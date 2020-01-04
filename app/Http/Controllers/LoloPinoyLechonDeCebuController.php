@@ -8,6 +8,25 @@ use App\User;
 
 class LoloPinoyLechonDeCebuController extends Controller
 {
+
+
+    //all lists
+    public function allLists(){
+        $id =  Auth::user()->id;
+        $user = User::find($id);
+
+        return view('lechon-de-cebu-all-lists', compact('user'));
+    }
+
+    //purchase order
+    public function purchaseOrder(){
+        $id =  Auth::user()->id;
+        $user = User::find($id);
+
+        return view('lechon-de-cebu-purchase-order', compact('user'));
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -41,6 +60,19 @@ class LoloPinoyLechonDeCebuController extends Controller
     public function store(Request $request)
     {
         //
+         $this->validate($request, [
+            'paidTo' => 'required|min:6',
+            'address'=> 'required|min:6',
+            'quantity'=>'required|min:6',
+            'description'=>'required|min:6',
+            'unitPrice'=>'required|min:6',
+            'amount'=>'required|min:6',
+        ]);
+
+         
+
+         
+
     }
 
     /**

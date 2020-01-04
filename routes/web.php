@@ -31,6 +31,15 @@ Route::group(['middleware' => ['auth']], function(){
 	//route for lolo pinoy lechon de cebu
 	Route::get('lolo-pinoy-lechon-de-cebu', 'LoloPinoyLechonDeCebuController@index')->name('lolo-pinoy-lechon-de-cebu.index');
 
+	//route for lechon de cebu purchase order
+	Route::get('lolo-pinoy-lechon-de-cebu/purchase-order', 'LoloPinoyLechonDeCebuController@purchaseOrder')->name('lolo-pinoy-lechon-de-cebu.purchaseOrder');
+
+	Route::get('lolo-pinoy-lechon-de-cebu/lists', 'LoloPinoyLechonDeCebuController@allLists')->name('lolo-pinoy-lechon-de-cebu.allLists');
+
+	//
+	Route::post('lolo-pinoy-lechon-de-cebu/store', 'LoloPinoyLechonDeCebuController@store')->name('lolo-pinoy-lechon-de-cebu.store');
+
+
 });
 
 

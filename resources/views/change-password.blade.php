@@ -56,11 +56,11 @@
 		                  Change Password</div>
 	                  	 <div class="card-body">
 	                  	 	@if(session('success'))
-									<p class="alert alert-success">{{ Session::get('success') }}</p>
-							@endif	
-							@if(session('error'))
-									<p class="alert alert-danger">{{ Session::get('error') }}</p>
-							@endif	
+									   <p class="alert alert-success">{{ Session::get('success') }}</p>
+      							@endif	
+      							@if(session('error'))
+      									<p class="alert alert-danger">{{ Session::get('error') }}</p>
+      							@endif	
 	          				<label>Current Password</label> 
 	          				<input type="password" name="currentPass" class="col-md-6 form-control" required="required" />   
 	          				<label>New Password</label>

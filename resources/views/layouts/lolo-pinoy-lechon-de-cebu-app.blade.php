@@ -23,7 +23,7 @@
 
      <!-- Page level plugin CSS-->
     <link href="{{ asset('vendor/dataTables.bootstrap4.css') }}" rel="stylesheet">
-    
+    <script src="{{ asset('vendor/jquery/jquery.min.js') }} "></script>
 
      <!-- Font Awesome CSS-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
@@ -120,7 +120,7 @@
     <script src="{{ asset('js/app.js') }}"></script>
 
      <!-- Bootstrap core JavaScript-->
-      <script src="{{ asset('vendor/jquery/jquery.min.js') }} "></script>
+      
       <script src="{{ asset('vendor/bootstrap.bundle.min.js') }} "></script>
 
       <!-- Core plugin JavaScript-->
