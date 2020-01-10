@@ -12,7 +12,7 @@
       </li>
      
       <li class="nav-item dropdown active">
-        <a class="nav-link dropdown-toggle" href="{{ url('lolo-pinoy-lechon-de-cebu/purchase-order') }}" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fab fa-first-order"></i>
           <span>Purchase order</span>
         </a>
@@ -28,11 +28,17 @@
           <span>Statement of account</span>
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="index.html">
-          <i class="fas fa-receipt"></i>
+     
+      <li class="nav-item dropdown active">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           <i class="fas fa-receipt"></i>
           <span>Billing statement</span>
         </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/billing-statement-form') }}">Billing Statement Form</a>
+          <a class="dropdown-item" href="">Lists</a>
+         
+        </div>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="index.html">
@@ -80,8 +86,8 @@
             	<div class="col-lg-12">
             		<div class="card mb-3">
             			<div class="card-header">
-					  <i class="fa fa-tasks" aria-hidden="true"></i>
-					  All Lists</div>
+        					  <i class="fa fa-tasks" aria-hidden="true"></i>
+        					  All Lists</div>
 					  <div class="card-body">
 					  		<div class="table-responsive">
 				  				<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -104,12 +110,18 @@
 				  						</tr>
 				  					</tfoot>
 				  					<tbody>
-				  						<tr>
-				  							<td><a href="" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-				  								<a href="" title="Delete"><i class="fas fa-trash"></i></a>
-				  								<a href="" title="View"><i class="fas fa-low-vision"></i></a>
+                      @foreach($purchaseOrders as $purchaseOrder)
+				  						<tr id="deletedId{{ $purchaseOrder['id'] }}">
+				  							<td><a href="{{ url('lolo-pinoy-lechon-de-cebu/edit/'.$purchaseOrder['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+				  								<a id="delete" onClick="confirmDelete('{{ $purchaseOrder['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+				  								<a href="{{ url('lolo-pinoy-lechon-de-cebu/view/'.$purchaseOrder['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
 				  							</td>
+                        <td><a href="#">P.O-{{ $purchaseOrder['p_o_number'] }}</a></td>
+                        <td>{{ $purchaseOrder['paid_to'] }}</td>
+                        <td>{{ $purchaseOrder['date'] }}</td>
+                        <td>{{ $purchaseOrder['created_by'] }}</td>
 				  						</tr>
+                      @endforeach
 				  					</tbody>
 				  				</table>
 					  		</div>
@@ -120,4 +132,32 @@
      	</div>
      </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script type="text/javascript">
+    function confirmDelete(id){
+        var x = confirm("Do you want to delete this?");
+        if(x){
+            $.ajax({
+              type: "DELETE",
+              url: '/lolo-pinoy-lechon-de-cebu/delete/' + id,
+              data:{
+                _method: 'delete', 
+                "_token": "{{ csrf_token() }}",
+                "id": id
+              },
+              success: function(data){
+                console.log(data);
+                $("#deletedId"+id).fadeOut('slow');
+               
+              },
+              error: function(data){
+                console.log('Error:', data);
+              }
+
+            });
+        }else{
+            return false;
+        }
+    }
+</script>
 @endsection

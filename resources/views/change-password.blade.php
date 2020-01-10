@@ -56,8 +56,8 @@
 		                  Change Password</div>
 	                  	 <div class="card-body">
 	                  	 	@if(session('success'))
-									   <p class="alert alert-success">{{ Session::get('success') }}</p>
-      							@endif	
+    									   <p class="alert alert-success">{{ Session::get('success') }}</p>
+          							@endif	
       							@if(session('error'))
       									<p class="alert alert-danger">{{ Session::get('error') }}</p>
       							@endif	

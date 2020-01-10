@@ -5,8 +5,6 @@
 <link rel="stylesheet" href="/resources/demos/style.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-
   <script>
     $(function() {
       $( "#datepicker").datepicker();
@@ -29,7 +27,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/purchase-order') }}">P.O Form</a>
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/lists') }}">Lists</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/purchase-order-lists') }}">Lists</a>
          
         </div>
       </li>
@@ -39,11 +37,16 @@
           <span>Statement of account</span>
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="index.html">
-          <i class="fas fa-receipt"></i>
+       <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           <i class="fas fa-receipt"></i>
           <span>Billing statement</span>
         </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/billing-statement-form') }}">Billing Statement Form</a>
+          <a class="dropdown-item" href="">Lists</a>
+         
+        </div>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="index.html">
@@ -98,6 +101,9 @@
         <div class="form-group">
         		<div class="form-row">
       			 	<div class="col-lg-6">
+                  @if(session('purchaseOrderSuccess'))
+                   <p class="alert alert-success">{{ Session::get('purchaseOrderSuccess') }}</p>
+                  @endif  
       			 		<label>Paid to</label>
       			 		<input type="text" name="paidTo" class="form-control" required="required" />
                 @if ($errors->has('paidTo'))

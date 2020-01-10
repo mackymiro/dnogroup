@@ -16,7 +16,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/purchase-order') }}">P.O Form</a>
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/lists') }}">Lists</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/purchase-order-lists') }}">Lists</a>
          
         </div>
       </li>
@@ -26,11 +26,16 @@
           <span>Statement of account</span>
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="index.html">
-          <i class="fas fa-receipt"></i>
+       <li class="nav-item dropdown active">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           <i class="fas fa-receipt"></i>
           <span>Billing statement</span>
         </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/billing-statement-form') }}">Billing Statement Form</a>
+          <a class="dropdown-item" href="">Lists</a>
+         
+        </div>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="index.html">
