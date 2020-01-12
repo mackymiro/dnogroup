@@ -25,7 +25,7 @@
 	}
 </script>
 <div id="wrapper">
-	 <ul class="sidebar navbar-nav">
+	<ul class="sidebar navbar-nav">
        <li class="nav-item">
         <a class="nav-link" href="index.html">
           <i class="fas fa-cash-register"></i>
@@ -33,7 +33,7 @@
         </a>
       </li>
      
-      <li class="nav-item dropdown active">
+      <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fab fa-first-order"></i>
           <span>Purchase order</span>
@@ -56,8 +56,8 @@
           <span>Billing statement</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="">Billing Statement Form</a>
-          <a class="dropdown-item" href="">Lists</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/billing-statement-form') }}">Billing Statement Form</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/billing-statement-lists') }}">Lists</a>
          
         </div>
       </li>
@@ -79,11 +79,14 @@
           <span>Commissary</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          
           <a class="dropdown-item" href="login.html">RAW materials</a>
           <a class="dropdown-item" href="register.html">Production</a>
           <a class="dropdown-item" href="forgot-password.html">Stocks inventory</a>     
           <a class="dropdown-item" href="forgot-password.html">Delivery Outlets</a>
+
           <a class="dropdown-item" href="forgot-password.html">Sales of outlets</a>
+
           <a class="dropdown-item" href="forgot-password.html">Inventory of stocks</a>
          
         </div>
@@ -102,7 +105,7 @@
               </li>
               <li class="breadcrumb-item active">Update Purchase Order Form</li>
             </ol>
-            <a href="{{ url('lolo-pinoy-lechon-de-cebu/lists') }}">Back to Lists</a>
+            <a href="{{ url('lolo-pinoy-lechon-de-cebu/purchase-order-lists') }}">Back to Lists</a>
             <div class="col-lg-12">
             	 <img src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
             	 

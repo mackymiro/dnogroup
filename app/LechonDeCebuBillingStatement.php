@@ -14,7 +14,7 @@ class LechonDeCebuBillingStatement extends Model
     	'bill_to',
     	'address',
     	'date',
-    	'soa_number',
+    	'reference_number',
     	'p_o_number',
     	'period_cover',
     	'terms',

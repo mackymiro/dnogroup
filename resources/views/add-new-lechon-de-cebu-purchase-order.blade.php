@@ -71,7 +71,7 @@
 		              <li class="breadcrumb-item">
 		                <a href="#">Lechon de Cebu</a>
 		              </li>
-		              <li class="breadcrumb-item active">Add New</li>
+		              <li class="breadcrumb-item active">Add New Purchase Order</li>
 		            </ol>
 		            <div class="row">
 		            	<div class="col-lg-12">

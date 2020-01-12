@@ -72,6 +72,8 @@
      
     </ul>
     <div id="content-wrapper">
+      <form action="{{ action('LoloPinoyLechonDeCebuController@storeBillingStatement') }}" method="post">
+          {{csrf_field()}}
     	<div class="container-fluid">
     		 <!-- Breadcrumbs-->
             <ol class="breadcrumb">
@@ -85,8 +87,6 @@
             	 
             	 <h4 class="text-center"><u>BILLING STATEMENT</u></h4>
             </div>
-            <form action="{{ action('LoloPinoyLechonDeCebuController@storeBillingStatement') }}" method="post">
-            {{csrf_field()}}
             <div class="form-group">
             	<div class="form-row">
             		<div class="col-lg-6">
@@ -106,7 +106,7 @@
 		                @endif
             			<label>Period Covered</label>
             			<input type="text" name="periodCovered" class="form-control" required="required" />
-            			@if ($errors->has('periodConvered'))
+            			@if ($errors->has('periodCovered'))
 		                  <span class="alert alert-danger">
 		                    <strong>{{ $errors->first('periodCovered') }}</strong>
 		                  </span>
@@ -120,8 +120,8 @@
 		                    <strong>{{ $errors->first('date') }}</strong>
 		                  </span>
 		                @endif
-            			<label>SOA Number</label>
-            			<input type="text" name="soaNumber" class="form-control" disabled="disabled" />
+            			<label>Reference #</label>
+            			<input type="text" name="refNumber" class="form-control" disabled="disabled" />
             			<label>PO Number</label>
             			<input type="text" name="poNumber" class="form-control" disabled="disabled" />
             			
@@ -137,49 +137,50 @@
             </div>
             <div class="form-group">
             	<div class="form-row">
-        			<div class="col-lg-1">
-    					<label>Date</label>
-    					<input type="text" name="transactionDate" class="form-control" required="required" />
-    					@if ($errors->has('transactionDate'))
-		                  <span class="alert alert-danger">
-		                    <strong>{{ $errors->first('transactionDate') }}</strong>
-		                  </span>
-		                @endif
-        			</div>
-        			<div class="col-lg-1">
-    					<label>Invoice #</label>
-    					<input type="text" name="invoiceNumber" class="form-control" disabled="disabled" />
-        			</div>
-        			<div class="col-lg-4">
-        				<label>Whole Lechon 500/KL</label>
-        				<input type="text" name="wholeLechon" class="form-control"  required="required" />
-        				@if ($errors->has('wholeLechon'))
-		                  <span class="alert alert-danger">
-		                    <strong>{{ $errors->first('wholeLechon') }}</strong>
-		                  </span>
-		                @endif
-        			</div>
-        			<div class="col-lg-4">
-        				<label>Description</label>
-        				<input type="text" name="description" class="form-control"  required="required" />
-        				@if ($errors->has('billTo'))
-		                  <span class="alert alert-danger">
-		                    <strong>{{ $errors->first('billTo') }}</strong>
-		                  </span>
-		                @endif
-        			</div>
-        			<div class="col-lg-1">
-        				<label>Amount</label>
-        				<input type="text" name="amount" class="form-control" disabled="disabled" />
-        			</div>
+              			<div class="col-lg-1">
+            					<label>Date</label>
+            					<input type="text" name="transactionDate" class="form-control" required="required" />
+            					@if ($errors->has('transactionDate'))
+        		                  <span class="alert alert-danger">
+        		                    <strong>{{ $errors->first('transactionDate') }}</strong>
+        		                  </span>
+        		                @endif
+              			</div>
+              			<div class="col-lg-1">
+              					<label>Invoice #</label>
+              					<input type="text" name="invoiceNumber" class="form-control" disabled="disabled" />
+              			</div>
+            			<div class="col-lg-4">
+            				<label>Whole Lechon 500/KL</label>
+            				<input type="text" name="wholeLechon" class="form-control"  required="required" />
+            				@if ($errors->has('wholeLechon'))
+    		                  <span class="alert alert-danger">
+    		                    <strong>{{ $errors->first('wholeLechon') }}</strong>
+    		                  </span>
+    		                @endif
+            			</div>
+            			<div class="col-lg-4">
+            				<label>Description</label>
+            				<input type="text" name="description" class="form-control"  required="required" />
+            				@if ($errors->has('description'))
+    		                  <span class="alert alert-danger">
+    		                    <strong>{{ $errors->first('description') }}</strong>
+    		                  </span>
+    		                @endif
+            			</div>
+            			<div class="col-lg-1">
+            				<label>Amount</label>
+            				<input type="text" name="amount" class="form-control" disabled="disabled" />
+            			</div>
             	</div>
             	<br>
 		          <div>
 		              <input type="submit" class="btn btn-success float-right" value="Add Billing" />
 		          </div>
             </div>
-            </form>	
+           
     	</div>
+     </form>  
     </div>
 </div>
 

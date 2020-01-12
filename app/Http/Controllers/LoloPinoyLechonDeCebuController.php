@@ -14,10 +14,52 @@ use Session;
 
 class LoloPinoyLechonDeCebuController extends Controller
 {
+    //add new billing statement form 
+    public function addNewBillingData(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+        
+    }
+
+    //add new billing statement
+    public function addNewBilling($id){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('add-new-lechon-de-cebu-billing-statement', compact('user', 'id'));
+    }
+
+
+    //edit billing statement 
+    public function editBillingStatement($id){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $billingStatement = LechonDeCebuBillingStatement::find($id);
+       
+
+        return view('edit-billing-statement-form', compact('user', 'billingStatement'));
+    }
 
     //storeBillingStatement
     public function storeBillingStatement(Request $request){
-         $this->validate($request, [
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        //get user name
+        $name  = $firstName.$lastName;
+
+        //validate
+        $this->validate($request, [
             'billTo' =>'required',
             'address'=>'required',
             'periodCovered'=>'required',
@@ -26,14 +68,85 @@ class LoloPinoyLechonDeCebuController extends Controller
             'transactionDate'=>'required',
             'wholeLechon'=>'required',
             'description'=>'required',
-            'amount'=>'required',
-        
         ]);
 
+        $wholeLechon = $request->get('wholeLechon');
+        $add = $wholeLechon * 500; 
+       
+        $inoviceNumber = $request->get('invoiceNumber');
+
+
+        //get the latest insert id query in table billing statements ref number
+        $dataReferenceNum = DB::select('SELECT id, reference_number FROM lechon_de_cebu_billing_statements ORDER BY id DESC LIMIT 1');
+
+        //if code is not zero add plus 1 reference number
+        if(isset($dataReferenceNum[0]->reference_number) != 0){
+            //if code is not 0
+            $newRefNum = $dataReferenceNum[0]->reference_number +1;
+            $uRef = sprintf("%06d",$newRefNum);   
+
+        }else{
+            //if code is 0 
+            $newRefNum = 1;
+            $uRef = sprintf("%06d",$newRefNum);
+        } 
+
+        //get the latest insert id query in table billing statements PO number
+        $datePoNumber = DB::select('SELECT id, p_o_number FROM lechon_de_cebu_billing_statements ORDER BY id DESC LIMIT 1');
+
+        //if code is not zero add plus 1 po number
+        if(isset($datePoNumber[0]->p_o_number) != 0){
+            //if code is not 0
+            $newPoNum = $datePoNumber[0]->p_o_number +1;
+            $uPoNum = sprintf("%06d",$newPoNum);   
+
+        }else{
+            //if code is 0 
+            $newPoNum = 1;
+            $uPoNum = sprintf("%06d",$newPoNum);
+        }
+
+         //get the latest insert id query in table billing statements invoice number
+        $dataInvoiceNum = DB::select('SELECT id, invoice_number FROM lechon_de_cebu_billing_statements ORDER BY id DESC LIMIT 1');
+
+         //if code is not zero add plus 1 invoice number
+        if(isset($dataInvoiceNum[0]->invoice_number) != 0){
+            //if code is not 0
+            $newInvoiceNUm = $dataInvoiceNum[0]->invoice_number +1;
+            $uInvoice = sprintf("%06d",$newInvoiceNUm);   
+
+        }else{
+            //if code is 0 
+            $newInvoiceNUm = 1;
+            $uInvoice = sprintf("%06d",$newInvoiceNUm);
+        }
+
+    
         $billingStatement = new LechonDeCebuBillingStatement([
-            
+            'user_id'=>$user->id,
+            'bill_to'=>$request->get('billTo'),
+            'address'=>$request->get('address'),
+            'period_cover'=>$request->get('periodCovered'),
+            'date'=>$request->get('date'),
+            'invoice_number'=>$uInvoice,
+            'reference_number'=>$uRef,
+            'p_o_number'=>$uPoNum,
+            'terms'=>$request->get('terms'),
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'whole_lechon'=>$wholeLechon,
+            'description'=>$request->get('description'),
+            'amount'=>$add,
+            'created_by'=>$name,
+            'prepared_by'=>$name,
         ]);
 
+        $billingStatement->save();
+
+        $insertedId = $billingStatement->id;
+
+        //Session::flash('billingStatementSuccess', 'Successfully added');
+         
+        return redirect('lolo-pinoy-lechon-de-cebu/edit-billing-statement/'.$insertedId);
 
     }
 
@@ -176,9 +289,9 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         //get the latest insert id query in table purchase order
         $data = DB::select('SELECT id, p_o_number FROM lechon_de_cebu_purchase_orders ORDER BY id DESC LIMIT 1');
+        
         //if code is not zero add plus 1
-
-        if(isset($data[0]->p_o_number) != 0){
+         if(isset($data[0]->p_o_number) != 0){
             //if code is not 0
             $newNum = $data[0]->p_o_number +1;
             $uNum = sprintf("%06d",$newNum);    

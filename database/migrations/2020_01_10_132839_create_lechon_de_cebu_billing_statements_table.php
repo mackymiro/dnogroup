@@ -20,7 +20,7 @@ class CreateLechonDeCebuBillingStatementsTable extends Migration
             $table->string('bill_to');
             $table->string('address');
             $table->string('date');
-            $table->string('soa_number');
+            $table->string('reference_number');
             $table->string('p_o_number');
             $table->string('period_cover');
             $table->string('terms');
