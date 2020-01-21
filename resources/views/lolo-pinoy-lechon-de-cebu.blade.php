@@ -4,7 +4,7 @@
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
        <li class="nav-item">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="{{ url('lolo-pinoy-lechon-de-cebu/') }}">
           <i class="fas fa-cash-register"></i>
           <span>Sales Invoice</span>
         </a>
@@ -15,25 +15,35 @@
           <span>Purchase order</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          @if($user->role_type == 1)
           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/purchase-order') }}">P.O Form</a>
+          @endif
           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/purchase-order-lists') }}">Lists</a>
          
         </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="index.html">
-          <i class="fas fa-receipt"></i>
+      
+       <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           <i class="fas fa-receipt"></i>
           <span>Statement of account</span>
         </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item" href="">Statement of Account</a>
+          <a class="dropdown-item" href="">Lists</a>
+         
+        </div>
       </li>
-       <li class="nav-item dropdown active">
+       <li class="nav-item dropdown ">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fas fa-receipt"></i>
           <span>Billing statement</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          @if($user->role_type == 1)
           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/billing-statement-form') }}">Billing Statement Form</a>
-          <a class="dropdown-item" href="">Lists</a>
+          @endif
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/billing-statement-lists') }}">Lists</a>
          
         </div>
       </li>
@@ -75,9 +85,9 @@
              <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">Dashboard</a>
+                <a href="#">Lechon de Cebu</a>
               </li>
-              <li class="breadcrumb-item active">Overview</li>
+              <li class="breadcrumb-item active">Sales</li>
             </ol>
 
     

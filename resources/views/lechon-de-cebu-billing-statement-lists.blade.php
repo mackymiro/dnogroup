@@ -1,8 +1,7 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('content')
 <div id="wrapper">
-	<!-- Sidebar -->
-    <ul class="sidebar navbar-nav">
+	<ul class="sidebar navbar-nav">
        <li class="nav-item">
         <a class="nav-link" href="index.html">
           <i class="fas fa-cash-register"></i>
@@ -82,93 +81,93 @@
               <li class="breadcrumb-item">
                 <a href="#">Lechon de Cebu</a>
               </li>
-              <li class="breadcrumb-item active">View Purchase Order</li>
+              <li class="breadcrumb-item active">Billing Statement All Lists</li>
             </ol>
-            <a href="{{ url('lolo-pinoy-lechon-de-cebu/purchase-order-lists') }}">Back to Lists</a>
-             <div class="col-lg-12">
-            	 <img src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
-            	 
-            	 <h4 class="text-center"><u>VIEW PURCHASE ORDER</u></h4>
+            <div class="row">
+            	<div class="col-lg-12">
+            		<div class="card mb-3">
+            			<div class="card-header">
+    					  <i class="fa fa-tasks" aria-hidden="true"></i>
+    					  All Lists</div>
+    					  <div class="card-body">
+    					  	<div class="table-responsive">
+				  				<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+				  					<thead>
+				  						<th>Action</th>
+				  						<th>Reference #</th>
+                      <th>PO #</th>
+				  						<th>Bill To</th>
+				  						<th>Date</th>
+				  						<th>Period Covered</th>
+				  						<th>Created By</th>
+			  						</thead>
+			  						<tfoot>
+			  							<th>Action</th>
+				  						<th>Reference #</th>
+                      <th>PO #</th>
+				  						<th>Bill To</th>
+				  						<th>Date</th>
+				  						<th>Period Covered</th>
+				  						<th>Created By</th>
+
+			  						</tfoot>
+			  						<tbody>
+			  							@foreach($billingStatements as $billingStatement)
+			  							<tr id="deletedId{{ $billingStatement['id'] }}">
+			  								<td>
+                          @if($user->role_type !== 3)
+			  									<a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-billing-statement/'.$billingStatement['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                          @endif
+                          @if($user->role_type == 1)
+				  								<a id="delete" onClick="confirmDelete('{{ $billingStatement['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                          @endif
+				  								<a href="{{ url('lolo-pinoy-lechon-de-cebu/view-billing-statement/'.$billingStatement['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
+
+			  								</td>
+			  								<td><a href="#">#-{{ $billingStatement['reference_number'] }}</a></td>
+                        <td><a href="#">#-{{ $billingStatement['p_o_number'] }}</a></td>
+			  								<td>{{ $billingStatement['bill_to'] }}</td>
+			  								<td>{{ $billingStatement['date'] }}</td>
+			  								<td>{{ $billingStatement['period_cover'] }}</td>
+			  								<td>{{ $billingStatement['created_by'] }}</td>
+			  							</tr>
+			  							@endforeach
+			  						</tbody>
+			  					</table>
+    					  	</div>
+    					  </div>
+            		</div>
+            	</div>
             </div>
-             <div class="form-group">
-             	<div class="form-row">
-             		<div class="col-lg-6">
-            			<label>Paid to</label>
-            			<br>
-      					 {{ $purchaseOrder['paid_to'] }}
-      			 		<br>
-      			 		<br>
-      			 		<label>Address</label>
-      			 		<br>
-      			 		Labogon Mandaue City
-      			 		
-            		</div>
-            		<div class="col-lg-6">
-            			<label>P.O Number</label>
-            			<br>
-            			<a href="#">P.O-{{ $purchaseOrder['p_o_number'] }}</a>
-            			<br>
-            			<br>
-            			<label>Date</label>
-            			<br>
-            			{{ $purchaseOrder['date'] }}
-            		</div>
-             	</div>
-             </div>
-             <table class="table table-striped">
-             		<thead>
-             			<tr>
-             				<th>QUANTITY</th>
-             				<th>DESCRIPTION</th>
-             				<th>UNIT PRICE</th>
-             				<th>AMOUNT</th>
-             			</tr>
-             		</thead>
-               		<tbody>
-
-           				<tr>
-           					<td>{{ $purchaseOrder['quantity']}}</td>
-           					<td>{{ $purchaseOrder['description']}}</td>
-           					<td>{{ $purchaseOrder['unit_price']}}</td>
-           					<td>{{ $purchaseOrder['amount']}}</td>
-           				</tr>
-           				@foreach($pOrders as $pOrder)
-           				<tr>
-           					<td>{{ $pOrder['quantity'] }}</td>
-           					<td>{{ $pOrder['description'] }}</td>
-           					<td>{{ $pOrder['unit_price'] }}</td>
-           					<td><?php echo number_format($pOrder['amount'], 2) ?></td>
-           				</tr>	
-           				@endforeach
-           				<tr>
-           					<td></td>
-           					<td></td>
-           					<td><strong>Total</strong></td>
-           					<td></td>
-           				</tr>
-               		</tbody>
-             </table>
-             <div class="form-group">
-                <div class="form-row">
-                    <div class="col-lg-6">
-                      <label>Requested By</label>
-                    </div>
-                    <div class="col-lg-6">
-                      <label>Prepared By</label>
-                      <p>{{ $purchaseOrder['created_by'] }}</p>
-                    </div>
-                </div>
-             </div>
-             <div class="form-group">
-                <div class="form-row">
-                    <div class="col-lg-6">
-                      <label>Checked By</label>
-                    </div>
-                   
-                </div>
-             </div>
     	</div>
-    </div>	
-
+ 	</div>
 </div>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script type="text/javascript">
+	 function confirmDelete(id){
+	 	var x = confirm("Do you want to delete this?");
+	 	if(x){
+	 		$.ajax({
+              type: "DELETE",
+              url: '/lolo-pinoy-lechon-de-cebu/delete-billing-statement/' + id,
+              data:{
+                _method: 'delete', 
+                "_token": "{{ csrf_token() }}",
+                "id": id
+              },
+              success: function(data){
+                console.log(data);
+                $("#deletedId"+id).fadeOut('slow');
+               
+              },
+              error: function(data){
+                console.log('Error:', data);
+              }
+
+            });
+	 	}else{
+	 		  return false;
+	 	}
+	 }
+</script>
 @endsection

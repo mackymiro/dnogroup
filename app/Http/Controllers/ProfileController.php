@@ -69,8 +69,10 @@ class ProfileController extends Controller
         //
         $profile = User::find($id);
        
+         $id =  Auth::user()->id;
+        $user = User::find($id);
 
-        return view('edit-profile', compact('profile'));
+        return view('edit-profile', compact('profile', 'user'));
 
     }
 

@@ -14,16 +14,115 @@ use Session;
 
 class LoloPinoyLechonDeCebuController extends Controller
 {
+    //viewBillingStatement
+    public function viewBillingStatement($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $viewBillingStatement = LechonDeCebuBillingStatement::find($id);
+        
+
+        $billingStatements = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+        return view('view-lechon-de-cebu-billing-statement', compact('user', 'viewBillingStatement', 'billingStatements'));
+    }
+
+
+    //updateBilling info
+    public function updateBillingInfo(Request $request, $id){
+
+        $updateBillingOrder = LechonDeCebuBillingStatement::find($id);
+
+        $wholeLechon = $request->get('wholeLechon');
+        $add = $wholeLechon * 500; 
+
+        $updateBillingOrder->bill_to = $request->get('billTo');
+        $updateBillingOrder->address = $request->get('address');
+        $updateBillingOrder->period_cover = $request->get('periodCovered');
+        $updateBillingOrder->date = $request->get('date');
+        $updateBillingOrder->terms = $request->get('terms');
+        $updateBillingOrder->p_o_number = $request->get('poNumber');
+        $updateBillingOrder->invoice_number = $request->get('invoiceNumber');
+        $updateBillingOrder->date_of_transaction = $request->get('transactionDate');
+        $updateBillingOrder->whole_lechon = $wholeLechon;
+        $updateBillingOrder->description = $request->get('description');
+        $updateBillingOrder->amount = $add;
+
+        $updateBillingOrder->save();
+
+        Session::flash('SuccessE', 'Successfully updated');
+
+        return redirect('lolo-pinoy-lechon-de-cebu/edit-billing-statement/'.$id);
+    }
+
+    //updateBillingStatement
+    public function updateBillingStatement(Request $request, $id){
+
+        $updateBilling = LechonDeCebuBillingStatement::find($id);
+
+        $wholeLechon = $request->get('wholeLechon');
+        $add = $wholeLechon * 500; 
+
+        $updateBilling->date_of_transaction = $request->get('transactionDate');
+        $updateBilling->whole_lechon = $wholeLechon;
+        $updateBilling->description = $request->get('description');
+        $updateBilling->invoice_number = $request->get('invoiceNumber');
+        $updateBilling->amount = $add;
+
+        $updateBilling->save();
+
+        Session::flash('SuccessEdit', 'Successfully updated');
+        return redirect('lolo-pinoy-lechon-de-cebu/edit-billing-statement/'.$request->get('billingStatementId'));
+    }
+
+
+    //billing statement lists
+    public function billingStatementLists(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $billingStatements = LechonDeCebuBillingStatement::where('billing_statement_id', NULL)->get()->toArray();
+
+
+        return view('lechon-de-cebu-billing-statement-lists', compact('user', 'billingStatements'));
+    }
+
+
     //add new billing statement form 
     public function addNewBillingData(Request $request, $id){
         $ids = Auth::user()->id;
         $user = User::find($ids);
+
+        $billingOrder = LechonDeCebuBillingStatement::find($id);
         
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 
         $name  = $firstName.$lastName;
 
+        //get the whole lechon then multiply by 500
+        $wholeLechon = $request->get('wholeLechon');
+        $add = $wholeLechon * 500; 
+
+
+        $addBillingStatement = new LechonDeCebuBillingStatement([
+            'user_id'=>$user->id,
+            'billing_statement_id'=>$id,
+            'reference_number'=>$billingOrder['reference_number'],
+            'p_o_number'=>$billingOrder['p_o_number'],
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'invoice_number'=>$request->get('invoiceNumber'),
+            'whole_lechon'=>$wholeLechon,
+            'description'=>$request->get('description'),
+            'amount'=>$add,
+            'created_by'=>$name,
+        ]);
+
+        $addBillingStatement->save();
+
+        Session::flash('addBillingSuccess', 'Successfully added.');
+
+        return redirect('lolo-pinoy-lechon-de-cebu/add-new-billing/'.$id);
         
     }
 
@@ -43,8 +142,12 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $billingStatement = LechonDeCebuBillingStatement::find($id);
        
+        $bStatements = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->get()->toArray();
 
-        return view('edit-billing-statement-form', compact('user', 'billingStatement'));
+        //get the purchase order lists
+        $getPurchaseOrders = LechonDeCebuPurchaseOrder::where('po_id', NULL)->get()->toArray();
+        
+        return view('edit-billing-statement-form', compact('user', 'billingStatement', 'bStatements', 'getPurchaseOrders'));
     }
 
     //storeBillingStatement
@@ -62,6 +165,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $this->validate($request, [
             'billTo' =>'required',
             'address'=>'required',
+            'invoiceNumber'=>'required',
             'periodCovered'=>'required',
             'date'=>'required',
             'terms'=>'required',
@@ -73,9 +177,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $wholeLechon = $request->get('wholeLechon');
         $add = $wholeLechon * 500; 
        
-        $inoviceNumber = $request->get('invoiceNumber');
-
-
+       
         //get the latest insert id query in table billing statements ref number
         $dataReferenceNum = DB::select('SELECT id, reference_number FROM lechon_de_cebu_billing_statements ORDER BY id DESC LIMIT 1');
 
@@ -91,46 +193,16 @@ class LoloPinoyLechonDeCebuController extends Controller
             $uRef = sprintf("%06d",$newRefNum);
         } 
 
-        //get the latest insert id query in table billing statements PO number
-        $datePoNumber = DB::select('SELECT id, p_o_number FROM lechon_de_cebu_billing_statements ORDER BY id DESC LIMIT 1');
-
-        //if code is not zero add plus 1 po number
-        if(isset($datePoNumber[0]->p_o_number) != 0){
-            //if code is not 0
-            $newPoNum = $datePoNumber[0]->p_o_number +1;
-            $uPoNum = sprintf("%06d",$newPoNum);   
-
-        }else{
-            //if code is 0 
-            $newPoNum = 1;
-            $uPoNum = sprintf("%06d",$newPoNum);
-        }
-
-         //get the latest insert id query in table billing statements invoice number
-        $dataInvoiceNum = DB::select('SELECT id, invoice_number FROM lechon_de_cebu_billing_statements ORDER BY id DESC LIMIT 1');
-
-         //if code is not zero add plus 1 invoice number
-        if(isset($dataInvoiceNum[0]->invoice_number) != 0){
-            //if code is not 0
-            $newInvoiceNUm = $dataInvoiceNum[0]->invoice_number +1;
-            $uInvoice = sprintf("%06d",$newInvoiceNUm);   
-
-        }else{
-            //if code is 0 
-            $newInvoiceNUm = 1;
-            $uInvoice = sprintf("%06d",$newInvoiceNUm);
-        }
-
-    
+       
         $billingStatement = new LechonDeCebuBillingStatement([
             'user_id'=>$user->id,
             'bill_to'=>$request->get('billTo'),
             'address'=>$request->get('address'),
             'period_cover'=>$request->get('periodCovered'),
             'date'=>$request->get('date'),
-            'invoice_number'=>$uInvoice,
+            'invoice_number'=>$request->get('invoiceNumber'),
             'reference_number'=>$uRef,
-            'p_o_number'=>$uPoNum,
+            'p_o_number'=>$request->get('poNumber'),
             'terms'=>$request->get('terms'),
             'date_of_transaction'=>$request->get('transactionDate'),
             'whole_lechon'=>$wholeLechon,
@@ -155,7 +227,11 @@ class LoloPinoyLechonDeCebuController extends Controller
         $id =  Auth::user()->id;
         $user = User::find($id);
 
-        return view('lechon-de-cebu-billing-statement-form', compact('user'));
+        //get the purchase order lists
+        $getPurchaseOrders = LechonDeCebuPurchaseOrder::where('po_id', NULL)->get()->toArray();
+       
+
+        return view('lechon-de-cebu-billing-statement-form', compact('user', 'getPurchaseOrders'));
     }
 
     //update-po
@@ -247,6 +323,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         //
          $id =  Auth::user()->id;
         $user = User::find($id);
+
 
         return view('lolo-pinoy-lechon-de-cebu', compact('user'));
     }
@@ -413,6 +490,13 @@ class LoloPinoyLechonDeCebuController extends Controller
         return redirect('lolo-pinoy-lechon-de-cebu/edit/'.$id);
 
 
+    }
+
+    //delete billing statement
+    public function destroyBillingStatement($id){
+        //
+        $billingStatement = LechonDeCebuBillingStatement::find($id);
+        $billingStatement->delete();
     }
 
     /**

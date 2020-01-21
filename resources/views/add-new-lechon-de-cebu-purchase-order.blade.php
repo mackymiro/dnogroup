@@ -1,6 +1,10 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('content')
-
+<script>
+  $(document).ready(function(){
+	$('.alert-success').fadeIn().delay(3000).fadeOut(); 
+   });
+</script>
 <div id="wrapper">
 	 <ul class="sidebar navbar-nav">
 	       <li class="nav-item">

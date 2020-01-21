@@ -123,7 +123,11 @@
             			<label>Reference #</label>
             			<input type="text" name="refNumber" class="form-control" disabled="disabled" />
             			<label>PO Number</label>
-            			<input type="text" name="poNumber" class="form-control" disabled="disabled" />
+            			<select name="poNumber" class="form-control">
+                      @foreach($getPurchaseOrders as $getPurchaseOrder)
+                      <option value="{{ $getPurchaseOrder['p_o_number'] }}">{{ $getPurchaseOrder['p_o_number'] }}</option>
+                      @endforeach
+                  </select>
             			
             			<label>Terms</label>
             			<input type="text" name="terms" class="form-control" required="required" />
@@ -148,7 +152,7 @@
               			</div>
               			<div class="col-lg-1">
               					<label>Invoice #</label>
-              					<input type="text" name="invoiceNumber" class="form-control" disabled="disabled" />
+              					<input type="text" name="invoiceNumber" class="form-control" required="required" />
               			</div>
             			<div class="col-lg-4">
             				<label>Whole Lechon 500/KL</label>

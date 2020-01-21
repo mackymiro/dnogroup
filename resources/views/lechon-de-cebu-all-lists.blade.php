@@ -11,14 +11,16 @@
         </a>
       </li>
      
-      <li class="nav-item dropdown active">
+      <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fab fa-first-order"></i>
           <span>Purchase order</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          @if($user->role_type == 1)
           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/purchase-order') }}">P.O Form</a>
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/lists') }}">Lists</a>
+          @endif
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/purchase-order-lists') }}">Lists</a>
          
         </div>
       </li>
@@ -28,15 +30,16 @@
           <span>Statement of account</span>
         </a>
       </li>
-     
-      <li class="nav-item dropdown active">
+       <li class="nav-item dropdown active">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fas fa-receipt"></i>
           <span>Billing statement</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          @if($user->role_type ==1)
           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/billing-statement-form') }}">Billing Statement Form</a>
-          <a class="dropdown-item" href="">Lists</a>
+          @endif
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/billing-statement-lists') }}">Lists</a>
          
         </div>
       </li>
@@ -80,7 +83,7 @@
               <li class="breadcrumb-item">
                 <a href="#">Lechon de Cebu</a>
               </li>
-              <li class="breadcrumb-item active">All Lists</li>
+              <li class="breadcrumb-item active">Purchase Order All Lists</li>
             </ol>
             <div class="row">
             	<div class="col-lg-12">
@@ -94,7 +97,7 @@
 				  					<thead>
 				  						<tr>
 				  							<th>Action</th>
-			  								<th>PO Number</th>
+			  								<th>PO #</th>
 			  								<th>Paid to</th>
 			  								<th>Date</th>
 			  								<th>Created by</th>
@@ -112,8 +115,13 @@
 				  					<tbody>
                       @foreach($purchaseOrders as $purchaseOrder)
 				  						<tr id="deletedId{{ $purchaseOrder['id'] }}">
-				  							<td><a href="{{ url('lolo-pinoy-lechon-de-cebu/edit/'.$purchaseOrder['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+				  							<td>
+                          @if($user->role_type != 3)
+                          <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit/'.$purchaseOrder['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                          @endif
+                          @if($user->role_type == 1)
 				  								<a id="delete" onClick="confirmDelete('{{ $purchaseOrder['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                          @endif
 				  								<a href="{{ url('lolo-pinoy-lechon-de-cebu/view/'.$purchaseOrder['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
 				  							</td>
                         <td><a href="#">P.O-{{ $purchaseOrder['p_o_number'] }}</a></td>

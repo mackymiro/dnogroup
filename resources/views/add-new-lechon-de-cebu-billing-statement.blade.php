@@ -1,5 +1,10 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('content')
+<script>
+  $(document).ready(function(){
+      $('.alert-success').fadeIn().delay(3000).fadeOut();
+  });
+</script>
 <div id="wrapper">
 		<ul class="sidebar navbar-nav">
        <li class="nav-item">
@@ -88,28 +93,31 @@
 						   <div class="card-body">
 						   		<form action="{{ action('LoloPinoyLechonDeCebuController@addNewBillingData', $id) }}" method="post">
 						   			{{csrf_field()}}
+                     @if(session('addBillingSuccess'))
+                       <p class="alert alert-success">{{ Session::get('addBillingSuccess') }}</p>
+                      @endif 
 						   		<div class="form-group">
 						   			<div class="form-row">
 						   				<div class="col-lg-1">
 						   					<label>Date</label>
 	        								<input type="text" name="transactionDate" class="form-control" required="required" />
 						   				</div>
-						   				<div class="col-lg-1">
-			              					<label>Invoice #</label>
-			              					<input type="text" name="invoiceNumber" class="form-control" disabled="disabled" />
-				              			</div>
-				              			<div class="col-lg-4">
-				              				<label>Whole Lechon 500/KL</label>
-            								<input type="text" name="wholeLechon" class="form-control"  required="required" />
-				              			</div>
-				              			<div class="col-lg-4">
-				              				<label>Description</label>
-            								<input type="text" name="description" class="form-control"  required="required" />
-				              			</div>
-				              			<div class="col-lg-1">
-				            				<label>Amount</label>
-				            				<input type="text" name="amount" class="form-control" disabled="disabled" />
-				            			</div>
+						   				 <div class="col-lg-1">
+	              					<label>Invoice #</label>
+	              					<input type="text" name="invoiceNumber" class="form-control" required="required" />
+		              			</div>
+		              			<div class="col-lg-4">
+		              				<label>Whole Lechon 500/KL</label>
+        							   	<input type="text" name="wholeLechon" class="form-control"  required="required" />
+		              			</div>
+		              			<div class="col-lg-4">
+		              				<label>Description</label>
+        								  <input type="text" name="description" class="form-control"  required="required" />
+		              			</div>
+		              			<div class="col-lg-1">
+            				        <label>Amount</label>
+		            				    <input type="text" name="amount" class="form-control" disabled="disabled" />
+		            			 </div>
 						   			</div>
 						   		</div>
 						   		<div class="form-group">

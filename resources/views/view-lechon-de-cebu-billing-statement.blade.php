@@ -16,9 +16,7 @@
           <span>Purchase order</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if($user->role_type == 1)
           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/purchase-order') }}">P.O Form</a>
-          @endif
           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/purchase-order-lists') }}">Lists</a>
          
         </div>
@@ -35,9 +33,7 @@
           <span>Billing statement</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if($user->role_type == 1)
           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/billing-statement-form') }}">Billing Statement Form</a>
-          @endif
           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/billing-statement-lists') }}">Lists</a>
          
         </div>
@@ -82,93 +78,103 @@
               <li class="breadcrumb-item">
                 <a href="#">Lechon de Cebu</a>
               </li>
-              <li class="breadcrumb-item active">View Purchase Order</li>
+              <li class="breadcrumb-item active">View Billing Statement</li>
             </ol>
-            <a href="{{ url('lolo-pinoy-lechon-de-cebu/purchase-order-lists') }}">Back to Lists</a>
-             <div class="col-lg-12">
+              <a href="{{ url('lolo-pinoy-lechon-de-cebu/billing-statement-lists') }}">Back to Lists</a>
+          	<div class="col-lg-12">
             	 <img src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
             	 
-            	 <h4 class="text-center"><u>VIEW PURCHASE ORDER</u></h4>
+            	 <h4 class="text-center"><u>VIEW BILLING STATEMENT</u></h4>
             </div>
-             <div class="form-group">
-             	<div class="form-row">
-             		<div class="col-lg-6">
-            			<label>Paid to</label>
-            			<br>
-      					 {{ $purchaseOrder['paid_to'] }}
-      			 		<br>
-      			 		<br>
-      			 		<label>Address</label>
-      			 		<br>
-      			 		Labogon Mandaue City
-      			 		
-            		</div>
-            		<div class="col-lg-6">
-            			<label>P.O Number</label>
-            			<br>
-            			<a href="#">P.O-{{ $purchaseOrder['p_o_number'] }}</a>
-            			<br>
-            			<br>
-            			<label>Date</label>
-            			<br>
-            			{{ $purchaseOrder['date'] }}
-            		</div>
-             	</div>
-             </div>
-             <table class="table table-striped">
-             		<thead>
+            <div class="form-group">
+        		<div class="form-row">
+        			<div class="col-lg-6">
+        				<label>Bill to</label>
+        				<br>
+        				{{ $viewBillingStatement['bill_to'] }}
+        				<br>
+        				<br>
+        				<label>Address</label>
+        				<br>
+        				{{ $viewBillingStatement['address'] }}
+        				<br>
+        				<br>
+        				<label>Period Covered</label>
+        				<br>
+        				{{ $viewBillingStatement['period_cover'] }}	
+        			</div>
+        			<div class="col-lg-6">
+        				<label>Date</label>
+        				<br>
+        				{{ $viewBillingStatement['date'] }}
+        				<br>
+        				<br>
+        				<label>Reference #</label>
+        				<br>
+        				{{ $viewBillingStatement['reference_number'] }}
+        				<br>
+        				<br>
+        				<label>PO Number</label>
+        				<br>
+        				{{ $viewBillingStatement['p_o_number'] }}
+        				<br>
+        				<br>
+        				<label>Terms</label>
+        				<br>
+        				{{ $viewBillingStatement['terms'] }}
+        				<br>
+
+        			</div>
+        		</div>
+            </div>
+            <table class="table table-striped">
+            		<thead>
              			<tr>
-             				<th>QUANTITY</th>
+             				<th>DATE</th>
+             				<th>INVOICE #</th>
+             				<th>WHOLE LECHON 500/KL</th>
              				<th>DESCRIPTION</th>
-             				<th>UNIT PRICE</th>
              				<th>AMOUNT</th>
              			</tr>
              		</thead>
-               		<tbody>
-
-           				<tr>
-           					<td>{{ $purchaseOrder['quantity']}}</td>
-           					<td>{{ $purchaseOrder['description']}}</td>
-           					<td>{{ $purchaseOrder['unit_price']}}</td>
-           					<td>{{ $purchaseOrder['amount']}}</td>
-           				</tr>
-           				@foreach($pOrders as $pOrder)
-           				<tr>
-           					<td>{{ $pOrder['quantity'] }}</td>
-           					<td>{{ $pOrder['description'] }}</td>
-           					<td>{{ $pOrder['unit_price'] }}</td>
-           					<td><?php echo number_format($pOrder['amount'], 2) ?></td>
-           				</tr>	
-           				@endforeach
-           				<tr>
+             		<tbody>
+             			<tr>
+         					<td>{{ $viewBillingStatement['date_of_transaction'] }}</td>
+         					<td>{{ $viewBillingStatement['invoice_number'] }}</td>
+         					<td>{{ $viewBillingStatement['whole_lechon'] }}</td>
+         					<td>{{ $viewBillingStatement['description'] }}</td>
+         					<td><?php echo number_format($viewBillingStatement['amount'], 2); ?></td>
+             			</tr>
+             			@foreach($billingStatements as $billingStatement)
+             			<tr>
+             				<td>{{ $billingStatement['date_of_transaction'] }}</td>
+             				<td>{{ $billingStatement['invoice_number'] }}</td>
+             				<td>{{ $billingStatement['whole_lechon'] }}</td>
+             				<td>{{ $billingStatement['description'] }}</td>
+             				<td><?php echo number_format($billingStatement['amount'], 2);?></td>
+             			</tr>
+             			@endforeach
+             			<tr>
+           					<td></td>
            					<td></td>
            					<td></td>
            					<td><strong>Total</strong></td>
            					<td></td>
            				</tr>
-               		</tbody>
-             </table>
-             <div class="form-group">
+             		</tbody>
+        	</table>
+        	 <div class="form-group">
                 <div class="form-row">
                     <div class="col-lg-6">
-                      <label>Requested By</label>
+                       <label>Prepared By</label>
+                      <p>{{ $viewBillingStatement['created_by'] }}</p>
                     </div>
                     <div class="col-lg-6">
-                      <label>Prepared By</label>
-                      <p>{{ $purchaseOrder['created_by'] }}</p>
+                     	 <label>Approved By</label>
                     </div>
-                </div>
-             </div>
-             <div class="form-group">
-                <div class="form-row">
-                    <div class="col-lg-6">
-                      <label>Checked By</label>
-                    </div>
-                   
                 </div>
              </div>
     	</div>
-    </div>	
-
+    </div>
 </div>
 @endsection

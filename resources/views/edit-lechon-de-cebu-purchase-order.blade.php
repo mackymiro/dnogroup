@@ -24,6 +24,11 @@
       var table = document.getElementById(rowid).remove();
 	}
 </script>
+<script>
+  $(document).ready(function(){
+      $('.alert-success').fadeIn().delay(3000).fadeOut();
+  });
+</script>
 <div id="wrapper">
 	<ul class="sidebar navbar-nav">
        <li class="nav-item">
@@ -109,14 +114,14 @@
             <div class="col-lg-12">
             	 <img src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
             	 
-            	 <h4 class="text-center"><u>UPDATE PURCHASE ORDER</u></h4>
+            	 <h4 class="text-center"><u>UPDATED PURCHASE ORDER</u></h4>
             </div>
               @if(session('SuccessE'))
                <p class="alert alert-success">{{ Session::get('SuccessE') }}</p>
               @endif 
              <form action="{{ action('LoloPinoyLechonDeCebuController@update', $purchaseOrder['id']) }}" method="post">
              {{csrf_field()}}
-            <input name="_method" type="hidden" value="POST">
+            <input name="_method" type="hidden" value="PATCH">
             <div class="form-group">
             	<div class="form-row">
             		<div class="col-lg-6">
@@ -184,7 +189,7 @@
             <form action="{{ action('LoloPinoyLechonDeCebuController@updatePo', $pOrder['id']) }}" method="post">
             <div class="form-group">
                  {{csrf_field()}}
-                 <input name="_method" type="hidden" value="POST">
+                 <input name="_method" type="hidden" value="PATCH">
 
                 <div id="deletedId{{ $pOrder['id'] }}" class="form-row">
                     <div class="col-lg-1">
@@ -209,7 +214,9 @@
                       <br>
                       <input type="hidden" name="poId" value="{{ $purchaseOrder['id'] }}" />
                       <input type="submit" class="btn btn-success" value="Update" />
+                      @if($user->role_type == 1)
                       <a id="delete" onClick="confirmDelete('{{ $pOrder['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
+                      @endif
                     </div>
                 </div>
                
@@ -217,7 +224,9 @@
           </form>
             @endforeach
             <div>
+              @if($user->role_type == 1)
               <a href="{{ url('lolo-pinoy-lechon-de-cebu/add-new/'.$purchaseOrder['id']) }}" class="btn btn-primary">Add New</a>
+              @endif
             </div>
           	
       			<br>
