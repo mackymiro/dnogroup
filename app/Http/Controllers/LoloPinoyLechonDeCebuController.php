@@ -9,11 +9,86 @@ use Auth;
 use App\User; 
 use App\LechonDeCebuPurchaseOrder; 
 use App\LechonDeCebuBillingStatement; 
+use App\LechonDeCebuStatementOfAccount; 
 
 use Session;
 
 class LoloPinoyLechonDeCebuController extends Controller
 {
+
+    //store statement of account
+    public function storeStatementAccount(Request $request){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        //get user name
+        $name  = $firstName.$lastName;
+
+         //validate
+        $this->validate($request, [
+            'date' =>'required',
+            'kilos'=>'required',
+            'paymentMethod'=>'required',
+            'amount'=>'required',
+            'checkAmount'=>'required',
+        ]);
+
+
+         //get the latest insert id query in table statement of account invoice number
+        $invoiceNumber = DB::select('SELECT id, invoice_number FROM lechon_de_cebu_statement_of_accounts ORDER BY id DESC LIMIT 1');
+
+        //if code is not zero add plus 1 reference number
+        if(isset($invoiceNumber[0]->invoice_number) != 0){
+            //if code is not 0
+            $newInvoice = $invoice_number[0]->invoice_number +1;
+            $uInvoice = sprintf("%06d",$newInvoice);   
+
+        }else{
+            //if code is 0 
+            $newInvoice = 1;
+            $uInvoice = sprintf("%06d",$newInvoice);
+        } 
+
+        $addStatementAccount =  new LechonDeCebuStatementOfAccount([
+            'user_id'=>$user->id,
+            'date'=>$request->get('date'),
+            'branch'=>$request->get('branch'),
+            'invoice_number'=>$uInvoice,
+            'kilos'=>$request->get('kilos'),
+            'unit_price'=>$request->get('unitPrice'),
+            'payment_method'=>$request->get('paymentMethod'),
+            'amount'=>$request->get('amount'),
+            'status'=>$request->get('status'),
+            'paid_amount'=>$request->get('paidAmount'),
+            'collection_date'=>$request->get('collectionDate'),
+            'check_number'=>$request->get('checkNumber'),
+            'check_amount'=>$request->get('checkAmount'),
+            'or_number'=>$request->get('orNumber'),
+            'created_by'=>$name,
+        ]);
+
+        $addStatementAccount->save();
+
+        $insertedId = $addStatementAccount->id;
+
+        return redirect('lolo-pinoy-lechon-de-cebu/edit-statement-of-account/'.$insertedId);
+
+
+
+    }
+
+    //statement of account
+    public function statementOfAccount(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('lechon-de-cebu-statement-of-account-form', compact('user'));
+    }
+
+
     //viewBillingStatement
     public function viewBillingStatement($id){
         $ids = Auth::user()->id;

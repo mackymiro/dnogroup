@@ -27,6 +27,11 @@
         <a class="nav-link" href="index.html">
           <i class="fas fa-receipt"></i>
           <span>Statement of account</span>
+           <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/statement-of-account-form')}}">Statement of Account</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/statement-of-account/lists') }}">Lists</a>
+         
+        </div>
         </a>
       </li>
        <li class="nav-item dropdown active">
