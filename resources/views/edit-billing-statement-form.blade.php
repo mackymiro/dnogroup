@@ -156,11 +156,11 @@
           				<input type="text" name="amount" class="form-control" disabled="disabled" value="<?php echo number_format($billingStatement['amount'], 2); ?>" />
           			</div>
         			<br>
-        			<div class="col-lg-12 float-right">
-	                  <br>
-	                  <br>
-	                  <input type="submit" class="btn btn-success"  value="Update Billing Statement" />
-	                </div>
+      			 <div class="col-lg-12 float-right">
+                  <br>
+                  <br>
+                  <input type="submit" class="btn btn-success"  value="Update Billing Statement" />
+                </div>
             	</div>		
             </div>	
            </form>

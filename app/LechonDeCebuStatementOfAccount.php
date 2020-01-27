@@ -10,6 +10,7 @@ class LechonDeCebuStatementOfAccount extends Model
 
     protected $fillable = [
 		'user_id',
+		'soa_id',
 		'date',
 		'branch',
 		'invoice_number',

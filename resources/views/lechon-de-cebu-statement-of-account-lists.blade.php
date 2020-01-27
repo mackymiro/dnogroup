@@ -2,7 +2,7 @@
 @section('content')
 <div id="wrapper">
 	<ul class="sidebar navbar-nav">
-       <li class="nav-item">
+		 <li class="nav-item">
         <a class="nav-link" href="index.html">
           <i class="fas fa-cash-register"></i>
           <span>Sales Invoice</span>
@@ -33,7 +33,7 @@
          
         </div>
       </li>
-       <li class="nav-item dropdown active">
+       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fas fa-receipt"></i>
           <span>Billing statement</span>
@@ -76,103 +76,94 @@
          
         </div>
       </li>
-     
-     
-    </ul>
-    <div id="content-wrapper">
-    	<div class="container-fluid">
-      		 <!-- Breadcrumbs-->
+	</ul>
+	<div id="content-wrapper">
+		<div class="container-fluid">
+			 <!-- Breadcrumbs-->
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                   <a href="#">Lechon de Cebu</a>
                 </li>
-                <li class="breadcrumb-item active">Billing Statement All Lists</li>
+                <li class="breadcrumb-item active">Statement Of Account All Lists</li>
               </ol>
-            <div class="row">
-            	<div class="col-lg-12">
-            		<div class="card mb-3">
-            			<div class="card-header">
-    					  <i class="fa fa-tasks" aria-hidden="true"></i>
+              <div class="row">
+              		<div class="col-lg-12">
+              			<div class="card mb-3">
+              			<div class="card-header">
+              				 <i class="fa fa-tasks" aria-hidden="true"></i>
     					  All Lists</div>
     					  <div class="card-body">
-    					  	<div class="table-responsive">
+    					  		<div class="table-responsive">
 				  				<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 				  					<thead>
-				  						<th>Action</th>
-				  						<th>Reference #</th>
-                      <th>PO #</th>
-				  						<th>Bill To</th>
-				  						<th>Date</th>
-				  						<th>Period Covered</th>
-				  						<th>Created By</th>
-			  						</thead>
-			  						<tfoot>
 			  							<th>Action</th>
-				  						<th>Reference #</th>
-                      <th>PO #</th>
-				  						<th>Bill To</th>
-				  						<th>Date</th>
-				  						<th>Period Covered</th>
-				  						<th>Created By</th>
+			  							<th>Date</th>
+			  							<th>Branch</th>
+			  							<th>Invoice#</th>
+			  							<th>Kilos</th>
+			  							<th>Unit Price</th>
+			  							<th>Payment Method Code</th>
+			  							<th>Amount</th>
+			  							<th>Status</th>
+			  							<th>Paid Amount</th>
+			  							<th>Created By</th>
+				  					</thead>
+				  					<tfoot>
+			  							<th>Action</th>
+			  							<th>Date</th>
+			  							<th>Branch</th>
+			  							<th>Invoice#</th>
+			  							<th>Kilos</th>
+			  							<th>Unit Price</th>
+			  							<th>Payment Method Code</th>
+			  							<th>Amount</th>
+			  							<th>Status</th>
+			  							<th>Paid Amount</th>
+			  							<th>Created By</th>
+				  					</tfoot>
+				  					<tbody>
+				  						@foreach($statementOfAccounts as $statementOfAccount)
+			  							<tr>
+		  									<td>
+		  										<a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-statement-of-account/'.$statementOfAccount['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+		  										<a href="" title="Delete"><i class="fas fa-trash"></i></a>
+		  										<a href="" title="View"><i class="fas fa-low-vision"></i></a>
+		  									</td>
+		  									<td>{{ $statementOfAccount['date'] }}</td>
+		  									<td>{{ $statementOfAccount['branch'] }}</td>
+		  									<td>{{ $statementOfAccount['invoice_number'] }}</td>
+		  									<td>{{ $statementOfAccount['kilos'] }}</td>
+		  									<td>{{ $statementOfAccount['unit_price'] }}</td>
+		  									<td>{{ $statementOfAccount['payment_method'] }}</td>
+		  									<td>{{ $statementOfAccount['amount'] }}</td>
+		  									<td>
+		  										@if($statementOfAccount['status'] == "Unpaid")
+		  										<span class="alert alert-danger">{{ $statementOfAccount['status'] }}</span>
+		  										@else if($statementOfAccount['status'] == "Paid")
+		  										<span class="alert alert-success">{{ $statementOfAccount['status'] }}</span>
 
-			  						</tfoot>
-			  						<tbody>
-			  							@foreach($billingStatements as $billingStatement)
-			  							<tr id="deletedId{{ $billingStatement['id'] }}">
-			  								<td>
-                          @if($user->role_type !== 3)
-			  									<a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-billing-statement/'.$billingStatement['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-                          @endif
-                          @if($user->role_type == 1)
-				  								<a id="delete" onClick="confirmDelete('{{ $billingStatement['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
-                          @endif
-				  								<a href="{{ url('lolo-pinoy-lechon-de-cebu/view-billing-statement/'.$billingStatement['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
-
-			  								</td>
-			  								<td><a href="#">#-{{ $billingStatement['reference_number'] }}</a></td>
-                        <td><a href="#">#-{{ $billingStatement['p_o_number'] }}</a></td>
-			  								<td>{{ $billingStatement['bill_to'] }}</td>
-			  								<td>{{ $billingStatement['date'] }}</td>
-			  								<td>{{ $billingStatement['period_cover'] }}</td>
-			  								<td>{{ $billingStatement['created_by'] }}</td>
-			  							</tr>
-			  							@endforeach
-			  						</tbody>
-			  					</table>
-    					  	</div>
+		  										@endif
+		  									</td>
+		  									<td>{{ $statementOfAccount['paid_amount'] }}</td>
+		  									<td>{{ $statementOfAccount['created_by'] }}</td>
+		  								</tr>
+		  								@endforeach
+				  					</tbody>
+				  				</table>
+    					  		</div>
     					  </div>
-            		</div>
-            	</div>
-            </div>
-    	</div>
- 	</div>
+              			</div>
+          			</div>
+          			<div class="col-lg-12">
+      					<div class="card mb-3">
+  							<div class="card-header">
+              				 <i class="fa fa-tasks" aria-hidden="true"></i>
+    					  	Paid</div>
+      					</div>
+          			</div>
+          		</div>	
+          </div>
+		</div>	
+	</div>
 </div>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-<script type="text/javascript">
-	 function confirmDelete(id){
-	 	var x = confirm("Do you want to delete this?");
-	 	if(x){
-	 		$.ajax({
-              type: "DELETE",
-              url: '/lolo-pinoy-lechon-de-cebu/delete-billing-statement/' + id,
-              data:{
-                _method: 'delete', 
-                "_token": "{{ csrf_token() }}",
-                "id": id
-              },
-              success: function(data){
-                console.log(data);
-                $("#deletedId"+id).fadeOut('slow');
-               
-              },
-              error: function(data){
-                console.log('Error:', data);
-              }
-
-            });
-	 	}else{
-	 		  return false;
-	 	}
-	 }
-</script>
 @endsection

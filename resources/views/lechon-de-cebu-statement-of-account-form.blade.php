@@ -133,11 +133,7 @@
 								</option>
     						</select>
     					</div>
-    					@if ($errors->has('paymentMethod'))
-		                  <span class="alert alert-danger">
-		                    <strong>{{ $errors->first('paymentMethod') }}</strong>
-		                  </span>
-		              	@endif
+    				
         			</div>
         			<div class="col-lg-6">
     					<label>Amount</label>

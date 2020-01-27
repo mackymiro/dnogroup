@@ -16,6 +16,120 @@ use Session;
 class LoloPinoyLechonDeCebuController extends Controller
 {
 
+    //update statment info
+    public function updateStatementInfo(Request $request, $id){
+        $updateStatmentInfo = LechonDeCebuStatementOfAccount::find($id);
+
+        $updateStatmentInfo->date = $request->get('date');
+        $updateStatmentInfo->branch = $request->get('branch');
+        $updateStatmentInfo->kilos = $request->get('kilos');
+        $updateStatmentInfo->unit_price = $request->get('unitPrice');
+        $updateStatmentInfo->payment_method = $request->get('paymentMethod');
+        $updateStatmentInfo->amount = $request->get('amount');
+        $updateStatmentInfo->status = $request->get('status');
+        $updateStatmentInfo->paid_amount = $request->get('paidAmount');
+        $updateStatmentInfo->collection_date = $request->get('collectionDate');
+        $updateStatmentInfo->check_number = $request->get('checkNumber');
+        $updateStatmentInfo->check_amount = $request->get('checkAmount');
+        $updateStatmentInfo->or_number = $request->get('orNumber');
+
+        $updateStatmentInfo->save();
+
+        Session::flash('SuccessE', 'Successfully updated');
+
+        return redirect('lolo-pinoy-lechon-de-cebu/edit-statement-of-account/'.$id);
+   }
+
+    //add new statement of account data
+    public function addNewStatementData(Request $request, $id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $statement = LechonDeCebuStatementOfAccount::find($id);
+        
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+         //get the latest insert id query in table billing statements ref number
+        $dataInvoiceNum = DB::select('SELECT id, invoice_number FROM lechon_de_cebu_statement_of_accounts ORDER BY id DESC LIMIT 1');
+
+        //if code is not zero add plus 1 inovice number
+        if(isset($dataInvoiceNum[0]->invoice_number) != 0){
+            //if code is not 0
+            $newInvoice = $dataInvoiceNum[0]->invoice_number +1;
+            $uInvoice = sprintf("%06d",$newInvoice);   
+
+        }else{
+            //if code is 0 
+            $newInvoice = 1;
+            $uInvoice = sprintf("%06d",$newInvoice);
+        } 
+
+        $addNewStatement = new LechonDeCebuStatementOfAccount([
+            'date'=>$request->get('date'),
+            'user_id'=>$user->id,
+            'soa_id'=>$id,
+            'branch'=>$request->get('branch'),
+            'invoice_number'=>$uInvoice,
+            'kilos'=>$request->get('kilos'),
+            'unit_price'=>$request->get('unitPrice'),
+            'payment_method'=>$request->get('paymentMethod'),
+            'amount'=>$request->get('amount'),
+            'status'=>$request->get('status'),
+            'paid_amount'=>$request->get('paidAmount'),
+            'collection_date'=>$request->get('collectionDate'),
+            'check_number'=>$request->get('checkNumber'),
+            'check_amount'=>$request->get('checkAmount'),
+            'or_number'=>$request->get('orNumber'),
+            'created_by'=>$name,
+
+        ]);
+
+        $addNewStatement->save();
+
+        Session::flash('addStatementSuccess', 'Successfully added.');
+
+        return redirect('lolo-pinoy-lechon-de-cebu/add-new-statement-account/'.$id);
+
+
+    }
+
+    //add new statement of account
+    public function addNewStatementAccount($id){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('add-new-lechon-de-cebu-statement-account', compact('user', 'id'));
+    }
+
+    //edit statement of account
+    public function editStatementAccount($id){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        //getStatementOfAccount
+        $getStatementOfAccount = LechonDeCebuStatementOfAccount::find($id);
+
+        $sAccounts = LechonDeCebuStatementOfAccount::where('soa_id', $id)->get()->toArray();
+        
+        return view('edit-statement-of-account', compact('user', 'getStatementOfAccount', 'sAccounts'));
+    }
+
+
+    //statement of account lists
+    public function statementOfAccountLists(){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        //get statement of account 
+        $statementOfAccounts = LechonDeCebuStatementOfAccount::where('soa_id', NULL)->get()->toArray();
+
+
+        return view('lechon-de-cebu-statement-of-account-lists', compact('user', 'statementOfAccounts'));
+    }
+
     //store statement of account
     public function storeStatementAccount(Request $request){
         $ids =  Auth::user()->id;
@@ -31,7 +145,6 @@ class LoloPinoyLechonDeCebuController extends Controller
         $this->validate($request, [
             'date' =>'required',
             'kilos'=>'required',
-            'paymentMethod'=>'required',
             'amount'=>'required',
             'checkAmount'=>'required',
         ]);
@@ -43,7 +156,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         //if code is not zero add plus 1 reference number
         if(isset($invoiceNumber[0]->invoice_number) != 0){
             //if code is not 0
-            $newInvoice = $invoice_number[0]->invoice_number +1;
+            $newInvoice = $invoiceNumber[0]->invoice_number +1;
             $uInvoice = sprintf("%06d",$newInvoice);   
 
         }else{
