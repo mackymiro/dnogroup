@@ -109,6 +109,15 @@ Route::group(['middleware' => ['auth']], function(){
 	//update statement of account info
 	Route::patch('/lolo-pinoy-lechon-de-cebu/update-statement-info/{id}', 'LoloPinoyLechonDeCebuController@updateStatementInfo')->name('lolo-pinoy-lechon-de-cebu.updateStatementInfo');
 
+	//update add statement information
+	Route::patch('lolo-pinoy-lechon-de-cebu/update-added-statement/{id}', 'LoloPinoyLechonDeCebuController@updateAddStatement')->name('lolo-pinoy-lechon-de-cebu.updateAddStatement');
+
+	//delete statement of account
+	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-statement-account/{id}', 'LoloPinoyLechonDeCebuController@destroyStatementAddAccount')->name('lolo-pinoy-lechon-de-cebu.deleteStatementAddAccount');
+
+	//view statement of account
+	Route::get('/lolo-pinoy-lechon-de-cebu/view-statement-account/{id}', 'LoloPinoyLechonDeCebuController@viewStatementAccount')->name('lolo-pinoy-lechon-de-cebu.viewStatementAccount');
+
 });
 
 

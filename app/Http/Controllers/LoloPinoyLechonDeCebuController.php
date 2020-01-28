@@ -16,6 +16,45 @@ use Session;
 class LoloPinoyLechonDeCebuController extends Controller
 {
 
+    //view statement of account
+    public function viewStatementAccount($id){
+       
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //getStatementAccounts
+        $getStatementAccounts = LechonDeCebuStatementOfAccount::where('id', $id)->get()->toArray();
+
+        return view('view-lechon-de-cebu-statement-account', compact('user','getStatementAccounts'));
+    }
+
+    //updateAddStatement
+    public function updateAddStatement(Request $request, $id){
+        $addedStatementAccount = LechonDeCebuStatementOfAccount::find($id);
+
+        $statementAccountId = $request->get('statementAccountId');
+
+        $addedStatementAccount->date = $request->get('date');
+        $addedStatementAccount->branch = $request->get('branch');
+        $addedStatementAccount->kilos = $request->get('kilos');
+        $addedStatementAccount->unit_price = $request->get('unitPrice');
+        $addedStatementAccount->payment_method = $request->get('paymentMethod');
+        $addedStatementAccount->amount = $request->get('amount');
+        $addedStatementAccount->status = $request->get('status');
+        $addedStatementAccount->paid_amount = $request->get('paidAmount');
+        $addedStatementAccount->collection_date = $request->get('collectionDate');
+        $addedStatementAccount->check_number = $request->get('checkNumber');
+        $addedStatementAccount->check_amount = $request->get('checkAmount');
+        $addedStatementAccount->or_number = $request->get('orNumber');
+
+        $addedStatementAccount->save();
+
+        Session::flash('SuccessEdit', 'Successfully updated');
+
+        return redirect('lolo-pinoy-lechon-de-cebu/edit-statement-of-account/'.$statementAccountId);
+
+    }
+
     //update statment info
     public function updateStatementInfo(Request $request, $id){
         $updateStatmentInfo = LechonDeCebuStatementOfAccount::find($id);
@@ -42,7 +81,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     //add new statement of account data
     public function addNewStatementData(Request $request, $id){
-         $ids = Auth::user()->id;
+        $ids = Auth::user()->id;
         $user = User::find($ids);
 
         $statement = LechonDeCebuStatementOfAccount::find($id);
@@ -123,11 +162,16 @@ class LoloPinoyLechonDeCebuController extends Controller
         $ids =  Auth::user()->id;
         $user = User::find($ids);
 
+        $status = "Unpaid";
+        $paid = "Paid";
+
         //get statement of account 
-        $statementOfAccounts = LechonDeCebuStatementOfAccount::where('soa_id', NULL)->get()->toArray();
+        $statementOfAccounts = LechonDeCebuStatementOfAccount::where('soa_id', NULL)->where('status', $status)->get()->toArray();
+
+        $statementOfAccountPaids = LechonDeCebuStatementOfAccount::where('soa_id', NULL)->where('status', $paid)->get()->toArray();
 
 
-        return view('lechon-de-cebu-statement-of-account-lists', compact('user', 'statementOfAccounts'));
+        return view('lechon-de-cebu-statement-of-account-lists', compact('user', 'statementOfAccounts', 'statementOfAccountPaids'));
     }
 
     //store statement of account
@@ -678,6 +722,14 @@ class LoloPinoyLechonDeCebuController extends Controller
         return redirect('lolo-pinoy-lechon-de-cebu/edit/'.$id);
 
 
+    }
+
+
+
+    //delete statement account
+    public function destroyStatementAddAccount($id){
+        $statementAccount = LechonDeCebuStatementOfAccount::find($id);
+        $statementAccount->delete();
     }
 
     //delete billing statement
