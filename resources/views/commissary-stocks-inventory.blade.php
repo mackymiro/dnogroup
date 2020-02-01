@@ -1,15 +1,15 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('content')
 <div id="wrapper">
-    <!-- Sidebar -->
-    <ul class="sidebar navbar-nav">
-       <li class="nav-item">
-        <a class="nav-link" href="{{ url('lolo-pinoy-lechon-de-cebu/') }}">
+	<ul class="sidebar navbar-nav">
+		 <li class="nav-item">
+        <a class="nav-link" href="index.html">
           <i class="fas fa-cash-register"></i>
           <span>Sales Invoice</span>
         </a>
       </li>
-       <li class="nav-item dropdown active">
+     
+      <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fab fa-first-order"></i>
           <span>Purchase order</span>
@@ -22,8 +22,7 @@
          
         </div>
       </li>
-      
-       <li class="nav-item dropdown">
+      <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fas fa-receipt"></i>
           <span>Statement of account</span>
@@ -34,7 +33,7 @@
          
         </div>
       </li>
-       <li class="nav-item dropdown ">
+       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fas fa-receipt"></i>
           <span>Billing statement</span>
@@ -78,35 +77,69 @@
         </div>
       </li>
      
-     
-    </ul>
-    <div id="content-wrapper">
-        <div class="container-fluid">
-             <!-- Breadcrumbs-->
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <a href="#">Lechon de Cebu</a>
-              </li>
-              <li class="breadcrumb-item active">Sales</li>
-            </ol>
+	</ul>
+	<div id="content-wrapper">
+		<div class="container-fluid">
+			 <!-- Breadcrumbs-->
+              <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                  <a href="#">Lechon de Cebu</a>
+                </li>
+                <li class="breadcrumb-item ">Commissary</li>
+                <li class="breadcrumb-item active">Stocks Inventory</li>
+              </ol>
+              <div class="row">
+              		<div class="col-lg-12">
+              			<div class="card mb-3">
+          					<div class="card-header">
+    					  <i class="fa fa-tasks" aria-hidden="true"></i>
+    					  All Lists</div>
+    					  <div class="card-body">
+    					  		<div class="table-responsive">
+    					  			<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+    					  				<thead>
+				  						<th>Action</th>
+				  						<th>Product Id No</th>
+				  						<th>Product Name</th>
+				  						<th>Unit Price</th>
+				  						<th>Unit</th>
+				  						<th>IN</th>
+				  						<th>OUT</th>
+				  						<th>Remaining Stock</th>
+				  						<th>Amount</th>
+				  						<th>Supplier</th>
+				  						<th>Created By</th>
+			  						</thead>
+			  						<tfoot>
+			  							<th>Action</th>
+				  						<th>Product Id No</th>
+				  						<th>Product Name</th>
+				  						<th>Unit Price</th>
+				  						<th>Unit</th>
+				  						<th>IN</th>
+				  						<th>OUT</th>
+				  						<th>Remaining Stock</th>
+				  						<th>Amount</th>
+				  						<th>Supplier</th>
+				  						<th>Created By</th>
 
-    
-        </div>
+			  						</tfoot>
+			  						<tbody>
+			  							<tr>
+		  									<td><a href="" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+		  										<a id="delete" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+		  										<a href="" title="View"><i class="fas fa-low-vision"></i></a>
+		  									</td>
 
-    </div>
-
-
-      <!-- Sticky Footer -->
-      <footer class="sticky-footer">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <span>Copyright © Lolo Pinoy Lechon de Cebu 2019</span>
-          </div>
-        </div>
-      </footer>
-
-    <!-- /.content-wrapper -->
+		  								</tr>
+			  						</tbody>
+					  			</table>
+    					  		</div>
+    					  </div>
+              			</div>
+              		</div>
+              </div>
+		</div>
+	</div>
 </div>
-
-
 @endsection

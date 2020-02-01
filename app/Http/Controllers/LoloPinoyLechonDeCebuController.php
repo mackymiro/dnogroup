@@ -15,6 +15,13 @@ use Session;
 
 class LoloPinoyLechonDeCebuController extends Controller
 {
+    //stocks inventory
+    public function stocksInventory(){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('commissary-stocks-inventory', compact('user'));
+    }
 
     //view statement of account
     public function viewStatementAccount($id){

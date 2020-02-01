@@ -2,7 +2,7 @@
 @section('content')
 <div id="wrapper">
 	<ul class="sidebar navbar-nav">
-       <li class="nav-item">
+      <li class="nav-item">
         <a class="nav-link" href="index.html">
           <i class="fas fa-cash-register"></i>
           <span>Sales Invoice</span>
@@ -67,7 +67,7 @@
           
           <a class="dropdown-item" href="login.html">RAW materials</a>
           <a class="dropdown-item" href="register.html">Production</a>
-          <a class="dropdown-item" href="forgot-password.html">Stocks inventory</a>     
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/commissary/stocks-inventory') }}">Stocks inventory</a>     
           <a class="dropdown-item" href="forgot-password.html">Delivery Outlets</a>
 
           <a class="dropdown-item" href="forgot-password.html">Sales of outlets</a>
