@@ -43,17 +43,16 @@
          
         </div>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="index.html">
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-file-invoice"></i>
-          <span>Cash vouchers</span>
+          <span>Payment vouchers</span>
         </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="index.html">
-          <i class="fas fa-book"></i>
-          <span>Check vouchers</span>
-        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+            <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/payment-voucher-form') }}">Payment Voucher Form</a>
+            <a class="dropdown-item" href="login.html">Cash Vouchers</a>
+            <a class="dropdown-item" href="login.html">Cheque Vouchers</a>  
+        </div>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -99,7 +98,7 @@
                               <i class="fas fa-receipt" aria-hidden="true"></i>
                             Billing Statement</div>
                           <div class="card-body">
-                              <div class="form-group">
+                            <div class="form-group">
                             <div class="form-row">
                               <div class="col-lg-6">
                                 <label>Bill To</label>

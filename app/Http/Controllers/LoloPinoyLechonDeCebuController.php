@@ -11,11 +11,161 @@ use App\LechonDeCebuPurchaseOrder;
 use App\LechonDeCebuBillingStatement; 
 use App\LechonDeCebuStatementOfAccount; 
 use App\CommissaryStockInventory;
-
+use App\LechonDeCebuPaymentVoucher;
 use Session;
 
 class LoloPinoyLechonDeCebuController extends Controller
 {
+
+    //update payment voucher pv
+    public function updatePV(Request $request, $id){
+
+        $updatePV = LechonDeCebuPaymentVoucher::find($id);
+      
+
+        $updatePV->particulars = $request->get('particulars');
+        $updatePV->amount = $request->get('amount');
+
+        $updatePV->save();
+
+        Session::flash('SuccessEdit', 'Successfully updated');
+        return redirect('lolo-pinoy-lechon-de-cebu/edit-payment-voucher/'.$request->get('pvId'));
+
+    }
+
+    //add new payment voucher data
+    public function addNewPaymentVoucherData(Request $request, $id){
+       
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+        $paymentVoucher = LechonDeCebuPaymentVoucher::find($id);
+
+        $addNewPaymentVoucherData = new LechonDeCebuPaymentVoucher([
+            'user_id'=>$user->id,
+            'pv_id'=>$id,
+            'reference_number'=>$paymentVoucher['reference_number'],
+            'particulars'=>$request->get('particulars'),
+            'amount'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+
+        $addNewPaymentVoucherData->save();
+
+         Session::flash('addPaymentVoucherSuccess', 'Successfully added.');
+
+        return redirect('lolo-pinoy-lechon-de-cebu/add-new-payment-voucher/'.$id);
+    }
+
+
+    //add new payment voucher
+    public function addNewPaymentVoucher($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('add-new-payment-voucher', compact('user', 'id'));
+    }
+
+    //update payment voucher
+    public function updatePaymentVoucher(Request $request, $id){
+
+        $updatePaymentVoucher = LechonDeCebuPaymentVoucher::find($id);
+
+        $updatePaymentVoucher->paid_to = $request->get('paidTo');
+        $updatePaymentVoucher->account_no = $request->get('accountNo');
+        $updatePaymentVoucher->date = $request->get('date');
+        $updatePaymentVoucher->particulars = $request->get('particulars');
+        $updatePaymentVoucher->amount = $request->get('amount');
+        $updatePaymentVoucher->method_of_payment = $request->get('methodOfPayment');
+
+        $updatePaymentVoucher->save();
+
+         Session::flash('updateSuccessfull', 'Successfully updated');
+
+        return redirect('lolo-pinoy-lechon-de-cebu/edit-payment-voucher/'.$id);
+    }
+
+    //payment voucher edit
+    public function editPaymentVoucher($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+
+        //getPaymentVoucher 
+        $getPaymentVoucher = LechonDeCebuPaymentVoucher::find($id);
+
+        //pVoucher
+        $pVouchers = LechonDeCebuPaymentVoucher::where('pv_id', $id)->get()->toArray();
+       
+
+        return view('edit-payment-voucher', compact('user', 'getPaymentVoucher', 'pVouchers'));
+    }
+
+    //payment voucher store 
+    public function paymentVoucherStore(Request $request){
+        
+        //validate
+        $this->validate($request, [
+            'paidTo' =>'required',
+           
+        ]);
+
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+         //get the latest insert id query in table payment voucher ref number
+        $dataReferenceNum = DB::select('SELECT id, reference_number FROM lechon_de_cebu_payment_vouchers ORDER BY id DESC LIMIT 1');
+
+        //if code is not zero add plus 1 reference number
+        if(isset($dataReferenceNum[0]->reference_number) != 0){
+            //if code is not 0
+            $newRefNum = $dataReferenceNum[0]->reference_number +1;
+            $uRef = sprintf("%06d",$newRefNum);   
+
+        }else{
+            //if code is 0 
+            $newRefNum = 1;
+            $uRef = sprintf("%06d",$newRefNum);
+        } 
+
+        $addPaymentVoucher = new LechonDeCebuPaymentVoucher([
+            'user_id'=>$user->id,
+            'reference_number'=>$uRef,
+            'paid_to'=>$request->get('paidTo'),
+            'account_no'=>$request->get('accountNo'),
+            'date'=>$request->get('date'),
+            'particulars'=>$request->get('particulars'),
+            'amount'=>$request->get('amount'),
+            'method_of_payment'=>$request->get('paymentMethod'),
+            'prepared_by'=>$name,
+            'created_by'=>$name,
+
+        ]);
+
+        $addPaymentVoucher->save();
+        $insertedId = $addPaymentVoucher->id; 
+
+        return redirect('lolo-pinoy-lechon-de-cebu/edit-payment-voucher/'.$insertedId);
+
+    }
+
+    //payment voucher form
+    public function paymentVoucherForm(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('payment-voucher-form',compact('user'));
+    }
 
     //view commissary stocks inventory
     public function viewStocksInventory($id){
@@ -72,7 +222,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $name  = $firstName.$lastName;
 
         //validate
-        $this->validate($request, [
+        $this->validate($request,[
             'productName' =>'required',
         ]);
 
@@ -843,6 +993,11 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     }
 
+    //delete payment voucher 
+    public function destroyPaymentVoucher($id){
+        $paymentVoucher = LechonDeCebuPaymentVoucher::find($id);
+        $paymentVoucher->delete();
+    }
 
     //delete commissary stocks inventory
     public function destroyStocksInventory($id){

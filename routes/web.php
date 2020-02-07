@@ -139,8 +139,28 @@ Route::group(['middleware' => ['auth']], function(){
 	//delete for commissary stocks inventory
 	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-stocks-inventory/{id}', 'LoloPinoyLechonDeCebuController@destroyStocksInventory')->name('lolo-pinoy-lechon-de-cebu.destroyStocksInventory');
 
+	//route for payment vouchers
+	Route::get('/lolo-pinoy-lechon-de-cebu/payment-voucher-form', 'LoloPinoyLechonDeCebuController@paymentVoucherForm')->name('lolo-pinoy-lechon-de-cebu.paymentVoucherForm');
+
+	//route for payment vouchers store
+	Route::post('/lolo-pinoy-lechon-de-cebu/payment-voucher-store', 'LoloPinoyLechonDeCebuController@paymentVoucherStore')->name('lolo-pinoy-lechon-de-cebu.paymnentVoucherStore');
 
 
+	//route for edit payment vouchers
+	Route::get('/lolo-pinoy-lechon-de-cebu/edit-payment-voucher/{id}', 'LoloPinoyLechonDeCebuController@editPaymentVoucher')->name('lolo-pinoy-lechon-de-cebu.editPaymentVoucher');
+
+	//route update payment vouhcer
+	Route::patch('/lolo-pinoy-lechon-de-cebu/update-payment-voucher/{id}', 'LoloPinoyLechonDeCebuController@updatePaymentVoucher')->name('lolo-pinoy-lechon-de-cebu.updatePaymentVoucher');
+
+	//Route for add new payment voucher
+	Route::get('/lolo-pinoy-lechon-de-cebu/add-new-payment-voucher/{id}', 'LoloPinoyLechonDeCebuController@addNewPaymentVoucher')->name('lolo-pinoy-lechon-de-cebu.addNewPaymentVoucher');
+
+	//route for add new payment voucher data
+	Route::post('/lolo-pinoy-lechon-de-cebu/add-new-payment-voucher-data/{id}', 'LoloPinoyLechonDeCebuController@addNewPaymentVoucherData')->name('lolo-pinoy-lechon-de-cebu.addNewPaymentVoucherData');
+
+	Route::patch('/lolo-pinoy-lechon-de-cebu/update-pv/{id}', 'LoloPinoyLechonDeCebuController@updatePV')->name('lolo-pinoy-lechon-de-cebu.updatePV');
+
+	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-payment-voucher/{id}', 'LoloPinoyLechonDeCebuController@destroyPaymentVoucher')->name('lolo-pinoy-lechon-de-cebu.destroyPaymentVoucher');
 });
 
 
