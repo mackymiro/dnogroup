@@ -50,8 +50,8 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
             <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/payment-voucher-form') }}">Payment Voucher Form</a>
-            <a class="dropdown-item" href="login.html">Cash Vouchers</a>
-            <a class="dropdown-item" href="login.html">Cheque Vouchers</a>  
+            <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/cash-vouchers') }}">Cash Vouchers</a>
+            <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/cheque-vouchers') }}">Cheque Vouchers</a>  
         </div>
       </li>
       <li class="nav-item dropdown">
@@ -144,9 +144,8 @@
                          	</div>
                          	
 	             		 	<div>
-		  	 					
-		  	 					<input type="submit" class="btn btn-success float-right" value="Add Payment Voucher" />
-			  	 			</div>
+		  	 				      <input type="submit" class="btn btn-success float-right" value="Add Payment Voucher" />
+			  	 			    </div>
 			  	 			<br>	
                          	
                          </div>	
@@ -164,8 +163,8 @@
 	el: '#app-payment-method',
 		data: {
 			payments:[
-				{ text:'Cheque', value: 'Cheque' },
-				{ text:'Cash', value: 'Cash'}
+				{ text:'Cash', value: 'Cash' },
+				{ text:'Cheque', value: 'Cheque'}
 			]
 		}
 	})	

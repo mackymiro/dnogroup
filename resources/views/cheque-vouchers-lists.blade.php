@@ -2,7 +2,7 @@
 @section('content')
 <div id="wrapper">
 	<ul class="sidebar navbar-nav">
-		 <li class="nav-item">
+      <li class="nav-item">
         <a class="nav-link" href="index.html">
           <i class="fas fa-cash-register"></i>
           <span>Sales Invoice</span>
@@ -33,7 +33,7 @@
          
         </div>
       </li>
-       <li class="nav-item dropdown">
+       <li class="nav-item dropdown active">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fas fa-receipt"></i>
           <span>Billing statement</span>
@@ -57,6 +57,7 @@
             <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/cheque-vouchers') }}">Cheque Vouchers</a>  
         </div>
       </li>
+     
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-apple-alt"></i>
@@ -76,110 +77,103 @@
         </div>
       </li>
      
-	</ul>
-	<div id="content-wrapper">
+     
+    </ul>
+     <div id="content-wrapper">
 		<div class="container-fluid">
 			 <!-- Breadcrumbs-->
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                   <a href="#">Lechon de Cebu</a>
                 </li>
-                <li class="breadcrumb-item ">Commissary</li>
-                <li class="breadcrumb-item active">Stocks Inventory</li>
+                <li class="breadcrumb-item active">Cheque Vouchers All Lists</li>
               </ol>
-              <div class="row">
-              		<div class="col-lg-12">
-              			<div class="card mb-3">
-            					<div class="card-header">
-          					  <i class="fa fa-tasks" aria-hidden="true"></i>
-          					  All Lists</div>
-    					    <div class="card-body">
-                    <div class="float-right">
-                        <a href="{{ url('lolo-pinoy-lechon-de-cebu/commissary/create-stocks')}}" title="Create Stocks" class="btn  btn-success">Create Stocks</a>
-                    </div>
-                    <br>
-                    <br>
+               <div class="row">
+               		<div class="col-lg-12">
+               			<div class="card mb-3">
+               				<div class="card-header">
+	    					  <i class="fa fa-file-invoice" aria-hidden="true"></i>
+	    					  All Lists</div>
+    					  	<div class="card-body">
     					  		<div class="table-responsive">
     					  			<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
     					  				<thead>
-  				  						<th>Action</th>
-  				  						<th>Product Id No</th>
-  				  						<th>Product Name</th>
-  				  						<th>Unit Price</th>
-  				  						<th>Unit</th>
-  				  						<th>IN</th>
-  				  						<th>OUT</th>
-  				  					
-  				  						<th>Created By</th>
-			  						   </thead>
-			  						<tfoot>
-			  							<th>Action</th>
-				  						<th>Product Id No</th>
-				  						<th>Product Name</th>
-				  						<th>Unit Price</th>
-				  						<th>Unit</th>
-				  						<th>IN</th>
-				  						<th>OUT</th>
-				  						
-				  						<th>Created By</th>
-
-			  						</tfoot>
-			  						<tbody>
-                      @foreach($getStocksInventories as $getStocksInventory)
-			  							<tr id="deletedId{{ $getStocksInventory['id']}}">
-		  									<td>
-                          <a href="{{ url('lolo-pinoy-lechon-de-cebu/commissary/edit-stocks-inventory/'.$getStocksInventory['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-		  										<a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getStocksInventory['id'] }}')" title="Delete"><i class="fas fa-trash"></i></a>
-		  										<a href="{{ url('lolo-pinoy-lechon-de-cebu/commissary/view-stocks-inventory/'.$getStocksInventory['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
-		  									</td>
-                        <td>{{ $getStocksInventory['product_id_no'] }}</td>
-                        <td>{{ $getStocksInventory['product_name'] }}</td>
-                        <td>{{ $getStocksInventory['unit_price'] }}</td>
-                        <td>{{ $getStocksInventory['unit'] }}</td>
-                        <td>{{ $getStocksInventory['in'] }}</td>
-                        <td>{{ $getStocksInventory['out'] }}</td>
-                       
-                        <td>{{ $getStocksInventory['created_by'] }}</td>
-                        
-		  								</tr>
-                      @endforeach
-			  						</tbody>
-					  			</table>
-    					  		</div>
-    					  </div>
-              			</div>
-              		</div>
-              </div>
+						  						<th>Action</th>
+						  						<th>Reference #</th>
+							                    <th>Paid To</th>
+						  						<th>Account No</th>
+						  						<th>Date</th>
+						  						<th>Method Of Payment</th>
+						  						<th>Particulars</th>
+						  						<th>Amount</th>
+						  						<th>Created By</th>
+					  						</thead>
+					  						<tfoot>
+					  							<th>Action</th>
+						  						<th>Reference #</th>
+							                    <th>Paid To</th>
+						  						<th>Account No</th>
+						  						<th>Date</th>
+						  						<th>Method Of Payment</th>
+						  						<th>Particulars</th>
+						  						<th>Amount</th>
+						  						<th>Created By</th>
+					  						</tfoot>
+					  						<tbody>
+					  							@foreach($getAllChequeVouchers as $getAllChequeVoucher)
+					  							<tr id="deletedId{{ $getAllChequeVoucher['id']}}">
+					  								<td>
+					  									<a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-payment-voucher/'.$getAllChequeVoucher['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+	      		  										<a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getAllChequeVoucher['id']}}')" title="Delete"><i class="fas fa-trash"></i></a>
+	      		  										<a href="{{ url('lolo-pinoy-lechon-de-cebu/view-payment-voucher/'.$getAllChequeVoucher['id'])}}" title="View"><i class="fas fa-low-vision"></i></a>
+					  								</td>
+					  								<td>{{ $getAllChequeVoucher['reference_number'] }}</td>
+					  								<td>{{ $getAllChequeVoucher['paid_to']}}</td>
+					  								<td>{{ $getAllChequeVoucher['account_no']}}</td>
+					  								<td>{{ $getAllChequeVoucher['date']}}</td>
+					  								<td>{{ $getAllChequeVoucher['method_of_payment']}}</td>
+					  								<td>{{ $getAllChequeVoucher['particulars']}}</td>
+					  								<td><?php echo number_format($getAllChequeVoucher['amount'], 2); ?></td>
+					  								<td>{{ $getAllChequeVoucher['created_by'] }}</td>
+					  							</tr>
+					  							@endforeach
+					  						</tbody>
+    					  			</table>
+    					  		</div>		
+    					  	</div>
+               			</div>
+               		</div>
+               </div>
 		</div>
-	</div>
+     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
-    function confirmDelete(id){
-        var x = confirm("Do you want to delete this?");
-        if(x){
-            $.ajax({
-              type: "DELETE",
-              url: '/lolo-pinoy-lechon-de-cebu/delete-stocks-inventory/' + id,
-              data:{
-                _method: 'delete', 
-                "_token": "{{ csrf_token() }}",
-                "id": id
-              },
-              success: function(data){
-                console.log(data);
-                $("#deletedId"+id).fadeOut('slow');
-               
-              },
-              error: function(data){
-                console.log('Error:', data);
-              }
+	function confirmDelete(id){
+	  		var x = confirm("Do you want to delete this?");
+	  		 if(x){
+	            $.ajax({
+	              type: "DELETE",
+	              url: '/lolo-pinoy-lechon-de-cebu/delete-payment-voucher/' + id,
+	              data:{
+	                _method: 'delete', 
+	                "_token": "{{ csrf_token() }}",
+	                "id": id
+	              },
+	              success: function(data){
+	                console.log(data);
+	                $("#deletedId"+id).fadeOut('slow');
+	               
+	              },
+	              error: function(data){
+	                console.log('Error:', data);
+	              }
 
-            });
+	            });
 
-        }else{
-            return false;
-        }
-    }
+	        }else{
+	            return false;
+	        }
+  	   }
 </script>
 @endsection

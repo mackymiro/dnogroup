@@ -17,6 +17,45 @@ use Session;
 class LoloPinoyLechonDeCebuController extends Controller
 {
 
+    //payment voucher view
+    public function viewPaymentVoucher($id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //paymentVoucher
+        $paymentVoucher = LechonDeCebuPaymentVoucher::find($id);
+
+        $pVouchers = LechonDeCebuPaymentVoucher::where('pv_id', $id)->get()->toArray();
+
+        return view('view-payment-voucher', compact('user', 'paymentVoucher', 'pVouchers'));
+    }
+
+    //payment voucher > cheque vouchers
+    public function chequeVouchers(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //getAllChequeVouchers
+        $method = "Cheque";
+
+        $getAllChequeVouchers = LechonDeCebuPaymentVoucher::where('method_of_payment', $method)->get()->toArray(); 
+
+        return view('cheque-vouchers-lists', compact('user', 'getAllChequeVouchers')); 
+    }
+
+    //payment voucher > cash vouchers
+    public function cashVouchers(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //getAllCashVouchers
+        $method = "Cash";
+
+        $getAllCashVouchers = LechonDeCebuPaymentVoucher::where('method_of_payment', $method)->get()->toArray();
+
+        return view('cash-vouchers-lists', compact('user', 'getAllCashVouchers'));
+    }
+
     //update payment voucher pv
     public function updatePV(Request $request, $id){
 

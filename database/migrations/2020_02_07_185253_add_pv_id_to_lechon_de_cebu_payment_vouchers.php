@@ -27,5 +27,9 @@ class AddPvIdToLechonDeCebuPaymentVouchers extends Migration
     public function down()
     {
         //
+          Schema::table('lechon_de_cebu_payment_vouchers', function($table) {
+            $table->dropColumn('pv_id');
+        });
     }
+
 }
