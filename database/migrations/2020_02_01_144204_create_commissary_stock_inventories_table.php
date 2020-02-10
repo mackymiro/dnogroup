@@ -13,22 +13,24 @@ class CreateCommissaryStockInventoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('commissary_stock_inventories', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id');
-            $table->string('branch');
-            $table->string('product_id_no');
-            $table->string('product_name');
-            $table->decimal('unit_price', 15,2);
-            $table->string('unit');
-            $table->string('in');
-            $table->string('out');
-            $table->string('remaining_stock');
-            $table->decimal('amount', 15,2);
-            $table->string('supplier');
-            $table->string('created_by');
-            $table->timestamps();
-        });
+        if(!Schema::hasTable('commissary_stock_inventories')) {
+            Schema::create('commissary_stock_inventories', function (Blueprint $table) {
+                $table->increments('id');
+                $table->integer('user_id');
+                $table->string('branch');
+                $table->string('product_id_no');
+                $table->string('product_name');
+                $table->decimal('unit_price', 15,2);
+                $table->string('unit');
+                $table->string('in');
+                $table->string('out');
+                $table->string('remaining_stock');
+                $table->decimal('amount', 15,2);
+                $table->string('supplier');
+                $table->string('created_by');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

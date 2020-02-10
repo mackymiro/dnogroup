@@ -3,13 +3,13 @@
 <div id="wrapper">
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
-       <li class="nav-item">
+       <li class="nav-item active">
         <a class="nav-link" href="{{ url('lolo-pinoy-lechon-de-cebu/') }}">
           <i class="fas fa-cash-register"></i>
           <span>Sales Invoice</span>
         </a>
       </li>
-       <li class="nav-item dropdown active">
+       <li class="nav-item dropdown ">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fab fa-first-order"></i>
           <span>Purchase order</span>

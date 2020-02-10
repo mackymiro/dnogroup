@@ -138,17 +138,22 @@
 					  	 					<label>OUT</label>
 					  	 					<input type="text" name="out" class="form-control" value="{{ $getStocksInventory['out'] }}" />
 					  	 				</div>
-					  	 				<div class="col-md-2">
-			  	 						<label>Remaining Stock</label>
-			  	 						<input type="text" name="remainingStock" class="form-control" value="{{ $getStocksInventory['remaining_stock'] }}" />
-					  	 				</div>
+                      <div class="col-md-2">
+                        <label>Stock Out Amount</label>
+                        <input type="text" name="stockAmount" class="form-control" value="<?php echo number_format($getStocksInventory['stock_amount'], 2)?>" />
+                      </div>
+					  	 				
             	 					</div>
             	 				</div>
         	 					<div class="form-group">
       					  	 		<div class="form-row">
+                          <div class="col-md-2">
+                            <label>Remaining Stock</label>
+                            <input type="text" name="remainingStock" class="form-control" value="{{ $getStocksInventory['remaining_stock'] }}" />
+                          </div>
       					  	 			<div class="col-md-2">
       					  	 				<label>Amount</label>
-      					  	 				<input type="text" name="amount" class="form-control" value="{{ $getStocksInventory['amount']}}" />
+      					  	 				<input type="text" name="amount" class="form-control" value="<?php echo number_format($getStocksInventory['amount'], 2)?>" />
       					  	 			</div>
       					  	 			<div class="col-md-2">
       					  	 				<label>Supplier</label>

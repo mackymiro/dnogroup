@@ -16,6 +16,7 @@ class CommissaryStockInventory extends Model
 		'unit',
 		'in',
 		'out',
+		'stock_amount',
 		'remaining_stock',
 		'amout',
 		'supplier',

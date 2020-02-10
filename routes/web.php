@@ -133,8 +133,6 @@ Route::group(['middleware' => ['auth']], function(){
 	//update commissary stocks inventory
 	Route::patch('/lolo-pinoy-lechon-de-cebu/update-stocks-inventory/{id}', 'LoloPinoyLechonDeCebuController@updateStocksInventory')->name('lolo-pinoy-lechon-de-cebu.updateStocksInventory');
 
-	//view commissary stocks inventory
-	Route::get('/lolo-pinoy-lechon-de-cebu/commissary/view-stocks-inventory/{id}', 'LoloPinoyLechonDeCebuController@viewStocksInventory')->name('lolo-pinoy-lechon-de-cebu.viewStocksInventory');
 
 	//delete for commissary stocks inventory
 	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-stocks-inventory/{id}', 'LoloPinoyLechonDeCebuController@destroyStocksInventory')->name('lolo-pinoy-lechon-de-cebu.destroyStocksInventory');

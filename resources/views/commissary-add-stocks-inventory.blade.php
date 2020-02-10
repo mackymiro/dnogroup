@@ -137,14 +137,19 @@
   					  	 					<label>OUT</label>
   					  	 					<input type="text" name="out" class="form-control" />
   					  	 				</div>
-  					  	 				<div class="col-md-2">
-				  	 						<label>Remaining Stock</label>
-				  	 						<input type="text" name="remainingStock" class="form-control" />
-  					  	 				</div>
+                        <div class="col-md-2">
+                          <label>Stock Out Amount</label>
+                          <input type="text" name="stockAmount" class="form-control" />
+                        </div>
+  					  	 				
   					  	 			</div>
       					  	 	</div>
       					  	 	<div class="form-group">
       					  	 		<div class="form-row">
+                          <div class="col-md-2">
+                            <label>Remaining Stock</label>
+                            <input type="text" name="remainingStock" class="form-control" />
+                          </div>
       					  	 			<div class="col-md-2">
       					  	 				<label>Amount</label>
       					  	 				<input type="text" name="amount" class="form-control" />

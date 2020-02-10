@@ -13,6 +13,7 @@ class CreateLechonDeCebuPurchaseOrdersTable extends Migration
      */
     public function up()
     {
+        
         Schema::create('lechon_de_cebu_purchase_orders', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id');

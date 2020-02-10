@@ -107,9 +107,11 @@
   				  						<th>Product Name</th>
   				  						<th>Unit Price</th>
   				  						<th>Unit</th>
-  				  						<th>IN</th>
+  				  						<th class="alert alert-danger">IN</th>
   				  						<th>OUT</th>
-  				  					
+  				  					  <th>Stock Out Amount</th>
+                        <th>Remaining Stock</th>
+                        <th>Amount</th>
   				  						<th>Created By</th>
 			  						   </thead>
 			  						<tfoot>
@@ -118,9 +120,11 @@
 				  						<th>Product Name</th>
 				  						<th>Unit Price</th>
 				  						<th>Unit</th>
-				  						<th>IN</th>
+				  						<th class="alert alert-danger">IN</th>
 				  						<th>OUT</th>
-				  						
+				  						<th>Stock Out Amount</th>
+                      <th>Remaining Stock</th>
+                      <th>Amount</th>
 				  						<th>Created By</th>
 
 			  						</tfoot>
@@ -130,21 +134,34 @@
 		  									<td>
                           <a href="{{ url('lolo-pinoy-lechon-de-cebu/commissary/edit-stocks-inventory/'.$getStocksInventory['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
 		  										<a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getStocksInventory['id'] }}')" title="Delete"><i class="fas fa-trash"></i></a>
-		  										<a href="{{ url('lolo-pinoy-lechon-de-cebu/commissary/view-stocks-inventory/'.$getStocksInventory['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
+		  									
 		  									</td>
                         <td>{{ $getStocksInventory['product_id_no'] }}</td>
                         <td>{{ $getStocksInventory['product_name'] }}</td>
                         <td>{{ $getStocksInventory['unit_price'] }}</td>
                         <td>{{ $getStocksInventory['unit'] }}</td>
-                        <td>{{ $getStocksInventory['in'] }}</td>
+                        <td class="alert alert-danger">{{ $getStocksInventory['in'] }}</td>
                         <td>{{ $getStocksInventory['out'] }}</td>
-                       
+                        <td>{{ $getStocksInventory['stock_amount']}}</td>
+                        <td>{{ $getStocksInventory['remaining_stock']}}</td>
+                        <td><?php echo number_format($getStocksInventory['amount'], 2);?></td>
                         <td>{{ $getStocksInventory['created_by'] }}</td>
                         
 		  								</tr>
                       @endforeach
+                      
 			  						</tbody>
 					  			</table>
+                  <table class="table">
+                    <thead>
+                        <tr>
+                
+                        <td>Stock Out Value: ₱ <?php echo number_format($countStockAmount, 2); ?></td>
+                        <td></td>
+                        <td>Total Stock Value: ₱ <?php echo number_format($countTotalAmount, 2);?></td>
+                      </tr>
+                    </thead>
+                  </table>
     					  		</div>
     					  </div>
               			</div>

@@ -206,16 +206,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         return view('payment-voucher-form',compact('user'));
     }
 
-    //view commissary stocks inventory
-    public function viewStocksInventory($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        //getStockInventory 
-        $getStocksInventory = CommissaryStockInventory::find($id);
-
-        return view('view-commissary-stocks-inventory', compact('user', 'getStocksInventory'));
-    }
+  
 
     //update commissary stocks inventory
     public function updateStocksInventory(Request $request, $id){
@@ -227,6 +218,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $updateStocksInventory->unit = $request->get('unit');
         $updateStocksInventory->in = $request->get('in');
         $updateStocksInventory->out = $request->get('out');
+        $updateStocksInventory->stock_amount = $request->get('stockAmount');
         $updateStocksInventory->remaining_stock = $request->get('remainingStock');
         $updateStocksInventory->amount = $request->get('amount');
         $updateStocksInventory->supplier = $request->get('supplier');
@@ -290,6 +282,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'unit'=>$request->get('unit'),
             'in'=>$request->get('in'),
             'out'=>$request->get('out'),
+            'stock_amount'=>$request->get(''),
             'remaining_stock'=>$request->get('remainingStock'),
             'amount'=>$request->get('amount'),
             'supplier'=>$request->get('supplier'),
@@ -321,7 +314,13 @@ class LoloPinoyLechonDeCebuController extends Controller
         //getStocksInventory
         $getStocksInventories = CommissaryStockInventory::get()->toArray();
 
-        return view('commissary-stocks-inventory', compact('user', 'getStocksInventories'));
+        //count the total stock out amount value
+        $countStockAmount = CommissaryStockInventory::all()->sum('stock_amount');
+        
+        //count the total amount 
+        $countTotalAmount = CommissaryStockInventory::all()->sum('amount');
+
+        return view('commissary-stocks-inventory', compact('user', 'getStocksInventories', 'countStockAmount', 'countTotalAmount'));
     }
 
     //view statement of account
