@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLechonDeCebuDeliveryReceiptsTable extends Migration
+class AddOtherFieldsToLechonDeCebuDeliveryReceiptDuplicateCopies extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateLechonDeCebuDeliveryReceiptsTable extends Migration
      */
     public function up()
     {
-        
-        Schema::create('lechon_de_cebu_delivery_receipts', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('user_id');
+        //
+         Schema::table('lechon_de_cebu_delivery_receipt_duplicate_copies', function(Blueprint $table) {
+            $table->integer('user_id')->after('id');
             $table->string('dr_id');
             $table->string('delivered_to');
             $table->string('time');
@@ -33,7 +32,6 @@ class CreateLechonDeCebuDeliveryReceiptsTable extends Migration
             $table->string('checked_by');
             $table->string('received_by');
             $table->string('created_by');
-            $table->timestamps();
         });
     }
 
@@ -44,6 +42,7 @@ class CreateLechonDeCebuDeliveryReceiptsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('lechon_de_cebu_delivery_receipts');
+        //
+         Schema::dropIfExists('lechon_de_cebu_delivery_receipt_duplicate_copies');
     }
 }

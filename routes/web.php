@@ -190,6 +190,21 @@ Route::group(['middleware' => ['auth']], function(){
 	//route for delivery receipts lists
 	Route::get('/lolo-pinoy-lechon-de-cebu/delivery-receipt/lists', 'LoloPinoyLechonDeCebuController@deliveryReceiptLists')->name('lolo-pinoy-lechon-de-cebu.deliveryReceiptLists');
 
+	//route for update delivery recipt add new
+	Route::patch('/lolo-pinoy-lechon-de-cebu/update-dr/{id}', 'LoloPinoyLechonDeCebuController@updateDr')->name('lolo-pinoy-lechon-de-cebu.updateDr');
+
+	//route for delete delivery receipt
+	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-delivery-receipt/{id}', 'LoloPinoyLechonDeCebuController@destroyDeliveryReceipt')->name('lolo-pinoy-lechon-de-cebu.destroyDeliveryReceipt');
+
+	//route for view delivery receipt
+	Route::get('/lolo-pinoy-lechon-de-cebu/view-delivery-receipt/{id}', 'LoloPinoyLechonDeCebuController@viewDeliveryReceipt')->name('lolo-pinoy-lechon-de-cebu.viewDeliveryReceipt');
+
+	//route for duplicate copy
+	Route::get('/lolo-pinoy-lechon-de-cebu/duplicate-copy/{id}', 'LoloPinoyLechonDeCebuController@duplicateCopy')->name('lolo-pinoy-lechon-de-cebu.duplicateCopy');
+
+	//view duplicate copy
+	Route::get('/lolo-pinoy-lechon-de-cebu/view-delivery-duplicate/{id}', 'LoloPinoyLechonDeCebuController@viewDeliveryDuplicate')->name('lolo-pinoy-lechon-de-cebu.viewDeliveryDuplicate');
+
 
 });
 

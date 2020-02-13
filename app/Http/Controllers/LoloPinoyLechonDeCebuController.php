@@ -13,17 +13,140 @@ use App\LechonDeCebuStatementOfAccount;
 use App\CommissaryStockInventory;
 use App\LechonDeCebuPaymentVoucher;
 use App\LechonDeCebuDeliveryReceipt;
+use App\LechonDeCebuDeliveryReceiptDuplicateCopy;
 use Session;
 
 class LoloPinoyLechonDeCebuController extends Controller
 {
+
+    //view delivery duplicate
+    public function viewDeliveryDuplicate($id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $viewDeliveryReceiptDuplicate = LechonDeCebuDeliveryReceiptDuplicateCopy::find($id);
+
+        $deliveryReceiptDuplicates = LechonDeCebuDeliveryReceiptDuplicateCopy::where('dr_id', $id)->get()->toArray();
+
+
+        return view('view-delivery-duplicate', compact('user', 'viewDeliveryReceiptDuplicate', 'deliveryReceiptDuplicates'));
+    }
+
+    //duplocicate copy of delivery receipt
+    public function duplicateCopy($id){
+
+        $getDeliveryReceipt = LechonDeCebuDeliveryReceipt::find($id);
+
+        //update table delivery receipt
+        $dupStatus = 1;
+
+        $getDeliveryReceipt->duplicate_status = $dupStatus;
+        $getDeliveryReceipt->save();
+        
+
+        $getDReceipts = LechonDeCebuDeliveryReceipt::where('dr_id', $id)->get()->toArray();
+
+
+        //save to duplicate copies table
+        $duplicateCopy = new LechonDeCebuDeliveryReceiptDuplicateCopy([
+            'user_id'=>$getDeliveryReceipt->user_id,
+            'sold_to'=>$getDeliveryReceipt->sold_to,
+            'time'=>$getDeliveryReceipt->time,
+            'dr_no'=>$getDeliveryReceipt->dr_no,
+            'date'=>$getDeliveryReceipt->date,
+            'delivered_to'=>$getDeliveryReceipt->delivered_to,
+            'contact_person'=>$getDeliveryReceipt->contact_person,
+            'mobile_num'=>$getDeliveryReceipt->mobile_num,
+            'special_instruction'=>$getDeliveryReceipt->special_instruction,
+            'qty'=>$getDeliveryReceipt->qty,
+            'description'=>$getDeliveryReceipt->description,
+            'price'=>$getDeliveryReceipt->price,
+            'total'=>$getDeliveryReceipt->total,
+            'prepared_by'=>$getDeliveryReceipt->prepared_by,
+            'created_by'=>$getDeliveryReceipt->created_by,
+        ]);
+
+        $duplicateCopy->save();
+
+        $insertedId  = $duplicateCopy->id;
+
+        foreach($getDReceipts as $getDReceipt){
+
+            $addedDataDuplicate = new LechonDeCebuDeliveryReceiptDuplicateCopy([
+                    'user_id'=>$getDReceipt['user_id'],
+                    'sold_to'=>$getDReceipt['sold_to'],
+                    'time'=>$getDReceipt['time'],
+                    'dr_id'=>$insertedId,
+                    'dr_no'=>$getDReceipt['dr_no'],
+                    'date'=>$getDReceipt['date'],
+                    'delivered_to'=>$getDReceipt['delivered_to'],
+                    'contact_person'=>$getDReceipt['contact_person'],
+                    'mobile_num'=>$getDReceipt['mobile_num'],
+                    'special_instruction'=>$getDReceipt['special_instruction'],
+                    'qty'=>$getDReceipt['qty'],
+                    'description'=>$getDReceipt['description'],
+                    'price'=>$getDReceipt['price'],
+                    'total'=>$getDReceipt['total'],
+                    'prepared_by'=>$getDReceipt['prepared_by'],
+                    'created_by'=>$getDReceipt['created_by'],
+             ]);
+
+            $addedDataDuplicate->save();
+        }
+       
+
+
+        Session::flash('duplicateSuccess', 'Successfully duplicated a copy.');
+
+        return redirect('lolo-pinoy-lechon-de-cebu/delivery-receipt/lists');
+
+    }
+
+
+    //view delivery receipt
+    public function viewDeliveryReceipt($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $viewDeliveryReceipt = LechonDeCebuDeliveryReceipt::find($id);
+
+        $deliveryReceipts = LechonDeCebuDeliveryReceipt::where('dr_id', $id)->get()->toArray();
+
+        
+
+        return view('view-lechon-de-cebu-delivery-receipt', compact('user', 'viewDeliveryReceipt', 'deliveryReceipts'));
+    }
+
+    //update for the add new delivery receipt
+    public function updateDr(Request $request, $id){
+        
+        $delivery = LechonDeCebuDeliveryReceipt::find($id);
+        $delivery->qty = $request->get('qty');
+        $delivery->description = $request->get('description');
+        $delivery->price = $request->get('price');
+
+        $delivery->save();
+
+
+        Session::flash('SuccessEdit', 'Successfully updated');
+        return redirect('lolo-pinoy-lechon-de-cebu/edit-delivery-receipt/'.$request->get('drId'));
+
+
+
+    }
 
     //delivery receipt lists
     public function deliveryReceiptLists(){
         $ids = Auth::user()->id;
         $user = User::find($ids);
 
-        return view('lechon-de-cebu-delivery-receipt-lists', compact('user'));
+        //getAllDeliveryReceipt
+        $getAllDeliveryReceipts = LechonDeCebuDeliveryReceipt::where('dr_id', NULL)->get()->toArray();
+
+        //getDuplicateCopy
+        $getDuplicateCopies = LechonDeCebuDeliveryReceiptDuplicateCopy::where('dr_id', NULL)->get()->toArray();
+
+        return view('lechon-de-cebu-delivery-receipt-lists', compact('user', 'getAllDeliveryReceipts', 'getDuplicateCopies'));
     }
 
     //add new delivery recipt data
@@ -1183,6 +1306,12 @@ class LoloPinoyLechonDeCebuController extends Controller
         return redirect('lolo-pinoy-lechon-de-cebu/edit/'.$id);
 
 
+    }
+
+    //delete delivery receipt
+    public function destroyDeliveryReceipt($id){
+        $deliveryReceipt = LechonDeCebuDeliveryReceipt::find($id);
+        $deliveryReceipt->delete();
     }
 
     //delete payment voucher 

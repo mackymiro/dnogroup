@@ -26,5 +26,6 @@ class LechonDeCebuDeliveryReceipt extends Model
     	'checked_by',
     	'received_by',
     	'created_by',
+        'duplicate_status',
     ];
 }

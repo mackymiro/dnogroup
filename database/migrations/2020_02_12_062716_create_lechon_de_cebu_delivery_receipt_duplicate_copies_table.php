@@ -13,6 +13,7 @@ class CreateLechonDeCebuDeliveryReceiptDuplicateCopiesTable extends Migration
      */
     public function up()
     {
+        
         Schema::create('lechon_de_cebu_delivery_receipt_duplicate_copies', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();

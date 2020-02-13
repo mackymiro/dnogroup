@@ -192,9 +192,15 @@
 	                              <i class="fas fa-receipt" aria-hidden="true"></i>
 	                            Edit Delivery Receipt</div>
 	                            <div class="card-body">
+                                  @if(session('SuccessEdit'))
+                                     <p class="alert alert-success">{{ Session::get('SuccessEdit') }}</p>
+                                  @endif 
                                   @foreach($dReceipts as $dReceipt)
+                                  <form action="{{ action('LoloPinoyLechonDeCebuController@updateDr', $dReceipt['id'])}}" method="post">
+                                     {{csrf_field()}}
+                                 <input name="_method" type="hidden" value="PATCH">
 	                            	  <div class="form-group">
-                                    <div class="form-row">
+                                    <div id="deletedId{{ $dReceipt['id'] }}" class="form-row">
                                          <div class="col-md-1">
                                           <label>QTY</label>
                                           <input type="text" name="qty" class="form-control" value="{{ $dReceipt['qty']}}" />
@@ -218,6 +224,7 @@
                                     </div>
                                     
                                   </div>
+                                  </form>
                                   @endforeach
 	                            	  <div>
 		                                  @if($user->role_type == 1)
@@ -231,4 +238,33 @@
 	</div>
 </div>
 </div>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script type="text/javascript">
+   function confirmDelete(id){
+      var x = confirm("Do you want to delete this?");
+        if(x){
+            $.ajax({
+              type: "DELETE",
+              url: '/lolo-pinoy-lechon-de-cebu/delete-delivery-receipt/' + id,
+              data:{
+                _method: 'delete', 
+                "_token": "{{ csrf_token() }}",
+                "id": id
+              },
+              success: function(data){
+                console.log(data);
+                $("#deletedId"+id).fadeOut('slow');
+               
+              },
+              error: function(data){
+                console.log('Error:', data);
+              }
+
+            });
+
+        }else{
+            return false;
+        }
+   }
+</script>
 @endsection

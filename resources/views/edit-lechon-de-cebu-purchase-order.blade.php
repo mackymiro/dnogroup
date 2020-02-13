@@ -214,7 +214,7 @@
                        <i class="fab fa-first-order" aria-hidden="true"></i>
                           Edit Purchase Order</div>
                         <div class="card-body">
-                              @if(session('SuccessEdit'))
+                            @if(session('SuccessEdit'))
                                <p class="alert alert-success">{{ Session::get('SuccessEdit') }}</p>
                               @endif 
                             @foreach($pOrders as $pOrder)
