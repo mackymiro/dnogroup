@@ -12,14 +12,168 @@ use App\LechonDeCebuBillingStatement;
 use App\LechonDeCebuStatementOfAccount; 
 use App\CommissaryStockInventory;
 use App\LechonDeCebuPaymentVoucher;
+use App\LechonDeCebuDeliveryReceipt;
 use Session;
 
 class LoloPinoyLechonDeCebuController extends Controller
 {
 
+    //delivery receipt lists
+    public function deliveryReceiptLists(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('lechon-de-cebu-delivery-receipt-lists', compact('user'));
+    }
+
+    //add new delivery recipt data
+    public function addNewDeliveryReceiptData(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+        $deliveryReceipt = LechonDeCebuDeliveryReceipt::find($id);
+
+        $addNewDeliveryReceipt = new LechonDeCebuDeliveryReceipt([
+            'user_id'=>$user->id,
+            'dr_id'=>$id,
+            'dr_no'=>$deliveryReceipt['dr_no'],
+            'qty'=>$request->get('qty'),
+            'description'=>$request->get('description'),
+            'price'=>$request->get('price'),
+            'prepared_by'=>$name,
+            'created_by'=>$name,
+
+        ]);
+
+        $addNewDeliveryReceipt->save();
+
+         Session::flash('addDeliveryReceiptSuccess', 'Successfully added.');
+
+        return redirect('lolo-pinoy-lechon-de-cebu/add-new-delivery-receipt/'.$id);
+
+
+    }
+
+    //add new delivery receipt
+    public function addNewDeliveryReceipt($id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('add-new-lechon-de-cebu-delivery-receipt', compact('user', 'id'));
+    }
+
+    //update delivery receipt
+    public function updateDeliveryReceipt(Request $request, $id){
+
+        $updateDeliveryReceipt = LechonDeCebuDeliveryReceipt::find($id);
+
+        $updateDeliveryReceipt->sold_to = $request->get('soldTo');
+        $updateDeliveryReceipt->time = $request->get('time');
+        $updateDeliveryReceipt->delivered_to = $request->get('deliveredTo');
+        $updateDeliveryReceipt->contact_person = $request->get('contactPerson');
+        $updateDeliveryReceipt->mobile_num = $request->get('mobile');
+        $updateDeliveryReceipt->special_instruction = $request->get('specialInstruction');
+        $updateDeliveryReceipt->qty = $request->get('qty');
+        $updateDeliveryReceipt->description = $request->get('description');
+        $updateDeliveryReceipt->price = $request->get('price');
+
+        $updateDeliveryReceipt->save();
+
+        Session::flash('updateSuccessfull', 'Successfully updated');
+
+        return redirect('lolo-pinoy-lechon-de-cebu/edit-delivery-receipt/'.$id);
+    }
+
+    //edit delivery receipt
+    public function editDeliveryReceipt($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //getDeliveryReceipt
+        $getDeliveryReceipt = LechonDeCebuDeliveryReceipt::find($id);
+
+        //dReceipts
+        $dReceipts = LechonDeCebuDeliveryReceipt::where('dr_id', $id)->get()->toArray();
+
+        return view('edit-lechon-de-cebu-delivery-receipt', compact('user','getDeliveryReceipt', 'dReceipts'));
+    }
+
+    //store delivery receipt
+    public function storeDeliveryReceipt(Request $request){
+         //validate
+        $this->validate($request, [
+            'soldTo' =>'required',
+           
+        ]);
+
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+         //get the latest insert id query in table delivery receipt dr_no
+        $dataDrNo = DB::select('SELECT id, dr_no FROM lechon_de_cebu_delivery_receipts ORDER BY id DESC LIMIT 1');
+
+        //if code is not zero add plus 1 dr_no
+        if(isset($dataDrNo[0]->dr_no) != 0){
+            //if code is not 0
+            $newDr = $dataDrNo[0]->dr_no +1;
+            $uDr = sprintf("%06d",$newDr);   
+
+        }else{
+            //if code is 0 
+            $newDr = 1;
+            $uDr = sprintf("%06d",$newDr);
+        } 
+
+        //get date today
+        $getDateToday =  date('Y-m-d');
+
+        $storeDeliveryReceipt = new LechonDeCebuDeliveryReceipt([
+            'user_id'=>$user->id,
+            'sold_to'=>$request->get('soldTo'),
+            'time'=>$request->get('time'),
+            'dr_no'=>$uDr,
+            'date'=>$getDateToday,
+            'delivered_to'=>$request->get('deliveredTo'),
+            'contact_person'=>$request->get('contactPerson'),
+            'mobile_num'=>$request->get('mobile'),
+            'special_instruction'=>$request->get('specialInstruction'),
+            'qty'=>$request->get('qty'),
+            'description'=>$request->get('description'),
+            'price'=>$request->get('price'),
+            'total'=>$request->get('price'),
+            'prepared_by'=>$name,
+            'created_by'=>$name,
+        ]);
+
+        $storeDeliveryReceipt->save();
+        $insertedId  = $storeDeliveryReceipt->id;
+
+        return redirect('lolo-pinoy-lechon-de-cebu/edit-delivery-receipt/'.$insertedId);
+
+    }
+
+    //delivery receipt
+    public function deliveryReceiptForm(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('lechon-de-cebu-delivery-receipt-form', compact('user'));
+    }
+
+
     //payment voucher view
     public function viewPaymentVoucher($id){
-         $ids = Auth::user()->id;
+        $ids = Auth::user()->id;
         $user = User::find($ids);
 
         //paymentVoucher

@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddPvIdToLechonDeCebuPaymentVouchers extends Migration
+class CreateLechonDeCebuDeliveryReceiptDuplicateCopiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddPvIdToLechonDeCebuPaymentVouchers extends Migration
      */
     public function up()
     {
-        //
-        Schema::table('lechon_de_cebu_payment_vouchers', function(Blueprint $table) {
-            $table->integer('pv_id')->after('user_id');
+        Schema::create('lechon_de_cebu_delivery_receipt_duplicate_copies', function (Blueprint $table) {
+            $table->increments('id');
+            $table->timestamps();
         });
     }
 
@@ -26,10 +26,6 @@ class AddPvIdToLechonDeCebuPaymentVouchers extends Migration
      */
     public function down()
     {
-        //
-          Schema::table('lechon_de_cebu_payment_vouchers', function($table) {
-            $table->dropColumn('pv_id');
-        });
+        Schema::dropIfExists('lechon_de_cebu_delivery_receipt_duplicate_copies');
     }
-
 }

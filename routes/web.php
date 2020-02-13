@@ -168,6 +168,29 @@ Route::group(['middleware' => ['auth']], function(){
 
 	//route for payment voucher view 
 	Route::get('/lolo-pinoy-lechon-de-cebu/view-payment-voucher/{id}', 'LoloPinoyLechonDeCebuController@viewPaymentVoucher')->name('lolo-pinoy-lechon-de-cebu.viewPaymentVoucher');
+
+	//route for delivery receipt 
+	Route::get('/lolo-pinoy-lechon-de-cebu/delivery-receipt-form', 'LoloPinoyLechonDeCebuController@deliveryReceiptForm')->name('lolo-pinoy-lechon-de-cebu.deliveryReceiptForm');
+
+	//route store delivery receipt
+	Route::post('/lolo-pinoy-lechon-de-cebu/store-delivery-receipt', 'LoloPinoyLechonDeCebuController@storeDeliveryReceipt')->name('lolo-pinoy-lechon-de-cebu.storeDeliveryReceipt');
+
+	//route edit delivery receipt
+	Route::get('/lolo-pinoy-lechon-de-cebu/edit-delivery-receipt/{id}', 'LoloPinoyLechonDeCebuController@editDeliveryReceipt')->name('lolo-pinoy-lechon-de-cebu.editDeliveryReceipt');
+
+
+	//route update delviery receipt
+	Route::patch('/lolo-pinoy-lechon-de-cebu/update-delivery-receipt/{id}', 'LoloPinoyLechonDeCebuController@updateDeliveryReceipt')->name('lolo-pinoy-lechon-de-cebu.updateDeliveryReceipt');
+
+	//route for add new delivery receipt
+	Route::get('/lolo-pinoy-lechon-de-cebu/add-new-delivery-receipt/{id}', 'LoloPinoyLechonDeCebuController@addNewDeliveryReceipt')->name('lolo-pinoy-lechon-de-cebu.addNewDelivertReceipt');
+
+	Route::post('/lolo-pinoy-lechon-de-cebu/add-new-delivery-receipt-data/{id}', 'LoloPinoyLechonDeCebuController@addNewDeliveryReceiptData')->name('lolo-pinoy-lechon-de-cebu.addNewDeliveryReceiptData');
+
+	//route for delivery receipts lists
+	Route::get('/lolo-pinoy-lechon-de-cebu/delivery-receipt/lists', 'LoloPinoyLechonDeCebuController@deliveryReceiptLists')->name('lolo-pinoy-lechon-de-cebu.deliveryReceiptLists');
+
+
 });
 
 
