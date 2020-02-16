@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'Home |')
 @section('content')
 <!--<div class="container">
     <div class="row">
@@ -25,7 +25,7 @@
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
       <li class="nav-item active">
-        <a class="nav-link" href="index.html">
+        <a class="nav-link" href="{{ url('/') }}">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span>
         </a>
@@ -166,6 +166,9 @@
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
             <span>Copyright © Ribos Food Corporation 2019</span>
+            <br>
+            <br>
+            <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
           </div>
         </div>
       </footer>
