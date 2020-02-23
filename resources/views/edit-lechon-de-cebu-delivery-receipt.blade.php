@@ -11,17 +11,17 @@
 	<div id="content-wrapper">
 		<div class="container-fluid">
 			<!-- Breadcrumbs-->
-             <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                  <a href="#">Lechon de Cebu</a>
-                </li>
-                <li class="breadcrumb-item active">Edit Delivery Receipt</li>
-              </ol>
-              <a href="{{ url('lolo-pinoy-lechon-de-cebu/delivery-receipt/lists') }}">Back to Lists</a>
-              <div class="col-lg-12">
-            	 <img src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
-            	 
-            	 <h4 class="text-center"><u>UPDATE DELIVERY RECEIPT</u></h4>
+         <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="#">Lechon de Cebu</a>
+            </li>
+            <li class="breadcrumb-item active">Edit Delivery Receipt</li>
+          </ol>
+          <a href="{{ url('lolo-pinoy-lechon-de-cebu/delivery-receipt/lists') }}">Back to Lists</a>
+          <div class="col-lg-12">
+        	 <img src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
+        	 
+        	 <h4 class="text-center"><u>UPDATE DELIVERY RECEIPT</u></h4>
 			  </div>
 			  <div class="row">
 			  		<div class="col-lg-12">
@@ -44,9 +44,40 @@
 	                    					
                     					</div>
                     					<div class="col-md-2">
-	                						<label>Time</label>
-	                						<input type="text" name="time" class="form-control" value="{{ $getDeliveryReceipt['time']}}" />
-	                    				</div>
+                              <label>Time</label>
+                             
+                                  <select name="time" class="form-control">
+                                      <option value="12:00 AM" {{ ( "12:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>12:00 AM</option>
+                                      <option value="1:00 AM" {{ ( "1:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>1:00 AM</option>
+                                      <option value="2:00 AM" {{ ( "2:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>2:00 AM</option>
+                                      <option value="3:00 AM" {{ ( "3:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>3:00 AM</option>
+                                      <option value="4:00 AM" {{ ( "4:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>4:00 AM</option>
+                                      <option value="5:00 AM" {{ ( "5:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>5:00 AM</option>
+                                      <option value="6:00 AM" {{ ( "6:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>6:00 AM</option>
+                                      <option value="7:00 AM" {{ ( "7:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>7:00 AM</option>
+                                      <option value="8:00 AM" {{ ( "8:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>8:00 AM</option>
+                                      <option value="9:00 AM" {{ ( "9:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>9:00 AM</option>
+                                      <option value="10:00 AM" {{ ( "10:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>10:00 AM</option>
+                                      <option value="11:00 AM" {{ ( "11:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>11:00 AM</option>
+                                      <option value="12:00 PM" {{ ( "12:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>12:00 PM</option>
+                                      <option value="1:00 PM" {{ ( "1:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>1:00 PM</option>
+                                      <option value="2:00 PM" {{ ( "2:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>2:00 PM</option>
+                                      <option value="3:00 PM" {{ ( "3:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>3:00 PM</option>
+                                      <option value="4:00 PM" {{ ( "4:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>4:00 PM</option>
+                                      <option value="5:00 PM" {{ ( "5:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>5:00 PM</option>
+                                      <option value="6:00 PM" {{ ( "6:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>6:00 PM</option>
+                                      <option value="7:00 PM" {{ ( "7:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>7:00 PM</option>
+                                      <option value="8:00 PM" {{ ( "8:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>8:00 PM</option>
+                                      <option value="9:00 PM" {{ ( "9:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>9:00 PM</option>
+                                      <option value="10:00 PM" {{ ( "10:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>10:00 PM</option>
+                                      <option value="11:00 PM" {{ ( "11:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>11:00 PM</option>
+                                  </select> 
+                                 
+                              </div>
+                              <div class="col-md-2">
+                                    <label>Date To be Delivered</label>
+                                    <input type="text" name="dateDelivered" class="form-control" value="{{ $getDeliveryReceipt['date_to_be_delivered']}}" />
+                              </div>
 	                    				<div class="col-md-4">
 	                    					<label>Delivered To</label>
 	                    					<input type="text" name="deliveredTo" class="form-control" value="{{ $getDeliveryReceipt['delivered_to']}}" />
@@ -86,16 +117,16 @@
                              		</div>
                              	</div>
                              	<div class="form-group">
-      					  	 		<div class="form-row">
-      					  	 			<div class="float-right">
-      					  	 				
-					  	 					<button type="submit" class="btn btn-success">
-										      <i class="fa fa-refresh" aria-hidden="true"></i> Update Delivery Receipt
-									      	 </button>
-			                            
-      					  	 			</div>
-      					  	 		</div>
-      					  	 	</div>
+              					  	 		<div class="form-row">
+              					  	 			<div class="float-right">
+              					  	 				
+        					  	 					<button type="submit" class="btn btn-success">
+        										      <i class="fa fa-refresh" aria-hidden="true"></i> Update Delivery Receipt
+        									      	 </button>
+        			                            
+              					  	 			</div>
+              					  	 		</div>
+      					  	 	      </div>
                              </div>
                          	</form>
 			  			</div>
@@ -194,4 +225,5 @@
         }
    }
 </script>
+
 @endsection

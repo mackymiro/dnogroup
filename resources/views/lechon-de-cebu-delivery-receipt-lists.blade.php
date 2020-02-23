@@ -32,9 +32,10 @@
 					  					<thead>
 					  						<th>Action</th>
 					  						<th>DR No</th>
-	                      					<th>Date</th>
+	                      <th>Date</th>
 					  						<th>Sold To</th>
 					  						<th>Time</th>
+                        <th>Date To Be Delivered</th>
 					  						<th>Delivered To</th>
 					  						<th>Qty</th>
 					  						<th>Description</th>
@@ -44,9 +45,10 @@
 			  							<tfoot>
 				  							<th>Action</th>
 					  						<th>DR No</th>
-	                      					<th>Date</th>
+	                      <th>Date</th>
 					  						<th>Sold To</th>
 					  						<th>Time</th>
+                        <th>Date To Be Delivered</th>
 					  						<th>Delivered To</th>
 					  						<th>Qty</th>
 					  						<th>Description</th>
@@ -75,6 +77,7 @@
 			  									<td>{{ $getAllDeliveryReceipt['date']}}</td>
 			  									<td>{{ $getAllDeliveryReceipt['sold_to']}}</td>
 			  									<td>{{ $getAllDeliveryReceipt['time']}}</td>
+                          <td>{{ $getAllDeliveryReceipt['date_to_be_delivered']}}</td>
 			  									<td>{{ $getAllDeliveryReceipt['delivered_to']}}</td>
 			  									<td>{{ $getAllDeliveryReceipt['qty']}}</td>
 			  									<td>{{ $getAllDeliveryReceipt['description']}}</td>
@@ -103,9 +106,10 @@
                                             <thead>
                                               <th>Action</th>
                                               <th>DR No</th>
-                                                        <th>Date</th>
+                                              <th>Date</th>
                                               <th>Sold To</th>
                                               <th>Time</th>
+                                              <th>Date To Be Delivered</th>
                                               <th>Delivered To</th>
                                               <th>Qty</th>
                                               <th>Description</th>
@@ -115,9 +119,10 @@
                                           <tfoot>
                                             <th>Action</th>
                                             <th>DR No</th>
-                                                      <th>Date</th>
+                                            <th>Date</th>
                                             <th>Sold To</th>
                                             <th>Time</th>
+                                            <th>Date To Be Delivered</th>
                                             <th>Delivered To</th>
                                             <th>Qty</th>
                                             <th>Description</th>
@@ -135,6 +140,7 @@
                                                   <td>{{ $getDuplicateCopy['date']}}</td>
                                                   <td>{{ $getDuplicateCopy['sold_to']}}</td>
                                                   <td>{{ $getDuplicateCopy['time']}}</td>
+                                                  <td></td>
                                                   <td>{{ $getDuplicateCopy['delivered_to']}}</td>
                                                   <td>{{ $getDuplicateCopy['qty']}}</td>
                                                   <td>{{ $getDuplicateCopy['description']}}</td>

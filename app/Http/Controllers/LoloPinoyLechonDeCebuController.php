@@ -14,14 +14,205 @@ use App\CommissaryStockInventory;
 use App\LechonDeCebuPaymentVoucher;
 use App\LechonDeCebuDeliveryReceipt;
 use App\LechonDeCebuDeliveryReceiptDuplicateCopy;
+use App\LechonDeCebuSalesInvoice;
 use Session;
 
 class LoloPinoyLechonDeCebuController extends Controller
 {
+    //update for the add new sales invoice
+    public function updateSi(Request $request, $id){
+
+        $updateSi = LechonDeCebuSalesInvoice::find($id);
+
+        //kls
+        $kls  = $request->get('totalKls');
+
+         //compute kls * unit price
+        $unitPrice = $updateSi->unit_price;
+        $compute = $kls * $unitPrice;
+        $sum = $compute;
+
+        $updateSi->qty = $request->get('qty');
+        $updateSi->total_kls = $kls;
+        $updateSi->item_description = $request->get('itemDescription');
+        $updateSi->unit_price = $unitPrice;
+        $updateSi->amount = $sum;
+
+        $updateSi->save();
+
+         Session::flash('SuccessEdit', 'Successfully updated');
+
+        return redirect('lolo-pinoy-lechon-de-cebu/edit-sales-invoice/'.$request->get('siId'));
+
+    }
+
+    //add new sales invoice
+    public function addNewSalesInvoiceData(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+          //get date today
+        $getDateToday =  date('Y-m-d');
+
+        //kls
+        $kls  = $request->get('totalKls');
+
+         //compute kls * unit price
+        $unitPrice = 500;
+        $compute = $kls * $unitPrice;
+        $sum = $compute;
+
+        $addNewSalesInvoice = new LechonDeCebuSalesInvoice([
+            'user_id'=>$user->id,
+            'si_id'=>$id,
+            'date'=>$getDateToday,
+            'qty'=>$request->get('qty'),
+            'total_kls'=>$kls,
+            'item_description'=>$request->get('itemDescription'),
+            'unit_price'=>$unitPrice,
+            'amount'=>$sum,
+            'created_by'=>$name,
+        ]);
+
+        $addNewSalesInvoice->save();
+
+        Session::flash('addSalesInvoiceSuccess', 'Successfully added.');
+
+
+        return redirect('lolo-pinoy-lechon-de-cebu/add-new-sales-invoice/'. $id);
+    }
+
+    //add new sales invoice
+    public function addNewSalesInvoice($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+        return view('add-new-lechon-de-cebu-sales-invoice', compact('user', 'id'));
+    }
+
+    //update sales invoice
+    public function updateSalesInvoice(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+        $updateSalesInvoice = LechonDeCebuSalesInvoice::find($id);
+
+        //kls
+        $kls  = $request->get('totalKls');
+
+         //compute kls * unit price
+        $unitPrice = $updateSalesInvoice->unit_price;
+        $compute = $kls * $unitPrice;
+        $sum = $compute;
+       
+
+        $updateSalesInvoice->invoice_number = $request->get('invoiceNum');
+        $updateSalesInvoice->ordered_by = $request->get('orderedBy');
+        $updateSalesInvoice->address = $request->get('address');
+        $updateSalesInvoice->qty = $request->get('qty');
+        $updateSalesInvoice->total_kls = $kls;
+        $updateSalesInvoice->item_description = $request->get('itemDescription');
+        $updateSalesInvoice->amount = $sum;
+        $updateSalesInvoice->created_by = $name; 
+
+        $updateSalesInvoice->save();
+
+        Session::flash('updateSuccessfull', 'Successfully updated');
+
+        return redirect('lolo-pinoy-lechon-de-cebu/edit-sales-invoice/'.$id);
+ 
+
+    }
+
+    //edit sales inovice
+    public function editSalesInvoice($id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //getSalesInvoice
+        $getSalesInvoice = LechonDeCebuSalesInvoice::find($id);
+
+        $sInvoices  = LechonDeCebuSalesInvoice::where('si_id', $id)->get()->toArray();
+
+        return view('edit-lechon-de-cebu-sales-invoice', compact('user', 'getSalesInvoice', 'sInvoices'));
+    }
+
+    //store sales invoice
+    public function storeSalesInvoice(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+
+           //validate
+        $this->validate($request, [
+            'invoiceNum' =>'required',
+            'orderedBy'=>'required',
+           
+        ]);
+
+         //get date today
+        $getDateToday =  date('Y-m-d');
+
+        //total kls
+        $kls = $request->get('totalKls');
+
+        //compute kls * unit price
+        $unitPrice = 500;
+        $compute = $kls * $unitPrice;
+        $sum = $compute;
+
+
+        $addSalesInvoice = new LechonDeCebuSalesInvoice([
+            'user_id'=>$user->id,
+            'invoice_number'=>$request->get('invoiceNum'),
+            'ordered_by'=>$request->get('orderedBy'),
+            'address'=>$request->get('address'),
+            'date'=>$getDateToday,
+            'qty'=>$request->get('qty'),
+            'total_kls'=>$kls,
+            'item_description'=>$request->get('itemDescription'),
+            'unit_price'=>$unitPrice,
+            'amount'=>$sum,
+            'created_by'=>$name,
+        ]);
+
+        $addSalesInvoice->save();
+
+        $insertedId = $addSalesInvoice->id;
+
+        return redirect('lolo-pinoy-lechon-de-cebu/edit-sales-invoice/'.$insertedId);
+
+    }
+
+
+    //sales invoice form
+    public function salesInvoiceForm(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('lechon-de-cebu-sales-invoice-form', compact('user'));
+    }
 
     //view delivery duplicate
     public function viewDeliveryDuplicate($id){
-         $ids = Auth::user()->id;
+        $ids = Auth::user()->id;
         $user = User::find($ids);
 
         $viewDeliveryReceiptDuplicate = LechonDeCebuDeliveryReceiptDuplicateCopy::find($id);
@@ -54,6 +245,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'time'=>$getDeliveryReceipt->time,
             'dr_no'=>$getDeliveryReceipt->dr_no,
             'date'=>$getDeliveryReceipt->date,
+            'date_to_be_delivered'=>$getDeliveryReceipt->date_to_be_delivered,
             'delivered_to'=>$getDeliveryReceipt->delivered_to,
             'contact_person'=>$getDeliveryReceipt->contact_person,
             'mobile_num'=>$getDeliveryReceipt->mobile_num,
@@ -266,6 +458,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'time'=>$request->get('time'),
             'dr_no'=>$uDr,
             'date'=>$getDateToday,
+            'date_to_be_delivered'=>$request->get('dateDelivered'),
             'delivered_to'=>$request->get('deliveredTo'),
             'contact_person'=>$request->get('contactPerson'),
             'mobile_num'=>$request->get('mobile'),
@@ -373,7 +566,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $addNewPaymentVoucherData->save();
 
-         Session::flash('addPaymentVoucherSuccess', 'Successfully added.');
+        Session::flash('addPaymentVoucherSuccess', 'Successfully added.');
 
         return redirect('lolo-pinoy-lechon-de-cebu/add-new-payment-voucher/'.$id);
     }
@@ -1140,8 +1333,9 @@ class LoloPinoyLechonDeCebuController extends Controller
          $id =  Auth::user()->id;
         $user = User::find($id);
 
+        $getAllSalesInvoices = LechonDeCebuSalesInvoice::where('si_id', NULL)->get()->toArray();
 
-        return view('lolo-pinoy-lechon-de-cebu', compact('user'));
+        return view('lolo-pinoy-lechon-de-cebu', compact('user', 'getAllSalesInvoices'));
     }
 
     /**
@@ -1306,6 +1500,12 @@ class LoloPinoyLechonDeCebuController extends Controller
         return redirect('lolo-pinoy-lechon-de-cebu/edit/'.$id);
 
 
+    }
+
+    //delete sales invoice 
+    public function destroySalesInvoice($id){
+        $salesInvoice = LechonDeCebuSalesInvoice::find($id);
+        $salesInvoice->delete();
     }
 
     //delete delivery receipt

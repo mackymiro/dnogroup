@@ -6,11 +6,17 @@
           <span>Ribos Food Corporation</span>
         </a>
       </li>
-       <li class="nav-item ">
-        <a class="nav-link" href="{{ url('lolo-pinoy-lechon-de-cebu/') }}">
-          <i class="fas fa-cash-register"></i>
+     
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           <i class="fas fa-cash-register"></i>
           <span>Sales Invoice</span>
         </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/sales-invoice-form')}}">Sales Invoice Form</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/') }}">Lists</a>
+         
+        </div>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

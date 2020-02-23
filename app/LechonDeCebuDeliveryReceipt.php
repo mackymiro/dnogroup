@@ -15,6 +15,7 @@ class LechonDeCebuDeliveryReceipt extends Model
     	'time',
     	'dr_no',
     	'date',
+        'date_to_be_delivered',
     	'contact_person',
     	'mobile_num',
     	'qty',

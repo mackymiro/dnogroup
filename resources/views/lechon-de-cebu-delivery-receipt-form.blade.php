@@ -40,8 +40,19 @@
                     				</div>
                     				<div class="col-md-2">
                 						<label>Time</label>
-                						<input type="text" name="time" class="form-control" />
+                						<div id="app-time">
+                                            <select name="time" class="form-control">
+                                                <option value="0">--Please Select--</option>
+                                                <option v-for="time in times" v-bind:value="time.value">
+                                                    @{{ time.text }}
+                                                </option>
+                                            </select> 
+                                        </div>
                     				</div>
+                                    <div class="col-md-2">
+                                        <label>Date To be Delivered</label>
+                                        <input type="text" name="dateDelivered" class="form-control" />
+                                    </div>
                     				<div class="col-md-4">
                     					<label>Delivered To</label>
                     					<input type="text" name="deliveredTo" class="form-control" />
@@ -102,4 +113,38 @@
         </div>
       </footer>
 </div>
+<script>
+    //branch data
+    new Vue({
+    el: '#app-time',
+        data: {
+            times:[
+                { text:'12:00 AM', value: '12:00 AM' },
+                { text:'1:00 AM', value: '1:00 AM' },
+                { text:'2:00 AM', value: '2:00 AM' },
+                { text:'3:00 AM', value: '3:00 AM' },
+                { text:'4:00 AM', value: '4:00 AM' },
+                { text:'5:00 AM', value: '5:00 AM' },
+                { text:'6:00 AM', value: '6:00 AM' },
+                { text:'7:00 AM', value: '7:00 AM' },
+                { text:'8:00 AM', value: '8:00 AM' },
+                { text:'9:00 AM', value: '9:00 AM' },
+                { text:'10:00 AM', value: '10:00 AM' },
+                { text:'11:00 AM', value: '11:00 AM' },
+                { text:'12:00 PM', value: '12:00 PM' },
+                { text:'1:00 PM', value: '1:00 PM' },
+                { text:'2:00 PM', value: '2:00 PM' },
+                { text:'3:00 PM', value: '3:00 PM' },
+                { text:'4:00 PM', value: '4:00 PM' },
+                { text:'5:00 PM', value: '5:00 PM' },
+                { text:'6:00 PM', value: '6:00 PM' },
+                { text:'7:00 PM', value: '7:00 PM' },
+                { text:'8:00 PM', value: '8:00 PM' },
+                { text:'9:00 PM', value: '9:00 PM' },
+                { text:'10:00 PM', value: '10:00 PM' },
+                { text:'11:00 PM', value: '11:00 PM' }
+            ]
+        }
+    })  
+</script>
 @endsection
