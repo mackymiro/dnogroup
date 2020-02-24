@@ -19,6 +19,20 @@ use Session;
 
 class LoloPinoyLechonDeCebuController extends Controller
 {
+
+    //view sales invoice
+    public function viewSalesInvoice($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $viewSalesInvoice = LechonDeCebuSalesInvoice::find($id);
+
+        $salesInvoices = LechonDeCebuSalesInvoice::where('si_id', $id)->get()->toArray();
+
+        return view('view-lechon-de-cebu-sales-invoice', compact('user', 'viewSalesInvoice', 'salesInvoices'));
+
+    }
+
     //update for the add new sales invoice
     public function updateSi(Request $request, $id){
 

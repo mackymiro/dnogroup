@@ -49,15 +49,15 @@
                                     </tfoot>
                                     <tbody>
                                           @foreach($getAllSalesInvoices as $getAllSalesInvoice)
-                                          <tr>
+                                          <tr id="deletedId{{ $getAllSalesInvoice['id']}}">
                                           <td>
                                              @if($user->role_type !== 3)
                                             <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-sales-invoice/'.$getAllSalesInvoice['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                              @endif
                                             @if($user->role_type == 1)
-                                            <a id="delete" onClick="confirmDelete('')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                                            <a id="delete" onClick="confirmDelete('{{ $getAllSalesInvoice['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
                                             @endif
-                                            <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-delivery-receipt/') }}" title="View"><i class="fas fa-low-vision"></i></a>
+                                            <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-sales-invoice/'.$getAllSalesInvoice['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
                                            
                                           </td>
                                           <td>{{ $getAllSalesInvoice['invoice_number']}}</td>
@@ -100,6 +100,32 @@
 
     <!-- /.content-wrapper -->
 </div>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script type="text/javascript">
+   function confirmDelete(id){
+      var x = confirm("Do you want to delete this?");
+      if(x){
+        $.ajax({
+                type: "DELETE",
+                url: '/lolo-pinoy-lechon-de-cebu/delete-sales-invoice/' + id,
+                data:{
+                  _method: 'delete', 
+                  "_token": "{{ csrf_token() }}",
+                  "id": id
+                },
+                success: function(data){
+                  console.log(data);
+                  $("#deletedId"+id).fadeOut('slow');
+                 
+                },
+                error: function(data){
+                  console.log('Error:', data);
+                }
 
-
+              });
+        }else{
+            return false;
+        }
+   }
+</script>
 @endsection
