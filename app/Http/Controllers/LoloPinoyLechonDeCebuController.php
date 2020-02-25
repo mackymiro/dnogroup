@@ -15,10 +15,121 @@ use App\LechonDeCebuPaymentVoucher;
 use App\LechonDeCebuDeliveryReceipt;
 use App\LechonDeCebuDeliveryReceiptDuplicateCopy;
 use App\LechonDeCebuSalesInvoice;
+use App\CommissaryRawMaterial;
 use Session;
 
 class LoloPinoyLechonDeCebuController extends Controller
 {
+    //update RAW material
+    public function updateRawMaterial(Request $request, $id){
+
+        $updateRawMaterial = CommissaryRawMaterial::find($id);
+
+        $updateRawMaterial->branch = $request->get('branch');
+        $updateRawMaterial->product_name = $request->get('productName');
+        $updateRawMaterial->unit_price = $request->get('unitPrice');
+        $updateRawMaterial->unit = $request->get('unit');
+        $updateRawMaterial->in = $request->get('in');
+        $updateRawMaterial->out = $request->get('out');
+        $updateRawMaterial->stock_amount = $request->get('stockAmount');
+        $updateRawMaterial->remaining_stock = $request->get('remainingStock');
+        $updateRawMaterial->amount = $request->get('amount');
+        $updateRawMaterial->supplier = $request->get('supplier');
+
+        $updateRawMaterial->save();
+
+         Session::flash('successRawMaterial', 'Successfully updated');
+
+        return redirect('lolo-pinoy-lechon-de-cebu/commissary/edit-raw-materials/'.$id);
+
+    }
+
+    //edit RAW materials
+    public function editRawMaterial($id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $getRawMaterial = CommissaryRawMaterial::find($id);
+
+        return view('edit-commissary-raw-material', compact('user', 'getRawMaterial'));
+    }
+
+
+    //add RAW materials
+    public function addRawMaterial(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+        //validate
+        $this->validate($request,[
+            'productName' =>'required',
+        ]);
+
+         //get the latest insert id query in table commissary RAW material product id no
+        $dataProductId = DB::select('SELECT id, product_id_no FROM commissary_raw_materials ORDER BY id DESC LIMIT 1');
+
+        //if code is not zero add plus 1 product id no
+        if(isset($dataProductId[0]->product_id_no) != 0){
+            //if code is not 0
+            $newProd = $dataProductId[0]->product_id_no +1;
+            $uProd = sprintf("%06d",$newProd);   
+
+        }else{
+            //if code is 0 
+            $newProd = 1;
+            $uProd = sprintf("%06d",$newProd);
+        } 
+
+         $addNewRawMaterial = new CommissaryRawMaterial([
+            'user_id'=>$user->id,
+            'branch'=>$request->get('branch'),
+            'product_id_no'=>$uProd,
+            'product_name'=>$request->get('productName'),
+            'unit_price'=>$request->get('unitPrice'),
+            'unit'=>$request->get('unit'),
+            'in'=>$request->get('in'),
+            'out'=>$request->get('out'),
+            'stock_amount'=>$request->get('stockAmount'),
+            'remaining_stock'=>$request->get('remainingStock'),
+            'amount'=>$request->get('amount'),
+            'supplier'=>$request->get('supplier'),
+            'created_by'=>$name,
+
+        ]);
+
+        $addNewRawMaterial->save();
+
+        Session::flash('addRawMaterial', 'Successfully added.');
+
+        return redirect('lolo-pinoy-lechon-de-cebu/commissary/create-raw-materials');
+
+
+
+
+    }
+
+    //create RAW materials
+    public function createRawMaterials(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('commissary-add-raw-materials', compact('user'));
+    }
+
+    //RAW materials
+    public function rawMaterials(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $getRawMaterials = CommissaryRawMaterial::get()->toArray();
+
+        return view('commissary-raw-materials', compact('user', 'getRawMaterials'));
+    }
 
     //view sales invoice
     public function viewSalesInvoice($id){
@@ -766,7 +877,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'unit'=>$request->get('unit'),
             'in'=>$request->get('in'),
             'out'=>$request->get('out'),
-            'stock_amount'=>$request->get(''),
+            'stock_amount'=>$request->get('stockAmount'),
             'remaining_stock'=>$request->get('remainingStock'),
             'amount'=>$request->get('amount'),
             'supplier'=>$request->get('supplier'),
@@ -1514,6 +1625,12 @@ class LoloPinoyLechonDeCebuController extends Controller
         return redirect('lolo-pinoy-lechon-de-cebu/edit/'.$id);
 
 
+    }
+
+    //delete RAW materials
+    public function destroyRawMaterial($id){
+        $rawMaterial = CommissaryRawMaterial::find($id);
+        $rawMaterial->delete();
     }
 
     //delete sales invoice 

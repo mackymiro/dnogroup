@@ -1,6 +1,11 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('title', 'Stocks Inventory |')
 @section('content')
+<script>
+  $(document).ready(function(){
+      $('.alert-success').fadeIn().delay(3000).fadeOut();
+  });
+</script>
 <div id="wrapper">
 	 @include('sidebar.sidebar')
 	<div id="content-wrapper">

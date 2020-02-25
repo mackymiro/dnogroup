@@ -1,0 +1,26 @@
+<?php
+
+namespace App;
+
+use Illuminate\Database\Eloquent\Model;
+
+class CommissaryRawMaterial extends Model
+{
+    //
+    protected $fillable = [
+		'user_id',
+		'branch',
+		'product_id_no',
+		'product_name',
+		'unit_price',
+		'unit',
+		'in',
+		'out',
+		'stock_amount',
+		'remaining_stock',
+		'amout',
+		'supplier',
+		'created_by',
+
+ 	];
+}

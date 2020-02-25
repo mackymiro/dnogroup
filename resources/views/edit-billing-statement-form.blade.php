@@ -21,7 +21,7 @@
              <div class="col-lg-12">
             	 <img src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
             	 
-            	 <h4 class="text-center"><u>UPDATED BILLING STATEMENT/COLLECTION STATEMENT</u></h4>
+            	 <h4 class="text-center"><u>BILLING STATEMENT/COLLECTION STATEMENT</u></h4>
             </div>
             <div class="row">
                 <div class="col-lg-12">

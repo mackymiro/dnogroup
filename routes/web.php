@@ -231,6 +231,24 @@ Route::group(['middleware' => ['auth']], function(){
 
 	//route for sales invoice view 
 	Route::get('/lolo-pinoy-lechon-de-cebu/view-sales-invoice/{id}', 'LoloPinoyLechonDeCebuController@viewSalesInvoice')->name('lolo-pinoy-lechon-de-cebu.viewSalesInvoice');
+
+	//route for commissary RAW materials
+	Route::get('/lolo-pinoy-lechon-de-cebu/commissary/raw-materials','LoloPinoyLechonDeCebuController@rawMaterials')->name('lolo-pinoy-lechon-de-cebu.rawMaterials');
+
+	//route create commissary RAW materials
+	Route::get('/lolo-pinoy-lechon-de-cebu/commissary/create-raw-materials', 'LoloPinoyLechonDeCebuController@createRawMaterials')->name('lolo-pinoy-lechon-de-cebu.createRawMaterials');
+
+	//route add commissary RAW materials
+	Route::post('/lolo-pinoy-lechon-de-cebu/commissary/add-raw-material','LoloPinoyLechonDeCebuController@addRawMaterial')->name('lolo-pinoy-lechon-de-cebu.addRawMaterial');
+
+	//route for commissary RAW materials
+	Route::get('/lolo-pinoy-lechon-de-cebu/commissary/edit-raw-materials/{id}', 'LoloPinoyLechonDeCebuController@editRawMaterial')->name('lolo-pinoy-lechon-de-cebu.editRawMaterial');
+
+	//update commissary RAW materials
+	Route::patch('/lolo-pinoy-lechon-de-cebu/comissary/update-raw-material/{id}','LoloPinoyLechonDeCebuController@updateRawMaterial')->name('lolo-pinoy-lechon-de-cebu.updateRawMaterial');
+
+	//delete comissary RAW materials
+	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-raw-materials/{id}', 'LoloPinoyLechonDeCebuController@destroyRawMaterial')->name('lolo-pinoy-lechon-de-cebu.destroyRawMaterial');
 });
 
 
