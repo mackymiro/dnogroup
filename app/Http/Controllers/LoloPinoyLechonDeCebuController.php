@@ -802,120 +802,31 @@ class LoloPinoyLechonDeCebuController extends Controller
     }
 
   
-
-    //update commissary stocks inventory
-    public function updateStocksInventory(Request $request, $id){
-        $updateStocksInventory = CommissaryStockInventory::find($id);
-
-        $updateStocksInventory->branch = $request->get('branch');
-        $updateStocksInventory->product_name = $request->get('productName');
-        $updateStocksInventory->unit_price = $request->get('unitPrice');
-        $updateStocksInventory->unit = $request->get('unit');
-        $updateStocksInventory->in = $request->get('in');
-        $updateStocksInventory->out = $request->get('out');
-        $updateStocksInventory->stock_amount = $request->get('stockAmount');
-        $updateStocksInventory->remaining_stock = $request->get('remainingStock');
-        $updateStocksInventory->amount = $request->get('amount');
-        $updateStocksInventory->supplier = $request->get('supplier');
-
-        $updateStocksInventory->save();
-
-        Session::flash('successStocksInventory', 'Successfully updated');
-
-        return redirect('lolo-pinoy-lechon-de-cebu/commissary/edit-stocks-inventory/'.$id);
-
-    }
-
-    //edit commissary stocks inventory
-    public function editStocksInventory($id){
-        $ids = Auth::user()->id;
+    //view stocks inventory
+    public function viewStocksInventory($id){   
+         $ids = Auth::user()->id;
         $user = User::find($ids);
-
-        //
-        $getStocksInventory = CommissaryStockInventory::find($id);
-
-        return view('edit-commissary-stocks-inventory', compact('user', 'getStocksInventory'));
+        
+        return view('view-lechon-de-cebu-stocks-inventory', compact('user'));
     }
-
-    //commissary add stocks inventory
-    public function addStockInventory(Request $request){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        $firstName = $user->first_name;
-        $lastName = $user->last_name;
-
-        $name  = $firstName.$lastName;
-
-        //validate
-        $this->validate($request,[
-            'productName' =>'required',
-        ]);
-
-         //get the latest insert id query in table commissary stock inventories product id no
-        $dataProductId = DB::select('SELECT id, product_id_no FROM commissary_stock_inventories ORDER BY id DESC LIMIT 1');
-
-        //if code is not zero add plus 1 product id no
-        if(isset($dataProductId[0]->product_id_no) != 0){
-            //if code is not 0
-            $newProd = $dataProductId[0]->product_id_no +1;
-            $uProd = sprintf("%06d",$newProd);   
-
-        }else{
-            //if code is 0 
-            $newProd = 1;
-            $uProd = sprintf("%06d",$newProd);
-        } 
-
-
-        $addNewStock = new CommissaryStockInventory([
-            'user_id'=>$user->id,
-            'branch'=>$request->get('branch'),
-            'product_id_no'=>$uProd,
-            'product_name'=>$request->get('productName'),
-            'unit_price'=>$request->get('unitPrice'),
-            'unit'=>$request->get('unit'),
-            'in'=>$request->get('in'),
-            'out'=>$request->get('out'),
-            'stock_amount'=>$request->get('stockAmount'),
-            'remaining_stock'=>$request->get('remainingStock'),
-            'amount'=>$request->get('amount'),
-            'supplier'=>$request->get('supplier'),
-            'created_by'=>$name,
-
-        ]);
-
-        $addNewStock->save();
-
-        Session::flash('addStockInventory', 'Successfully added.');
-
-        return redirect('lolo-pinoy-lechon-de-cebu/commissary/create-stocks');
-    }
-
-    //commissary create stocks inventory
-    public function commissaryCreateStocks(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        return view('commissary-add-stocks-inventory', compact('user'));
-    }
-
+  
 
     //stocks inventory
     public function stocksInventory(){
         $ids = Auth::user()->id;
         $user = User::find($ids);
 
-        //getStocksInventory
-        $getStocksInventories = CommissaryStockInventory::get()->toArray();
+    
+        //getRawMaterial
+        $getRawMaterials = CommissaryRawMaterial::get()->toArray();
 
         //count the total stock out amount value
-        $countStockAmount = CommissaryStockInventory::all()->sum('stock_amount');
+        $countStockAmount = CommissaryRawMaterial::all()->sum('stock_amount');
         
         //count the total amount 
-        $countTotalAmount = CommissaryStockInventory::all()->sum('amount');
+        $countTotalAmount = CommissaryRawMaterial::all()->sum('amount');
 
-        return view('commissary-stocks-inventory', compact('user', 'getStocksInventories', 'countStockAmount', 'countTotalAmount'));
+        return view('commissary-stocks-inventory', compact('user', 'getRawMaterials', 'countStockAmount', 'countTotalAmount'));
     }
 
     //view statement of account
@@ -1651,12 +1562,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $paymentVoucher->delete();
     }
 
-    //delete commissary stocks inventory
-    public function destroyStocksInventory($id){
-        $stocksInventory = CommissaryStockInventory::find($id);
-        $stocksInventory->delete();
-    }
-
+   
     //delete statement account
     public function destroyStatementAddAccount($id){
         $statementAccount = LechonDeCebuStatementOfAccount::find($id);

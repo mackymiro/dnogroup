@@ -1,11 +1,6 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('title', 'View Sales Invoice |')
 @section('content')
-<script>
-  $(document).ready(function(){
-      $('.alert-success').fadeIn().delay(3000).fadeOut();
-  });
-</script>
 <div id="wrapper">
 	<!-- Sidebar -->
   	 @include('sidebar.sidebar')

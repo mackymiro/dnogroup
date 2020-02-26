@@ -1,11 +1,6 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('title', 'Stocks Inventory |')
 @section('content')
-<script>
-  $(document).ready(function(){
-      $('.alert-success').fadeIn().delay(3000).fadeOut();
-  });
-</script>
 <div id="wrapper">
 	 @include('sidebar.sidebar')
 	<div id="content-wrapper">
@@ -25,15 +20,13 @@
           					  <i class="fa fa-tasks" aria-hidden="true"></i>
           					  All Lists</div>
     					    <div class="card-body">
-                    <div class="float-right">
-                        <a href="{{ url('lolo-pinoy-lechon-de-cebu/commissary/create-stocks')}}" title="Create Stocks" class="btn  btn-success">Create Stocks</a>
-                    </div>
+                   
                     <br>
                     <br>
     					  		<div class="table-responsive">
     					  			<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
     					  				<thead>
-  				  						<th>Action</th>
+  				  						
   				  						<th>Product Id No</th>
   				  						<th>Product Name</th>
   				  						<th>Unit Price</th>
@@ -43,10 +36,11 @@
   				  					  <th>Stock Out Amount</th>
                         <th>Remaining Stock</th>
                         <th>Amount</th>
+                        <th>Supplier</th>
   				  						<th>Created By</th>
 			  						   </thead>
 			  						<tfoot>
-			  							<th>Action</th>
+			  						
 				  						<th>Product Id No</th>
 				  						<th>Product Name</th>
 				  						<th>Unit Price</th>
@@ -56,27 +50,25 @@
 				  						<th>Stock Out Amount</th>
                       <th>Remaining Stock</th>
                       <th>Amount</th>
+                      <th>Supplier</th>
 				  						<th>Created By</th>
 
 			  						</tfoot>
 			  						<tbody>
-                      @foreach($getStocksInventories as $getStocksInventory)
-			  							<tr id="deletedId{{ $getStocksInventory['id']}}">
-		  									<td>
-                          <a href="{{ url('lolo-pinoy-lechon-de-cebu/commissary/edit-stocks-inventory/'.$getStocksInventory['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-		  										<a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getStocksInventory['id'] }}')" title="Delete"><i class="fas fa-trash"></i></a>
+                      @foreach($getRawMaterials as $getRawMaterial)
+			  							<tr >
 		  									
-		  									</td>
-                        <td>{{ $getStocksInventory['product_id_no'] }}</td>
-                        <td>{{ $getStocksInventory['product_name'] }}</td>
-                        <td>{{ $getStocksInventory['unit_price'] }}</td>
-                        <td>{{ $getStocksInventory['unit'] }}</td>
-                        <td class="alert alert-danger">{{ $getStocksInventory['in'] }}</td>
-                        <td>{{ $getStocksInventory['out'] }}</td>
-                        <td>{{ $getStocksInventory['stock_amount']}}</td>
-                        <td>{{ $getStocksInventory['remaining_stock']}}</td>
-                        <td><?php echo number_format($getStocksInventory['amount'], 2);?></td>
-                        <td>{{ $getStocksInventory['created_by'] }}</td>
+                        <td>{{ $getRawMaterial['product_id_no'] }}</td>
+                        <td><a href="">{{ $getRawMaterial['product_name'] }}</a></td>
+                        <td>{{ $getRawMaterial['unit_price'] }}</td>
+                        <td>{{ $getRawMaterial['unit'] }}</td>
+                        <td class="alert alert-danger">{{ $getRawMaterial['in'] }}</td>
+                        <td>{{ $getRawMaterial['out'] }}</td>
+                        <td>{{ $getRawMaterial['stock_amount']}}</td>
+                        <td>{{ $getRawMaterial['remaining_stock']}}</td>
+                        <td><?php echo number_format($getRawMaterial['amount'], 2);?></td>
+                        <td>{{ $getRawMaterial['supplier']}}</td>
+                        <td>{{ $getRawMaterial['created_by'] }}</td>
                         
 		  								</tr>
                       @endforeach
@@ -112,33 +104,5 @@
         </div>
       </footer>
 </div>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-<script type="text/javascript">
-    function confirmDelete(id){
-        var x = confirm("Do you want to delete this?");
-        if(x){
-            $.ajax({
-              type: "DELETE",
-              url: '/lolo-pinoy-lechon-de-cebu/delete-stocks-inventory/' + id,
-              data:{
-                _method: 'delete', 
-                "_token": "{{ csrf_token() }}",
-                "id": id
-              },
-              success: function(data){
-                console.log(data);
-                $("#deletedId"+id).fadeOut('slow');
-               
-              },
-              error: function(data){
-                console.log('Error:', data);
-              }
 
-            });
-
-        }else{
-            return false;
-        }
-    }
-</script>
 @endsection
