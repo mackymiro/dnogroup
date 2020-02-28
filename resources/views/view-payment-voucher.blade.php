@@ -119,9 +119,14 @@
              <div class="row">
              	<div class="col-lg-12">
              		<div class="card mb-3">
-         				 <div class="card-header">
+         				       <div class="card-header">
                               <i class="fas fa-file-invoice" aria-hidden="true"></i>
-                            View Payment Voucher </div>
+                            View Payment Voucher 
+                             <div class="float-right">
+                                     <i class="fa fa-print fa-2x" aria-hidden="true"></i>
+                              
+                              </div>
+                        </div>
                          <div class="card-body">
                          	<div class="form-group">
                          		<div class="form-row">
@@ -177,7 +182,7 @@
                          				<tr>
 	                                      
 	                                      <td><strong>Total</strong></td>
-	                                      <td></td>
+	                                      <td>₱ <?php echo number_format($sum, 2)?></td>
 	                                    </tr>
                          			</tbody>
                          		</table>

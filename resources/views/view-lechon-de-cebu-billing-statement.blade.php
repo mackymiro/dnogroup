@@ -1,11 +1,6 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('title', 'View Billing Statement |')
 @section('content')
-<script>
-  $(document).ready(function(){
-      $('.alert-success').fadeIn().delay(3000).fadeOut();
-  });
-</script>
 <div id="wrapper">
 	<!-- Sidebar -->
    @include('sidebar.sidebar')
@@ -29,7 +24,12 @@
                     <div class="card mb-3">
                         <div class="card-header">
                               <i class="fas fa-receipt" aria-hidden="true"></i>
-                            View Billing Statment</div>
+                            View Billing Statment
+                             <div class="float-right">
+                                     <i class="fa fa-print fa-2x" aria-hidden="true"></i>
+                              
+                              </div>
+                        </div>
                         <div class="card-body">
                              <div class="form-group">
                                 <div class="form-row">
@@ -104,7 +104,7 @@
                                         <td></td>
                                         <td></td>
                                         <td><strong>Total</strong></td>
-                                        <td></td>
+                                        <td>₱ <?php echo number_format($sum, 2)?></td>
                                       </tr>
                                     </tbody>
                               </table>

@@ -9,6 +9,7 @@ class CommissaryRawMaterial extends Model
     //
     protected $fillable = [
 		'user_id',
+		'rm_id',
 		'branch',
 		'product_id_no',
 		'product_name',
@@ -18,8 +19,16 @@ class CommissaryRawMaterial extends Model
 		'out',
 		'stock_amount',
 		'remaining_stock',
-		'amout',
+		'amount',
 		'supplier',
+		'date',
+		'item',
+		'description',
+		'reference_no',
+		'qty',
+		'requesting_branch',
+		'cheque_no_issued',
+		'status',
 		'created_by',
 
  	];

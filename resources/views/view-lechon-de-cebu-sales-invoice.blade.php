@@ -24,7 +24,13 @@
 	             		<div class="card mb-3">
              				<div class="card-header">
 	                              <i class="fas fa-cash-register" aria-hidden="true"></i>
-	                            View Sales Invoice</div>
+	                            View Sales Invoice
+                                <div class="float-right">
+                                     <i class="fa fa-print fa-2x" aria-hidden="true"></i>
+
+                              
+                                </div>
+                            </div>
                             <div class="card-body">
                             	 <div class="form-group">
                         	 		<div class="form-row">
@@ -82,7 +88,7 @@
                                        	<td></td>
                                        	<td></td>
                                         <td><strong>Total</strong></td>
-                                        <td></td>
+                                        <td>₱ <?php echo number_format($sum, 2)?></td>
                                       </tr>
                         	 		</tbody>
                             	 </table>

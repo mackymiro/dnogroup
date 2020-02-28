@@ -39,7 +39,7 @@
 	  				  						<th>Product Name</th>
 	  				  						<th>Unit Price</th>
 	  				  						<th>Unit</th>
-	  				  						<th class="alert alert-danger">IN</th>
+	  				  						<th class="bg-danger" style="color:white;">IN</th>
 	  				  						<th>OUT</th>
 	  				  					  	<th>Stock Out Amount</th>
 					                        <th>Remaining Stock</th>
@@ -52,7 +52,7 @@
 					  						<th>Product Name</th>
 					  						<th>Unit Price</th>
 					  						<th>Unit</th>
-					  						<th class="alert alert-danger">IN</th>
+					  						<th class="bg-danger" style="color:white;">IN</th>
 					  						<th>OUT</th>
 					  						<th>Stock Out Amount</th>
 						                    <th>Remaining Stock</th>
@@ -68,10 +68,10 @@
 	  									
 		  									</td>
 					                        <td>{{ $getRawMaterial['product_id_no'] }}</td>
-					                        <td>{{ $getRawMaterial['product_name'] }}</td>
+					                        <td><a href="{{ url('lolo-pinoy-lechon-de-cebu/view-raw-material-details/'.$getRawMaterial['id']) }}">{{ $getRawMaterial['product_name'] }}</a></td>
 					                        <td>{{ $getRawMaterial['unit_price'] }}</td>
 					                        <td>{{ $getRawMaterial['unit'] }}</td>
-					                        <td class="alert alert-danger">{{ $getRawMaterial['in'] }}</td>
+					                        <td class="bg-danger" style="color:white;">{{ $getRawMaterial['in'] }}</td>
 					                        <td>{{ $getRawMaterial['out'] }}</td>
 					                        <td>{{ $getRawMaterial['stock_amount']}}</td>
 					                        <td>{{ $getRawMaterial['remaining_stock']}}</td>

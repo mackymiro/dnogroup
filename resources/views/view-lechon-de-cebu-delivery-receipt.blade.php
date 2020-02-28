@@ -27,9 +27,14 @@
             <div class="row">
             	 <div class="col-lg-12">
             	 	 <div class="card mb-3">
-            	 	 	<div class="card-header">
-                              <i class="fas fa-receipt" aria-hidden="true"></i>
-                            View Delivery Receipt</div>
+                  	 	 	<div class="card-header">
+                            <i class="fas fa-receipt" aria-hidden="true"></i>
+                                  View Delivery Receipt
+                             <div class="float-right">
+                                     <i class="fa fa-print fa-2x" aria-hidden="true"></i>
+                              
+                                </div>
+                        </div>
                         <div class="card-body">
                         	 <div class="form-group">
                         	 	<div class="form-row">
@@ -98,7 +103,7 @@
                                         <td></td>
                                        
                                         <td><strong>Total</strong></td>
-                                        <td></td>
+                                        <td>₱ <?php echo number_format($sum, 2)?></td>
                                       </tr>
                                   </tbody>
 

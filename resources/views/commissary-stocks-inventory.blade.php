@@ -31,7 +31,7 @@
   				  						<th>Product Name</th>
   				  						<th>Unit Price</th>
   				  						<th>Unit</th>
-  				  						<th class="alert alert-danger">IN</th>
+  				  						<th class="bg-danger" style="color:white;">IN</th>
   				  						<th>OUT</th>
   				  					  <th>Stock Out Amount</th>
                         <th>Remaining Stock</th>
@@ -45,7 +45,7 @@
 				  						<th>Product Name</th>
 				  						<th>Unit Price</th>
 				  						<th>Unit</th>
-				  						<th class="alert alert-danger">IN</th>
+				  						<th class="bg-danger" style="color:white;">IN</th>
 				  						<th>OUT</th>
 				  						<th>Stock Out Amount</th>
                       <th>Remaining Stock</th>
@@ -62,7 +62,7 @@
                         <td><a href="">{{ $getRawMaterial['product_name'] }}</a></td>
                         <td>{{ $getRawMaterial['unit_price'] }}</td>
                         <td>{{ $getRawMaterial['unit'] }}</td>
-                        <td class="alert alert-danger">{{ $getRawMaterial['in'] }}</td>
+                        <td class="bg-danger" style="color:white;">{{ $getRawMaterial['in'] }}</td>
                         <td>{{ $getRawMaterial['out'] }}</td>
                         <td>{{ $getRawMaterial['stock_amount']}}</td>
                         <td>{{ $getRawMaterial['remaining_stock']}}</td>

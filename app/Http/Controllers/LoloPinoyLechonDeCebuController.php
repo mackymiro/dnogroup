@@ -20,6 +20,134 @@ use Session;
 
 class LoloPinoyLechonDeCebuController extends Controller
 {
+    //save request stock out RAW material
+    public function requestStockOut(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+        $requestStockOut = CommissaryRawMaterial::find($id);
+
+        $qty = $request->get('qty');
+
+        //compute qty times unit price
+        $compute  = $qty * $requestStockOut->unit_price;
+        $sum = $compute;
+
+          //get date today
+        $getDateToday =  date('Y-m-d');
+
+        $addRequestStockOut = new CommissaryRawMaterial([
+            'user_id'=>$user->id,
+            'rm_id'=>$id,
+            'product_id_no'=>$request->get('productId'),
+            'description'=>$request->get('description'),
+            'date'=>$getDateToday,
+            'item'=>$requestStockOut->product_name,
+            'reference_no'=>$request->get('referenceNum'),
+            'qty'=>$qty,
+            'unit'=>$requestStockOut->unit,
+            'amount'=>$sum,
+            'status'=>$request->get('status'),
+            'cheque_no_issued'=>$request->get('chequeNo'),
+            'requesting_branch'=>$request->get('requestingBranch'),
+            'created_by'=>$name,
+        ]);
+
+        $addRequestStockOut->save();
+
+         Session::flash('requestStockOut', 'Request Stock Out Successfully Added');
+
+         return redirect('lolo-pinoy-lechon-de-cebu/raw-material/request-stock-out/'.$id);
+
+
+    }
+
+
+    //request stock out RAW material
+    public function rawMaterialRequestStockOut($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $getRequestStock = CommissaryRawMaterial::find($id);
+
+        return view('request-stock-out-raw-material', compact('user', 'getRequestStock', 'id'));
+    }
+
+    //save delivery in RAW material
+    public function addDeliveryInRawMaterial(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+        $rawMaterial = CommissaryRawMaterial::find($id);
+
+        $qty = $request->get('qty');
+
+        //compute qty times unit price
+        $compute  = $qty * $rawMaterial->unit_price;
+        $sum = $compute;
+
+          //get date today
+        $getDateToday =  date('Y-m-d');
+
+        $addDeliveryIn = new CommissaryRawMaterial([
+            'user_id'=>$user->id,
+            'rm_id'=>$id,
+            'product_id_no'=>$request->get('productId'),
+            'description'=>$request->get('description'),
+            'date'=>$getDateToday,
+            'item'=>$rawMaterial->product_name,
+            'reference_no'=>$request->get('referenceNum'),
+            'qty'=>$qty,
+            'unit'=>$rawMaterial->unit,
+            'amount'=>$sum,
+            'status'=>$request->get('status'),
+            'cheque_no_issued'=>$request->get('chequeNo'),
+            'created_by'=>$name,
+        ]);
+
+        $addDeliveryIn->save();
+
+         Session::flash('addDeliveryIn', 'Delivery In Successfully Added');
+
+         return redirect('lolo-pinoy-lechon-de-cebu/raw-material/add-delivery-in/'.$id);
+
+    }
+
+    //add delivery in RAW material
+    public function rawMaterialAddDeliveryIn($id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $getRawMaterial = CommissaryRawMaterial::find($id);
+
+        return view('add-delivery-in-raw-material', compact('user', 'getRawMaterial', 'id'));
+    }
+
+
+    //view RAW material details
+    public function viewRawMaterialDetails($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //
+        $viewRawDetail = CommissaryRawMaterial::find($id);
+
+        //transaction table
+        $getViewRawDetails = CommissaryRawMaterial::where('rm_id', $id)->get()->toArray();
+        
+        return view('view-lechon-de-cebu-raw-material-details', compact('user', 'viewRawDetail', 'getViewRawDetails'));
+    }
+
     //update RAW material
     public function updateRawMaterial(Request $request, $id){
 
@@ -46,7 +174,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     //edit RAW materials
     public function editRawMaterial($id){
-         $ids = Auth::user()->id;
+        $ids = Auth::user()->id;
         $user = User::find($ids);
 
         $getRawMaterial = CommissaryRawMaterial::find($id);
@@ -126,7 +254,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $ids = Auth::user()->id;
         $user = User::find($ids);
 
-        $getRawMaterials = CommissaryRawMaterial::get()->toArray();
+        $getRawMaterials = CommissaryRawMaterial::where('rm_id', NULL)->get()->toArray();
 
         return view('commissary-raw-materials', compact('user', 'getRawMaterials'));
     }
@@ -140,7 +268,15 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $salesInvoices = LechonDeCebuSalesInvoice::where('si_id', $id)->get()->toArray();
 
-        return view('view-lechon-de-cebu-sales-invoice', compact('user', 'viewSalesInvoice', 'salesInvoices'));
+         //count the total amount 
+        $countTotalAmount = LechonDeCebuSalesInvoice::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = LechonDeCebuSalesInvoice::where('si_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        return view('view-lechon-de-cebu-sales-invoice', compact('user', 'viewSalesInvoice', 'salesInvoices', 'sum'));
 
     }
 
@@ -344,8 +480,16 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $deliveryReceiptDuplicates = LechonDeCebuDeliveryReceiptDuplicateCopy::where('dr_id', $id)->get()->toArray();
 
+          //count the total amount 
+        $countTotalAmount = LechonDeCebuDeliveryReceiptDuplicateCopy::where('id', $id)->sum('price');
 
-        return view('view-delivery-duplicate', compact('user', 'viewDeliveryReceiptDuplicate', 'deliveryReceiptDuplicates'));
+        //
+        $countAmount = LechonDeCebuDeliveryReceiptDuplicateCopy::where('dr_id', $id)->sum('price');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+
+        return view('view-delivery-duplicate', compact('user', 'viewDeliveryReceiptDuplicate', 'deliveryReceiptDuplicates', 'sum'));
     }
 
     //duplocicate copy of delivery receipt
@@ -427,11 +571,19 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $viewDeliveryReceipt = LechonDeCebuDeliveryReceipt::find($id);
 
+
         $deliveryReceipts = LechonDeCebuDeliveryReceipt::where('dr_id', $id)->get()->toArray();
 
+         //count the total amount 
+        $countTotalAmount = LechonDeCebuDeliveryReceipt::where('id', $id)->sum('price');
+
+        //
+        $countAmount = LechonDeCebuDeliveryReceipt::where('dr_id', $id)->sum('price');
+
+        $sum  = $countTotalAmount + $countAmount;
         
 
-        return view('view-lechon-de-cebu-delivery-receipt', compact('user', 'viewDeliveryReceipt', 'deliveryReceipts'));
+        return view('view-lechon-de-cebu-delivery-receipt', compact('user', 'viewDeliveryReceipt', 'deliveryReceipts', 'sum'));
     }
 
     //update for the add new delivery receipt
@@ -622,7 +774,16 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $pVouchers = LechonDeCebuPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
-        return view('view-payment-voucher', compact('user', 'paymentVoucher', 'pVouchers'));
+
+         //count the total amount 
+        $countTotalAmount = LechonDeCebuPaymentVoucher::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = LechonDeCebuPaymentVoucher::where('pv_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        return view('view-payment-voucher', compact('user', 'paymentVoucher', 'pVouchers', 'sum'));
     }
 
     //payment voucher > cheque vouchers
@@ -818,7 +979,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     
         //getRawMaterial
-        $getRawMaterials = CommissaryRawMaterial::get()->toArray();
+        $getRawMaterials = CommissaryRawMaterial::where('rm_id', NULL)->get()->toArray();
 
         //count the total stock out amount value
         $countStockAmount = CommissaryRawMaterial::all()->sum('stock_amount');
@@ -1069,7 +1230,16 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $billingStatements = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->get()->toArray();
 
-        return view('view-lechon-de-cebu-billing-statement', compact('user', 'viewBillingStatement', 'billingStatements'));
+          //count the total amount 
+        $countTotalAmount = LechonDeCebuBillingStatement::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+
+        return view('view-lechon-de-cebu-billing-statement', compact('user', 'viewBillingStatement', 'billingStatements', 'sum'));
     }
 
 
@@ -1465,9 +1635,18 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         //
         $pOrders = LechonDeCebuPurchaseOrder::where('po_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = LechonDeCebuPurchaseOrder::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = LechonDeCebuPurchaseOrder::where('po_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
         
 
-        return view('view-lechon-de-cebu-purchase-order', compact('user', 'purchaseOrder', 'pOrders'));
+        return view('view-lechon-de-cebu-purchase-order', compact('user', 'purchaseOrder', 'pOrders', 'sum'));
     }
 
     /**

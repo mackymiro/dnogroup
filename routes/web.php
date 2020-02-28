@@ -234,6 +234,21 @@ Route::group(['middleware' => ['auth']], function(){
 
 	//delete comissary RAW materials
 	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-raw-materials/{id}', 'LoloPinoyLechonDeCebuController@destroyRawMaterial')->name('lolo-pinoy-lechon-de-cebu.destroyRawMaterial');
+
+	//route for view RAW material details
+	Route::get('/lolo-pinoy-lechon-de-cebu/view-raw-material-details/{id}', 'LoloPinoyLechonDeCebuController@viewRawMaterialDetails')->name('lolo-pinoy-lechon-de-cebu.viewRawMaterialDetails');
+
+	//route for RAW materials add delivery in
+	Route::get('/lolo-pinoy-lechon-de-cebu/raw-material/add-delivery-in/{id}', 'LoloPinoyLechonDeCebuController@rawMaterialAddDeliveryIn')->name('lolo-pinoy-lechon-de-cebu.rawMaterialAddDeliveryIn');
+
+	//route for add delivery in RAW material
+	Route::post('/lolo-pinoy-lechon-de-cebu/add-delivery-in-raw-material/{id}', 'LoloPinoyLechonDeCebuController@addDeliveryInRawMaterial')->name('lolo-pinoy-lechon-de-cebu.addDeliveryInRawMaterial');
+
+	//route for RAW material request stock out
+	Route::get('/lolo-pinoy-lechon-de-cebu/raw-material/request-stock-out/{id}', 'LoloPinoyLechonDeCebuController@rawMaterialRequestStockOut')->name('lolo-pinoy-lechon-de-cebu.rawMaterialRequestStockOut');
+
+	//route for request stock out RAW material
+	Route::post('/lolo-pinoy-lechon-de-cebu/request-stock-out-raw-material/{id}', 'LoloPinoyLechonDeCebuController@requestStockOut')->name('lolo-pinoy-lechon-de-cebu.requestStockOut');
 });
 
 
