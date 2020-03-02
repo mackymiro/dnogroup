@@ -20,6 +20,53 @@ use Session;
 
 class LoloPinoyLechonDeCebuController extends Controller
 {
+    //inventory of stocks
+    public function inventoryOfStocks(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        
+        return view('commissary-inventory-of-stocks', compact('user'));
+    }
+
+    //sales of outlets
+    public function salesOfOutlet(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('commissary-sales-of-outlet', compact('user'));
+    }
+
+    //commissary delivery outlet
+    public function commissaryDeliveryOutlet(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('commissary-delivery-outlet', compact('user'));
+    }
+
+    //commissary production
+    public function commissaryProduction(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('commissary-production', compact('user'));
+    }
+
+    //view stock inventory 
+    public function viewStockInventory($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //
+        $viewStockDetail = CommissaryRawMaterial::find($id);
+
+        //transaction table
+        $getViewStockDetails = CommissaryRawMaterial::where('rm_id', $id)->get()->toArray();
+
+        return view('view-lechon-de-cebu-stock-inventory', compact('user', 'viewStockDetail', 'getViewStockDetails'));
+    }
+
+
     //save request stock out RAW material
     public function requestStockOut(Request $request, $id){
         $ids = Auth::user()->id;

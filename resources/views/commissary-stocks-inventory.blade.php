@@ -59,7 +59,7 @@
 			  							<tr >
 		  									
                         <td>{{ $getRawMaterial['product_id_no'] }}</td>
-                        <td><a href="">{{ $getRawMaterial['product_name'] }}</a></td>
+                        <td><a href="{{ url('lolo-pinoy-lechon-de-cebu/view-stock-inventory/'.$getRawMaterial['id'])}}">{{ $getRawMaterial['product_name'] }}</a></td>
                         <td>{{ $getRawMaterial['unit_price'] }}</td>
                         <td>{{ $getRawMaterial['unit'] }}</td>
                         <td class="bg-danger" style="color:white;">{{ $getRawMaterial['in'] }}</td>

@@ -249,6 +249,21 @@ Route::group(['middleware' => ['auth']], function(){
 
 	//route for request stock out RAW material
 	Route::post('/lolo-pinoy-lechon-de-cebu/request-stock-out-raw-material/{id}', 'LoloPinoyLechonDeCebuController@requestStockOut')->name('lolo-pinoy-lechon-de-cebu.requestStockOut');
+
+	//route for view stock inventory
+	Route::get('/lolo-pinoy-lechon-de-cebu/view-stock-inventory/{id}', 'LoloPinoyLechonDeCebuController@viewStockInventory')->name('lolo-pinoy-lechon-de-cebu.viewStockInventory');
+
+	//route for commissary production
+	Route::get('/lolo-pinoy-lechon-de-cebu/commissary/production', 'LoloPinoyLechonDeCebuController@commissaryProduction')->name('lolo-pinoy-lechon-de-cebu.commissaryProduction');
+
+	//route for commissary delivery outlets
+	Route::get('/lolo-pinoy-lechon-de-cebu/commissary/delivery-outlets', 'LoloPinoyLechonDeCebuController@commissaryDeliveryOutlet')->name('lolo-pinoy-lechon-de-cebu.commissaryDeliveryOutlet');
+
+	//route for commissary sales of outlets
+	Route::get('/lolo-pinoy-lechon-de-cebu/commissary/sales-of-outlets', 'LoloPinoyLechonDeCebuController@salesOfOutlet')->name('lolo-pinoy-lechon-de-cebu.salesOfOutlet');
+
+	//route for commissary inventory of stocks
+	Route::get('/lolo-pinoy-lechon-de-cebu/commissary/inventory-of-stocks', 'LoloPinoyLechonDeCebuController@inventoryOfStocks')->name('lolo-pinoy-lechon-de-cebu.inventoryOfStocks');
 });
 
 

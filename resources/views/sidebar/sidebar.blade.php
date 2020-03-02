@@ -86,13 +86,13 @@
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           
           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/commissary/raw-materials') }}">RAW materials</a>
-          <a class="dropdown-item" href="register.html">Production</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/commissary/production') }}">Production</a>
           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/commissary/stocks-inventory') }}">Stocks inventory</a>     
-          <a class="dropdown-item" href="forgot-password.html">Delivery Outlets</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/commissary/delivery-outlets') }}">Delivery Outlets</a>
 
-          <a class="dropdown-item" href="forgot-password.html">Sales of outlets</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/commissary/sales-of-outlets') }}">Sales of outlets</a>
 
-          <a class="dropdown-item" href="forgot-password.html">Inventory of stocks</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/commissary/inventory-of-stocks') }}">Inventory of stocks</a>
          
         </div>
       </li>
