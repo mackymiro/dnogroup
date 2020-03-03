@@ -119,12 +119,20 @@
 
 		            	 				<td>{{ $getViewStockDetail['date']}}</td>
 		            	 				<td>{{ $getViewStockDetail['reference_no']}}</td>
-		            	 				<td>{{ $getViewStockDetail['description']}}</td>
+		            	 				@if($getViewStockDetail['description'] == "DELIVERY IN")
+		            	 					<td class="bg-success" style="color:white;">{{ $getViewStockDetail['description']}}</td>
+	            	 					@else
+	            	 						<td class="bg-danger" style="color:white;">{{ $getViewStockDetail['description']}}</td>
+	            	 					@endif
 		            	 				<td>{{ $getViewStockDetail['item']}}</td>
 		            	 				<td>{{ $getViewStockDetail['qty']}}</td>
 		            	 				<td>{{ $getViewStockDetail['unit']}}</td>
 		            	 				<td><?php echo number_format($getViewStockDetail['amount'], 2)?></td>
-		            	 				<td>{{ $getViewStockDetail['status']}}</td>
+		            	 				@if($getViewStockDetail['status'] == "Paid")
+		            	 					<td class="bg-success" style="color:white;">{{ $getViewStockDetail['status']}}</td>
+	            	 					@else
+	            	 						<td class="bg-danger" style="color:white;">{{ $getViewStockDetail['status']}}</td>
+	            	 					@endif
 		            	 				<td>{{ $getViewStockDetail['requesting_branch']}}</td>
 		            	 				<td>{{ $getViewStockDetail['cheque_no_issued']}}</td>
 		            	 			</tr>
@@ -137,5 +145,16 @@
             </div>
    		</div>
    	</div>
+   	 <!-- Sticky Footer -->
+      <footer class="sticky-footer">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright © Ribos Food Corporation 2019</span>
+            <br>
+            <br>
+            <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
+          </div>
+        </div>
+      </footer>
 </div>
 @endsection

@@ -132,12 +132,20 @@
 
 		            	 				<td>{{ $getViewRawDetail['date']}}</td>
 		            	 				<td>{{ $getViewRawDetail['reference_no']}}</td>
-		            	 				<td>{{ $getViewRawDetail['description']}}</td>
+		            	 				@if($getViewRawDetail['description'] == "DELIVERY IN")
+		            	 					<td class="bg-success" style="color:white;">{{ $getViewRawDetail['description']}}</td>
+	            	 					@else
+	            	 						<td class="bg-danger" style="color:white;">{{ $getViewRawDetail['description']}}</td>
+	            	 					@endif
 		            	 				<td>{{ $getViewRawDetail['item']}}</td>
 		            	 				<td>{{ $getViewRawDetail['qty']}}</td>
 		            	 				<td>{{ $getViewRawDetail['unit']}}</td>
 		            	 				<td><?php echo number_format($getViewRawDetail['amount'], 2)?></td>
-		            	 				<td>{{ $getViewRawDetail['status']}}</td>
+		            	 				@if($getViewRawDetail['status'] == "Paid")
+		            	 					<td class="bg-success" style="color:white;">{{ $getViewRawDetail['status']}}</td>
+	            	 					@else
+	            	 						<td class="bg-danger" style="color:white;">{{ $getViewRawDetail['status']}}</td>
+	            	 					@endif
 		            	 				<td>{{ $getViewRawDetail['requesting_branch']}}</td>
 		            	 				<td>{{ $getViewRawDetail['cheque_no_issued']}}</td>
 		            	 			</tr>
@@ -151,5 +159,16 @@
             </div>
    		</div>
    	</div>
+   	 <!-- Sticky Footer -->
+      <footer class="sticky-footer">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright © Ribos Food Corporation 2019</span>
+            <br>
+            <br>
+            <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
+          </div>
+        </div>
+      </footer>
 </div>
 @endsection

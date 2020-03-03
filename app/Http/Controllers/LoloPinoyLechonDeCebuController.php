@@ -33,7 +33,23 @@ class LoloPinoyLechonDeCebuController extends Controller
         $ids = Auth::user()->id;
         $user = User::find($ids);
 
-        return view('commissary-sales-of-outlet', compact('user'));
+        //
+        $getSalesOfOutlets = CommissaryRawMaterial::where('rm_id', '!=', NULL)->get()->toArray();
+
+        //get total amount in delivery in 
+        $desc = "DELIVERY IN";
+        $status = "Paid";
+
+        $totalDeliveryIn = CommissaryRawMaterial::where('rm_id', '!=', NULL)->where('description', $desc)->where('status', $status)->sum('amount');
+
+        //get total amount delivery out 
+        $descDelOut = "DELIVERY OUT"; 
+        $statusDelOut = "Paid";  
+
+        $totalDeliveryOut = CommissaryRawMaterial::where('rm_id', '!=', NULL)->where('description', $descDelOut)->where('status', $statusDelOut)->sum('amount');
+
+        return view('commissary-sales-of-outlet', compact('user', 'getSalesOfOutlets', 'totalDeliveryIn', 
+            'totalDeliveryOut'));
     }
 
     //commissary delivery outlet
@@ -41,7 +57,10 @@ class LoloPinoyLechonDeCebuController extends Controller
         $ids = Auth::user()->id;
         $user = User::find($ids);
 
-        return view('commissary-delivery-outlet', compact('user'));
+        //
+        $getDeliveryOutlets = CommissaryRawMaterial::where('rm_id', '!=', NULL)->get()->toArray();
+
+        return view('commissary-delivery-outlet', compact('user', 'getDeliveryOutlets'));
     }
 
     //commissary production

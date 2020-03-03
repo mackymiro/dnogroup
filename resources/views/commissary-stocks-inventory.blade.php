@@ -75,16 +75,7 @@
                       
 			  						</tbody>
 					  			</table>
-                  <table class="table">
-                    <thead>
-                        <tr>
-                
-                        <td>Stock Out Value: ₱ <?php echo number_format($countStockAmount, 2); ?></td>
-                        <td></td>
-                        <td>Total Stock Value: ₱ <?php echo number_format($countTotalAmount, 2);?></td>
-                      </tr>
-                    </thead>
-                  </table>
+                 
     					  		</div>
     					  </div>
               			</div>
