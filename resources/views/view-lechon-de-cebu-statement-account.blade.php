@@ -6,6 +6,11 @@
       $('.alert-success').fadeIn().delay(3000).fadeOut();
   });
 </script>
+<script>
+    function myFunction() {
+      window.print();
+    }
+</script>
 <div id="wrapper">
 		<!-- Sidebar -->
      @include('sidebar.sidebar')
@@ -27,12 +32,17 @@
             <div class="row">
         		<div class="col-lg-12">
         			 <div class="card mb-3">
-    			 		 <div class="card-header">
+    			 		        <div class="card-header">
                               <i class="fas fa-receipt" aria-hidden="true"></i>
-                            View Statement Of Account </div>
+                            View Statement Of Account 
+                            <div class="float-right">
+                                 <button class="btn btn-success" onclick="myFunction()"> <i class="fa fa-print fa-2x" aria-hidden="true"></i></button>
+                              
+                              </div>
+                        </div>
                         <div class="card-body">
                         	<div class="table-responsive">
-                    			<table class="table table-striped">
+                    			<table class="table table-bordered">
                     				<thead>
                     					<tr>
                     						<th>Date</th>

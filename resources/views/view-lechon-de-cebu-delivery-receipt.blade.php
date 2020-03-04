@@ -6,6 +6,11 @@
       $('.alert-success').fadeIn().delay(3000).fadeOut();
   });
 </script>
+<script>
+    function myFunction() {
+      window.print();
+    }
+</script>
 <div id="wrapper">
 	<!-- Sidebar -->
    @include('sidebar.sidebar')
@@ -31,55 +36,66 @@
                             <i class="fas fa-receipt" aria-hidden="true"></i>
                                   View Delivery Receipt
                              <div class="float-right">
-                                     <i class="fa fa-print fa-2x" aria-hidden="true"></i>
+                                 <button class="btn btn-success" onclick="myFunction()"><i class="fa fa-print fa-2x" aria-hidden="true"></i></button>
                               
                                 </div>
                         </div>
                         <div class="card-body">
-                        	 <div class="form-group">
-                        	 	<div class="form-row">
-                    	 			<div class="col-lg-6">
-                    	 				<label>Sold To</label>
-                    	 				<br>
-                    	 				{{ $viewDeliveryReceipt['sold_to'] }}
-                    	 				<br>
-                    	 				<br>
-                    	 				<label>Delivered To</label>
-                    	 				<br>
-                    	 				{{ $viewDeliveryReceipt['delivered_to']}}
-                    	 				<br>
-                    	 				<br>
-                    	 				<label>Contact Person</label>
-                    	 				<br>
-                    	 				{{ $viewDeliveryReceipt['contact_person'] }}
-                    	 				<label>Time</label>
-                    	 				<br>
-                    	 				{{ $viewDeliveryReceipt['time'] }}
-                    	 				
-                    	 			</div>
-                    	 			<div class="col-lg-6">
-                    	 				
-                    	 				<label>Mobile #</label>
-                    	 				<br>
-                    	 				{{ $viewDeliveryReceipt['mobile_num']}}
-                    	 				<br>
-                    	 				<br>
-                    	 				<label>DR No</label>
-                    	 				<br>
-                    	 				{{ $viewDeliveryReceipt['dr_no'] }}
-                    	 				<br>
-                    	 				<br>
-                    	 				<label>Date</label><br>
-                    	 				{{ $viewDeliveryReceipt['date'] }}
-                    	 			</div>
-                        	 	</div>
-                        	 </div>
+                          <div class="form-group">
+                              <div class="form-row">
+                                   <div class="col-lg-6">
+                                    <table class="table table-bordered">
+                                      <thead>
+                                          <tr>
+                                              <th width="30%">Sold To</th>
+                                              <th>{{ $viewDeliveryReceipt['sold_to'] }}</th>
+                                          </tr>
+                                          <tr>
+                                              <th>Delivered To</th>
+                                              <th>{{ $viewDeliveryReceipt['delivered_to']}}</th>
+                                          </tr>
+                                          <tr> 
+                                              <th>Contact Person</th>
+                                              <th>{{ $viewDeliveryReceipt['contact_person'] }}</th>
+                                          </tr>
+                                          <tr>
+                                              <th>Time</th>
+                                              <th>{{ $viewDeliveryReceipt['time'] }}</th>
+                                          </tr>
+                                         
+                                      </thead>
+                                      
+                                  </table>   
+                             </div>
+                          <div class="col-lg-6">
+                              <table class="table table-bordered">
+                                  <thead>
+                                      <tr>
+                                          <th width="20%">Mobile #</th>
+                                          <th>{{ $viewDeliveryReceipt['mobile_num']}}</th>
+                                      </tr>
+                                      <tr> 
+                                          <th>DR No</th>
+                                          <th>{{ $viewDeliveryReceipt['dr_no'] }}</th>
+                                      </tr> 
+                                       <tr>
+                                          <th>Date</th>
+                                          <th>{{ $viewDeliveryReceipt['date'] }}</th>
+                                       </tr>
+                                  </thead>
+                              </table>
+                          </div>
+                          </div>
+                          </div>
+                         
+                         
+                        	
                         	 <table class="table table-striped">
                         	 	 <thead>
 	                                  <tr>
-	                                    <th>QTY</th>
-	                                    <th>DESCRIPTION</th>
-	                                    <th>PRICE</th>
+	                                    <th class="bg-info" style="color:white;">QTY</th>
+	                                    <th class="bg-info" style="color:white;">DESCRIPTION</th>
+	                                    <th class="bg-info" style="color:white;">PRICE</th>
 	                                  
 	                                  </tr>
                                   </thead>

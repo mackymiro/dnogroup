@@ -1,6 +1,11 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('title', 'View Sales Invoice |')
 @section('content')
+<script>
+    function myFunction() {
+      window.print();
+    }
+</script>
 <div id="wrapper">
 	<!-- Sidebar -->
   	 @include('sidebar.sidebar')
@@ -26,44 +31,41 @@
 	                              <i class="fas fa-cash-register" aria-hidden="true"></i>
 	                            View Sales Invoice
                                 <div class="float-right">
-                                     <i class="fa fa-print fa-2x" aria-hidden="true"></i>
-
+                                    <button class="btn btn-success" onclick="myFunction()"> <i class="fa fa-print fa-2x" aria-hidden="true"></i></button>
                               
                                 </div>
                             </div>
                             <div class="card-body">
-                            	 <div class="form-group">
-                        	 		<div class="form-row">
-                        	 			<div class="col-lg-6">
-                        	 				<label>Invoice #</label>
-                        	 				<br>
-                        	 				{{ $viewSalesInvoice['invoice_number'] }}
-                        	 				<br>
-                        	 				<br>
-                        	 				<label>Date</label>
-                        	 				<br>
-                        	 				{{ $viewSalesInvoice['date'] }}
-                        	 			</div>
-                        	 			<div class="col-lg-6">
-                    	 					<label>Orederd By</label>
-                    	 					<br>
-                    	 					{{ $viewSalesInvoice['ordered_by'] }}
-                    	 					<br>
-                    	 					<br>
-                    	 					<label>Address</label>
-                    	 					<br>
-                    	 					{{ $viewSalesInvoice['address'] }}
-                        	 			</div>
-                        	 		</div>
-                            	 </div>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th width="20%">Invoice #</th>
+                                            <th>{{ $viewSalesInvoice['invoice_number'] }}</th>
+                                        </tr>
+                                          <tr>
+                                            <th>Date</th>
+                                            <th>{{ $viewSalesInvoice['date'] }}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Ordered By</th>
+                                            <th>{{ $viewSalesInvoice['ordered_by'] }}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Address</th>
+                                            <th>{{ $viewSalesInvoice['address'] }}</th>
+                                        </tr>
+                                    </thead>
+                                   
+                                </table>
+                            	
                             	 <table class="table table-striped">
                         	 		<thead>
                         	 			<tr>
-                    	 					<th>QTY</th>
-                    	 					<th>TOTAL KLS</th>
-                    	 					<th>ITEM DESCRIPTION</th>
-                    	 					<th>UNIT PRICE</th>
-                    	 					<th>AMOUNT</th>
+                    	 					<th class="bg-info" style="color:white;">QTY</th>
+                    	 					<th class="bg-info" style="color:white;">TOTAL KLS</th>
+                    	 					<th class="bg-info" style="color:white;">ITEM DESCRIPTION</th>
+                    	 					<th class="bg-info" style="color:white;">UNIT PRICE</th>
+                    	 					<th class="bg-info" style="color:white;">AMOUNT</th>
                         	 			</tr>
                         	 		</thead>
                         	 		<tbody>

@@ -1,6 +1,11 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('title', 'View Purchase Order |')
 @section('content')
+<script>
+    function myFunction() {
+      window.print();
+    }
+</script>
 <div id="wrapper">
 	<!-- Sidebar -->
     @include('sidebar.sidebar')
@@ -26,7 +31,7 @@
                               <i class="fab fa-first-order" aria-hidden="true"></i>
                             View Purchase Order
                              <div class="float-right">
-                                     <i class="fa fa-print fa-2x" aria-hidden="true"></i>
+                                 <button class="btn btn-success" onclick="myFunction()"> <i class="fa fa-print fa-2x" aria-hidden="true"></i></button>
                               
                               </div>
                         </div>
@@ -34,35 +39,45 @@
                             <div class="form-group">
                                 <div class="form-row">
                                   <div class="col-lg-6">
-                                    <label>Paid to</label>
-                                    <br>
-                                   {{ $purchaseOrder['paid_to'] }}
-                                  <br>
-                                  <br>
-                                  <label>Address</label>
-                                  <br>
-                                  Labogon Mandaue City
-                                  
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th width="20%">Paid To</th>
+                                                <th>{{ $purchaseOrder['paid_to'] }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Address</th>
+                                                <th>{{ $purchaseOrder['address']}}</th>
+                                            </tr>
+                                        </thead>
+
+                                    </table>
+                                   
                                   </div>
                                   <div class="col-lg-6">
-                                    <label>P.O Number</label>
-                                    <br>
-                                    <a href="#">P.O-{{ $purchaseOrder['p_o_number'] }}</a>
-                                    <br>
-                                    <br>
-                                    <label>Date</label>
-                                    <br>
-                                    {{ $purchaseOrder['date'] }}
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th width="20%">P.O Number</th>
+                                                <th><a href="#">P.O-{{ $purchaseOrder['p_o_number'] }}</a></th>
+                                            </tr>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th> {{ $purchaseOrder['date'] }}</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                   
                                   </div>
                                 </div>
                                </div>
                                <table class="table table-striped">
                                   <thead>
                                     <tr>
-                                      <th>QUANTITY</th>
-                                      <th>DESCRIPTION</th>
-                                      <th>UNIT PRICE</th>
-                                      <th>AMOUNT</th>
+                                      <th class="bg-info" style="color:white;">QUANTITY</th>
+                                      <th class="bg-info" style="color:white;">DESCRIPTION</th>
+                                      <th class="bg-info" style="color:white;">UNIT PRICE</th>
+                                      <th class="bg-info" style="color:white;">AMOUNT</th>
                                     </tr>
                                   </thead>
                                     <tbody>
@@ -89,25 +104,38 @@
                                     </tr>
                                     </tbody>
                                </table>
+                            
                                <div class="form-group">
                                   <div class="form-row">
                                       <div class="col-lg-6">
-                                        <label>Requested By</label>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th width="30%">Requested By</th>
+                                                    <th></th>
+                                                </tr>
+                                                 <tr>
+                                                    <th>Checked By</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                       
                                       </div>
                                       <div class="col-lg-6">
-                                        <label>Prepared By</label>
-                                        <p>{{ $purchaseOrder['created_by'] }}</p>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th width="20%">Prepared By</th>
+                                                    <th>{{ $purchaseOrder['created_by'] }}</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                       
                                       </div>
                                   </div>
                                </div>
-                               <div class="form-group">
-                                  <div class="form-row">
-                                      <div class="col-lg-6">
-                                        <label>Checked By</label>
-                                      </div>
-                                     
-                                  </div>
-                               </div>
+                              
                         </div>
                     </div>
                 </div>

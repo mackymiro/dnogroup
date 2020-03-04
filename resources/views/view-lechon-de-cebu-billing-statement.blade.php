@@ -1,6 +1,11 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('title', 'View Billing Statement |')
 @section('content')
+<script>
+    function myFunction() {
+      window.print();
+    }
+</script>
 <div id="wrapper">
 	<!-- Sidebar -->
    @include('sidebar.sidebar')
@@ -25,8 +30,8 @@
                         <div class="card-header">
                               <i class="fas fa-receipt" aria-hidden="true"></i>
                             View Billing Statment
-                             <div class="float-right">
-                                     <i class="fa fa-print fa-2x" aria-hidden="true"></i>
+                            <div class="float-right">
+                                 <button class="btn btn-success" onclick="myFunction()"> <i class="fa fa-print fa-2x" aria-hidden="true"></i></button>
                               
                               </div>
                         </div>
@@ -34,52 +39,58 @@
                              <div class="form-group">
                                 <div class="form-row">
                                   <div class="col-lg-6">
-                                    <label>Bill to</label>
-                                    <br>
-                                    {{ $viewBillingStatement['bill_to'] }}
-                                    <br>
-                                    <br>
-                                    <label>Address</label>
-                                    <br>
-                                    {{ $viewBillingStatement['address'] }}
-                                    <br>
-                                    <br>
-                                    <label>Period Covered</label>
-                                    <br>
-                                    {{ $viewBillingStatement['period_cover'] }} 
+                                    <table class="table table-bordered">  
+                                        <thead>
+                                            <tr>
+                                                <th width="30%">Bill To</th>
+                                                <th> {{ $viewBillingStatement['bill_to'] }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Address</th>
+                                                <th>{{ $viewBillingStatement['address'] }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Period Covered</th>
+                                                <th> {{ $viewBillingStatement['period_cover'] }} </th>
+                                            </tr>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>{{ $viewBillingStatement['date'] }}</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                  
                                   </div>
                                   <div class="col-lg-6">
-                                    <label>Date</label>
-                                    <br>
-                                    {{ $viewBillingStatement['date'] }}
-                                    <br>
-                                    <br>
-                                    <label>Reference #</label>
-                                    <br>
-                                    {{ $viewBillingStatement['reference_number'] }}
-                                    <br>
-                                    <br>
-                                    <label>PO Number</label>
-                                    <br>
-                                    {{ $viewBillingStatement['p_o_number'] }}
-                                    <br>
-                                    <br>
-                                    <label>Terms</label>
-                                    <br>
-                                    {{ $viewBillingStatement['terms'] }}
-                                    <br>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th width="20%">Reference #</th>
+                                                <th>{{ $viewBillingStatement['reference_number'] }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>PO Number</th>
+                                                <th> {{ $viewBillingStatement['p_o_number'] }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Terms</th>
+                                                <th>{{ $viewBillingStatement['terms'] }}</th>
+                                            </tr>
+                                        </thead>
 
+                                    </table>
+                        
                                   </div>
                                 </div>
                                 </div>
                                 <table class="table table-striped">
                                     <thead>
                                       <tr>
-                                        <th>DATE</th>
-                                        <th>INVOICE #</th>
-                                        <th>WHOLE LECHON 500/KL</th>
-                                        <th>DESCRIPTION</th>
-                                        <th>AMOUNT</th>
+                                        <th class="bg-info" style="color:white;">DATE</th>
+                                        <th class="bg-info" style="color:white;">INVOICE #</th>
+                                        <th class="bg-info" style="color:white;">WHOLE LECHON 500/KL</th>
+                                        <th class="bg-info" style="color:white;">DESCRIPTION</th>
+                                        <th class="bg-info" style="color:white;">AMOUNT</th>
                                       </tr>
                                     </thead>
                                     <tbody>
@@ -110,13 +121,24 @@
                               </table>
                                <div class="form-group">
                                     <div class="form-row">
-                                        <div class="col-lg-6">
-                                           <label>Prepared By</label>
-                                          <p>{{ $viewBillingStatement['created_by'] }}</p>
+                                        <div class="col-lg-12">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Prepared By</th>
+                                                        <th>Approved By</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>{{ $viewBillingStatement['created_by'] }}</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                          
                                         </div>
-                                        <div class="col-lg-6">
-                                           <label>Approved By</label>
-                                        </div>
+                                       
                                     </div>
                                </div>
                         </div>

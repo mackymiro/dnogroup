@@ -62,14 +62,13 @@
       		  									<td>{{ $statementOfAccount['unit_price'] }}</td>
       		  									<td>{{ $statementOfAccount['payment_method'] }}</td>
       		  									<td><?php echo number_format($statementOfAccount['amount'], 2); ?></td>
-      		  									<td>
-      		  										@if($statementOfAccount['status'] == "Unpaid")
-      		  										<span class="alert alert-danger">{{ $statementOfAccount['status'] }}</span>
-      		  										@elseif($statementOfAccount['status'] == "Paid")
-      		  										<span class="alert alert-success">{{ $statementOfAccount['status'] }}</span>
+      		  									@if($statementOfAccount['status'] == "Unpaid")
+                                <td class="bg-danger" style="color:white;">{{ $statementOfAccount['status'] }}</td>
+      		  									@elseif($statementOfAccount['status'] == "Paid")
+      		  										 <td class="bg-success" style="color:white;">{{ $statementOfAccount['status'] }}</td>
 
       		  										@endif
-      		  									</td>
+      		  								
       		  									<td>{{ $statementOfAccount['paid_amount'] }}</td>
       		  									<td>{{ $statementOfAccount['created_by'] }}</td>
       		  								</tr>
@@ -122,14 +121,12 @@
                                         <td>{{ $statementOfAccountPaid['unit_price'] }}</td>
                                         <td>{{ $statementOfAccountPaid['payment_method'] }}</td>
                                         <td><?php echo number_format($statementOfAccountPaid['amount'], 2); ?></td>
-                                        <td>
-                                            @if($statementOfAccountPaid['status'] == "Unpaid")
-                                              <span class="alert alert-danger">{{ $statementOfAccountPaid['status'] }}</span>
-                                            @elseif($statementOfAccountPaid['status'] == "Paid")
-                                              <span class="alert alert-success">{{ $statementOfAccountPaid['status'] }}</span>
+                                        @if($statementOfAccountPaid['status'] == "Unpaid")
+                                          <td class="bg-danger" style="color:white;">{{ $statementOfAccountPaid['status'] }}</td>
+                                        @elseif($statementOfAccountPaid['status'] == "Paid")
+                                           <td class="bg-success" style="color:white;">{{ $statementOfAccountPaid['status'] }}</td>
 
-                                            @endif
-                                        </td>
+                                          @endif
                                         <td>{{ $statementOfAccountPaid['paid_amount'] }}</td>
                                         <td>{{ $statementOfAccountPaid['created_by'] }}</td>
                                       </tr>

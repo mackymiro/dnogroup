@@ -1,6 +1,11 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('title', 'View Stock Inventory Item Details |')
 @section('content')
+<script>
+    function myFunction() {
+      window.print();
+    }
+</script>
 <div id="wrapper">
 	<!-- Sidebar -->
    	@include('sidebar.sidebar')
@@ -20,6 +25,8 @@
             	 <img src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
             	 
             	 <h4 class="text-center"><u>STOCK INVENTORY ITEM DETAILS </u></h4>
+
+
             </div>
             <div class="row">
             	<div class="col-lg-12">
@@ -27,7 +34,10 @@
             			 <div class="card-header">
                               <i class="fas fa-apple-alt" aria-hidden="true"></i>
                            Stock Inventory View Item Details
-                           
+                           	 <div class="float-right">
+			                   <button class="btn btn-success" onclick="myFunction()"> <i class="fa fa-print fa-2x" aria-hidden="true"></i></button>
+			                  
+			               </div>
                         </div>
                         <div class="card-body">
                         	<table class="table table-bordered">

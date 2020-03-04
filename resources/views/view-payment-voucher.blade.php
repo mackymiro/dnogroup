@@ -5,102 +5,14 @@
       $('.alert-success').fadeIn().delay(3000).fadeOut();
   });
 </script>
+<script>
+    function myFunction() {
+      window.print();
+    }
+</script>
 <div id="wrapper">
 		<!-- Sidebar -->
-   <ul class="sidebar navbar-nav">
-       <li class="nav-item active">
-        <a class="nav-link" href="{{ url('/') }}">
-          <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Ribos Food Corporation</span>
-        </a>
-      </li>
-       <li class="nav-item">
-        <a class="nav-link" href="index.html">
-          <i class="fas fa-cash-register"></i>
-          <span>Sales Invoice</span>
-        </a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-           <i class="fas fa-receipt"></i>
-          <span>Delivery Receipt</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/delivery-receipt-form')}}">Delivery Receipt Form</a>
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/delivery-receipt/lists') }}">Lists</a>
-         
-        </div>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-           <i class="fab fa-first-order"></i>
-          <span>Purchase order</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if($user->role_type == 1)
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/purchase-order') }}">P.O Form</a>
-          @endif
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/purchase-order-lists') }}">Lists</a>
-         
-        </div>
-      </li>
-      <li class="nav-item dropdown active">
-        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-           <i class="fas fa-receipt"></i>
-          <span>Statement of account</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/statement-of-account-form')}}">Statement of Account</a>
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/statement-of-account/lists') }}">Lists</a>
-         
-        </div>
-      </li>
-       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-           <i class="fas fa-receipt"></i>
-          <span>Billing statement</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if($user->role_type == 1)
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/billing-statement-form') }}">Billing Statement Form</a>
-          @endif
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/billing-statement-lists') }}">Lists</a>
-         
-        </div>
-      </li>
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-file-invoice"></i>
-          <span>Payment vouchers</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-            <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/payment-voucher-form') }}">Payment Voucher Form</a>
-            <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/cash-vouchers') }}">Cash Vouchers</a>
-            <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/cheque-vouchers') }}">Cheque Vouchers</a>  
-        </div>
-      </li>
-     
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-apple-alt"></i>
-          <span>Commissary</span>
-        </a>
-         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          
-          <a class="dropdown-item" href="login.html">RAW materials</a>
-          <a class="dropdown-item" href="register.html">Production</a>
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/commissary/stocks-inventory') }}">Stocks inventory</a>     
-          <a class="dropdown-item" href="forgot-password.html">Delivery Outlets</a>
-
-          <a class="dropdown-item" href="forgot-password.html">Sales of outlets</a>
-
-          <a class="dropdown-item" href="forgot-password.html">Inventory of stocks</a>
-         
-        </div>
-      </li>
-     
-     
-    </ul>
+    @include('sidebar.sidebar')
      <div id="content-wrapper">
  		<div class="container-fluid">
  			 <!-- Breadcrumbs-->
@@ -122,39 +34,47 @@
          				       <div class="card-header">
                               <i class="fas fa-file-invoice" aria-hidden="true"></i>
                             View Payment Voucher 
-                             <div class="float-right">
-                                     <i class="fa fa-print fa-2x" aria-hidden="true"></i>
+                           <div class="float-right">
+                               <button class="btn btn-success" onclick="myFunction()"> <i class="fa fa-print fa-2x" aria-hidden="true"></i></button>
                               
-                              </div>
+                            </div>
                         </div>
                          <div class="card-body">
                          	<div class="form-group">
                          		<div class="form-row">
                          			<div class="col-lg-6">
-                         				<label>Reference Number</label>
-                         				<br>
-                         				{{ $paymentVoucher['reference_number']}}
-                         				<br>
-                         				<br>
-                         				<label>Paid To</label>
-                         				<br>
-                         				{{ $paymentVoucher['paid_to']}}
-                         				<br>
-                         				<br>
-                         				<label>Account Number</label>
-                         				<br>
-                         				{{ $paymentVoucher['account_no']}}
-                         				<br>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th width="30%">Reference Number</th>
+                                            <th>{{ $paymentVoucher['reference_number']}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Paid To</th>
+                                            <th>{{ $paymentVoucher['paid_to']}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Account Number</th>
+                                            <th>{{ $paymentVoucher['account_no']}}</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                         			
                          			</div>
                          			<div class="col-lg-6">
-                         				<label>Date</label>
-                         				<br>
-                         				{{ $paymentVoucher['date']}}
-                         				<br>
-                         				<br>
-                         				<label>Method Of Payment</label>
-                         				<br>
-                         				{{ $paymentVoucher['method_of_payment']}}
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>{{ $paymentVoucher['date']}}</th>
+                                        </tr>
+                                        <tr>
+                                            <th>Method Of Payment</th>
+                                            <th>{{ $paymentVoucher['method_of_payment']}}</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                         				
                          			</div>
                          		</div>
                          	</div>
@@ -162,8 +82,8 @@
                          		<table class="table table-striped">
                          			<thead>
                          				<tr>
-                         					<th>Particulars</th>
-                         					<th>Amount</th>
+                         					<th class="bg-info" style="color:white;">Particulars</th>
+                         					<th class="bg-info" style="color:white;">Amount</th>
                          				</tr>
                          			</thead>
                          			<tbody>
@@ -190,24 +110,30 @@
                          	</div>
                          	<div class="form-group">
                      				<div class="form-row">
-                     					<div class="col-lg-6">
-                                        <label>Prepared/Checked By</label>
-                                        <br>
-                                        {{ $paymentVoucher['prepared_by']}}
-                                        <br>
-                                        <br>
-                                        <label>Date</label>
-                                        {{ $paymentVoucher['date_approved']}}
-                                      </div>
-                                      <div class="col-lg-6">
-                                        <label>Approved By</label>
-                                        {{ $paymentVoucher['approved_by'] }}
-                                        <br>
-                                        <br>
-                                        <label>Received By </label>
-                                        {{ $paymentVoucher['received_by_date']}}
-                                      </div>
+                     					<div class="col-lg-12">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Prepared/Checked By</th>
+                                            <th>Approved By</th>
+                                            <th>Received By</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td> {{ $paymentVoucher['date_approved']}}</td>
+                                            <td> {{ $paymentVoucher['prepared_by']}}</td>
+                                            <td>{{ $paymentVoucher['approved_by'] }}</td>
+                                            <td>{{ $paymentVoucher['received_by_date'] }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                               
+                              </div>
+                                 
                      				</div>
+                            
                          		</div>
                          </div>
              		</div>
