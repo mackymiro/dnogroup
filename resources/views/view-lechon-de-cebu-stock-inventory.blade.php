@@ -37,7 +37,7 @@
                            	 <div class="float-right">
 			                   <button class="btn btn-success" onclick="myFunction()"> <i class="fa fa-print fa-2x" aria-hidden="true"></i></button>
 			                  
-			               </div>
+			               	</div>
                         </div>
                         <div class="card-body">
                         	<table class="table table-bordered">

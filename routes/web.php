@@ -264,6 +264,29 @@ Route::group(['middleware' => ['auth']], function(){
 
 	//route for commissary inventory of stocks
 	Route::get('/lolo-pinoy-lechon-de-cebu/commissary/inventory-of-stocks', 'LoloPinoyLechonDeCebuController@inventoryOfStocks')->name('lolo-pinoy-lechon-de-cebu.inventoryOfStocks');
+
+	//route for download PDF file
+	Route::get('/lolo-pinoy-lechon-de-cebu/printDelivery/{id}', 'LoloPinoyLechonDeCebuController@printDelivery')->name('lolo-pinoy-lechon-de-cebu.printDelivery');
+
+	//print Duplicate delivery receipt
+	Route::get('/lolo-pinoy-lechon-de-cebu/printDuplicateDelivery/{id}', 'LoloPinoyLechonDeCebuController@printDuplicateDelivery')->name('lolo-pinoy-lechon-de-cebu.printDuplicateDelivery');
+
+	//print PO
+	Route::get('/lolo-pinoy-lechon-de-cebu/printPO/{id}', 'LoloPinoyLechonDeCebuController@printPO')->name('lolo-pinoy-lechon-de-cebu.printPO');
+
+	//Lolo Pinoy Grill Commissary
+	Route::get('/lolo-pinoy-grill-commissary', 'LoloPinoyGrillCommissaryController@index')->name('lolo-pinoy-grill-commissary.index');
+
+
+	//Lolo Pinoy Grill Branches
+	Route::get('/lolo-pinoy-grill-branches', 'LoloPinoyGrillBranchesController@index')->name('lolo-pinoy-grill-branches.index');
+
+	//Mr Potato
+	Route::get('/mr-potato', 'MrPotatoController@index')->name('mr-potato.index');
+
+
+	//Ribos Bar
+	Route::get('/ribos-bar', 'RibosBarController@index')->name('ribos-bar.index');
 });
 
 

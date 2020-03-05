@@ -6,11 +6,7 @@
       $('.alert-success').fadeIn().delay(3000).fadeOut();
   });
 </script>
-<script>
-    function myFunction() {
-      window.print();
-    }
-</script>
+
 <div id="wrapper">
 	<!-- Sidebar -->
    @include('sidebar.sidebar')
@@ -36,9 +32,10 @@
                             <i class="fas fa-receipt" aria-hidden="true"></i>
                                   View Delivery Receipt
                              <div class="float-right">
-                                 <button class="btn btn-success" onclick="myFunction()"><i class="fa fa-print fa-2x" aria-hidden="true"></i></button>
-                              
-                                </div>
+                               
+                                 <a href="{{ action('LoloPinoyLechonDeCebuController@printDelivery', $viewDeliveryReceipt['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                               
+                              </div>
                         </div>
                         <div class="card-body">
                           <div class="form-group">
@@ -91,7 +88,7 @@
                          
                         	
                         	 <table class="table table-striped">
-                        	 	 <thead>
+                        	 	     <thead>
 	                                  <tr>
 	                                    <th class="bg-info" style="color:white;">QTY</th>
 	                                    <th class="bg-info" style="color:white;">DESCRIPTION</th>
@@ -124,6 +121,24 @@
                                   </tbody>
 
                         	 </table>
+                           <br>
+                           <br>
+                           <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Prepared By:</th>
+                                        <th>Checked By:</th>
+                                        <th>Received By:</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{ $viewDeliveryReceipt['created_by']}}</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                           </table>
                         </div>
             	 	 </div>
             	 </div>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
+use PDF; 
 use Auth;
 use App\User; 
 use App\LechonDeCebuPurchaseOrder; 
@@ -18,8 +19,85 @@ use App\LechonDeCebuSalesInvoice;
 use App\CommissaryRawMaterial;
 use Session;
 
+
 class LoloPinoyLechonDeCebuController extends Controller
 {
+    //print PO purchase order
+    public function printPO($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $purchaseOrder = LechonDeCebuPurchaseOrder::find($id);
+
+          //
+        $pOrders = LechonDeCebuPurchaseOrder::where('po_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = LechonDeCebuPurchaseOrder::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = LechonDeCebuPurchaseOrder::where('po_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+
+        $pdf = PDF::loadView('printPO', compact('purchaseOrder', 'pOrders', 'sum'));
+
+        return $pdf->download('purchase-order.pdf');
+
+
+    }
+
+    //print Duplicate Delivery
+    public function printDuplicateDelivery($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $deliveryDuplicateId = LechonDeCebuDeliveryReceiptDuplicateCopy::find($id);
+
+        $deliveryReceiptDuplicates = LechonDeCebuDeliveryReceiptDuplicateCopy::where('dr_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = LechonDeCebuDeliveryReceiptDuplicateCopy::where('id', $id)->sum('price');
+
+        //
+        $countAmount = LechonDeCebuDeliveryReceiptDuplicateCopy::where('dr_id', $id)->sum('price');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+
+        $pdf = PDF::loadView('printDuplicateDelivery', compact('deliveryDuplicateId', 'user', 'deliveryReceipts', 'sum', 'deliveryReceiptDuplicates'));
+
+        return $pdf->download('duplicate-delivery-receipt.pdf');
+
+
+    }
+
+    //printDelivery
+    public function printDelivery($id){
+
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $deliveryId = LechonDeCebuDeliveryReceipt::find($id);
+
+        $deliveryReceipts = LechonDeCebuDeliveryReceipt::where('dr_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = LechonDeCebuDeliveryReceipt::where('id', $id)->sum('price');
+
+
+          //
+        $countAmount = LechonDeCebuDeliveryReceipt::where('dr_id', $id)->sum('price');
+
+        $sum  = $countTotalAmount + $countAmount;
+       
+
+        $pdf = PDF::loadView('printDelivery', compact('deliveryId', 'user', 'deliveryReceipts', 'sum'));
+
+        return $pdf->download('delivery-receipt.pdf');
+    }
+
     //inventory of stocks
     public function inventoryOfStocks(){
         $ids = Auth::user()->id;

@@ -31,8 +31,9 @@
                               <i class="fab fa-first-order" aria-hidden="true"></i>
                             View Purchase Order
                              <div class="float-right">
-                                 <button class="btn btn-success" onclick="myFunction()"> <i class="fa fa-print fa-2x" aria-hidden="true"></i></button>
-                              
+                               
+                                 <a href="{{ action('LoloPinoyLechonDeCebuController@printPO', $purchaseOrder['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                               
                               </div>
                         </div>
                         <div class="card-body">

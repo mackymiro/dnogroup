@@ -35,9 +35,10 @@
               	 	 	   <div class="card-header">
                                 <i class="fas fa-receipt" aria-hidden="true"></i>
                               View Duplicate Delivery Receipt
-                               <div class="float-right">
-                                 <button class="btn btn-success" onclick="myFunction()"><i class="fa fa-print fa-2x" aria-hidden="true"></i></button>
-                              
+                                <div class="float-right">
+                               
+                                 <a href="{{ action('LoloPinoyLechonDeCebuController@printDuplicateDelivery', $viewDeliveryReceiptDuplicate['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                               
                               </div>
                         </div>
                         <div class="card-body">
@@ -121,6 +122,24 @@
                                   </tbody>
 
                         	 </table>
+                            <br>
+                           <br>
+                           <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Prepared By:</th>
+                                        <th>Checked By:</th>
+                                        <th>Received By:</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>{{ $viewDeliveryReceiptDuplicate['created_by']}}</td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                           </table>
                         </div>
             	 	 </div>
             	 </div>
