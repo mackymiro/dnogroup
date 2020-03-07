@@ -274,9 +274,43 @@ Route::group(['middleware' => ['auth']], function(){
 	//print PO
 	Route::get('/lolo-pinoy-lechon-de-cebu/printPO/{id}', 'LoloPinoyLechonDeCebuController@printPO')->name('lolo-pinoy-lechon-de-cebu.printPO');
 
+	Route::get('/lolo-pinoy-lechon-de-cebu/printBillingStatement/{id}', 'LoloPinoyLechonDeCebuController@printBillingStatement')->name('lolo-pinoy-lechon-de-cebu.printBillingStatement');
+
+	Route::get('/lolo-pinoy-lechon-de-cebu/printPaymentVoucher/{id}', 'LoloPinoyLechonDeCebuController@printPaymentVoucher')->name('lolo-pinoy-lechon-de-cebu.printPaymentVoucher');
+
 	//Lolo Pinoy Grill Commissary
 	Route::get('/lolo-pinoy-grill-commissary', 'LoloPinoyGrillCommissaryController@index')->name('lolo-pinoy-grill-commissary.index');
 
+	//delivery receipt
+	Route::get('/lolo-pinoy-grill-commissary/delivery-receipt-form', 'LoloPinoyGrillCommissaryController@deliveryReceiptForm')->name('lolo-pinoy-grill-commissary.deliveryReceiptForm');
+
+	//store deivery receipt
+	Route::post('/lolo-pinoy-grill-commissary/store-delivery-receipt', 'LoloPinoyGrillCommissaryController@storeDeliveryReceipt')->name('lolo-pinoy-grill-commissary.storeDeliveryReceipt');
+
+	Route::get('/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-delivery-receipt/{id}', 'LoloPinoyGrillCommissaryController@editDeliveryReceipt')->name('lolo-pinoy-grill-commissary.editDeliveryReceipt');
+
+	Route::patch('/lolo-pinoy-grill-commissary/update-delivery-receipt/{id}', 'LoloPinoyGrillCommissaryController@updateDeliveryReceipt')->name('lolo-pinoy-grill-commissary.updateDeliveryReceipt');
+
+	//add new delivery receipt lolo pinoy grill commissary
+	Route::get('/lolo-pinoy-grill-commissary/add-new-lolo-pinoy-grill-delivery-receipt/{id}', 'LoloPinoyGrillCommissaryController@addNewDelivery')->name('lolo-pinoy-grill-commissary.addNewDelivery');
+
+	//save add new delivery receipt lolo pinoy grill 
+	Route::post('/lolo-pinoy-grill-commissary/add-new-lolo-pinoy-grill-delivery-receipt-data/{id}', 'LoloPinoyGrillCommissaryController@addNewDeliveryReceiptData')->name('lolo-pinoy-grill-commissary.addNewDeliveryReceiptData');
+
+	//
+	Route::patch('/lolo-pinoy-grill-commissary/update-dr/{id}', 'LoloPinoyGrillCommissaryController@updateDr')->name('lolo-pinoy-grill-commissary.updateDr');
+
+	//destroy delivery receipt
+	Route::delete('/lolo-pinoy-grill-commissary/delete-delivery-receipt/{id}', 'LoloPinoyGrillCommissaryController@destroyDeliveryReceipt')->name('lolo-pinoy-grill-commissary.destroyDeliveryReceipt');
+
+	//delivery receipt lists
+	Route::get('/lolo-pinoy-grill-commissary/delivery-receipt/lists', 'LoloPinoyGrillCommissaryController@deliveryReceiptList')->name('lolo-pinoy-grill-commissary.deliveryReceiptList');
+
+	//view 
+	Route::get('/lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-commissary-delivery-receipt/{id}', 'LoloPinoyGrillCommissaryController@viewDeliveryReceipt')->name('lolo-pinoy-grill-commissary.viewDeliveryReceipt');
+
+	//print delivery receipt lolo pinoy grill
+	Route::get('/lolo-pinoy-grill-commissary/prntDeliveryReceipt/{id}', 'LoloPinoyGrillCommissaryController@printDelivery')->name('lolo-pinoy-grill-commissary.printDelivery');
 
 	//Lolo Pinoy Grill Branches
 	Route::get('/lolo-pinoy-grill-branches', 'LoloPinoyGrillBranchesController@index')->name('lolo-pinoy-grill-branches.index');

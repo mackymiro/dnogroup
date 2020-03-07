@@ -29,6 +29,8 @@
 			  				<div class="card-header">
                               <i class="fas fa-receipt" aria-hidden="true"></i>
                             Edit Delivery Receipt</div>
+                            <br>
+                            <br>
                              @if(session('updateSuccessfull'))
                              	<p class="alert alert-success">{{ Session::get('updateSuccessfull') }}</p>
                              @endif 
@@ -100,6 +102,18 @@
 	                        			</div>
                          			</div>
                              	</div>
+                               <div class="form-group">
+                                <div class="form-row">
+                                    <div class="col-md-4">  
+                                        <label>Consignee Name</label>
+                                        <input type="text" name="consigneeName" class="form-control" value="{{ $getDeliveryReceipt['consignee_name'] }}" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Consignee Contact #</label>
+                                        <input type="text" name="consigneeContact" class="form-control" value="{{ $getDeliveryReceipt['consignee_contact_num']}}" />
+                                    </div>
+                                </div>
+                            </div>
                              	<div class="form-group">
                              		<div class="form-row">
                      					<div class="col-md-1">
@@ -112,7 +126,7 @@
 	                    				</div>
                     					<div class="col-md-2">
 	                    					<label>Price</label>
-	                    					<input type="text" name="price" class="form-control" value="<?php echo number_format($getDeliveryReceipt['price'], 2)?>" />
+	                    					<input type="text" name="price" class="form-control" value="{{ $getDeliveryReceipt['price']}}" />
 	                    				</div>
                              		</div>
                              	</div>

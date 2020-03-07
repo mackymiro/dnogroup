@@ -21,13 +21,13 @@
             	<div class="col-lg-12">
             		<div class="card mb-3">
             			<div class="card-header">
-						  <i class="fa fa-receipt" aria-hidden="true"></i>
-						  Add New</div>
+      						  <i class="fa fa-receipt" aria-hidden="true"></i>
+      						  Add New</div>
 
 						   <div class="card-body">
 						   	  @if(session('addDeliveryReceiptSuccess'))
-		                       <p class="alert alert-success">{{ Session::get('addDeliveryReceiptSuccess') }}</p>
-		                      @endif 
+                     <p class="alert alert-success">{{ Session::get('addDeliveryReceiptSuccess') }}</p>
+                    @endif 
 						   		<form action="{{ action('LoloPinoyLechonDeCebuController@addNewDeliveryReceiptData', $id) }}" method="post">
 						   				{{csrf_field()}}
 						   		<div class="form-group">
@@ -47,17 +47,17 @@
 						   			</div>
 						   			
 						   		</div>
-					   			<div class="form-group">
-					   			<div class="form-row">
-					   				<div class="col-lg-12 float-right">
-			  							<input type="submit" class="btn btn-success" value="Add" />
-			  							<br>
-			  							<br>
-			  							<br>
-			  							<a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-delivery-receipt/'.$id) }}">Back</a>
-				  					</div> 
-					   			</div>
-					   			</div>
+  					   			<div class="form-group">
+  					   			<div class="form-row">
+  					   				<div class="col-lg-12 float-right">
+  			  							<input type="submit" class="btn btn-success" value="Add" />
+  			  							<br>
+  			  							<br>
+  			  							<br>
+  			  							<a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-delivery-receipt/'.$id) }}">Back</a>
+  				  					</div> 
+  					   			</div>
+  					   			</div>
 					   		</form>
 						   </div>
             		</div>

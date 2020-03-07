@@ -1,11 +1,6 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('title', 'View Delivery Receipt |')
 @section('content')
-<script>
-  $(document).ready(function(){
-      $('.alert-success').fadeIn().delay(3000).fadeOut();
-  });
-</script>
 
 <div id="wrapper">
 	<!-- Sidebar -->
@@ -83,10 +78,7 @@
                               </table>
                           </div>
                           </div>
-                          </div>
-                         
-                         
-                        	
+                          </div>	
                         	 <table class="table table-striped">
                         	 	     <thead>
 	                                  <tr>

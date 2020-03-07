@@ -28,6 +28,8 @@
             	 	 <p >
 		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
 						Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
+            Mobile No: Globe (063) 9772955322<br>
+            Smart No: Smart (063) 9212153137<br>
 
 						Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
             	 	 </p>
@@ -84,10 +86,26 @@
                           </div>
                           <br>
                           <br>
+                          <table style="margin-top:70px;">
+                              <thead>
+                                  <tr>
+                                      <th>Consignee Name</th>
+                                  </tr>
+                                  <tr>
+                                      <th>Consignee Contact #</th>
+                                  </tr>
+                              </thead>
+                              <tbody>
+                                  <tr>
+                                      <th></th>
+                                  </tr>
+                                  <tr>
+                                      <th></th>
+                                  </tr>
+                              </tbody>
+                          </table>
                           <br>
-                          <br>
-                          <br>
-                          <br>
+                        
                           <table style="border:1px solid black;">
                           		  <thead>
 	                                  <tr>
@@ -115,7 +133,7 @@
 	                                       <tr style="border:1px solid black;">
 	                                        <td style=" border: 1px solid black;"></td>
 	                                       
-	                                        <td style=" border: 1px solid black;"><strong>Total</strong></td>
+	                                        <td style="text-align:center; border: 1px solid black;"><strong>Total</strong></td>
 	                                        <td style=" text-align:center; border: 1px solid black;"> <?php echo number_format($sum, 2)?></td>
 	                                      </tr>
                                   </tbody>
@@ -126,7 +144,7 @@
                            				<tr>
                        						<th style="width:30%;">Prepared By</th>
                        						<th>Checked By</th>
-                       						<th>Received By</th>
+                       						<th>Received By & Date</th>
                            				</tr>
                            			</thead>
                            			<tbody>

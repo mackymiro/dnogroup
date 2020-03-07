@@ -22,6 +22,55 @@ use Session;
 
 class LoloPinoyLechonDeCebuController extends Controller
 {
+
+    //print payment voucher
+    public function printPaymentVoucher($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $printPaymentVoucher = LechonDeCebuPaymentVoucher::find($id);
+       
+
+        $pVouchers = LechonDeCebuPaymentVoucher::where('pv_id', $id)->get()->toArray();
+
+
+         //count the total amount 
+        $countTotalAmount = LechonDeCebuPaymentVoucher::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = LechonDeCebuPaymentVoucher::where('pv_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+
+        $pdf = PDF::loadView('printPaymentVoucher', compact('printPaymentVoucher', 'pVouchers', 'sum'));
+
+        return $pdf->download('lechon-de-cebu-payment-voucher.pdf'); 
+    }
+
+    //print billing statement
+    public function printBillingStatement($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $printBillingStatement = LechonDeCebuBillingStatement::find($id);
+
+        $billingStatements = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = LechonDeCebuBillingStatement::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        $pdf = PDF::loadView('printBillingStatement', compact('printBillingStatement', 'billingStatements', 'sum'));
+
+        return $pdf->download('lechon-de-cebu-billing-statement.pdf');         
+    }
+
+
     //print PO purchase order
     public function printPO($id){
         $ids = Auth::user()->id;
@@ -43,7 +92,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $pdf = PDF::loadView('printPO', compact('purchaseOrder', 'pOrders', 'sum'));
 
-        return $pdf->download('purchase-order.pdf');
+        return $pdf->download('lechon-de-cebu-purchase-order.pdf');
 
 
     }
@@ -68,7 +117,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $pdf = PDF::loadView('printDuplicateDelivery', compact('deliveryDuplicateId', 'user', 'deliveryReceipts', 'sum', 'deliveryReceiptDuplicates'));
 
-        return $pdf->download('duplicate-delivery-receipt.pdf');
+        return $pdf->download('lechon-de-cebu-duplicate-delivery-receipt.pdf');
 
 
     }
@@ -95,7 +144,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $pdf = PDF::loadView('printDelivery', compact('deliveryId', 'user', 'deliveryReceipts', 'sum'));
 
-        return $pdf->download('delivery-receipt.pdf');
+        return $pdf->download('lechon-de-cebu-delivery-receipt.pdf');
     }
 
     //inventory of stocks
@@ -720,6 +769,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
          //count the total amount 
         $countTotalAmount = LechonDeCebuDeliveryReceipt::where('id', $id)->sum('price');
+       
 
         //
         $countAmount = LechonDeCebuDeliveryReceipt::where('dr_id', $id)->sum('price');
@@ -814,6 +864,8 @@ class LoloPinoyLechonDeCebuController extends Controller
         $updateDeliveryReceipt->contact_person = $request->get('contactPerson');
         $updateDeliveryReceipt->mobile_num = $request->get('mobile');
         $updateDeliveryReceipt->special_instruction = $request->get('specialInstruction');
+        $updateDeliveryReceipt->consignee_name = $request->get('consigneeName');
+        $updateDeliveryReceipt->consignee_contact_num = $request->get('consigneeContact');
         $updateDeliveryReceipt->qty = $request->get('qty');
         $updateDeliveryReceipt->description = $request->get('description');
         $updateDeliveryReceipt->price = $request->get('price');
@@ -884,6 +936,8 @@ class LoloPinoyLechonDeCebuController extends Controller
             'contact_person'=>$request->get('contactPerson'),
             'mobile_num'=>$request->get('mobile'),
             'special_instruction'=>$request->get('specialInstruction'),
+            'consignee_name'=>$request->get('consigneeName'),
+            'consignee_contact_num'=>$request->get('consigneeContact'),
             'qty'=>$request->get('qty'),
             'description'=>$request->get('description'),
             'price'=>$request->get('price'),

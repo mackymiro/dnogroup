@@ -75,6 +75,18 @@
                         			</div>
                         		</div>
                         	</div>
+                            <div class="form-group">
+                                <div class="form-row">
+                                    <div class="col-md-4">  
+                                        <label>Consignee Name</label>
+                                        <input type="text" name="consigneeName" class="form-control" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Consignee Contact #</label>
+                                        <input type="text" name="consigneeContact" class="form-control" />
+                                    </div>
+                                </div>
+                            </div>
                         	<div class="form-group">
                     			<div class="form-row">
                     				<div class="col-md-1">

@@ -5,11 +5,6 @@
       $('.alert-success').fadeIn().delay(3000).fadeOut();
   });
 </script>
-<script>
-    function myFunction() {
-      window.print();
-    }
-</script>
 <div id="wrapper">
 		<!-- Sidebar -->
     @include('sidebar.sidebar')
@@ -35,9 +30,8 @@
                               <i class="fas fa-file-invoice" aria-hidden="true"></i>
                             View Payment Voucher 
                            <div class="float-right">
-                               <button class="btn btn-success" onclick="myFunction()"> <i class="fa fa-print fa-2x" aria-hidden="true"></i></button>
-                              
-                            </div>
+                               <a href="{{ action('LoloPinoyLechonDeCebuController@printPaymentVoucher', $paymentVoucher['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                             </div>
                         </div>
                          <div class="card-body">
                          	<div class="form-group">

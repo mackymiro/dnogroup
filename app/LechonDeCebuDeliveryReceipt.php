@@ -23,6 +23,8 @@ class LechonDeCebuDeliveryReceipt extends Model
     	'price',
     	'total',
     	'special_instruction',
+        'consignee_name',
+        'consignee_contact_num',
     	'prepared_by',
     	'checked_by',
     	'received_by',
