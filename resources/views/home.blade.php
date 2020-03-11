@@ -60,7 +60,24 @@
           <span>Ribos Bar</span>
         </a>
       </li>
-     
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url('dno-personal') }}">
+          <i class="fas fa-book"></i>
+          <span>DNO Personal</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <i class="fas fa-book"></i>
+          <span>DNO Food Ventures</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <i class="fas fa-book"></i>
+          <span>DNO Resources and Development Corp</span>
+        </a>
+      </li>
      
     </ul>
     <div id="content-wrapper">
@@ -165,7 +182,7 @@
                 </div>
                 <div class="mr-5">DNO Personal</div>
               </div>
-              <a class="card-footer text-white clearfix small z-1" href="#">
+              <a class="card-footer text-white clearfix small z-1" href="{{ url('dno-personal') }}">
                 <span class="float-left">View Details</span>
                 <span class="float-right">
                   <i class="fas fa-angle-right"></i>

@@ -10,9 +10,97 @@ use Auth;
 use Session; 
 use App\User;
 use App\LoloPinoyGrillCommissaryDeliveryReceipt;
+use App\LoloPinoyGrillCommissaryPurchaseOrder;
 
 class LoloPinoyGrillCommissaryController extends Controller
 {
+
+    //billing statement form
+    public function billingStatementForm(){
+         $id =  Auth::user()->id;
+        $user = User::find($id);
+
+        return view('lolo-pinoy-grill-commissary-billing-statement-form', compact('user'));
+    }
+
+    
+    //purchase order lists
+    public function purchaseOrderAllLists(){
+        $id =  Auth::user()->id;
+        $user = User::find($id);
+
+        $purchaseOrders = LoloPinoyGrillCommissaryPurchaseOrder::where('po_id', NULL)->get()->toArray();
+
+        return view('lolo-pinoy-grill-commissary-purchase-order-lists', compact('user', 'purchaseOrders'));
+    }
+
+    //updatePO 
+    public function updatePo(Request $request, $id){
+        $order = LoloPinoyGrillCommissaryPurchaseOrder::find($id);
+
+        $order->quantity = $request->get('quantity');
+        $order->description = $request->get('description');
+        $order->unit_price = $request->get('unitPrice');
+        $order->amount = $request->get('amount');
+
+        $order->save();
+
+        Session::flash('SuccessEdit', 'Successfully updated');
+        return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-purchase-order/'.$request->get('poId'));
+    }
+
+    //store add new purchase order
+    public function addNewPurchaseOrder(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+        $pO = LoloPinoyGrillCommissaryPurchaseOrder::find($id);
+
+        $addNewPurchaseOrder = new LoloPinoyGrillCommissaryPurchaseOrder([
+            'user_id'=>$user->id,
+            'po_id'=>$id,
+            'p_o_number'=>$pO['p_o_number'],
+            'quantity'=>$request->get('quantity'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$request->get('unitPrice'),
+            'amount'=>$request->get('amount'),
+            'total_price'=>$request->get('amount'),
+            'prepared_by'=>$name,
+            'created_by'=>$name,
+
+        ]);
+
+        $addNewPurchaseOrder->save();
+
+        Session::flash('purchaseOrderSuccess', 'Successfully added purchase order');
+
+
+        return redirect('lolo-pinoy-grill-commissary/add-new/'.$id);
+    }
+
+    //add new purchase order
+    public function addNew(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        
+        return view('add-new-lolo-pinoy-grill-purchase-order', compact('user', 'id'));
+
+    }
+
+    //purchase order
+    public function purchaseOrder(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('lolo-pinoy-grill-commissary-purchase-order', compact('user'));
+    }
+
+
     //printDelivery
     public function printDelivery($id){
         $ids = Auth::user()->id;
@@ -309,6 +397,62 @@ class LoloPinoyGrillCommissaryController extends Controller
     public function store(Request $request)
     {
         //
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+
+        //
+         $this->validate($request, [
+            'paidTo' => 'required',
+            'address'=> 'required',
+            'quantity'=>'required',
+            'description'=>'required',
+            'unitPrice'=>'required',
+            'amount'=>'required',
+        ]);
+
+          //get the latest insert id query in table purchase order
+        $data = DB::select('SELECT id, p_o_number FROM lolo_pinoy_grill_commissary_purchase_orders ORDER BY id DESC LIMIT 1');
+        
+        //if code is not zero add plus 1
+         if(isset($data[0]->p_o_number) != 0){
+            //if code is not 0
+            $newNum = $data[0]->p_o_number +1;
+            $uNum = sprintf("%06d",$newNum);    
+        }else{
+            //if code is 0 
+            $newNum = 1;
+            $uNum = sprintf("%06d",$newNum);
+        }
+
+        $purchaseOrder = new LoloPinoyGrillCommissaryPurchaseOrder([
+            'user_id' =>$user->id,
+            'paid_to'=>$request->get('paidTo'),
+            'address'=>$request->get('address'),
+            'p_o_number'=>$uNum,
+            'date'=>$request->get('date'),
+            'quantity'=>$request->get('quantity'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$request->get('unitPrice'),
+            'amount'=>$request->get('amount'),
+            'total_price'=>$request->get('amount'),
+            'requesting_branch'=>$request->get('requestingBranch'),
+            'prepared_by'=>$name,
+            'created_by'=>$name,
+
+        ]);
+
+        $purchaseOrder->save();
+
+         $insertedId = $purchaseOrder->id;
+         
+        return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-purchase-order/'.$insertedId);
+
     }
 
     /**
@@ -331,6 +475,16 @@ class LoloPinoyGrillCommissaryController extends Controller
     public function edit($id)
     {
         //
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+         $purchaseOrder = LoloPinoyGrillCommissaryPurchaseOrder::find($id);
+
+         $pOrders = LoloPinoyGrillCommissaryPurchaseOrder::where('po_id', $id)->get()->toArray();
+
+
+        return view('edit-lolo-pinoy-grill-commissary-purchase-order', compact('user', 'purchaseOrder', 'pOrders'));
+
     }
 
     /**
@@ -343,6 +497,39 @@ class LoloPinoyGrillCommissaryController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+        $paidTo = $request->get('paidTo');
+        $address = $request->get('address');
+        $quantity = $request->get('quantity');
+        $description = $request->get('description');
+        $date = $request->get('date');
+        $unitPrice = $request->get('unitPrice');
+        $amount = $request->get('amount');
+
+        $purchaseOrder = LoloPinoyGrillCommissaryPurchaseOrder::find($id);
+        
+        $purchaseOrder->paid_to = $paidTo;
+        $purchaseOrder->address = $address;
+        $purchaseOrder->date = $date;
+        $purchaseOrder->quantity = $quantity;
+        $purchaseOrder->unit_price = $unitPrice;
+        $purchaseOrder->description = $description;
+        $purchaseOrder->requesting_branch = $request->get('requestingBranch');
+        $purchaseOrder->amount = $amount;
+
+        $purchaseOrder->save();
+
+        Session::flash('SuccessE', 'Successfully updated');
+
+        return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-purchase-order/'.$id);
+
     }
 
     /**
@@ -354,6 +541,9 @@ class LoloPinoyGrillCommissaryController extends Controller
     public function destroy($id)
     {
         //
+        $purchaseOrder = LoloPinoyGrillCommissaryPurchaseOrder::find($id);
+        $purchaseOrder->delete();
+
     }
 
     //destroy delivery receipt

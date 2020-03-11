@@ -312,6 +312,38 @@ Route::group(['middleware' => ['auth']], function(){
 	//print delivery receipt lolo pinoy grill
 	Route::get('/lolo-pinoy-grill-commissary/prntDeliveryReceipt/{id}', 'LoloPinoyGrillCommissaryController@printDelivery')->name('lolo-pinoy-grill-commissary.printDelivery');
 
+	//route for purchase order lolo pinoy grill
+	Route::get('/lolo-pinoy-grill-commissary/purchase-order', 'LoloPinoyGrillCommissaryController@purchaseOrder')->name('lolo-pinoy-grill-commissary.purchaseOrder
+		');
+
+	//store purchase order lolo pinoy grill
+	Route::post('/lolo-pinoy-grill-commissary/store', 'LoloPinoyGrillCommissaryController@store')->name('lolo-pinoy-grill-commissary');
+
+	//edit purchase order lolo pinoy grill
+	Route::get('/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-purchase-order/{id}', 'LoloPinoyGrillCommissaryController@edit')->name('lolo-pinoy-grill-commissary.edit');
+
+	//update purchase order lolo pinoy grill
+	Route::patch('/lolo-pinoy-grill-commissary/update/{id}', 'LoloPinoyGrillCommissaryController@update')->name('lolo-pinoy-grill-commissary.update');
+
+
+	//add new purchase order lolo pinoy grill
+	Route::get('/lolo-pinoy-grill-commissary/add-new/{id}', 'LoloPinoyGrillCommissaryController@addNew')->name('lolo-pinoy-grill-commissary.addNew');
+
+	//store add new purchase order lolo pinoy grill
+	Route::post('/lolo-pinoy-grill-commissary/add-new-purchase-order/{id}', 'LoloPinoyGrillCommissaryController@addNewPurchaseOrder')->name('lolo-pinoy-grill-commissary.addNewPurchaseOrder');
+
+
+	Route::patch('/lolo-pinoy-grill-commissary/update-po/{id}', 'LoloPinoyGrillCommissaryController@updatePo')->name('lolo-pinoy-grill-commissary.updatePo');
+
+	//delete 
+	Route::delete('/lolo-pinoy-grill-commissary/delete/{id}', 'LoloPinoyGrillCommissaryController@destroy')->name('lolo-pinoy-grill-commissary.delete');
+
+	//lolo pinoy grill commissary purchase order lists
+	Route::get('/lolo-pinoy-grill-commissary/purchase-order-lists', 'LoloPinoyGrillCommissaryController@purchaseOrderAllLists')->name('lolo-pinoy-grill-commissary.purchaseOrderAllLists');
+
+	//billing statement form lolo pinoy grill commissary
+	Route::get('/lolo-pinoy-grill-commissary/billing-statement-form', 'LoloPinoyGrillCommissaryController@billingStatementForm')->name('lolo-pinoy-grill-commissary.billingStatementForm');
+
 	//Lolo Pinoy Grill Branches
 	Route::get('/lolo-pinoy-grill-branches', 'LoloPinoyGrillBranchesController@index')->name('lolo-pinoy-grill-branches.index');
 
@@ -321,6 +353,10 @@ Route::group(['middleware' => ['auth']], function(){
 
 	//Ribos Bar
 	Route::get('/ribos-bar', 'RibosBarController@index')->name('ribos-bar.index');
+
+
+	//DNO Personal
+	Route::get('/dno-personal', 'DnoPersonalController@index')->name('dno-personal');
 });
 
 

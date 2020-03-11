@@ -13,7 +13,7 @@
               <li class="breadcrumb-item active">Delivery Receipt Form</li>
             </ol>
             <div class="col-lg-12">
-            	 <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
+            	 <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill ">
             	 
             	 <h4 class="text-center"><u>DELIVERY RECEIPT</u></h4>
             </div>

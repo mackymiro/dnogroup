@@ -1810,8 +1810,6 @@ class LoloPinoyLechonDeCebuController extends Controller
         $purchaseOrder->save();
 
         $insertedId = $purchaseOrder->id;
-
-        Session::flash('purchaseOrderSuccess', 'Successfully added');
          
         return redirect('lolo-pinoy-lechon-de-cebu/edit/'.$insertedId);
     }

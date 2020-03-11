@@ -12,8 +12,8 @@
           <span>Sales Invoice</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/sales-invoice-form')}}">Sales Invoice Form</a>
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/') }}">Lists</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/sales-invoice-form')}}">Sales Invoice Form</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/') }}">Lists</a>
          
         </div>
       </li>
