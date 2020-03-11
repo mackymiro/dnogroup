@@ -15,6 +15,23 @@ class CreateLoloPinoyGrillCommissaryBillingStatementsTable extends Migration
     {
         Schema::create('lolo_pinoy_grill_commissary_billing_statements', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('user_id');
+            $table->integer('billing_statement_id');
+            $table->string('bill_to');
+            $table->string('address');
+            $table->string('date');
+            $table->string('reference_number');
+            $table->string('p_o_number');
+            $table->string('period_cover');
+            $table->string('terms');
+            $table->string('date_of_transaction');
+            $table->string('invoice_number');
+            $table->decimal('whole_lechon', 15,2);
+            $table->string('description');
+            $table->decimal('amount', 15,2);
+            $table->string('prepared_by');
+            $table->string('approved_by');
+            $table->string('created_by');
             $table->timestamps();
         });
     }

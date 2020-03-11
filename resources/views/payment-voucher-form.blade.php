@@ -5,7 +5,7 @@
 	<!-- Sidebar -->
     @include('sidebar.sidebar')
      <div id="content-wrapper">
- 		<div class="container-fluid">
+ 		 <div class="container-fluid">
  			 <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">

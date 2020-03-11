@@ -60,7 +60,7 @@
 				  	 			    </div>
 				  	 			   	<div class="col-md-2">
 				  	 					<label>Amount</label>
-				  	 					<input type="text" name="amount" class="form-control" value="<?php echo number_format($getPaymentVoucher['amount'], 2); ?>" />
+				  	 					<input type="text" name="amount" class="form-control" value="{{ $getPaymentVoucher['amount']}}" />
 					  	 			</div>
 					  	 			<div class="col-md-2">
 			  	 						<label>Method Of Payment</label>
@@ -72,8 +72,8 @@
                      			</div>
                      		</div>
                      		<div>
-		  	 				    <input type="submit" class="btn btn-success float-right" value="Update Payment Voucher" />
-			  	 			 </div>
+      		  	 				    <input type="submit" class="btn btn-success float-right" value="Update Payment Voucher" />
+      			  	 			 </div>
 			  	 			 <br>
                          </div>
                      	</form>
@@ -97,32 +97,32 @@
                                  <input name="_method" type="hidden" value="PATCH">
                       		 	<div id="deletedId{{ $pVoucher['id']}}" class="form-row">
                       		 		<div class="col-md-4">
-			  	 					<label>Particulars</label>
-			  	 					<input type="text" name="particulars" class="form-control" value="{{ $pVoucher['particulars']}}" />
-				  	 			    </div>
-			  	 			    	<div class="col-md-2">
-				  	 					<label>Amount</label>
-				  	 					<input type="text" name="amount" class="form-control"  value="<?php echo number_format($pVoucher['amount'], 2); ?>" />
-					  	 			</div>
-					  	 			<div class="col-lg-2">
-                                      <br>
-                                      <input type="hidden" name="pvId" value="{{ $pVoucher['id'] }}" />
-                                      <input type="submit" class="btn btn-success" value="Update" />
-                                      @if($user->role_type == 1)
-                                      <a id="delete" onClick="confirmDelete('{{ $pVoucher['id']}}')" href="javascript:void" class="btn btn-danger">Remove</a>
-                                      @endif
-                                    </div>
-                      		 	</div>
-                      		 	
-                      		 </div>
-                      		</form>
-                      		 @endforeach
-                      		<div>
+              			  	 					<label>Particulars</label>
+              			  	 					<input type="text" name="particulars" class="form-control" value="{{ $pVoucher['particulars']}}" />
+        				  	 			     </div>
+          			  	 			    	<div class="col-md-2">
+            				  	 					<label>Amount</label>
+            				  	 					<input type="text" name="amount" class="form-control"  value="<?php echo number_format($pVoucher['amount'], 2); ?>" />
+            					  	 			</div>
+					  	 			        <div class="col-lg-2">
+                              <br>
+                              <input type="hidden" name="pvId" value="{{ $pVoucher['id'] }}" />
+                              <input type="submit" class="btn btn-success" value="Update" />
                               @if($user->role_type == 1)
-                              <a href="{{ url('lolo-pinoy-lechon-de-cebu/add-new-payment-voucher/'.$getPaymentVoucher['id']) }}" class="btn btn-primary">Add New </a>
+                              <a id="delete" onClick="confirmDelete('{{ $pVoucher['id']}}')" href="javascript:void" class="btn btn-danger">Remove</a>
                               @endif
                             </div>
-                      	</div>
+              		 	</div>
+                      		 	
+                		 </div>
+                		</form>
+                		 @endforeach
+                		<div>
+                        @if($user->role_type == 1)
+                        <a href="{{ url('lolo-pinoy-lechon-de-cebu/add-new-payment-voucher/'.$getPaymentVoucher['id']) }}" class="btn btn-primary">Add New </a>
+                        @endif
+                      </div>
+                	</div>
         		 	</div>
         		 </div>
             </div>	

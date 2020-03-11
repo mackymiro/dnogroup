@@ -344,6 +344,44 @@ Route::group(['middleware' => ['auth']], function(){
 	//billing statement form lolo pinoy grill commissary
 	Route::get('/lolo-pinoy-grill-commissary/billing-statement-form', 'LoloPinoyGrillCommissaryController@billingStatementForm')->name('lolo-pinoy-grill-commissary.billingStatementForm');
 
+	//save billing statement form lolo pinoy grill commissary
+	Route::post('/lolo-pinoy-grill-commissary/store-billing-statement', 'LoloPinoyGrillCommissaryController@storeBillingStatement')->name('lolo-pinoy-grill-commissary.storeBillingStatement');
+
+
+	//edit billing statement form lolo pinoy grill commissary
+	Route::get('/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-billing-statement/{id}', 'LoloPinoyGrillCommissaryController@editBillingStatement')->name('lolo-pinoy-grill-commissary.editBillingStatement');
+
+	Route::patch('/lolo-pinoy-grill-commissary/update-billing-info/{id}', 'LoloPinoyGrillCommissaryController@updateBillingInfo')->name('lolo-pinoy-grill-commissary.updateBillingInfo');
+
+	Route::get('/lolo-pinoy-grill-commissary/add-new-lolo-pinoy-grill-billing-statement/{id}', 'LoloPinoyGrillCommissaryController@addNewBillingStatement')->name('lolo-pinoy-grill-commissary.addNewBillingStatement');
+
+	Route::post('/lolo-pinoy-grill-commissary/add-new-billing-data/{id}', 'LoloPinoyGrillCommissaryController@addNewBillingData')->name('lolo-pinoy-grill-commissary.addNewBillingData');
+
+	//update billing statement in add new
+	Route::patch('/lolo-pinoy-grill-commissary/update-billing-statement/{id}', 'LoloPinoyGrillCommissaryController@updateBillingStatement')->name('lolo-pinoy-grill-commissary.updateBillingStatement');
+
+	//destroy billing statement
+	Route::delete('/lolo-pinoy-grill-commissary/delete-billing-statement/{id}', 'LoloPinoyGrillCommissaryController@destroyBillingStatement')->name('lolo-pinoy-grill-commissary.destroyBillingStatement');
+
+	//billing statement lists
+	Route::get('/lolo-pinoy-grill-commissary/billing-statement-lists', 'LoloPinoyGrillCommissaryController@billingStatementLists')->name('lolo-pinoy-grill-commissary.billingStatementLists');
+
+	//view billing statement
+	Route::get('/lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-billing-statement/{id}', 'LoloPinoyGrillCommissaryController@viewBillingStatement')->name('lolo-pinoy-grill-commissary.viewBillingStatement');
+
+	//payment voucher form
+	Route::get('/lolo-pinoy-grill-commissary/payment-voucher-form', 'LoloPinoyGrillCommissaryController@paymentVoucherForm')->name('lolo-pinoy-grill-commissary.paymentVoucherForm');
+
+	//save 
+	Route::post('/lolo-pinoy-grill-commissary/payment-voucher-store', 'LoloPinoyGrillCommissaryController@paymentVoucherStore')->name('lolo-pinoy-grill-commissary.paymentVoucherStore');
+
+	//edit payment voucher
+	Route::get('/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-payment-voucher/{id}', 'LoloPinoyGrillCommissaryController@editPaymentVoucher')->name('lolo-pinoy-grill-commissary.editPaymentVoucher');
+
+	Route::patch('/lolo-pinoy-grill-commissary/update-payment-voucher/{id}', 'LoloPinoyGrillCommissaryController@updatePaymentVoucher')->name('lolo-pinoy-grill-commissary.updatePaymentVoucher');
+
+	Route::get('/lolo-pinoy-grill-commissary/add-new-lolo-pinoy-grill-payment-voucher/{id}', 'LoloPinoyGrillCommissaryController@addNewPaymentVoucher')->name('lolo-pinoy-grill-commissary.addNewPaymentVoucher');
+
 	//Lolo Pinoy Grill Branches
 	Route::get('/lolo-pinoy-grill-branches', 'LoloPinoyGrillBranchesController@index')->name('lolo-pinoy-grill-branches.index');
 

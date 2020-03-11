@@ -1535,7 +1535,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         Session::flash('addBillingSuccess', 'Successfully added.');
 
-        return redirect('lolo-pinoy-lechon-de-cebu/add-new-billing/'.$id);
+        return redirect('lolo-pinoy-lechon-de-cebu/add-new-lolo-pinoy-grill-billing-statement/'.$id);
         
     }
 

@@ -11,16 +11,332 @@ use Session;
 use App\User;
 use App\LoloPinoyGrillCommissaryDeliveryReceipt;
 use App\LoloPinoyGrillCommissaryPurchaseOrder;
+use App\LoloPinoyGrillCommissaryBillingStatement;
+use App\LoloPinoyGrillCommissaryPaymentVoucher;
 
 class LoloPinoyGrillCommissaryController extends Controller
 {
 
+    //
+    public function addNewPaymentVoucher($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('add-new-lolo-pinoy-grill-payment-voucher', compact('user', 'id'));
+    }   
+
+    //
+    public function updatePaymentVoucher(Request $request, $id){
+        $updatePaymentVoucher = LoloPinoyGrillCommissaryPaymentVoucher::find($id);
+
+        $updatePaymentVoucher->paid_to = $request->get('paidTo');
+        $updatePaymentVoucher->account_no = $request->get('accountNum');
+        $updatePaymentVoucher->date = $request->get('date');
+        $updatePaymentVoucher->particulars = $request->get('particulars');
+        $updatePaymentVoucher->amount = $request->get('amount');
+        $updatePaymentVoucher->method_of_payment = $request->get('methodOfPayment');
+
+        $updatePaymentVoucher->save();
+
+         Session::flash('updateSuccessfull', 'Successfully updated');
+
+        return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-payment-voucher/'.$id);
+    }
+
+    //edit payment voucher
+    public function editPaymentVoucher($id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+         //getPaymentVoucher 
+        $getPaymentVoucher = LoloPinoyGrillCommissaryPaymentVoucher::find($id);
+
+        return view('edit-payment-voucher-lolo-pinoy-grill', compact('user', 'getPaymentVoucher'));
+    }
+
+    //store payment voucher 
+    public function paymentVoucherStore(Request $request){
+        //validate
+        $this->validate($request, [
+            'paidTo' =>'required',
+           
+        ]);
+
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+         //get the latest insert id query in table payment voucher ref number
+        $dataReferenceNum = DB::select('SELECT id, reference_number FROM lolo_pinoy_grill_commissary_payment_vouchers ORDER BY id DESC LIMIT 1');
+
+         //if code is not zero add plus 1 reference number
+        if(isset($dataReferenceNum[0]->reference_number) != 0){
+            //if code is not 0
+            $newRefNum = $dataReferenceNum[0]->reference_number +1;
+            $uRef = sprintf("%06d",$newRefNum);   
+
+        }else{
+            //if code is 0 
+            $newRefNum = 1;
+            $uRef = sprintf("%06d",$newRefNum);
+        } 
+
+        $addPaymentVoucher = new LoloPinoyGrillCommissaryPaymentVoucher([
+            'user_id'=>$user->id,
+            'reference_number'=>$uRef,
+            'paid_to'=>$request->get('paidTo'),
+            'account_no'=>$request->get('accountNo'),
+            'date'=>$request->get('date'),
+            'particulars'=>$request->get('particulars'),
+            'amount'=>$request->get('amount'),
+            'method_of_payment'=>$request->get('paymentMethod'),
+            'prepared_by'=>$name,
+            'created_by'=>$name,
+        ]);
+
+        $addPaymentVoucher->save();
+
+        $insertedId = $addPaymentVoucher->id;
+
+         return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-payment-voucher/'.$insertedId);
+
+    }   
+
+
+    //payment vouceher form
+    public function paymentVoucherForm(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('payment-voucher-form-lolo-pinoy-grill', compact('user'));
+    }
+
+    //view billing statement
+    public function viewBillingStatement($id){
+
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $viewBillingStatement = LoloPinoyGrillCommissaryBillingStatement::find($id);
+
+        $billingStatements = LoloPinoyGrillCommissaryBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = LoloPinoyGrillCommissaryBillingStatement::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = LoloPinoyGrillCommissaryBillingStatement::where('billing_statement_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+
+        return view('view-lolo-pinoy-grill-commissary-billing-statement', compact('user', 'viewBillingStatement', 'billingStatements', 'sum'));
+    }
+
+
+    //billingStatementLists
+    public function billingStatementLists(){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $billingStatements = LoloPinoyGrillCommissaryBillingStatement::where('billing_statement_id', NULL)->get()->toArray();
+
+
+        return view('lolo-pinoy-grill-commissary-billing-statement-lists', compact('user', 'billingStatements'));
+    }
+
+    //updateBillingStatement
+    public function updateBillingStatement(Request $request, $id){
+        $updateBilling = LoloPinoyGrillCommissaryBillingStatement::find($id);
+
+
+        $wholeLechon = $request->get('wholeLechon');
+        $add = $wholeLechon * 500;
+
+        $updateBilling->date_of_transaction = $request->get('transactionDate');
+        $updateBilling->whole_lechon = $wholeLechon;
+        $updateBilling->description = $request->get('description');
+        $updateBilling->invoice_number = $request->get('invoiceNumber');
+        $updateBilling->amount = $add;
+
+        $updateBilling->save();
+
+        Session::flash('SuccessEdit', 'Successfully updated');
+        return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-billing-statement/'
+            .$request->get('billingStatementId'));
+
+
+    }
+
+    //add new billing statement data
+    public function addNewBillingData(Request $request, $id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $billingOrder = LoloPinoyGrillCommissaryBillingStatement::find($id);
+
+         $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+        //get the whole lechon then multiply by 500
+        $wholeLechon = $request->get('wholeLechon');
+        $add = $wholeLechon * 500; 
+
+        $addNewBillingStatement = new LoloPinoyGrillCommissaryBillingStatement([
+            'user_id'=>$user->id,
+            'billing_statement_id'=>$id,
+            'reference_number'=>$billingOrder['reference_number'],
+            'p_o_number'=>$billingOrder['p_o_number'],
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'invoice_number'=>$request->get('invoiceNumber'),
+            'whole_lechon'=>$wholeLechon,
+            'description'=>$request->get('description'),
+            'amount'=>$add,
+            'created_by'=>$name,
+        ]);
+
+        $addNewBillingStatement->save();
+
+         Session::flash('addBillingSuccess', 'Successfully added.');
+
+         return redirect('lolo-pinoy-grill-commissary/add-new-lolo-pinoy-grill-billing-statement/'.$id);
+    
+    }
+
+    //add new billing statement
+    public function addNewBillingStatement($id){
+         $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+
+        return view('add-new-lolo-pinoy-grill-billing-statement', compact('user', 'id'));
+    }
+
+    //update billing statement
+    public function updateBillingInfo(Request $request, $id){
+         $updateBillingOrder = LoloPinoyGrillCommissaryBillingStatement::find($id);
+
+          $wholeLechon = $request->get('wholeLechon');
+        $add = $wholeLechon * 500; 
+
+        $updateBillingOrder->bill_to = $request->get('billTo');
+        $updateBillingOrder->address = $request->get('address');
+        $updateBillingOrder->period_cover = $request->get('periodCovered');
+        $updateBillingOrder->date = $request->get('date');
+        $updateBillingOrder->terms = $request->get('terms');
+        $updateBillingOrder->p_o_number = $request->get('poNumber');
+        $updateBillingOrder->invoice_number = $request->get('invoiceNumber');
+        $updateBillingOrder->date_of_transaction = $request->get('transactionDate');
+        $updateBillingOrder->whole_lechon = $wholeLechon;
+        $updateBillingOrder->description = $request->get('description');
+        $updateBillingOrder->amount = $add;
+
+        $updateBillingOrder->save();
+        
+        Session::flash('SuccessE', 'Successfully updated');
+
+        return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-billing-statement/'.$id);
+
+    }
+
+    //edit billing statement
+    public function editBillingStatement($id){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+         $billingStatement = LoloPinoyGrillCommissaryBillingStatement::find($id);
+
+          $bStatements = LoloPinoyGrillCommissaryBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+          //get the purchase order lists
+        $getPurchaseOrders = LoloPinoyGrillCommissaryPurchaseOrder::where('po_id', NULL)->get()->toArray();
+
+        return view('edit-lolo-pinoy-grill-commissary-billing-statement', compact('user', 'billingStatement', 'getPurchaseOrders', 'bStatements'));
+    }
+
+    //store billing statement form
+    public function storeBillingStatement(Request $request){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        //get user name
+        $name  = $firstName.$lastName;
+
+          //validate
+        $this->validate($request, [
+            'billTo' =>'required',
+            'address'=>'required',
+            'periodCovered'=>'required',
+            'date'=>'required',
+            'terms'=>'required',
+            'transactionDate'=>'required',
+            'wholeLechon'=>'required',
+            'description'=>'required',
+        ]);
+
+         $wholeLechon = $request->get('wholeLechon');
+        $add = $wholeLechon * 500; 
+
+         //get the latest insert id query in table billing statements ref number
+        $dataReferenceNum = DB::select('SELECT id, reference_number FROM lolo_pinoy_grill_commissary_billing_statements ORDER BY id DESC LIMIT 1');
+
+        //if code is not zero add plus 1 reference number
+        if(isset($dataReferenceNum[0]->reference_number) != 0){
+            //if code is not 0
+            $newRefNum = $dataReferenceNum[0]->reference_number +1;
+            $uRef = sprintf("%06d",$newRefNum);   
+
+        }else{
+            //if code is 0 
+            $newRefNum = 1;
+            $uRef = sprintf("%06d",$newRefNum);
+        } 
+
+        $billingStatement = new LoloPinoyGrillCommissaryBillingStatement([
+            'user_id'=>$user->id,
+            'bill_to'=>$request->get('billTo'),
+            'address'=>$request->get('address'),
+            'period_cover'=>$request->get('periodCovered'),
+            'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNumber'),
+            'reference_number'=>$uRef,
+            'p_o_number'=>$request->get('poNumber'),
+            'terms'=>$request->get('terms'),
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'whole_lechon'=>$wholeLechon,
+            'description'=>$request->get('description'),
+            'amount'=>$add,
+            'created_by'=>$name,
+            'prepared_by'=>$name,
+
+        ]);
+
+        $billingStatement->save();
+
+        $insertedId = $billingStatement->id;
+
+        return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-billing-statement/'.$insertedId);
+
+    }
+
     //billing statement form
     public function billingStatementForm(){
-         $id =  Auth::user()->id;
+        $id =  Auth::user()->id;
         $user = User::find($id);
 
-        return view('lolo-pinoy-grill-commissary-billing-statement-form', compact('user'));
+          //get the purchase order lists
+        $getPurchaseOrders = LoloPinoyGrillCommissaryPurchaseOrder::where('po_id', NULL)->get()->toArray();
+
+        return view('lolo-pinoy-grill-commissary-billing-statement-form', compact('user', 'getPurchaseOrders'));
     }
 
     
@@ -267,6 +583,7 @@ class LoloPinoyGrillCommissaryController extends Controller
         $updateDeliveryReceipt->unit = $request->get('unit');
         $updateDeliveryReceipt->item_description = $request->get('itemDescription');
         $updateDeliveryReceipt->unit_price = $unitPrice;
+        $updateDeliveryReceipt->address = $request->get('address');
         $updateDeliveryReceipt->amount = $sum;
 
         $updateDeliveryReceipt->save();
@@ -339,6 +656,7 @@ class LoloPinoyGrillCommissaryController extends Controller
             'qty'=>$qty,
             'unit'=>$request->get('unit'),
             'item_description'=>$request->get('itemDescription'),
+            'address'=>$request->get('address'),
             'unit_price'=>$unitPrice,
             'amount'=>$sum,
             'prepared_by'=>$name,
@@ -544,6 +862,12 @@ class LoloPinoyGrillCommissaryController extends Controller
         $purchaseOrder = LoloPinoyGrillCommissaryPurchaseOrder::find($id);
         $purchaseOrder->delete();
 
+    }
+
+
+    public function destroyBillingStatement($id){
+        $billingStatement = LoloPinoyGrillCommissaryBillingStatement::find($id);
+        $billingStatement->delete();
     }
 
     //destroy delivery receipt
