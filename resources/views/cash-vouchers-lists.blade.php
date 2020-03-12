@@ -55,7 +55,7 @@
 					  								<td>{{ $getAllCashVoucher['paid_to'] }}</td>
 					  								<td>{{ $getAllCashVoucher['account_no']}}</td>
 					  								<td>{{ $getAllCashVoucher['date'] }}</td>
-					  								<td>{{ $getAllCashVoucher['method_of_payment'] }}</td>
+					  								<td class="bg-success" style="color:white;">{{ $getAllCashVoucher['method_of_payment'] }}</td>
 					  								<td>{{ $getAllCashVoucher['particulars']}}</td>
 					  								<td><?php echo number_format($getAllCashVoucher['amount'], 2); ?></td>
 					  								<td>{{ $getAllCashVoucher['created_by'] }}</td>

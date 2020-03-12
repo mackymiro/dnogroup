@@ -7,8 +7,8 @@
     <div id="content-wrapper">
     	<form action="{{ action('LoloPinoyLechonDeCebuController@storeStatementAccount') }}" method="post">
     		{{ csrf_field() }}
-		<div class="container-fluid">
-			<!-- Breadcrumbs-->
+		  <div class="container-fluid">
+			     <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
                 <a href="#">Lechon de Cebu</a>
@@ -26,9 +26,9 @@
                   <div class="card mb-3">
                       <div class="card-header">
                        <i class="fas fa-receipt" aria-hidden="true"></i>
-                Statement Of Account</div>
+                         Statement Of Account</div>
                      <div class="card-body">
-                           <div class="form-group">
+                          <div class="form-group">
                           <div class="form-row">
                           <div class="col-lg-6">
                           <label>Date</label>

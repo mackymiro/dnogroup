@@ -6,7 +6,7 @@
           <span>Ribos Food Corporation</span>
         </a>
       </li>
-       <li class="nav-item dropdown">
+      <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fas fa-cash-register"></i>
           <span>Sales Invoice</span>
@@ -48,7 +48,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/statement-of-account-form')}}">Statement Of Account <br>Form</a>
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/statement-of-account/lists') }}">Lists</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/statement-of-account-lists') }}">Lists</a>
          
         </div>
       </li>

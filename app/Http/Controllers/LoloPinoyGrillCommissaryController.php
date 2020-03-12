@@ -13,9 +13,440 @@ use App\LoloPinoyGrillCommissaryDeliveryReceipt;
 use App\LoloPinoyGrillCommissaryPurchaseOrder;
 use App\LoloPinoyGrillCommissaryBillingStatement;
 use App\LoloPinoyGrillCommissaryPaymentVoucher;
+use App\LoloPinoyGrillCommissarySalesInvoice;
+use App\LoloPinoyGrillCommissaryStatementOfAccount;
 
 class LoloPinoyGrillCommissaryController extends Controller
 {
+
+    //
+    public function viewStatementAccount($id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //getStatementAccounts
+        $getStatementAccounts = LoloPinoyGrillCommissaryStatementOfAccount::where('id', $id)->get()->toArray();
+
+        return view('view-lolo-pinoy-grill-statement-account', compact('user','getStatementAccounts'));
+    }
+
+    //
+    public function statementOfAccountList(){
+         $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $status = "Unpaid";
+        $paid = "Paid";
+
+        //get statement of account 
+        $statementOfAccounts = LoloPinoyGrillCommissaryStatementOfAccount::where('soa_id', NULL)->where('status', $status)->get()->toArray();
+
+        $statementOfAccountPaids = LoloPinoyGrillCommissaryStatementOfAccount::where('soa_id', NULL)->where('status', $paid)->get()->toArray();
+
+
+        return view('lolo-pinoy-grill-statement-of-account-lists', compact('user', 'statementOfAccounts', 'statementOfAccountPaids'));
+    }
+
+    //
+    public function updateStatementInfo(Request $request, $id){
+        $updateStatmentInfo = LoloPinoyGrillCommissaryStatementOfAccount::find($id);
+
+        $updateStatmentInfo->date = $request->get('date');
+        $updateStatmentInfo->branch = $request->get('branch');
+        $updateStatmentInfo->kilos = $request->get('kilos');
+        $updateStatmentInfo->unit_price = $request->get('unitPrice');
+        $updateStatmentInfo->payment_method = $request->get('paymentMethod');
+        $updateStatmentInfo->amount = $request->get('amount');
+        $updateStatmentInfo->status = $request->get('status');
+        $updateStatmentInfo->paid_amount = $request->get('paidAmount');
+        $updateStatmentInfo->collection_date = $request->get('collectionDate');
+        $updateStatmentInfo->check_number = $request->get('checkNumber');
+        $updateStatmentInfo->check_amount = $request->get('checkAmount');
+        $updateStatmentInfo->or_number = $request->get('orNumber');
+
+        $updateStatmentInfo->save();
+
+        Session::flash('SuccessE', 'Successfully updated');
+
+        return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-statement-of-account/'.$id);
+    }
+
+    //
+    public function editStatementOfAccount($id){
+         $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+
+         //getStatementOfAccount
+        $getStatementOfAccount = LoloPinoyGrillCommissaryStatementOfAccount::find($id);
+
+        $sAccounts = LoloPinoyGrillCommissaryStatementOfAccount::where('soa_id', $id)->get()->toArray();
+        
+        return view('edit-lolo-pinoy-grill-statement-of-account', compact('user', 'getStatementOfAccount', 'sAccounts'));
+    }
+
+    //store statement of account
+    public function storeStatementAccount(Request $request){
+         $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        //get user name
+        $name  = $firstName.$lastName;
+
+         //validate
+        $this->validate($request, [
+            'date' =>'required',
+            'kilos'=>'required',
+            'amount'=>'required',
+
+        ]);
+
+         //get the latest insert id query in table statement of account invoice number
+        $invoiceNumber = DB::select('SELECT id, invoice_number FROM lolo_pinoy_grill_commissary_statement_of_accounts ORDER BY id DESC LIMIT 1');
+
+         //if code is not zero add plus 1 reference number
+        if(isset($invoiceNumber[0]->invoice_number) != 0){
+            //if code is not 0
+            $newInvoice = $invoiceNumber[0]->invoice_number +1;
+            $uInvoice = sprintf("%06d",$newInvoice);   
+
+        }else{
+            //if code is 0 
+            $newInvoice = 1;
+            $uInvoice = sprintf("%06d",$newInvoice);
+        } 
+
+        $addStatementAccount = new LoloPinoyGrillCommissaryStatementOfAccount([
+            'user_id'=>$user->id,
+            'date'=>$request->get('date'),
+            'branch'=>$request->get('branch'),
+            'invoice_number'=>$uInvoice,
+            'kilos'=>$request->get('kilos'),
+            'unit_price'=>$request->get('unitPrice'),
+            'payment_method'=>$request->get('paymentMethod'),
+            'amount'=>$request->get('amount'),
+            'status'=>$request->get('status'),
+            'paid_amount'=>$request->get('paidAmount'),
+            'collection_date'=>$request->get('collectionDate'),
+            'check_number'=>$request->get('checkNumber'),
+            'check_amount'=>$request->get('checkAmount'),
+            'or_number'=>$request->get('orNumber'),
+            'created_by'=>$name,
+        ]);
+
+        $addStatementAccount->save();
+
+        $insertedId = $addStatementAccount->id;
+
+        return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-statement-of-account/'.$insertedId);
+
+
+
+    }
+
+    //statement of account
+    public function statementOfAccountForm(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+
+        return view('lolo-pinoy-grill-statement-of-account', compact('user'));
+    }
+
+    //
+    public function viewSalesInvoice($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+         $viewSalesInvoice = LoloPinoyGrillCommissarySalesInvoice::find($id);
+
+        $salesInvoices = LoloPinoyGrillCommissarySalesInvoice::where('si_id', $id)->get()->toArray();
+
+         //count the total amount 
+        $countTotalAmount = LoloPinoyGrillCommissarySalesInvoice::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = LoloPinoyGrillCommissarySalesInvoice::where('si_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        return view('view-lolo-pinoy-grill-sales-invoice', compact('user', 'viewSalesInvoice', 'salesInvoices', 'sum'));
+    }
+
+    //
+    public function updateSi(Request $request, $id){
+         $updateSi = LoloPinoyGrillCommissarySalesInvoice::find($id);
+
+          //kls
+        $kls  = $request->get('totalKls');
+
+         //compute kls * unit price
+        $unitPrice = $updateSi->unit_price;
+        $compute = $kls * $unitPrice;
+        $sum = $compute;
+
+        $updateSi->qty = $request->get('qty');
+        $updateSi->total_kls = $kls;
+        $updateSi->item_description = $request->get('itemDescription');
+        $updateSi->unit_price = $unitPrice;
+        $updateSi->amount = $sum;
+
+        $updateSi->save();
+
+        Session::flash('SuccessEdit', 'Successfully updated');
+
+        return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-sales-invoice/'.$request->get('siId'));
+    }
+
+    //add new sales invoice
+    public function addNewSalesInvoiceData(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+          //get date today
+        $getDateToday =  date('Y-m-d');
+
+        //kls
+        $kls  = $request->get('totalKls');
+
+         //compute kls * unit price
+        $unitPrice = 500;
+        $compute = $kls * $unitPrice;
+        $sum = $compute;
+
+         $addNewSalesInvoice = new LoloPinoyGrillCommissarySalesInvoice([
+            'user_id'=>$user->id,
+            'si_id'=>$id,
+            'date'=>$getDateToday,
+            'qty'=>$request->get('qty'),
+            'total_kls'=>$kls,
+            'item_description'=>$request->get('itemDescription'),
+            'unit_price'=>$unitPrice,
+            'amount'=>$sum,
+            'created_by'=>$name,
+        ]);
+
+        $addNewSalesInvoice->save();
+        Session::flash('addSalesInvoiceSuccess', 'Successfully added.');
+
+        return redirect('lolo-pinoy-grill-commissary/add-new-lolo-pinoy-grill-sales-invoice/'.$id);
+    }
+
+    //add new sales invoice
+    public function addNewSalesInvoice($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+        return view('add-new-lolo-pinoy-grill-sales-invoice', compact('user', 'id'));
+    }
+
+    //
+    public function updateSalesInvoice(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+        $updateSalesInvoice = LoloPinoyGrillCommissarySalesInvoice::find($id);
+
+          //kls
+        $kls  = $request->get('totalKls');
+
+         //compute kls * unit price
+        $unitPrice = $updateSalesInvoice->unit_price;
+        $compute = $kls * $unitPrice;
+        $sum = $compute;
+
+        $updateSalesInvoice->invoice_number = $request->get('invoiceNum');
+        $updateSalesInvoice->ordered_by = $request->get('orderedBy');
+        $updateSalesInvoice->address = $request->get('address');
+        $updateSalesInvoice->qty = $request->get('qty');
+        $updateSalesInvoice->total_kls = $kls;
+        $updateSalesInvoice->item_description = $request->get('itemDescription');
+        $updateSalesInvoice->amount = $sum;
+        $updateSalesInvoice->created_by = $name; 
+
+        $updateSalesInvoice->save();
+
+         Session::flash('updateSuccessfull', 'Successfully updated');
+
+         return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-sales-invoice/'.$id);
+    }
+
+
+    //edit sales invoice
+    public function editSalesInvoice($id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+         //getSalesInvoice
+        $getSalesInvoice = LoloPinoyGrillCommissarySalesInvoice::find($id);
+
+        $sInvoices  = LoloPinoyGrillCommissarySalesInvoice::where('si_id', $id)->get()->toArray();
+
+        return view('edit-lolo-pinoy-grill-sales-invoice', compact('user', 'getSalesInvoice', 'sInvoices'));
+    }
+
+    //store sales invoice
+    public function storeSalesInvoice(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+             //validate
+        $this->validate($request, [
+            'invoiceNum' =>'required',
+            'orderedBy'=>'required',
+           
+        ]);
+
+         //get date today
+        $getDateToday =  date('Y-m-d');
+
+        //total kls
+        $kls = $request->get('totalKls');
+
+        //compute kls * unit price
+        $unitPrice = 500;
+        $compute = $kls * $unitPrice;
+        $sum = $compute;
+
+        $addSalesInvoice = new LoloPinoyGrillCommissarySalesInvoice([
+            'user_id'=>$user->id,
+            'invoice_number'=>$request->get('invoiceNum'),
+            'ordered_by'=>$request->get('orderedBy'),
+            'address'=>$request->get('address'),
+            'date'=>$getDateToday,
+            'qty'=>$request->get('qty'),
+            'total_kls'=>$kls,
+            'item_description'=>$request->get('itemDescription'),
+            'unit_price'=>$unitPrice,
+            'amount'=>$sum,
+            'created_by'=>$name,
+        ]);
+
+        $addSalesInvoice->save();
+
+        $insertedId = $addSalesInvoice->id;
+
+        return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-sales-invoice/'.$insertedId);
+    }
+
+    //sales invoice
+    public function salesInvoiceForm(){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('lolo-pinoy-grill-sales-invoice-form', compact('user'));
+    }
+
+    //view payment voucher
+    public function viewPaymentVoucher($id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+         //paymentVoucher
+        $paymentVoucher = LoloPinoyGrillCommissaryPaymentVoucher::find($id);
+
+        $pVouchers = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->get()->toArray();
+
+
+         //count the total amount 
+        $countTotalAmount = LoloPinoyGrillCommissaryPaymentVoucher::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        return view('view-payment-voucher-lolo-pinoy-grill', compact('user', 'paymentVoucher', 'pVouchers', 'sum'));
+    }
+
+    //cheque vouchers
+    public function chequeVouchers(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //getAllChequeVouchers
+        $method = "Cheque";
+
+        $getAllChequeVouchers = LoloPinoyGrillCommissaryPaymentVoucher::where('method_of_payment', $method)->get()->toArray(); 
+
+        return view('cheque-vouchers-lists-lolo-pinoy-grill', compact('user', 'getAllChequeVouchers')); 
+    }
+
+    //cash vouchers
+    public function cashVouchers(){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //getAllCashVouchers
+        $method = "Cash";
+
+        $getAllCashVouchers = LoloPinoyGrillCommissaryPaymentVoucher::where('method_of_payment', $method)->get()->toArray();
+
+        return view('cash-vouchers-list-lolo-pinoy-grill', compact('user', 'getAllCashVouchers'));
+    }  
+
+    //
+    public function updatePV(Request $request, $id){
+        $updatePV = LoloPinoyGrillCommissaryPaymentVoucher::find($id);
+
+        $updatePV->particulars = $request->get('particulars');
+        $updatePV->amount = $request->get('amount');
+
+        $updatePV->save();
+
+        Session::flash('SuccessEdit', 'Successfully updated');
+        return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-payment-voucher/'.$request->get('pvId'));
+    }
+
+    //
+    public function addNewPaymentVoucherData(Request $request, $id){
+
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+        $paymentVoucher = LoloPinoyGrillCommissaryPaymentVoucher::find($id);
+
+        $addNewPaymentVoucherData = new LoloPinoyGrillCommissaryPaymentVoucher([
+             'user_id'=>$user->id,
+            'pv_id'=>$id,
+            'reference_number'=>$paymentVoucher['reference_number'],
+            'particulars'=>$request->get('particulars'),
+            'amount'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+
+        $addNewPaymentVoucherData->save();
+
+        Session::flash('addPaymentVoucherSuccess', 'Successfully added.');
+
+        return redirect('lolo-pinoy-grill-commissary/add-new-lolo-pinoy-grill-payment-voucher/'.$id);
+    }
+
 
     //
     public function addNewPaymentVoucher($id){
@@ -51,7 +482,10 @@ class LoloPinoyGrillCommissaryController extends Controller
          //getPaymentVoucher 
         $getPaymentVoucher = LoloPinoyGrillCommissaryPaymentVoucher::find($id);
 
-        return view('edit-payment-voucher-lolo-pinoy-grill', compact('user', 'getPaymentVoucher'));
+        //pVoucher
+        $pVouchers = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->get()->toArray();
+
+        return view('edit-payment-voucher-lolo-pinoy-grill', compact('user', 'getPaymentVoucher', 'pVouchers'));
     }
 
     //store payment voucher 
@@ -692,8 +1126,9 @@ class LoloPinoyGrillCommissaryController extends Controller
         $ids = Auth::user()->id;
         $user = User::find($ids);
 
+        $getAllSalesInvoices = LoloPinoyGrillCommissarySalesInvoice::where('si_id', NULL)->get()->toArray();
 
-        return view('lolo-pinoy-grill', compact('user'));
+        return view('lolo-pinoy-grill', compact('user', 'getAllSalesInvoices'));
     }
 
     /**
@@ -864,6 +1299,21 @@ class LoloPinoyGrillCommissaryController extends Controller
 
     }
 
+    public function destroyStatementAccount($id){
+        $statementAccount = LoloPinoyGrillCommissaryStatementOfAccount::find($id);
+        $statementAccount->delete();
+    }       
+
+    public function destroySalesInvoice($id){
+        $salesInvoice = LoloPinoyGrillCommissarySalesInvoice::find($id);
+        $salesInvoice->delete();
+    }
+
+
+    public function destroyPaymentVoucher($id){
+        $paymentVoucher = LoloPinoyGrillCommissaryPaymentVoucher::find($id);
+        $paymentVoucher->delete();
+    }
 
     public function destroyBillingStatement($id){
         $billingStatement = LoloPinoyGrillCommissaryBillingStatement::find($id);

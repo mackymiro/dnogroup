@@ -55,7 +55,7 @@
 					  								<td>{{ $getAllChequeVoucher['paid_to']}}</td>
 					  								<td>{{ $getAllChequeVoucher['account_no']}}</td>
 					  								<td>{{ $getAllChequeVoucher['date']}}</td>
-					  								<td>{{ $getAllChequeVoucher['method_of_payment']}}</td>
+					  								<td class="bg-danger" style="color:white">{{ $getAllChequeVoucher['method_of_payment']}}</td>
 					  								<td>{{ $getAllChequeVoucher['particulars']}}</td>
 					  								<td><?php echo number_format($getAllChequeVoucher['amount'], 2); ?></td>
 					  								<td>{{ $getAllChequeVoucher['created_by'] }}</td>

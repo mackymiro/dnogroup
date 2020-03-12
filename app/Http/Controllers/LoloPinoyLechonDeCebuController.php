@@ -494,7 +494,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $updateSi->save();
 
-         Session::flash('SuccessEdit', 'Successfully updated');
+        Session::flash('SuccessEdit', 'Successfully updated');
 
         return redirect('lolo-pinoy-lechon-de-cebu/edit-sales-invoice/'.$request->get('siId'));
 

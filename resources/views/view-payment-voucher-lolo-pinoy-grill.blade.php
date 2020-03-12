@@ -1,4 +1,4 @@
-@extends('layouts.lolo-pinoy-lechon-de-cebu-app')
+@extends('layouts.lolo-pinoy-grill-commissary-app')
 @section('title', 'View Payment Voucher |')
 @section('content')
 <script>
@@ -7,38 +7,37 @@
   });
 </script>
 <div id="wrapper">
-		<!-- Sidebar -->
-    @include('sidebar.sidebar')
-     <div id="content-wrapper">
- 		<div class="container-fluid">
- 			 <!-- Breadcrumbs-->
+	<!-- Sidebar -->
+    @include('sidebar.sidebar-lolo-pinoy-grill')
+    <div id="content-wrapper">
+    	<div class="container-fluid">
+    		 <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">Lechon de Cebu</a>
+                <a href="#">Lolo Pinoy Grill Commissary</a>
               </li>
               <li class="breadcrumb-item active">View Payment Voucher</li>
             </ol>
-            
             <div class="col-lg-12">
-            	 <img src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
+            	 <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill">
             	 
             	 <h4 class="text-center"><u>VIEW PAYMENT VOUCHER</u></h4>
             </div>
-             <div class="row">
-             	<div class="col-lg-12">
-             		<div class="card mb-3">
- 				       <div class="card-header">
+            <div class="row">
+            	<div class="col-lg-12">
+            		<div class="card mb-3">
+            			<div class="card-header">
                               <i class="fas fa-file-invoice" aria-hidden="true"></i>
-                            View Payment Voucher 
+                           	 View Payment Voucher 
                            <div class="float-right">
-                               <a href="{{ action('LoloPinoyLechonDeCebuController@printPaymentVoucher', $paymentVoucher['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                               <a href=""><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                              </div>
                         </div>
-                         <div class="card-body">
-                         	<div class="form-group">
-                         		<div class="form-row">
-                         			<div class="col-lg-6">
-                                        <table class="table table-bordered">
+                        <div class="card-body">
+                        	<div class="form-group">
+                    			<div class="form-row">
+                					<div class="col-lg-6">
+            							 <table class="table table-bordered">
                                             <thead>
                                                 <tr>
                                                     <th width="30%">Reference Number</th>
@@ -54,10 +53,9 @@
                                                 </tr>
                                             </thead>
                                         </table>
-                         			
-                         			</div>
-                         			<div class="col-lg-6">
-                                        <table class="table table-bordered">
+                					</div>
+                					<div class="col-lg-6">
+            							 <table class="table table-bordered">
                                             <thead>
                                                 <tr>
                                                     <th>Date</th>
@@ -69,13 +67,12 @@
                                                 </tr>
                                             </thead>
                                         </table>
-                         				
-                         			</div>
-                         		</div>
-                         	</div>
-                         	<div class="table-responsive">
-                         		<table class="table table-striped">
-                         			<thead>
+                					</div>
+                    			</div>
+                        	</div>
+                        	<div class="table-responsive">
+                        		<table class="table table-striped">
+                        			<thead>
                          				<tr>
                          					<th class="bg-info" style="color:white;">Particulars</th>
                          					<th class="bg-info" style="color:white;">Amount</th>
@@ -100,10 +97,9 @@
 	                                      <td>₱ <?php echo number_format($sum, 2)?></td>
 	                                    </tr>
                          			</tbody>
-                         		</table>
-                         		
-                         	</div>
-                         	<div class="form-group">
+                        		</table>
+                        	</div>
+                        	<div class="form-group">
                  				<div class="form-row">
                  					<div class="col-lg-12">
                                         <table class="table table-bordered">
@@ -130,22 +126,11 @@
                  				</div>
                             
                      		</div>
-                         </div>
-             		</div>
-             	</div>
-             </div>
- 		</div>
-     </div>
-      <!-- Sticky Footer -->
-      <footer class="sticky-footer">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <span>Copyright © Ribos Food Corporation 2019</span>
-            <br>
-            <br>
-            <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
-          </div>
-        </div>
-      </footer>
-</div>	
+                        </div>
+            		</div>
+            	</div>
+            </div>
+    	</div>
+    </div>	
+</div>
 @endsection

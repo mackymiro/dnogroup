@@ -85,7 +85,7 @@
         </div>
         <br>
         <br>
-         <table style="margin-top:70px;">
+         <table style="margin-top:120px;">
                 <thead>
                     <tr  style="border:1px solid black;">
                         <th style="font-size:16px">Consignee Name: </th>
@@ -167,7 +167,7 @@
           <br>
           <br>
           <br>
-           <div style=" margin-top:270px; float:left; width:50%">
+           <div style=" margin-top:220px; float:left; width:50%">
              <table >
                 <thead>
                     <tr >
@@ -181,7 +181,7 @@
                 
             </table>   
         </div>
-        <div style="  margin-top:270px;float:right; width: 50%; margin-right: 400px">
+        <div style="  margin-top:220px;float:right; width: 50%; margin-right: 400px">
            <table>
                   <thead>
                       <tr >

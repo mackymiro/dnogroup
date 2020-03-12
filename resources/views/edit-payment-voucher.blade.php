@@ -102,11 +102,11 @@
         				  	 			     </div>
           			  	 			    	<div class="col-md-2">
             				  	 					<label>Amount</label>
-            				  	 					<input type="text" name="amount" class="form-control"  value="<?php echo number_format($pVoucher['amount'], 2); ?>" />
+            				  	 					<input type="text" name="amount" class="form-control"  value="{{ $pVoucher['amount']}}" />
             					  	 			</div>
 					  	 			        <div class="col-lg-2">
                               <br>
-                              <input type="hidden" name="pvId" value="{{ $pVoucher['id'] }}" />
+                              <input type="hidden" name="pvId" value="{{ $getPaymentVoucher['id'] }}" />
                               <input type="submit" class="btn btn-success" value="Update" />
                               @if($user->role_type == 1)
                               <a id="delete" onClick="confirmDelete('{{ $pVoucher['id']}}')" href="javascript:void" class="btn btn-danger">Remove</a>

@@ -16,8 +16,8 @@
               		<div class="col-lg-12">
               			<div class="card mb-3">
               			<div class="card-header">
-              				 <i class="fa fa-tasks" aria-hidden="true"></i>
-    					  All Lists</div>
+                    				 <i class="fa fa-tasks" aria-hidden="true"></i>
+          					  All Lists</div>
     					  <div class="card-body">
     					  		<div class="table-responsive">
       				  				<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
