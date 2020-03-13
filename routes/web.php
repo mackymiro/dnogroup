@@ -544,7 +544,7 @@ Route::group(['middleware' => ['auth']], function(){
 	//payment voucher mr potato
 	Route::get(
 		'/mr-potato/payment-voucher-form',
-		'MrPotatoController@paymantVoucherForm')
+		'MrPotatoController@paymentVoucherForm')
 		->name('mr-potato.paymentVoucherForm');
 
 	//Ribos Bar

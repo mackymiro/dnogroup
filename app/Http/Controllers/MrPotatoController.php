@@ -13,7 +13,14 @@ use App\MrPotatoDeliveryReceipt;
 
 class MrPotatoController extends Controller
 {   
-    
+
+    //
+    public function paymentVoucherForm(){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('payment-voucher-form-mr-potato', compact('user'));
+    }
 
     //
     public function viewDeliveryReceipt($id){

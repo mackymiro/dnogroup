@@ -4,7 +4,7 @@
 <div id="wrapper">
 	<!-- Sidebar -->
     @include('sidebar.sidebar-lolo-pinoy-grill')
-     <div id="content-wrapper">
+   <div id="content-wrapper">
  		<div class="container-fluid">
  			 <!-- Breadcrumbs-->
 	            <ol class="breadcrumb">
@@ -13,7 +13,7 @@
 	              </li>
 	              <li class="breadcrumb-item active">Payment Voucher Form</li>
 	            </ol>
-	             <div class="col-lg-12">
+	           <div class="col-lg-12">
 	            	 <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill">
 	            	 
 	            	 <h4 class="text-center"><u>PAYMENT VOUCHER</u></h4>

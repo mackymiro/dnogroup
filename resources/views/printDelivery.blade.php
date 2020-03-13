@@ -50,7 +50,7 @@
              <table style="position: absolute; width: 350px;">
                 <thead>
                     <tr >
-                        <th style="font-size:16px; height: 1%; width:30%; ">Sold To</th>
+                        <th style="font-size:16px; height: 1%; width:35%; ">Sold To</th>
                         <th style="font-size:16px; height: 1%; ">{{ $deliveryId->sold_to }}</th>
                     </tr>
                     <tr  >
