@@ -19,10 +19,10 @@
 	          </ol>
 	          <a href="{{ url('lolo-pinoy-grill-commissary/delivery-receipt/lists') }}">Back to Lists</a>
 	          <div class="col-lg-12">
-	        	 <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill">
-	        	 
-	        	 <h4 class="text-center"><u>DELIVERY RECEIPT</u></h4>
-			  </div>
+  	        	 <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill">
+  	        	 
+  	        	 <h4 class="text-center"><u>DELIVERY RECEIPT</u></h4>
+			      </div>
 			  <div class="row">
 			  		<div class="col-lg-12">
 			  			<div class="card mb-3">
@@ -172,7 +172,17 @@
 			  </div>
 	 	</div>
 	 </div>
-
+    <!-- Sticky Footer -->
+      <footer class="sticky-footer">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright © Ribos Food Corporation 2019</span>
+            <br>
+            <br>
+            <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
+          </div>
+        </div>
+      </footer>
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">

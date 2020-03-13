@@ -1,15 +1,14 @@
 @extends('layouts.lolo-pinoy-grill-commissary-app')
 @section('title', 'Delivery Receipt Lists| ')
 @section('content')
-
 <div id="wrapper">
-	 @include('sidebar.sidebar-lolo-pinoy-grill')
-	 <div id="content-wrapper">
-	 	<div class="container-fluid">
- 			 <!-- Breadcrumbs-->
+	 @include('sidebar.sidebar-mr-potato')
+	  <div id="content-wrapper">
+	  	<div class="container-fluid">
+	  		<!-- Breadcrumbs-->
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                  <a href="#">Lolo Pinoy Grill Commissary</a>
+                  <a href="#">Mr Potato</a>
                 </li>
                 <li class="breadcrumb-item active">Delivery Receipt All Lists</li>
               </ol>
@@ -17,50 +16,52 @@
               		<div class="col-lg-12">
               			<div class="card mb-3">
               				<div class="card-header">
-	    					  <i class="fa fa-receipt" aria-hidden="true"></i>
+	    					  <i class="fa fa-tasks" aria-hidden="true"></i>
 	    					  All Lists</div>
-    					  	<div class="card-body">
-					  			<div class="table-responsive">
-					  				<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-					  					<thead>
+	    					  <div class="card-body">
+	    					  		<div class="table-responsive">
+	    					  			<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+	    					  				<thead>
 					  						
-				  							<th>Action</th>
-				  							<th>DR No</th>
-				  							<th>Date</th>
-				  							<th>Delivered To</th>
-				  							<th>Address</th>
-				  							<th>Product Id</th>
-				  							<th>Qty</th>
-				  							<th>Unit</th>
-				  							<th>Item Description</th>
-				  							<th>Unit Price</th>
-				  							<th>Amount</th>
-					  						
-					  					</thead>
-					  					<tfoot>
-					  						<th>Action</th>
-				  							<th>DR No</th>
-				  							<th>Date</th>
-				  							<th>Delivered To</th>
-				  							<th>Address</th>
-				  							<th>Product Id</th>
-				  							<th>Qty</th>
-				  							<th>Unit</th>
-				  							<th>Item Description</th>
-				  							<th>Unit Price</th>
-				  							<th>Amount</th>
-					  					</tfoot>
-					  					<tbody>
+					  							<th>Action</th>
+					  							<th>DR No</th>
+					  							<th>Date</th>
+					  							<th>Delivered To</th>
+					  							<th>Address</th>
+					  							<th>Product Id</th>
+					  							<th>Qty</th>
+					  							<th>Unit</th>
+					  							<th>Item Description</th>
+					  							<th>Unit Price</th>
+					  							<th>Amount</th>
+					  							<th>Created By</th>
+						  						
+						  					</thead>
+						  					<tfoot>
+						  						<th>Action</th>
+					  							<th>DR No</th>
+					  							<th>Date</th>
+					  							<th>Delivered To</th>
+					  							<th>Address</th>
+					  							<th>Product Id</th>
+					  							<th>Qty</th>
+					  							<th>Unit</th>
+					  							<th>Item Description</th>
+					  							<th>Unit Price</th>
+					  							<th>Amount</th>
+					  							<th>Created By</th>
+						  					</tfoot>
+						  					<tbody>
 				  							@foreach($getAllDeliveryReceipts as $getAllDeliveryReceipt)
 					  						<tr id="deletedId{{ $getAllDeliveryReceipt['id'] }}">
 					  							<td>
 			               						 @if($user->role_type !== 3)
-			  										<a href="{{ url('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-delivery-receipt/'.$getAllDeliveryReceipt['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+			  										<a href="{{ url('mr-potato/edit-mr-potato-delivery-receipt/'.$getAllDeliveryReceipt['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
 			               						 @endif
 			              						@if($user->role_type == 1)
 					  								<a id="delete" onClick="confirmDelete('{{ $getAllDeliveryReceipt['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
 			              						@endif
-									  				<a href="{{ url('lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-commissary-delivery-receipt/'.$getAllDeliveryReceipt['id'])}}" title="View"><i class="fas fa-low-vision"></i></a>
+									  				<a href="{{ url('mr-potato/view-mr-potato-delivery-receipt/'.$getAllDeliveryReceipt['id'])}}" title="View"><i class="fas fa-low-vision"></i></a>
 						                         
 			  									</td>
 					  							<td>{{ $getAllDeliveryReceipt['dr_no']}}</td>
@@ -73,18 +74,19 @@
 					  							<td>{{ $getAllDeliveryReceipt['item_description']}}</td>
 					  							<td><?php echo number_format($getAllDeliveryReceipt['unit_price'], 2)?></td>
 					  							<td><?php echo number_format($getAllDeliveryReceipt['amount'], 2)?></td>
+					  							<td>{{ $getAllDeliveryReceipt['created_by'] }}</td>
 					  						</tr>
 					  						@endforeach
 					  					</tbody>
-					  				</table>
-					  			</div>
-    					  	</div>
+	    					  			</table>	
+	    					  		</div>
+	    					  </div>
               			</div>	
               		</div>
-              </div>	
-	 	</div>
-	 </div>
-	  <!-- Sticky Footer -->
+              </div>
+	  	</div>
+	  </div>
+	    <!-- Sticky Footer -->
       <footer class="sticky-footer">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
@@ -103,7 +105,7 @@
         if(x){
             $.ajax({
               type: "DELETE",
-              url: '/lolo-pinoy-grill-commissary/delete-delivery-receipt/' + id,
+              url: '/mr-potato/delete-delivery-receipt/' + id,
               data:{
                 _method: 'delete', 
                 "_token": "{{ csrf_token() }}",

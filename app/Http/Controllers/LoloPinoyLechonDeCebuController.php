@@ -905,7 +905,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 
-        $name  = $firstName.$lastName;
+        $name  = $firstName." ".$lastName;
 
          //get the latest insert id query in table delivery receipt dr_no
         $dataDrNo = DB::select('SELECT id, dr_no FROM lechon_de_cebu_delivery_receipts ORDER BY id DESC LIMIT 1');

@@ -884,12 +884,12 @@ class LoloPinoyGrillCommissaryController extends Controller
 
     //view delivery receipt
     public function viewDeliveryReceipt($id){
-         $ids = Auth::user()->id;
+        $ids = Auth::user()->id;
         $user = User::find($ids);
 
         $viewDeliveryReceipt = LoloPinoyGrillCommissaryDeliveryReceipt::find($id);
 
-         $deliveryReceipts = LoloPinoyGrillCommissaryDeliveryReceipt::where('dr_id', $id)->get()->toArray();
+        $deliveryReceipts = LoloPinoyGrillCommissaryDeliveryReceipt::where('dr_id', $id)->get()->toArray();
 
          //count the total unit price
         $countTotalUnitPrice = LoloPinoyGrillCommissaryDeliveryReceipt::where('id', $id)->sum('unit_price');
@@ -942,8 +942,8 @@ class LoloPinoyGrillCommissaryController extends Controller
 
         $delivery->save();
 
-         Session::flash('SuccessEdit', 'Successfully updated');
-          return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-delivery-receipt/'.$request->get('drId'));
+        Session::flash('SuccessEdit', 'Successfully updated');
+        return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-delivery-receipt/'.$request->get('drId'));
 
     }
 

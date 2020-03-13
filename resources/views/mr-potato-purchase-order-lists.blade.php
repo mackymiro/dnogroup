@@ -1,15 +1,15 @@
-@extends('layouts.lolo-pinoy-grill-commissary-app')
+@extends('layouts.mr-potato-app')
 @section('title', 'Purchase Order Lists |')
 @section('content')
 <div id="wrapper">
 	<!-- Sidebar -->
-	@include('sidebar.sidebar-lolo-pinoy-grill')
+	@include('sidebar.sidebar-mr-potato')
 	<div id="content-wrapper">
 		<div class="container-fluid">
 			 <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">Lolo Pinoy Grill Commissary</a>
+                <a href="#">Mr Potato</a>
               </li>
               <li class="breadcrumb-item active">Purchase Order All Lists</li>
             </ol>
@@ -21,8 +21,8 @@
         					  All Lists</div>
 					  	<div class="card-body">
 					  		<div class="table-responsive">
-				  				<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-				  					<thead>
+					  			<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+					  				<thead>
 				  						<tr>
 				  							<th>Action</th>
 			  								<th>PO #</th>
@@ -45,12 +45,12 @@
 				  						<tr>
 				  							<td>
 			  								  @if($user->role_type != 3)
-					                          <a href="{{ url('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-purchase-order/'.$purchaseOrder['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+					                          <a href="{{ url('mr-potato/edit-mr-potato-purchase-order/'.$purchaseOrder['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
 					                          @endif
 					                          @if($user->role_type == 1)
 										  		<a id="delete" onClick="confirmDelete('{{ $purchaseOrder['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
 						                       @endif
-				  								<a href="{{ url('lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-commissary-purchase-order/'.$purchaseOrder['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
+				  								<a href="{{ url('mr-potato/view-mr-potato-purchase-order/'.$purchaseOrder['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
 				  							</td>
 				  							 <td><a href="#">P.O-{{ $purchaseOrder['p_o_number'] }}</a></td>
 					                        <td>{{ $purchaseOrder['paid_to'] }}</td>
@@ -59,7 +59,7 @@
 				  						</tr>
 				  						@endforeach
 				  					</tbody>
-			  					</table>
+					  			</table>
 					  		</div>
 					  	</div>
             		</div>

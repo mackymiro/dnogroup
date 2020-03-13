@@ -1,4 +1,4 @@
-@extends('layouts.lolo-pinoy-grill-commissary-app')
+@extends('layouts.mr-potato-app')
 @section('title', 'Add New Delivery Receipt |')
 @section('content')
 <script>
@@ -7,31 +7,31 @@
   });
 </script>
 <div id="wrapper">
-	 @include('sidebar.sidebar-lolo-pinoy-grill')
+	@include('sidebar.sidebar-mr-potato')
 	 <div id="content-wrapper">
 	 	<div class="container-fluid">
 	 		 <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">Lolo Pinoy Grill Commissary</a>
+                <a href="#">Mr Potato</a>
               </li>
               <li class="breadcrumb-item active">Add New Delivery Receipt</li>
             </ol>
-             <div class="row">
-             		<div class="col-lg-12">
-             			<div class="card mb-3">
-         					<div class="card-header">
+            <div class="row">
+            	<div class="col-lg-12">
+            		<div class="card mb-3">
+            			<div class="card-header">
       						  <i class="fa fa-receipt" aria-hidden="true"></i>
       						  Add New</div>
-      						  <div class="card-body">
-      						  	@if(session('addDeliveryReceiptSuccess'))
+  						 <div class="card-body">
+					 		@if(session('addDeliveryReceiptSuccess'))
 			                     <p class="alert alert-success">{{ Session::get('addDeliveryReceiptSuccess') }}</p>
-			                    @endif 
-      						  <form action="{{ action('LoloPinoyGrillCommissaryController@addNewDeliveryReceiptData', $id)}}" method="post">
-      						  	{{csrf_field()}}
-  						  	  <div class="form-group">
-                    			<div class="form-row">
-                      				<div class="col-md-2">
+		                    @endif 
+  						 	<form action="{{ action('MrPotatoController@addNewDeliveryReceiptData', $id) }}" method="post">
+  						 		{{csrf_field()}}
+  						 	<div class="form-group">
+  						 		<div class="form-row">	
+					 				<div class="col-md-2">
 	            						<label>Product Id</label>
 	            						<input type="text" name="productId" class="form-control" required="required" />
 		              				</div>
@@ -51,26 +51,25 @@
 		            					<label>Unit Price</label>
 		            					<input type="text" name="unitPrice" class="form-control" required="required" />
 		            				</div>
-		            				
-		            			 </div>
-		                	</div>
-		                	<div class="form-group">
+  						 		</div>
+  						 	</div>
+  						 	<div class="form-group">
 					   			<div class="form-row">
 					   				<div class="col-lg-12 float-right">
 			  							<input type="submit" class="btn btn-success" value="Add" />
 			  							<br>
 			  							<br>
 			  							<br>
-			  							<a href="{{ url('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-delivery-receipt/'.$id) }}">Back</a>
+			  							<a href="{{ url('mr-potato/edit-mr-potato-delivery-receipt/'.$id) }}">Back</a>
 				  					</div> 
 					   			</div>
 				   			 </div>
 				   			</form>
-  						  </div> 
-             			</div>
-             		</div>
-             </div>
-	 	</div>	
+  						 </div>
+            		</div>
+            	</div>
+            </div>
+	 	</div>
 	 </div>
 </div>
 @endsection

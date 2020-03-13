@@ -25,10 +25,10 @@
         					  Add New</div>
         					  <div class="card-body">
         					  	<form action="{{ action('LoloPinoyGrillCommissaryController@addNewPurchaseOrder', $id) }}" method="post">
-        					  		{{csrf_field()}}
-        					  		 @if(session('purchaseOrderSuccess'))
-						                   <p class="alert alert-success">{{ Session::get('purchaseOrderSuccess') }}</p>
-						                  @endif 
+						  		{{csrf_field()}}
+						  		 @if(session('purchaseOrderSuccess'))
+				                   	<p class="alert alert-success">{{ Session::get('purchaseOrderSuccess') }}</p>
+				                  @endif 
         					  	<div class="form-group">
         					  		<div class="form-row">
     					  				<div class="col-lg-1">

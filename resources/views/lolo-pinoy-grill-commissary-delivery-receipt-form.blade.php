@@ -17,7 +17,7 @@
             	 
             	 <h4 class="text-center"><u>DELIVERY RECEIPT</u></h4>
             </div>
-             <div class="row">
+            <div class="row">
          		<div class="col-lg-12">
          			<div class="card mb-3">
          				<div class="card-header">
@@ -63,10 +63,10 @@
                         					<label>Item Description</label>
                         					<input type="text" name="itemDescription" class="form-control" required="required" />
                         				</div>
-                    				<div class="col-md-2">
-                    					<label>Unit Price</label>
-                    					<input type="text" name="unitPrice" class="form-control" required="required" />
-                    				</div>
+                        				<div class="col-md-2">
+                        					<label>Unit Price</label>
+                        					<input type="text" name="unitPrice" class="form-control" required="required" />
+                        				</div>
                     				
                     			 </div>
                         	</div>

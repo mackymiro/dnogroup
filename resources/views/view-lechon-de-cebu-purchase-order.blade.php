@@ -1,11 +1,6 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('title', 'View Purchase Order |')
 @section('content')
-<script>
-    function myFunction() {
-      window.print();
-    }
-</script>
 <div id="wrapper">
 	<!-- Sidebar -->
     @include('sidebar.sidebar')
@@ -81,7 +76,7 @@
                                       <th class="bg-info" style="color:white;">AMOUNT</th>
                                     </tr>
                                   </thead>
-                                    <tbody>
+                                  <tbody>
 
                                     <tr>
                                       <td>{{ $purchaseOrder['quantity']}}</td>

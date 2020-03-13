@@ -446,6 +446,106 @@ Route::group(['middleware' => ['auth']], function(){
 	//purchase order
 	Route::get('/mr-potato/purchase-order', 'MrPotatoController@purchaseOrder')->name('mr-potato.purchaseOrder');
 
+	//save purchase order
+	Route::post('/mr-potato/store', 'MrPotatoController@store')->name('mr-potato.store');
+
+	Route::get('/mr-potato/edit-mr-potato-purchase-order/{id}', 'MrPotatoController@edit')->name('mr-potato.edit');
+
+	Route::patch(
+		'/mr-potato/update/{id}', 
+		'MrPotatoController@update')
+		->name('mr-potato.update');
+
+	//add new Po
+	Route::get(
+		'/mr-potato/add-new/{id}', 
+		'MrPotatoController@addNew')
+		->name('mr-potato.addNew');
+
+	Route::post(
+		'/mr-potato/add-new-purchase-order/{id}', 
+		'MrPotatoController@addNewPurchaseOrder')
+		->name('mr-potato.addNewPurchaseOrder');
+
+	Route::patch(
+		'/mr-potato/update-po/{id}',
+		'MrPotatoController@updatePo')
+		->name('mr-potato.updatePo');
+
+	//delete
+	Route::delete(
+		'/mr-potato/delete/{id}',
+		'MrPotatoController@destroy')
+		->name('mr-potato.destroy');
+
+	//purchase order lists
+	Route::get(
+		'/mr-potato/purchase-order-lists',
+		'MrPotatoController@purchaseOrderAllLists')
+		->name('mr-potato.purchaseOrderAllLists');
+
+	//view
+	Route::get(
+		'/mr-potato/view-mr-potato-purchase-order/{id}',
+		'MrPotatoController@show')
+		->name('mr-potato.show');
+
+	Route::get(
+		'/mr-potato/delivery-receipt-form',
+		'MrPotatoController@deliveryReceiptForm')
+		->name('mr-potato.deliveryReceiptForm');
+
+	//store delivery receipt
+	Route::post(
+		'/mr-potato/store-delivery-receipt',
+		'MrPotatoController@storeDeliveryReceipt')
+		->name('mr-potato.storeDeliveryReceipt');
+
+	Route::get(
+		'/mr-potato/edit-mr-potato-delivery-receipt/{id}',
+		'MrPotatoController@editDeliveryReceipt')
+		->name('mr-potato.editDeliveryReceipt');
+
+	Route::patch(
+		'/mr-potato/update-delivery-receipt/{id}',
+		'MrPotatoController@updateDeliveryReceipt')
+		->name('mr-potato.updateDeliveryReceipt');
+
+	Route::get(
+		'/mr-potato/add-new-delivery-receipt/{id}',
+		'MrPotatoController@addNewDelivery')
+		->name('mr-potato.addNewDelivery');
+
+	Route::post(
+		'/mr-potato/add-new-delivery-receipt-data/{id}',
+		'MrPotatoController@addNewDeliveryReceiptData')
+		->name('mr-potato.addNewDeliveryReceiptData');
+
+	Route::patch(
+		'/mr-potato/update-dr/{id}',
+		'MrPotatoController@updateDr')
+		->name('mr-potato.updateDr');
+
+	Route::delete(
+		'/mr-potato/delete-delivery-receipt/{id}',
+		'MrPotatoController@destroyDeliveryReceipt')
+		->name('mr-potato.destroyDeliveryReceipt');
+
+	Route::get(
+		'/mr-potato/delivery-receipt-lists',
+		'MrPotatoController@deliveryReceiptList')
+		->name('mr-potato.deliveryReceiptList');
+
+	Route::get(
+		'/mr-potato/view-mr-potato-delivery-receipt/{id}',
+		'MrPotatoController@viewDeliveryReceipt')
+		->name('mr-potato.viewDeliveryReceipt');
+
+	//payment voucher mr potato
+	Route::get(
+		'/mr-potato/payment-voucher-form',
+		'MrPotatoController@paymantVoucherForm')
+		->name('mr-potato.paymentVoucherForm');
 
 	//Ribos Bar
 	Route::get('/ribos-bar', 'RibosBarController@index')->name('ribos-bar.index');

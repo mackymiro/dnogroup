@@ -10,7 +10,7 @@
               <li class="breadcrumb-item">
                 <a href="#">Lechon de Cebu</a>
               </li>
-              <li class="breadcrumb-item active">Sales All Lists</li>
+              <li class="breadcrumb-item active">View Sales By Outlets</li>
             </ol>
             <div class="row">
                 <div class="col-lg-12">
