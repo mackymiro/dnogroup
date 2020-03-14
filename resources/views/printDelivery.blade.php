@@ -45,9 +45,9 @@
         </div>-->
         <div style="clear:both;"></div>
         <hr>
-        <div style="border-style: groove; height: 80px; width:350px; height: 140px;">
+        <div style="border-style: groove; height: 80px; width:350px; height: 160px;">
         <div style="float:left; width:50%;">
-             <table style="position: absolute; width: 350px;">
+             <table style="position: absolute; width: 360px;">
                 <thead>
                     <tr >
                         <th style="font-size:16px; height: 1%; width:35%; ">Sold To: </th>
@@ -75,7 +75,7 @@
             </table>   
         </div>
         </div>
-        <div style="border-style: groove; width:350px; height: 140px; margin-top: -170px; float:right; margin-right: 20px;">
+        <div style="border-style: groove; width:350px; height: 160px; margin-top: -170px; float:right; margin-right: 20px;">
         <div style="float:right; width: 50%;  ">
            <table style="position: absolute; width: 480px;  margin-left:-170px;">
                   <thead>
@@ -95,7 +95,7 @@
         </div>
         <br>
         <br>
-        <div style="border-style: groove; height: 80px; width:700px; margin-top:105px;">
+        <div style="border-style: groove; height: 80px; width:700px; margin-top:125px;">
         <table style="margin-top:20px;position: absolute;">
                 <thead>
                     <tr  style="border:1px solid black;">
@@ -174,7 +174,7 @@
           <br>
         <br>
         <div style="float:left; width:50%; margin-top:10px; ">
-            <p style="font-size: 16px;">ALL PAYMENTS SHOULD BE MADE IN FAVOR OF RIBOS FOOD CORPORATION</p>
+            <p style="font-size: 16px;">ALL PAYMENTS SHOULD BE MADE IN FAVOR OF <u>RIBO'S FOOD CORPORATION</u></p>
         </div>
         <div style="float:right; width:50%;">
             <p style="font-size: 16px;">Received the above merchandise in good order and condition<br>

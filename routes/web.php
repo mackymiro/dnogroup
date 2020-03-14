@@ -592,6 +592,52 @@ Route::group(['middleware' => ['auth']], function(){
 		'MrPotatoController@chequeVouchers')
 		->name('mr-potato.chequeVouchers');
 
+	//sales invoice
+	Route::get(
+		'/mr-potato/sales-invoice-form',
+		'MrPotatoController@salesInvoiceForm')
+		->name('mr-potato.salesInvoiceForm');
+
+	Route::post(
+		'/mr-potato/store-sales-invoice',
+		'MrPotatoController@storeSalesInvoice')
+		->name('mr-potato.storeSalesInvoice');
+
+	Route::get(
+		'/mr-potato/edit-mr-potato-sales-invoice/{id}',
+		'MrPotatoController@editSalesInvoice')
+		->name('mr-potato.editSalesInvoice');
+
+	Route::patch(
+		'/mr-potato/update-sales-invoice/{id}',
+		'MrPotatoController@updateSalesInvoice')
+		->name('mr-potato.updateSalesInvoice');
+
+	Route::get(
+		'/mr-potato/add-new-mr-potato-sales-invoice/{id}',
+		'MrPotatoController@addNewSalesInvoice')
+		->name('mr-potato.addNewSalesInvoice');
+
+	Route::post(
+		'/mr-potato/add-new-sales-invoice-data/{id}',
+		'MrPotatoController@addNewSalesInvoiceData')
+		->name('mr-potato.addNewSalesInvoiceData');
+
+	Route::patch(
+		'/mr-potato/update-si/{id}',
+		'MrPotatoController@updateSi')
+		->name('mr-potato.updateSi');
+
+	Route::delete(
+		'/mr-potato/delete-sales-invoice/{id}',
+		'MrPotatoController@destroySalesInvoice')
+		->name('mr-potato.destroySalesInvoice');	
+
+	Route::get(
+		'/mr-potato/view-mr-potato-sales-invoice/{id}',
+		'MrPotatoController@viewSalesInvoice')
+		->name('mr-potato.viewSalesInvoice');
+
 	//Ribos Bar
 	Route::get('/ribos-bar', 'RibosBarController@index')->name('ribos-bar.index');
 

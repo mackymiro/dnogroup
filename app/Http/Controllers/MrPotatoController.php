@@ -11,9 +11,209 @@ use App\User;
 use App\MrPotatoPurchaseOrder;
 use App\MrPotatoDeliveryReceipt;
 use App\MrPotatoPaymentVoucher;
+use App\MrPotatoSalesInvoice;
 
 class MrPotatoController extends Controller
-{                                                           
+{       
+    //
+    public function viewSalesInvoice($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $viewSalesInvoice = MrPotatoSalesInvoice::find($id);
+
+        $salesInvoices = MrPotatoSalesInvoice::where('si_id', $id)->get()->toArray();
+
+         //count the total amount 
+        $countTotalAmount = MrPotatoSalesInvoice::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = MrPotatoSalesInvoice::where('si_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        return view('view-mr-potato-sales-invoice', compact('user', 'viewSalesInvoice', 'salesInvoices', 'sum'));
+    }
+
+    //
+    public function updateSi(Request $request, $id){
+        $updateSi = MrPotatoSalesInvoice::find($id);
+
+          //kls
+        $kls  = $request->get('totalKls');
+
+         //compute kls * unit price
+        $unitPrice = $updateSi->unit_price;
+        $compute = $kls * $unitPrice;
+        $sum = $compute;
+
+        $updateSi->qty = $request->get('qty');
+        $updateSi->total_kls = $kls;
+        $updateSi->item_description = $request->get('itemDescription');
+        $updateSi->unit_price = $unitPrice;
+        $updateSi->amount = $sum;
+
+        $updateSi->save();
+
+         Session::flash('SuccessEdit', 'Successfully updated');
+
+        return redirect('mr-potato/edit-mr-potato-sales-invoice/'.$request->get('siId'));
+    }
+
+
+    //
+    public function addNewSalesInvoiceData(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+
+           //get date today
+        $getDateToday =  date('Y-m-d');
+
+        //kls
+        $kls  = $request->get('totalKls');
+
+         //compute kls * unit price
+        $unitPrice = 500;
+        $compute = $kls * $unitPrice;
+        $sum = $compute;
+
+        $addNewSalesInvoice = new MrPotatoSalesInvoice([
+            'user_id'=>$user->id,
+            'si_id'=>$id,
+            'date'=>$getDateToday,
+            'qty'=>$request->get('qty'),
+            'total_kls'=>$kls,
+            'item_description'=>$request->get('itemDescription'),
+            'unit_price'=>$unitPrice,
+            'amount'=>$sum,
+            'created_by'=>$name,
+        ]);
+
+        $addNewSalesInvoice->save();
+        Session::flash('addSalesInvoiceSuccess', 'Successfully added.');
+
+        return redirect('mr-potato/add-new-mr-potato-sales-invoice/'.$id);
+    }
+
+    //
+    public function addNewSalesInvoice($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+       
+
+        return view('add-new-mr-potato-sales-invoice', compact('user', 'id'));
+    }
+
+    //
+    public function updateSalesInvoice(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $updateSalesInvoice = MrPotatoSalesInvoice::find($id);
+
+          //kls
+        $kls  = $request->get('totalKls');
+
+        //compute kls * unit price
+        $unitPrice = $updateSalesInvoice->unit_price;
+        $compute = $kls * $unitPrice;
+        $sum = $compute;
+
+        $updateSalesInvoice->invoice_number = $request->get('invoiceNum');
+        $updateSalesInvoice->ordered_by = $request->get('orderedBy');
+        $updateSalesInvoice->address = $request->get('address');
+        $updateSalesInvoice->qty = $request->get('qty');
+        $updateSalesInvoice->total_kls = $kls;
+        $updateSalesInvoice->item_description = $request->get('itemDescription');
+        $updateSalesInvoice->amount = $sum;
+        $updateSalesInvoice->created_by = $name; 
+
+        $updateSalesInvoice->save();
+
+        Session::flash('updateSuccessfull', 'Successfully updated');
+
+         return redirect('mr-potato/edit-mr-potato-sales-invoice/'.$id);
+    } 
+
+    //]
+    public function editSalesInvoice($id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+         //getSalesInvoice
+        $getSalesInvoice = MrPotatoSalesInvoice::find($id);
+
+        $sInvoices  = MrPotatoSalesInvoice::where('si_id', $id)->get()->toArray();
+
+        return view('edit-mr-potato-sales-invoice', compact('user', 'getSalesInvoice', 'sInvoices'));
+    }
+
+    //store sales invoice form
+    public function storeSalesInvoice(Request $request){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //validate
+        $this->validate($request, [
+            'invoiceNum' =>'required',
+            'orderedBy'=>'required',
+           
+        ]);
+
+         //get date today
+        $getDateToday =  date('Y-m-d');
+
+        //total kls
+        $kls = $request->get('totalKls');
+
+        //compute kls * unit price
+        $unitPrice = 500;
+        $compute = $kls * $unitPrice;
+        $sum = $compute;
+
+        $addSalesInvoice = new MrPotatoSalesInvoice([
+            'user_id'=>$user->id,
+            'invoice_number'=>$request->get('invoiceNum'),
+            'ordered_by'=>$request->get('orderedBy'),
+            'address'=>$request->get('address'),
+            'date'=>$getDateToday,
+            'qty'=>$request->get('qty'),
+            'total_kls'=>$kls,
+            'item_description'=>$request->get('itemDescription'),
+            'unit_price'=>$unitPrice,
+            'amount'=>$sum,
+            'created_by'=>$name,
+        ]);
+
+        $addSalesInvoice->save();
+
+        $insertedId = $addSalesInvoice->id;
+
+        return redirect('mr-potato/edit-mr-potato-sales-invoice/'.$insertedId);
+
+    }
+
+    //sales invoice form
+    public function salesInvoiceForm(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('mr-potato-sales-invoice-form', compact('user'));
+    }                                                   
 
     //
     public function chequeVouchers(){
@@ -511,8 +711,9 @@ class MrPotatoController extends Controller
         $ids = Auth::user()->id;
         $user = User::find($ids);
 
+        $getAllSalesInvoices = MrPotatoSalesInvoice::where('si_id', NULL)->get()->toArray();
 
-        return view('mr-potato', compact('user'));
+        return view('mr-potato', compact('user', 'getAllSalesInvoices'));
     }
 
     /**
@@ -703,5 +904,10 @@ class MrPotatoController extends Controller
     public function destroyPaymentVoucher($id){
         $paymentVoucher = MrPotatoPaymentVoucher::find($id);
         $paymentVoucher->delete();
+    }
+
+    public function destroySalesInvoice($id){
+         $salesInvoice = MrPotatoSalesInvoice::find($id);
+        $salesInvoice->delete();
     }
 }

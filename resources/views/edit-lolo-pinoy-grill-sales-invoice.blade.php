@@ -78,16 +78,16 @@
                         			</div>
                             	</div>
                             	<div class="form-group">
-      					  	 		<div class="form-row">
-      					  	 			<div class="float-right">
-      					  	 				
-					  	 					<button type="submit" class="btn btn-success">
-										      <i class="fa fa-refresh" aria-hidden="true"></i> Update Sales Invoice
-									      	 </button>
-			                            
-      					  	 			</div>
-      					  	 		</div>
-				  	 	        </div>
+              					  	 		<div class="form-row">
+              					  	 			<div class="float-right">
+              					  	 				
+        					  	 					  <button type="submit" class="btn btn-success">
+        										      <i class="fa fa-refresh" aria-hidden="true"></i> Update Sales Invoice
+        									      	 </button>
+        			                            
+              					  	 			</div>
+              					  	 		</div>
+        				  	 	        </div>
                             </div>
 
                        	  </form>
@@ -107,7 +107,7 @@
                         	 @foreach($sInvoices as $sInvoice)
                         	 <form action="{{ action('LoloPinoyGrillCommissaryController@updateSi', $sInvoice['id']) }}" method="post">
                         	 	{{csrf_field()}}
-                                 <input name="_method" type="hidden" value="PATCH">
+                           <input name="_method" type="hidden" value="PATCH">
                         	 <div class="form-group">
                     	 		<div id="deletedId{{ $sInvoice['id'] }}" class="form-row">
                 	 				<div class="col-md-1">
@@ -132,13 +132,13 @@
                          				$sInvoice['amount'], 2)?>" />
                          			</div>
                          			<div class="col-lg-2">
-	                                      <br>
-	                                      <input type="hidden" name="siId" value="{{ $getSalesInvoice['id'] }}" />
-	                                      <input type="submit" class="btn btn-success" value="Update" />
-	                                      @if($user->role_type == 1)
-	                                      <a id="delete" onClick="confirmDelete('{{ $sInvoice['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
-	                                      @endif
-                                    </div>
+                                  <br>
+                                  <input type="hidden" name="siId" value="{{ $getSalesInvoice['id'] }}" />
+                                  <input type="submit" class="btn btn-success" value="Update" />
+                                  @if($user->role_type == 1)
+                                  <a id="delete" onClick="confirmDelete('{{ $sInvoice['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
+                                  @endif
+                              </div>
                     	 		</div>
                         	 </div>
                         	</form>
@@ -154,6 +154,17 @@
     		  </div>
 		</div>	
 	</div>	
+  <!-- Sticky Footer -->
+      <footer class="sticky-footer">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright © Ribos Food Corporation 2019</span>
+            <br>
+            <br>
+            <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
+          </div>
+        </div>
+      </footer>
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">

@@ -209,7 +209,7 @@ class LoloPinoyGrillCommissaryController extends Controller
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 
-        $name  = $firstName.$lastName;
+        $name  = $firstName." ".$lastName;
 
           //get date today
         $getDateToday =  date('Y-m-d');
@@ -244,10 +244,7 @@ class LoloPinoyGrillCommissaryController extends Controller
     public function addNewSalesInvoice($id){
         $ids = Auth::user()->id;
         $user = User::find($ids);
-        $firstName = $user->first_name;
-        $lastName = $user->last_name;
-
-        $name  = $firstName.$lastName;
+    
 
         return view('add-new-lolo-pinoy-grill-sales-invoice', compact('user', 'id'));
     }
@@ -259,7 +256,7 @@ class LoloPinoyGrillCommissaryController extends Controller
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 
-        $name  = $firstName.$lastName;
+        $name  = $firstName." ".$lastName;
 
         $updateSalesInvoice = LoloPinoyGrillCommissarySalesInvoice::find($id);
 
@@ -308,9 +305,9 @@ class LoloPinoyGrillCommissaryController extends Controller
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 
-        $name  = $firstName.$lastName;
+        $name  = $firstName." ".$lastName;
 
-             //validate
+         //validate
         $this->validate($request, [
             'invoiceNum' =>'required',
             'orderedBy'=>'required',

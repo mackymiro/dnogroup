@@ -21,7 +21,7 @@
             	<div class="col-lg-12">
             		<div class="card mb-3">
             			<div class="card-header">
-						  <i class="fa fa-cash-register" aria-hidden="true"></i>
+						  <i class="fa fa-plus" aria-hidden="true"></i>
 						  Add New</div>
 					  	<div class="card-body">
 				  			 @if(session('addSalesInvoiceSuccess'))
