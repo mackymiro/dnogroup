@@ -74,9 +74,9 @@
                   	  	 		</div>
                   	  	 	</div>
                   	  	 	<div>
-  		  	 				    <input type="submit" class="btn btn-success float-right" value="Update Payment Voucher" />
-  			  	 			 </div>
-  			  	 			 <br>
+        		  	 				    <input type="submit" class="btn btn-success float-right" value="Update Payment Voucher" />
+        			  	 			 </div>
+  			  	 			      <br>
                   	  	 </div>
                   	  	</form>
              		</div>

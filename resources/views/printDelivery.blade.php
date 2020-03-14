@@ -27,42 +27,46 @@
              <div style="float:left;">
                <img  src="{{ asset('images/pdf/lolo-pinoys-lechon-de-cebu(6).png')}}"   alt="Lechon de Cebu">    
             </div>
-            <div style="float:right; width:300px; margin-right:230px; margin-top:20px;">
+            <div style="float:right; width:500px; margin-right:230px; margin-top:20px;">
                <p style="font-size:12px; text-align: left;">
                 Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
-                Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) <br>346-0341<br>
+                Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
 
                 Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
                  </p>
             </div>
         </div>
-        <div style="width:50%; float:right; margin-right:590px; margin-top:20px; ">
+        <!--<div style="width:50%; float:right; margin-right:590px; margin-top:20px; ">
             <p style="font-size:12px;">
                 <strong>DELIVERY RECEIPT NO</strong><br>
                 {{ $deliveryId->dr_no }}
             </p>
 
-        </div>
+        </div>-->
         <div style="clear:both;"></div>
         <hr>
-        <div style="border-style: groove; height: 80px; width:350px; height: 120px;">
+        <div style="border-style: groove; height: 80px; width:350px; height: 140px;">
         <div style="float:left; width:50%;">
              <table style="position: absolute; width: 350px;">
                 <thead>
                     <tr >
-                        <th style="font-size:16px; height: 1%; width:35%; ">Sold To</th>
+                        <th style="font-size:16px; height: 1%; width:35%; ">Sold To: </th>
                         <th style="font-size:16px; height: 1%; ">{{ $deliveryId->sold_to }}</th>
                     </tr>
                     <tr  >
-                        <th style="font-size:16px; height: 1%; ">Delivered To</th>
+                        <th style="font-size:16px; height: 1%; ">Delivered To: </th>
                         <th style="font-size:16px;">{{ $deliveryId->delivered_to}}</th>
                     </tr>
                     <tr  > 
-                        <th style="font-size:16px; height: 1%; ">Contact Person</th>
+                        <th style="font-size:16px; height: 1%; ">Contact Person: </th>
                         <th style="font-size:16px; height: 1%; ">{{ $deliveryId->contact_person }}</th>
                     </tr>
+                     <tr >
+                          <th style="font-size:16px; height: 1%; ">Mobile #: </th>
+                          <th style="font-size:16px; height: 1%; ">{{ $deliveryId->mobile_num}}</th>
+                      </tr>
                     <tr >
-                        <th style="font-size:16px; height: 1%; ">Time</th>
+                        <th style="font-size:16px; height: 1%; ">Time: </th>
                         <th style="font-size:16px; height: 1%; ">{{ $deliveryId->time }}</th>
                     </tr>
                    
@@ -71,20 +75,17 @@
             </table>   
         </div>
         </div>
-        <div style="border-style: groove; width:350px; height: 120px; margin-top: -130px; float:right; margin-right: 20px;">
+        <div style="border-style: groove; width:350px; height: 140px; margin-top: -170px; float:right; margin-right: 20px;">
         <div style="float:right; width: 50%;  ">
            <table style="position: absolute; width: 480px;  margin-left:-170px;">
                   <thead>
                      <tr >
-                          <th style="font-size:16px; height: 1%; width: 35%;">Delivery Receipt No</th>
+                          <th style="font-size:16px; height: 1%; width: 25%;">Delivery Receipt No: </th>
                           <th style="font-size:16px; height: 1%; ">{{ $deliveryId->dr_no }}</th>
                        </tr>
+                     
                       <tr >
-                          <th style="font-size:16px; height: 1%; ">Mobile #</th>
-                          <th style="font-size:16px; height: 1%; ">{{ $deliveryId->mobile_num}}</th>
-                      </tr>
-                      <tr >
-                          <th style="font-size:16px; height: 1%; ">Date</th>
+                          <th style="font-size:16px; height: 1%; ">Date: </th>
                           <th style="font-size:16px; height: 1%; ">{{ $deliveryId->date }}</th>
                        </tr>
                         
@@ -94,11 +95,11 @@
         </div>
         <br>
         <br>
-        <div style="border-style: groove; height: 80px; width:700px; margin-top:85px;">
+        <div style="border-style: groove; height: 80px; width:700px; margin-top:105px;">
         <table style="margin-top:20px;position: absolute;">
                 <thead>
                     <tr  style="border:1px solid black;">
-                        <th style="font-size:16px; width: 35%">Consignee Name: </th>
+                        <th style="font-size:16px; width: 25%">Consignee Name: </th>
                         <th style="font-size:16px;">{{ $deliveryId->consignee_name }}</th>
                     </tr>
                     <tr  style="border:1px solid black;">

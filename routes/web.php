@@ -547,6 +547,51 @@ Route::group(['middleware' => ['auth']], function(){
 		'MrPotatoController@paymentVoucherForm')
 		->name('mr-potato.paymentVoucherForm');
 
+	Route::post(
+		'/mr-potato/store-payment',
+		'MrPotatoController@paymentVoucherStore')
+		->name('mr-potato.paymentVoucherStore');
+
+	Route::get(
+		'/mr-potato/edit-mr-potato-payment-voucher/{id}',
+		'MrPotatoController@editPaymentVoucher')
+		->name('mr-potato.editPaymentVoucher');
+
+	Route::patch(
+		'/mr-potato/update-payment-voucher/{id}',
+		'MrPotatoController@updatePaymentVoucher')
+		->name('mr-potato.updatePaymentVoucher');
+
+	Route::get(
+		'/mr-potato/add-new-mr-potato-payment-voucher/{id}',
+		'MrPotatoController@addNewPaymentVoucher')
+		->name('mr-potato.addNewPaymentVoucher');
+
+	Route::post(
+		'/mr-potato/add-new-payment-voucher-data/{id}',
+		'MrPotatoController@addNewPaymentVoucherData')
+		->name('mr-potato.addNewPaymentVoucherData');
+
+	Route::patch(
+		'/mr-potato/update-pv/{id}',
+		'MrPotatoController@updatePV')
+		->name('mr-potato.updatePV');
+
+	Route::delete(
+		'/mr-potato/delete-payment-voucher/{id}',
+		'MrPotatoController@destroyPaymentVoucher')
+		->name('mr-potato.destroyPaymentVoucher');
+
+	Route::get(
+		'/mr-potato/cash-vouchers',
+		'MrPotatoController@cashVouchers')
+		->name('mr-potato.cashVouchers');
+
+	Route::get(
+		'/mr-potato/cheque-vouchers',
+		'MrPotatoController@chequeVouchers')
+		->name('mr-potato.chequeVouchers');
+
 	//Ribos Bar
 	Route::get('/ribos-bar', 'RibosBarController@index')->name('ribos-bar.index');
 

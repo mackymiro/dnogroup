@@ -10,9 +10,173 @@ use Auth;
 use App\User;
 use App\MrPotatoPurchaseOrder;
 use App\MrPotatoDeliveryReceipt;
+use App\MrPotatoPaymentVoucher;
 
 class MrPotatoController extends Controller
-{   
+{                                                           
+
+    //
+    public function chequeVouchers(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //getAllChequeVouchers
+        $method = "Cheque";
+
+        $getAllChequeVouchers = MrPotatoPaymentVoucher::where('method_of_payment', $method)->get()->toArray(); 
+
+        return view('cheque-vouchers-lists-mr-potato', compact('user', 'getAllChequeVouchers')); 
+    }
+
+    //
+    public function cashVouchers(){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+         //getAllCashVouchers
+        $method = "Cash";
+
+        $getAllCashVouchers = MrPotatoPaymentVoucher::where('method_of_payment', $method)->get()->toArray();
+
+        return view('cash-vouchers-list-mr-potato', compact('user', 'getAllCashVouchers'));
+
+    }
+
+    //
+    public function updatePV(Request $request, $id){
+         $updatePV = MrPotatoPaymentVoucher::find($id);
+
+        $updatePV->particulars = $request->get('particulars');
+        $updatePV->amount = $request->get('amount');
+
+        $updatePV->save();
+
+        Session::flash('SuccessEdit', 'Successfully updated');
+
+         return redirect('mr-potato/edit-mr-potato-payment-voucher/'.$request->get('pvId'));
+    }
+
+    //
+    public function addNewPaymentVoucherData(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $paymentVoucher = MrPotatoPaymentVoucher::find($id);
+
+         $addNewPaymentVoucherData = new MrPotatoPaymentVoucher([
+             'user_id'=>$user->id,
+            'pv_id'=>$id,
+            'reference_number'=>$paymentVoucher['reference_number'],
+            'particulars'=>$request->get('particulars'),
+            'amount'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+
+        $addNewPaymentVoucherData->save();
+
+        Session::flash('addPaymentVoucherSuccess', 'Successfully added.');
+        
+        return redirect('mr-potato/add-new-mr-potato-payment-voucher/'.$id);
+    }
+
+
+    //
+    public function addNewPaymentVoucher($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('add-new-mr-potato-payment-voucher', compact('user', 'id'));
+    }
+
+
+    //updatePaymentVoucher
+    public function updatePaymentVoucher(Request $request, $id){
+         $updatePaymentVoucher = MrPotatoPaymentVoucher::find($id);
+
+        $updatePaymentVoucher->paid_to = $request->get('paidTo');
+        $updatePaymentVoucher->account_no = $request->get('accountNumber');
+        $updatePaymentVoucher->date = $request->get('date');
+        $updatePaymentVoucher->particulars = $request->get('particulars');
+        $updatePaymentVoucher->amount = $request->get('amount');
+        $updatePaymentVoucher->method_of_payment = $request->get('methodOfPayment');
+
+        $updatePaymentVoucher->save();
+
+        Session::flash('updateSuccessfull', 'Successfully updated');
+
+        return redirect('mr-potato/edit-mr-potato-payment-voucher/'.$id);
+
+    }
+
+
+    public function editPaymentVoucher($id){    
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+          //getPaymentVoucher 
+        $getPaymentVoucher = MrPotatoPaymentVoucher::find($id);
+
+        //pVoucher
+        $pVouchers = MrPotatoPaymentVoucher::where('pv_id', $id)->get()->toArray();
+
+        return view('edit-payment-voucher-mr-potato', compact('user', 'getPaymentVoucher', 'pVouchers'));
+    }
+
+    //store voucher
+    public function paymentVoucherStore(Request $request){
+         //validate
+        $this->validate($request, [
+            'paidTo' =>'required',
+           
+        ]);
+
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //get the latest insert id query in table payment voucher ref number
+        $dataReferenceNum = DB::select('SELECT id, reference_number FROM mr_potato_payment_vouchers ORDER BY id DESC LIMIT 1');
+
+         //if code is not zero add plus 1 reference number
+        if(isset($dataReferenceNum[0]->reference_number) != 0){
+            //if code is not 0
+            $newRefNum = $dataReferenceNum[0]->reference_number +1;
+            $uRef = sprintf("%06d",$newRefNum);   
+
+        }else{
+            //if code is 0 
+            $newRefNum = 1;
+            $uRef = sprintf("%06d",$newRefNum);
+        } 
+
+        $addPaymentVoucher = new MrPotatoPaymentVoucher([
+             'user_id'=>$user->id,
+            'reference_number'=>$uRef,
+            'paid_to'=>$request->get('paidTo'),
+            'account_no'=>$request->get('accountNumber'),
+            'date'=>$request->get('date'),
+            'particulars'=>$request->get('particulars'),
+            'amount'=>$request->get('amount'),
+            'method_of_payment'=>$request->get('paymentMethod'),
+            'prepared_by'=>$name,
+            'created_by'=>$name,
+        ]);
+
+        $addPaymentVoucher->save();
+
+         $insertedId = $addPaymentVoucher->id;
+
+         return redirect('mr-potato/edit-mr-potato-payment-voucher/'.$insertedId);
+    }
 
     //
     public function paymentVoucherForm(){
@@ -532,7 +696,12 @@ class MrPotatoController extends Controller
     }
 
     public function destroyDeliveryReceipt($id){
-         $deliveryReceipt = MrPotatoDeliveryReceipt::find($id);
+        $deliveryReceipt = MrPotatoDeliveryReceipt::find($id);
         $deliveryReceipt->delete();
+    }
+
+    public function destroyPaymentVoucher($id){
+        $paymentVoucher = MrPotatoPaymentVoucher::find($id);
+        $paymentVoucher->delete();
     }
 }

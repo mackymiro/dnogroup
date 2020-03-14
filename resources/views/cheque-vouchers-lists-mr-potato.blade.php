@@ -2,7 +2,7 @@
 @section('title', 'Cheque Vouchers Lists |')
 @section('content')
 <div id="wrapper">
-	 @include('sidebar.sidebar-lolo-pinoy-grill')
+	@include('sidebar.sidebar-mr-potato')
 	 <div id="content-wrapper">
 	 	<div class="container-fluid">
 	 		 <!-- Breadcrumbs-->

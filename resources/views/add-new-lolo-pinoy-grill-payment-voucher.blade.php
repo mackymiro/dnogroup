@@ -21,14 +21,14 @@
              	<div class="col-lg-12">
              		<div class="card mb-3">
              			<div class="card-header">
-						  <i class="fa fa-file-invoice" aria-hidden="true"></i>
+						  <i class="fa fa-plus" aria-hidden="true"></i>
 						  Add New</div>
 						  <div class="card-body">
 						  		<form action="{{ action('LoloPinoyGrillCommissaryController@addNewPaymentVoucherData', $id) }}" method="post">
 						  			{{csrf_field()}}
 				  				 @if(session('addPaymentVoucherSuccess'))
 			                       <p class="alert alert-success">{{ Session::get('addPaymentVoucherSuccess') }}</p>
-			                      @endif 
+			                     @endif 
 					  			<div class="form-group">
 					  	 			<div class="form-row">
 				  	 					<div class="col-md-4">
@@ -59,5 +59,16 @@
              </div>
  		</div>
  	</div>
+ 	 <!-- Sticky Footer -->
+      <footer class="sticky-footer">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright © Ribos Food Corporation 2019</span>
+            <br>
+            <br>
+            <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
+          </div>
+        </div>
+      </footer>
 </div>
 @endsection

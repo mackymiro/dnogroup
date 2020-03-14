@@ -59,21 +59,21 @@
         				  	 					<input type="text" name="amount" class="form-control"  />
         					  	 			</div>
         					  	 			<div class="col-md-2">
-						  	 					<label>Method Of Payment</label>
-				  	 					     <div id="app-payment-method">
-					                            <select name="paymentMethod" class="form-control">
-						                              <option value="0">--Please Select--</option>
-						                              <option v-for="payment in payments" v-bind:value="payment.value">
-						                              @{{ payment.text }}
-						                            </option>
-						                            </select>
-						                          </div>
+  						  	 					<label>Method Of Payment</label>
+  				  	 					     <div id="app-payment-method">
+  	                            <select name="paymentMethod" class="form-control">
+  		                              <option value="0">--Please Select--</option>
+  		                              <option v-for="payment in payments" v-bind:value="payment.value">
+  		                              @{{ payment.text }}
+  		                            </option>
+  		                            </select>
+		                          </div>
 					  	 			        </div>
                       	   				</div>
                           	   		</div>
                       	   			<div>
-			  	 				      <input type="submit" class="btn btn-success float-right" value="Add Payment Voucher" />
-				  	 			    </div>
+            			  	 				      <input type="submit" class="btn btn-success float-right" value="Add Payment Voucher" />
+            				  	 			    </div>
                           	   		<br>
                           	   </div>
                           	</form>

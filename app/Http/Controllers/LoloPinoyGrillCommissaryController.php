@@ -421,13 +421,13 @@ class LoloPinoyGrillCommissaryController extends Controller
     //
     public function addNewPaymentVoucherData(Request $request, $id){
 
-         $ids = Auth::user()->id;
+        $ids = Auth::user()->id;
         $user = User::find($ids);
 
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 
-        $name  = $firstName.$lastName;
+        $name  = $firstName." ".$lastName;
 
         $paymentVoucher = LoloPinoyGrillCommissaryPaymentVoucher::find($id);
 
@@ -469,14 +469,14 @@ class LoloPinoyGrillCommissaryController extends Controller
 
         $updatePaymentVoucher->save();
 
-         Session::flash('updateSuccessfull', 'Successfully updated');
+        Session::flash('updateSuccessfull', 'Successfully updated');
 
         return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-payment-voucher/'.$id);
     }
 
     //edit payment voucher
     public function editPaymentVoucher($id){
-         $ids = Auth::user()->id;
+        $ids = Auth::user()->id;
         $user = User::find($ids);
 
          //getPaymentVoucher 
@@ -502,7 +502,7 @@ class LoloPinoyGrillCommissaryController extends Controller
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 
-        $name  = $firstName.$lastName;
+        $name  = $firstName." ".$lastName;
 
          //get the latest insert id query in table payment voucher ref number
         $dataReferenceNum = DB::select('SELECT id, reference_number FROM lolo_pinoy_grill_commissary_payment_vouchers ORDER BY id DESC LIMIT 1');
