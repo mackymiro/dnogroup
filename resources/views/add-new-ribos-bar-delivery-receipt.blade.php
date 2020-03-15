@@ -1,4 +1,4 @@
-@extends('layouts.mr-potato-app')
+@extends('layouts.ribos-bar-app')
 @section('title', 'Add New Delivery Receipt |')
 @section('content')
 <script>
@@ -7,13 +7,13 @@
   });
 </script>
 <div id="wrapper">
-	@include('sidebar.sidebar-mr-potato')
-	 <div id="content-wrapper">
-	 	<div class="container-fluid">
-	 		 <!-- Breadcrumbs-->
+	@include('sidebar.sidebar-ribos-bar')
+	<div id="content-wrapper">
+		<div class="container-fluid">
+			 <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">Mr Potato</a>
+                <a href="#">Ribo's Bar</a>
               </li>
               <li class="breadcrumb-item active">Add New Delivery Receipt</li>
             </ol>
@@ -24,12 +24,12 @@
       						  <i class="fa fa-plus" aria-hidden="true"></i>
       						  Add New</div>
   						 <div class="card-body">
-					 		@if(session('addDeliveryReceiptSuccess'))
+  						 	@if(session('addDeliveryReceiptSuccess'))
 			                     <p class="alert alert-success">{{ Session::get('addDeliveryReceiptSuccess') }}</p>
 		                    @endif 
-  						 	<form action="{{ action('MrPotatoController@addNewDeliveryReceiptData', $id) }}" method="post">
+  						 	<form action="{{ action('RibosBarController@addNewDeliveryReceiptData', $id) }}" method="post">
   						 		{{csrf_field()}}
-  						 	<div class="form-group">
+				 			<div class="form-group">
   						 		<div class="form-row">	
 					 				<div class="col-md-2">
 	            						<label>Product Id</label>
@@ -60,7 +60,7 @@
 			  							<br>
 			  							<br>
 			  							<br>
-			  							<a href="{{ url('mr-potato/edit-mr-potato-delivery-receipt/'.$id) }}">Back</a>
+			  							<a href="{{ url('ribos-bar/edit-ribos-bar-delivery-receipt/'.$id) }}">Back</a>
 				  					</div> 
 					   			</div>
 				   			 </div>
@@ -69,7 +69,7 @@
             		</div>
             	</div>
             </div>
-	 	</div>
-	 </div>
+		</div>
+	</div>
 </div>
 @endsection

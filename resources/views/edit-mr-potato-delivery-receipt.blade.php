@@ -26,7 +26,7 @@
 		     <div class="row">
      			<div class="col-lg-12">
      				<div class="card mb-3">
-     					<div class="card-header">
+     					          <div class="card-header">
                               <i class="fas fa-receipt" aria-hidden="true"></i>
                             Edit Delivery Receipt
                         </div>
@@ -96,14 +96,14 @@
 		     <div class="row">
 		     	<div class="col-lg-12">
 		     		<div class="card mb-3">
-		     			<div class="card-header">
+		     			        <div class="card-header">
                     	  <i class="fas fa-receipt" aria-hidden="true"></i>
                         	Edit Delivery Receipt
                         </div>
                         <div class="card-body">
                         	 @if(session('SuccessEdit'))
-                                     <p class="alert alert-success">{{ Session::get('SuccessEdit') }}</p>
-                                  @endif 
+                               <p class="alert alert-success">{{ Session::get('SuccessEdit') }}</p>
+                            @endif 
                     		 @foreach($dReceipts as $dReceipt)
                     		 <form action="{{ action('MrPotatoController@updateDr', $dReceipt['id']) }}" method="post">
                 		 		 {{csrf_field()}}
@@ -141,7 +141,7 @@
                                         value="<?php echo number_format($dReceipt['amount'], 2)?>" />
                                     </div>
                     			</div>
-                			</div>
+                			 </div>
                 			 <div  class="form-group">
                                 <div class="form-row">
                                      <div class="col-lg-2">
@@ -156,12 +156,12 @@
                             </div>
                         	</div>
                         	</form>
-                			@endforeach
-                    		 <div>
-                                  @if($user->role_type == 1)
-                                  <a href="{{ url('mr-potato/add-new-delivery-receipt/'.$getDeliveryReceipt['id'] ) }}" class="btn btn-primary">Add New</a>
-                                  @endif
-                                </div>
+                		    	@endforeach
+                    		  <div>
+                            @if($user->role_type == 1)
+                            <a href="{{ url('mr-potato/add-new-delivery-receipt/'.$getDeliveryReceipt['id'] ) }}" class="btn btn-primary">Add New</a>
+                            @endif
+                          </div>
                         </div>
 		     		</div>
 	     		</div>

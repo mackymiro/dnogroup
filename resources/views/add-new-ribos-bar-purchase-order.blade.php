@@ -1,4 +1,4 @@
-@extends('layouts.lolo-pinoy-lechon-de-cebu-app')
+@extends('layouts.ribos-bar-app')
 @section('title', 'Add New Purchase Order |')
 @section('content')
 <script>
@@ -14,7 +14,7 @@
 	    		 <!-- Breadcrumbs-->
 		            <ol class="breadcrumb">
 		              <li class="breadcrumb-item">
-		                <a href="#">Lechon de Cebu</a>
+		                <a href="#">Ribo's Bar</a>
 		              </li>
 		              <li class="breadcrumb-item active">Add New Purchase Order</li>
 		            </ol>
@@ -25,7 +25,7 @@
         					  <i class="fa fa-plus" aria-hidden="true"></i>
         					  Add New</div>
         					   <div class="card-body">
-        					   		<form action="{{ action('LoloPinoyLechonDeCebuController@addNewPurchaseOrder', $id) }}" method="post">
+        					   		<form action="{{ action('RibosBarController@addNewPurchaseOrder', $id) }}" method="post">
     					   				{{csrf_field()}}
     					   				 @if(session('purchaseOrderSuccess'))
 						                   <p class="alert alert-success">{{ Session::get('purchaseOrderSuccess') }}</p>
@@ -79,7 +79,7 @@
 					  							<br>
 					  							<br>
 					  							<br>
-					  							<a href="{{ url('lolo-pinoy-lechon-de-cebu/edit/'.$id) }}">Back</a>
+					  							<a href="{{ url('ribos-bar/edit-ribos-bar-purchase-order/'.$id) }}">Back</a>
 						  					</div> 
 	    					   			</div>
 	    					   		</div>

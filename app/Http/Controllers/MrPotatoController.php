@@ -380,7 +380,7 @@ class MrPotatoController extends Controller
 
     //
     public function paymentVoucherForm(){
-         $ids = Auth::user()->id;
+        $ids = Auth::user()->id;
         $user = User::find($ids);
 
         return view('payment-voucher-form-mr-potato', compact('user'));
@@ -429,7 +429,7 @@ class MrPotatoController extends Controller
 
     //
     public function updateDr(Request $request, $id){
-         $delivery = MrPotatoDeliveryReceipt::find($id);
+        $delivery = MrPotatoDeliveryReceipt::find($id);
 
         $qty = $request->get('qty');
         $unitPrice = $request->get('unitPrice');
@@ -437,7 +437,7 @@ class MrPotatoController extends Controller
         $compute = $qty * $unitPrice;
         $sum = $compute;
 
-         $delivery->product_id = $request->get('productId');
+        $delivery->product_id = $request->get('productId');
         $delivery->qty = $qty;
         $delivery->unit = $request->get('unit');
         $delivery->item_description = $request->get('itemDescription');
@@ -454,7 +454,7 @@ class MrPotatoController extends Controller
 
     //
     public function addNewDeliveryReceiptData(Request $request, $id){
-         $ids = Auth::user()->id;
+        $ids = Auth::user()->id;
         $user = User::find($ids);
 
         $firstName = $user->first_name;
@@ -508,7 +508,7 @@ class MrPotatoController extends Controller
 
     //update 
     public function updateDeliveryReceipt(Request $request, $id){
-         $updateDeliveryReceipt = MrPotatoDeliveryReceipt::find($id);
+        $updateDeliveryReceipt = MrPotatoDeliveryReceipt::find($id);
 
         $qty = $request->get('qty');
         $unitPrice = $request->get('unitPrice');
@@ -554,7 +554,7 @@ class MrPotatoController extends Controller
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 
-        $name  = $firstName.$lastName;
+        $name  = $firstName." ".$lastName;
         
         //validate
         $this->validate($request, [
@@ -611,7 +611,7 @@ class MrPotatoController extends Controller
 
         $storeDeliveryReceipt->save();
 
-         $insertedId  = $storeDeliveryReceipt->id;
+        $insertedId  = $storeDeliveryReceipt->id;
 
         return redirect('mr-potato/edit-mr-potato-delivery-receipt/'.$insertedId);
 

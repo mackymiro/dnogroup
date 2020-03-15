@@ -874,7 +874,7 @@ class LoloPinoyGrillCommissaryController extends Controller
 
         $sum2  = $countTotalAmount + $countAmount;
 
-        $pdf = PDF::loadView('printDeliveryLoloPinoyGrill', compact('deliveryId', 'user', 'deliveryReceipts', 'sum', 'sum2'));
+        $pdf = PDF::loadView('lolo-pinoy-grill-printDelivery', compact('deliveryId', 'user', 'deliveryReceipts', 'sum'));
 
         return $pdf->download('lolo-pinoy-grill-commissary-delivery-receipt.pdf');
     }

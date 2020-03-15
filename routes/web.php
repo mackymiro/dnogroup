@@ -437,6 +437,11 @@ Route::group(['middleware' => ['auth']], function(){
 
 	Route::delete('/lolo-pinoy-grill-commissary/delete-statement-account/{id}', 'LoloPinoyGrillCommissaryController@destroyStatementAccount')->name('lolo-pinoy-grill-commissary.destroyStatementAccount');
 
+	Route::get(
+		'/lolo-pinoy-grill-commissary/printDelivery/{id}',
+		'LoloPinoyGrillCommissaryController@printDelivery')
+		->name('lolo-pinoy-grill-commissary.printDelivery');
+
 	//Lolo Pinoy Grill Branches
 	Route::get('/lolo-pinoy-grill-branches', 'LoloPinoyGrillBranchesController@index')->name('lolo-pinoy-grill-branches.index');
 
@@ -641,6 +646,133 @@ Route::group(['middleware' => ['auth']], function(){
 	//Ribos Bar
 	Route::get('/ribos-bar', 'RibosBarController@index')->name('ribos-bar.index');
 
+	Route::get(
+		'/ribos-bar/delivery-receipt-form',
+		'RibosBarController@deliveryReceiptForm')
+		->name('ribos-bar.deliveryReceiptForm');
+
+	//store delivery receipt
+	Route::post(
+		'/ribos-bar/store-delivery-receipt',
+		'RibosBarController@storeDeliveryReceipt')
+		->name('ribos-bar.storeDeliveryReceipt');
+
+	Route::get(
+		'/ribos-bar/edit-ribos-bar-delivery-receipt/{id}',
+		'RibosBarController@editDeliveryReceipt')
+		->name('ribos-bar.editDeliveryReceipt');
+
+	Route::patch(
+		'/ribos-bar/update-delivery-receipt/{id}',
+		'RibosBarController@updateDeliveryReceipt')
+		->name('ribos-bar.updateDeliveryReceipt');
+
+	Route::get(
+		'/ribos-bar/add-new-delivery-receipt/{id}',
+		'RibosBarController@addNewDelivery')
+		->name('ribos-bar.addNewDelivery');
+
+	Route::post(
+		'/ribos-bar/add-new-delivery-receipt-data/{id}',
+		'RibosBarController@addNewDeliveryReceiptData')
+		->name('ribos-bar.addNewDeliveryReceiptData');
+
+	Route::patch(
+		'/ribos-bar/update-dr/{id}',
+		'RibosBarController@updateDr')
+		->name('ribos-bar.updateDr');
+
+	Route::delete(
+		'/ribos-bar/delete-delivery-receipt/{id}',
+		'RibosBarController@destroyDeliveryReceipt')
+		->name('ribos-bar.destroyDeliveryReceipt');
+
+	Route::get(
+		'/ribos-bar/delivery-receipt-lists',
+		'RibosBarController@deliveryReceiptList')
+		->name('ribos-bar.deliveryReceiptList');
+
+	Route::get(
+		'/ribos-bar/view-ribos-bar-delivery-receipt/{id}',
+		'RibosBarController@viewDeliveryReceipt')
+		->name('ribos-bar.viewDeliveryReceipt');
+
+	Route::get(
+		'/ribos-bar/printDelivery/{id}',
+		'RibosBarController@printDelivery')
+		->name('ribos-bar.printDelivery');
+
+	Route::get(
+		'/ribos-bar/purchase-order',
+		'RibosBarController@purchaseOrder')
+		->name('ribos-bar.purchaseOrder');
+
+	//store po 
+	Route::post(
+		'/ribos-bar/store',
+		'RibosBarController@store')
+		->name('ribos-bar.store');
+
+	Route::get(
+		'/ribos-bar/edit-ribos-bar-purchase-order/{id}',
+		'RibosBarController@edit')
+		->name('ribos-bar.edit');
+
+	Route::patch(
+		'/ribos-bar/update/{id}',
+		'RibosBarController@update')
+		->name('ribos-bar.update');
+
+	Route::get(
+		'/ribos-bar/add-new/{id}',
+		'RibosBarController@addNew')
+		->name('ribos-bar.addNew');
+
+	Route::post(
+		'/ribos-bar/add-new-purchase-order/{id}',
+		'RibosBarController@addNewPurchaseOrder')
+		->name('ribos-bar.addNewPurchaseOrder');
+
+	Route::patch(
+		'/ribos-bar/update-po/{id}',
+		'RibosBarController@updatePo')
+		->name('ribos-bar.updatePo');
+
+	Route::delete(
+		'/ribos-bar/delete/{id}',
+		'RibosBarController@destroy')
+		->name('ribos-bar.destroy');
+
+	Route::get(
+		'/ribos-bar/purchase-order-lists',
+		'RibosBarController@purchaseOrderList')
+		->name('ribos-bar.purchaseOrderList');
+
+	Route::get(
+		'/ribos-bar/view-ribos-bar-purchase-order/{id}',
+		'RibosBarController@show')
+		->name('ribos-bar.show');
+
+	Route::get(
+		'/ribos-bar/payment-voucher-form',
+		'RibosBarController@paymentVoucherForm')
+		->name('ribos-bar.paymentVoucherForm');
+
+	//store
+	Route::post(
+		'/ribos-bar/payment-voucher-store',
+		'RibosBarController@paymentVoucherStore')
+		->name('ribos-bar.paymentVoucherStore');
+
+	Route::get(
+		'/ribos-bar/edit-ribos-bar-payment-voucher/{id}',
+		'RibosBarController@editPaymentVoucher')
+		->name('ribos-bar.editPaymentVoucher');
+
+	Route::patch(
+		'/ribos-bar/update-payment-voucher/{id}',
+		'RibosBarController@updatePaymentVoucher')
+		->name('ribos-bar.updatePaymentVoucher');
 
 	//DNO Personal
 	Route::get('/dno-personal', 'DnoPersonalController@index')->name('dno-personal');
