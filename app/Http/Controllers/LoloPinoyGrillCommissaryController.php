@@ -178,7 +178,7 @@ class LoloPinoyGrillCommissaryController extends Controller
 
     //
     public function updateSi(Request $request, $id){
-         $updateSi = LoloPinoyGrillCommissarySalesInvoice::find($id);
+        $updateSi = LoloPinoyGrillCommissarySalesInvoice::find($id);
 
           //kls
         $kls  = $request->get('totalKls');
