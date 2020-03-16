@@ -72,6 +72,7 @@
                                     <tr>
                                       <th class="bg-info" style="color:white;">QUANTITY</th>
                                       <th class="bg-info" style="color:white;">DESCRIPTION</th>
+                                     
                                       <th class="bg-info" style="color:white;">UNIT PRICE</th>
                                       <th class="bg-info" style="color:white;">AMOUNT</th>
                                     </tr>
@@ -81,6 +82,7 @@
                                     <tr>
                                       <td>{{ $purchaseOrder['quantity']}}</td>
                                       <td>{{ $purchaseOrder['description']}}</td>
+                                     
                                       <td>{{ $purchaseOrder['unit_price']}}</td>
                                       <td><?php echo number_format($purchaseOrder['amount'], 2); ?></td>
                                     </tr>
@@ -88,6 +90,7 @@
                                     <tr>
                                       <td>{{ $pOrder['quantity'] }}</td>
                                       <td>{{ $pOrder['description'] }}</td>
+                                     
                                       <td>{{ $pOrder['unit_price'] }}</td>
                                       <td><?php echo number_format($pOrder['amount'], 2) ?></td>
                                     </tr> 

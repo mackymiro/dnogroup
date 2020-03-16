@@ -87,14 +87,14 @@ class LoloPinoyGrillCommissaryController extends Controller
 
     //store statement of account
     public function storeStatementAccount(Request $request){
-         $ids =  Auth::user()->id;
+        $ids =  Auth::user()->id;
         $user = User::find($ids);
 
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 
         //get user name
-        $name  = $firstName.$lastName;
+        $name  = $firstName." ".$lastName;
 
          //validate
         $this->validate($request, [

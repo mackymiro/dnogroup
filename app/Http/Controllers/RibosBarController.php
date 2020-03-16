@@ -12,9 +12,667 @@ use App\User;
 use App\RibosBarDeliveryReceipt;
 use App\RibosBarPurchaseOrder;
 use App\RibosBarPaymentVoucher;
+use App\RibosBarSalesInvoice;
+use App\RibosBarBillingStatement;
+use App\RibosBarStatementOfAccount;
 
 class RibosBarController extends Controller
 {
+
+    //
+    public function viewStatementAccount($id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //getStatementAccounts
+        $getStatementAccounts = RibosBarStatementOfAccount::where('id', $id)->get()->toArray();
+
+        return view('view-ribos-bar-statement-account', compact('user','getStatementAccounts'));
+    }
+
+    //
+    public function statementOfAccountList(){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $status = "Unpaid";
+        $paid = "Paid";
+
+        //get statement of account 
+        $statementOfAccounts = RibosBarStatementOfAccount::where('soa_id', NULL)->where('status', $status)->get()->toArray();
+
+        $statementOfAccountPaids = RibosBarStatementOfAccount::where('soa_id', NULL)->where('status', $paid)->get()->toArray();
+
+
+        return view('ribos-bar-statement-of-account-lists', compact('user', 'statementOfAccounts', 'statementOfAccountPaids'));
+    }
+
+    //
+    public function updateStatementInfo(Request $request, $id){
+         $updateStatmentInfo = RibosBarStatementOfAccount::find($id);
+
+        $updateStatmentInfo->date = $request->get('date');
+        $updateStatmentInfo->branch = $request->get('branch');
+        $updateStatmentInfo->kilos = $request->get('kilos');
+        $updateStatmentInfo->unit_price = $request->get('unitPrice');
+        $updateStatmentInfo->payment_method = $request->get('paymentMethod');
+        $updateStatmentInfo->amount = $request->get('amount');
+        $updateStatmentInfo->status = $request->get('status');
+        $updateStatmentInfo->paid_amount = $request->get('paidAmount');
+        $updateStatmentInfo->collection_date = $request->get('collectionDate');
+        $updateStatmentInfo->check_number = $request->get('checkNumber');
+        $updateStatmentInfo->check_amount = $request->get('checkAmount');
+        $updateStatmentInfo->or_number = $request->get('orNumber');
+
+        $updateStatmentInfo->save();
+
+        Session::flash('SuccessE', 'Successfully updated');
+
+        return redirect('ribos-bar/edit-ribos-bar-statement-of-account/'.$id);
+    }
+
+    //
+    public function editStatementOfAccount($id){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+
+         //getStatementOfAccount
+        $getStatementOfAccount = RibosBarStatementOfAccount::find($id);
+
+        $sAccounts = RibosBarStatementOfAccount::where('soa_id', $id)->get()->toArray();
+        
+        return view('edit-ribos-bar-statement-of-account', compact('user', 'getStatementOfAccount', 'sAccounts'));
+    }
+
+    //
+    public function storeStatementAccount(Request $request){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        //get user name
+        $name  = $firstName." ".$lastName;
+
+         //validate
+        $this->validate($request, [
+            'date' =>'required',
+            'kilos'=>'required',
+            'amount'=>'required',
+
+        ]);
+
+          //get the latest insert id query in table statement of account invoice number
+        $invoiceNumber = DB::select('SELECT id, invoice_number FROM ribos_bar_statement_of_accounts ORDER BY id DESC LIMIT 1');
+
+         //if code is not zero add plus 1 reference number
+        if(isset($invoiceNumber[0]->invoice_number) != 0){
+            //if code is not 0
+            $newInvoice = $invoiceNumber[0]->invoice_number +1;
+            $uInvoice = sprintf("%06d",$newInvoice);   
+
+        }else{
+            //if code is 0 
+            $newInvoice = 1;
+            $uInvoice = sprintf("%06d",$newInvoice);
+        } 
+
+
+         $addStatementAccount = new RibosBarStatementOfAccount([
+            'user_id'=>$user->id,
+            'date'=>$request->get('date'),
+            'branch'=>$request->get('branch'),
+            'invoice_number'=>$uInvoice,
+            'kilos'=>$request->get('kilos'),
+            'unit_price'=>$request->get('unitPrice'),
+            'payment_method'=>$request->get('paymentMethod'),
+            'amount'=>$request->get('amount'),
+            'status'=>$request->get('status'),
+            'paid_amount'=>$request->get('paidAmount'),
+            'collection_date'=>$request->get('collectionDate'),
+            'check_number'=>$request->get('checkNumber'),
+            'check_amount'=>$request->get('checkAmount'),
+            'or_number'=>$request->get('orNumber'),
+            'created_by'=>$name,
+        ]);
+
+        $addStatementAccount->save();
+
+        $insertedId = $addStatementAccount->id;
+
+        return redirect('ribos-bar/edit-ribos-bar-statement-of-account/'.$insertedId);
+
+
+    }
+
+    //
+    public function statementOfAccountForm(){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+
+        return view('ribos-bar-statement-of-account', compact('user'));
+    }
+
+    //
+    public function viewBillingStatement($id){
+          $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $viewBillingStatement = RibosBarBillingStatement::find($id);
+        
+
+        $billingStatements = RibosBarBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = RibosBarBillingStatement::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = RibosBarBillingStatement::where('billing_statement_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+
+        return view('view-ribos-bar-billing-statement', compact('user', 'viewBillingStatement', 'billingStatements', 'sum'));
+    }
+
+    //
+    public function billingStatementLists(){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $billingStatements = RibosBarBillingStatement::where('billing_statement_id', NULL)->get()->toArray();
+
+
+        return view('ribos-bar-billing-statement-lists', compact('user', 'billingStatements'));
+    }
+
+    //
+    public function updateBillingStatement(Request $request, $id){
+        $updateBilling = RibosBarBillingStatement::find($id);
+
+        $wholeLechon = $request->get('wholeLechon');
+        $add = $wholeLechon * 500; 
+
+        $updateBilling->date_of_transaction = $request->get('transactionDate');
+        $updateBilling->whole_lechon = $wholeLechon;
+        $updateBilling->description = $request->get('description');
+        $updateBilling->invoice_number = $request->get('invoiceNumber');
+        $updateBilling->amount = $add;
+
+        $updateBilling->save();
+
+        Session::flash('SuccessEdit', 'Successfully updated');
+        return redirect('ribos-bar/edit-ribos-bar-billing-statement/'.$request->get('billingStatementId'));
+    }
+
+    //
+    public function addNewBillingData(Request $request, $id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $billingOrder = RibosBarBillingStatement::find($id);
+        
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+          //get the whole lechon then multiply by 500
+        $wholeLechon = $request->get('wholeLechon');
+        $add = $wholeLechon * 500; 
+
+        $addBillingStatement = new RibosBarBillingStatement([
+            'user_id'=>$user->id,
+            'billing_statement_id'=>$id,
+            'reference_number'=>$billingOrder['reference_number'],
+            'p_o_number'=>$billingOrder['p_o_number'],
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'invoice_number'=>$request->get('invoiceNumber'),
+            'whole_lechon'=>$wholeLechon,
+            'description'=>$request->get('description'),
+            'amount'=>$add,
+            'created_by'=>$name,
+        ]);
+
+        $addBillingStatement->save();
+
+        Session::flash('addBillingSuccess', 'Successfully added.');
+
+        return redirect('ribos-bar/add-new-ribos-bar-billing/'.$id);
+
+    }
+
+    //
+    public function addNewBilling($id){
+         $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('add-new-ribos-bar-billing-statement', compact('user', 'id'));
+    }
+
+    //
+    public function updateBillingInfo(Request $request, $id){
+        $updateBillingOrder = RibosBarBillingStatement::find($id);
+
+        $wholeLechon = $request->get('wholeLechon');
+        $add = $wholeLechon * 500; 
+
+        $updateBillingOrder->bill_to = $request->get('billTo');
+        $updateBillingOrder->address = $request->get('address');
+        $updateBillingOrder->period_cover = $request->get('periodCovered');
+        $updateBillingOrder->date = $request->get('date');
+        $updateBillingOrder->terms = $request->get('terms');
+        $updateBillingOrder->p_o_number = $request->get('poNumber');
+        $updateBillingOrder->invoice_number = $request->get('invoiceNumber');
+        $updateBillingOrder->date_of_transaction = $request->get('transactionDate');
+        $updateBillingOrder->whole_lechon = $wholeLechon;
+        $updateBillingOrder->description = $request->get('description');
+        $updateBillingOrder->amount = $add;
+
+        $updateBillingOrder->save();
+
+        Session::flash('SuccessE', 'Successfully updated');
+
+        return redirect('ribos-bar/edit-ribos-bar-billing-statement/'.$id);
+    }
+
+    //
+    public function editBillingStatement($id){
+         $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $billingStatement = RibosBarBillingStatement::find($id);
+       
+        $bStatements = RibosBarBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+        //get the purchase order lists
+        $getPurchaseOrders = RibosBarPurchaseOrder::where('po_id', NULL)->get()->toArray();
+        
+        return view('edit-ribos-bar-billing-statement-form', compact('user', 'billingStatement', 'bStatements', 'getPurchaseOrders'));
+    }
+
+    //
+    public function storeBillingStatement(Request $request){
+         $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        //get user name
+        $name  = $firstName." ".$lastName;
+
+         //validate
+        $this->validate($request, [
+            'billTo' =>'required',
+            'address'=>'required',
+            'invoiceNumber'=>'required',
+            'periodCovered'=>'required',
+            'date'=>'required',
+            'terms'=>'required',
+            'transactionDate'=>'required',
+            'wholeLechon'=>'required',
+            'description'=>'required',
+        ]);
+
+        $wholeLechon = $request->get('wholeLechon');
+        $add = $wholeLechon * 500; 
+
+         //get the latest insert id query in table billing statements ref number
+        $dataReferenceNum = DB::select('SELECT id, reference_number FROM ribos_bar_billing_statements ORDER BY id DESC LIMIT 1');
+
+        //if code is not zero add plus 1 reference number
+        if(isset($dataReferenceNum[0]->reference_number) != 0){
+            //if code is not 0
+            $newRefNum = $dataReferenceNum[0]->reference_number +1;
+            $uRef = sprintf("%06d",$newRefNum);   
+
+        }else{
+            //if code is 0 
+            $newRefNum = 1;
+            $uRef = sprintf("%06d",$newRefNum);
+        } 
+
+          $billingStatement = new RibosBarBillingStatement([
+            'user_id'=>$user->id,
+            'bill_to'=>$request->get('billTo'),
+            'address'=>$request->get('address'),
+            'period_cover'=>$request->get('periodCovered'),
+            'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNumber'),
+            'reference_number'=>$uRef,
+            'p_o_number'=>$request->get('poNumber'),
+            'terms'=>$request->get('terms'),
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'whole_lechon'=>$wholeLechon,
+            'description'=>$request->get('description'),
+            'amount'=>$add,
+            'created_by'=>$name,
+            'prepared_by'=>$name,
+        ]);
+
+        $billingStatement->save();
+
+        $insertedId = $billingStatement->id;
+
+         return redirect('ribos-bar/edit-ribos-bar-billing-statement/'.$insertedId);
+
+    }
+
+    //
+    public function billingStatementForm(){
+        $id =  Auth::user()->id;
+        $user = User::find($id);
+
+        //get the purchase order lists
+        $getPurchaseOrders = RibosBarPurchaseOrder::where('po_id', NULL)->get()->toArray();
+       
+
+        return view('ribos-bar-billing-statement-form', compact('user', 'getPurchaseOrders'));
+    }
+
+    //
+    public function viewSalesInvoice($id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $viewSalesInvoice = RibosBarSalesInvoice::find($id);
+
+        $salesInvoices = RibosBarSalesInvoice::where('si_id', $id)->get()->toArray();
+
+         //count the total amount 
+        $countTotalAmount = RibosBarSalesInvoice::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = RibosBarSalesInvoice::where('si_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        return view('view-ribos-bar-sales-invoice', compact('user', 'viewSalesInvoice', 'salesInvoices', 'sum'));
+    }
+
+    //
+    public function updateSi(Request $request, $id){
+        
+        $updateSi = RibosBarSalesInvoice::find($id);
+
+        //kls
+        $kls  = $request->get('totalKls');
+
+         //compute kls * unit price
+        $unitPrice = $updateSi->unit_price;
+        $compute = $kls * $unitPrice;
+        $sum = $compute;
+
+        $updateSi->qty = $request->get('qty');
+        $updateSi->total_kls = $kls;
+        $updateSi->item_description = $request->get('itemDescription');
+        $updateSi->unit_price = $unitPrice;
+        $updateSi->amount = $sum;
+
+        $updateSi->save();
+
+        Session::flash('SuccessEdit', 'Successfully updated');
+
+        return redirect('ribos-bar/edit-ribos-bar-sales-invoice/'.$request->get('siId'));
+    }
+
+    //
+    public function addNewSalesInvoiceData(Request $request, $id){  
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+          //get date today
+        $getDateToday =  date('Y-m-d');
+
+         //kls
+        $kls  = $request->get('totalKls');
+
+         //compute kls * unit price
+        $unitPrice = 500;
+        $compute = $kls * $unitPrice;
+        $sum = $compute;
+
+        $addNewSalesInvoice = new RibosBarSalesInvoice([
+            'user_id'=>$user->id,
+            'si_id'=>$id,
+            'date'=>$getDateToday,
+            'qty'=>$request->get('qty'),
+            'total_kls'=>$kls,
+            'item_description'=>$request->get('itemDescription'),
+            'unit_price'=>$unitPrice,
+            'amount'=>$sum,
+            'created_by'=>$name,
+        ]);
+
+        $addNewSalesInvoice->save();
+
+        Session::flash('addSalesInvoiceSuccess', 'Successfully added.');
+
+
+        return redirect('ribos-bar/add-new-ribos-bar-sales-invoice/'. $id);
+
+    }
+
+    //
+    public function addNewSalesInvoice($id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+       
+
+        return view('add-new-ribos-bar-sales-invoice', compact('user', 'id'));
+    }
+
+    //
+    public function updateSalesInvoice(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $updateSalesInvoice = RibosBarSalesInvoice::find($id);
+
+         //kls
+        $kls  = $request->get('totalKls');
+
+         //compute kls * unit price
+        $unitPrice = $updateSalesInvoice->unit_price;
+        $compute = $kls * $unitPrice;
+        $sum = $compute;
+
+         $updateSalesInvoice->invoice_number = $request->get('invoiceNum');
+        $updateSalesInvoice->ordered_by = $request->get('orderedBy');
+        $updateSalesInvoice->address = $request->get('address');
+        $updateSalesInvoice->qty = $request->get('qty');
+        $updateSalesInvoice->total_kls = $kls;
+        $updateSalesInvoice->item_description = $request->get('itemDescription');
+        $updateSalesInvoice->amount = $sum;
+        $updateSalesInvoice->created_by = $name; 
+
+        $updateSalesInvoice->save();
+
+        Session::flash('updateSuccessfull', 'Successfully updated');
+
+        return redirect('ribos-bar/edit-ribos-bar-sales-invoice/'.$id);
+    }
+
+    //
+    public function editSalesInvoice($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //getSalesInvoice
+        $getSalesInvoice = RibosBarSalesInvoice::find($id);
+
+        $sInvoices  = RibosBarSalesInvoice::where('si_id', $id)->get()->toArray();
+
+        return view('edit-ribos-bar-sales-invoice', compact('user', 'getSalesInvoice', 'sInvoices'));
+    }
+
+    //
+    public function storeSalesInvoice(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //validate
+        $this->validate($request, [
+            'invoiceNum' =>'required',
+            'orderedBy'=>'required',
+           
+        ]);
+
+           //get date today
+        $getDateToday =  date('Y-m-d');
+
+        //total kls
+        $kls = $request->get('totalKls');
+
+        //compute kls * unit price
+        $unitPrice = 500;
+        $compute = $kls * $unitPrice;
+        $sum = $compute;
+
+        $addSalesInvoice = new RibosBarSalesInvoice([
+            'user_id'=>$user->id,
+            'invoice_number'=>$request->get('invoiceNum'),
+            'ordered_by'=>$request->get('orderedBy'),
+            'address'=>$request->get('address'),
+            'date'=>$getDateToday,
+            'qty'=>$request->get('qty'),
+            'total_kls'=>$kls,
+            'item_description'=>$request->get('itemDescription'),
+            'unit_price'=>$unitPrice,
+            'amount'=>$sum,
+            'created_by'=>$name,
+        ]);
+
+        $addSalesInvoice->save();
+
+         $insertedId = $addSalesInvoice->id;
+
+        return redirect('ribos-bar/edit-ribos-bar-sales-invoice/'.$insertedId);
+    }
+
+    //
+    public function salesInvoiceForm(){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('ribos-bar-sales-invoice-form', compact('user'));
+    }
+
+    //
+    public function viewPaymentVoucher($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //paymentVoucher
+        $paymentVoucher = RibosBarPaymentVoucher::find($id);
+
+        $pVouchers = RibosBarPaymentVoucher::where('pv_id', $id)->get()->toArray();
+
+
+         //count the total amount 
+        $countTotalAmount = RibosBarPaymentVoucher::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = RibosBarPaymentVoucher::where('pv_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        return view('view-payment-voucher-ribos-bar', compact('user', 'paymentVoucher', 'pVouchers', 'sum'));
+    }
+
+    //
+    public function chequeVoucher(){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //getAllChequeVouchers
+        $method = "Cheque";
+
+        $getAllChequeVouchers = RibosBarPaymentVoucher::where('method_of_payment', $method)->get()->toArray(); 
+
+        return view('cheque-vouchers-lists-ribos-bar', compact('user', 'getAllChequeVouchers'));
+    }
+
+    //
+    public function cashVoucher(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //getAllCashVouchers
+        $method = "Cash";
+
+        $getAllCashVouchers = RibosBarPaymentVoucher::where('method_of_payment', $method)->get()->toArray();
+
+        return view('cash-vouchers-list-ribos-bar', compact('user', 'getAllCashVouchers'));
+    }
+
+    //
+    public function updatePV(Request $request, $id){
+         $updatePV = RibosBarPaymentVoucher::find($id);
+      
+
+        $updatePV->particulars = $request->get('particulars');
+        $updatePV->amount = $request->get('amount');
+
+        $updatePV->save();
+
+        Session::flash('SuccessEdit', 'Successfully updated');
+        return redirect('ribos-bar/edit-ribos-bar-payment-voucher/'.$request->get('pvId'));
+    }
+
+    //
+    public function addNewPaymentVoucherData(Request $request, $id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $paymentVoucher = RibosBarPaymentVoucher::find($id);
+
+         $addNewPaymentVoucherData = new RibosBarPaymentVoucher([
+            'user_id'=>$user->id,
+            'pv_id'=>$id,
+            'reference_number'=>$paymentVoucher['reference_number'],
+            'particulars'=>$request->get('particulars'),
+            'amount'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+
+        $addNewPaymentVoucherData->save();
+
+        Session::flash('addPaymentVoucherSuccess', 'Successfully added.');
+
+        return redirect('ribos-bar/add-new-ribos-bar-payment-voucher/'.$id);
+
+    }
+
+    //
+    public function addNewPaymentVoucher($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('add-new-ribos-bar-payment-voucher', compact('user', 'id'));
+    }
 
     //
     public function updatePaymentVoucher(Request $request, $id){
@@ -452,7 +1110,9 @@ class RibosBarController extends Controller
         $ids = Auth::user()->id;
         $user = User::find($ids);
 
-        return view('ribos-bar', compact('user')); 
+         $getAllSalesInvoices = RibosBarSalesInvoice::where('si_id', NULL)->get()->toArray();
+
+        return view('ribos-bar', compact('user', 'getAllSalesInvoices')); 
     }
 
     /**
@@ -623,6 +1283,25 @@ class RibosBarController extends Controller
         Session::flash('SuccessE', 'Successfully updated');
 
         return redirect('ribos-bar/edit-ribos-bar-purchase-order/'.$id);
+    }
+
+
+     //
+    public function destroyBillingStatement($id){
+        $billingStatement = RibosBarBillingStatement::find($id);
+        $billingStatement->delete();
+    }
+
+    //
+    public function destroySalesInvoice($id){
+        $salesInvoice = RibosBarSalesInvoice::find($id);
+        $salesInvoice->delete();
+    }
+
+    //
+    public function destroyPaymentVoucher($id){
+        $paymentVoucher = RibosBarPaymentVoucher::find($id);
+        $paymentVoucher->delete();
     }
 
 

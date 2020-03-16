@@ -94,7 +94,7 @@
 	                               <p class="alert alert-success">{{ Session::get('SuccessEdit') }}</p>
 	                              @endif 
 	                      		 @foreach($pVouchers as $pVoucher)
-	                      		 <form action="{{ action('MrPotatoController@updatePV', $pVoucher['id']) }}" method="post">
+	                      		 <form action="{{ action('RibosBarController@updatePV', $pVoucher['id']) }}" method="post">
 	                      		 	 {{csrf_field()}}
                                  <input name="_method" type="hidden" value="PATCH">
 	                      		<div class="form-group">
@@ -149,7 +149,7 @@
         if(x){
             $.ajax({
               type: "DELETE",
-              url: '/mr-potato/delete-payment-voucher/' + id,
+              url: '/ribos-bar/delete-payment-voucher/' + id,
               data:{
                 _method: 'delete', 
                 "_token": "{{ csrf_token() }}",

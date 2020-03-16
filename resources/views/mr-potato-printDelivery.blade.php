@@ -25,10 +25,10 @@
  		<div class="container-fluid"">
  				 <div style="width:50%; float:left;">
              <div style="float:left;">
-               <img  src="{{ asset('images/pdf/lolo-pinoys-lechon-de-cebu(6).png')}}"   alt="Lechon de Cebu">    
+               <img  src="{{ asset('images/pdf/mr-potato.png')}}"   alt="Mr Potato">    
             </div>
             <div style="float:right; width:500px; margin-right:230px; margin-top:20px;">
-               <p style="font-size:16px; text-align: left;">
+               <p style="font-size:12px; text-align: left;">
                 Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
                 Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
 
@@ -49,26 +49,15 @@
         <div style="float:left; width:50%;">
              <table style="position: absolute; width: 360px;">
                 <thead>
-                    <tr >
-                        <th style="font-size:16px; height: 1%; width:35%; ">Sold To: </th>
-                        <th style="font-size:16px; height: 1%; ">{{ $deliveryId->sold_to }}</th>
-                    </tr>
                     <tr  >
                         <th style="font-size:16px; height: 1%; ">Delivered To: </th>
                         <th style="font-size:16px;">{{ $deliveryId->delivered_to}}</th>
                     </tr>
                     <tr  > 
-                        <th style="font-size:16px; height: 1%; ">Contact Person: </th>
-                        <th style="font-size:16px; height: 1%; ">{{ $deliveryId->contact_person }}</th>
+                        <th style="font-size:16px; height: 1%; ">Address: </th>
+                        <th style="font-size:16px; height: 1%; ">{{ $deliveryId->address }}</th>
                     </tr>
-                     <tr >
-                          <th style="font-size:16px; height: 1%; ">Mobile #: </th>
-                          <th style="font-size:16px; height: 1%; ">{{ $deliveryId->mobile_num}}</th>
-                      </tr>
-                    <tr >
-                        <th style="font-size:16px; height: 1%; ">Time: </th>
-                        <th style="font-size:16px; height: 1%; ">{{ $deliveryId->time }}</th>
-                    </tr>
+                   
                    
                 </thead>
                 
@@ -95,44 +84,35 @@
         </div>
         <br>
         <br>
-        <div style="border-style: groove; height: 80px; width:700px; margin-top:125px;">
-        <table style="margin-top:20px;position: absolute;">
-                <thead>
-                    <tr  style="border:1px solid black;">
-                        <th style="font-size:16px; width: 25%">Consignee Name: </th>
-                        <th style="font-size:16px;">{{ $deliveryId->consignee_name }}</th>
-                    </tr>
-                    <tr  style="border:1px solid black;">
-                        <th style="font-size:16px">Consignee Contact #: </th>
-                         <th style="font-size:16px">{{ $deliveryId->consignee_contact_num }}</th>
-                    </tr>
-                </thead>
-               
-          </table>
-        </div>
-          <br>
-          <br>
-          <div style="border-style: groove; width: 700px; height: 300px; margin-top: -40px;">
+          <div style="border-style: groove; width: 700px; height: 300px; margin-top: 125px;">
           <table  style="margin-top:20px;">
                <thead>
                   <tr>
-                    <th style="height: 1%; text-align: center;" >QTY</th>
-                    <th style="height: 1%; text-align: center;">DESCRIPTION</th>
-                    <th style="height: 1%; text-align: center;">PRICE</th>
-                  
+                    <th style="height: 1%; text-align: center;" >PRODUCT ID</th>
+                    <th style="height: 1%; text-align: center;">QTY</th>
+                    <th style="height: 1%; text-align: center;">UNIT</th>
+                    <th style="height: 1%; text-align: center;">ITEM DESCRIPTION</th>
+                    <th style="height: 1%; text-align: center;">UNIT PRICE</th>
+                    <th style="height: 1%; text-align: center;">AMOUNT</th>
                   </tr>
                 </thead>
                 <tbody >
                    <tr style="border:1px solid black;">
+                      <td style="text-align:center; font-size:16px; ">{{ $deliveryId['product_id']}}</td>
                       <td style="text-align:center; font-size:16px; ">{{ $deliveryId['qty']}}</td>
-                      <td style="text-align:center; font-size:16px; ">{{ $deliveryId['description']}}</td>
-                      <td style="text-align:center; font-size:16px; "><?php echo number_format($deliveryId['price'], 2); ?></td>
+                      <td style="text-align:center; font-size:16px; ">{{ $deliveryId['unit']}}</td>
+                      <td style="text-align:center; font-size:16px; ">{{ $deliveryId['item_description']}}</td>
+                      <td style="text-align:center; font-size:16px; ">{{ $deliveryId['unit_price']}}</td>
+                      <td style="text-align:center; font-size:16px; "><?php echo number_format($deliveryId['amount'], 2); ?></td>
                     </tr>
                      @foreach($deliveryReceipts as $deliveryReceipt)
                      <tr style="border:1px solid black;">
+                        <td style="text-align:center; font-size:16px; ">{{ $deliveryReceipt['product_id']}}</td>
                         <td style="text-align:center; font-size:16px; ">{{ $deliveryReceipt['qty']}}</td>
-                        <td style=" text-align:center; font-size:16px; ">{{ $deliveryReceipt['description']}}</td>
-                        <td style=" text-align:center; font-size:16px;"><?php echo number_format($deliveryReceipt['price'], 2)?></td>
+                        <td style="text-align:center; font-size:16px; ">{{ $deliveryReceipt['unit']}}</td>
+                        <td style="text-align:center; font-size:16px; ">{{ $deliveryReceipt['item_description']}}</td>
+                        <td style="text-align:center; font-size:16px; ">{{ $deliveryReceipt['unit_price']}}</td>
+                        <td style="text-align:center; font-size:16px; "><?php echo number_format($deliveryReceipt['amount'], 2); ?></td>
                      </tr>
                      @endforeach
                 </tbody>
@@ -173,10 +153,10 @@
           <br>
           <br>
         <br>
-        <div style="float:left; width:50%; margin-top:-2px; ">
+        <div style="float:left; width:50%; margin-top:10px; ">
             <p style="font-size: 16px;">ALL PAYMENTS SHOULD BE MADE IN FAVOR OF <u>RIBO'S FOOD CORPORATION</u></p>
         </div>
-        <div style="float:right; width:50%; margin-top:-2px;">
+        <div style="float:right; width:50%;">
             <p style="font-size: 16px;">Received the above merchandise in good order and condition<br>
             ___________________________<br>
             Printed Name and Signature/Date</p>

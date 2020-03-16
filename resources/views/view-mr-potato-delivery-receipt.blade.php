@@ -27,7 +27,7 @@
 		                              View Delivery Receipt
 		                         <div class="float-right">
                                
-                                 	<a href="{{ action('LoloPinoyGrillCommissaryController@printDelivery', $viewDeliveryReceipt['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                                 	<a href="{{ action('MrPotatoController@printDelivery', $viewDeliveryReceipt['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                                
                              	 </div>
 		                    </div>

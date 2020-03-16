@@ -24,7 +24,7 @@
 	 <div id="content-wrapper">
  		<div class="container-fluid">
  				<div  style="margin-top:60px;">
-            	 <img  src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}"   alt="Lechon de Cebu">
+            	 <img style="margin-left:150px;" src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}"   alt="Lechon de Cebu">
             	 	 <p >
 		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
 						Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
@@ -32,7 +32,7 @@
 						Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
             	 	 </p>
 	            	 <h4 ><u>PURCHASE ORDER</u></h4>
-	            </div>
+        </div>
 				<div class="row">
 					<div class="col-lg-12">
 						 <div class="card-body">
@@ -87,7 +87,7 @@
                                   </thead>
                                   <tbody>
                                   		<tr style="border:1px solid black;">
-	                                  	 	<td style="text-align:center; border: 1px solid black;">{{ $purchaseOrder['qty']}}</td>
+	                                  	 	<td style="text-align:center; border: 1px solid black;">{{ $purchaseOrder['quantity']}}</td>
 	                                  	 	<td style="text-align:center; border: 1px solid black;">{{ $purchaseOrder['description']}}</td>
                                           <td style="text-align:center; border: 1px solid black;">{{ $purchaseOrder['unit_price']}}</td>
 	                                  	 	<td style="text-align:center; border: 1px solid black;"><?php echo number_format($purchaseOrder['amount'], 2); ?></td>
@@ -104,8 +104,8 @@
 	                                      
 	                                       <tr style="border:1px solid black;">
 	                                        <td style=" border: 1px solid black;"></td>
-	                                          <td style=" border: 1px solid black;"></td>
-	                                        <td style=" border: 1px solid black;"><strong>Total</strong></td>
+	                                         <td style=" border: 1px solid black;"></td> 
+                                           <td style=" border: 1px solid black;"><strong>Total</strong></td>
 	                                        <td style=" text-align:center; border: 1px solid black;"> <?php echo number_format($sum, 2)?></td>
 	                                      </tr>
                                   </tbody>

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 use Session;
 use Auth; 
+use PDF;
 use App\User;
 use App\MrPotatoPurchaseOrder;
 use App\MrPotatoDeliveryReceipt;
@@ -15,6 +16,37 @@ use App\MrPotatoSalesInvoice;
 
 class MrPotatoController extends Controller
 {       
+    //
+    public function printDelivery($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $deliveryId = MrPotatoDeliveryReceipt::find($id);
+
+        $deliveryReceipts = MrPotatoDeliveryReceipt::where('dr_id', $id)->get()->toArray();
+
+          //count the total unit price
+        $countTotalUnitPrice = MrPotatoDeliveryReceipt::where('id', $id)->sum('unit_price');
+       
+        //
+        $countUnitPrice = MrPotatoDeliveryReceipt::where('dr_id', $id)->sum('unit_price');
+
+        $sum  = $countTotalUnitPrice + $countUnitPrice;
+
+
+          //count the total amount
+        $countTotalAmount = MrPotatoDeliveryReceipt::where('id', $id)->sum('amount');
+       
+        //
+        $countAmount = MrPotatoDeliveryReceipt::where('dr_id', $id)->sum('amount');
+
+        $sum2  = $countTotalAmount + $countAmount;
+
+        $pdf = PDF::loadView('mr-potato-printDelivery', compact('deliveryId', 'user', 'deliveryReceipts', 'sum'));
+
+        return $pdf->download('mr-potato-delivery-receipt.pdf');
+    }
+
     //
     public function viewSalesInvoice($id){
         $ids = Auth::user()->id;
@@ -160,7 +192,7 @@ class MrPotatoController extends Controller
 
     //store sales invoice form
     public function storeSalesInvoice(Request $request){
-         $ids = Auth::user()->id;
+        $ids = Auth::user()->id;
         $user = User::find($ids);
         $firstName = $user->first_name;
         $lastName = $user->last_name;
@@ -296,7 +328,7 @@ class MrPotatoController extends Controller
 
     //updatePaymentVoucher
     public function updatePaymentVoucher(Request $request, $id){
-         $updatePaymentVoucher = MrPotatoPaymentVoucher::find($id);
+        $updatePaymentVoucher = MrPotatoPaymentVoucher::find($id);
 
         $updatePaymentVoucher->paid_to = $request->get('paidTo');
         $updatePaymentVoucher->account_no = $request->get('accountNumber');

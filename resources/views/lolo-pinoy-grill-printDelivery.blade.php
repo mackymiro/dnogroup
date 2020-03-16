@@ -25,7 +25,7 @@
  		<div class="container-fluid"">
  				 <div style="width:50%; float:left;">
              <div style="float:left;">
-               <img  src="{{ asset('images/pdf/lolo-pinoy-grill.jpg')}}"   alt="Lechon de Cebu">    
+               <img  src="{{ asset('images/pdf/lolo-pinoy-grill.jpg')}}"   alt="Lolo Pinoy Grill">    
             </div>
             <div style="float:right; width:500px; margin-right:230px; margin-top:20px;">
                <p style="font-size:12px; text-align: left;">
@@ -84,24 +84,7 @@
         </div>
         <br>
         <br>
-        <div style="border-style: groove; height: 80px; width:700px; margin-top:125px;">
-        <table style="margin-top:20px;position: absolute;">
-                <thead>
-                    <tr  style="border:1px solid black;">
-                        <th style="font-size:16px; width: 25%">Consignee Name: </th>
-                        <th style="font-size:16px;">{{ $deliveryId->consignee_name }}</th>
-                    </tr>
-                    <tr  style="border:1px solid black;">
-                        <th style="font-size:16px">Consignee Contact #: </th>
-                         <th style="font-size:16px">{{ $deliveryId->consignee_contact_num }}</th>
-                    </tr>
-                </thead>
-               
-          </table>
-        </div>
-          <br>
-          <br>
-          <div style="border-style: groove; width: 700px; height: 300px; margin-top: -40px;">
+          <div style="border-style: groove; width: 700px; height: 300px; margin-top: 125px;">
           <table  style="margin-top:20px;">
                <thead>
                   <tr>

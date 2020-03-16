@@ -152,7 +152,12 @@
                                       <label>Description</label>
                                       <input type="text" name="desc" class="form-control" required="required" value="{{ $pOrder['description'] }}" />
                                     </div>
-                                    <div class="col-lg-4">
+                                  <div class="col-lg-2">
+                                    <label>Total Kls</label>
+                                    <input type="text" name="totalKls" class="form-control" value="{{ $pOrder['total_kls']}}" />
+                                   
+                                  </div>
+                                    <div class="col-lg-2">
                                       <label>Unit Price</label>
                                       <input type="text" name="unitP" class="form-control" required="required" value="{{ $pOrder['unit_price'] }}" />
                                     </div>

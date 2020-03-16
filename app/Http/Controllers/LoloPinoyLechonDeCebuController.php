@@ -508,7 +508,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 
-        $name  = $firstName.$lastName;
+        $name  = $firstName." ".$lastName;
 
           //get date today
         $getDateToday =  date('Y-m-d');
@@ -545,10 +545,7 @@ class LoloPinoyLechonDeCebuController extends Controller
     public function addNewSalesInvoice($id){
         $ids = Auth::user()->id;
         $user = User::find($ids);
-        $firstName = $user->first_name;
-        $lastName = $user->last_name;
-
-        $name  = $firstName.$lastName;
+       
 
         return view('add-new-lechon-de-cebu-sales-invoice', compact('user', 'id'));
     }
@@ -593,7 +590,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     //edit sales inovice
     public function editSalesInvoice($id){
-         $ids = Auth::user()->id;
+        $ids = Auth::user()->id;
         $user = User::find($ids);
 
         //getSalesInvoice
@@ -1035,7 +1032,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 
-        $name  = $firstName.$lastName;
+        $name  = $firstName." ".$lastName;
 
         $paymentVoucher = LechonDeCebuPaymentVoucher::find($id);
 
@@ -1511,7 +1508,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 
-        $name  = $firstName.$lastName;
+        $name  = $firstName." ".$lastName;
 
         //get the whole lechon then multiply by 500
         $wholeLechon = $request->get('wholeLechon');
@@ -1535,7 +1532,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         Session::flash('addBillingSuccess', 'Successfully added.');
 
-        return redirect('lolo-pinoy-lechon-de-cebu/add-new-lolo-pinoy-grill-billing-statement/'.$id);
+        return redirect('lolo-pinoy-lechon-de-cebu/add-new-billing/'.$id);
         
     }
 
@@ -1572,7 +1569,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $lastName = $user->last_name;
 
         //get user name
-        $name  = $firstName.$lastName;
+        $name  = $firstName." ".$lastName;
 
         //validate
         $this->validate($request, [

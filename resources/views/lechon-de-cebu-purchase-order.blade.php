@@ -83,7 +83,8 @@
                                         </span>
                                     @endif
                                   </div>
-                                  <div class="col-lg-4">
+                                 
+                                  <div class="col-lg-2">
                                     <label>Unit Price</label>
                                     <input type="text" name="unitPrice" class="form-control" required="required" />
                                     @if ($errors->has('unitPrice'))

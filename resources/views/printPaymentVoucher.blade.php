@@ -23,16 +23,15 @@
 <div id="wrapper">
 	 <div id="content-wrapper">
  		<div class="container-fluid">
-         <div style="float:left; ">
-           <img  style="width:200px; height:200px; " src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}"   alt="Lechon de Cebu">    
-        </div>
-        <div style="float:right; width:300px;">
-           <p >
+          <div  style="margin-top:60px;">
+               <img style="margin-left:150px;"src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}"   alt="Lechon de Cebu">
+                 <p >
             Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
             Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
 
             Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
-             </p>
+                 </p>
+                 <h4 ><u>PAYMENT VOUCHER</u></h4>
         </div>
 				<div class="row">
           <div class="col-lg-12">
@@ -44,30 +43,30 @@
                                         <thead>
                                           <tr>
                                               <th width="30%">Reference Number</th>
-                                              <th>{{ $printPaymentVoucher['reference_number']}}</th>
+                                              <th>{{ $printPaymentVoucher->reference_number }}</th>
                                           </tr>
                                           <tr>
                                               <th>Paid To</th>
-                                              <th>{{ $printPaymentVoucher['paid_to']}}</th>
+                                              <th>{{ $printPaymentVoucher->paid_to }}</th>
                                           </tr>
                                           <tr>
                                               <th>Account Number</th>
-                                              <th>{{ $printPaymentVoucher['account_no']}}</th>
+                                              <th>{{ $printPaymentVoucher->account_no }}</th>
                                           </tr>
                                       </thead>
                                       
                                   </table>   
                              </div>
-                            <div style="float:right; width: 50%">
+                            <div style="float:right; width: 50%; margin-right: 100px;">
                                 <table >
                                      <thead>
                                         <tr>
-                                            <th>Date</th>
-                                            <th>{{ $printPaymentVoucher['date'] }}</th>
+                                            <th width="30%">Date</th>
+                                            <th>{{ $printPaymentVoucher->date }}</th>
                                         </tr>
                                         <tr>
                                             <th>Method Of Payment</th>
-                                            <th>{{ $printPaymentVoucher['method_of_payment'] }}</th>
+                                            <th>{{ $printPaymentVoucher->method_of_payment }}</th>
                                         </tr>
                                     </thead>
                                 </table>

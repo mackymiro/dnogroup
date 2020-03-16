@@ -16,6 +16,7 @@ class LechonDeCebuPurchaseOrder extends Model
 		'address',
 		'date',
 		'quantity',
+		'total_kls',
 		'description',
 		'unit_price',
 		'amount',
