@@ -24,55 +24,54 @@
       				  					<thead>
       			  							<th>Action</th>
       			  							<th>Date</th>
+                            <th>Bill To</th>
       			  							<th>Branch</th>
+                            <th>Reference #</th>
       			  							<th>Invoice#</th>
-      			  							<th>Kilos</th>
-      			  							<th>Unit Price</th>
       			  							<th>Payment Method Code</th>
-      			  							<th>Amount</th>
+      			  							
       			  							<th>Status</th>
       			  							<th>Paid Amount</th>
       			  							<th>Created By</th>
       				  					</thead>
       				  					<tfoot>
       			  							<th>Action</th>
-      			  							<th>Date</th>
-      			  							<th>Branch</th>
-      			  							<th>Invoice#</th>
-      			  							<th>Kilos</th>
-      			  							<th>Unit Price</th>
-      			  							<th>Payment Method Code</th>
-      			  							<th>Amount</th>
-      			  							<th>Status</th>
-      			  							<th>Paid Amount</th>
-      			  							<th>Created By</th>
+                            <th>Date</th>
+                            <th>Bill To</th>
+                            <th>Branch</th>
+                            <th>Reference #</th>
+                            <th>Invoice#</th>
+                            <th>Payment Method Code</th>
+                           
+                            <th>Status</th>
+                            <th>Paid Amount</th>
+                            <th>Created By</th>
       				  					</tfoot>
       				  					<tbody>
-      				  						@foreach($statementOfAccounts as $statementOfAccount)
-      			  							<tr id="deletedId{{ $statementOfAccount['id'] }}">
-      		  									<td>
-      		  										<a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-statement-of-account/'.$statementOfAccount['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-      		  										<a id="delete" href="javascript:void" onClick="confirmDelete('{{ $statementOfAccount['id'] }}')" title="Delete"><i class="fas fa-trash"></i></a>
-      		  										<a href="{{ url('lolo-pinoy-lechon-de-cebu/view-statement-account/'.$statementOfAccount['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
-      		  									</td>
-      		  									<td>{{ $statementOfAccount['date'] }}</td>
-      		  									<td>{{ $statementOfAccount['branch'] }}</td>
-      		  									<td>{{ $statementOfAccount['invoice_number'] }}</td>
-      		  									<td>{{ $statementOfAccount['kilos'] }}</td>
-      		  									<td>{{ $statementOfAccount['unit_price'] }}</td>
-      		  									<td>{{ $statementOfAccount['payment_method'] }}</td>
-      		  									<td><?php echo number_format($statementOfAccount['amount'], 2); ?></td>
-      		  									@if($statementOfAccount['status'] == "Unpaid")
-                                <td class="bg-danger" style="color:white;">{{ $statementOfAccount['status'] }}</td>
-      		  									@elseif($statementOfAccount['status'] == "Paid")
-      		  										 <td class="bg-success" style="color:white;">{{ $statementOfAccount['status'] }}</td>
+                            @foreach($statementOfAccounts as $statementOfAccount)
+      				  						<tr id="deletedId{{ $statementOfAccount['id']}}">
+                              <td>
+                                 @if($user->role_type !== 3)
+                                  <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-statement-of-account/'.$statementOfAccount['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                  @endif
+                                  @if($user->role_type == 1)
+                                  <a id="delete" onClick="confirmDelete('{{ $statementOfAccount['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                                  @endif
+                                  <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-statement-account/'.$statementOfAccount['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
 
-      		  										@endif
-      		  								
-      		  									<td>{{ $statementOfAccount['paid_amount'] }}</td>
-      		  									<td>{{ $statementOfAccount['created_by'] }}</td>
-      		  								</tr>
-      		  								@endforeach
+                              </td>
+                              <td>{{ $statementOfAccount['date'] }}</td>
+                              <td>{{ $statementOfAccount['bill_to' ]}}</td>
+                              <td>{{ $statementOfAccount['branch' ]}}</td>
+                              <td>{{ $statementOfAccount['reference_number' ]}}</td>
+                              <td>{{ $statementOfAccount['invoice_number' ]}}</td>
+                              <td>{{ $statementOfAccount['payment_method' ]}}</td>
+                             
+                              <td class="bg-danger" style="color:white;">{{ $statementOfAccount['status' ]}}</td>
+                              <td>{{ $statementOfAccount['paid_amount' ]}}</td>
+                              <td>{{ $statementOfAccount['created_by' ]}}</td>
+                            </tr>
+                            @endforeach
       				  					</tbody>
       				  				</table>
     					  		</div>
@@ -88,47 +87,49 @@
                             <div class="table-responsive">
                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                     <thead>
-                                    <th>Date</th>
-                                    <th>Branch</th>
-                                    <th>Invoice#</th>
-                                    <th>Kilos</th>
-                                    <th>Unit Price</th>
-                                    <th>Payment Method Code</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
-                                    <th>Paid Amount</th>
-                                    <th>Created By</th>
+                                      <th>Action</th>
+                                      <th>Date</th>
+                                      <th>Bill To</th>
+                                      <th>Branch</th>
+                                      <th>Reference #</th>
+                                      <th>Invoice#</th>
+                                      <th>Payment Method Code</th>
+                                     
+                                      <th>Status</th>
+                                      <th>Paid Amount</th>
+                                      <th>Created By</th>
                                   </thead>
                                   <tfoot>
+                                   <th>Action</th>
                                     <th>Date</th>
+                                    <th>Bill To</th>
                                     <th>Branch</th>
+                                    <th>Reference #</th>
                                     <th>Invoice#</th>
-                                    <th>Kilos</th>
-                                    <th>Unit Price</th>
                                     <th>Payment Method Code</th>
-                                    <th>Amount</th>
+                                  
                                     <th>Status</th>
                                     <th>Paid Amount</th>
                                     <th>Created By</th>
-                                  </tfoot>
                                   <tbody>
-                                      @foreach($statementOfAccountPaids as $statementOfAccountPaid)
-                                      <tr>
-                                        <td>{{ $statementOfAccountPaid['date'] }}</td>
-                                        <td>{{ $statementOfAccountPaid['branch']}}</td>
-                                        <td>{{ $statementOfAccountPaid['invoice_number'] }}</td>
-                                        <td>{{ $statementOfAccountPaid['kilos'] }}</td>
-                                        <td>{{ $statementOfAccountPaid['unit_price'] }}</td>
-                                        <td>{{ $statementOfAccountPaid['payment_method'] }}</td>
-                                        <td><?php echo number_format($statementOfAccountPaid['amount'], 2); ?></td>
-                                        @if($statementOfAccountPaid['status'] == "Unpaid")
-                                          <td class="bg-danger" style="color:white;">{{ $statementOfAccountPaid['status'] }}</td>
-                                        @elseif($statementOfAccountPaid['status'] == "Paid")
-                                           <td class="bg-success" style="color:white;">{{ $statementOfAccountPaid['status'] }}</td>
+                                       @foreach($statementOfAccountsPaids as $statementOfAccountsPaid)
+                                        <tr>
+                                        <td>
+                                           
+                                          
+                                            <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-statement-account/'.$statementOfAccountsPaid['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
 
-                                          @endif
-                                        <td>{{ $statementOfAccountPaid['paid_amount'] }}</td>
-                                        <td>{{ $statementOfAccountPaid['created_by'] }}</td>
+                                        </td>
+                                        <td>{{ $statementOfAccountsPaid['date'] }}</td>
+                                        <td>{{ $statementOfAccountsPaid['bill_to' ]}}</td>
+                                        <td>{{ $statementOfAccountsPaid['branch' ]}}</td>
+                                        <td>{{ $statementOfAccountsPaid['reference_number' ]}}</td>
+                                        <td>{{ $statementOfAccountsPaid['invoice_number' ]}}</td>
+                                        <td>{{ $statementOfAccountsPaid['payment_method' ]}}</td>
+                                       
+                                        <td class="bg-success" style="color:white;">{{ $statementOfAccountsPaid['status' ]}}</td>
+                                        <td><?php echo number_format($statementOfAccountsPaid['paid_amount'], 2); ?></td>
+                                        <td>{{ $statementOfAccountsPaid['created_by' ]}}</td>
                                       </tr>
                                       @endforeach
                                   </tbody>

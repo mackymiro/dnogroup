@@ -32,7 +32,7 @@ class LoloPinoyGrillCommissaryController extends Controller
 
     //
     public function statementOfAccountList(){
-         $ids =  Auth::user()->id;
+        $ids =  Auth::user()->id;
         $user = User::find($ids);
 
         $status = "Unpaid";

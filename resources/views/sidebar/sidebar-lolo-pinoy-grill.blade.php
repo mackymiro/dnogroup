@@ -76,6 +76,24 @@
             <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/cheque-vouchers') }}">Cheque Vouchers</a>  
         </div>
       </li>
+       <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-apple-alt"></i>
+          <span>Commissary Stock</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/commissary/raw-materials') }}">RAW Materials</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/commissary/production') }}">Production</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/commissary/stocks-inventory') }}">Stocks Inventory</a>     
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/commissary/delivery-outlets') }}">Delivery Outlets</a>
+
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/commissary/sales-of-outlets') }}">Sales Of Outlets</a>
+
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/commissary/inventory-of-stocks') }}">Inventory Of Stocks</a>
+         
+        </div>
+      </li>
       <li class="nav-item dropdown ">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fa fa-credit-card" aria-hidden="true"></i>

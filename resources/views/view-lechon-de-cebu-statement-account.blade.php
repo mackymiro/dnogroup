@@ -27,52 +27,152 @@
                               <i class="fas fa-receipt" aria-hidden="true"></i>
                             View Statement Of Account 
                             <div class="float-right">
-                                 <button class="btn btn-success" onclick="myFunction()"> <i class="fa fa-print fa-2x" aria-hidden="true"></i></button>
+                                 <button class="btn btn-success" > <i class="fa fa-print fa-2x" aria-hidden="true"></i></button>
                               
                               </div>
                         </div>
                         <div class="card-body">
-                        	<div class="table-responsive">
-                    			<table class="table table-bordered">
-                    				<thead>
-                    					<tr>
-                    						<th>Date</th>
-          				  							<th>Branch</th>
-          				  							<th>Invoice#</th>
-          				  							<th>Kilos</th>
-          				  							<th>Unit Price</th>
-          				  							<th>Payment Method Code</th>
-          				  							<th>Amount</th>
-          				  							<th>Status</th>
-          				  							<th>Paid Amount</th>
-          				  							<th>Collection Date</th>
-          				  							<th>Check Number</th>
-          				  							<th>Check Amount</th>
-          				  							<th>OR Number</th>
-				  							
-                    					</tr>
-                    				</thead>
-                    				<tbody>
-                    					@foreach($getStatementAccounts as $getStatementAccount)
-                    					<tr>
-                    						<td>{{ $getStatementAccount['date'] }}</td>
-                    						<td>{{ $getStatementAccount['branch']}}</td>
-                    						<td>{{ $getStatementAccount['invoice_number'] }}</td>
-                    						<td>{{ $getStatementAccount['kilos']}}</td>
-                    						<td>{{ $getStatementAccount['unit_price']}}</td>
-                    						<td>{{ $getStatementAccount['payment_method']}}</td>
-                    						<td><?php echo number_format($getStatementAccount['amount'], 2); ?></td>
-                    						<td>{{ $getStatementAccount['status']}}</td>
-                    						<td>{{ $getStatementAccount['paid_amount']}}</td>
-                    						<td>{{ $getStatementAccount['collection_date']}}</td>
-                    						<td>{{ $getStatementAccount['check_number']}}</td>
-                    						<td><?php echo number_format($getStatementAccount['check_amount'], 2); ?></td>
-                    						<td>{{ $getStatementAccount['or_number']}}</td>
-                    					</tr>
-                    					@endforeach
-                    				</tbody>
-                    			</table>
-                        	</div>
+                        	 <div class="form-group">
+                                <div class="form-row">
+                                  <div class="col-lg-6">
+                                    <table class="table table-bordered">  
+                                        <thead>
+                                            <tr>
+                                                <th width="30%">Bill To</th>
+                                                <th> {{ $viewStatementAccount[0]['bill_to'] }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Address</th>
+                                                <th>{{ $viewStatementAccount[0]['address'] }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Period Covered</th>
+                                                <th> {{ $viewStatementAccount[0]['period_cover'] }} </th>
+                                            </tr>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>{{ $viewStatementAccount[0]['date'] }}</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                  
+                                  </div>
+                                  <div class="col-lg-6">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th width="20%">Reference #</th>
+                                                <th>{{ $viewStatementAccount[0]['reference_number'] }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>PO Number</th>
+                                                <th> {{ $viewStatementAccount[0]['p_o_number'] }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Terms</th>
+                                                <th>{{ $viewStatementAccount[0]['terms'] }}</th>
+                                            </tr>
+                                        </thead>
+
+                                    </table>
+                        
+                                  </div>
+                                </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-row">
+                                        <div class="col-lg-6">
+                                           <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="30%">Branch</th>
+                                                        <th>{{ $viewStatementAccount[0]['branch'] }}</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Payment Method</th>
+                                                        <th> {{ $viewStatementAccount[0]['payment_method'] }}</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th class="bg-success" style="color:white;">Total Amount</th>
+                                                        <th class="bg-success" style="color:white;">₱ <?php echo number_format($sum, 2)?></th>
+                                                    </tr>
+                                                    <tr>
+                                                        @if($viewStatementAccount[0]['status'] == "Unpaid")
+                                                            <th class="bg-danger" style="color:white;">Status</th>
+                                                            <th class="bg-danger" style="color:white;">{{ $viewStatementAccount[0]['status'] }}</th>
+                                                        @else
+                                                           <th class="bg-success" style="color:white;">Status</th>
+                                                            <th class="bg-success" style="color:white;">{{ $viewStatementAccount[0]['status'] }}</th>
+                                                        @endif
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Paid Amount</th>
+                                                        <th>{{ $viewStatementAccount[0]['paid_amount'] }}</th>
+                                                    </tr>
+                                                </thead>
+
+                                            </table>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <table class="table table-bordered">
+                                                 <thead>
+                                                    <tr>
+                                                        <th width="30%">Collection Date</th>
+                                                        <th>{{ $viewStatementAccount[0]['collection_date'] }}</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Cheque Number</th>
+                                                        <th> {{ $viewStatementAccount[0]['check_number'] }}</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Cheque Amount</th>
+                                                        <th><?php echo number_format($viewStatementAccount[0]['check_amount'], 2); ?></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th >OR Number</th>
+                                                        <th >{{ $viewStatementAccount[0]['or_number'] }}</th>
+                                                    </tr>
+                                                   
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table table-striped">
+                                     <thead>
+                                        <tr>
+                                          <th class="bg-info" style="color:white;">DATE</th>
+                                          <th class="bg-info" style="color:white;">INVOICE #</th>
+                                          <th class="bg-info" style="color:white;">WHOLE LECHON 500/KL</th>
+                                          <th class="bg-info" style="color:white;">DESCRIPTION</th>
+                                          <th class="bg-info" style="color:white;">AMOUNT</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr>
+                                          <td>{{ $viewStatementAccount[0]['transaction_date'] }}</td>
+                                          <td>{{ $viewStatementAccount[0]['invoice_number'] }}</td>
+                                          <td>{{ $viewStatementAccount[0]['whole_lechon'] }}</td>
+                                          <td>{{ $viewStatementAccount[0]['description'] }}</td>
+                                          <td><?php echo number_format($viewStatementAccount[0]['amount'], 2); ?></td>
+                                          </tr>
+                                          @foreach($statementAccounts as $statementAccount)
+                                          <tr>
+                                            <td>{{ $statementAccount['transaction_date'] }}</td>
+                                            <td>{{ $statementAccount['invoice_number'] }}</td>
+                                            <td>{{ $statementAccount['whole_lechon'] }}</td>
+                                            <td>{{ $statementAccount['description'] }}</td>
+                                            <td><?php echo number_format($statementAccount['amount'], 2);?></td>
+                                          </tr>
+                                          @endforeach
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><strong>Total</strong></td>
+                                            <td><strong>₱ <?php echo number_format($sum, 2)?></strong></td>
+                                          </tr>
+                                        </tbody>
+                                </table>
                         </div>
         			 </div>
         		</div>

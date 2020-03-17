@@ -1191,10 +1191,23 @@ class LoloPinoyLechonDeCebuController extends Controller
         $ids = Auth::user()->id;
         $user = User::find($ids);
 
-        //getStatementAccounts
-        $getStatementAccounts = LechonDeCebuStatementOfAccount::where('id', $id)->get()->toArray();
+        //viewStatementAccount
+        $viewStatementAccount = LechonDeCebuStatementOfAccount::where('id', $id)->get()->toArray();
+       
+        
+        $statementAccounts = LechonDeCebuStatementOfAccount::where('billing_statement_id', $viewStatementAccount[0]['billing_statement_id'])->where('bill_to', NULL)->get();
 
-        return view('view-lechon-de-cebu-statement-account', compact('user','getStatementAccounts'));
+
+        //count the total amount 
+        $countTotalAmount = LechonDeCebuStatementOfAccount::where('id', $id)->sum('amount');
+
+          //
+        $countAmount = LechonDeCebuStatementOfAccount::where('billing_statement_id', $viewStatementAccount[0]['billing_statement_id'])->where('bill_to', NULL)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+    
+
+        return view('view-lechon-de-cebu-statement-account', compact('user','viewStatementAccount', 'statementAccounts', 'sum'));
     }
 
     //updateAddStatement
@@ -1228,17 +1241,15 @@ class LoloPinoyLechonDeCebuController extends Controller
     public function updateStatementInfo(Request $request, $id){
         $updateStatmentInfo = LechonDeCebuStatementOfAccount::find($id);
 
-        $updateStatmentInfo->date = $request->get('date');
-        $updateStatmentInfo->branch = $request->get('branch');
-        $updateStatmentInfo->kilos = $request->get('kilos');
-        $updateStatmentInfo->unit_price = $request->get('unitPrice');
+        $updateStatmentInfo->branch = $request->get('branch');;
         $updateStatmentInfo->payment_method = $request->get('paymentMethod');
         $updateStatmentInfo->amount = $request->get('amount');
         $updateStatmentInfo->status = $request->get('status');
         $updateStatmentInfo->paid_amount = $request->get('paidAmount');
+        $updateStatmentInfo->amount = $request->get('amount');
         $updateStatmentInfo->collection_date = $request->get('collectionDate');
-        $updateStatmentInfo->check_number = $request->get('checkNumber');
-        $updateStatmentInfo->check_amount = $request->get('checkAmount');
+        $updateStatmentInfo->check_number = $request->get('chequeNumber');
+        $updateStatmentInfo->check_amount = $request->get('chequeAmount');
         $updateStatmentInfo->or_number = $request->get('orNumber');
 
         $updateStatmentInfo->save();
@@ -1320,9 +1331,17 @@ class LoloPinoyLechonDeCebuController extends Controller
         //getStatementOfAccount
         $getStatementOfAccount = LechonDeCebuStatementOfAccount::find($id);
 
-        $sAccounts = LechonDeCebuStatementOfAccount::where('soa_id', $id)->get()->toArray();
+        //$sAccounts = LechonDeCebuStatementOfAccount::where('soa_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = LechonDeCebuStatementOfAccount::where('id', $id)->sum('amount');
+
+          //
+        $countAmount = LechonDeCebuStatementOfAccount::where('billing_statement_id', $getStatementOfAccount['billing_statement_id'])->where('bill_to', NULL)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
         
-        return view('edit-statement-of-account', compact('user', 'getStatementOfAccount', 'sAccounts'));
+        return view('edit-statement-of-account', compact('user', 'getStatementOfAccount', 'sum'));
     }
 
 
@@ -1331,16 +1350,21 @@ class LoloPinoyLechonDeCebuController extends Controller
         $ids =  Auth::user()->id;
         $user = User::find($ids);
 
-        $status = "Unpaid";
+        /*$status = "Unpaid";
         $paid = "Paid";
 
         //get statement of account 
         $statementOfAccounts = LechonDeCebuStatementOfAccount::where('soa_id', NULL)->where('status', $status)->get()->toArray();
 
-        $statementOfAccountPaids = LechonDeCebuStatementOfAccount::where('soa_id', NULL)->where('status', $paid)->get()->toArray();
+        $statementOfAccountPaids = LechonDeCebuStatementOfAccount::where('soa_id', NULL)->where('status', $paid)->get()->toArray();*/
 
+        $status = "Unpaid";
+        $paid = "Paid";
+        $statementOfAccounts = LechonDeCebuStatementOfAccount::where('bill_to', '!=', NULL)->where('status', $status)->get()->toArray();
 
-        return view('lechon-de-cebu-statement-of-account-lists', compact('user', 'statementOfAccounts', 'statementOfAccountPaids'));
+        $statementOfAccountsPaids = LechonDeCebuStatementOfAccount::where('bill_to', '!=', NULL)->where('status', $paid)->get()->toArray();
+
+        return view('lechon-de-cebu-statement-of-account-lists', compact('user', 'statementOfAccounts', 'statementOfAccountsPaids'));
     }
 
     //store statement of account
@@ -1530,6 +1554,23 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $addBillingStatement->save();
 
+        //save to table statement of account
+        $addStatementAccount = new LechonDeCebuStatementOfAccount([
+            'user_id'=>$user->id,
+            'billing_statement_id'=>$id,
+            'reference_number'=>$billingOrder['reference_number'],
+            'p_o_number'=>$billingOrder['p_o_number'],
+            'transaction_date'=>$request->get('transactionDate'),
+            'invoice_number'=>$request->get('invoiceNumber'),
+            'whole_lechon'=>$wholeLechon,
+            'description'=>$request->get('description'),
+            'amount'=>$add,
+            'created_by'=>$name,
+
+        ]);
+
+        $addStatementAccount->save();
+
         Session::flash('addBillingSuccess', 'Successfully added.');
 
         return redirect('lolo-pinoy-lechon-de-cebu/add-new-billing/'.$id);
@@ -1625,6 +1666,32 @@ class LoloPinoyLechonDeCebuController extends Controller
         $billingStatement->save();
 
         $insertedId = $billingStatement->id;
+
+          //store billing statement data to  table statement of accounts
+        $status = "Unpaid";
+
+        $statementAccount = new LechonDeCebuStatementOfAccount([
+            'user_id'=>$user->id,
+            'billing_statement_id'=>$insertedId,
+            'bill_to'=>$request->get('billTo'),
+            'address'=>$request->get('address'),
+            'period_cover'=>$request->get('periodCovered'),
+            'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNumber'),
+            'reference_number'=>$uRef,
+            'p_o_number'=>$request->get('poNumber'),
+            'terms'=>$request->get('terms'),
+            'transaction_date'=>$request->get('transactionDate'),
+            'whole_lechon'=>$wholeLechon,
+            'description'=>$request->get('description'),
+            'amount'=>$add,
+            'created_by'=>$name,
+            'prepared_by'=>$name,
+            'status'=>$status,
+ 
+        ]);
+
+        $statementAccount->save();
 
         //Session::flash('billingStatementSuccess', 'Successfully added');
          

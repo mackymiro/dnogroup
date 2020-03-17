@@ -24,5 +24,6 @@ class LoloPinoyGrillCommissaryStatementOfAccount extends Model
 		'check_amount',
 		'or_number',
 		'created_by',
+		'amount_statement_account',
     ];
 }

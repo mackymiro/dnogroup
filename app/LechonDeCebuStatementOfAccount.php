@@ -10,14 +10,21 @@ class LechonDeCebuStatementOfAccount extends Model
 
     protected $fillable = [
 		'user_id',
-		'soa_id',
+		'billing_statement_id',
+		'bill_to',
 		'date',
+		'address',
+		'period_cover',
+		'reference_number',
+		'p_o_number',
+		'terms',
+		'transaction_date',
 		'branch',
 		'invoice_number',
-		'kilos',
-		'unit_price',
+		'whole_lechon',
+		'description',
+		'invoice_number_soa',
 		'payment_method',
-		'amount',
 		'status',
 		'paid_amount',
 		'collection_date',
@@ -25,5 +32,7 @@ class LechonDeCebuStatementOfAccount extends Model
 		'check_amount',
 		'or_number',
 		'created_by',
+		'amount',
+		'amount_statement_account',
     ];
 }
