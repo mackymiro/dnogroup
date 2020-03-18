@@ -1246,7 +1246,6 @@ class LoloPinoyLechonDeCebuController extends Controller
         $updateStatmentInfo->amount = $request->get('amount');
         $updateStatmentInfo->status = $request->get('status');
         $updateStatmentInfo->paid_amount = $request->get('paidAmount');
-        $updateStatmentInfo->amount = $request->get('amount');
         $updateStatmentInfo->collection_date = $request->get('collectionDate');
         $updateStatmentInfo->check_number = $request->get('chequeNumber');
         $updateStatmentInfo->check_amount = $request->get('chequeAmount');
