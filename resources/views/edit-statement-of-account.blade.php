@@ -90,9 +90,10 @@
                                             </select>
 
                                       </div>
-                                        <div class="col-lg-2">
+                                      <div class="col-lg-2">
                                           <label>Total Amount</label>
-                                          <input style="color:white;" type="text" name="amount" class="bg-success form-control" value="<?php echo number_format($sum, 2);?>" disabled="disabled" />
+                                          <p class="bg-success" style="color:white; border-radius: 3px; padding:5px;"><?php echo number_format($sum, 2);?></p>
+                                         
                                       </div>
                                   </div>
                               </div>

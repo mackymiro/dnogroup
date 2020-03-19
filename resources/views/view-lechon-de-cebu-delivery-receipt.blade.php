@@ -63,7 +63,7 @@
                               <table class="table table-bordered">
                                   <thead>
                                       <tr>
-                                          <th width="20%">Mobile #</th>
+                                          <th width="30%">Mobile #</th>
                                           <th>{{ $viewDeliveryReceipt['mobile_num']}}</th>
                                       </tr>
                                       <tr> 
@@ -73,6 +73,10 @@
                                        <tr>
                                           <th>Date</th>
                                           <th>{{ $viewDeliveryReceipt['date'] }}</th>
+                                       </tr>
+                                        <tr>
+                                          <th>Date To Be Delivered</th>
+                                          <th>{{ $viewDeliveryReceipt['date_to_be_delivered'] }}</th>
                                        </tr>
                                   </thead>
                               </table>

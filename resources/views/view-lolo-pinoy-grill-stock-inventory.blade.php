@@ -1,23 +1,23 @@
-@extends('layouts.lolo-pinoy-lechon-de-cebu-app')
+@extends('layouts.lolo-pinoy-grill-commissary-app')
 @section('title', 'View Stock Inventory Item Details |')
 @section('content')
 <div id="wrapper">
 	<!-- Sidebar -->
-   	@include('sidebar.sidebar')
+   	@include('sidebar.sidebar-lolo-pinoy-grill')
    	<div id="content-wrapper">
    		<div class="container-fluid">
    			 <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">Lechon de Cebu</a>
+                <a href="#">Lolo Pinoy Grill Commissary</a>
               </li>
               <li class="breadcrumb-item ">Commissary</li>
               <li class="breadcrumb-item ">Stock Inventory</li>
               <li class="breadcrumb-item active">Item Details</li>
             </ol>
-            <a href="{{ url('lolo-pinoy-lechon-de-cebu/commissary/stocks-inventory') }}">Back to Lists</a>
+            <a href="{{ url('lolo-pinoy-grill-commissary/commissary/stocks-inventory') }}">Back to Lists</a>
              <div class="col-lg-12">
-            	 <img src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
+            	 <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill">
             	 
             	 <h4 class="text-center"><u>STOCK INVENTORY ITEM DETAILS </u></h4>
 

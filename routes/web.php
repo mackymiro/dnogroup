@@ -442,6 +442,82 @@ Route::group(['middleware' => ['auth']], function(){
 		'LoloPinoyGrillCommissaryController@printDelivery')
 		->name('lolo-pinoy-grill-commissary.printDelivery');
 
+	//
+	Route::get(
+		'/lolo-pinoy-grill-commissary/commissary/raw-materials',
+		'LoloPinoyGrillCommissaryController@rawMaterials')
+		->name('lolo-pinoy-grill-commissary.rawMaterials');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/commissary/create-raw-materials',
+		'LoloPinoyGrillCommissaryController@createRawMaterials')
+		->name('lolo-pinoy-grill-commissary.createRawMaterials');
+
+	Route::post(
+		'/lolo-pinoy-grill-commissary/commissary/create-raw-materials',
+		'LoloPinoyGrillCommissaryController@addRawMaterial')
+		->name('lolo-pinoy-grill-commissary.addRawMaterial');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/commissary/edit-raw-materials/{id}',
+		'LoloPinoyGrillCommissaryController@editRawMaterials')
+		->name('lolo-pinoy-grill-commissary.editRawMaterials');
+
+	Route::patch(
+		'/lolo-pinoy-grill-commissary/commissary/update-raw-material/{id}',
+		'LoloPinoyGrillCommissaryController@updateRawMaterial')
+		->name('lolo-pinoy-grill-commissary.updateRawMaterial');
+
+	Route::delete(
+		'/lolo-pinoy-grill-commissary/delete-raw-materials/{id}',
+		'LoloPinoyGrillCommissaryController@destroyRawMaterial')
+		->name('lolo-pinoy-grill-commissary.destroyRawMaterial');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/commissary/stocks-inventory',
+		'LoloPinoyGrillCommissaryController@stocksInventory')
+		->name('lolo-pinoy-grill-commissary.stocksInventory');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/view-raw-material-details/{id}',
+		'LoloPinoyGrillCommissaryController@viewRawMaterialDetails')
+		->name('lolo-pinoy-grill-commissary.viewRawMaterialDetails');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/raw-material/add-delivery-in/{id}',
+		'LoloPinoyGrillCommissaryController@rawMaterialAddDeliveryIn')
+		->name('lolo-pinoy-grill-commissary.rawMaterialAddDeliveryIn');
+
+	Route::post(
+		'/lolo-pinoy-grill-commissary/add-delivery-in-raw-material/{id}',
+		'LoloPinoyGrillCommissaryController@addDeliveryInRawMaterial')
+		->name('lolo-pinoy-grill-commissary.addDeliveryInRawMaterial');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/raw-material/request-stock-out/{id}',
+		'LoloPinoyGrillCommissaryController@rawMaterialRequestStockOut')
+		->name('lolo-pinoy-grill-commissary.rawMaterialRequestStockOut');
+
+	Route::post(
+		'/lolo-pinoy-grill-commissary/request-stock-out/{id}',
+		'LoloPinoyGrillCommissaryController@requestStockOut')
+		->name('lolo-pinoy-grill-commissary.requestStockOut');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/view-stock-inventory/{id}',
+		'LoloPinoyGrillCommissaryController@viewStockInventory')
+		->name('lolo-pinoy-grill-commissary.viewStockInventory');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/commissary/sales-of-outlets',
+		'LoloPinoyGrillCommissaryController@salesOfOutlet')
+		->name('lolo-pinoy-grill-commissary.salesOfOutlet');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/commissary/delivery-outlets',
+		'LoloPinoyGrillCommissaryController@commissaryDeliveryOutlet')
+		->name('lolo-pinoy-grill-commissary.commissaryDeliveryOutlet');
+
 	//Lolo Pinoy Grill Branches
 	Route::get('/lolo-pinoy-grill-branches', 'LoloPinoyGrillBranchesController@index')->name('lolo-pinoy-grill-branches.index');
 

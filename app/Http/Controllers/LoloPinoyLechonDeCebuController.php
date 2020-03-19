@@ -221,7 +221,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 
-        $name  = $firstName.$lastName;
+        $name  = $firstName." ".$lastName;
 
         $requestStockOut = CommissaryRawMaterial::find($id);
 
@@ -279,7 +279,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 
-        $name  = $firstName.$lastName;
+        $name  = $firstName." ".$lastName;
 
         $rawMaterial = CommissaryRawMaterial::find($id);
 
@@ -318,7 +318,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     //add delivery in RAW material
     public function rawMaterialAddDeliveryIn($id){
-         $ids = Auth::user()->id;
+        $ids = Auth::user()->id;
         $user = User::find($ids);
 
         $getRawMaterial = CommissaryRawMaterial::find($id);
@@ -384,7 +384,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 
-        $name  = $firstName.$lastName;
+        $name  = $firstName." ".$lastName;
 
         //validate
         $this->validate($request,[
@@ -406,7 +406,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             $uProd = sprintf("%06d",$newProd);
         } 
 
-         $addNewRawMaterial = new CommissaryRawMaterial([
+        $addNewRawMaterial = new CommissaryRawMaterial([
             'user_id'=>$user->id,
             'branch'=>$request->get('branch'),
             'product_id_no'=>$uProd,
@@ -1243,7 +1243,6 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $updateStatmentInfo->branch = $request->get('branch');;
         $updateStatmentInfo->payment_method = $request->get('paymentMethod');
-        $updateStatmentInfo->amount = $request->get('amount');
         $updateStatmentInfo->status = $request->get('status');
         $updateStatmentInfo->paid_amount = $request->get('paidAmount');
         $updateStatmentInfo->collection_date = $request->get('collectionDate');

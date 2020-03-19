@@ -88,6 +88,10 @@
                           <th style="font-size:16px; height: 1%; ">Date: </th>
                           <th style="font-size:16px; height: 1%; ">{{ $deliveryId->date }}</th>
                        </tr>
+                        <tr >
+                          <th style="font-size:16px; height: 1%; ">Date To Be Delivered: </th>
+                          <th style="font-size:16px; height: 1%; ">{{ $deliveryId->date_to_be_delivered }}</th>
+                       </tr>
                         
                   </thead>
               </table>
@@ -139,15 +143,19 @@
           </table>
           </div>
           
-          <div style="border-style: groove; margin-top:-1px;  width:700px; height: 50px;">
+          <div style="border-style: groove; margin-top:-1px;  width:700px; height: 90px;">
           <div style="float:left; width:50%; margin-left: 10px;">
              <table >
                 <thead>
                     <tr >
                         <th style="font-size:16px; height: 1%; width: 30%; ">Prepared By:</th>
-                        <th style="font-size:16px; height: 1%; ">{{ $deliveryId['created_by'] }}</th>
+                        <th style="font-size:16px; height: 1%; ">_____________________</th>
                     </tr>
                     <tr  >
+                        <th style="font-size:16px; height: 1%; ">&nbsp;</th>
+                        <th style="font-size:16px;">{{ $deliveryId['created_by'] }}</th>
+                    </tr>
+                    <tr >
                         <th style="font-size:16px; height: 1%; ">Checked By:</th>
                         <th style="font-size:16px;"></th>
                     </tr>
@@ -173,10 +181,10 @@
           <br>
           <br>
         <br>
-        <div style="float:left; width:50%; margin-top:-2px; ">
+        <div style="float:left; width:50%; margin-top:-10px; ">
             <p style="font-size: 16px;">ALL PAYMENTS SHOULD BE MADE IN FAVOR OF <u>RIBO'S FOOD CORPORATION</u></p>
         </div>
-        <div style="float:right; width:50%; margin-top:-2px;">
+        <div style="float:right; width:50%; margin-top:-50px;">
             <p style="font-size: 16px;">Received the above merchandise in good order and condition<br>
             ___________________________<br>
             Printed Name and Signature/Date</p>

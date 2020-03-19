@@ -15,9 +15,312 @@ use App\LoloPinoyGrillCommissaryBillingStatement;
 use App\LoloPinoyGrillCommissaryPaymentVoucher;
 use App\LoloPinoyGrillCommissarySalesInvoice;
 use App\LoloPinoyGrillCommissaryStatementOfAccount;
+use App\LoloPinoyGrillCommissaryRawMaterial;
 
 class LoloPinoyGrillCommissaryController extends Controller
 {
+
+    //
+    public function commissaryDeliveryOutlet(){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //
+        $getDeliveryOutlets = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', '!=', NULL)->get()->toArray();
+
+        return view('commissary-delivery-outlet-lolo-pinoy-grill', compact('user', 'getDeliveryOutlets'));
+    }
+
+    //
+    public function salesOfOutlet(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //
+        $getSalesOfOutlets = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', '!=', NULL)->get()->toArray();
+
+        //get total amount in delivery in 
+        $desc = "DELIVERY IN";
+        $status = "Paid";
+
+        $totalDeliveryIn = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', '!=', NULL)->where('description', $desc)->where('status', $status)->sum('amount');
+
+        //get total amount delivery out 
+        $descDelOut = "DELIVERY OUT"; 
+        $statusDelOut = "Paid";  
+
+        $totalDeliveryOut = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', '!=', NULL)->where('description', $descDelOut)->where('status', $statusDelOut)->sum('amount');
+
+        return view('commissary-sales-of-outlet-lolo-pinoy-grill', compact('user', 'getSalesOfOutlets', 'totalDeliveryIn', 
+            'totalDeliveryOut'));
+    }
+
+    //
+    public function viewStockInventory($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //
+        $viewStockDetail = LoloPinoyGrillCommissaryRawMaterial::find($id);
+
+        //transaction table
+        $getViewStockDetails = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', $id)->get()->toArray();
+
+        return view('view-lolo-pinoy-grill-stock-inventory', compact('user', 'viewStockDetail', 'getViewStockDetails'));
+    }
+
+    //
+    public function requestStockOut(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $requestStockOut = LoloPinoyGrillCommissaryRawMaterial::find($id);
+
+        $qty = $request->get('qty');
+
+        //compute qty times unit price
+        $compute  = $qty * $requestStockOut->unit_price;
+        $sum = $compute;
+
+          //get date today
+        $getDateToday =  date('Y-m-d');
+
+         $addRequestStockOut = new LoloPinoyGrillCommissaryRawMaterial([
+            'user_id'=>$user->id,
+            'rm_id'=>$id,
+            'product_id_no'=>$request->get('productId'),
+            'description'=>$request->get('description'),
+            'date'=>$getDateToday,
+            'item'=>$requestStockOut->product_name,
+            'reference_no'=>$request->get('referenceNum'),
+            'qty'=>$qty,
+            'unit'=>$requestStockOut->unit,
+            'amount'=>$sum,
+            'status'=>$request->get('status'),
+            'cheque_no_issued'=>$request->get('chequeNo'),
+            'requesting_branch'=>$request->get('requestingBranch'),
+            'created_by'=>$name,
+        ]);
+
+        $addRequestStockOut->save();
+
+         Session::flash('requestStockOut', 'Request Stock Out Successfully Added');
+
+         return redirect('lolo-pinoy-grill-commissary/raw-material/request-stock-out/'.$id);
+
+    }
+
+    //
+    public function rawMaterialRequestStockOut($id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $getRequestStock = LoloPinoyGrillCommissaryRawMaterial::find($id);
+
+        return view('request-stock-out-raw-material-lolo-pinoy-grill', compact('user', 'getRequestStock', 'id'));
+    }
+
+
+    //
+    public function addDeliveryInRawMaterial(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $rawMaterial = LoloPinoyGrillCommissaryRawMaterial::find($id);
+
+        $qty = $request->get('qty');
+
+         //compute qty times unit price
+        $compute  = $qty * $rawMaterial->unit_price;
+        $sum = $compute;
+
+          //get date today
+        $getDateToday =  date('Y-m-d');
+
+        $addDeliveryIn = new LoloPinoyGrillCommissaryRawMaterial([
+            'user_id'=>$user->id,
+            'rm_id'=>$id,
+            'product_id_no'=>$request->get('productId'),
+            'description'=>$request->get('description'),
+            'date'=>$getDateToday,
+            'item'=>$rawMaterial->product_name,
+            'reference_no'=>$request->get('referenceNum'),
+            'qty'=>$qty,
+            'unit'=>$rawMaterial->unit,
+            'amount'=>$sum,
+            'status'=>$request->get('status'),
+            'cheque_no_issued'=>$request->get('chequeNo'),
+            'created_by'=>$name,
+        ]);
+
+        $addDeliveryIn->save();
+
+         Session::flash('addDeliveryIn', 'Delivery In Successfully Added');
+
+         return redirect('lolo-pinoy-grill-commissary/raw-material/add-delivery-in/'.$id);
+
+
+
+    }
+
+    //
+    public function rawMaterialAddDeliveryIn($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $getRawMaterial = LoloPinoyGrillCommissaryRawMaterial::find($id);
+
+        return view('add-delivery-in-raw-material-lolo-pinoy-grill', compact('user', 'getRawMaterial', 'id'));
+    }
+
+    //
+    public function viewRawMaterialDetails($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //
+        $viewRawDetail = LoloPinoyGrillCommissaryRawMaterial::find($id);
+
+        //transaction table
+        $getViewRawDetails = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', $id)->get()->toArray();
+        
+        return view('view-lolo-pinoy-grill-raw-material-details', compact('user', 'viewRawDetail', 'getViewRawDetails'));
+    }
+
+    //
+    public function stocksInventory(){
+          $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+    
+        //getRawMaterial
+        $getRawMaterials = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', NULL)->get()->toArray();
+
+        //count the total stock out amount value
+        $countStockAmount = LoloPinoyGrillCommissaryRawMaterial::all()->sum('stock_amount');
+        
+        //count the total amount 
+        $countTotalAmount = LoloPinoyGrillCommissaryRawMaterial::all()->sum('amount');
+
+        return view('commissary-stocks-inventory-lolo-pinoy-grill', compact('user', 'getRawMaterials', 'countStockAmount', 'countTotalAmount'));
+    }
+
+    //
+    public function updateRawMaterial(Request $request, $id){
+        $updateRawMaterial = LoloPinoyGrillCommissaryRawMaterial::find($id);
+
+        $updateRawMaterial->branch = $request->get('branch');
+        $updateRawMaterial->product_name = $request->get('productName');
+        $updateRawMaterial->unit_price = $request->get('unitPrice');
+        $updateRawMaterial->unit = $request->get('unit');
+        $updateRawMaterial->in = $request->get('in');
+        $updateRawMaterial->out = $request->get('out');
+        $updateRawMaterial->stock_amount = $request->get('stockAmount');
+        $updateRawMaterial->remaining_stock = $request->get('remainingStock');
+        $updateRawMaterial->amount = $request->get('amount');
+        $updateRawMaterial->supplier = $request->get('supplier');
+
+        $updateRawMaterial->save();
+
+         Session::flash('successRawMaterial', 'Successfully updated');
+
+        return redirect('lolo-pinoy-grill-commissary/commissary/edit-raw-materials/'.$id);
+    }
+
+    //
+    public function editRawMaterials($id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $getRawMaterial = LoloPinoyGrillCommissaryRawMaterial::find($id);
+
+        return view('edit-lolo-pinoy-grill-commissary-raw-material', compact('user', 'getRawMaterial'));
+    }
+
+    //
+    public function addRawMaterial(Request $request){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        //validate
+        $this->validate($request,[
+            'productName' =>'required',
+        ]);
+
+
+         //get the latest insert id query in table commissary RAW material product id no
+        $dataProductId = DB::select('SELECT id, product_id_no FROM lolo_pinoy_grill_commissary_raw_materials ORDER BY id DESC LIMIT 1');
+
+        //if code is not zero add plus 1 product id no
+        if(isset($dataProductId[0]->product_id_no) != 0){
+            //if code is not 0
+            $newProd = $dataProductId[0]->product_id_no +1;
+            $uProd = sprintf("%06d",$newProd);   
+
+        }else{
+            //if code is 0 
+            $newProd = 1;
+            $uProd = sprintf("%06d",$newProd);
+        } 
+
+        $addNewRawMaterial = new LoloPinoyGrillCommissaryRawMaterial([
+            'user_id'=>$user->id,
+            'branch'=>$request->get('branch'),
+            'product_id_no'=>$uProd,
+            'product_name'=>$request->get('productName'),
+            'unit_price'=>$request->get('unitPrice'),
+            'unit'=>$request->get('unit'),
+            'in'=>$request->get('in'),
+            'out'=>$request->get('out'),
+            'stock_amount'=>$request->get('stockAmount'),
+            'remaining_stock'=>$request->get('remainingStock'),
+            'amount'=>$request->get('amount'),
+            'supplier'=>$request->get('supplier'),
+            'created_by'=>$name,
+
+        ]);
+
+        $addNewRawMaterial->save();
+
+        Session::flash('addRawMaterial', 'Successfully added.');
+
+        return redirect('lolo-pinoy-grill-commissary/commissary/create-raw-materials');
+
+
+    }
+
+    //
+    public function createRawMaterials(){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('commissary-add-raw-materials-lolo-pinoy-grill', compact('user'));
+    }
+
+    //
+    public function rawMaterials(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $getRawMaterials = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', NULL)->get()->toArray();
+
+        return view('commissary-raw-materials-lolo-pinoy-grill', compact('user', 'getRawMaterials'));
+    }
 
     //
     public function viewStatementAccount($id){
@@ -1321,5 +1624,10 @@ class LoloPinoyGrillCommissaryController extends Controller
     public function destroyDeliveryReceipt($id){
         $deliveryReceipt = LoloPinoyGrillCommissaryDeliveryReceipt::find($id);
         $deliveryReceipt->delete();
+    }
+
+    public function destroyRawMaterial($id){
+         $rawMaterial = LoloPinoyGrillCommissaryRawMaterial::find($id);
+        $rawMaterial->delete();
     }
 }
