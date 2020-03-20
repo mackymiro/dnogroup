@@ -35,18 +35,19 @@
                      					<label>Qty</label>
                      					<input type="text" name="qty" class="form-control" required="required"  />
 	                         		</div>
-	                         		<div class="col-md-2">
-                         				<label>Total KlS</label>
-                         				<input type="text" name="totalKls" class="form-control" required="required" />
-                         			</div>
+	                         		 <div class="col-md-2">
+                                        <label>Body 400/KLS</label>
+                                        <input type="text" name="body" class="form-control" />
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label>Head & Feet 200/KLS</label>
+                                        <input type="text" name="headFeet" class="form-control" />
+                                    </div>
                          			<div class="col-md-4">
                          				<label>Item Description</label>
                          				<input type="text" name="itemDescription" class="form-control"/>
                          			</div>
-                         			<div class="col-md-1">
-                         				<label>Unit Price</label>
-                         				<input type="text" name="unitPrice" class="form-control" disabled="disabled" value="500.00" />
-                         			</div>
+                         			
 				  				</div>
 					  		</div>
 					  		<div class="form-group">

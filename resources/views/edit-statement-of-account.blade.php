@@ -30,12 +30,7 @@
                               <i class="fas fa-receipt" aria-hidden="true"></i>
                             Edit Statement Of Account</div>
                         <div class="card-body">
-                              @if(session('SuccessE'))
-                                 <p class="alert alert-success">{{ Session::get('SuccessE') }}</p>
-                                @endif 
-                              <form action="{{ action('LoloPinoyLechonDeCebuController@updateStatementInfo', $getStatementOfAccount['id']) }}" method="post">
-                                 {{csrf_field()}}
-                               <input name="_method" type="hidden" value="PATCH">
+                             
                                <div class="form-group"> 
                                   <div class="form-row">
                                        <div class="col-lg-4">
@@ -88,32 +83,13 @@
                                       </div>
                                        <div class="col-lg-2">
                                            <label>Branch</label>
-                                            <select name="branch" class="form-control">
-                                              <option value="0">--Please Select--</option>
-                                              <option value="Terminal 1" 
-                                                <?php echo ("Terminal 1" == $getStatementOfAccount['branch']) ? 'selected="selected"' : '' ?> >Terminal 1
-                                              </option>
-                                              <option value="Terminal 2" <?php echo ("Terminal 2" == $getStatementOfAccount['branch']) ? 'selected="selected"' : '' ?> >Terminal 2
-                                              </option>
-                                           
-                                          </select>
+                                           <input type="text" name="branch" class="form-control" value="{{ $getStatementOfAccount['branch']}}" disabled="disabled" />
                                       </div>
                                     
                                      
                                   </div>
                               </div>
-                             
-                               <div class="form-group">
-                                      <div class="form-row">
-                                        <div class="col-lg-12 float-right">
-                                  
-                                            <input type="submit" class="btn btn-success"  value="Update Statement Of Account" />
-                                        </div>       
-                                      </div>
-                                </div>
-                                  
-                              
-                            </form>
+                            
                         </div>
                     </div>  
                 </div>

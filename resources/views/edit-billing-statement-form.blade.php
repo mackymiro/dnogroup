@@ -46,6 +46,8 @@
                                         <input type="text" name="address" class="form-control" value="{{ $billingStatement['date'] }}" />
                                         <label>Period Covered</label>
                                         <input type="text" name="periodCovered" class="form-control" value="{{ $billingStatement['period_cover'] }}" />
+                                         <label>Terms</label>
+                                        <input type="text" name="terms" class="form-control" required="required" value="{{ $billingStatement['terms'] }}" />
                                       </div>
                                       <div class="col-lg-6">
                                       <label>Date</label>
@@ -59,8 +61,13 @@
                                             <option value="{{ $getPurchaseOrder['p_o_number'] }}" {{ ( $billingStatement['p_o_number'] == $getPurchaseOrder['p_o_number']) ? 'selected' : '' }}>{{ $getPurchaseOrder['p_o_number'] }}</option>
                                             @endforeach
                                         </select>
-                                        <label>Terms</label>
-                                        <input type="text" name="terms" class="form-control" required="required" value="{{ $billingStatement['terms'] }}" />
+                                        <label>Branch</label>
+                                         <select name="branch" class="form-control">
+                                            <option value="0">--Please Select--</option>
+                                            <option value="{{ $billingStatement['branch'] }}" {{ ( $billingStatement['branch'] == "Terminal 1") ? 'selected' : '' }}>Terminal 1</option>
+                                            <option value="{{ $billingStatement['branch'] }}" {{ ( $billingStatement['branch'] == "Terminal 2") ? 'selected' : '' }}>Terminal 2</option>
+                                           
+                                        </select>
                                       </div>
                                     </div>
                                   </div>

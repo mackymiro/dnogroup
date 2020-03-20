@@ -16,6 +16,8 @@ class LechonDeCebuSalesInvoice extends Model
 		'address',
 		'qty',
 		'total_kls',
+		'body',
+		'head_and_feet',
 		'item_description',
 		'unit_price',
 		'amount',

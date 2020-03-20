@@ -106,8 +106,6 @@ Route::group(['middleware' => ['auth']], function(){
 	//route for add new statement of account
 	Route::post('/lolo-pinoy-lechon-de-cebu/add-new-statement-data/{id}', 'LoloPinoyLechonDeCebuController@addNewStatementData')->name('lolo-pinoy-lechon-de-cebu.addNewStatementData');
 
-	//update statement of account info
-	Route::patch('/lolo-pinoy-lechon-de-cebu/update-statement-info/{id}', 'LoloPinoyLechonDeCebuController@updateStatementInfo')->name('lolo-pinoy-lechon-de-cebu.updateStatementInfo');
 
 	//update add statement information
 	Route::patch('lolo-pinoy-lechon-de-cebu/update-added-statement/{id}', 'LoloPinoyLechonDeCebuController@updateAddStatement')->name('lolo-pinoy-lechon-de-cebu.updateAddStatement');
@@ -192,6 +190,16 @@ Route::group(['middleware' => ['auth']], function(){
 
 	//route for sales invoice form lechon de cebu
 	Route::get('/lolo-pinoy-lechon-de-cebu/sales-invoice-form', 'LoloPinoyLechonDeCebuController@salesInvoiceForm')->name('lolo-pinoy-lechon-de-cebu.salesInvoiceForm');
+
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/sales-per-outlet',
+		'LoloPinoyLechonDeCebuController@salesInvoiceSalesPerOutlet')
+		->name('lolo-pinoy-lechon-de-cebu.salesInvoiceSalesPerOutlet');
+
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/sales-invoice/private-orders',
+		'LoloPinoyLechonDeCebuController@privateOrders')
+		->name('lolo-pinoy-lechon-de-cebu.privateOrders');
 
 	//route for add sales invoice lechon de cebu
 	Route::post('/lolo-pinoy-lechon-de-cebu/store-sales-invoice', 'LoloPinoyLechonDeCebuController@storeSalesInvoice')->name('lolo-pinoy-lechon-de-cebu.storeSalesInvoice');

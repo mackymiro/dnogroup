@@ -14,8 +14,9 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/sales-invoice-form')}}">Sales Invoice Form</a>
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/') }}">Lists</a>
-         
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/') }}">ALl Lists</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/sales-per-outlet') }}">Sales Per Outlet</a>
+           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/sales-invoice/private-orders') }}">Private Orders</a>
         </div>
       </li>
       <li class="nav-item dropdown">
@@ -68,8 +69,8 @@
       </li>
        <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-file-invoice"></i>
-          <span>Payment Vouchers</span>
+           <i class="fa fa-credit-card" aria-hidden="true"></i>
+          <span>Payables</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
             <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/payment-voucher-form') }}">Payment Voucher Form</a>
@@ -95,19 +96,7 @@
          
         </div>
       </li>
-       <li class="nav-item dropdown ">
-        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fa fa-credit-card" aria-hidden="true"></i>
-          <span>Payables</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if($user->role_type == 1)
-          <a class="dropdown-item" href="">Transaction List</a>
-          @endif
-          <a class="dropdown-item" href="">test</a>
-         
-        </div>
-      </li>
+      
      
      
     </ul>

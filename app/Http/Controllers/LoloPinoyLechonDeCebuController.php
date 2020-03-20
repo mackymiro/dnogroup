@@ -21,7 +21,38 @@ use Session;
 
 
 class LoloPinoyLechonDeCebuController extends Controller
-{
+{   
+
+    //
+    public function privateOrders(){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+
+        return view('lechon-de-cebu-sales-invoice-private-orders', compact('user'));
+    }
+
+    //sales invoice > sales pero outlet
+    public function salesInvoiceSalesPerOutlet(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //getSalesInvoiceTerminal1
+        $branch = "Terminal 1";
+        $branch2 = "Terminal 2";
+
+        $statementOfAccountT1s = LechonDeCebuStatementOfAccount::where('bill_to', '!=', NULL)->where('branch', $branch)->get()->toArray();
+
+        //get total sales in terminal 1
+        $totalSalesInTerminal1 =  LechonDeCebuStatementOfAccount::where('branch', $branch)->sum('paid_amount');
+
+        $statementOfAccountT2s = LechonDeCebuStatementOfAccount::where('bill_to', '!=', NULL)->where('branch', $branch2)->get()->toArray();
+
+          //get total sales in terminal 1
+        $totalSalesInTerminal2 =  LechonDeCebuStatementOfAccount::where('branch', $branch2)->sum('paid_amount');
+
+        return view('lechon-de-cebu-sales-invoice-sales-per-outlet', compact('user', 'statementOfAccountT1s', 'totalSalesInTerminal1', 'statementOfAccountT2s', 'totalSalesInTerminal2'));
+    }
 
     //
     public function sAccountUpdate(Request $request, $id){
@@ -499,18 +530,35 @@ class LoloPinoyLechonDeCebuController extends Controller
         $updateSi = LechonDeCebuSalesInvoice::find($id);
 
         //kls
-        $kls  = $request->get('totalKls');
+        /*$kls  = $request->get('totalKls');
 
          //compute kls * unit price
         $unitPrice = $updateSi->unit_price;
         $compute = $kls * $unitPrice;
-        $sum = $compute;
+        $sum = $compute;*/
+
+           //body 400kls
+        $body = $request->get('body');
+
+        $bodyComp = 400;
+        $computeBody = $body * $bodyComp;
+
+
+        //head and feet 200kls
+        $head = $request->get('headFeet');
+
+        $headFeet = 200;
+        $computeHeadFeet = $head * $headFeet;
+
+
+        //total body and head and feet    
+        $tot = $computeBody + $computeHeadFeet;
 
         $updateSi->qty = $request->get('qty');
-        $updateSi->total_kls = $kls;
+        $updateSi->body = $body;
+        $updateSi->head_and_feet = $head;
         $updateSi->item_description = $request->get('itemDescription');
-        $updateSi->unit_price = $unitPrice;
-        $updateSi->amount = $sum;
+        $updateSi->amount = $tot;
 
         $updateSi->save();
 
@@ -534,22 +582,39 @@ class LoloPinoyLechonDeCebuController extends Controller
         $getDateToday =  date('Y-m-d');
 
         //kls
-        $kls  = $request->get('totalKls');
+        /*$kls  = $request->get('totalKls');
 
          //compute kls * unit price
         $unitPrice = 500;
         $compute = $kls * $unitPrice;
-        $sum = $compute;
+        $sum = $compute;*/
+
+        //body 400kls
+        $body = $request->get('body');
+
+        $bodyComp = 400;
+        $computeBody = $body * $bodyComp;
+
+
+        //head and feet 200kls
+        $head = $request->get('headFeet');
+
+        $headFeet = 200;
+        $computeHeadFeet = $head * $headFeet;
+
+
+        //total body and head and feet    
+        $tot = $computeBody + $computeHeadFeet;
 
         $addNewSalesInvoice = new LechonDeCebuSalesInvoice([
             'user_id'=>$user->id,
             'si_id'=>$id,
             'date'=>$getDateToday,
             'qty'=>$request->get('qty'),
-            'total_kls'=>$kls,
+            'body'=>$body,
+            'head_and_feet'=>$head,
             'item_description'=>$request->get('itemDescription'),
-            'unit_price'=>$unitPrice,
-            'amount'=>$sum,
+            'amount'=>$tot,
             'created_by'=>$name,
         ]);
 
@@ -582,22 +647,41 @@ class LoloPinoyLechonDeCebuController extends Controller
         $updateSalesInvoice = LechonDeCebuSalesInvoice::find($id);
 
         //kls
-        $kls  = $request->get('totalKls');
+        /*$kls  = $request->get('totalKls');
 
          //compute kls * unit price
         $unitPrice = $updateSalesInvoice->unit_price;
         $compute = $kls * $unitPrice;
-        $sum = $compute;
+        $sum = $compute;*/
+
+         //body 400kls
+        $body = $request->get('body');
+
+        $bodyComp = 400;
+        $computeBody = $body * $bodyComp;
+
+
+        //head and feet 200kls
+        $head = $request->get('headFeet');
+
+        $headFeet = 200;
+        $computeHeadFeet = $head * $headFeet;
+
+
+        //total body and head and feet    
+        $tot = $computeBody + $computeHeadFeet;
+
        
 
-        $updateSalesInvoice->invoice_number = $request->get('invoiceNum');
-        $updateSalesInvoice->ordered_by = $request->get('orderedBy');
-        $updateSalesInvoice->address = $request->get('address');
-        $updateSalesInvoice->qty = $request->get('qty');
-        $updateSalesInvoice->total_kls = $kls;
-        $updateSalesInvoice->item_description = $request->get('itemDescription');
-        $updateSalesInvoice->amount = $sum;
-        $updateSalesInvoice->created_by = $name; 
+        $updateSalesInvoice->invoice_number     = $request->get('invoiceNum');
+        $updateSalesInvoice->ordered_by         = $request->get('orderedBy');
+        $updateSalesInvoice->address            = $request->get('address');
+        $updateSalesInvoice->qty                = $request->get('qty');
+        $updateSalesInvoice->body               = $body;
+        $updateSalesInvoice->head_and_feet      = $head;
+        $updateSalesInvoice->item_description   = $request->get('itemDescription');
+        $updateSalesInvoice->amount             = $tot;
+        $updateSalesInvoice->created_by         = $name; 
 
         $updateSalesInvoice->save();
 
@@ -642,12 +726,29 @@ class LoloPinoyLechonDeCebuController extends Controller
         $getDateToday =  date('Y-m-d');
 
         //total kls
-        $kls = $request->get('totalKls');
+        /*$kls = $request->get('totalKls');
 
         //compute kls * unit price
         $unitPrice = 500;
         $compute = $kls * $unitPrice;
-        $sum = $compute;
+        $sum = $compute;*/
+
+        //body 400kls
+        $body = $request->get('body');
+
+        $bodyComp = 400;
+        $computeBody = $body * $bodyComp;
+
+
+        //head and feet 200kls
+        $head = $request->get('headFeet');
+
+        $headFeet = 200;
+        $computeHeadFeet = $head * $headFeet;
+
+
+        //total body and head and feet    
+        $tot = $computeBody + $computeHeadFeet;
 
 
         $addSalesInvoice = new LechonDeCebuSalesInvoice([
@@ -657,10 +758,10 @@ class LoloPinoyLechonDeCebuController extends Controller
             'address'=>$request->get('address'),
             'date'=>$getDateToday,
             'qty'=>$request->get('qty'),
-            'total_kls'=>$kls,
+            'body'=>$body,
+            'head_and_feet'=>$head,
             'item_description'=>$request->get('itemDescription'),
-            'unit_price'=>$unitPrice,
-            'amount'=>$sum,
+            'amount'=>$tot,
             'created_by'=>$name,
         ]);
 
@@ -1270,17 +1371,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     }
 
-    //update statment info
-    public function updateStatementInfo(Request $request, $id){
-        $updateStatmentInfo = LechonDeCebuStatementOfAccount::find($id);
 
-        $updateStatmentInfo->branch = $request->get('branch');
-        $updateStatmentInfo->save();
-
-        Session::flash('SuccessE', 'Successfully updated');
-
-        return redirect('lolo-pinoy-lechon-de-cebu/edit-statement-of-account/'.$id);
-   }
 
     //add new statement of account data
     public function addNewStatementData(Request $request, $id){
@@ -1408,6 +1499,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         //$status = "Unpaid";
         //$paid = "Paid";
         $statementOfAccounts = LechonDeCebuStatementOfAccount::where('bill_to', '!=', NULL)->get()->toArray();
+
 
         //$statementOfAccountsPaids = LechonDeCebuStatementOfAccount::where('bill_to', '!=', NULL)->where('status', $paid)->get()->toArray();
 
@@ -1591,6 +1683,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'billing_statement_id'=>$id,
             'reference_number'=>$billingOrder['reference_number'],
             'p_o_number'=>$billingOrder['p_o_number'],
+            'branch'=>$request->get('branch'),
             'date_of_transaction'=>$request->get('transactionDate'),
             'invoice_number'=>$request->get('invoiceNumber'),
             'whole_lechon'=>$wholeLechon,
@@ -1607,6 +1700,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'billing_statement_id'=>$id,
             'reference_number'=>$billingOrder['reference_number'],
             'p_o_number'=>$billingOrder['p_o_number'],
+            'branch'=>$request->get('branch'),
             'transaction_date'=>$request->get('transactionDate'),
             'invoice_number'=>$request->get('invoiceNumber'),
             'whole_lechon'=>$wholeLechon,
@@ -1701,6 +1795,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'invoice_number'=>$request->get('invoiceNumber'),
             'reference_number'=>$uRef,
             'p_o_number'=>$request->get('poNumber'),
+            'branch'=>$request->get('branch'),
             'terms'=>$request->get('terms'),
             'date_of_transaction'=>$request->get('transactionDate'),
             'whole_lechon'=>$wholeLechon,
@@ -1727,6 +1822,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'invoice_number'=>$request->get('invoiceNumber'),
             'reference_number'=>$uRef,
             'p_o_number'=>$request->get('poNumber'),
+            'branch'=>$request->get('branch'),
             'terms'=>$request->get('terms'),
             'transaction_date'=>$request->get('transactionDate'),
             'whole_lechon'=>$wholeLechon,

@@ -58,22 +58,23 @@
 	                             	</div>
                              		<div class="form-group">
                          				<div class="form-row">
-                         					<div class="col-md-2">
+                         					<div class="col-md-1">
 		                     					<label>Qty</label>
 		                     					<input type="text" name="qty" class="form-control" value="{{ $getSalesInvoice['qty']}}" />
 		                         			</div>
-		                         			<div class="col-md-2">
-		                         				<label>Total KlS</label>
-		                         				<input type="text" name="totalKls" class="form-control" value="{{ $getSalesInvoice['total_kls']}}" />
-		                         			</div>
+		                         			 <div class="col-md-2">
+		                                        <label>Body 400/KLS</label>
+		                                        <input type="text" name="body" class="form-control" value="{{ $getSalesInvoice['body']}}" />
+		                                    </div>
+		                                    <div class="col-md-2">
+		                                        <label>Head & Feet 200/KLS</label>
+		                                        <input type="text" name="headFeet" class="form-control" value="{{ $getSalesInvoice['head_and_feet']}}" />
+		                                    </div>
 		                         			<div class="col-md-4">
 		                         				<label>Item Description</label>
 		                         				<input type="text" name="itemDescription" class="form-control" value="{{ $getSalesInvoice['item_description']}}" />
 		                         			</div>
-		                         			<div class="col-md-1">
-		                         				<label>Unit Price</label>
-		                         				<input type="text" name="unitPrice" class="form-control" disabled="disabled" value="<?php echo number_format($getSalesInvoice['unit_price'], 2)?>" />
-		                         			</div>
+		                         		
 		                         			<div class="col-md-1">
 		                         				<label>Amount</label>
 		                         				<input type="text" name="amount" class="form-control" disabled="disabled" value="<?php echo number_format($getSalesInvoice['amount'], 2)?>" />
@@ -114,22 +115,23 @@
                                  <input name="_method" type="hidden" value="PATCH">
                              	<div class="form-group">
                              		<div id="deletedId{{ $sInvoice['id'] }}" class="form-row">
-                         				<div class="col-md-2">
+                         				<div class="col-md-1">
 	                     					<label>Qty</label>
 	                     					<input type="text" name="qty" class="form-control" value="{{ $sInvoice['qty']}}" />
 	                         			</div>
-	                         			<div class="col-md-2">
-		                         				<label>Total KlS</label>
-		                         				<input type="text" name="totalKls" class="form-control" value="{{ $sInvoice['total_kls']}}" />
-		                         			</div>
+	                         				 <div class="col-md-2">
+		                                        <label>Body 400/KLS</label>
+		                                        <input type="text" name="body" class="form-control" value="{{ $sInvoice['body']}}" />
+		                                    </div>
+		                                    <div class="col-md-2">
+		                                        <label>Head & Feet 200/KLS</label>
+		                                        <input type="text" name="headFeet" class="form-control" value="{{ $sInvoice['head_and_feet']}}" />
+		                                    </div>
 		                         			<div class="col-md-4">
 		                         				<label>Item Description</label>
 		                         				<input type="text" name="itemDescription" class="form-control" value="{{ $sInvoice['item_description'] }}" />
 		                         			</div>
-		                         			<div class="col-md-1">
-		                         				<label>Unit Price</label>
-		                         				<input type="text" name="unitPrice" class="form-control" disabled="disabled" value="<?php echo number_format($sInvoice['unit_price'], 2)?>" />
-		                         			</div>
+		                         			
 		                         			<div class="col-md-1">
 		                         				<label>Amount</label>
 		                         				<input type="text" name="ampunt" class="form-control" disabled="disabled" value="<?php echo number_format(

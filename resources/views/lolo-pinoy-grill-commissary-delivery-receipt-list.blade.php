@@ -74,7 +74,7 @@
 					  							<td>{{ $getAllDeliveryReceipt['item_description']}}</td>
 					  							<td><?php echo number_format($getAllDeliveryReceipt['unit_price'], 2)?></td>
 					  							<td><?php echo number_format($getAllDeliveryReceipt['amount'], 2)?></td>
-					  							<td>{{ $getAllDeliveryReceipt['created_by	']}}</td>
+					  							<td>{{ $getAllDeliveryReceipt['created_by']}}</td>
 					  						</tr>
 					  						@endforeach
 					  					</tbody>

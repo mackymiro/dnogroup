@@ -47,9 +47,16 @@
 		              				<label>Description</label>
         								  <input type="text" name="description" class="form-control"  required="required" />
 		              			</div>
-		              			<div class="col-lg-1">
-            				        <label>Amount</label>
-		            				    <input type="text" name="amount" class="form-control" disabled="disabled" />
+		              			<div class="col-lg-2">
+            				        <label>Branch</label>
+		            				  <div id="app-branch">
+	                                  <select name="branch" class="form-control">
+	                                      <option value="0">--Please Select--</option>
+	                                      <option v-for="branch in branches" v-bind:value="branch.value">
+	                                          @{{ branch.text }}
+	                                      </option>
+                            	      </select>
+                           			 </div>
 		            			 </div>
 						   			</div>
 						   		</div>
@@ -83,4 +90,17 @@
         </div>
       </footer>
 </div>
+<script>
+   //branch data
+  new Vue({
+  el: '#app-branch',
+    data: {
+      branches:[
+        { text:'Terminal 1', value: 'Terminal 1' },
+        { text:'Terminal 2', value: 'Terminal 2'}
+      ]
+    }
+  })  
+  
+</script>
 @endsection

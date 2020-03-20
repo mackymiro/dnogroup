@@ -51,6 +51,13 @@
                                       <strong>{{ $errors->first('periodCovered') }}</strong>
                                     </span>
                                   @endif
+                                 <label>Terms</label>
+                                <input type="text" name="terms" class="form-control" required="required" />
+                                @if ($errors->has('terms'))
+                                    <span class="alert alert-danger">
+                                      <strong>{{ $errors->first('terms') }}</strong>
+                                    </span>
+                                  @endif
                               </div>
                               <div class="col-lg-6">
                                 <label>Date</label>
@@ -68,14 +75,15 @@
                                     <option value="{{ $getPurchaseOrder['p_o_number'] }}">{{ $getPurchaseOrder['p_o_number'] }}</option>
                                     @endforeach
                                 </select>
-                                
-                                <label>Terms</label>
-                                <input type="text" name="terms" class="form-control" required="required" />
-                                @if ($errors->has('terms'))
-                                    <span class="alert alert-danger">
-                                      <strong>{{ $errors->first('terms') }}</strong>
-                                    </span>
-                                  @endif
+                                <label>Branch</label>
+                                <div id="app-branch">
+                                  <select name="branch" class="form-control">
+                                      <option value="0">--Please Select--</option>
+                                      <option v-for="branch in branches" v-bind:value="branch.value">
+                                          @{{ branch.text }}
+                                      </option>
+                                  </select>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -151,6 +159,17 @@
       statuses:[
         { text:'Unpaid', value: 'Unpaid' },
         { text:'Paid', value: 'Paid'}
+      ]
+    }
+  })  
+
+   //branch data
+  new Vue({
+  el: '#app-branch',
+    data: {
+      branches:[
+        { text:'Terminal 1', value: 'Terminal 1' },
+        { text:'Terminal 2', value: 'Terminal 2'}
       ]
     }
   })  

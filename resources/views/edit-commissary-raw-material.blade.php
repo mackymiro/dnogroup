@@ -66,7 +66,7 @@
 					  	 				</div>
 					                      <div class="col-md-2">
 					                        <label>Stock Out Amount</label>
-					                        <input type="text" name="stockAmount" class="form-control" value="<?php echo number_format($getRawMaterial['stock_amount'], 2)?>" />
+					                        <input type="text" name="stockAmount" class="form-control" value="{{ $getRawMaterial['stock_amount']}}" />
 					                      </div>
 					  	 				
             	 					</div>

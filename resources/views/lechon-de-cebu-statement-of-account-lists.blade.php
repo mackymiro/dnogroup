@@ -28,7 +28,7 @@
       			  							<th>Branch</th>
                             <th>Reference #</th>
       			  							<th>Invoice#</th>
-      			  						
+      			  						  <th  class="bg-info" style="color:white;">Period Covered</th>
       			  							<th>Created By</th>
       				  					</thead>
       				  					<tfoot>
@@ -38,7 +38,7 @@
                             <th>Branch</th>
                             <th>Reference #</th>
                             <th>Invoice#</th>
-                          
+                            <th  class="bg-info" style="color:white;">Period Covered</th>
                             <th>Created By</th>
       				  					</tfoot>
       				  					<tbody>
@@ -59,7 +59,7 @@
                               <td>{{ $statementOfAccount['branch' ]}}</td>
                               <td>{{ $statementOfAccount['reference_number' ]}}</td>
                               <td>{{ $statementOfAccount['invoice_number' ]}}</td>
-                              
+                              <td class="bg-info" style="color:white;">{{ $statementOfAccount['period_cover']}}</td>
                               <td>{{ $statementOfAccount['created_by' ]}}</td>
                             </tr>
                             @endforeach

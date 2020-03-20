@@ -16,6 +16,7 @@ class LechonDeCebuBillingStatement extends Model
     	'date',
     	'reference_number',
     	'p_o_number',
+        'branch',
     	'period_cover',
     	'terms',
     	'date_of_transaction',
