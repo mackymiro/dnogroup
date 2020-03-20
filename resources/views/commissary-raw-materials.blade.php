@@ -44,6 +44,7 @@
 	  				  					  	<th>Stock Out Amount</th>
 					                        <th>Remaining Stock</th>
 					                        <th>Amount</th>
+                                  <th>Supplier</th>
 	  				  						<th>Created By</th>
 			  						   </thead>
 			  						   <tfoot>
@@ -57,6 +58,7 @@
 					  						<th>Stock Out Amount</th>
 						                    <th>Remaining Stock</th>
 						                    <th>Amount</th>
+                                <th>Supplier</th>
 					  						<th>Created By</th>
 										</tfoot>
 										<tbody>
@@ -76,7 +78,8 @@
 					                        <td>{{ $getRawMaterial['stock_amount']}}</td>
 					                        <td>{{ $getRawMaterial['remaining_stock']}}</td>
 					                        <td><?php echo number_format($getRawMaterial['amount'], 2);?></td>
-					                        <td>{{ $getRawMaterial['created_by'] }}</td>
+                                  <td><p style="width:100px;">{{ $getRawMaterial['supplier']}}</p></td>
+					                        <td><p style="width: 100px;">{{ $getRawMaterial['created_by'] }}</p></td>
 					                        
 		  								</tr>
                       					@endforeach

@@ -28,10 +28,7 @@
       			  							<th>Branch</th>
                             <th>Reference #</th>
       			  							<th>Invoice#</th>
-      			  							<th>Payment Method Code</th>
-      			  							
-      			  							<th>Status</th>
-      			  							<th>Paid Amount</th>
+      			  						
       			  							<th>Created By</th>
       				  					</thead>
       				  					<tfoot>
@@ -41,10 +38,7 @@
                             <th>Branch</th>
                             <th>Reference #</th>
                             <th>Invoice#</th>
-                            <th>Payment Method Code</th>
-                           
-                            <th>Status</th>
-                            <th>Paid Amount</th>
+                          
                             <th>Created By</th>
       				  					</tfoot>
       				  					<tbody>
@@ -65,10 +59,7 @@
                               <td>{{ $statementOfAccount['branch' ]}}</td>
                               <td>{{ $statementOfAccount['reference_number' ]}}</td>
                               <td>{{ $statementOfAccount['invoice_number' ]}}</td>
-                              <td>{{ $statementOfAccount['payment_method' ]}}</td>
-                             
-                              <td class="bg-danger" style="color:white;">{{ $statementOfAccount['status' ]}}</td>
-                              <td>{{ $statementOfAccount['paid_amount' ]}}</td>
+                              
                               <td>{{ $statementOfAccount['created_by' ]}}</td>
                             </tr>
                             @endforeach
@@ -78,66 +69,7 @@
     					  </div>
               			</div>
           			</div>
-          			<div class="col-lg-12">
-          					<div class="card mb-3">
-          							<div class="card-header">
-                      				<i class="far fa-money-bill-alt"></i>
-            					  	Paid</div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                      <th>Action</th>
-                                      <th>Date</th>
-                                      <th>Bill To</th>
-                                      <th>Branch</th>
-                                      <th>Reference #</th>
-                                      <th>Invoice#</th>
-                                      <th>Payment Method Code</th>
-                                     
-                                      <th>Status</th>
-                                      <th>Paid Amount</th>
-                                      <th>Created By</th>
-                                  </thead>
-                                  <tfoot>
-                                   <th>Action</th>
-                                    <th>Date</th>
-                                    <th>Bill To</th>
-                                    <th>Branch</th>
-                                    <th>Reference #</th>
-                                    <th>Invoice#</th>
-                                    <th>Payment Method Code</th>
-                                  
-                                    <th>Status</th>
-                                    <th>Paid Amount</th>
-                                    <th>Created By</th>
-                                  <tbody>
-                                       @foreach($statementOfAccountsPaids as $statementOfAccountsPaid)
-                                        <tr>
-                                        <td>
-                                           
-                                          
-                                            <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-statement-account/'.$statementOfAccountsPaid['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
-
-                                        </td>
-                                        <td>{{ $statementOfAccountsPaid['date'] }}</td>
-                                        <td>{{ $statementOfAccountsPaid['bill_to' ]}}</td>
-                                        <td>{{ $statementOfAccountsPaid['branch' ]}}</td>
-                                        <td>{{ $statementOfAccountsPaid['reference_number' ]}}</td>
-                                        <td>{{ $statementOfAccountsPaid['invoice_number' ]}}</td>
-                                        <td>{{ $statementOfAccountsPaid['payment_method' ]}}</td>
-                                       
-                                        <td class="bg-success" style="color:white;">{{ $statementOfAccountsPaid['status' ]}}</td>
-                                        <td><?php echo number_format($statementOfAccountsPaid['paid_amount'], 2); ?></td>
-                                        <td>{{ $statementOfAccountsPaid['created_by' ]}}</td>
-                                      </tr>
-                                      @endforeach
-                                  </tbody>
-                              </table>
-                            </div>
-                        </div>
-          					</div>
-          			</div>
+          			
           		</div>	
           </div>
 		</div>	

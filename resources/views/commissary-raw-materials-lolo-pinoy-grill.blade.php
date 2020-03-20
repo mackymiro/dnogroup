@@ -40,6 +40,7 @@
 	  				  					  	<th>Stock Out Amount</th>
 					                        <th>Remaining Stock</th>
 					                        <th>Amount</th>
+                                   <th>Supplier</th>
 	  				  						<th>Created By</th>
 			  						   </thead>
 			  						   <tfoot>
@@ -53,6 +54,7 @@
 					  						<th>Stock Out Amount</th>
 						                    <th>Remaining Stock</th>
 						                    <th>Amount</th>
+                                 <th>Supplier</th>
 					  						<th>Created By</th>
 										</tfoot>
 										<tbody>
@@ -64,15 +66,16 @@
 	  									
 		  									</td>
 	                        <td>{{ $getRawMaterial['product_id_no'] }}</td>
-	                        <td><a href="{{ url('lolo-pinoy-grill-commissary/view-raw-material-details/'.$getRawMaterial['id']) }}">{{ $getRawMaterial['product_name'] }}</a></td>
+	                        <td><p style="width: 180px;"><a href="{{ url('lolo-pinoy-grill-commissary/view-raw-material-details/'.$getRawMaterial['id']) }}">{{ $getRawMaterial['product_name'] }}</a></p></td>
 	                        <td>{{ $getRawMaterial['unit_price'] }}</td>
 	                        <td>{{ $getRawMaterial['unit'] }}</td>
 	                        <td class="bg-danger" style="color:white;">{{ $getRawMaterial['in'] }}</td>
 	                        <td>{{ $getRawMaterial['out'] }}</td>
-	                        <td>{{ $getRawMaterial['stock_amount']}}</td>
+	                        <td><?php echo number_format($getRawMaterial['stock_amount'], 2); ?></td>
 	                        <td>{{ $getRawMaterial['remaining_stock']}}</td>
 	                        <td><?php echo number_format($getRawMaterial['amount'], 2);?></td>
-	                        <td>{{ $getRawMaterial['created_by'] }}</td>
+                          <td><p style="width:180px;">{{ $getRawMaterial['supplier']}}</p></td>
+                          <td><p style="width: 100px;">{{ $getRawMaterial['created_by'] }}</p></td>
 					                        
 		  								</tr>
                   					@endforeach

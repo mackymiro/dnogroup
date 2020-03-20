@@ -143,5 +143,17 @@
         </div>
       </footer>
 </div>
-
+<script>
+  //status data
+  new Vue({
+  el: '#app-status',
+    data: {
+      statuses:[
+        { text:'Unpaid', value: 'Unpaid' },
+        { text:'Paid', value: 'Paid'}
+      ]
+    }
+  })  
+  
+</script>
 @endsection

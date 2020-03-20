@@ -23,6 +23,26 @@ use Session;
 class LoloPinoyLechonDeCebuController extends Controller
 {
 
+    //
+    public function sAccountUpdate(Request $request, $id){
+        $accountPaid = LechonDeCebuStatementOfAccount::find($id);
+
+        $accountPaid->paid_amount = $request->get('paidAmount');
+        $accountPaid->status = $request->get('status');
+        $accountPaid->collection_date = $request->get('collectionDate');
+        $accountPaid->check_number = $request->get('chequeNumber');
+        $accountPaid->check_amount = $request->get('chequeAmount');
+        $accountPaid->or_number = $request->get('orNumber');
+        $accountPaid->payment_method = $request->get('paymentMethod');
+
+        $accountPaid->save();
+
+        Session::flash('sAccountUpdate', 'SOA updated.');
+
+        return redirect('lolo-pinoy-lechon-de-cebu/edit-statement-of-account/'.$request->get('soaId'));
+
+    }
+
     //print payment voucher
     public function printPaymentVoucher($id){
         $ids = Auth::user()->id;
@@ -1205,9 +1225,22 @@ class LoloPinoyLechonDeCebuController extends Controller
         $countAmount = LechonDeCebuStatementOfAccount::where('billing_statement_id', $viewStatementAccount[0]['billing_statement_id'])->where('bill_to', NULL)->sum('amount');
 
         $sum  = $countTotalAmount + $countAmount;
+
+
+         //count the total balance if there are paid amount
+        $paidAmountCount = LechonDeCebuStatementOfAccount::where('id', $id)->sum('paid_amount');
+       
+        //
+        $countAmountOthersPaid = LechonDeCebuStatementOfAccount::where('billing_statement_id', $viewStatementAccount[0]['billing_statement_id'])->where('bill_to', NULL)->sum('paid_amount');
+        
+        $compute  = $paidAmountCount + $countAmountOthersPaid;
+
+
+        //minus the total balance to paid amounts
+        $computeAll  = $sum - $compute;
     
 
-        return view('view-lechon-de-cebu-statement-account', compact('user','viewStatementAccount', 'statementAccounts', 'sum'));
+        return view('view-lechon-de-cebu-statement-account', compact('user','viewStatementAccount', 'statementAccounts', 'sum', 'computeAll'));
     }
 
     //updateAddStatement
@@ -1241,15 +1274,7 @@ class LoloPinoyLechonDeCebuController extends Controller
     public function updateStatementInfo(Request $request, $id){
         $updateStatmentInfo = LechonDeCebuStatementOfAccount::find($id);
 
-        $updateStatmentInfo->branch = $request->get('branch');;
-        $updateStatmentInfo->payment_method = $request->get('paymentMethod');
-        $updateStatmentInfo->status = $request->get('status');
-        $updateStatmentInfo->paid_amount = $request->get('paidAmount');
-        $updateStatmentInfo->collection_date = $request->get('collectionDate');
-        $updateStatmentInfo->check_number = $request->get('chequeNumber');
-        $updateStatmentInfo->check_amount = $request->get('chequeAmount');
-        $updateStatmentInfo->or_number = $request->get('orNumber');
-
+        $updateStatmentInfo->branch = $request->get('branch');
         $updateStatmentInfo->save();
 
         Session::flash('SuccessE', 'Successfully updated');
@@ -1328,7 +1353,18 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         //getStatementOfAccount
         $getStatementOfAccount = LechonDeCebuStatementOfAccount::find($id);
+       
+        //
+       $sAccounts = LechonDeCebuStatementOfAccount::where('billing_statement_id', $getStatementOfAccount['billing_statement_id'])->get()->toArray();
 
+
+       //AllAcounts not yet paid
+       $allAccounts = LechonDeCebuStatementOfAccount::where('billing_statement_id', $getStatementOfAccount['billing_statement_id'])->where('status', NULL)->get()->toArray();
+
+
+       $stat = "Paid";
+
+       $allAccountsPaids = LechonDeCebuStatementOfAccount::where('billing_statement_id', $getStatementOfAccount['billing_statement_id'])->where('status', $stat)->get()->toArray();
         //$sAccounts = LechonDeCebuStatementOfAccount::where('soa_id', $id)->get()->toArray();
 
           //count the total amount 
@@ -1338,8 +1374,21 @@ class LoloPinoyLechonDeCebuController extends Controller
         $countAmount = LechonDeCebuStatementOfAccount::where('billing_statement_id', $getStatementOfAccount['billing_statement_id'])->where('bill_to', NULL)->sum('amount');
 
         $sum  = $countTotalAmount + $countAmount;
+
+        //count the total balance if there are paid amount
+        $paidAmountCount = LechonDeCebuStatementOfAccount::where('id', $id)->sum('paid_amount');
+       
+        //
+        $countAmountOthersPaid = LechonDeCebuStatementOfAccount::where('billing_statement_id', $getStatementOfAccount['billing_statement_id'])->where('bill_to', NULL)->sum('paid_amount');
         
-        return view('edit-statement-of-account', compact('user', 'getStatementOfAccount', 'sum'));
+        $compute  = $paidAmountCount + $countAmountOthersPaid;
+
+
+        //minus the total balance to paid amounts
+        $computeAll  = $sum - $compute;
+
+
+        return view('edit-statement-of-account', compact('user', 'getStatementOfAccount', 'computeAll','sAccounts', 'allAccounts', 'allAccountsPaids', 'sum'));
     }
 
 
@@ -1356,11 +1405,11 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $statementOfAccountPaids = LechonDeCebuStatementOfAccount::where('soa_id', NULL)->where('status', $paid)->get()->toArray();*/
 
-        $status = "Unpaid";
-        $paid = "Paid";
-        $statementOfAccounts = LechonDeCebuStatementOfAccount::where('bill_to', '!=', NULL)->where('status', $status)->get()->toArray();
+        //$status = "Unpaid";
+        //$paid = "Paid";
+        $statementOfAccounts = LechonDeCebuStatementOfAccount::where('bill_to', '!=', NULL)->get()->toArray();
 
-        $statementOfAccountsPaids = LechonDeCebuStatementOfAccount::where('bill_to', '!=', NULL)->where('status', $paid)->get()->toArray();
+        //$statementOfAccountsPaids = LechonDeCebuStatementOfAccount::where('bill_to', '!=', NULL)->where('status', $paid)->get()->toArray();
 
         return view('lechon-de-cebu-statement-of-account-lists', compact('user', 'statementOfAccounts', 'statementOfAccountsPaids'));
     }

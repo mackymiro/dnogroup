@@ -75,14 +75,14 @@
 			  									</td>
 			  									<td>{{ $getAllDeliveryReceipt['dr_no']}}</td>
 			  									<td>{{ $getAllDeliveryReceipt['date']}}</td>
-			  									<td>{{ $getAllDeliveryReceipt['sold_to']}}</td>
-			  									<td>{{ $getAllDeliveryReceipt['time']}}</td>
-                          <td>{{ $getAllDeliveryReceipt['date_to_be_delivered']}}</td>
-			  									<td>{{ $getAllDeliveryReceipt['delivered_to']}}</td>
+			  									<td><p style="width: 170px;">{{ $getAllDeliveryReceipt['sold_to']}}</p></td>
+			  									<td><p style="width: 110px;">{{ $getAllDeliveryReceipt['time']}}</p></td>
+                          <td><p style="width: 140px;">{{ $getAllDeliveryReceipt['date_to_be_delivered']}}</p></td>
+			  									<td><p style="width: 200px;">{{ $getAllDeliveryReceipt['delivered_to']}}</p></td>
 			  									<td>{{ $getAllDeliveryReceipt['qty']}}</td>
-			  									<td>{{ $getAllDeliveryReceipt['description']}}</td>
+			  									<td><p style="width: 200px;">{{ $getAllDeliveryReceipt['description']}}</p></td>
 			  									<td><?php echo number_format($getAllDeliveryReceipt['price']);?></td>
-			  									<td>{{ $getAllDeliveryReceipt['created_by']}}</td>
+			  									<td><p style="width: 120px;">{{ $getAllDeliveryReceipt['created_by']}}</p></td>
 			  									
 			  								</tr>
 			  								@endforeach

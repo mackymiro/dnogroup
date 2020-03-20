@@ -278,6 +278,11 @@ Route::group(['middleware' => ['auth']], function(){
 
 	Route::get('/lolo-pinoy-lechon-de-cebu/printPaymentVoucher/{id}', 'LoloPinoyLechonDeCebuController@printPaymentVoucher')->name('lolo-pinoy-lechon-de-cebu.printPaymentVoucher');
 
+	Route::patch(
+		'/lolo-pinoy-lechon-de-cebu/s-account/{id}',
+		'LoloPinoyLechonDeCebuController@sAccountUpdate')
+		->name('lolo-pinoy-lechon-de-cebu.sAccountUpdate');
+
 	//Lolo Pinoy Grill Commissary
 	Route::get('/lolo-pinoy-grill-commissary', 'LoloPinoyGrillCommissaryController@index')->name('lolo-pinoy-grill-commissary.index');
 

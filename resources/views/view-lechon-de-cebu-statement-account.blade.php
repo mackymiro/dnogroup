@@ -94,21 +94,17 @@
                                                     </tr>
                                                     <tr>
                                                         <th class="bg-success" style="color:white;">Total Amount</th>
-                                                        <th class="bg-success" style="color:white;">₱ <?php echo number_format($sum, 2)?></th>
+                                                        <th class="bg-success" style="color:white;">₱ <?php echo number_format($sum, 2);?></th>
                                                     </tr>
-                                                    <tr>
-                                                        @if($viewStatementAccount[0]['status'] == "Unpaid")
-                                                            <th class="bg-danger" style="color:white;">Status</th>
-                                                            <th class="bg-danger" style="color:white;">{{ $viewStatementAccount[0]['status'] }}</th>
-                                                        @else
-                                                           <th class="bg-success" style="color:white;">Status</th>
-                                                            <th class="bg-success" style="color:white;">{{ $viewStatementAccount[0]['status'] }}</th>
-                                                        @endif
+                                                     <tr>
+                                                        <th class="bg-danger" style="color:white;">Total Remaining Amount </th>
+                                                        <th class="bg-danger" style="color:white;">₱ <?php echo number_format($computeAll, 2);?></th>
                                                     </tr>
-                                                    <tr>
-                                                        <th>Paid Amount</th>
-                                                        <th>{{ $viewStatementAccount[0]['paid_amount'] }}</th>
+                                                      <tr>
+                                                        <th>Cheque Amount</th>
+                                                        <th><?php echo number_format($viewStatementAccount[0]['check_amount'], 2); ?></th>
                                                     </tr>
+                                                
                                                 </thead>
 
                                             </table>
@@ -124,10 +120,7 @@
                                                         <th>Cheque Number</th>
                                                         <th> {{ $viewStatementAccount[0]['check_number'] }}</th>
                                                     </tr>
-                                                    <tr>
-                                                        <th>Cheque Amount</th>
-                                                        <th><?php echo number_format($viewStatementAccount[0]['check_amount'], 2); ?></th>
-                                                    </tr>
+                                                  
                                                     <tr>
                                                         <th >OR Number</th>
                                                         <th >{{ $viewStatementAccount[0]['or_number'] }}</th>
@@ -146,6 +139,7 @@
                                           <th class="bg-info" style="color:white;">WHOLE LECHON 500/KL</th>
                                           <th class="bg-info" style="color:white;">DESCRIPTION</th>
                                           <th class="bg-info" style="color:white;">AMOUNT</th>
+                                          <th class="bg-info" style="color:white;">STATUS</th>
                                         </tr>
                                       </thead>
                                       <tbody>
@@ -155,6 +149,7 @@
                                           <td>{{ $viewStatementAccount[0]['whole_lechon'] }}</td>
                                           <td>{{ $viewStatementAccount[0]['description'] }}</td>
                                           <td><?php echo number_format($viewStatementAccount[0]['amount'], 2); ?></td>
+                                          <td>{{ $viewStatementAccount[0]['status'] }}</td>
                                           </tr>
                                           @foreach($statementAccounts as $statementAccount)
                                           <tr>
@@ -163,6 +158,7 @@
                                             <td>{{ $statementAccount['whole_lechon'] }}</td>
                                             <td>{{ $statementAccount['description'] }}</td>
                                             <td><?php echo number_format($statementAccount['amount'], 2);?></td>
+                                            <td>{{ $statementAccount['status']}}</td>
                                           </tr>
                                           @endforeach
                                             <td></td>
