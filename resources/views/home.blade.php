@@ -198,7 +198,7 @@
                 </div>
                 <div class="mr-5">DNO Food Ventures</div>
               </div>
-              <a class="card-footer text-white clearfix small z-1" href="#">
+              <a class="card-footer text-white clearfix small z-1" href="{{ url('dno-food-ventures') }}">
                 <span class="float-left">View Details</span>
                 <span class="float-right">
                   <i class="fas fa-angle-right"></i>
@@ -215,7 +215,7 @@
                 </div>
                 <div class="mr-5">DNO Resources and Development Corp</div>
               </div>
-              <a class="card-footer text-white clearfix small z-1" href="#">
+              <a class="card-footer text-white clearfix small z-1" href="{{ url('dno-resources-development') }}">
                 <span class="float-left">View Details</span>
                 <span class="float-right">
                   <i class="fas fa-angle-right"></i>

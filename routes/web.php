@@ -119,6 +119,37 @@ Route::group(['middleware' => ['auth']], function(){
 	//route for commissary stocks inventory
 	Route::get('/lolo-pinoy-lechon-de-cebu/commissary/stocks-inventory', 'LoloPinoyLechonDeCebuController@stocksInventory')->name('lolo-pinoy-lechon-de-cebu.stocksInventory');
 
+	//
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/payables/transaction-list',
+		'LoloPinoyLechonDeCebuController@transactionList')
+		->name('lolo-pinoy-lechon-de-cebu.transactionList');
+
+	//
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/edit-payables-detail/{id}',
+		'LoloPinoyLechonDeCebuController@editPayablesDetail')
+		->name('lolo-pinoy-lechon-de-cebu.editPayablesDetail');
+
+	Route::post(
+		'/lolo-pinoy-lechon-de-cebu/add-payment/{id}',
+		'LoloPinoyLechonDeCebuController@addPayment')
+		->name('lolo-pinoy-lechon-de-cebu.addPayment');
+
+	Route::patch(
+		'/lolo-pinoy-lechon-de-cebu/accept/{id}',
+		'LoloPinoyLechonDeCebuController@accept')
+		->name('lolo-pinoy-lechon-de-cebu.accept');
+
+	Route::delete(
+		'/lolo-pinoy-lechon-de-cebu/delete-transaction-list/{id}',
+		'LoloPinoyLechonDeCebuController@destroyTransactionList')
+		->name('lolo-pinoy-lechon-de-cebu.destroyTransactionList');
+
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/view-payables-details/{id}',
+		'LoloPinoyLechonDeCebuController@viewPayableDetails')
+		->name('lolo-pinoy-lechon-de-cebu.viewPayableDetails');
 
 	//route for payment vouchers
 	Route::get('/lolo-pinoy-lechon-de-cebu/payment-voucher-form', 'LoloPinoyLechonDeCebuController@paymentVoucherForm')->name('lolo-pinoy-lechon-de-cebu.paymentVoucherForm');
@@ -1032,6 +1063,19 @@ Route::group(['middleware' => ['auth']], function(){
 
 	//DNO Personal
 	Route::get('/dno-personal', 'DnoPersonalController@index')->name('dno-personal');
+
+
+	//DNO food ventures
+	Route::get(
+		'/dno-food-ventures',
+		'DnoFoodVenturesController@index')
+		->name('dno-food-ventures');
+
+	//DNO resources and devlopment corp
+	Route::get(
+		'/dno-resources-development',
+		'DnoResourcesDevelopmentController@index')
+		->name('dno-resources-development');
 });
 
 

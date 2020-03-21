@@ -1,5 +1,5 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
-@section('title', 'Sales |')
+@section('title', 'Private Orders |')
 @section('content')
 <div id="wrapper">
     @include('sidebar.sidebar')
@@ -25,16 +25,32 @@
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                           
+                                                <th>Action</th>
+                                                <th>DR No</th>
+                                                <th>Sold To</th>
+                                                <th>Created By</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
-                                            
+                                                <th>Action</th>
+                                                <th>DR No</th>
+                                                <th>Sold To</th>
+                                                <th>Created By</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
-                                         
+                                            @foreach($getAllDeliveryReceipts as  $getAllDeliveryReceipt)
+                                            <tr>
+                                                <td width="5%">
+                                                  <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-delivery-receipt/'.$getAllDeliveryReceipt['id'])}}" title="View"><i class="fas fa-low-vision"></i></a>
+
+                                                </td>
+                                                <td>{{ $getAllDeliveryReceipt['dr_no']}}</td>
+                                                <td>{{ $getAllDeliveryReceipt['sold_to']}}</td>
+                                                <td>{{ $getAllDeliveryReceipt['created_by']}}</td>
+                                            </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                     <br>

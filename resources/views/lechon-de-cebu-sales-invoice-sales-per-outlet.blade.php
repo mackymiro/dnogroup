@@ -49,7 +49,7 @@
                                             @foreach($statementOfAccountT1s as $statementOfAccountT1) 
                                             <tr>
                                                 <td>
-                                                   <a href="" title="View"><i class="fas fa-low-vision"></i></a>
+                                                   <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-statement-account/'.$statementOfAccountT1['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
                                                 </td>
                                                 <td>{{ $statementOfAccountT1['transaction_date']}}</td>
                                                 <td>{{ $statementOfAccountT1['bill_to']}}</td>
