@@ -419,6 +419,36 @@ Route::group(['middleware' => ['auth']], function(){
 	//save 
 	Route::post('/lolo-pinoy-grill-commissary/payment-voucher-store', 'LoloPinoyGrillCommissaryController@paymentVoucherStore')->name('lolo-pinoy-grill-commissary.paymentVoucherStore');
 
+	Route::get(
+		'/lolo-pinoy-grill-commissary/payables/transaction-list',
+		'LoloPinoyGrillCommissaryController@transactionList')
+		->name('lolo-pinoy-grill-commissary.transactionList');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-payables-detail/{id}',
+		'LoloPinoyGrillCommissaryController@editPayablesDetail')
+		->name('lolo-pinoy-grill-commissary.editPayablesDetail');
+
+	Route::post(
+		'/lolo-pinoy-grill-commissary/add-payment/{id}',
+		'LoloPinoyGrillCommissaryController@addPayment')
+		->name('lolo-pinoy-grill-commissary.addPayment');
+
+	Route::patch(
+		'/lolo-pinoy-grill-commissary/accept/{id}',
+		'LoloPinoyGrillCommissaryController@accept')
+		->name('lolo-pinoy-grill-commissary.accept');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-payables-details/{id}',
+		'LoloPinoyGrillCommissaryController@viewPayableDetails')
+		->name('lolo-pinoy-grill-commissary.viewPayableDetails');
+
+	Route::delete(
+		'/lolo-pinoy-grill-commissary/delete-transaction-list/{id}',
+		'LoloPinoyGrillCommissaryController@destroyTransactionList')
+		->name('lolo-pinoy-grill-commissary.destroyTransactionList');
+
 	//edit payment voucher
 	Route::get('/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-payment-voucher/{id}', 'LoloPinoyGrillCommissaryController@editPaymentVoucher')->name('lolo-pinoy-grill-commissary.editPaymentVoucher');
 
@@ -676,6 +706,36 @@ Route::group(['middleware' => ['auth']], function(){
 		'/mr-potato/store-payment',
 		'MrPotatoController@paymentVoucherStore')
 		->name('mr-potato.paymentVoucherStore');
+
+	Route::get(
+		'/mr-potato/payables/transaction-list',
+		'MrPotatoController@transactionList')
+		->name('mr-potato.transactionList');
+
+	Route::get(
+		'/mr-potato/edit-mr-potato-payables-detail/{id}',
+		'MrPotatoController@editPayablesDetail')
+		->name('mr-potato.editPayablesDetail');
+
+	Route::post(
+		'/mr-potato/add-payment/{id}',
+		'MrPotatoController@addPayment')
+		->name('mr-potato.addPayment');
+
+	Route::patch(
+		'/mr-potato/accept/{id}',
+		'MrPotatoController@accept')
+		->name('mr-potato.accept');
+
+	Route::get(
+		'/mr-potato/view-mr-potato-payables-details/{id}',
+		'MrPotatoController@viewPayableDetails')
+		->name('mr-potato.viewPayableDetails');
+
+	Route::delete(
+		'/mr-potato/delete-transaction-list/{id}',
+		'MrPotatoController@destroyTransactionList')
+		->name('mr-potato.destroyTransactionList');
 
 	Route::get(
 		'/mr-potato/edit-mr-potato-payment-voucher/{id}',

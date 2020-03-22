@@ -1382,7 +1382,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 
-        $name  = $firstName.$lastName;
+        $name  = $firstName." ".$lastName;
 
          //get the latest insert id query in table payment voucher ref number
         $dataVoucherRef = DB::select('SELECT id, voucher_ref_number FROM lechon_de_cebu_payment_vouchers ORDER BY id DESC LIMIT 1');

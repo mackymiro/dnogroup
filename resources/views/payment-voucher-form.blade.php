@@ -53,8 +53,8 @@
 	                                @endif
             					  	 			</div>
             					  	 			<div class="col-md-2">
-          				  	 					<label>Invoice #</label>
-          				  	 					<input type="text" name="invoiceNumber" class="form-control"  required="required" value="{{ old('invoiceNumber') }}" />
+          				  	 					   <label>Invoice #</label>
+          				  	 				    	<input type="text" name="invoiceNumber" class="form-control"  required="required" value="{{ old('invoiceNumber') }}" />
             					  	 			</div>
                                 <div class="col-md-2">
                                     <label>Issued Date </label>

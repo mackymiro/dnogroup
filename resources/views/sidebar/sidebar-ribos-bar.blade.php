@@ -67,26 +67,15 @@
       </li>
        <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-file-invoice"></i>
-          <span>Payment Vouchers</span>
-        </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-            <a class="dropdown-item" href="{{ url('ribos-bar/payment-voucher-form') }}">Payment Voucher Form</a>
-            <a class="dropdown-item" href="{{ url('ribos-bar/cash-vouchers') }}">Cash Vouchers</a>
-            <a class="dropdown-item" href="{{ url('ribos-bar/cheque-vouchers') }}">Cheque Vouchers</a>  
-        </div>
-      </li>
-      <li class="nav-item dropdown ">
-        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fa fa-credit-card" aria-hidden="true"></i>
           <span>Payables</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if($user->role_type == 1)
-          <a class="dropdown-item" href="">Transaction List</a>
-          @endif
-          <a class="dropdown-item" href="">test</a>
-         
+            <a class="dropdown-item" href="{{ url('ribos-bar/payment-voucher-form') }}">Payment Voucher Form</a>
+             <a class="dropdown-item" href="{{ url('ribos-bar/payables/transaction-list') }}">Transaction List</a>
+            <!--<a class="dropdown-item" href="{{ url('ribos-bar/cash-vouchers') }}">Cash Vouchers</a>
+            <a class="dropdown-item" href="{{ url('ribos-bar/cheque-vouchers') }}">Cheque Vouchers</a>  -->
         </div>
       </li>
+     
  </ul>

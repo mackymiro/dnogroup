@@ -1,4 +1,4 @@
-@extends('layouts.lolo-pinoy-lechon-de-cebu-app')
+@extends('layouts.lolo-pinoy-grill-commissary-app')
 @section('title', 'Payables Form|')
 @section('content')
 <script>
@@ -14,12 +14,12 @@
 			 <!-- Breadcrumbs-->
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                  <a href="#">Lechon de Cebu</a>
+                  <a href="#">Lolo Pinoy Grill Commissary</a>
                 </li>
                 <li class="breadcrumb-item active">Payables</li>
                 <li class="breadcrumb-item ">Payable Form</li>
               </ol>
-               <a href="{{ url('lolo-pinoy-lechon-de-cebu/payables/transaction-list')}}">Back to Transaction Lists</a>
+               <a href="{{ url('lolo-pinoy-grill-commissary/payables/transaction-list')}}">Back to Transaction Lists</a>
                <br>
                <br>
                <div class="row">
@@ -31,7 +31,7 @@
 	    					  Payable Form</div>
 
 	    					  <div class="card-body">
-	    					  		<form action="{{ action('LoloPinoyLechonDeCebuController@addPayment', $transactionList['id']) }}" method="post">
+	    					  		<form action="{{ action('MrPotatoController@addPayment', $transactionList['id']) }}" method="post">
 	    					  			{{ csrf_field() }}
 				  			 	 	@if(session('paymentAdded'))
 		                                <p class="alert alert-success">{{ Session::get('paymentAdded') }}</p>
@@ -78,7 +78,7 @@
 		                         @if(session('errorPaid'))
 		                                <p class="alert alert-danger">{{ Session::get('errorPaid') }}</p>
 		                         @endif
-    					  		<form action="{{ action('LoloPinoyLechonDeCebuController@accept', $transactionList['id'])}}" method="post">
+    					  		<form action="{{ action('LoloPinoyGrillCommissaryController@accept', $transactionList['id'])}}" method="post">
     					  			{{ csrf_field() }}
     					  			 <input name="_method" type="hidden" value="PATCH">
 				  				<div class="form-group">
@@ -93,7 +93,7 @@
 			  							</div>
 			  							<div class="col-lg-4">
 		  									<label>Voucher Ref #</label>
-		  									<input type="text" name="voucherRef" class="form-control" value="LPLDC-{{ $transactionList['voucher_ref_number'] }}" disabled="disabled" />
+		  									<input type="text" name="voucherRef" class="form-control" value="LPGC-{{ $transactionList['voucher_ref_number'] }}" disabled="disabled" />
 			  							</div>
 			  							<div class="col-lg-4">
 		  									<label>Status</label>

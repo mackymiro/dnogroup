@@ -72,8 +72,9 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
             <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/payment-voucher-form') }}">Payment Voucher Form</a>
-            <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/cash-vouchers') }}">Cash Vouchers</a>
-            <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/cheque-vouchers') }}">Cheque Vouchers</a>  
+             <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/payables/transaction-list') }}">Transaction List</a> 
+           <!-- <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/cash-vouchers') }}">Cash Vouchers</a>
+            <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/cheque-vouchers') }}">Cheque Vouchers</a>  -->
         </div>
       </li>
        <li class="nav-item dropdown">
