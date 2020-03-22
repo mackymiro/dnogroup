@@ -61,7 +61,13 @@
 					  									<a id="delete" onClick="confirmDelete('{{ $getTransactionList['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
 				              						@endif
 			  									</td>
-			  									<td><a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-payables-detail/'.$getTransactionList['id']) }}" title="Edit">{{ $getTransactionList['invoice_number']}}</a></td>
+			  									<td>
+			  										@if($getTransactionList['status'] != "FULLY PAID AND RELEASED")
+			  										<a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-payables-detail/'.$getTransactionList['id']) }}" title="Edit">{{ $getTransactionList['invoice_number']}}</a>
+			  										@else
+			  											{{ $getTransactionList['invoice_number']}}
+			  										@endif
+			  									</td>
 			  									<td>LPLDC-{{ $getTransactionList['voucher_ref_number']}}</td>
 			  									<td>{{ $getTransactionList['issued_date']}}</td>
 			  									<td class="bg-danger" style="color:white;"><?php echo number_format($getTransactionList['amount_due'], 2);?></td>

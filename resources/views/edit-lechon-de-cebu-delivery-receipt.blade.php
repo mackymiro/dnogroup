@@ -47,34 +47,15 @@
                     					</div>
                     					<div class="col-md-2">
                               <label>Time</label>
-                             
-                                  <select name="time" class="form-control">
-                                      <option value="12:00 AM" {{ ( "12:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>12:00 AM</option>
-                                      <option value="1:00 AM" {{ ( "1:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>1:00 AM</option>
-                                      <option value="2:00 AM" {{ ( "2:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>2:00 AM</option>
-                                      <option value="3:00 AM" {{ ( "3:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>3:00 AM</option>
-                                      <option value="4:00 AM" {{ ( "4:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>4:00 AM</option>
-                                      <option value="5:00 AM" {{ ( "5:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>5:00 AM</option>
-                                      <option value="6:00 AM" {{ ( "6:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>6:00 AM</option>
-                                      <option value="7:00 AM" {{ ( "7:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>7:00 AM</option>
-                                      <option value="8:00 AM" {{ ( "8:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>8:00 AM</option>
-                                      <option value="9:00 AM" {{ ( "9:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>9:00 AM</option>
-                                      <option value="10:00 AM" {{ ( "10:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>10:00 AM</option>
-                                      <option value="11:00 AM" {{ ( "11:00 AM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>11:00 AM</option>
-                                      <option value="12:00 PM" {{ ( "12:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>12:00 PM</option>
-                                      <option value="1:00 PM" {{ ( "1:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>1:00 PM</option>
-                                      <option value="2:00 PM" {{ ( "2:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>2:00 PM</option>
-                                      <option value="3:00 PM" {{ ( "3:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>3:00 PM</option>
-                                      <option value="4:00 PM" {{ ( "4:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>4:00 PM</option>
-                                      <option value="5:00 PM" {{ ( "5:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>5:00 PM</option>
-                                      <option value="6:00 PM" {{ ( "6:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>6:00 PM</option>
-                                      <option value="7:00 PM" {{ ( "7:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>7:00 PM</option>
-                                      <option value="8:00 PM" {{ ( "8:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>8:00 PM</option>
-                                      <option value="9:00 PM" {{ ( "9:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>9:00 PM</option>
-                                      <option value="10:00 PM" {{ ( "10:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>10:00 PM</option>
-                                      <option value="11:00 PM" {{ ( "11:00 PM" == $getDeliveryReceipt['time']) ? 'selected' : '' }}>11:00 PM</option>
-                                  </select> 
-                                 
+                                <div id="app-time">
+                                    <select name="time" class="form-control">
+                                        <option value="0">--Please Select--</option>
+                                       <option v-for="time in times" v-bind:value="time.value"
+                                          :selected="time.value=={{json_encode($getDeliveryReceipt['time'])}}?true : false">
+                                             @{{ time.text }}
+                                        </option>
+                                    </select> 
+                                </div>              
                               </div>
                               <div class="col-md-2">
                                     <label>Date To be Delivered</label>
@@ -210,6 +191,40 @@
         </div>
       </footer>
 </div>
+<script>
+     //branch data
+    new Vue({
+    el: '#app-time',
+        data: {
+            times:[
+                { text:'12:00 AM', value: '12:00 AM' },
+                { text:'1:00 AM', value: '1:00 AM' },
+                { text:'2:00 AM', value: '2:00 AM' },
+                { text:'3:00 AM', value: '3:00 AM' },
+                { text:'4:00 AM', value: '4:00 AM' },
+                { text:'5:00 AM', value: '5:00 AM' },
+                { text:'6:00 AM', value: '6:00 AM' },
+                { text:'7:00 AM', value: '7:00 AM' },
+                { text:'8:00 AM', value: '8:00 AM' },
+                { text:'9:00 AM', value: '9:00 AM' },
+                { text:'10:00 AM', value: '10:00 AM' },
+                { text:'11:00 AM', value: '11:00 AM' },
+                { text:'12:00 PM', value: '12:00 PM' },
+                { text:'1:00 PM', value: '1:00 PM' },
+                { text:'2:00 PM', value: '2:00 PM' },
+                { text:'3:00 PM', value: '3:00 PM' },
+                { text:'4:00 PM', value: '4:00 PM' },
+                { text:'5:00 PM', value: '5:00 PM' },
+                { text:'6:00 PM', value: '6:00 PM' },
+                { text:'7:00 PM', value: '7:00 PM' },
+                { text:'8:00 PM', value: '8:00 PM' },
+                { text:'9:00 PM', value: '9:00 PM' },
+                { text:'10:00 PM', value: '10:00 PM' },
+                { text:'11:00 PM', value: '11:00 PM' }
+            ]
+        }
+    })  
+</script>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
    function confirmDelete(id){

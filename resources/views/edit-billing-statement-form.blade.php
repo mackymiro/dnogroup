@@ -62,12 +62,14 @@
                                             @endforeach
                                         </select>
                                         <label>Branch</label>
-                                         <select name="branch" class="form-control">
-                                            <option value="0">--Please Select--</option>
-                                            <option value="{{ $billingStatement['branch'] }}" {{ ( $billingStatement['branch'] == "Terminal 1") ? 'selected' : '' }}>Terminal 1</option>
-                                            <option value="{{ $billingStatement['branch'] }}" {{ ( $billingStatement['branch'] == "Terminal 2") ? 'selected' : '' }}>Terminal 2</option>
-                                           
-                                        </select>
+                                         <div id="app-branch">
+                                           <select name="branch" class="form-control">
+                                               <option value="0">--Please Select--</option>
+                                                <option v-for="branch in branches" v-bind:value="branch.value":selected="branch.value=={{json_encode($billingStatement['branch'])}}?true : false">
+                                                  @{{ branch.text }}
+                                                 </option>
+                                          </select>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
@@ -180,6 +182,18 @@
         </div>
       </footer>
 </div>
+<script>
+     //branch data
+  new Vue({
+  el: '#app-branch',
+    data: {
+      branches:[
+        { text:'Terminal 1', value: 'Terminal 1' },
+        { text:'Terminal 2', value: 'Terminal 2'}
+      ]
+    }
+  }) 
+</script>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
    function confirmDelete(id){

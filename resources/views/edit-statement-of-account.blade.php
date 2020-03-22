@@ -161,6 +161,7 @@
                                               </div>
                                               <div class="col-lg-2">
                                                   <label>Payment Method</label>
+                                                  
                                                  <select class="form-control" name="paymentMethod">
                                                       <option value="0">--Please Select--</option>
                                                       <option value="CHEQUE">CHEQUE</option>
@@ -357,19 +358,6 @@
     }
 </script>
 <script>
-	
-
-	//status data
-	new Vue({
-	el: '#app-status',
-		data: {
-			statuses:[
-				{ text:'Unpaid', value: 'Unpaid' },
-				{ text:'Paid', value: 'Paid'}
-			]
-		}
-	})	
-
 	//payment data
 	new Vue({
 	el: '#app-payment',
@@ -381,15 +369,6 @@
 		}
 	})	
 
-    //branch data
-  new Vue({
-  el: '#app-branch',
-    data: {
-      branches:[
-        { text:'Terminal 1', value: 'Terminal 1' },
-        { text:'Terminal 2', value: 'Terminal 2'}
-      ]
-    }
-  })
+
 </script>
 @endsection
