@@ -1,6 +1,13 @@
 @extends('layouts.ribos-bar-app')
 @section('title', 'Payment Voucher Form |')
 @section('content')
+
+<script>
+  $(document).ready(function(){
+      $('.alert-success').fadeIn().delay(3000).fadeOut();
+      
+  });
+</script>
 <div id="wrapper">
 	<!-- Sidebar -->
     @include('sidebar.sidebar-ribos-bar')
@@ -11,7 +18,8 @@
 	              <li class="breadcrumb-item">
 	                <a href="#">Ribo's Bar</a>
 	              </li>
-	              <li class="breadcrumb-item active">Payment Voucher Form</li>
+                <li class="breadcrumb-item active">Payables</li>
+	              <li class="breadcrumb-item ">Payment Voucher Form</li>
 	            </ol>
 	            <div class="col-lg-12">
 	            	  <img src="{{ asset('images/ribos.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
@@ -27,51 +35,42 @@
                               <form action="{{ action('RibosBarController@paymentVoucherStore') }}" method="post">
                                 {{ csrf_field() }}
                           	  <div class="card-body">
+                                   @if(session('addSuccess'))
+                                        <p class="alert alert-success">{{ Session::get('addSuccess') }}</p>
+                                    @endif 
+                                    @if(session('error'))
+                                        <p class="alert alert-danger">{{ Session::get('error') }}</p>
+                                    @endif
                           	  		<div class="form-group">
                       	  				<div class="form-row">
-                  	  						<div class="col-lg-4">
-                  	  							<label>Paid To</label>
-                  	  							<input type="text" name="paidTo" class="form-control" required="required" />
-                  	  						</div>
-                                  @if ($errors->has('paidTo'))
-                                    <span class="alert alert-danger">
-                                      <strong>{{ $errors->first('paidTo') }}</strong>
-                                    </span>
-                                  @endif
-                  	  						<div class="col-lg-4">
-                  	  							<label>Account Number</label>
-                  	  							<input type="text" name="accountNumber" class="form-control" required="required" />
-                  	  						</div>
-                  	  						<div class="col-lg-2">
-                                      <label>Date</label>
-                                      <input type="text" name="date" class="form-control" />
-                                    </div>
+                      	  						<div class="col-lg-4">
+                      	  							<label>Paid To</label>
+                      	  							<input type="text" name="paidTo" class="form-control" required="required" />
+                      	  						</div>
+                                      @if ($errors->has('paidTo'))
+                                        <span class="alert alert-danger">
+                                          <strong>{{ $errors->first('paidTo') }}</strong>
+                                        </span>
+                                      @endif
+                    	  						  <div class="col-md-2">
+                                         <label>Invoice #</label>
+                                          <input type="text" name="invoiceNumber" class="form-control"  required="required" value="{{ old('invoiceNumber') }}" />
+                                      </div>
+                      	  						<div class="col-md-2">
+                                          <label>Issued Date </label>
+                                          <input type="text" name="issuedDate" class="form-control" value="{{ old('issuedDate') }}" />
+                                      </div>
+                                       <div class="col-md-2">
+                                          <label>Delivered Date </label>
+                                          <input type="text" name="deliveredDate" class="form-control" value="{{ old('deliveredDate') }}" />
+                                      </div>
+                                       <div class="col-md-2">
+                                          <label>Amount Due</label>
+                                          <input type="text" name="amountDue" class="form-control" value="{{ old('amountDue') }}" />
+                                      </div>
                       	  				</div>
                           	  		</div>
-                          	  		<div class="form-group">
-                          	  			<div class="form-row">
-                      	  					
-                      	  					<div class="col-lg-4">
-                      	  						<label>Particulars</label>
-                      	  						<input type="text" name="particulars" class="form-control" />
-                      	  					</div>
-                                    <div class="col-lg-2">
-                                      <label>Amount</label>
-                                      <input type="text" name="amount" class="form-control" />
-                                    </div>
-                      	  					<div class="col-lg-2">
-                      	  						<label>Method Of Payment</label>
-                      	  						 <div id="app-payment-method">
-                                          <select name="paymentMethod" class="form-control">
-                                              <option value="0">--Please Select--</option>
-                                              <option v-for="payment in payments" v-bind:value="payment.value">
-                                              @{{ payment.text }}
-                                            </option>
-                                            </select>
-                                        </div>
-                      	  					</div>
-                          	  			</div>
-                          	  		</div>
+                          	  	
                                   <div>
                                     <input type="submit" class="btn btn-success float-right" value="Add Payment Voucher" />
                                   </div>

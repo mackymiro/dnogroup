@@ -950,6 +950,36 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('ribos-bar.paymentVoucherStore');
 
 	Route::get(
+		'/ribos-bar/payables/transaction-list',
+		'RibosBarController@transactionList')
+		->name('ribos-bar.transactionList');
+
+	Route::get(
+		'/ribos-bar/edit-ribos-bar-payables-detail/{id}',
+		'RibosBarController@editPayablesDetail')
+		->name('ribos-bar.editPayablesDetail');
+
+	Route::post(
+		'/ribos-bar/edit-ribos-bar-payables-detail/{id}',
+		'RibosBarController@addPayment')
+		->name('ribos-bar.addPayment');
+
+	Route::patch(
+		'/ribos-bar/accept/{id}',
+		'RibosBarController@accept')
+		->name('ribos-bar.accept');
+
+	Route::get(
+		'/ribos-bar/view-ribos-bar-payables-details/{id}',
+		'RibosBarController@viewPayableDetails')
+		->name('ribos-bar.viewPayableDetails');
+
+	Route::delete(
+		'/ribos-bar/delete-transaction-list/{id}',
+		'RibosBarController@destroyTransactionList')
+		->name('ribos-bar.destroyTransactionList');
+
+	Route::get(
 		'/ribos-bar/edit-ribos-bar-payment-voucher/{id}',
 		'RibosBarController@editPaymentVoucher')
 		->name('ribos-bar.editPaymentVoucher');

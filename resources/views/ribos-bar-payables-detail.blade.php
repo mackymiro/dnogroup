@@ -1,4 +1,4 @@
-@extends('layouts.mr-potato-app')
+@extends('layouts.ribos-bar-app')
 @section('title', 'Payables Form|')
 @section('content')
 <script>
@@ -8,18 +8,18 @@
   });
 </script>
 <div id="wrapper">
-	 @include('sidebar.sidebar-mr-potato')
+	 @include('sidebar.sidebar-ribos-bar')
      <div id="content-wrapper">
 		<div class="container-fluid">
 			 <!-- Breadcrumbs-->
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                  <a href="#">Mr Potato</a>
+                  <a href="#">Ribo's Bar</a>
                 </li>
                 <li class="breadcrumb-item active">Payables</li>
                 <li class="breadcrumb-item ">Payable Form</li>
               </ol>
-               <a href="{{ url('mr-potato/payables/transaction-list')}}">Back to Transaction Lists</a>
+               <a href="{{ url('ribos-bar/payables/transaction-list')}}">Back to Transaction Lists</a>
                <br>
                <br>
                <div class="row">
@@ -31,7 +31,7 @@
 	    					  Payable Form</div>
 
 	    					  <div class="card-body">
-	    					  		<form action="{{ action('MrPotatoController@addPayment', $transactionList['id']) }}" method="post">
+	    					  		<form action="{{ action('RibosBarController@addPayment', $transactionList['id']) }}" method="post">
 	    					  			{{ csrf_field() }}
 				  			 	 	@if(session('paymentAdded'))
 		                                <p class="alert alert-success">{{ Session::get('paymentAdded') }}</p>
@@ -78,7 +78,7 @@
 		                         @if(session('errorPaid'))
 		                                <p class="alert alert-danger">{{ Session::get('errorPaid') }}</p>
 		                         @endif
-    					  		<form action="{{ action('MrPotatoController@accept', $transactionList['id'])}}" method="post">
+    					  		<form action="{{ action('RibosBarController@accept', $transactionList['id'])}}" method="post">
     					  			{{ csrf_field() }}
     					  			 <input name="_method" type="hidden" value="PATCH">
 				  				<div class="form-group">
