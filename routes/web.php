@@ -110,8 +110,7 @@ Route::group(['middleware' => ['auth']], function(){
 	//update add statement information
 	Route::patch('lolo-pinoy-lechon-de-cebu/update-added-statement/{id}', 'LoloPinoyLechonDeCebuController@updateAddStatement')->name('lolo-pinoy-lechon-de-cebu.updateAddStatement');
 
-	//delete statement of account
-	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-statement-account/{id}', 'LoloPinoyLechonDeCebuController@destroyStatementAddAccount')->name('lolo-pinoy-lechon-de-cebu.deleteStatementAddAccount');
+	
 
 	//view statement of account
 	Route::get('/lolo-pinoy-lechon-de-cebu/view-statement-account/{id}', 'LoloPinoyLechonDeCebuController@viewStatementAccount')->name('lolo-pinoy-lechon-de-cebu.viewStatementAccount');
@@ -150,6 +149,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'/lolo-pinoy-lechon-de-cebu/view-payables-details/{id}',
 		'LoloPinoyLechonDeCebuController@viewPayableDetails')
 		->name('lolo-pinoy-lechon-de-cebu.viewPayableDetails');
+
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/printPayables/{id}',
+		'LoloPinoyLechonDeCebuController@printPayables')
+		->name('lolo-pinoy-lechon-de-cebu.printPayables');
 
 	//route for payment vouchers
 	Route::get('/lolo-pinoy-lechon-de-cebu/payment-voucher-form', 'LoloPinoyLechonDeCebuController@paymentVoucherForm')->name('lolo-pinoy-lechon-de-cebu.paymentVoucherForm');

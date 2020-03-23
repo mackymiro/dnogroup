@@ -144,7 +144,7 @@
                                       </thead>
                                       <tbody>
                                           <tr>
-                                          <td>{{ $viewStatementAccount[0]['transaction_date'] }}</td>
+                                          <td>{{ $viewStatementAccount[0]['date_of_transaction'] }}</td>
                                           <td>{{ $viewStatementAccount[0]['invoice_number'] }}</td>
                                           <td>{{ $viewStatementAccount[0]['whole_lechon'] }}</td>
                                           <td>{{ $viewStatementAccount[0]['description'] }}</td>

@@ -25,5 +25,12 @@ class LoloPinoyGrillCommissaryBillingStatement extends Model
     	'prepared_by',
     	'approved_by',
     	'created_by',
+        'payment_method',
+        'status',
+        'paid_amount',
+        'collection_date',
+        'check_number',
+        'check_amount',
+        'or_number',
     ];
 }

@@ -18,15 +18,19 @@
              <div class="col-lg-12">
             	 <img src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
             	 
-            	 <h4 class="text-center"><u>PAYMENT DETAILS</u></h4>
+            	 <h4 class="text-center"><u>PAYMENT DETAILS (PAYMENT VOUCHER)</u></h4>
             </div>
             <div class="row">
             	<div class="col-lg-12">
             		 <div class="card mb-3">
-            		 	 <div class="card-header">
+                  		 	 <div class="card-header">
                               <i class="fas fa-file-invoice" aria-hidden="true"></i>
-                            Payment Details</div>
-                          
+                            Payment Details
+                              <div class="float-right">
+                               <a href="{{ action('LoloPinoyLechonDeCebuController@printPayables', $viewPaymentDetail['id']) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                             </div>
+                          </div>
+                           
                          <form action="{{ action('LoloPinoyLechonDeCebuController@paymentVoucherStore') }}" method="post">
                          	{{ csrf_field() }}
                          <div class="card-body">
@@ -36,6 +40,11 @@
                                           <table class="table table-bordered">
                                               <thead>
                                                   <tr>
+                                                      <th class="bg-info" style="color:white;">Paid To</th>
+                                                      <th class="bg-info" style="color:white;">{{ $viewPaymentDetail['paid_to']}}</th>
+                                                  </tr>
+                                                  <tr>
+
                                                       <th class="bg-success" style="color:white;" width="15%">Status</th>
                                                       <th class="bg-success" style="color:white;">{{ $viewPaymentDetail['status']}}</th>
                                                   </tr>
@@ -53,6 +62,11 @@
                                                       <th width="20%">Amount Due</th>
                                                       <th><?php echo number_format($viewPaymentDetail['amount_due'], 2); ?></th>
                                                   </tr>
+                                                   <tr>
+                                                      <th width="20%">Invoice #</th>
+                                                      <th>{{ $viewPaymentDetail['invoice_number']}}</th>
+                                                  </tr>
+                                              
                                                  
                                               </thead>
                                           </table>
@@ -82,7 +96,7 @@
                                <table class="table table-striped ">
                                     <thead>
                                         <tr>
-                                            <th width="30%">USER WHO MAKE THE TRANSACTION</th>
+                                            <th width="15%%">PREAPARED BY</th>
                                             <th>{{ $viewPaymentDetail['created_by']}}</th>
                                         </tr>
                                     </thead>

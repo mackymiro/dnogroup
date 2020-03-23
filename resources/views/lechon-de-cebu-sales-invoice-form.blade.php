@@ -29,7 +29,15 @@
                          		{{ csrf_field() }}
                          	<div class="form-group">
                          		<div class="form-row">
+                                    <div class="col-md-2">
+                                        
+                                        <label>Date</label>
+                                        <input type="text" name="date" class="form-control" required="required" />
+                                       
+
+                                    </div>
                          			<div class="col-md-2">
+
                      					<label>Invoice #</label>
                      					<input type="text" name="invoiceNum" class="form-control" required="required" />
                      					@if($errors->has('invoiceNum'))

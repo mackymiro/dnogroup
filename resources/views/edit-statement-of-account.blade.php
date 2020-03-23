@@ -104,6 +104,81 @@
                                       @if(session('sAccountUpdate'))
                                          <p class="alert alert-success">{{ Session::get('sAccountUpdate') }}</p>
                                       @endif 
+                                       <form action="{{ action('LoloPinoyLechonDeCebuController@sAccountUpdate', $getStatementOfAccount['id']) }}" method="post">
+                                         {{csrf_field()}}
+                                 <input name="_method" type="hidden" value="PATCH">
+                                       <div class="form-row">
+                                          <div class="form-row">
+                                              <div class="col-lg-1">
+                                                  <label>Date</label>
+                                                  <input type="text" name="date" class="form-control" value="{{ $getStatementOfAccount['date_of_transaction'] }}"  disabled="disabled" />
+                                              </div>
+                                               <div class="col-lg-2">
+                                                  <label>Invoice</label>
+                                                  <input type="text" name="invoiceNumber" class="form-control" value="{{ $getStatementOfAccount['invoice_number'] }}" disabled="disabled" />
+                                              </div>
+                                              <div class="col-lg-2">
+                                                  <label>Whole Lechon 500/KL</label>
+                                                  <input type="text" name="wholeLechon" class="form-control" value="{{ $getStatementOfAccount['whole_lechon']}}" disabled="disabled" />
+                                              </div>
+                                              <div class="col-lg-4">
+                                                  <label>Description</label>
+                                                  <input type="text" name="description" class="form-control" value="{{ $getStatementOfAccount['description']}}" disabled="disabled" />
+                                              </div>
+                                              <div class="col-lg-1">
+                                                  <label>Amount</label>
+                                                  <input type="text" name="amount" class="bg-danger form-control" style="color:white;" value="<?php echo number_format($getStatementOfAccount['amount'], 2)?>" disabled="disabled"/>
+                                              </div>
+                                              <div class="col-lg-2">
+                                                  <label>Paid Amount</label>
+                                                  <input type="text" name="paidAmount" class="form-control" value="{{ $getStatementOfAccount['paid_amount']}}" />
+                                              </div>
+                                              
+                                          </div>
+                                      </div>
+                                      <div class="form-group">
+                                          <div class="form-row">
+                                              <div class="col-lg-2">
+                                                  <label>Status</label>
+                                                  <input type="text" name="status" class="form-control" value="{{ $getStatementOfAccount['status'] }}" />
+                                              </div>
+                                              <div class="col-lg-2">
+                                                  <label>Collection Date</label>
+                                                  <input type="text" name="collectionDate" class="form-control" value="{{ $getStatementOfAccount['collection_date']}}" />
+                                              </div>
+                                              <div class="col-lg-2">
+                                                  <label>Cheque Number</label>
+                                                  <input type="text" name="chequeNumber" class="form-control" value="{{ $getStatementOfAccount['check_number'] }}" />
+                                              </div>
+                                              <div class="col-lg-2">
+                                                  <label>Cheque Amount</label>
+                                                  <input type="text" name="chequeAmount" class="form-control" value="{{ $getStatementOfAccount['check_amount'] }}" />
+                                              </div>
+                                              <div class="col-lg-2">
+                                                  <label>OR Number</label>
+                                                  <input type="text" name="orNumber" class="form-control" value="{{ $getStatementOfAccount['or_number'] }}" />
+                                              </div>
+                                              <div class="col-lg-2">
+                                                  <label>Payment Method</label>
+                                                  
+                                                 <select class="form-control" name="paymentMethod">
+                                                      <option value="0">--Please Select--</option>
+                                                      <option value="CHEQUE">CHEQUE</option>
+                                                      <option value="ACCOUNT">ACCOUNT</option>
+                                                 </select>
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="form-group">
+                                          <div class="form-row">
+                                              <div class="col-lg-2">
+                                                  <input type="hidden" name="soaId" value="{{ $getStatementOfAccount['id'] }}" />
+                                                  <input type="submit" class="btn btn-success" value="Paid" />
+                                              </div>
+                                          </div>  
+                                      </div>
+                                    </form>
+
                                       @foreach($sAccounts as $sAccount)
                                       <form  action="{{ action('LoloPinoyLechonDeCebuController@sAccountUpdate', $sAccount['id']) }}" method="post">
                                          {{csrf_field()}}
@@ -112,7 +187,7 @@
                                           <div class="form-row">
                                               <div class="col-lg-1">
                                                   <label>Date</label>
-                                                  <input type="text" name="date" class="form-control" value="{{ $sAccount['transaction_date'] }}"  disabled="disabled" />
+                                                  <input type="text" name="date" class="form-control" value="{{ $sAccount['date_of_transaction'] }}"  disabled="disabled" />
                                               </div>
                                                <div class="col-lg-2">
                                                   <label>Invoice</label>
@@ -120,7 +195,7 @@
                                               </div>
                                               <div class="col-lg-2">
                                                   <label>Whole Lechon 500/KL</label>
-                                                  <input type="text" name="wholeLechon" class="form-control"value="{{ $sAccount['whole_lechon']}}" disabled="disabled" />
+                                                  <input type="text" name="wholeLechon" class="form-control" value="{{ $sAccount['whole_lechon']}}" disabled="disabled" />
                                               </div>
                                               <div class="col-lg-4">
                                                   <label>Description</label>
@@ -149,11 +224,11 @@
                                               </div>
                                               <div class="col-lg-2">
                                                   <label>Cheque Number</label>
-                                                  <input type="text" name="chequeNumber" class="form-control"value="{{ $sAccount['check_number']}}" value="{{ $sAccount['check_number'] }}" />
+                                                  <input type="text" name="chequeNumber" class="form-control" value="{{ $sAccount['check_number'] }}" />
                                               </div>
                                               <div class="col-lg-2">
                                                   <label>Cheque Amount</label>
-                                                  <input type="text" name="chequeAmount" class="form-control"value="{{ $sAccount['check_amount'] }}" />
+                                                  <input type="text" name="chequeAmount" class="form-control" value="{{ $sAccount['check_amount'] }}" />
                                               </div>
                                               <div class="col-lg-2">
                                                   <label>OR Number</label>
@@ -226,9 +301,25 @@
                                             </tr>
                                         </tfoot>
                                         <tbody>
+                                           @if($getStatementOfAccount['status'] != "PAID")
+                                           <tr>
+                                                <td ><p style="width: 110px;">{{ $getStatementOfAccount['date_of_transaction']}}</p></td>
+                                                <td>{{ $getStatementOfAccount['invoice_number'] }}</td>
+                                                <td>{{ $getStatementOfAccount['whole_lechon']}}</td>
+                                                <td><p style="width: 300px;">{{ $getStatementOfAccount['description']}}</p></td>
+                                                <td class="bg-danger" style="color:white;"><?php echo number_format($getStatementOfAccount['amount'], 2)?></td>
+                                                <td><?php echo number_format($getStatementOfAccount['paid_amount'], 2) ?></td>
+                                                <td>{{ $getStatementOfAccount['status'] }}</td>
+                                                <td>{{ $getStatementOfAccount['collection_date']}}</td>
+                                                <td>{{ $getStatementOfAccount['check_number']}}</td>
+                                                <td>{{ $getStatementOfAccount['check_amount']}}</td>
+                                                <td>{{ $getStatementOfAccount['or_number']}}</td>
+                                                <td><p style="width:110px;">{{ $getStatementOfAccount['payment_method']}}</p></td>
+                                            </tr>
+                                            @endif
                                             @foreach($allAccounts as $allAccount)
                                             <tr>
-                                                <td ><p style="width: 110px;">{{ $allAccount['transaction_date']}}</p></td>
+                                                <td ><p style="width: 110px;">{{ $allAccount['date_of_transaction']}}</p></td>
                                                 <td>{{ $allAccount['invoice_number'] }}</td>
                                                 <td>{{ $allAccount['whole_lechon']}}</td>
                                                 <td><p style="width: 300px;">{{ $allAccount['description']}}</p></td>
@@ -291,9 +382,26 @@
                                             </tr>
                                         </tfoot>
                                         <tbody>
+                                             @if($getStatementOfAccount['status'] == "PAID")
+                                           <tr>
+                                                <td ><p style="width: 110px;">{{ $getStatementOfAccount['date_of_transaction']}}</p></td>
+                                                <td>{{ $getStatementOfAccount['invoice_number'] }}</td>
+                                                <td>{{ $getStatementOfAccount['whole_lechon']}}</td>
+                                                <td><p style="width: 300px;">{{ $getStatementOfAccount['description']}}</p></td>
+                                                <td class="bg-success" style="color:white;"><?php echo number_format($getStatementOfAccount['amount'], 2)?></td>
+                                                <td><?php echo number_format($getStatementOfAccount['paid_amount'], 2) ?></td>
+                                                <td class="bg-success" style="color:white;">{{ $getStatementOfAccount['status'] }}</td>
+                                                <td>{{ $getStatementOfAccount['collection_date']}}</td>
+                                                <td>{{ $getStatementOfAccount['check_number']}}</td>
+                                                <td>{{ $getStatementOfAccount['check_amount']}}</td>
+                                                <td>{{ $getStatementOfAccount['or_number']}}</td>
+                                                <td><p style="width:110px;">{{ $getStatementOfAccount['payment_method']}}</p></td>
+                                            </tr>
+                                            @endif
                                             @foreach($allAccountsPaids as $allAccountsPaid)
                                             <tr>
-                                                <td ><p style="width: 110px;">{{ $allAccountsPaid['transaction_date']}}</p></td>
+
+                                                <td ><p style="width: 110px;">{{ $allAccountsPaid['date_of_transaction']}}</p></td>
                                                 <td>{{ $allAccountsPaid['invoice_number'] }}</td>
                                                 <td>{{ $allAccountsPaid['whole_lechon']}}</td>
                                                 <td><p style="width: 300px;">{{ $allAccountsPaid['description']}}</p></td>

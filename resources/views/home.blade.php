@@ -178,7 +178,7 @@
             <div class="card text-white bg-info o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                  
+                     <img src="{{ asset('images/DIC-LOGO.png')}}" width="255" height="172" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
                 </div>
                 <div class="mr-5">DNO Personal</div>
               </div>

@@ -24,6 +24,30 @@ class LoloPinoyLechonDeCebuController extends Controller
 {   
 
     //
+    public function printPayables($id){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $payableId = LechonDeCebuPaymentVoucher::find($id);
+
+        $payablesVouchers = LechonDeCebuPaymentVoucher::where('pv_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = LechonDeCebuPaymentVoucher::where('id', $id)->sum('amount_due');
+
+
+          //
+        $countAmount = LechonDeCebuPaymentVoucher::where('pv_id', $id)->sum('amount_due');
+
+        $sum  = $countTotalAmount + $countAmount;
+       
+
+        $pdf = PDF::loadView('printPayables', compact('payableId', 'user', 'payablesVouchers', 'sum'));
+
+        return $pdf->download('lechon-de-cebu-payment-voucher.pdf');
+    }
+
+    //
     public function viewPayableDetails($id){    
         $ids = Auth::user()->id;
         $user = User::find($ids);
@@ -206,8 +230,8 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     //
     public function sAccountUpdate(Request $request, $id){
-        $accountPaid = LechonDeCebuStatementOfAccount::find($id);
-
+        $accountPaid = LechonDeCebuBillingStatement::find($id);
+        
         $accountPaid->paid_amount = $request->get('paidAmount');
         $accountPaid->status = $request->get('status');
         $accountPaid->collection_date = $request->get('collectionDate');
@@ -824,6 +848,7 @@ class LoloPinoyLechonDeCebuController extends Controller
        
 
         $updateSalesInvoice->invoice_number     = $request->get('invoiceNum');
+        $updateSalesInvoice->date               = $request->get('date');
         $updateSalesInvoice->ordered_by         = $request->get('orderedBy');
         $updateSalesInvoice->address            = $request->get('address');
         $updateSalesInvoice->qty                = $request->get('qty');
@@ -872,8 +897,6 @@ class LoloPinoyLechonDeCebuController extends Controller
            
         ]);
 
-         //get date today
-        $getDateToday =  date('Y-m-d');
 
         //total kls
         /*$kls = $request->get('totalKls');
@@ -906,7 +929,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'invoice_number'=>$request->get('invoiceNum'),
             'ordered_by'=>$request->get('orderedBy'),
             'address'=>$request->get('address'),
-            'date'=>$getDateToday,
+            'date'=>$request->get('date'),
             'qty'=>$request->get('qty'),
             'body'=>$body,
             'head_and_feet'=>$head,
@@ -1479,26 +1502,26 @@ class LoloPinoyLechonDeCebuController extends Controller
         $user = User::find($ids);
 
         //viewStatementAccount
-        $viewStatementAccount = LechonDeCebuStatementOfAccount::where('id', $id)->get()->toArray();
+        $viewStatementAccount = LechonDeCebuBillingStatement::where('id', $id)->get()->toArray();
        
         
-        $statementAccounts = LechonDeCebuStatementOfAccount::where('billing_statement_id', $viewStatementAccount[0]['billing_statement_id'])->where('bill_to', NULL)->get();
+        $statementAccounts = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->where('bill_to', NULL)->get();
 
 
         //count the total amount 
-        $countTotalAmount = LechonDeCebuStatementOfAccount::where('id', $id)->sum('amount');
+        $countTotalAmount = LechonDeCebuBillingStatement::where('id', $id)->sum('amount');
 
           //
-        $countAmount = LechonDeCebuStatementOfAccount::where('billing_statement_id', $viewStatementAccount[0]['billing_statement_id'])->where('bill_to', NULL)->sum('amount');
+        $countAmount = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
 
         $sum  = $countTotalAmount + $countAmount;
 
 
          //count the total balance if there are paid amount
-        $paidAmountCount = LechonDeCebuStatementOfAccount::where('id', $id)->sum('paid_amount');
+        $paidAmountCount = LechonDeCebuBillingStatement::where('id', $id)->sum('paid_amount');
        
         //
-        $countAmountOthersPaid = LechonDeCebuStatementOfAccount::where('billing_statement_id', $viewStatementAccount[0]['billing_statement_id'])->where('bill_to', NULL)->sum('paid_amount');
+        $countAmountOthersPaid = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('paid_amount');
         
         $compute  = $paidAmountCount + $countAmountOthersPaid;
 
@@ -1609,34 +1632,38 @@ class LoloPinoyLechonDeCebuController extends Controller
         $user = User::find($ids);
 
         //getStatementOfAccount
-        $getStatementOfAccount = LechonDeCebuStatementOfAccount::find($id);
-       
+        $getStatementOfAccount = LechonDeCebuBillingStatement::find($id);
+    
         //
-       $sAccounts = LechonDeCebuStatementOfAccount::where('billing_statement_id', $getStatementOfAccount['billing_statement_id'])->get()->toArray();
-
-
+       $sAccounts = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+     
        //AllAcounts not yet paid
-       $allAccounts = LechonDeCebuStatementOfAccount::where('billing_statement_id', $getStatementOfAccount['billing_statement_id'])->where('status', NULL)->get()->toArray();
+       $allAccounts = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->where('status', NULL)->get()->toArray();
+
+      
 
 
-       $stat = "Paid";
+       $stat = "PAID";
 
-       $allAccountsPaids = LechonDeCebuStatementOfAccount::where('billing_statement_id', $getStatementOfAccount['billing_statement_id'])->where('status', $stat)->get()->toArray();
+       $allAccountsPaids = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->where('status', $stat)->get()->toArray();
+
+      
+
         //$sAccounts = LechonDeCebuStatementOfAccount::where('soa_id', $id)->get()->toArray();
 
           //count the total amount 
-        $countTotalAmount = LechonDeCebuStatementOfAccount::where('id', $id)->sum('amount');
+        $countTotalAmount = LechonDeCebuBillingStatement::where('id', $id)->sum('amount');
 
           //
-        $countAmount = LechonDeCebuStatementOfAccount::where('billing_statement_id', $getStatementOfAccount['billing_statement_id'])->where('bill_to', NULL)->sum('amount');
+        $countAmount = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
 
         $sum  = $countTotalAmount + $countAmount;
 
         //count the total balance if there are paid amount
-        $paidAmountCount = LechonDeCebuStatementOfAccount::where('id', $id)->sum('paid_amount');
+        $paidAmountCount = LechonDeCebuBillingStatement::where('id', $id)->sum('paid_amount');
        
         //
-        $countAmountOthersPaid = LechonDeCebuStatementOfAccount::where('billing_statement_id', $getStatementOfAccount['billing_statement_id'])->where('bill_to', NULL)->sum('paid_amount');
+        $countAmountOthersPaid = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('paid_amount');
         
         $compute  = $paidAmountCount + $countAmountOthersPaid;
 
@@ -1664,7 +1691,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         //$status = "Unpaid";
         //$paid = "Paid";
-        $statementOfAccounts = LechonDeCebuStatementOfAccount::where('bill_to', '!=', NULL)->get()->toArray();
+        $statementOfAccounts = LechonDeCebuBillingStatement::where('bill_to', '!=', NULL)->get()->toArray();
 
 
         //$statementOfAccountsPaids = LechonDeCebuStatementOfAccount::where('bill_to', '!=', NULL)->where('status', $paid)->get()->toArray();
@@ -1780,6 +1807,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $updateBillingOrder->period_cover = $request->get('periodCovered');
         $updateBillingOrder->date = $request->get('date');
         $updateBillingOrder->terms = $request->get('terms');
+        $updateBillingOrder->branch = $request->get('branch');
         $updateBillingOrder->p_o_number = $request->get('poNumber');
         $updateBillingOrder->invoice_number = $request->get('invoiceNumber');
         $updateBillingOrder->date_of_transaction = $request->get('transactionDate');
@@ -1974,33 +2002,6 @@ class LoloPinoyLechonDeCebuController extends Controller
         $billingStatement->save();
 
         $insertedId = $billingStatement->id;
-
-          //store billing statement data to  table statement of accounts
-        $status = "Unpaid";
-
-        $statementAccount = new LechonDeCebuStatementOfAccount([
-            'user_id'=>$user->id,
-            'billing_statement_id'=>$insertedId,
-            'bill_to'=>$request->get('billTo'),
-            'address'=>$request->get('address'),
-            'period_cover'=>$request->get('periodCovered'),
-            'date'=>$request->get('date'),
-            'invoice_number'=>$request->get('invoiceNumber'),
-            'reference_number'=>$uRef,
-            'p_o_number'=>$request->get('poNumber'),
-            'branch'=>$request->get('branch'),
-            'terms'=>$request->get('terms'),
-            'transaction_date'=>$request->get('transactionDate'),
-            'whole_lechon'=>$wholeLechon,
-            'description'=>$request->get('description'),
-            'amount'=>$add,
-            'created_by'=>$name,
-            'prepared_by'=>$name,
-            'status'=>$status,
- 
-        ]);
-
-        $statementAccount->save();
 
         //Session::flash('billingStatementSuccess', 'Successfully added');
          
@@ -2317,11 +2318,7 @@ class LoloPinoyLechonDeCebuController extends Controller
     }
 
    
-    //delete statement account
-    public function destroyStatementAddAccount($id){
-        $statementAccount = LechonDeCebuStatementOfAccount::find($id);
-        $statementAccount->delete();
-    }
+
 
     //delete billing statement
     public function destroyBillingStatement($id){
