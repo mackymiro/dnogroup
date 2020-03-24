@@ -8,6 +8,20 @@ use App\User;
 
 class DnoPersonalController extends Controller
 {
+
+    //
+    public function paymentVoucherStore(){
+        
+    }
+    
+     //
+    public function paymentVoucherForm(){
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('payment-voucher-form-dno-personal', compact('user'));
+    }
+
     /**
      * Display a listing of the resource.
      *

@@ -115,6 +115,11 @@ Route::group(['middleware' => ['auth']], function(){
 	//view statement of account
 	Route::get('/lolo-pinoy-lechon-de-cebu/view-statement-account/{id}', 'LoloPinoyLechonDeCebuController@viewStatementAccount')->name('lolo-pinoy-lechon-de-cebu.viewStatementAccount');
 
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/printSOA/{id}',
+		'LoloPinoyLechonDeCebuController@printSOA')
+		->name('lolo-pinoy-lechon-de-cebu.printSOA');
+
 	//route for commissary stocks inventory
 	Route::get('/lolo-pinoy-lechon-de-cebu/commissary/stocks-inventory', 'LoloPinoyLechonDeCebuController@stocksInventory')->name('lolo-pinoy-lechon-de-cebu.stocksInventory');
 
@@ -295,15 +300,6 @@ Route::group(['middleware' => ['auth']], function(){
 
 	//route for view stock inventory
 	Route::get('/lolo-pinoy-lechon-de-cebu/view-stock-inventory/{id}', 'LoloPinoyLechonDeCebuController@viewStockInventory')->name('lolo-pinoy-lechon-de-cebu.viewStockInventory');
-
-	//route for commissary production
-	Route::get('/lolo-pinoy-lechon-de-cebu/commissary/production', 'LoloPinoyLechonDeCebuController@commissaryProduction')->name('lolo-pinoy-lechon-de-cebu.commissaryProduction');
-
-	//route for commissary delivery outlets
-	Route::get('/lolo-pinoy-lechon-de-cebu/commissary/delivery-outlets', 'LoloPinoyLechonDeCebuController@commissaryDeliveryOutlet')->name('lolo-pinoy-lechon-de-cebu.commissaryDeliveryOutlet');
-
-	//route for commissary sales of outlets
-	Route::get('/lolo-pinoy-lechon-de-cebu/commissary/sales-of-outlets', 'LoloPinoyLechonDeCebuController@salesOfOutlet')->name('lolo-pinoy-lechon-de-cebu.salesOfOutlet');
 
 	//route for commissary inventory of stocks
 	Route::get('/lolo-pinoy-lechon-de-cebu/commissary/inventory-of-stocks', 'LoloPinoyLechonDeCebuController@inventoryOfStocks')->name('lolo-pinoy-lechon-de-cebu.inventoryOfStocks');
@@ -984,6 +980,11 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('ribos-bar.destroyTransactionList');
 
 	Route::get(
+		'/ribos-bar/print-payables/{id}',
+		'RibosBarController@printPayablesRibosBar')
+		->name('ribos-bar.printPayablesRibosBar');
+
+	Route::get(
 		'/ribos-bar/edit-ribos-bar-payment-voucher/{id}',
 		'RibosBarController@editPaymentVoucher')
 		->name('ribos-bar.editPaymentVoucher');
@@ -1158,6 +1159,10 @@ Route::group(['middleware' => ['auth']], function(){
 	//DNO Personal
 	Route::get('/dno-personal', 'DnoPersonalController@index')->name('dno-personal');
 
+	Route::get(
+		'/dno-personal/payment-voucher-form',
+		'DnoPersonalController@paymentVoucherForm')
+		->name('dno-personal.paymentVoucherForm');
 
 	//DNO food ventures
 	Route::get(

@@ -81,6 +81,15 @@
     					  		<form action="{{ action('LoloPinoyGrillCommissaryController@accept', $transactionList['id'])}}" method="post">
     					  			{{ csrf_field() }}
     					  			 <input name="_method" type="hidden" value="PATCH">
+				  				 <table class="table table-bordered">
+				  			 		<thead>
+				  			 			<tr>
+				  			 				<th width="15%">Paid To</th>
+				  			 				<th>{{ $transactionList['paid_to']}}</th>
+				  			 			</tr>
+
+				  			 		</thead>
+					  			 </table>
 				  				<div class="form-group">
 			  						<div class="form-row">
 			  							<div class="col-lg-2">

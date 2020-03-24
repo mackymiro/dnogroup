@@ -52,9 +52,9 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           @if($user->role_type == 1)
-          <a class="dropdown-item" href="">Transaction List</a>
+           <a class="dropdown-item" href="{{ url('dno-personal/payment-voucher-form') }}">Payment Voucher Form</a>
+           <a class="dropdown-item" href="{{ url('dno-personal/payables/transaction-list') }}">Transaction List</a>
           @endif
-          <a class="dropdown-item" href="">test</a>
          
         </div>
       </li>

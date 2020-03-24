@@ -24,6 +24,30 @@ class LoloPinoyLechonDeCebuController extends Controller
 {   
 
     //
+    public function printSOA($id){
+          $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $Soa = LechonDeCebuBillingStatement::find($id);
+
+        $statementAccounts = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = LechonDeCebuBillingStatement::where('id', $id)->sum('paid_amount');
+
+
+          //
+        $countAmount = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->sum('paid_amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+       
+
+        $pdf = PDF::loadView('printSOA', compact('Soa', 'user', 'statementAccounts', 'sum'));
+
+        return $pdf->download('lechon-de-cebu-statement-of-account.pdf');
+    }
+
+    //
     public function printPayables($id){
          $ids = Auth::user()->id;
         $user = User::find($ids);
@@ -212,18 +236,18 @@ class LoloPinoyLechonDeCebuController extends Controller
         $user = User::find($ids);
 
         //getSalesInvoiceTerminal1
-        $branch = "Terminal 1";
-        $branch2 = "Terminal 2";
+        $branch = "Ssp Food Avenue Terminal 1";
+        $branch2 = "Ssp Food Avenue Terminal 2";
 
-        $statementOfAccountT1s = LechonDeCebuStatementOfAccount::where('bill_to', '!=', NULL)->where('branch', $branch)->get()->toArray();
+        $statementOfAccountT1s = LechonDeCebuSalesInvoice::where('ordered_by', $branch)->get()->toArray();
 
         //get total sales in terminal 1
-        $totalSalesInTerminal1 =  LechonDeCebuStatementOfAccount::where('branch', $branch)->sum('paid_amount');
+        $totalSalesInTerminal1 =  LechonDeCebuSalesInvoice::where('ordered_by', $branch)->sum('amount');
 
-        $statementOfAccountT2s = LechonDeCebuStatementOfAccount::where('bill_to', '!=', NULL)->where('branch', $branch2)->get()->toArray();
+        $statementOfAccountT2s = LechonDeCebuSalesInvoice::where('ordered_by', $branch2)->get()->toArray();
 
           //get total sales in terminal 1
-        $totalSalesInTerminal2 =  LechonDeCebuStatementOfAccount::where('branch', $branch2)->sum('paid_amount');
+        $totalSalesInTerminal2 =  LechonDeCebuSalesInvoice::where('ordered_by', $branch2)->sum('amount');
 
         return view('lechon-de-cebu-sales-invoice-sales-per-outlet', compact('user', 'statementOfAccountT1s', 'totalSalesInTerminal1', 'statementOfAccountT2s', 'totalSalesInTerminal2'));
     }
@@ -380,49 +404,6 @@ class LoloPinoyLechonDeCebuController extends Controller
         return view('commissary-inventory-of-stocks', compact('user'));
     }
 
-    //sales of outlets
-    public function salesOfOutlet(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        //
-        $getSalesOfOutlets = CommissaryRawMaterial::where('rm_id', '!=', NULL)->get()->toArray();
-
-        //get total amount in delivery in 
-        $desc = "DELIVERY IN";
-        $status = "Paid";
-
-        $totalDeliveryIn = CommissaryRawMaterial::where('rm_id', '!=', NULL)->where('description', $desc)->where('status', $status)->sum('amount');
-
-        //get total amount delivery out 
-        $descDelOut = "DELIVERY OUT"; 
-        $statusDelOut = "Paid";  
-
-        $totalDeliveryOut = CommissaryRawMaterial::where('rm_id', '!=', NULL)->where('description', $descDelOut)->where('status', $statusDelOut)->sum('amount');
-
-        return view('commissary-sales-of-outlet', compact('user', 'getSalesOfOutlets', 'totalDeliveryIn', 
-            'totalDeliveryOut'));
-    }
-
-    //commissary delivery outlet
-    public function commissaryDeliveryOutlet(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        //
-        $getDeliveryOutlets = CommissaryRawMaterial::where('rm_id', '!=', NULL)->get()->toArray();
-
-        return view('commissary-delivery-outlet', compact('user', 'getDeliveryOutlets'));
-    }
-
-    //commissary production
-    public function commissaryProduction(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        return view('commissary-production', compact('user'));
-    }
-
     //view stock inventory 
     public function viewStockInventory($id){
         $ids = Auth::user()->id;
@@ -434,7 +415,10 @@ class LoloPinoyLechonDeCebuController extends Controller
         //transaction table
         $getViewStockDetails = CommissaryRawMaterial::where('rm_id', $id)->get()->toArray();
 
-        return view('view-lechon-de-cebu-stock-inventory', compact('user', 'viewStockDetail', 'getViewStockDetails'));
+        //total 
+        $total = CommissaryRawMaterial::where('rm_id', $id)->sum('amount');
+
+        return view('view-lechon-de-cebu-stock-inventory', compact('user', 'viewStockDetail', 'getViewStockDetails', 'total'));
     }
 
 
@@ -1490,7 +1474,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $countStockAmount = CommissaryRawMaterial::all()->sum('stock_amount');
         
         //count the total amount 
-        $countTotalAmount = CommissaryRawMaterial::all()->sum('amount');
+        $countTotalAmount = CommissaryRawMaterial::where('rm_id', NULL)->sum('amount');
 
         return view('commissary-stocks-inventory', compact('user', 'getRawMaterials', 'countStockAmount', 'countTotalAmount'));
     }
@@ -2113,7 +2097,10 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $getAllSalesInvoices = LechonDeCebuSalesInvoice::where('si_id', NULL)->get()->toArray();
 
-        return view('lolo-pinoy-lechon-de-cebu', compact('user', 'getAllSalesInvoices'));
+        //
+        $total = LechonDeCebuSalesInvoice::where('ordered_by', '!=', NULL)->sum('amount');
+
+        return view('lolo-pinoy-lechon-de-cebu', compact('user', 'getAllSalesInvoices','total'));
     }
 
     /**

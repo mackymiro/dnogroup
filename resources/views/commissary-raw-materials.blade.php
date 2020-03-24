@@ -70,7 +70,7 @@
 	  									
 		  									</td>
 					                        <td>{{ $getRawMaterial['product_id_no'] }}</td>
-					                        <td><a href="{{ url('lolo-pinoy-lechon-de-cebu/view-raw-material-details/'.$getRawMaterial['id']) }}">{{ $getRawMaterial['product_name'] }}</a></td>
+					                        <td ><p style="width:200px;"><a  href="{{ url('lolo-pinoy-lechon-de-cebu/view-raw-material-details/'.$getRawMaterial['id']) }}">{{ $getRawMaterial['product_name'] }}</a></p></td>
 					                        <td>{{ $getRawMaterial['unit_price'] }}</td>
 					                        <td>{{ $getRawMaterial['unit'] }}</td>
 					                        <td class="bg-danger" style="color:white;">{{ $getRawMaterial['in'] }}</td>
@@ -78,7 +78,7 @@
 					                        <td>{{ $getRawMaterial['stock_amount']}}</td>
 					                        <td>{{ $getRawMaterial['remaining_stock']}}</td>
 					                        <td><?php echo number_format($getRawMaterial['amount'], 2);?></td>
-                                  <td><p style="width:100px;">{{ $getRawMaterial['supplier']}}</p></td>
+                                  <td><p style="width:200px;">{{ $getRawMaterial['supplier']}}</p></td>
 					                        <td><p style="width: 100px;">{{ $getRawMaterial['created_by'] }}</p></td>
 					                        
 		  								</tr>

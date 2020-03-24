@@ -18,6 +18,30 @@ use App\RibosBarStatementOfAccount;
 
 class RibosBarController extends Controller
 {
+
+    //
+    public function printPayablesRibosBar($id){
+          $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $payableId = RibosBarPaymentVoucher::find($id);
+
+        $payablesVouchers = RibosBarPaymentVoucher::where('pv_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = RibosBarPaymentVoucher::where('id', $id)->sum('amount_due');
+
+
+          //
+        $countAmount = RibosBarPaymentVoucher::where('pv_id', $id)->sum('amount_due');
+
+        $sum  = $countTotalAmount + $countAmount;
+       
+
+        $pdf = PDF::loadView('printPayablesRibosBar', compact('payableId', 'user', 'payablesVouchers', 'sum'));
+
+        return $pdf->download('ribos-bar-payment-voucher.pdf');
+    }
     
     //
     public function viewPayableDetails($id){

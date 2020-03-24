@@ -25,23 +25,31 @@
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                              <th>Action</th>
-                                              <th>Date</th>
-                                              <th>Bill To</th>
-                                              <th>Reference #</th>
+                                               <th>Action</th>
                                               <th>Invoice #</th>
-                                              <th>Period Covered</th>
+                                              <th>Date</th>
+                                              <th>Ordered By</th>
+                                              <th>Address</th>
+                                              <th>QTY</th>
+                                              <th>Total KlS</th>
+                                              <th>Item Description</th>
+                                              <th>Unit Price</th>
+                                              <th>Amount</th>
                                               <th>Created By</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
                                               <th>Action</th>
-                                              <th>Date</th>
-                                              <th>Bill To</th>
-                                              <th>Reference #</th>
                                               <th>Invoice #</th>
-                                              <th>Period Covered</th>
+                                              <th>Date</th>
+                                              <th>Ordered By</th>
+                                              <th>Address</th>
+                                              <th>QTY</th>
+                                              <th>Total KlS</th>
+                                              <th>Item Description</th>
+                                              <th>Unit Price</th>
+                                              <th>Amount</th>
                                               <th>Created By</th>
                                             </tr>
                                         </tfoot>
@@ -51,11 +59,16 @@
                                                 <td>
                                                    <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-statement-account/'.$statementOfAccountT1['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
                                                 </td>
-                                                <td>{{ $statementOfAccountT1['transaction_date']}}</td>
-                                                <td>{{ $statementOfAccountT1['bill_to']}}</td>
-                                                <td>{{ $statementOfAccountT1['reference_number']}}</td>
                                                 <td>{{ $statementOfAccountT1['invoice_number']}}</td>
-                                                <td>{{ $statementOfAccountT1['period_cover']}}</td>
+                                                <td>{{ $statementOfAccountT1['date']}}</td>
+                                                <td>{{ $statementOfAccountT1['ordered_by']}}</td>
+                                                <td>{{ $statementOfAccountT1['address']}}</td>
+                                                <td>{{ $statementOfAccountT1['qty']}}</td>
+                                                <td>{{ $statementOfAccountT1['total_kls']}}</td>
+                                                <td>{{ $statementOfAccountT1['item_description']}}</td>
+                                                <td>{{ $statementOfAccountT1['unit_price']}}</td>
+                                                <td>{{ $statementOfAccountT1['amount']}}</td>
+
                                                 <td>{{ $statementOfAccountT1['created_by']}}</td>
                                             </tr>
                                             @endforeach
@@ -89,24 +102,32 @@
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
-                                            <tr>
+                                           <tr>
                                               <th>Action</th>
-                                              <th>Date</th>
-                                              <th>Bill To</th>
-                                              <th>Reference #</th>
                                               <th>Invoice #</th>
-                                              <th>Period Covered</th>
+                                              <th>Date</th>
+                                              <th>Ordered By</th>
+                                              <th>Address</th>
+                                              <th>QTY</th>
+                                              <th>Total KlS</th>
+                                              <th>Item Description</th>
+                                              <th>Unit Price</th>
+                                              <th>Amount</th>
                                               <th>Created By</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
-                                            <tr>
+                                             <tr>
                                               <th>Action</th>
-                                              <th>Date</th>
-                                              <th>Bill To</th>
-                                              <th>Reference #</th>
                                               <th>Invoice #</th>
-                                              <th>Period Covered</th>
+                                              <th>Date</th>
+                                              <th>Ordered By</th>
+                                              <th>Address</th>
+                                              <th>QTY</th>
+                                              <th>Total KlS</th>
+                                              <th>Item Description</th>
+                                              <th>Unit Price</th>
+                                              <th>Amount</th>
                                               <th>Created By</th>
                                             </tr>
                                         </tfoot>
@@ -116,11 +137,16 @@
                                                 <td>
                                                    <a href="" title="View"><i class="fas fa-low-vision"></i></a>
                                                 </td>
-                                                <td>{{ $statementOfAccountT2['transaction_date']}}</td>
-                                                <td>{{ $statementOfAccountT2['bill_to']}}</td>
-                                                <td>{{ $statementOfAccountT2['reference_number']}}</td>
-                                                <td>{{ $statementOfAccountT2['invoice_number']}}</td>
-                                                <td>{{ $statementOfAccountT2['period_cover']}}</td>
+                                                 <td>{{ $statementOfAccountT2['invoice_number']}}</td>
+                                                <td>{{ $statementOfAccountT2['date']}}</td>
+                                                <td>{{ $statementOfAccountT2['ordered_by']}}</td>
+                                                <td>{{ $statementOfAccountT2['address']}}</td>
+                                                <td>{{ $statementOfAccountT2['qty']}}</td>
+                                                <td>{{ $statementOfAccountT2['total_kls']}}</td>
+                                                <td>{{ $statementOfAccountT2['item_description']}}</td>
+                                                <td>{{ $statementOfAccountT2['unit_price']}}</td>
+                                                <td>{{ $statementOfAccountT2['amount']}}</td>
+
                                                 <td>{{ $statementOfAccountT2['created_by']}}</td>
                                             </tr>
                                             @endforeach

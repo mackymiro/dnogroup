@@ -81,6 +81,15 @@
     					  		<form action="{{ action('RibosBarController@accept', $transactionList['id'])}}" method="post">
     					  			{{ csrf_field() }}
     					  			 <input name="_method" type="hidden" value="PATCH">
+					  			 <table class="table table-bordered">
+				  			 		<thead>
+				  			 			<tr>
+				  			 				<th width="15%">Paid To</th>
+				  			 				<th>{{ $transactionList['paid_to']}}</th>
+				  			 			</tr>
+
+				  			 		</thead>
+					  			 </table>
 				  				<div class="form-group">
 			  						<div class="form-row">
 			  							<div class="col-lg-2">
@@ -93,7 +102,7 @@
 			  							</div>
 			  							<div class="col-lg-4">
 		  									<label>Voucher Ref #</label>
-		  									<input type="text" name="voucherRef" class="form-control" value="MP-{{ $transactionList['voucher_ref_number'] }}" disabled="disabled" />
+		  									<input type="text" name="voucherRef" class="form-control" value="RB-{{ $transactionList['voucher_ref_number'] }}" disabled="disabled" />
 			  							</div>
 			  							<div class="col-lg-4">
 		  									<label>Status</label>

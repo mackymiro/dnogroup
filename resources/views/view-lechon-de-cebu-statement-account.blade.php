@@ -26,10 +26,9 @@
     			 		        <div class="card-header">
                               <i class="fas fa-receipt" aria-hidden="true"></i>
                             View Statement Of Account 
-                            <div class="float-right">
-                                 <button class="btn btn-success" > <i class="fa fa-print fa-2x" aria-hidden="true"></i></button>
-                              
-                              </div>
+                              <div class="float-right">
+                               <a href="{{ action('LoloPinoyLechonDeCebuController@printSOA', $viewStatementAccount[0]['id']) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                             </div>
                         </div>
                         <div class="card-body">
                         	 <div class="form-group">
@@ -100,10 +99,7 @@
                                                         <th class="bg-danger" style="color:white;">Total Remaining Amount </th>
                                                         <th class="bg-danger" style="color:white;">₱ <?php echo number_format($computeAll, 2);?></th>
                                                     </tr>
-                                                      <tr>
-                                                        <th>Cheque Amount</th>
-                                                        <th><?php echo number_format($viewStatementAccount[0]['check_amount'], 2); ?></th>
-                                                    </tr>
+                                                    
                                                 
                                                 </thead>
 

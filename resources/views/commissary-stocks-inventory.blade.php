@@ -77,6 +77,18 @@
 					  			</table>
                  
     					  		</div>
+                    <br>
+
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th width="15%" class="bg-info" style="color:white;">Total Product Cost</th>
+                                 <th class="bg-success" style="color:white;">
+                                    ₱ <?php echo number_format($countTotalAmount, 2);?>
+                                 </th>
+                            </tr>
+                        </thead>
+                    </table>
     					  </div>
               			</div>
               		</div>
