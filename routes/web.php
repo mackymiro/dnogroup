@@ -1164,6 +1164,46 @@ Route::group(['middleware' => ['auth']], function(){
 		'DnoPersonalController@paymentVoucherForm')
 		->name('dno-personal.paymentVoucherForm');
 
+	Route::post(
+		'/dno-personal/payment-voucher-store/',
+		'DnoPersonalController@paymentVoucherStore')
+		->name('dno-personal.paymentVoucherStore');
+
+	Route::get(
+		'/dno-personal/payables/transaction-list',
+		'DnoPersonalController@transactionList')
+		->name('dno-personal.transactionList');
+
+	Route::get(
+		'/dno-personal/edit-dno-personal-payables-detail/{id}',
+		'DnoPersonalController@editPayablesDetail')
+		->name('dno-resources-development.editPayablesDetail');
+
+	Route::post(
+		'/dno-personal/add-payment/{id}',
+		'DnoPersonalController@addPayment')
+		->name('dno-personal.addPayment');
+
+	Route::patch(
+		'/dno-personal/accept/{id}',
+		'DnoPersonalController@accept')
+		->name('dno-personal.accept');
+
+	Route::get(
+		'/dno-personal/view-dno-personal-payables-details/{id}',
+		'DnoPersonalController@viewPayableDetails')
+		->name('dno-personal.viewPayableDetails');
+
+	Route::get(
+		'/dno-personal/printPayables/{id}',
+		'DnoPersonalController@printPayablesDnoPersonal')
+		->name('dno-personal.printPayablesDnoPersonal');
+
+	Route::delete(
+		'/dno-personal/delete-transaction-list/{id}',
+		'DnoPersonalController@destroyTransactionList')
+		->name('dno-personal.destroyTransactionList');
+
 	//DNO food ventures
 	Route::get(
 		'/dno-food-ventures',

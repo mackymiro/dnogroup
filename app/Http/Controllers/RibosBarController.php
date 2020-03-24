@@ -893,7 +893,7 @@ class RibosBarController extends Controller
 
         $name  = $firstName." ".$lastName;
 
-            //get the latest insert id query in table payment voucher ref number
+        //get the latest insert id query in table payment voucher ref number
         $dataVoucherRef = DB::select('SELECT id, voucher_ref_number FROM ribos_bar_payment_vouchers ORDER BY id DESC LIMIT 1');
 
            //if code is not zero add plus 1 reference number
