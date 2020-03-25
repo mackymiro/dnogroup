@@ -1672,14 +1672,10 @@ class LoloPinoyLechonDeCebuController extends Controller
        //AllAcounts not yet paid
        $allAccounts = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->where('status', NULL)->get()->toArray();
 
-      
-
-
+    
        $stat = "PAID";
 
-       $allAccountsPaids = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->where('status', $stat)->get()->toArray();
-
-      
+       $allAccountsPaids = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->where('status', $stat)->get()->toArray();  
 
         //$sAccounts = LechonDeCebuStatementOfAccount::where('soa_id', $id)->get()->toArray();
 

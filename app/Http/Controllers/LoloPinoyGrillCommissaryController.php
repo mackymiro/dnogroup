@@ -21,6 +21,49 @@ class LoloPinoyGrillCommissaryController extends Controller
 {
 
     //
+    public function printSOA($id){
+          $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $Soa = LoloPinoyGrillCommissaryBillingStatement::find($id);
+
+        $statementAccounts = LoloPinoyGrillCommissaryBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = LoloPinoyGrillCommissaryBillingStatement::where('id', $id)->sum('paid_amount');
+
+
+          //
+        $countAmount = LoloPinoyGrillCommissaryBillingStatement::where('billing_statement_id', $id)->sum('paid_amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+       
+
+        $pdf = PDF::loadView('printSOA-lolo-pinoy-grill', compact('Soa', 'user', 'statementAccounts', 'sum'));
+
+        return $pdf->download('lolo-pinoy-grill-statement-of-account.pdf');
+    }
+
+    //
+    public function sAccountUpdate(Request $request, $id){
+         $accountPaid = LoloPinoyGrillCommissaryBillingStatement::find($id);
+        
+        $accountPaid->paid_amount = $request->get('paidAmount');
+        $accountPaid->status = $request->get('status');
+        $accountPaid->collection_date = $request->get('collectionDate');
+        $accountPaid->check_number = $request->get('chequeNumber');
+        $accountPaid->check_amount = $request->get('chequeAmount');
+        $accountPaid->or_number = $request->get('orNumber');
+        $accountPaid->payment_method = $request->get('paymentMethod');
+
+        $accountPaid->save();
+
+        Session::flash('sAccountUpdate', 'SOA updated.');
+
+        return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-statement-of-account/'.$request->get('soaId'));
+    }
+
+    //
     public function inventoryStockUpdate(Request $request, $id){
         $updateInventoryStock = LoloPinoyGrillCommissaryRawMaterial::find($id);
 
@@ -503,13 +546,38 @@ class LoloPinoyGrillCommissaryController extends Controller
 
     //
     public function viewStatementAccount($id){
-         $ids = Auth::user()->id;
+        $ids = Auth::user()->id;
         $user = User::find($ids);
 
-        //getStatementAccounts
-        $getStatementAccounts = LoloPinoyGrillCommissaryStatementOfAccount::where('id', $id)->get()->toArray();
+        //viewStatementAccount
+        $viewStatementAccount = LoloPinoyGrillCommissaryBillingStatement::where('id', $id)->get()->toArray();
+       
+        
+        $statementAccounts = LoloPinoyGrillCommissaryBillingStatement::where('billing_statement_id', $id)->where('bill_to', NULL)->get();
 
-        return view('view-lolo-pinoy-grill-statement-account', compact('user','getStatementAccounts'));
+
+        //count the total amount 
+        $countTotalAmount = LoloPinoyGrillCommissaryBillingStatement::where('id', $id)->sum('amount');
+
+          //
+        $countAmount = LoloPinoyGrillCommissaryBillingStatement::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+
+         //count the total balance if there are paid amount
+        $paidAmountCount = LoloPinoyGrillCommissaryBillingStatement::where('id', $id)->sum('paid_amount');
+       
+        //
+        $countAmountOthersPaid = LoloPinoyGrillCommissaryBillingStatement::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('paid_amount');
+        
+        $compute  = $paidAmountCount + $countAmountOthersPaid;
+
+
+        //minus the total balance to paid amounts
+        $computeAll  = $sum - $compute;
+
+        return view('view-lolo-pinoy-grill-statement-account', compact('user','viewStatementAccount', 'statementAccounts', 'sum', 'computeAll'));
     }
 
     //
@@ -517,41 +585,20 @@ class LoloPinoyGrillCommissaryController extends Controller
         $ids =  Auth::user()->id;
         $user = User::find($ids);
 
-        $status = "Unpaid";
+        /*$status = "Unpaid";
         $paid = "Paid";
 
         //get statement of account 
         $statementOfAccounts = LoloPinoyGrillCommissaryStatementOfAccount::where('soa_id', NULL)->where('status', $status)->get()->toArray();
 
-        $statementOfAccountPaids = LoloPinoyGrillCommissaryStatementOfAccount::where('soa_id', NULL)->where('status', $paid)->get()->toArray();
+        $statementOfAccountPaids = LoloPinoyGrillCommissaryStatementOfAccount::where('soa_id', NULL)->where('status', $paid)->get()->toArray();*/
+         $statementOfAccounts = LoloPinoyGrillCommissaryBillingStatement::where('bill_to', '!=', NULL)->get()->toArray();
 
 
         return view('lolo-pinoy-grill-statement-of-account-lists', compact('user', 'statementOfAccounts', 'statementOfAccountPaids'));
     }
 
-    //
-    public function updateStatementInfo(Request $request, $id){
-        $updateStatmentInfo = LoloPinoyGrillCommissaryStatementOfAccount::find($id);
-
-        $updateStatmentInfo->date = $request->get('date');
-        $updateStatmentInfo->branch = $request->get('branch');
-        $updateStatmentInfo->kilos = $request->get('kilos');
-        $updateStatmentInfo->unit_price = $request->get('unitPrice');
-        $updateStatmentInfo->payment_method = $request->get('paymentMethod');
-        $updateStatmentInfo->amount = $request->get('amount');
-        $updateStatmentInfo->status = $request->get('status');
-        $updateStatmentInfo->paid_amount = $request->get('paidAmount');
-        $updateStatmentInfo->collection_date = $request->get('collectionDate');
-        $updateStatmentInfo->check_number = $request->get('checkNumber');
-        $updateStatmentInfo->check_amount = $request->get('checkAmount');
-        $updateStatmentInfo->or_number = $request->get('orNumber');
-
-        $updateStatmentInfo->save();
-
-        Session::flash('SuccessE', 'Successfully updated');
-
-        return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-statement-of-account/'.$id);
-    }
+  
 
     //
     public function editStatementOfAccount($id){
@@ -560,11 +607,41 @@ class LoloPinoyGrillCommissaryController extends Controller
 
 
          //getStatementOfAccount
-        $getStatementOfAccount = LoloPinoyGrillCommissaryStatementOfAccount::find($id);
+        $getStatementOfAccount = LoloPinoyGrillCommissaryBillingStatement::find($id);
 
-        $sAccounts = LoloPinoyGrillCommissaryStatementOfAccount::where('soa_id', $id)->get()->toArray();
+        $sAccounts = LoloPinoyGrillCommissaryBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+         //AllAcounts not yet paid
+       $allAccounts = LoloPinoyGrillCommissaryBillingStatement::where('billing_statement_id', $id)->where('status', NULL)->get()->toArray();
+
+    
+       $stat = "PAID";
+
+       $allAccountsPaids = LoloPinoyGrillCommissaryBillingStatement::where('billing_statement_id', $id)->where('status', $stat)->get()->toArray();  
+
+        //$sAccounts = LechonDeCebuStatementOfAccount::where('soa_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = LoloPinoyGrillCommissaryBillingStatement::where('id', $id)->sum('amount');
+
+          //
+        $countAmount = LoloPinoyGrillCommissaryBillingStatement::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        //count the total balance if there are paid amount
+        $paidAmountCount = LoloPinoyGrillCommissaryBillingStatement::where('id', $id)->sum('paid_amount');
+       
+        //
+        $countAmountOthersPaid = LoloPinoyGrillCommissaryBillingStatement::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('paid_amount');
         
-        return view('edit-lolo-pinoy-grill-statement-of-account', compact('user', 'getStatementOfAccount', 'sAccounts'));
+        $compute  = $paidAmountCount + $countAmountOthersPaid;
+
+
+        //minus the total balance to paid amounts
+        $computeAll  = $sum - $compute;
+        
+        return view('edit-lolo-pinoy-grill-statement-of-account', compact('user', 'getStatementOfAccount', 'sAccounts', 'allAccounts', 'allAccountsPaids', 'sum', 'computeAll'));
     }
 
     //store statement of account
@@ -625,18 +702,8 @@ class LoloPinoyGrillCommissaryController extends Controller
 
         return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-statement-of-account/'.$insertedId);
 
-
-
     }
 
-    //statement of account
-    public function statementOfAccountForm(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-
-        return view('lolo-pinoy-grill-statement-of-account', compact('user'));
-    }
 
     //
     public function viewSalesInvoice($id){

@@ -503,8 +503,6 @@ Route::group(['middleware' => ['auth']], function(){
 	//view 
 	Route::get('/lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-sales-invoice/{id}', 'LoloPinoyGrillCommissaryController@viewSalesInvoice')->name('lolo-pinoy-grill-commissary.viewSalesInvoice');
 
-	//statement of account form lolo pinoy grill
-	Route::get('/lolo-pinoy-grill-commissary/statement-of-account-form', 'LoloPinoyGrillCommissaryController@statementOfAccountForm')->name('lolo-pinoy-grill-commissary.statementOfAccountForm');
 
 	//store statement of account
 	Route::post('/lolo-pinoy-grill-commissary/store-statement-account', 'LoloPinoyGrillCommissaryController@storeStatementAccount')->name('lolo-pinoy-grill-commissary.storeStatementAccount');
@@ -512,9 +510,23 @@ Route::group(['middleware' => ['auth']], function(){
 	//edit
 	Route::get('/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-statement-of-account/{id}', 'LoloPinoyGrillCommissaryController@editStatementOfAccount')->name('lolo-pinoy-grill-commissary.editStatementOfAccount');
 
-	Route::patch('/lolo-pinoy-grill-commissary/update-statement-info/{id}', 'LoloPinoyGrillCommissaryController@updateStatementInfo')->name('lolo-pinoy-grill-commissary.updateStatementInfo');
 
 	Route::get('/lolo-pinoy-grill-commissary/statement-of-account-lists', 'LoloPinoyGrillCommissaryController@statementOfAccountList')->name('lolo-pinoy-grill-commissary.statementOfAccountList');
+
+	Route::patch(
+		'/lolo-pinoy-grill-commissary/s-account/{id}',
+		'LoloPinoyGrillCommissaryController@sAccountUpdate')
+		->name('lolo-pinoy-grill-commissary.sAccountUpdate');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/view-statement-account/{id}',
+		'LoloPinoyGrillCommissaryController@viewStatementAccount')
+		->name('lolo-pinoy-grill-commissary.viewStatementAccount');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/printSOA/{id}',
+		'LoloPinoyGrillCommissaryController@printSOA')
+		->name('lolo-pinoy-grill-commissary.printSOA');
 
 	//
 	Route::get('/lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-statement-account/{id}', 'LoloPinoyGrillCommissaryController@viewStatementAccount')->name('lolo-pinoy-grill-commissary.viewStatementAccount');
