@@ -1,6 +1,11 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
-@section('title', 'View Stock Inventory Item Details |')
+@section('title', 'View Inventory Of Stocks Item Details |')
 @section('content')
+<script>
+  $(document).ready(function(){
+      $('.alert-success').fadeIn().delay(3000).fadeOut();
+  });
+</script>
 <div id="wrapper">
 	<!-- Sidebar -->
    	@include('sidebar.sidebar')
@@ -12,14 +17,14 @@
                 <a href="#">Lechon de Cebu</a>
               </li>
               <li class="breadcrumb-item ">Commissary</li>
-              <li class="breadcrumb-item ">Stock Inventory</li>
+              <li class="breadcrumb-item ">Inventory Of Stock</li>
               <li class="breadcrumb-item active">Item Details</li>
             </ol>
-            <a href="{{ url('lolo-pinoy-lechon-de-cebu/commissary/stocks-inventory') }}">Back to Lists</a>
+            <a href="{{ url('lolo-pinoy-lechon-de-cebu/commissary/inventory-of-stocks') }}">Back to Lists</a>
              <div class="col-lg-12">
             	 <img src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
             	 
-            	 <h4 class="text-center"><u>STOCK INVENTORY ITEM DETAILS </u></h4>
+            	 <h4 class="text-center"><u>INVENTORY OF STOCK ITEM DETAILS </u></h4>
 
 
             </div>
@@ -28,7 +33,7 @@
             		<div class="card mb-3">
             			 <div class="card-header">
                               <i class="fas fa-apple-alt" aria-hidden="true"></i>
-                           Stock Inventory View Item Details
+                           Inventory Stock View Item Details
                            	 <div class="float-right">
 			                   <button class="btn btn-success" onclick="myFunction()"> <i class="fa fa-print fa-2x" aria-hidden="true"></i></button>
 			                  
@@ -99,6 +104,75 @@
 		            	 		</tbody>
 		            	 		
                         	</table>
+                       		 @if(session('viewInventoryOfStocks'))
+	                             	<p class="alert alert-success">{{ Session::get('viewInventoryOfStocks') }}</p>
+	                            @endif 
+                        	@foreach($getViewStockDetails as $getViewStockDetail)
+                        	<form action="{{ action('LoloPinoyLechonDeCebuController@inventoryStockUpdate', $getViewStockDetail['id']) }}" method="post">
+                        	  {{csrf_field()}}
+	                         <input name="_method" type="hidden" value="PATCH">
+	                         
+                        	<div class="form-group">
+                    			<div class="form-row">
+                					<div class="col-lg-2">
+            							<label>Date</label>
+            							<input type="text" name="date" class="form-control" value="{{ $getViewStockDetail['date']}}" />
+                					</div>
+                					<div class="col-lg-2">
+            							<label>Reference #</label>
+            							<input type="text" name="referenceNumber" class="form-control" value="{{ $getViewStockDetail['reference_no'] }}" />
+                					</div>
+                					<div class="col-lg-2">
+            							<label>Description</label>
+            							<input type="text" name="description" class="form-control" value="{{ $getViewStockDetail['description']}}" />
+                					</div>
+                					<div class="col-lg-2">
+            							<label>Item</label>
+            							<input type="text" name="item" class="form-control" value="{{ $getViewStockDetail['item']}}" />
+                					</div>
+                					<div class="col-lg-1">
+            							<label>QTY</label>
+            							<input type="text" name="qty" class="form-control" value="{{ $getViewStockDetail['qty']}}" />
+                					</div>
+                					<div class="col-lg-1">
+            							<label>Unit</label>
+            							<input type="text" name="unit" class="form-control" value="{{ $getViewStockDetail['unit'] }}" />
+                					</div>
+                					<div class="col-lg-2">
+            							<label>amount</label>
+            							<input type="text" name="amount" class="form-control" value="{{ $getViewStockDetail['amount']}}" />
+                					</div>
+                					
+                    			</div>
+                        	</div>
+                        	<div class="form-group">
+                    			<div class="form-row">
+                					<div class="col-lg-1">
+            							<label>Status</label>
+            							<input type="text" name="status" class="form-control" value="{{ $getViewStockDetail['status'] }}" />
+                					</div>
+                					<div class="col-lg-4">
+            							<label>Requesting Branch</label>
+            							<input type="text" name="requestingBranch" class="form-control" value="{{ $getViewStockDetail['requesting_branch']}}" />
+                					</div>
+                					<div class="col-lg-2">
+            							<label>Cheque No Issued</label>
+            							<input type="text" name="chequeNoIssued" class="form-control" value="{{ $getViewStockDetail['cheque_no_issued']}}" />
+                					</div>
+                					<div class="col-lg-2">
+            							<label>Remarks</label>
+            							<input type="text" name="remarks" class="form-control" value="{{ $getViewStockDetail['remarks']}}" />
+                					</div>
+                					<div class="col-lg-2">
+                						<br>
+                						<input type="hidden" name="iSId" value="{{ $viewStockDetail['id']}}">
+                						<input type="submit" class="btn btn-success" value="Add Remarks" />
+                					</div>
+                    			</div>
+                        	</div>
+                        	</form>
+                        	@endforeach	
+                       	 	
                         	<table class="table table-bordered">
                         		<thead>
 		            	 			<tr>
@@ -141,22 +215,13 @@
 	            	 					@endif
 		            	 				<td>{{ $getViewStockDetail['requesting_branch']}}</td>
 		            	 				<td>{{ $getViewStockDetail['cheque_no_issued']}}</td>
-		            	 				<td>{{ $getViewStockDetail['remarks'] }}</td>
+		            	 				<td>{{ $getViewStockDetail['remarks']}}</td>
 		            	 			</tr>
 		            	 			@endforeach
 		            	 		</tbody>
                         	</table>
                         	<br>
-                        	<table class="table table-bordered">
-                        		<thead>
-                					<tr>
-                						 <th width="15%" class="bg-info" style="color:white;">Total Product Cost</th>
-                						  <th class="bg-success" style="color:white;">
-			                                    ₱ <?php echo number_format($total, 2);?>
-			                                 </th>
-                					</tr>
-                        		</thead>
-                        	</table>
+                        	
                         </div>
             		</div>
             	</div>

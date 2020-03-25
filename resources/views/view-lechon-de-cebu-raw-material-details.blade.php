@@ -110,7 +110,7 @@
 		            	 	<table class="table table-bordered">
 		            	 		<thead>
 		            	 			<tr>
-		            	 				<th colspan="10" class="bg-info" style="color:white;">TRANSACTION</th>
+		            	 				<th colspan="11" class="bg-info" style="color:white;">TRANSACTION</th>
 		            	 			</tr>
 		            	 		</thead>
 		            	 		<tbody>
@@ -125,6 +125,7 @@
 		            	 				<th>STATUS</th>
 		            	 				<th>REQUESTING BRANCH</th>
 		            	 				<th>CHEQUE NO. ISSUED</th>
+		            	 				<th>REMARKS</th>
 		            	 			</tr>
 
 		            	 			@foreach($getViewRawDetails as $getViewRawDetail)
@@ -148,6 +149,7 @@
 	            	 					@endif
 		            	 				<td>{{ $getViewRawDetail['requesting_branch']}}</td>
 		            	 				<td>{{ $getViewRawDetail['cheque_no_issued']}}</td>
+		            	 				<td>{{ $getViewRawDetail['remarks']}}</td>
 		            	 			</tr>
 		            	 			@endforeach
 		            	 		</tbody>

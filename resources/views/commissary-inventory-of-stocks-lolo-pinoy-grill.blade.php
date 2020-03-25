@@ -1,15 +1,15 @@
-@extends('layouts.lolo-pinoy-lechon-de-cebu-app')
+@extends('layouts.lolo-pinoy-grill-commissary-app')
 @section('title', 'Inventory Of Stocks |')
 @section('content')
 
 <div id="wrapper">
-	 @include('sidebar.sidebar')
+	 @include('sidebar.sidebar-lolo-pinoy-grill')
 	 <div id="content-wrapper">
 	 	<div class="container-fluid">
 	 		 <!-- Breadcrumbs-->
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                  <a href="#">Lechon de Cebu</a>
+                  <a href="#">Lolo Pinoy Grill Commissary</a>
                 </li>
                 <li class="breadcrumb-item ">Commissary</li>
                 <li class="breadcrumb-item active">Inventory Of Stocks</li>
@@ -59,7 +59,7 @@
                                   <tr >
                                     
                                     <td>{{ $getRawMaterial['product_id_no'] }}</td>
-                                    <td><a href="{{ url('lolo-pinoy-lechon-de-cebu/view-inventory-of-stocks/'.$getRawMaterial['id'])}}">{{ $getRawMaterial['product_name'] }}</a></td>
+                                    <td><a href="{{ url('lolo-pinoy-grill-commissary/view-inventory-of-stocks/'.$getRawMaterial['id'])}}">{{ $getRawMaterial['product_name'] }}</a></td>
                                     <td>{{ $getRawMaterial['unit_price'] }}</td>
                                     <td>{{ $getRawMaterial['unit'] }}</td>
                                     <td class="bg-danger" style="color:white;">{{ $getRawMaterial['in'] }}</td>

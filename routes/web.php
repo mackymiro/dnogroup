@@ -304,6 +304,16 @@ Route::group(['middleware' => ['auth']], function(){
 	//route for commissary inventory of stocks
 	Route::get('/lolo-pinoy-lechon-de-cebu/commissary/inventory-of-stocks', 'LoloPinoyLechonDeCebuController@inventoryOfStocks')->name('lolo-pinoy-lechon-de-cebu.inventoryOfStocks');
 
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/view-inventory-of-stocks/{id}',
+		'LoloPinoyLechonDeCebuController@viewInventoryOfStocks')
+		->name('lolo-pinoy-lechon-de-cebu.viewInventoryOfStocks');
+
+	Route::patch(
+		'/lolo-pinoy-lechon-de-cebu/inventory-stock-update/{id}',
+		'LoloPinoyLechonDeCebuController@inventoryStockUpdate')
+		->name('lolo-pinoy-lechon-de-cebu.inventoryStockUpdate');
+
 	//route for download PDF file
 	Route::get('/lolo-pinoy-lechon-de-cebu/printDelivery/{id}', 'LoloPinoyLechonDeCebuController@printDelivery')->name('lolo-pinoy-lechon-de-cebu.printDelivery');
 
@@ -583,14 +593,25 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('lolo-pinoy-grill-commissary.viewStockInventory');
 
 	Route::get(
-		'/lolo-pinoy-grill-commissary/commissary/sales-of-outlets',
-		'LoloPinoyGrillCommissaryController@salesOfOutlet')
-		->name('lolo-pinoy-grill-commissary.salesOfOutlet');
-
-	Route::get(
 		'/lolo-pinoy-grill-commissary/commissary/delivery-outlets',
 		'LoloPinoyGrillCommissaryController@commissaryDeliveryOutlet')
 		->name('lolo-pinoy-grill-commissary.commissaryDeliveryOutlet');
+
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/commissary/inventory-of-stocks',
+		'LoloPinoyGrillCommissaryController@inventoryOfStocks')
+		->name('lolo-pinoy-grill-commissary.inventoryOfStocks');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/view-inventory-of-stocks/{id}',
+		'LoloPinoyGrillCommissaryController@viewInventoryOfStocks')
+		->name('lolo-pinoy-grill-commissary.viewInventoryOfStocks');
+
+	Route::patch(
+		'/lolo-pinoy-grill-commissary/inventory-stock-update/{id}',
+		'LoloPinoyGrillCommissaryController@inventoryStockUpdate')
+		->name('lolo-pinoy-grill-commissary.inventoryStockUpdate');
 
 	//Lolo Pinoy Grill Branches
 	Route::get('/lolo-pinoy-grill-branches', 'LoloPinoyGrillBranchesController@index')->name('lolo-pinoy-grill-branches.index');

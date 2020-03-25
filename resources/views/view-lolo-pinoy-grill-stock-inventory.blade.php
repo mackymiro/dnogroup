@@ -102,7 +102,7 @@
                         	<table class="table table-bordered">
                         		<thead>
 		            	 			<tr>
-		            	 				<th colspan="10" class="bg-info" style="color:white;">TRANSACTION</th>
+		            	 				<th colspan="11" class="bg-info" style="color:white;">TRANSACTION</th>
 		            	 			</tr>
 		            	 		</thead>
 		            	 		<tbody>
@@ -117,6 +117,7 @@
 		            	 				<th>STATUS</th>
 		            	 				<th>REQUESTING BRANCH</th>
 		            	 				<th>CHEQUE NO. ISSUED</th>
+		            	 				<th>REMARKS</th>
 		            	 			</tr>
 
 		            	 			@foreach($getViewStockDetails as $getViewStockDetail)
@@ -140,6 +141,7 @@
 	            	 					@endif
 		            	 				<td>{{ $getViewStockDetail['requesting_branch']}}</td>
 		            	 				<td>{{ $getViewStockDetail['cheque_no_issued']}}</td>
+		            	 				<td>{{ $getViewStockDetail['remarks']}}</td>
 		            	 			</tr>
 		            	 			@endforeach
 		            	 		</tbody>

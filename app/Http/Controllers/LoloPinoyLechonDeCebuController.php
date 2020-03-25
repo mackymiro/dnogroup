@@ -24,6 +24,45 @@ class LoloPinoyLechonDeCebuController extends Controller
 {   
 
     //
+    public function inventoryStockUpdate(Request $request, $id){
+        $updateInventoryStock = CommissaryRawMaterial::find($id);
+
+        $updateInventoryStock->date = $request->get('date');
+        $updateInventoryStock->reference_no = $request->get('referenceNumber');
+        $updateInventoryStock->description  =$request->get('description');
+        $updateInventoryStock->item = $request->get('item');
+        $updateInventoryStock->qty = $request->get('qty');
+        $updateInventoryStock->unit = $request->get('unit');
+        $updateInventoryStock->amount = $request->get('amount');
+        $updateInventoryStock->status = $request->get('status');
+        $updateInventoryStock->requesting_branch = $request->get('requestingBranch');
+        $updateInventoryStock->cheque_no_issued = $request->get('chequeNoIssued');
+        $updateInventoryStock->remarks = $request->get('remarks');
+
+        $updateInventoryStock->save();
+
+        Session::flash('viewInventoryOfStocks', 'Successfully updated.');
+
+        return redirect('lolo-pinoy-lechon-de-cebu/view-inventory-of-stocks/'.$request->get('iSId'));
+    }
+
+    //
+    public function viewInventoryOfStocks($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //
+        $viewStockDetail = CommissaryRawMaterial::find($id);
+
+        //transaction table
+        $getViewStockDetails = CommissaryRawMaterial::where('rm_id', $id)->get()->toArray();
+
+      
+
+        return view('view-lechon-de-cebu-inventory-stock', compact('user', 'viewStockDetail', 'getViewStockDetails'));
+    }
+
+    //
     public function printSOA($id){
           $ids = Auth::user()->id;
         $user = User::find($ids);
@@ -400,8 +439,17 @@ class LoloPinoyLechonDeCebuController extends Controller
     public function inventoryOfStocks(){
         $ids = Auth::user()->id;    
         $user = User::find($ids);
+
+         //getRawMaterial
+        $getRawMaterials = CommissaryRawMaterial::where('rm_id', NULL)->get()->toArray();
+
+        //count the total stock out amount value
+        $countStockAmount = CommissaryRawMaterial::all()->sum('stock_amount');
         
-        return view('commissary-inventory-of-stocks', compact('user'));
+        //count the total amount 
+        $countTotalAmount = CommissaryRawMaterial::where('rm_id', NULL)->sum('amount');
+        
+        return view('commissary-inventory-of-stocks', compact('user', 'getRawMaterials', 'countStockAmount', 'countTotalAmount'));
     }
 
     //view stock inventory 

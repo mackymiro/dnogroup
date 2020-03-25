@@ -19,6 +19,63 @@ use App\LoloPinoyGrillCommissaryRawMaterial;
 
 class LoloPinoyGrillCommissaryController extends Controller
 {
+
+    //
+    public function inventoryStockUpdate(Request $request, $id){
+        $updateInventoryStock = LoloPinoyGrillCommissaryRawMaterial::find($id);
+
+        $updateInventoryStock->date = $request->get('date');
+        $updateInventoryStock->reference_no = $request->get('referenceNumber');
+        $updateInventoryStock->description  =$request->get('description');
+        $updateInventoryStock->item = $request->get('item');
+        $updateInventoryStock->qty = $request->get('qty');
+        $updateInventoryStock->unit = $request->get('unit');
+        $updateInventoryStock->amount = $request->get('amount');
+        $updateInventoryStock->status = $request->get('status');
+        $updateInventoryStock->requesting_branch = $request->get('requestingBranch');
+        $updateInventoryStock->cheque_no_issued = $request->get('chequeNoIssued');
+        $updateInventoryStock->remarks = $request->get('remarks');
+
+        $updateInventoryStock->save();
+
+        Session::flash('viewInventoryOfStocks', 'Successfully updated.');
+
+        return redirect('lolo-pinoy-grill-commissary/view-inventory-of-stocks/'.$request->get('iSId'));
+    }
+
+    //
+    public function viewInventoryOfStocks($id){
+          $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //
+        $viewStockDetail = LoloPinoyGrillCommissaryRawMaterial::find($id);
+
+        //transaction table
+        $getViewStockDetails = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', $id)->get()->toArray();
+
+      
+
+        return view('view-lolo-pinoy-grill-commissary-inventory-stock', compact('user', 'viewStockDetail', 'getViewStockDetails'));
+    }
+
+    //
+    public function inventoryOfStocks(){
+          $ids = Auth::user()->id;    
+        $user = User::find($ids);
+
+         //getRawMaterial
+        $getRawMaterials = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', NULL)->get()->toArray();
+
+        //count the total stock out amount value
+        $countStockAmount = LoloPinoyGrillCommissaryRawMaterial::all()->sum('stock_amount');
+        
+        //count the total amount 
+        $countTotalAmount = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', NULL)->sum('amount');
+        
+        return view('commissary-inventory-of-stocks-lolo-pinoy-grill', compact('user', 'getRawMaterials', 'countStockAmount', 'countTotalAmount'));
+    }
+
     //
     public function viewPayableDetails($id){
         $ids = Auth::user()->id;
@@ -175,30 +232,6 @@ class LoloPinoyGrillCommissaryController extends Controller
         $getDeliveryOutlets = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', '!=', NULL)->get()->toArray();
 
         return view('commissary-delivery-outlet-lolo-pinoy-grill', compact('user', 'getDeliveryOutlets'));
-    }
-
-    //
-    public function salesOfOutlet(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        //
-        $getSalesOfOutlets = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', '!=', NULL)->get()->toArray();
-
-        //get total amount in delivery in 
-        $desc = "DELIVERY IN";
-        $status = "Paid";
-
-        $totalDeliveryIn = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', '!=', NULL)->where('description', $desc)->where('status', $status)->sum('amount');
-
-        //get total amount delivery out 
-        $descDelOut = "DELIVERY OUT"; 
-        $statusDelOut = "Paid";  
-
-        $totalDeliveryOut = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', '!=', NULL)->where('description', $descDelOut)->where('status', $statusDelOut)->sum('amount');
-
-        return view('commissary-sales-of-outlet-lolo-pinoy-grill', compact('user', 'getSalesOfOutlets', 'totalDeliveryIn', 
-            'totalDeliveryOut'));
     }
 
     //

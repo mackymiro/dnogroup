@@ -89,8 +89,6 @@
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/commissary/stocks-inventory') }}">Stocks Inventory</a>     
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/commissary/delivery-outlets') }}">Delivery Outlets</a>
 
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/commissary/sales-of-outlets') }}">Sales Of Outlets</a>
-
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/commissary/inventory-of-stocks') }}">Inventory Of Stocks</a>
          
         </div>

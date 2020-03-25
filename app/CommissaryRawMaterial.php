@@ -30,6 +30,7 @@ class CommissaryRawMaterial extends Model
 		'cheque_no_issued',
 		'status',
 		'created_by',
+		'remarks',
 
  	];
 }

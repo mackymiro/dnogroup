@@ -19,7 +19,7 @@
             </ol>
              <a href="{{ url('lolo-pinoy-grill-commissary/purchase-order-lists') }}">Back to Lists</a>
              <div class="col-lg-12">
-            	 <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
+            	 <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill Commissary">
             	 
             	 <h4 class="text-center"><u>PURCHASE ORDER</u></h4>
             </div>
