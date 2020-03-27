@@ -33,23 +33,37 @@
                     			<div class="form-row">
                       				<div class="col-md-2">
 	            						<label>Product Id</label>
-	            						<input type="text" name="productId" class="form-control" required="required" />
+            							<select name="productId" class="form-control">
+		                                    <option value="0">--Please Select--</option>
+		                                    @foreach($getRawMaterials as $getRawMaterial)
+		                                    <option value="{{ $getRawMaterial['id']}}-{{ $getRawMaterial['product_id_no']}}">{{ $getRawMaterial['product_id_no']}}</option>
+		                                    @endforeach
+		                                </select>
 		              				</div>
 	                				<div class="col-md-1">
 	            						<label>QTY</label>
 	            						<input type="text" name="qty" class="form-control" required="required" />
 	                				</div>
 	                				<div class="col-md-1">
-	            						<label>Unit</label>
-	            						<input type="text" name="unit" class="form-control" required="required" />
+	                					<label>Unit</label>
+	            						<div id="unitClose">
+                    						 <input type="text" name="unit" class="form-control"/>
+                           				 </div>
+                              			  <div id="unit"></div>
 	                				</div>
 	                				<div class="col-md-4">
 	                					<label>Item Description</label>
-	                					<input type="text" name="itemDescription" class="form-control" required="required" />
+	                					<div id="itemDescClose">
+                        					   <input type="text" name="itemDescription" class="form-control" />
+		                                 </div>
+		                                 <div id="itemDesc"></div>
 	                				</div>
 		            				<div class="col-md-2">
 		            					<label>Unit Price</label>
-		            					<input type="text" name="unitPrice" class="form-control" required="required" />
+		            					<div id="unitPriceClose">
+                        					   <input type="text" name="unitPrice" class="form-control"  />
+                              			</div>
+                                 		 <div id="unitPrice"></div>
 		            				</div>
 		            				
 		            			 </div>
@@ -73,4 +87,39 @@
 	 	</div>	
 	 </div>
 </div>
+<script type="text/javascript">
+  $(document).ready(function(){
+      $("select").change(function(){
+          <?php
+            $getRawMaterials = DB::table(
+                                  'lolo_pinoy_grill_commissary_raw_materials')
+                                  ->where('rm_id', NULL)
+                                  ->get(); ?>
+          <?php foreach($getRawMaterials as $key=>$getRawMaterial): ?>
+              
+              var prodId = $(this).children("option:selected").val();
+              var prodIdSplit = prodId.split("-");
+              var prodArr = prodIdSplit[0];
+  
+              if(prodArr  == "<?php echo $getRawMaterial->id;?>"){
+                    <?php 
+                        $getId = DB::table(
+                                  'lolo_pinoy_grill_commissary_raw_materials')
+                                  ->where('id', $getRawMaterial->id)
+                                  ->get();
+                    ?>
+                     $("#unit").html('<input type="text" name="unit" value="<?php echo $getId[0]->unit?>" class="form-control" readonly="readonly" /> ');
+                     $("#unitClose").hide();
+                     $("#itemDesc").html('<input type="text" name="itemDescription" value="<?php echo $getId[0]->product_name; ?>" class="form-control" readonly="readonly">')
+                     $("#itemDescClose").hide();
+                     $("#unitPrice").html('<input type="text" name="unitPrice" value="<?php echo $getId[0]->unit_price; ?>" class="form-control" readonly="readonly" >');
+                     $("#unitPriceClose").hide();
+                    
+                  
+              }
+          <?php endforeach; ?>           
+        
+      });
+  });
+</script>
 @endsection

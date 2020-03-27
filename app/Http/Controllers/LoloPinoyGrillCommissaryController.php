@@ -1555,12 +1555,16 @@ class LoloPinoyGrillCommissaryController extends Controller
         $ids = Auth::user()->id;
         $user = User::find($ids);
 
-        return view('add-new-lolo-pinoy-grill-delivery-receipt', compact('user', 'id'));
+          //get Raw material
+        $getRawMaterials = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', NULL)->get()->toArray();
+
+        return view('add-new-lolo-pinoy-grill-delivery-receipt', compact('user', 'id', 'getRawMaterials'));
     }
 
     //update delivery receipt
     public function updateDeliveryReceipt(Request $request, $id){
         $updateDeliveryReceipt = LoloPinoyGrillCommissaryDeliveryReceipt::find($id);
+
 
         $qty = $request->get('qty');
         $unitPrice = $request->get('unitPrice');
@@ -1569,6 +1573,7 @@ class LoloPinoyGrillCommissaryController extends Controller
         $sum = $compute;
 
         $updateDeliveryReceipt->delivered_to = $request->get('deliveredTo');
+        $updateDeliveryReceipt->product_id  = $request->get('productId');
         $updateDeliveryReceipt->qty = $request->get('qty');
         $updateDeliveryReceipt->unit = $request->get('unit');
         $updateDeliveryReceipt->item_description = $request->get('itemDescription');
@@ -1591,10 +1596,13 @@ class LoloPinoyGrillCommissaryController extends Controller
          //getDeliveryReceipt
         $getDeliveryReceipt = LoloPinoyGrillCommissaryDeliveryReceipt::find($id);
 
+          //get Raw material
+        $getRawMaterials = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', NULL)->get()->toArray();
+
          //dReceipts
         $dReceipts = LoloPinoyGrillCommissaryDeliveryReceipt::where('dr_id', $id)->get()->toArray();
 
-        return view('edit-lolo-pinoy-grill-commissary-delivery-receipt', compact('user','getDeliveryReceipt', 'dReceipts'));
+        return view('edit-lolo-pinoy-grill-commissary-delivery-receipt', compact('user','getDeliveryReceipt', 'dReceipts', 'getRawMaterials'));
     }
 
     //storeDeliveryReceipt
@@ -1667,7 +1675,10 @@ class LoloPinoyGrillCommissaryController extends Controller
         $ids = Auth::user()->id;
         $user = User::find($ids);
 
-        return view('lolo-pinoy-grill-commissary-delivery-receipt-form', compact('user'));
+        //get Raw material
+        $getRawMaterials = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', NULL)->get()->toArray();
+
+        return view('lolo-pinoy-grill-commissary-delivery-receipt-form', compact('user', 'getRawMaterials'));
     }
 
 

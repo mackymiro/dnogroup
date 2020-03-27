@@ -122,24 +122,25 @@
 
                                           </tfoot>
                                           <tbody>
-                                           @foreach($statementOfAccountT2s as $statementOfAccountT2) 
-                                              <tr>
-                                                  <td>
-                                                     <a href="" title="View"><i class="fas fa-low-vision"></i></a>
-                                                  </td>
-                                                   <td>{{ $statementOfAccountT2['invoice_number']}}</td>
-                                                  <td>{{ $statementOfAccountT2['date']}}</td>
-                                                  <td>{{ $statementOfAccountT2['ordered_by']}}</td>
-                                                  <td>{{ $statementOfAccountT2['address']}}</td>
-                                                  <td>{{ $statementOfAccountT2['qty']}}</td>
-                                                  <td>{{ $statementOfAccountT2['total_kls']}}</td>
-                                                  <td>{{ $statementOfAccountT2['item_description']}}</td>
-                                                  <td>{{ $statementOfAccountT2['unit_price']}}</td>
-                                                  <td>{{ $statementOfAccountT2['amount']}}</td>
+                                          @foreach($statementOfAccountT2s as $statementOfAccountT2) 
+                                                <tr>
+                                                    <td>
+                                                       <a href="{{ url('lolo-pinoy-lechon-de-cebu/billing-statement/view-ssps/'.$statementOfAccountT1['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
+                                                    </td>
+                                                    <td>{{ $statementOfAccountT2['invoice_number']}}</td>
+                                                    <td>{{ $statementOfAccountT2['date']}}</td>
+                                                    <td>{{ $statementOfAccountT2['ordered_by']}}</td>
+                                                    <td>{{ $statementOfAccountT2['address']}}</td>
+                                                    <td>{{ $statementOfAccountT2['qty']}}</td>
+                                                    <td>{{ $statementOfAccountT2['total_kls']}}</td>
+                                                    <td>{{ $statementOfAccountT2['item_description']}}</td>
+                                                   
+                                                    <td>{{ $statementOfAccountT2['unit_price']}}</td>
+                                                    <td><?php echo number_format($statementOfAccountT2['amount'], 2)?></td>
 
-                                                  <td>{{ $statementOfAccountT2['created_by']}}</td>
-                                              </tr>
-                                              @endforeach
+                                                    <td>{{ $statementOfAccountT2['created_by']}}</td>
+                                                </tr>
+                                            @endforeach
                                           </tbody>
                                       </table>
                                   </div>

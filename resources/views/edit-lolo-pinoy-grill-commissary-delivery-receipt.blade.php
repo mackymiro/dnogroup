@@ -51,7 +51,7 @@
                     				</div>
                     				<div class="col-md-2">
                         				<label>Dr No</label>
-                        				<input type="text" name="contactPerson" class="form-control"  value="{{ $getDeliveryReceipt['dr_no']}}" />
+                        				<input type="text" name="contactPerson" class="form-control"  value="{{ $getDeliveryReceipt['dr_no']}}" disabled="disabled" />
                         			</div>
                              		</div>
                              	</div>
@@ -59,23 +59,42 @@
                     			<div class="form-row">
                     				<div class="col-md-2">
                 						<label>Product Id</label>
-                						<input type="text" name="productId" class="form-control"  value="{{ $getDeliveryReceipt['product_id']}}"/>
+                						  <select name="productId" id="prod" class="form-control">
+                                  <?php
+                                      $prodArr = $getDeliveryReceipt['product_id'];
+                                      $prodExp = explode("-", $prodArr);
+                                  ?>
+                                  <option value="0">--Please Select--</option>
+                                  @foreach($getRawMaterials as $getRawMaterial)
+                                  <option value="{{ $getRawMaterial['id']}}-{{ $getRawMaterial['product_id_no']}}" <?php echo ($prodExp[1] == $getRawMaterial['product_id_no']) ? 'selected="selected"' : '' ?>>{{ $getRawMaterial['product_id_no']}}</option>
+                                  @endforeach
+                              </select>
                     				</div>
                     				<div class="col-md-1">
                 						<label>QTY</label>
                 						<input type="text" name="qty" class="form-control"  value="{{ $getDeliveryReceipt['qty']}}" />
                     				</div>
                     				<div class="col-md-1">
-                						<label>Unit</label>
-                						<input type="text" name="unit" class="form-control"  value="{{ $getDeliveryReceipt['unit']}}" />
+                  						<label>Unit</label>
+                              <div id="unitClose">
+                  						    <input type="text" name="unit" class="form-control"  value="{{ $getDeliveryReceipt['unit']}}" disabled="disabled" />
+                              </div>
+                            <div id="unit"></div>
                     				</div>
+                            
                     				<div class="col-md-4">
                     					<label>Item Description</label>
-                    					<input type="text" name="itemDescription" class="form-control"  value="{{ $getDeliveryReceipt['item_description']}}"/>
+                              <div id="itemDescClose">
+                    					   <input type="text" name="itemDescription" class="form-control"  value="{{ $getDeliveryReceipt['item_description']}}" disabled="disabled" />
+                              </div>
+                              <div id="itemDesc"></div>
                     				</div>
                     				<div class="col-md-2">
                     					<label>Unit Price</label>
-                    					<input type="text" name="unitPrice" class="form-control"  value="{{ $getDeliveryReceipt['unit_price']}}"/>
+                              <div id="unitPriceClose">
+                    					   <input type="text" name="unitPrice" class="form-control"  value="{{ $getDeliveryReceipt['unit_price']}}" disabled="disabled" />
+                              </div>
+                              <div id="unitPrice"></div>
                     				</div>
                     				<div class="col-md-2">
                     					<label>Amount</label>
@@ -121,7 +140,18 @@
                                         <div  class="form-row">
                                             <div class="col-md-2">
                                                 <label>Product Id</label>
-                                                <input type="text" name="productId" class="form-control"  value="{{ $dReceipt['product_id']}}"/>
+                                                 <select name="productId" class="product-{{ $dReceipt['id']}} form-control">
+                                                    <?php
+                                                        $prodArr = $dReceipt['product_id'];
+                                                        $prodExp = explode("-", $prodArr);
+                                                        
+                                                    ?>
+                                                    <option value="0">--Please Select--</option>
+                                                   @foreach($getRawMaterials as $getRawMaterial)
+                                                       <option value="{{ $getRawMaterial['id']}}-{{ $getRawMaterial['product_id_no']}}" <?php echo ($prodExp[1] == $getRawMaterial['product_id_no']) ? 'selected="selected"' : '' ?>>{{ $getRawMaterial['product_id_no']}}</option>
+                                                    @endforeach
+                                                </select>
+
                                             </div>
                                             <div class="col-md-1">
                                                 <label>QTY</label>
@@ -129,15 +159,24 @@
                                             </div>
                                             <div class="col-md-1">
                                                 <label>Unit</label>
+                                                <div id="unitClose2-{{ $dReceipt['id']}}">
                                                 <input type="text" name="unit" class="form-control"  value="{{ $dReceipt['unit']}}" />
+                                                </div>
+                                                <div id="unit2-{{ $dReceipt['id']}}"></div>
                                             </div>
                                             <div class="col-md-4">
                                                 <label>Item Description</label>
-                                                <input type="text" name="itemDescription" class="form-control"  value="{{ $dReceipt['item_description']}}"/>
+                                                <div id="itemDescClose2-{{ $dReceipt['id']}}">
+                                                  <input type="text" name="itemDescription" class="form-control"  value="{{ $dReceipt['item_description']}}"/>
+                                                </div>
+                                                 <div id="itemDesc2-{{ $dReceipt['id']}}"></div>
                                             </div>
                                             <div class="col-md-2">
                                                 <label>Unit Price</label>
-                                                <input type="text" name="unitPrice" class="form-control"  value="{{ $dReceipt['unit_price']}}"/>
+                                                <div id="unitPrice2-{{ $dReceipt['id']}}">
+                                                 <input type="text" name="unitPrice" class="form-control"  value="{{ $dReceipt['unit_price']}}"/>
+                                                </div>
+                                                <div id="unitPrice2-{{ $dReceipt['id']}}"></div>
                                             </div>
                                             <div class="col-md-2">
                                                 <label>Amount</label>
@@ -211,5 +250,81 @@
             return false;
         }
      }
+</script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#prod").change(function(){
+             <?php
+                   $getRawMaterials = DB::table(
+                                  'lolo_pinoy_grill_commissary_raw_materials')
+                                  ->where('rm_id', NULL)
+                                  ->get(); ?>
+              <?php foreach($getRawMaterials as $key=>$getRawMaterial): ?>
+
+                  var prodId = $(this).children("option:selected").val();
+                  var prodIdSplit = prodId.split("-");
+                  var prodArr = prodIdSplit[0];
+                  if(prodArr  == "<?php echo $getRawMaterial->id;?>"){
+                    <?php 
+                        $getId = DB::table(
+                                  'lolo_pinoy_grill_commissary_raw_materials')
+                                  ->where('id', $getRawMaterial->id)
+                                  ->get();
+                    ?>
+                     $("#unit").html('<input type="text" name="unit" value="<?php echo $getId[0]->unit?>" class="form-control" readonly="readonly" /> ');
+                     $("#unitClose").hide();
+                     $("#itemDesc").html('<input type="text" name="itemDescription" value="<?php echo $getId[0]->product_name; ?>" class="form-control" readonly="readonly">')
+                     $("#itemDescClose").hide();
+                     $("#unitPrice").html('<input type="text" name="unitPrice" value="<?php echo $getId[0]->unit_price; ?>" class="form-control" readonly="readonly" >');
+                     $("#unitPriceClose").hide();
+                    
+                  
+              }
+  
+
+              <?php endforeach; ?>
+        }); 
+
+        <?php foreach($dReceipts as $dReceipt):  ?>
+         $(".product-<?php echo $dReceipt['id']?>").change(function(){
+             <?php
+                   $getRawMaterials = DB::table(
+                                  'lolo_pinoy_grill_commissary_raw_materials')
+                                  ->where('rm_id', NULL)
+                                  ->get(); ?>
+              <?php foreach($getRawMaterials as $key=>$getRawMaterial): ?>
+
+                  var prodId = $(this).children("option:selected").val();
+                  var prodIdSplit = prodId.split("-");
+                  var prodArr = prodIdSplit[0];
+                  if(prodArr  == "<?php echo $getRawMaterial->id;?>"){
+                    <?php 
+                        $getId = DB::table(
+                                  'lolo_pinoy_grill_commissary_raw_materials')
+                                  ->where('id', $getRawMaterial->id)
+                                  ->get();
+                    ?>
+                     $("#unit2-<?php echo $dReceipt['id']?>").html('<input type="text" name="unit" value="<?php echo $getId[0]->unit?>" class="form-control" readonly="readonly" /> ');
+
+                     $("#unitClose2-<?php echo $dReceipt['id']?>").hide();
+
+                     $("#itemDesc2-<?php echo $dReceipt['id'];?>").html('<input type="text" name="itemDescription" value="<?php echo $getId[0]->product_name; ?>" class="form-control" readonly="readonly">')
+
+                     $("#itemDescClose2-<?php echo $dReceipt['id'];?>").hide();
+
+                     $("#unitPrice2-<?php echo $dReceipt['id'];?>").html('<input type="text" name="unitPrice" value="<?php echo $getId[0]->unit_price; ?>" class="form-control" readonly="readonly" >');
+
+                     $("#unitPriceClose2-<?php echo $dReceipt['id'];?>").hide();
+                    
+                  
+              }
+  
+
+              <?php endforeach; ?>
+        }); 
+
+       <?php endforeach; ?>
+
+    });
 </script>
 @endsection

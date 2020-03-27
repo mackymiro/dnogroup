@@ -27,8 +27,7 @@
 	                              <i class="fas fa-cash-register" aria-hidden="true"></i>
 	                            View Sales Invoice
                                 <div class="float-right">
-                                    <button class="btn btn-success" onclick="myFunction()"> <i class="fa fa-print fa-2x" aria-hidden="true"></i></button>
-                              
+                                      <a href="{{ action('LoloPinoyLechonDeCebuController@printSalesInvoice', $viewSalesInvoice['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                                 </div>
                             </div>
                             <div class="card-body">

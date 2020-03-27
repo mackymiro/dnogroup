@@ -68,7 +68,15 @@
 					  							<td>{{ $getAllDeliveryReceipt['date']}}</td>
 					  							<td>{{ $getAllDeliveryReceipt['delivered_to']}}</td>
 					  							<td>{{ $getAllDeliveryReceipt['address']}}</td>
-					  							<td>{{ $getAllDeliveryReceipt['product_id']}}</td>
+					  							<td>
+					  								<?php
+                                                        $prodArr = $getAllDeliveryReceipt['product_id'];
+                                                        $prodExp = explode("-", $prodArr);
+                                                        
+                                                    ?>
+					  								{{ $prodExp[1] }}
+				  									
+				  								</td>
 					  							<td>{{ $getAllDeliveryReceipt['qty']}}</td>
 					  							<td>{{ $getAllDeliveryReceipt['unit']}}</td>
 					  							<td>{{ $getAllDeliveryReceipt['item_description']}}</td>

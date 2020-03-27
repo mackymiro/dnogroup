@@ -31,7 +31,7 @@
 
 						Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
             	 	 </p>
-	            	 <h4 ><u>SALES INVOICE</u></h4>
+	            	 <h4 ><u>BILLING STATEMENT (SSP)</u></h4>
 	            </div>
 				<div class="row">
 					<div class="col-lg-12">
@@ -42,7 +42,7 @@
                                     <table >
                                           <thead>
                                             <tr>
-                                                <th width="30%">Oredered By</th>
+                                                <th width="30%">Bill To</th>
                                                 <th> {{ $printSales['ordered_by'] }}</th>
                                             </tr>
                                             <tr>

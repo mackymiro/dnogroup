@@ -259,6 +259,28 @@ class LoloPinoyLechonDeCebuController extends Controller
     }
 
     //
+    public function printSalesInvoice($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $printSales = LechonDeCebuSalesInvoice::find($id);
+
+        $salesInvoices = LechonDeCebuSalesInvoice::where('si_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = LechonDeCebuSalesInvoice::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = LechonDeCebuSalesInvoice::where('si_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        $pdf = PDF::loadView('printSalesInvoice', compact('printSales', 'salesInvoices', 'sum'));
+
+        return $pdf->download('lechon-de-cebu-sales-invoice.pdf');
+    }
+
+    //
     public function privateOrders(){
         $ids = Auth::user()->id;
         $user = User::find($ids);
@@ -1838,7 +1860,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $sum  = $countTotalAmount + $countAmount;
 
-        $pdf = PDF::loadView('printSalesInvoice', compact('printSales', 'salesInvoices', 'sum'));
+        $pdf = PDF::loadView('printBillingSsp', compact('printSales', 'salesInvoices', 'sum'));
 
         return $pdf->download('lechon-de-cebu-billing-statement-ssp.pdf');
     }

@@ -290,6 +290,11 @@ Route::group(['middleware' => ['auth']], function(){
 	//route for sales invoice view 
 	Route::get('/lolo-pinoy-lechon-de-cebu/view-sales-invoice/{id}', 'LoloPinoyLechonDeCebuController@viewSalesInvoice')->name('lolo-pinoy-lechon-de-cebu.viewSalesInvoice');
 
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/printSalesInvoice/{id}',
+		'LoloPinoyLechonDeCebuController@printSalesInvoice')
+		->name('lolo-pinoy-lechon-de-cebu.printSalesInvoice');
+
 	//route for commissary RAW materials
 	Route::get('/lolo-pinoy-lechon-de-cebu/commissary/raw-materials','LoloPinoyLechonDeCebuController@rawMaterials')->name('lolo-pinoy-lechon-de-cebu.rawMaterials');
 
