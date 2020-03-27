@@ -1798,6 +1798,118 @@ class LoloPinoyLechonDeCebuController extends Controller
         return view('lechon-de-cebu-statement-of-account-form', compact('user'));
     }
 
+    //
+    public function printBillingDelivery($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $deliveryId = LechonDeCebuDeliveryReceipt::find($id);
+
+        $deliveryReceipts = LechonDeCebuDeliveryReceipt::where('dr_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = LechonDeCebuDeliveryReceipt::where('id', $id)->sum('price');
+
+
+          //
+        $countAmount = LechonDeCebuDeliveryReceipt::where('dr_id', $id)->sum('price');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        $pdf = PDF::loadView('printBillingDelivery', compact('deliveryId', 'deliveryReceipts', 'sum'));
+
+        return $pdf->download('lechon-de-cebu-billing-statement-delivery.pdf');  
+    }
+
+    //
+    public function printSsps($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $printSales = LechonDeCebuSalesInvoice::find($id);
+
+        $salesInvoices = LechonDeCebuSalesInvoice::where('si_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = LechonDeCebuSalesInvoice::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = LechonDeCebuSalesInvoice::where('si_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        $pdf = PDF::loadView('printSalesInvoice', compact('printSales', 'salesInvoices', 'sum'));
+
+        return $pdf->download('lechon-de-cebu-billing-statement-ssp.pdf');
+    }
+
+    //
+    public function viewPerAccountDeliveryReceipt($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $viewDeliveryReceipt = LechonDeCebuDeliveryReceipt::find($id);
+
+
+        $deliveryReceipts = LechonDeCebuDeliveryReceipt::where('dr_id', $id)->get()->toArray();
+
+         //count the total amount 
+        $countTotalAmount = LechonDeCebuDeliveryReceipt::where('id', $id)->sum('price');
+       
+
+        //
+        $countAmount = LechonDeCebuDeliveryReceipt::where('dr_id', $id)->sum('price');
+
+        $sum  = $countTotalAmount + $countAmount;
+        
+
+        return view('view-lechon-de-cebu-billing-statement-per-acccount-delivery', compact('user', 'viewDeliveryReceipt', 'deliveryReceipts', 'sum'));
+    }
+
+    //
+    public function viewSsps($id){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $viewSalesInvoice = LechonDeCebuSalesInvoice::find($id);
+
+        $salesInvoices = LechonDeCebuSalesInvoice::where('si_id', $id)->get()->toArray();
+
+         //count the total amount 
+        $countTotalAmount = LechonDeCebuSalesInvoice::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = LechonDeCebuSalesInvoice::where('si_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        return view('view-billing-statement-ssps', compact('user', 'viewSalesInvoice', 'salesInvoices', 'sum'));
+    }
+
+    //
+    public function viewPerAccountsBilling(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+         $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //getSalesInvoiceTerminal1
+        $branch = "Ssp Food Avenue Terminal 1";
+        $branch2 = "Ssp Food Avenue Terminal 2";
+
+        $statementOfAccountT1s = LechonDeCebuSalesInvoice::where('ordered_by', $branch)->get()->toArray();
+
+
+        $statementOfAccountT2s = LechonDeCebuSalesInvoice::where('ordered_by', $branch2)->get()->toArray();
+
+        //getAllDeliveryReceipt
+        $getAllDeliveryReceipts = LechonDeCebuDeliveryReceipt::where('dr_id', NULL)->get()->toArray();
+
+
+        return view('lechon-de-cebu-view-per-accounts-billing-statement', compact('user', 'statementOfAccountT1s', 'statementOfAccountT2s', 'getAllDeliveryReceipts'));
+    }
+
 
     //viewBillingStatement
     public function viewBillingStatement($id){
@@ -2044,9 +2156,12 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         //get the purchase order lists
         $getPurchaseOrders = LechonDeCebuPurchaseOrder::where('po_id', NULL)->get()->toArray();
+
+        //get data from sales invoice invoice #
+        $getSalesInvoices = LechonDeCebuSalesInvoice::where('invoice_number', '!=', NULL)->get()->toArray();
        
 
-        return view('lechon-de-cebu-billing-statement-form', compact('user', 'getPurchaseOrders'));
+        return view('lechon-de-cebu-billing-statement-form', compact('user', 'getPurchaseOrders', 'getSalesInvoices'));
     }
 
     //update-po

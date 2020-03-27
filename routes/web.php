@@ -89,6 +89,31 @@ Route::group(['middleware' => ['auth']], function(){
 	//view billing statement
 	Route::get('/lolo-pinoy-lechon-de-cebu/view-billing-statement/{id}', 'LoloPinoyLechonDeCebuController@viewBillingStatement')->name('lolo-pinoy-lechon-de-cebu.viewBillingStatement');
 
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/view-per-accounts-billing-statement',
+		'LoloPinoyLechonDeCebuController@viewPerAccountsBilling')
+		->name('lolo-pinoy-lechon-de-cebu.viewPerAccountsBilling');
+
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/billing-statement/view-ssps/{id}',
+		'LoloPinoyLechonDeCebuController@viewSsps')
+		->name('lolo-pinoy-lechon-de-cebu.viewSsps');
+
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/printSsps/{id}',
+		'LoloPinoyLechonDeCebuController@printSsps')
+		->name('lolo-pinoy-lechon-de-cebu.printSsps');
+
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/printBillingDelivery/{id}',
+		'LoloPinoyLechonDeCebuController@printBillingDelivery')
+		->name('lolo-pinoy-lechon-de-cebu.printBillingDelivery');
+
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/billing-statement/view-per-account-delivery-receipt/{id}',
+		'LoloPinoyLechonDeCebuController@viewPerAccountDeliveryReceipt')
+		->name('lolo-pinoy-lechon-de-cebu.viewPerAccountDeliveryReceipt');
+
 	//route for lechon de cebu statement of account
 	Route::get('/lolo-pinoy-lechon-de-cebu/statement-of-account-form', 'LoloPinoyLechonDeCebuController@statementOfAccount')->name('lolo-pinoy-lechon-de-cebu.statementOfAccount');
 

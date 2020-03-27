@@ -30,6 +30,7 @@
                             <div class="form-group">
                             <div class="form-row">
                               <div class="col-lg-6">
+                               
                                 <label>Bill To</label>
                                 <input type="text" name="billTo" class="form-control" required="required" />
                                 @if ($errors->has('billTo'))

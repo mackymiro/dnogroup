@@ -64,6 +64,7 @@
           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/billing-statement-form') }}">Billing Statement Form</a>
           @endif
           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/billing-statement-lists') }}">Lists</a>
+         <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/view-per-accounts-billing-statement') }}">View Per Accounts</a>
          
         </div>
       </li>
