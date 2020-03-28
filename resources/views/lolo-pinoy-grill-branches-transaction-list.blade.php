@@ -1,4 +1,4 @@
-@extends('layouts.dno-personal-app')
+@extends('layouts.lolo-pinoy-grill-branches-app')
 @section('title', 'Transaction Lists |')
 @section('content')
 <style >
@@ -11,13 +11,13 @@
 	}
 </style>
 <div id="wrapper">
-	 @include('sidebar.sidebar-dno-personal')
+	 @include('sidebar.sidebar-lolo-pinoy-grill-branches')
      <div id="content-wrapper">
 		<div class="container-fluid">
 			 <!-- Breadcrumbs-->
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                  <a href="#">DNO Personal</a>
+                  <a href="#">Lolo Pinoy Grill Branches</a>
                 </li>
                 <li class="breadcrumb-item active">Payables</li>
                 <li class="breadcrumb-item ">Transaction List</li>
@@ -63,17 +63,17 @@
 			  									</td>
 			  									<td>
 			  										@if($getTransactionList['status'] != "FULLY PAID AND RELEASED")
-			  										<a href="{{ url('dno-personal/edit-dno-personal-payables-detail/'.$getTransactionList['id']) }}" title="Edit">{{ $getTransactionList['invoice_number']}}</a>
+			  										<a href="{{ url('lolo-pinoy-grill-branches/edit-lolo-pinoy-grill-branches-payables-detail/'.$getTransactionList['id']) }}" title="Edit">{{ $getTransactionList['invoice_number']}}</a>
 			  										@else
 			  											{{ $getTransactionList['invoice_number']}}
 			  										@endif
 			  									</td>
-			  									<td>DP-{{ $getTransactionList['voucher_ref_number']}}</td>
+			  									<td>LPGB-{{ $getTransactionList['voucher_ref_number']}}</td>
 			  									<td>{{ $getTransactionList['issued_date']}}</td>
 			  									<td class="bg-danger" style="color:white;"><?php echo number_format($getTransactionList['amount_due'], 2);?></td>
 			  									<td>{{ $getTransactionList['delivered_date']}}</td>
 			  									@if($getTransactionList['status'] == "FULLY PAID AND RELEASED")
-			  									<td class="bg-success" style="color:white; "><a class="anchor" href="{{ url('dno-personal/view-dno-personal-payables-details/'.$getTransactionList['id']) }}">{{ $getTransactionList['status'] }}</a></td>
+			  									<td class="bg-success" style="color:white; "><a class="anchor" href="{{ url('lolo-pinoy-grill-branches/view-lolo-pinoy-grill-branches-payables-details/'.$getTransactionList['id']) }}">{{ $getTransactionList['status'] }}</a></td>
 			  									@else
 			  									<td class="bg-success" style="color:white; ">{{ $getTransactionList['status'] }}</td>
 			  									@endif
@@ -117,7 +117,7 @@
         if(x){
             $.ajax({
               type: "DELETE",
-              url: '/dno-personal/delete-transaction-list/' + id,
+              url: '/lolo-pinoy-grill-commissary/delete-transaction-list/' + id,
               data:{
                 _method: 'delete', 
                 "_token": "{{ csrf_token() }}",

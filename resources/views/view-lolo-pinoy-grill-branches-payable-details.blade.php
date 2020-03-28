@@ -1,16 +1,16 @@
-@extends('layouts.lolo-pinoy-grill-commissary-app')
+@extends('layouts.lolo-pinoy-grill-branches-app')
 @section('title', 'Payment Details|')
 @section('content')
 
 <div id="wrapper">
 	<!-- Sidebar -->
-    @include('sidebar.sidebar-lolo-pinoy-grill')
+    @include('sidebar.sidebar-lolo-pinoy-grill-branches')
      <div id="content-wrapper">
  		 <div class="container-fluid">
  			 <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">Lolo Pinoy Grill Commissary</a>
+                <a href="#">Lolo Pinoy Grill Branches</a>
               </li>
               <li class="breadcrumb-item active">Payables</li>
               <li class="breadcrumb-item ">Payment Details</li>
@@ -27,8 +27,9 @@
                               <i class="fas fa-file-invoice" aria-hidden="true"></i>
                             Payment Details
                             <div class="float-right">
-                               <a href="{{ action('LoloPinoyGrillCommissaryController@printPayables', $viewPaymentDetail['id']) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                               <a href="{{ action('LoloPinoyGrillBranchesController@printPayables', $viewPaymentDetail['id']) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                              </div>
+
                           </div>
                           
                          <form action="{{ action('LoloPinoyLechonDeCebuController@paymentVoucherStore') }}" method="post">

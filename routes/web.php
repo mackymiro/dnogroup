@@ -465,6 +465,11 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('lolo-pinoy-grill-commissary.transactionList');
 
 	Route::get(
+		'/lolo-pinoy-grill-commissary/printPayables/{id}',
+		'LoloPinoyGrillCommissaryController@printPayables')
+		->name('lolo-pinoy-grill-commissary.printPayables');
+
+	Route::get(
 		'/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-payables-detail/{id}',
 		'LoloPinoyGrillCommissaryController@editPayablesDetail')
 		->name('lolo-pinoy-grill-commissary.editPayablesDetail');
@@ -657,6 +662,46 @@ Route::group(['middleware' => ['auth']], function(){
 
 	//Lolo Pinoy Grill Branches
 	Route::get('/lolo-pinoy-grill-branches', 'LoloPinoyGrillBranchesController@index')->name('lolo-pinoy-grill-branches.index');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/payment-voucher-form',
+		'LoloPinoyGrillBranchesController@paymentVoucherForm')
+		->name('lolo-pinoy-grill-branches.payment-voucher-form');
+
+	Route::post(
+		'/lolo-pinoy-grill-branches/payment-voucher-store',
+		'LoloPinoyGrillBranchesController@paymentVoucherStore')
+		->name('lolo-pinoy-grill-branches.paymentVoucherStore');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/payables/transaction-list',
+		'LoloPinoyGrillBranchesController@transactionList')
+		->name('lolo-pinoy-grill-branches.transactionList');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/edit-lolo-pinoy-grill-branches-payables-detail/{id}',
+		'LoloPinoyGrillBranchesController@editPayablesDetail')
+		->name('lolo-pinoy-grill-branches.editPayablesDetail');
+
+	Route::patch(
+		'/lolo-pinoy-grill-branches/accept/{id}',
+		'LoloPinoyGrillBranchesController@accept')
+		->name('lolo-pinoy-grill-branches.accept');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/view-lolo-pinoy-grill-branches-payables-details/{id}',
+		'LoloPinoyGrillBranchesController@viewPayableDetails')
+		->name('lolo-pinoy-grill-branches.viewPayableDetails');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/printPayables/{id}',
+		'LoloPinoyGrillBranchesController@printPayables')
+		->name('lolo-pinoy-grill-branches.printPayables');
+
+	Route::post(
+		'/lolo-pinoy-grill-branches/add-payment/{id}',
+		'LoloPinoyGrillBranchesController@addPayment')
+		->name('lolo-pinoy-grill-branches.addPayment');
 
 	//Mr Potato
 	Route::get('/mr-potato', 'MrPotatoController@index')->name('mr-potato.index');

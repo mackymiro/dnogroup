@@ -21,6 +21,30 @@ class LoloPinoyGrillCommissaryController extends Controller
 {
 
     //
+    public function printPayables($id){
+          $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $payableId = LoloPinoyGrillCommissaryPaymentVoucher::find($id);
+
+        $payablesVouchers = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = LoloPinoyGrillCommissaryPaymentVoucher::where('id', $id)->sum('amount_due');
+
+
+          //
+        $countAmount = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->sum('amount_due');
+
+        $sum  = $countTotalAmount + $countAmount;
+       
+
+        $pdf = PDF::loadView('printPayablesLoloPinoyGrillCommissary', compact('payableId', 'user', 'payablesVouchers', 'sum'));
+
+        return $pdf->download('lolo-pinoy-grill-commissary-payment-voucher.pdf');
+    }
+
+    //
     public function printSOA($id){
           $ids = Auth::user()->id;
         $user = User::find($ids);

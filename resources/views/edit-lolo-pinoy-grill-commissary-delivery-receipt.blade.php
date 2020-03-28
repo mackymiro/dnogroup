@@ -132,7 +132,7 @@
                                      <p class="alert alert-success">{{ Session::get('SuccessEdit') }}</p>
                                   @endif 
                                    @foreach($dReceipts as $dReceipt)
-                                   <form action="{{ action('LoloPinoyGrillCommissaryController@updateDr', $dReceipt['id'])}}" method="post">
+                                   <form action="{{ action('LoloPinoyGrillCommissaryController@updateDeliveryReceipt', $dReceipt['id'])}}" method="post">
                                      {{csrf_field()}}
                                     <input name="_method" type="hidden" value="PATCH">
                                     <div id="deletedId{{ $dReceipt['id']}}">
