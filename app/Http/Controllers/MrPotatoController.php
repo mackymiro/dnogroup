@@ -15,7 +15,29 @@ use App\MrPotatoPaymentVoucher;
 use App\MrPotatoSalesInvoice;
 
 class MrPotatoController extends Controller
-{       
+{     
+
+    //
+    public function printPayables($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $payableId = MrPotatoPaymentVoucher::find($id);
+
+        $payablesVouchers = MrPotatoPaymentVoucher::where('pv_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = MrPotatoPaymentVoucher::where('id', $id)->sum('amount_due');
+
+         //
+        $countAmount = MrPotatoPaymentVoucher::where('pv_id', $id)->sum('amount_due');
+
+        $sum  = $countTotalAmount + $countAmount;
+       
+         $pdf = PDF::loadView('printPayablesMrPotato', compact('payableId', 'user', 'payablesVouchers', 'sum'));
+
+        return $pdf->download('mr-potato-payment-voucher.pdf');
+    }  
 
     //
     public function viewPayableDetails($id){

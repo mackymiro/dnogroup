@@ -825,6 +825,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'MrPotatoController@editPayablesDetail')
 		->name('mr-potato.editPayablesDetail');
 
+	Route::get(
+		'/mr-potato/print-payables/{id}',
+		'MrPotatoController@printPayables')
+		->name('mr-potato.printPayables');
+
 	Route::post(
 		'/mr-potato/add-payment/{id}',
 		'MrPotatoController@addPayment')

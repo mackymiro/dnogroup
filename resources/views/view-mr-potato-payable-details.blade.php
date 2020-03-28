@@ -23,18 +23,24 @@
             <div class="row">
             	<div class="col-lg-12">
             		 <div class="card mb-3">
-            		 	 <div class="card-header">
+            		 	      <div class="card-header">
                               <i class="fas fa-file-invoice" aria-hidden="true"></i>
-                            Payment Details</div>
+                            Payment Details
+                              <div class="float-right">
+                               <a href="{{ action('MrPotatoController@printPayables', $viewPaymentDetail['id']) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                             </div>
+                        </div>
                           
-                         <form action="{{ action('LoloPinoyLechonDeCebuController@paymentVoucherStore') }}" method="post">
-                         	{{ csrf_field() }}
                          <div class="card-body">
                               <div class="form-group">  
                                   <div class="form-row">
                                        <div class="col-lg-6">
                                           <table class="table table-bordered">
                                               <thead>
+                                                   <tr>
+                                                      <th class="bg-info" style="color:white;">Paid To</th>
+                                                      <th class="bg-info" style="color:white;">{{ $viewPaymentDetail['paid_to']}}</th>
+                                                  </tr>
                                                   <tr>
                                                       <th class="bg-success" style="color:white;" width="15%">Status</th>
                                                       <th class="bg-success" style="color:white;">{{ $viewPaymentDetail['status']}}</th>
@@ -82,14 +88,14 @@
                                <table class="table table-striped ">
                                     <thead>
                                         <tr>
-                                            <th width="30%">USER WHO MAKE THE TRANSACTION</th>
+                                            <th width="15%">PREPARED BY</th>
                                             <th>{{ $viewPaymentDetail['created_by']}}</th>
                                         </tr>
                                     </thead>
                                   
                               </table>
                          </div>	
-                     	</form>
+                     	
             		 </div>
             	</div>
             </div>
