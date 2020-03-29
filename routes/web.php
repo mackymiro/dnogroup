@@ -703,6 +703,36 @@ Route::group(['middleware' => ['auth']], function(){
 		'LoloPinoyGrillBranchesController@addPayment')
 		->name('lolo-pinoy-grill-branches.addPayment');
 
+	Route::get(
+		'/lolo-pinoy-grill-branches/requisition-form',
+		'LoloPinoyGrillBranchesController@requisitionForm')
+		->name('lolo-pinoy-grill-branches.requisitionForm');
+
+	Route::post(
+		'/lolo-pinoy-grill-branches/store',
+		'LoloPinoyGrillBranchesController@store')
+		->name('lolo-pinoy-grill-branches.store');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/edit/{id}',
+		'LoloPinoyGrillBranchesController@edit')
+		->name('lolo-pinoy-grill-branches.edit');
+
+	Route::patch(
+		'/lolo-pinoy-grill-branches/update/{id}',
+		'LoloPinoyGrillBranchesController@update')
+		->name('lolo-pinoy-grill-branches.update');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/add-new/{id}',
+		'LoloPinoyGrillBranchesController@addNew')
+		->name('lolo-pinoy-grill-branches.addNew');
+
+	Route::post(
+		'/lolo-pinoy-grill-branches/add-new-requistion-form/{id}',
+		'LoloPinoyGrillBranchesController@addNewRequisitionForm')
+		->name('lolo-pinoy-grill-branches.addNewRequisitionForm');
+
 	//Mr Potato
 	Route::get('/mr-potato', 'MrPotatoController@index')->name('mr-potato.index');
 
@@ -1328,6 +1358,52 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dno-resources-development',
 		'DnoResourcesDevelopmentController@index')
 		->name('dno-resources-development');
+
+	Route::get(
+		'/dno-resources-development/payment-voucher-form',
+		'DnoResourcesDevelopmentController@paymentVoucherForm')
+		->name('dno-resources-development.paymentVoucherForm');
+
+	Route::post(
+		'/dno-resources-development/payment-voucher-store',
+		'DnoResourcesDevelopmentController@paymentVoucherStore')
+		->name('dno-resources-development.paymentVoucherStore');
+
+	Route::get(
+		'/dno-resources-development/payables/transaction-list',
+		'DnoResourcesDevelopmentController@transactionList')
+		->name('dno-resources-development.transactionList');
+
+	Route::get(
+		'/dno-resources-development/edit-dno-resources-payables-detail/{id}',
+		'DnoResourcesDevelopmentController@editPayablesDetail')
+		->name('dno-resources-development.editPayablesDetail');
+
+	Route::post(
+		'/dno-resources-development/add-payment/{id}',
+		'DnoResourcesDevelopmentController@addPayment')
+		->name('dno-resources-development.addPayment');
+
+	Route::patch(
+		'/dno-resources-development/accept/{id}',
+		'DnoResourcesDevelopmentController@accept')
+		->name('dno-resources-development.accept');
+
+	Route::get(
+		'/dno-resources-development/view-dno-resources-payables-details/{id}',
+		'DnoResourcesDevelopmentController@viewPayableDetails')
+		->name('dno-resources-development.viewPayableDetails');
+
+	Route::delete(
+		'/dno-resources-development/delete-transaction-list/{id}',
+		'DnoResourcesDevelopmentController@destroyTransactionList')
+		->name('dno-resources-development.destroyTransactionList');
+
+	Route::get(
+		'/dno-resources-development/printPayables/{id}',
+		'DnoResourcesDevelopmentController@printPayables')
+		->name('dno-resources-development.printPayables');
+		
 });
 
 

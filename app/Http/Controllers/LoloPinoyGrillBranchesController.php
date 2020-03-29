@@ -10,9 +10,58 @@ use Session;
 use Auth; 
 use App\User;
 use App\LoloPinoyGrillBranchesPaymentVoucher;
+use App\LoloPinoyGrillBranchesRequisitionForm;
 
 class LoloPinoyGrillBranchesController extends Controller
 {
+
+    //
+    public function addNewRequisitionForm(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $pO = LoloPinoyGrillBranchesRequisitionForm::find($id);
+
+         $addRequisitionForm = new LoloPinoyGrillBranchesRequisitionForm([
+            'user_id'=>$user->id,
+            'po_id'=>$id,
+            'p_o_number'=>$pO['p_o_number'],
+            'quantity'=>$request->get('quantity'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$request->get('unitPrice'),
+            'amount'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+
+        $addRequisitionForm->save();
+
+        Session::flash('purchaseOrderSuccess', 'Successfully added requisition order');
+
+        return redirect('lolo-pinoy-grill-branches/add-new/'.$id);
+
+    }
+
+    //
+    public function addNew($id){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        
+        return view('add-new-lolo-pinoy-grill-branches-requisition-form', compact('user', 'id'));
+    }
+
+    //
+    public function requisitionForm(){
+          $id =  Auth::user()->id;
+        $user = User::find($id);
+
+        return view('lolo-pinoy-grill-branches-requisition-form', compact('user'));
+    }
 
     //
     public function printPayables($id){
@@ -292,6 +341,59 @@ class LoloPinoyGrillBranchesController extends Controller
     public function store(Request $request)
     {
         //
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+          //
+         $this->validate($request, [
+            'paidTo' => 'required',
+            'address'=> 'required',
+            'quantity'=>'required',
+            'description'=>'required',
+            'unitPrice'=>'required',
+            'amount'=>'required',
+        ]);
+
+         //get the latest insert id query in table purchase order
+        $data = DB::select('SELECT id, p_o_number FROM lolo_pinoy_grill_branches_requisition_forms ORDER BY id DESC LIMIT 1');
+
+         //if code is not zero add plus 1
+         if(isset($data[0]->p_o_number) != 0){
+            //if code is not 0
+            $newNum = $data[0]->p_o_number +1;
+            $uNum = sprintf("%06d",$newNum);    
+        }else{
+            //if code is 0 
+            $newNum = 1;
+            $uNum = sprintf("%06d",$newNum);
+        }
+       
+        $requisitionForm = new LoloPinoyGrillBranchesRequisitionForm([
+            'user_id' =>$user->id,
+            'paid_to'=>$request->get('paidTo'),
+            'address'=>$request->get('address'),
+            'p_o_number'=>$uNum,
+            'date'=>$request->get('date'),
+            'quantity'=>$request->get('quantity'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$request->get('unitPrice'),
+            'amount'=>$request->get('amount'),
+            'total_price'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+
+        $requisitionForm->save();
+
+        $insertedId = $requisitionForm->id;
+         
+        return redirect('lolo-pinoy-grill-branches/edit/'.$insertedId);
+
+
     }
 
     /**
@@ -314,6 +416,19 @@ class LoloPinoyGrillBranchesController extends Controller
     public function edit($id)
     {
         //
+          $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $purchaseOrder = LoloPinoyGrillBranchesRequisitionForm::find($id);
+
+        $pOrders = LoloPinoyGrillBranchesRequisitionForm::where('po_id', $id)->get()->toArray();
+
+        //get users
+        $getUsers = User::get()->toArray();
+       
+
+        return view('edit-lolo-pinoy-grill-branches-requisition-order', compact('user', 'purchaseOrder', 'pOrders', 'getUsers'));
+
     }
 
     /**
@@ -326,6 +441,39 @@ class LoloPinoyGrillBranchesController extends Controller
     public function update(Request $request, $id)
     {
         //
+          $ids = Auth::user()->id;
+          $user = User::find($ids);
+
+          $firstName = $user->first_name;
+          $lastName = $user->last_name;
+
+          $name  = $firstName." ".$lastName;
+
+          $paidTo = $request->get('paidTo');
+          $address = $request->get('address');
+          $quantity = $request->get('quantity');
+          $description = $request->get('description');
+          $date = $request->get('date');
+          $unitPrice = $request->get('unitPrice');
+          $amount = $request->get('amount');
+
+          $requisitonForm = LoloPinoyGrillBranchesRequisitionForm::find($id);
+        
+          $requisitonForm->paid_to = $paidTo;
+          $requisitonForm->address = $address;
+          $requisitonForm->date = $date;
+          $requisitonForm->description = $description;
+          $requisitonForm->quantity = $quantity;
+          $requisitonForm->unit_price = $unitPrice;
+          $requisitonForm->amount = $amount;
+
+          $requisitonForm->save();
+
+           Session::flash('SuccessE', 'Successfully updated');
+
+           return redirect('lolo-pinoy-grill-branches/edit/'.$id);
+
+
     }
 
     /**

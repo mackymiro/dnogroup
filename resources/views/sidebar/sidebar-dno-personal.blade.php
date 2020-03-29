@@ -35,7 +35,7 @@
       </li>
        <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-building"></i>
+          <i class="fas fa-tools"></i>
           <span>Utilities</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
