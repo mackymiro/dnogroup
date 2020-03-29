@@ -142,7 +142,7 @@
                   <thead>
                       <tr >
                           <th style="font-size:16px; height: 1%; ">Total</th>
-                          <th style="font-size:16px; height: 1%; "><?php echo number_format($sum, 2)?></th>
+                          <th style="font-size:16px; height: 1%; "><?php echo number_format($sum2, 2)?></th>
                       </tr>
                      
                   </thead>

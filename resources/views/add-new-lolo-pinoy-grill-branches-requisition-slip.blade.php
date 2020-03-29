@@ -25,54 +25,34 @@
         					  <i class="fa fa-plus" aria-hidden="true"></i>
         					  Add New</div>
         					   <div class="card-body">
-        					   		<form action="{{ action('LoloPinoyGrillBranchesController@addNewRequisitionForm', $id) }}" method="post">
+        					   		<form action="{{ action('LoloPinoyGrillBranchesController@addNewRequisitionSlip', $id) }}" method="post">
     					   				{{csrf_field()}}
     					   				 @if(session('purchaseOrderSuccess'))
 						                   <p class="alert alert-success">{{ Session::get('purchaseOrderSuccess') }}</p>
 						                  @endif 
 	    					   		<div class="form-group">
 	    					   			<div class="form-row">
-    					   					<div class="col-lg-1">
-					  						<label>Quantity</label>
-						  						<input type="text" name="quantity" class="form-control" required="required" />
-								              @if ($errors->has('quantity'))
-								                  <span class="alert alert-danger">
-								                    <strong>{{ $errors->first('quantity') }}</strong>
-								                  </span>
-								              @endif
-						  					</div>
-						  					<div class="col-lg-4">
-						  						<label>Description</label>
-						  						<input type="text" name="description" class="form-control" required="required" />
-								              @if ($errors->has('description'))
-								                  <span class="alert alert-danger">
-								                    <strong>{{ $errors->first('description') }}</strong>
-								                  </span>
-								              @endif
-						  					</div>
-						  					 <div class="col-lg-2">
-			                                    <label>Total Kls</label>
-			                                    <input type="text" name="totalKls" class="form-control" required="required" />
-			                                   
-			                                  </div>
-						  					<div class="col-lg-2">
-						  						<label>Unit Price</label>
-						  						<input type="text" name="unitPrice" class="form-control" required="required" />
-								              @if ($errors->has('unitPrice'))
-								                  <span class="alert alert-danger">
-								                    <strong>{{ $errors->first('unitPrice') }}</strong>
-								                  </span>
-								              @endif
-  											</div>
-						  					<div class="col-lg-2">
-						  						<label>Amount</label>
-						  						<input type="text" name="amount" class="form-control" required="required" />
-								               @if ($errors->has('amount'))
-								                  <span class="alert alert-danger">
-								                    <strong>{{ $errors->first('amount') }}</strong>
-								                  </span>
-								              @endif
-						  					</div> 
+    					   					<div class="col-lg-2">
+                                        <label>Quantity Requested</label>
+                                        <input type="text" name="quantityRequested" class="form-control" value="" />
+                                      
+                                      </div>
+                                      <div class="col-lg-2">
+                                        <label>Unit</label>
+                                        <input type="text" name="unit" class="form-control" required="required" />
+                                      
+                                      </div>
+                                     
+                                      <div class="col-lg-2">
+                                        <label>Item</label>
+                                        <input type="text" name="item" class="form-control" required="required" />
+                                      
+                                      </div>
+                                      <div class="col-lg-2">
+                                        <label>Quantity Given</label>
+                                        <input type="text" name="quantityGiven" class="form-control" required="required" />
+                                        
+                                      </div> 
 
 						  					
 	    					   			</div>

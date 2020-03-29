@@ -704,9 +704,9 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('lolo-pinoy-grill-branches.addPayment');
 
 	Route::get(
-		'/lolo-pinoy-grill-branches/requisition-form',
-		'LoloPinoyGrillBranchesController@requisitionForm')
-		->name('lolo-pinoy-grill-branches.requisitionForm');
+		'/lolo-pinoy-grill-branches/requisition-slip',
+		'LoloPinoyGrillBranchesController@requisitionSlip')
+		->name('lolo-pinoy-grill-branches.requisitionSlip');
 
 	Route::post(
 		'/lolo-pinoy-grill-branches/store',
@@ -729,9 +729,34 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('lolo-pinoy-grill-branches.addNew');
 
 	Route::post(
-		'/lolo-pinoy-grill-branches/add-new-requistion-form/{id}',
-		'LoloPinoyGrillBranchesController@addNewRequisitionForm')
-		->name('lolo-pinoy-grill-branches.addNewRequisitionForm');
+		'/lolo-pinoy-grill-branches/add-new-requistion-slip/{id}',
+		'LoloPinoyGrillBranchesController@addNewRequisitionSlip')
+		->name('lolo-pinoy-grill-branches.addNewRequisitionSlip');
+
+	Route::patch(
+		'/lolo-pinoy-grill-branches/update-rs/{id}',
+		'LoloPinoyGrillBranchesController@updateRs')
+		->name('lolo-pinoy-grill-branches.updateRs');
+
+	Route::delete(
+		'/lolo-pinoy-grill-branches/delete/{id}',
+		'LoloPinoyGrillBranchesController@destroy')
+		->name('lolo-pinoy-grill-branches.destroy');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/requisition-slip-lists',
+		'LoloPinoyGrillBranchesController@requisitionSlipList')
+		->name('lolo-pinoy-grill-branches.requisitionSlipList');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/view/{id}',
+		'LoloPinoyGrillBranchesController@show')
+		->name('lolo-pinoy-grill-branches.show');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/printRS/{id}',
+		'LoloPinoyGrillBranchesController@printRS')
+		->name('lolo-pinoy-grill-branches.printRS');
 
 	//Mr Potato
 	Route::get('/mr-potato', 'MrPotatoController@index')->name('mr-potato.index');

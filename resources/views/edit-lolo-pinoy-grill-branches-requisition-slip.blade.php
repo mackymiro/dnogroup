@@ -1,5 +1,5 @@
 @extends('layouts.lolo-pinoy-grill-branches-app')
-@section('title', 'Edit Purchase Order |')
+@section('title', 'Edit Requisition Slip |')
 @section('content')
 <script>
 	function addFunction(){
@@ -41,77 +41,72 @@
               <li class="breadcrumb-item">
                 <a href="#">Lolo Pinoy Grill Branches</a>
               </li>
-              <li class="breadcrumb-item active">Update Requisition Form</li>
+              <li class="breadcrumb-item active">Update Requisition Slip</li>
             </ol>
-            <a href="{{ url('lolo-pinoy-grill-branches/requisition-form-lists') }}">Back to Lists</a>
+            <a href="{{ url('lolo-pinoy-grill-branches/requisition-slip-lists') }}">Back to Lists</a>
             <div class="col-lg-12">
             	 <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill Branches">
                
             	 
-            	 <h4 class="text-center"><u>REQUISITION FORM</u></h4>
+            	 <h4 class="text-center"><u>REQUISITION SLIP</u></h4>
             </div>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card mb-3">
                          <div class="card-header">
                        <i class="fab fa-first-order" aria-hidden="true"></i>
-                         Edit Purchase Order</div>
+                         Edit Requisition Slip</div>
                          <div class="card-body">
                                @if(session('SuccessE'))
                                  <p class="alert alert-success">{{ Session::get('SuccessE') }}</p>
                                 @endif 
-                               <form action="{{ action('LoloPinoyGrillBranchesController@update', $purchaseOrder['id']) }}" method="post">
+                               <form action="{{ action('LoloPinoyGrillBranchesController@update', $requisitionSlip['id']) }}" method="post">
                                {{csrf_field()}}
                               <input name="_method" type="hidden" value="PATCH">
                               <div class="form-group">
                                 <div class="form-row">
-                                  <div class="col-lg-6">
-                                    <label>Paid to</label>
-                                  <input type="text" name="paidTo" class="form-control" required="required" value="{{ $purchaseOrder['paid_to'] }}" />
-                                  <label>Address</label>
-                                  <input type="text" name="address" class="form-control" required="required" value="{{ $purchaseOrder['address'] }}" />
-                                  <label>Checked By</label>
-                                  <select class="form-control" name="checkedBy">
-                                      <option value="0">--Please Select--</option>
-                                      @foreach($getUsers as $getUser)
-                                      <option value="{{ $getUser['first_name']}} {{ $getUser['last_name'] }}">{{ $getUser['first_name']}} {{ $getUser['last_name'] }}</option>
-                                      @endforeach
-                                  </select>
+                                   <div class="form-group">
+                                      <div class="form-row">
+                                          <div class="col-lg-4">
+                                              <label>Requesting Department</label>
+                                              <input type="text" name="requestingDept" class="form-control" value="{{ $requisitionSlip['requesting_department']}}" />
+                                          </div>
+                                          <div class="col-lg-2">
+                                              <label>Request Date</label>
+                                              <input type="text" name="requestDate" class="form-control" value="{{ $requisitionSlip['request_date']}}" />
+                                          </div>
+                                          <div class="col-lg-2">
+                                              <label>Date Released</label>
+                                              <input type="text" name="dateReleased" class="form-control" value="{{ $requisitionSlip['date_released'] }}" />
+                                          </div>
+                                      </div>
                                   </div>
-                                  <div class="col-lg-6">
-                                    <label>P.O Number</label>
-                                    <input type="text" name="poNum" class="form-control" disabled="disabled"  value="{{ $purchaseOrder['p_o_number'] }}" />
-                                    <label>Date</label>
-                                    <input type="text" name="date" id="datepicker" class="form-control" required="required" value="{{ $purchaseOrder['date'] }}" />
-                                    <label>Requested By</label>
-                                    <select class="form-control" name="requestedBy">
-                                        <option value="0">--Please Select--</option>
-                                        @foreach($getUsers as $getUser)
-                                        <option value="{{ $getUser['first_name']}} {{ $getUser['last_name'] }}">{{ $getUser['first_name']}} {{ $getUser['last_name']}}</option>
-                                        @endforeach
-                                    </select>
-                                  </div>
+                               
                                 </div>
                               </div>
                               <div class="form-group">
                                 <div class="form-row">
-                                  <div class="col-lg-1">
-                                    <label>Quantity</label>
-                                    <input type="text" name="quantity" class="form-control" required="required" value="{{ $purchaseOrder['quantity'] }}" />
-
-                                  </div>
-                                  <div class="col-lg-4">
-                                    <label>Description</label>
-                                    <input type="text" name="description" class="form-control" required="required" value="{{ $purchaseOrder['description'] }}" />
-                                  </div>
-                                  <div class="col-lg-4">
-                                    <label>Unit Price</label>
-                                    <input type="text" name="unitPrice" class="form-control" required="required" value="{{ $purchaseOrder['unit_price'] }}" />
+                                  <div class="col-lg-2">
+                                    <label>Quantity Requested</label>
+                                    <input type="text" name="quantityRequested" class="form-control" value="{{ $requisitionSlip['quantity_requested']}}" />
+                                  
                                   </div>
                                   <div class="col-lg-2">
-                                    <label>Amount</label>
-                                    <input type="text" name="amount" class="form-control" required="required" value="{{ $purchaseOrder['amount'] }}" />
+                                    <label>Unit</label>
+                                    <input type="text" name="unit" class="form-control" value="{{ $requisitionSlip['unit']}}" />
+                                  
                                   </div>
+                                 
+                                  <div class="col-lg-2">
+                                    <label>Item</label>
+                                    <input type="text" name="item" class="form-control" value="{{ $requisitionSlip['item'] }}" />
+                                  
+                                  </div>
+                                  <div class="col-lg-2">
+                                    <label>Quantity Given</label>
+                                    <input type="text" name="quantityGiven" class="form-control" value="{{ $requisitionSlip['quantity_given']}}" />
+                                    
+                                  </div>   
                                   <br>
                                   <div class="col-lg-12 float-right">
                                     <br>
@@ -131,47 +126,45 @@
                      <div class="card mb-3">
                         <div class="card-header">
                        <i class="fab fa-first-order" aria-hidden="true"></i>
-                          Edit Purchase Order</div>
+                          Edit Requistion Slip</div>
                         <div class="card-body">
                             @if(session('SuccessEdit'))
                                <p class="alert alert-success">{{ Session::get('SuccessEdit') }}</p>
                               @endif 
-                            @foreach($pOrders as $pOrder)
-                            <form action="{{ action('LoloPinoyLechonDeCebuController@updatePo', $pOrder['id']) }}" method="post">
+                            @foreach($rSlips as $rSlip)
+                            <form action="{{ action('LoloPinoyGrillBranchesController@updateRs', $rSlip['id']) }}" method="post">
                             <div class="form-group">
                                  {{csrf_field()}}
                                  <input name="_method" type="hidden" value="PATCH">
 
-                                <div id="deletedId{{ $pOrder['id'] }}" class="form-row">
-                                    <div class="col-lg-1">
+                                    <div id="deletedId{{ $rSlip['id'] }}" class="form-row">
+                                      <div class="col-lg-2">
+                                        <label>Quantity Requested</label>
+                                        <input type="text" name="quantityRequested" class="form-control" value="{{ $rSlip['quantity_requested']}}" />
                                       
-                                      <label>Quantity</label>
-                                      <input type="text" name="quant" class="form-control" required="required" value="{{ $pOrder['quantity'] }}" />
-
-                                    </div>
-                                    <div class="col-lg-2">
-                                      <label>Description</label>
-                                      <input type="text" name="desc" class="form-control" required="required" value="{{ $pOrder['description'] }}" />
-                                    </div>
-                                  <div class="col-lg-2">
-                                    <label>Total Kls</label>
-                                    <input type="text" name="totalKls" class="form-control" value="{{ $pOrder['total_kls']}}" />
-                                   
-                                  </div>
-                                    <div class="col-lg-2">
-                                      <label>Unit Price</label>
-                                      <input type="text" name="unitP" class="form-control" required="required" value="{{ $pOrder['unit_price'] }}" />
-                                    </div>
-                                    <div class="col-lg-2">
-                                      <label>Amount</label>
-                                      <input type="text" name="amt" class="form-control" required="required" value="{{ $pOrder['amount'] }}" />
-                                    </div>
+                                      </div>
+                                      <div class="col-lg-2">
+                                        <label>Unit</label>
+                                        <input type="text" name="unit" class="form-control" value="{{ $rSlip['unit']}}" />
+                                      
+                                      </div>
+                                     
+                                      <div class="col-lg-2">
+                                        <label>Item</label>
+                                        <input type="text" name="item" class="form-control" value="{{ $rSlip['item']}}" />
+                                      
+                                      </div>
+                                      <div class="col-lg-2">
+                                        <label>Quantity Given</label>
+                                        <input type="text" name="quantityGiven" class="form-control"  value="{{ $rSlip['quantity_given']}}" />
+                                        
+                                      </div> 
                                      <div class="col-lg-2">
                                       <br>
-                                      <input type="hidden" name="poId" value="{{ $purchaseOrder['id'] }}" />
+                                      <input type="hidden" name="rsId" value="{{ $requisitionSlip['id'] }}" />
                                       <input type="submit" class="btn btn-success" value="Update" />
                                       @if($user->role_type == 1)
-                                      <a id="delete" onClick="confirmDelete('{{ $pOrder['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
+                                      <a id="delete" onClick="confirmDelete('{{ $rSlip['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
                                       @endif
                                     </div>
                                 </div>
@@ -181,7 +174,7 @@
                             @endforeach
                             <div>
                               @if($user->role_type == 1)
-                              <a href="{{ url('lolo-pinoy-grill-branches/add-new/'.$purchaseOrder['id']) }}" class="btn btn-primary">Add New</a>
+                              <a href="{{ url('lolo-pinoy-grill-branches/add-new/'.$requisitionSlip['id']) }}" class="btn btn-primary">Add New</a>
                               @endif
                             </div>
                             
@@ -215,7 +208,7 @@
         if(x){
             $.ajax({
               type: "DELETE",
-              url: '/lolo-pinoy-lechon-de-cebu/delete/' + id,
+              url: '/lolo-pinoy-grill-branches/delete/' + id,
               data:{
                 _method: 'delete', 
                 "_token": "{{ csrf_token() }}",

@@ -10,13 +10,56 @@ use Session;
 use Auth; 
 use App\User;
 use App\LoloPinoyGrillBranchesPaymentVoucher;
-use App\LoloPinoyGrillBranchesRequisitionForm;
+use App\LoloPinoyGrillBranchesRequisitionSlip;
 
 class LoloPinoyGrillBranchesController extends Controller
 {
 
+    //  
+    public function printRS($id){
+          $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $requisitionSlip = LoloPinoyGrillBranchesRequisitionSlip::find($id);
+
+          //
+        $rSlips = LoloPinoyGrillBranchesRequisitionSlip::where('rs_id', $id)->get()->toArray();
+
+
+        $pdf = PDF::loadView('printRS', compact('requisitionSlip', 'rSlips'));
+
+        return $pdf->download('lolo-pinoy-grill-branches-requisition-slip.pdf');
+
+    }
+
     //
-    public function addNewRequisitionForm(Request $request, $id){
+    public function requisitionSlipList(){
+          $id =  Auth::user()->id;
+        $user = User::find($id);
+
+        $requisitionLists = LoloPinoyGrillBranchesRequisitionSlip::where('rs_id', NULL)->get()->toArray();
+
+        return view('lolo-pinoy-grill-branches-all-lists', compact('user', 'requisitionLists'));
+    }
+
+    //
+    public function updateRs(Request $request, $id){
+        $slip = LoloPinoyGrillBranchesRequisitionSlip::find($id);
+        
+
+        $slip->quantity_requested = $request->get('quantityRequested');
+        $slip->unit = $request->get('unit');
+        $slip->item = $request->get('item');
+        $slip->quantity_given = $request->get('quantityGiven');
+
+        $slip->save();
+
+         Session::flash('SuccessEdit', 'Successfully updated');
+        return redirect('lolo-pinoy-grill-branches/edit/'.$request->get('rsId'));
+    }
+
+    //
+    public function addNewRequisitionSlip(Request $request, $id){
         $ids = Auth::user()->id;
         $user = User::find($ids);
         
@@ -25,20 +68,21 @@ class LoloPinoyGrillBranchesController extends Controller
 
         $name  = $firstName." ".$lastName;
 
-        $pO = LoloPinoyGrillBranchesRequisitionForm::find($id);
+        $rs = LoloPinoyGrillBranchesRequisitionSlip::find($id);
 
-         $addRequisitionForm = new LoloPinoyGrillBranchesRequisitionForm([
-            'user_id'=>$user->id,
-            'po_id'=>$id,
-            'p_o_number'=>$pO['p_o_number'],
-            'quantity'=>$request->get('quantity'),
-            'description'=>$request->get('description'),
-            'unit_price'=>$request->get('unitPrice'),
-            'amount'=>$request->get('amount'),
+         $addRequisitionslip = new LoloPinoyGrillBranchesRequisitionSlip([
+            'user_id' =>$user->id,
+            'rs_id'=>$id,
+            'rs_number'=>$rs['rs_number'],
+            'quantity_requested'=>$request->get('quantityRequested'),
+            'unit'=>$request->get('unit'),
+            'item'=>$request->get('item'),
+            'quantity_given'=>$request->get('quantityGiven'),
+            'released_by'=>$name,
             'created_by'=>$name,
         ]);
 
-        $addRequisitionForm->save();
+        $addRequisitionslip->save();
 
         Session::flash('purchaseOrderSuccess', 'Successfully added requisition order');
 
@@ -52,15 +96,15 @@ class LoloPinoyGrillBranchesController extends Controller
         $user = User::find($ids);
 
         
-        return view('add-new-lolo-pinoy-grill-branches-requisition-form', compact('user', 'id'));
+        return view('add-new-lolo-pinoy-grill-branches-requisition-slip', compact('user', 'id'));
     }
 
     //
-    public function requisitionForm(){
+    public function requisitionSlip(){
           $id =  Auth::user()->id;
         $user = User::find($id);
 
-        return view('lolo-pinoy-grill-branches-requisition-form', compact('user'));
+        return view('lolo-pinoy-grill-branches-requisition-slip', compact('user'));
     }
 
     //
@@ -351,21 +395,20 @@ class LoloPinoyGrillBranchesController extends Controller
 
           //
          $this->validate($request, [
-            'paidTo' => 'required',
-            'address'=> 'required',
-            'quantity'=>'required',
-            'description'=>'required',
-            'unitPrice'=>'required',
-            'amount'=>'required',
+            'requestingDept' => 'required',
+            'quantityRequested'=> 'required',
+            'unit'=>'required',
+            'item'=>'required',
+            'quantityGiven'=>'required',
         ]);
 
          //get the latest insert id query in table purchase order
-        $data = DB::select('SELECT id, p_o_number FROM lolo_pinoy_grill_branches_requisition_forms ORDER BY id DESC LIMIT 1');
+        $data = DB::select('SELECT id, rs_number FROM lolo_pinoy_grill_branches_requisition_slips ORDER BY id DESC LIMIT 1');
 
          //if code is not zero add plus 1
-         if(isset($data[0]->p_o_number) != 0){
+         if(isset($data[0]->rs_number) != 0){
             //if code is not 0
-            $newNum = $data[0]->p_o_number +1;
+            $newNum = $data[0]->rs_number +1;
             $uNum = sprintf("%06d",$newNum);    
         }else{
             //if code is 0 
@@ -373,23 +416,24 @@ class LoloPinoyGrillBranchesController extends Controller
             $uNum = sprintf("%06d",$newNum);
         }
        
-        $requisitionForm = new LoloPinoyGrillBranchesRequisitionForm([
+        $requisitionSlip = new LoloPinoyGrillBranchesRequisitionSlip([
             'user_id' =>$user->id,
-            'paid_to'=>$request->get('paidTo'),
-            'address'=>$request->get('address'),
-            'p_o_number'=>$uNum,
-            'date'=>$request->get('date'),
-            'quantity'=>$request->get('quantity'),
-            'description'=>$request->get('description'),
-            'unit_price'=>$request->get('unitPrice'),
-            'amount'=>$request->get('amount'),
-            'total_price'=>$request->get('amount'),
+
+            'requesting_department'=>$request->get('requestingDept'),
+            'request_date'=>$request->get('requestDate'),
+            'rs_number'=>$uNum,
+            'date_released'=>$request->get('dateReleased'),
+            'quantity_requested'=>$request->get('quantityRequested'),
+            'unit'=>$request->get('unit'),
+            'item'=>$request->get('item'),
+            'quantity_given'=>$request->get('quantityGiven'),
+            'released_by'=>$name,
             'created_by'=>$name,
         ]);
 
-        $requisitionForm->save();
+        $requisitionSlip->save();
 
-        $insertedId = $requisitionForm->id;
+        $insertedId = $requisitionSlip->id;
          
         return redirect('lolo-pinoy-grill-branches/edit/'.$insertedId);
 
@@ -405,6 +449,17 @@ class LoloPinoyGrillBranchesController extends Controller
     public function show($id)
     {
         //
+          $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $requisitionSlip = LoloPinoyGrillBranchesRequisitionSlip::find($id);
+
+        //
+        $rSlips = LoloPinoyGrillBranchesRequisitionSlip::where('rs_id', $id)->get()->toArray();
+    
+
+        return view('view-lolo-pinoy-grill-branches-requisition-slip', compact('user', 'requisitionSlip', 'rSlips'));
+
     }
 
     /**
@@ -419,15 +474,15 @@ class LoloPinoyGrillBranchesController extends Controller
           $ids = Auth::user()->id;
         $user = User::find($ids);
 
-        $purchaseOrder = LoloPinoyGrillBranchesRequisitionForm::find($id);
+        $requisitionSlip = LoloPinoyGrillBranchesRequisitionSlip::find($id);
 
-        $pOrders = LoloPinoyGrillBranchesRequisitionForm::where('po_id', $id)->get()->toArray();
+        $rSlips = LoloPinoyGrillBranchesRequisitionSlip::where('rs_id', $id)->get()->toArray();
 
         //get users
         $getUsers = User::get()->toArray();
        
 
-        return view('edit-lolo-pinoy-grill-branches-requisition-order', compact('user', 'purchaseOrder', 'pOrders', 'getUsers'));
+        return view('edit-lolo-pinoy-grill-branches-requisition-slip', compact('user', 'requisitionSlip', 'rSlips', 'getUsers'));
 
     }
 
@@ -449,25 +504,25 @@ class LoloPinoyGrillBranchesController extends Controller
 
           $name  = $firstName." ".$lastName;
 
-          $paidTo = $request->get('paidTo');
-          $address = $request->get('address');
-          $quantity = $request->get('quantity');
-          $description = $request->get('description');
-          $date = $request->get('date');
-          $unitPrice = $request->get('unitPrice');
-          $amount = $request->get('amount');
+          $requestingDept = $request->get('requestingDept');
+          $requestDate = $request->get('requestDate');
+          $dateReleased = $request->get('dateReleased');
+          $quantityRequested = $request->get('quantityRequested');
+          $unit = $request->get('unit');
+          $item = $request->get('item');
+          $quantityGiven = $request->get('quantityGiven');
 
-          $requisitonForm = LoloPinoyGrillBranchesRequisitionForm::find($id);
+          $requisitonSlip = LoloPinoyGrillBranchesRequisitionSlip::find($id);
         
-          $requisitonForm->paid_to = $paidTo;
-          $requisitonForm->address = $address;
-          $requisitonForm->date = $date;
-          $requisitonForm->description = $description;
-          $requisitonForm->quantity = $quantity;
-          $requisitonForm->unit_price = $unitPrice;
-          $requisitonForm->amount = $amount;
+          $requisitonSlip->requesting_department = $requestingDept;
+          $requisitonSlip->request_date = $requestDate;
+          $requisitonSlip->date_released = $dateReleased;
+          $requisitonSlip->quantity_requested = $quantityRequested;
+          $requisitonSlip->unit = $unit;
+          $requisitonSlip->item = $item;
+          $requisitonSlip->quantity_given = $quantityGiven;
 
-          $requisitonForm->save();
+          $requisitonSlip->save();
 
            Session::flash('SuccessE', 'Successfully updated');
 
@@ -485,5 +540,7 @@ class LoloPinoyGrillBranchesController extends Controller
     public function destroy($id)
     {
         //
+         $requisitionSlip = LoloPinoyGrillBranchesRequisitionSlip::find($id);
+        $requisitionSlip->delete();
     }
 }
