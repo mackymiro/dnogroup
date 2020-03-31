@@ -21,6 +21,14 @@ class LoloPinoyGrillCommissaryController extends Controller
 {
 
     //
+    public function production(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('commissary-production-lolo-pinoy-grill', compact('user'));
+    }
+
+    //
     public function printPayables($id){
           $ids = Auth::user()->id;
         $user = User::find($ids);

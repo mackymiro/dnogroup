@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 use Auth;
 use App\User;
@@ -11,6 +12,58 @@ use Session;
 
 class ProfileController extends Controller
 {
+
+    //
+    public function storeCreateUser(Request $request){
+         //validate
+        $this->validate($request,[
+            'firstName' => 'required|string|max:255',
+            'lastName' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+            'userType'=>'required_without:userType|not_in:0',
+        ]);
+
+
+        //check if email address already exists
+        $checkEmail = DB::table(
+                        'users')
+                        ->where('email', $request->get('email'))
+                        ->get()->first();
+        if ($checkEmail === NULL) {
+            # code...
+             $createUser = new User([
+                'first_name'=>$request->get('firstName'),
+                'last_name'=>$request->get('lastName'),
+                'email'=>$request->get('email'),
+                'password'=>bcrypt($request->get('password')),
+                'role_type'=>$request->get('userType'),
+            ]);
+
+            $createUser->save();
+            
+            Session::flash('createSuccess', 'Successfully created a user.');
+
+            return redirect('profile/create-user');
+        }else{
+             return redirect('profile/create-user')->with('error', 'Email already exists');
+
+        }
+
+
+     
+
+    }
+
+    //
+    public function createUser(){
+        $id =  Auth::user()->id;
+        $user = User::find($id);
+
+        return view('create-user', compact('user'));        
+    }
+
+
     /**
      * Display a listing of the resource.
      *

@@ -27,6 +27,9 @@
 
      <!-- Font Awesome CSS-->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="{{ asset('vendor/jquery/jquery.min.js') }} "></script>
     
     
 </head>
@@ -55,30 +58,8 @@
       Welcome! {{ ucfirst(Auth::user()->first_name) }} {{ ucfirst(Auth::user()->last_name) }} <span class="caret"></span>
           </a>
         </li>
-      <li class="nav-item dropdown no-arrow mx-1">
-        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-bell fa-fw"></i>
-          <span class="badge badge-danger">9+</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown no-arrow mx-1">
-        <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="fas fa-envelope fa-fw"></i>
-          <span class="badge badge-danger">7</span>
-        </a>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="messagesDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
-      </li>
+    
+    
       <li class="nav-item dropdown no-arrow">
         <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-user-circle fa-fw"></i>
@@ -97,6 +78,9 @@
            </strong>
            </div>
           <a class="dropdown-item" href="{{ url('profile') }}"><i class="fa fa-user"></i> Profile</a>
+          @if($user->role_type == 1)
+           <a class="dropdown-item" href="{{ url('profile/create-user') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Create User</a>
+           @endif
           <a class="dropdown-item" href="{{ url('change-password') }}"><i class="fa fa-key" aria-hidden="true"></i> Change Password</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="{{ route('logout') }}"

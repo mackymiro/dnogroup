@@ -22,6 +22,16 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('/profile/edit/{id}', 'ProfileController@edit')->name('profile.edit');
 	Route::post('/profile/update/{id}', 'ProfileController@update')->name('profile.update');
 
+	Route::get(
+		'/profile/create-user',
+		'ProfileController@createUser')
+		->name('profile.createUser');
+
+	Route::post(
+		'/profile/store-create-user',
+		'ProfileController@storeCreateUser')
+		->name('profile.storeCreateUser');
+
 	//route for change password
 	Route::get('/change-password', 'ChangePasswordController@index')->name('change-password.index');
 
@@ -659,6 +669,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'/lolo-pinoy-grill-commissary/inventory-stock-update/{id}',
 		'LoloPinoyGrillCommissaryController@inventoryStockUpdate')
 		->name('lolo-pinoy-grill-commissary.inventoryStockUpdate');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/commissary/production',
+		'LoloPinoyGrillCommissaryController@production')
+		->name('lolo-pinoy-grill-commissary.production');
 
 	//Lolo Pinoy Grill Branches
 	Route::get('/lolo-pinoy-grill-branches', 'LoloPinoyGrillBranchesController@index')->name('lolo-pinoy-grill-branches.index');
