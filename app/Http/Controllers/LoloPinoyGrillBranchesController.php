@@ -15,6 +15,16 @@ use App\LoloPinoyGrillBranchesRequisitionSlip;
 class LoloPinoyGrillBranchesController extends Controller
 {
 
+    //
+    public function reqTransactionList(){
+           $id =  Auth::user()->id;
+        $user = User::find($id);
+
+        $requisitionLists = LoloPinoyGrillBranchesRequisitionSlip::where('rs_id', NULL)->get()->toArray();
+
+        return view('lolo-pinoy-grill-branches-requisition-slip-transaction-list', compact('user', 'requisitionLists'));
+    }
+
     //  
     public function printRS($id){
           $ids = Auth::user()->id;

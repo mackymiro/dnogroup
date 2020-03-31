@@ -12,7 +12,8 @@
               <li class="breadcrumb-item">
                 <a href="#">Lolo Pinoy Grill Branches</a>
               </li>
-              <li class="breadcrumb-item active">Requisition Slip All Lists</li>
+              <li class="breadcrumb-item active">Requisition Slip </li>
+              <li class="breadcrumb-item ">Lists</li>
             </ol>
             <div class="row">
             	<div class="col-lg-12">

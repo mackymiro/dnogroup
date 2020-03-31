@@ -758,6 +758,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'LoloPinoyGrillBranchesController@printRS')
 		->name('lolo-pinoy-grill-branches.printRS');
 
+	Route::get(
+		'/lolo-pinoy-grill-branches/requistion/transaction-list',
+		'LoloPinoyGrillBranchesController@reqTransactionList')
+		->name('lolo-pinoy-grill-branches.reqTransactionList');
+
 	//Mr Potato
 	Route::get('/mr-potato', 'MrPotatoController@index')->name('mr-potato.index');
 

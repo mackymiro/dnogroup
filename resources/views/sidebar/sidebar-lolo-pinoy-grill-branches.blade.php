@@ -38,10 +38,9 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           @if($user->role_type == 1)
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/purchase-order') }}">P.O Form</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/requistion/transaction-list') }}">Lists</a>
           @endif
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/purchase-order-lists') }}">Lists</a>
-         
+                  
         </div>
       </li>
        <li class="nav-item dropdown ">
