@@ -13,7 +13,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/sales-invoice-form')}}">Sales Invoice Form</a>
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/') }}">Lists</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/') }}">Transaction List</a>
          
         </div>
       </li>

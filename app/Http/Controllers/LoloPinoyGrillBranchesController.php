@@ -16,8 +16,16 @@ class LoloPinoyGrillBranchesController extends Controller
 {
 
     //
+    public function salesInvoiceForm(){
+        $id =  Auth::user()->id;
+        $user = User::find($id);
+
+        return view('lolo-pinoy-grill-branches-sales-invoice-form', compact('user'));
+    }
+
+    //
     public function reqTransactionList(){
-           $id =  Auth::user()->id;
+       $id =  Auth::user()->id;
         $user = User::find($id);
 
         $requisitionLists = LoloPinoyGrillBranchesRequisitionSlip::where('rs_id', NULL)->get()->toArray();

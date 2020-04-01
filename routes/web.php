@@ -778,6 +778,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'LoloPinoyGrillBranchesController@reqTransactionList')
 		->name('lolo-pinoy-grill-branches.reqTransactionList');
 
+	Route::get(
+		'/lolo-pinoy-grill-branches/sales-invoice-form',
+		'LoloPinoyGrillBranchesController@salesInvoiceForm')
+		->name('lolo-pinoy-grill-branches.salesInvoiceForm');
+
 	//Mr Potato
 	Route::get('/mr-potato', 'MrPotatoController@index')->name('mr-potato.index');
 
