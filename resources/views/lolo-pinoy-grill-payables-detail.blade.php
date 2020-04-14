@@ -31,7 +31,7 @@
 	    					  Payable Form</div>
 
 	    					  <div class="card-body">
-	    					  		<form action="{{ action('MrPotatoController@addPayment', $transactionList['id']) }}" method="post">
+	    					  		<form action="{{ action('LoloPinoyGrillCommissaryController@addPayment', $transactionList['id']) }}" method="post">
 	    					  			{{ csrf_field() }}
 				  			 	 	@if(session('paymentAdded'))
 		                                <p class="alert alert-success">{{ Session::get('paymentAdded') }}</p>
@@ -65,6 +65,43 @@
 	    					  		</form>
 	    					  </div>
        					</div>
+						<div class="card mb-3">
+							<div class="card-header">
+								<i class="fas fa-tasks"></i>
+								Particulars
+							</div>
+							<div class="card-body">
+  								<form action="{{ action('LoloPinoyGrillCommissaryController@addParticulars', $transactionList['id']) }}" method="post">
+								  {{ csrf_field() }}
+								  @if(session('particularsAdded'))
+		                                <p class="alert alert-success">{{ Session::get('particularsAdded') }}</p>
+		                            @endif 
+  								<div class="form-group">
+  									<div class="form-row">
+  										<div class="col-lg-8">
+  											<label>Particulars</label>
+											<input type="text" name="particulars" class="form-control" required="required" />
+										
+										</div>
+										<div class="col-lg-8">
+  											<label>Amount</label>
+											<input type="text" name="amount" class="form-control" required="required" />
+										
+										</div>
+										
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="form-row">
+										<div class="col-lg-4">
+											<input type="submit" class="btn btn-primary" value="Add" />
+										</div> 
+									
+									</div>
+								</div>
+								</form>
+							</div>
+						</div>
                		</div>
                		<div class="col-lg-8">
                			<div class="card mb-3">
@@ -98,7 +135,7 @@
 			  							</div>
 			  							<div class="col-lg-2">
 		  									<label>Amount Due</label>
-		  									<input type="text" name="amountDue" style="color:white;" class="bg-danger form-control" value="<?php echo number_format($transactionList['amount_due'], 2)?>" />
+		  									<input type="text" name="amountDue" style="color:white;" class="bg-danger form-control" value="<?php echo number_format($sum, 2); ?>" />
 			  							</div>
 			  							<div class="col-lg-4">
 		  									<label>Voucher Ref #</label>
@@ -118,6 +155,27 @@
 			  							</div>
 			  						</div>
 				  				</div>
+								<table class="table table-striped">
+  									<thead>
+  										<tr>
+  											<th>PARTICULARS</th>
+											<th>AMOUNT</th>
+										</tr>
+									</thead>
+									<tbody>
+  										
+										<tr>	
+  											<td>{{ $transactionList['particulars']}}</td>
+											<td><?php echo number_format($transactionList['amount'], 2); ?></td>
+										</tr>
+										@foreach($getParticulars as $getParticular)
+										<tr>
+  											<td>{{ $getParticular['particulars']}}</td>
+											<td><?php echo number_format($getParticular['amount'], 2); ?></td>
+										</tr>
+										@endforeach
+									</tbody>
+								</table>
 				  				<table class="table table-striped">
 				  					<thead>
 				  						<tr>
@@ -134,7 +192,7 @@
 				  						@endforeach
 				  						<tr>
 				  							<td class="bg-info" style="color:white;">Total</td>
-				  							<td class="bg-success" style="color:white;"><?php echo number_format($tot, 2); ?></td>
+				  							<td class="bg-success" style="color:white;"><?php echo number_format($sumCheque, 2);?></td>
 				  						</tr>
 				  					</tbody>
 				  				</table>

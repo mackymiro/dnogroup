@@ -55,6 +55,19 @@
 				  						</tfoot>
 				  						<tbody>
 				  							@foreach($getTransactionLists as $getTransactionList)
+											<?php $id = $getTransactionList['id']; ?>
+											<?php
+												$amount1 = DB::table('dno_personal_payment_vouchers')
+															->select('*')
+															->where('id', $id)
+															->sum('amount');
+												
+												$amount2 = DB::table('dno_personal_payment_vouchers')
+															->select('*')
+															->where('pv_id', $id)
+															->sum('amount');
+												$compute = $amount1 + $amount2;
+											?>
 				  							<tr id="deletedId{{ $getTransactionList['id'] }}">
 			  									<td width="2%">
 			  										@if($user->role_type == 1)
@@ -70,7 +83,9 @@
 			  									</td>
 			  									<td>DP-{{ $getTransactionList['voucher_ref_number']}}</td>
 			  									<td>{{ $getTransactionList['issued_date']}}</td>
-			  									<td class="bg-danger" style="color:white;"><?php echo number_format($getTransactionList['amount_due'], 2);?></td>
+			  									<td class="bg-danger" style="color:white;">
+												  <?php echo number_format($compute, 2);?>
+												</td>
 			  									<td>{{ $getTransactionList['delivered_date']}}</td>
 			  									@if($getTransactionList['status'] == "FULLY PAID AND RELEASED")
 			  									<td class="bg-success" style="color:white; "><a class="anchor" href="{{ url('dno-personal/view-dno-personal-payables-details/'.$getTransactionList['id']) }}">{{ $getTransactionList['status'] }}</a></td>

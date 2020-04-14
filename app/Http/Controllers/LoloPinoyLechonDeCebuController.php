@@ -194,6 +194,42 @@ class LoloPinoyLechonDeCebuController extends Controller
     }
 
     //
+    public function addParticulars(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $particulars = LechonDeCebuPaymentVoucher::find($id);
+
+         //add current amount
+        $add = $particulars['amount_due'] + $request->get('amount');
+
+        $addParticulars = new LechonDeCebuPaymentVoucher([
+            'user_id'=>$user->id,
+            'pv_id'=>$id,
+            'particulars'=>$request->get('particulars'),
+            'amount'=>$request->get('amount'),
+            'created_by'=>$name,
+
+        ]);
+        
+        $addParticulars->save();
+
+        //update 
+        $particulars->amount_due = $add;
+        $particulars->save();
+        
+        Session::flash('particularsAdded', 'Particulars added.');
+
+        return redirect('lolo-pinoy-lechon-de-cebu/edit-payables-detail/'.$id);
+
+    }
+
+    //
     public function addPayment(Request $request, $id){  
         $ids = Auth::user()->id;
         $user = User::find($ids);
@@ -232,12 +268,26 @@ class LoloPinoyLechonDeCebuController extends Controller
         $transactionList = LechonDeCebuPaymentVoucher::find($id);
 
         //
-        $getChequeNumbers = LechonDeCebuPaymentVoucher::where('pv_id', $id)->get()->toArray();
+        $getChequeNumbers = LechonDeCebuPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
-        //total the cheque amount
-        $tot = LechonDeCebuPaymentVoucher::where('pv_id', $id)->sum('cheque_amount');
+        //getParticular details
+        $getParticulars = LechonDeCebuPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+      
 
-        return view('lechon-de-cebu-payables-detail', compact('user', 'transactionList', 'getChequeNumbers','tot'));
+        //amount
+        $amount1 = LechonDeCebuPaymentVoucher::where('id', $id)->sum('amount');
+        $amount2 = LechonDeCebuPaymentVoucher::where('pv_id', $id)->sum('amount');
+       
+        $sum = $amount1 + $amount2;
+
+        $chequeAmount1 = LechonDeCebuPaymentVoucher::where('id', $id)->sum('cheque_amount');
+        $chequeAmount2 = LechonDeCebuPaymentVoucher::where('pv_id', $id)->sum('cheque_amount');
+        
+        $sumCheque = $chequeAmount1 + $chequeAmount2;
+        
+
+        return view('lechon-de-cebu-payables-detail', compact('user', 
+            'transactionList', 'getChequeNumbers', 'getParticulars', 'sum', 'sumCheque'));
 
     }
 
@@ -246,13 +296,16 @@ class LoloPinoyLechonDeCebuController extends Controller
         $ids = Auth::user()->id;
         $user = User::find($ids);
 
+
         //
         $getTransactionLists = LechonDeCebuPaymentVoucher::where('pv_id', NULL)->get()->toArray();
+        
 
         //get total amount due
         $status = "FULLY PAID AND RELEASED";
 
         $totalAmoutDue = LechonDeCebuPaymentVoucher::where('pv_id', NULL)->where('status' ,'!=', $status)->sum('amount_due');
+
 
         return view('lechon-de-cebu-transaction-list', compact('user', 'getTransactionLists', 'totalAmoutDue'));
 
@@ -1476,8 +1529,6 @@ class LoloPinoyLechonDeCebuController extends Controller
             $uVoucher = sprintf("%06d",$newVoucherRef);
         } 
 
-
-
         //check if invoice number already exists
         $target = DB::table(
                         'lechon_de_cebu_payment_vouchers')
@@ -1493,17 +1544,20 @@ class LoloPinoyLechonDeCebuController extends Controller
                 'voucher_ref_number'=>$uVoucher,
                 'issued_date'=>$request->get('issuedDate'),
                 'delivered_date'=>$request->get('deliveredDate'),
-                'amount_due'=>$request->get('amountDue'),
+                'amount'=>$request->get('amount'),
+                'amount_due'=>$request->get('amount'),
+                'particulars'=>$request->get('particulars'),
                 'prepared_by'=>$name,
                 'created_by'=>$name,
 
             ]);
 
              $addPaymentVoucher->save();
-            
-             Session::flash('addSuccess', 'Successfully created.');
 
-            return redirect('lolo-pinoy-lechon-de-cebu/payment-voucher-form');
+             $insertedId = $addPaymentVoucher->id;
+            
+             return redirect('lolo-pinoy-lechon-de-cebu/edit-payables-detail/'.$insertedId);
+
         }else{
             return redirect('lolo-pinoy-lechon-de-cebu/payment-voucher-form/')->with('error', 'Invoice Number Already Exists. Please See Transaction List For Your Reference');
         }

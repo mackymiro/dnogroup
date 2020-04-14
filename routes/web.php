@@ -175,6 +175,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'LoloPinoyLechonDeCebuController@addPayment')
 		->name('lolo-pinoy-lechon-de-cebu.addPayment');
 
+	Route::post(
+		'/lolo-pinoy-lechon-de-cebu/add-particulars/{id}',
+		'LoloPinoyLechonDeCebuController@addParticulars')
+		->name('lolo-pinoy-lechon-de-cebu.addParticulars');
+
 	Route::patch(
 		'/lolo-pinoy-lechon-de-cebu/accept/{id}',
 		'LoloPinoyLechonDeCebuController@accept')
@@ -379,9 +384,15 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('/lolo-pinoy-grill-commissary/delivery-receipt-form', 'LoloPinoyGrillCommissaryController@deliveryReceiptForm')->name('lolo-pinoy-grill-commissary.deliveryReceiptForm');
 
 	//store deivery receipt
-	Route::post('/lolo-pinoy-grill-commissary/store-delivery-receipt', 'LoloPinoyGrillCommissaryController@storeDeliveryReceipt')->name('lolo-pinoy-grill-commissary.storeDeliveryReceipt');
+	Route::post(
+		'/lolo-pinoy-grill-commissary/store-delivery-receipt', 
+		'LoloPinoyGrillCommissaryController@storeDeliveryReceipt')
+		->name('lolo-pinoy-grill-commissary.storeDeliveryReceipt');
 
-	Route::get('/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-delivery-receipt/{id}', 'LoloPinoyGrillCommissaryController@editDeliveryReceipt')->name('lolo-pinoy-grill-commissary.editDeliveryReceipt');
+	Route::get(
+		'/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-delivery-receipt/{id}', 
+		'LoloPinoyGrillCommissaryController@editDeliveryReceipt')
+		->name('lolo-pinoy-grill-commissary.editDeliveryReceipt');
 
 	Route::patch('/lolo-pinoy-grill-commissary/update-delivery-receipt/{id}', 'LoloPinoyGrillCommissaryController@updateDeliveryReceipt')->name('lolo-pinoy-grill-commissary.updateDeliveryReceipt');
 
@@ -483,6 +494,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-payables-detail/{id}',
 		'LoloPinoyGrillCommissaryController@editPayablesDetail')
 		->name('lolo-pinoy-grill-commissary.editPayablesDetail');
+	
+	Route::post(
+		'/lolo-pinoy-grill-commissary/add-particulars/{id}',
+		'LoloPinoyGrillCommissaryController@addParticulars')
+		->name('lolo-pinoy-grill-commissary.addParticulars');
 
 	Route::post(
 		'/lolo-pinoy-grill-commissary/add-payment/{id}',
@@ -698,6 +714,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'LoloPinoyGrillBranchesController@editPayablesDetail')
 		->name('lolo-pinoy-grill-branches.editPayablesDetail');
 
+	Route::post(
+		'/lolo-pinoy-grill-branches/add-particulars/{id}',
+		'LoloPinoyGrillBranchesController@addParticulars')
+		->name('lolo-pinoy-grill-branhces.addParticulars');
+
 	Route::patch(
 		'/lolo-pinoy-grill-branches/accept/{id}',
 		'LoloPinoyGrillBranchesController@accept')
@@ -757,6 +778,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'/lolo-pinoy-grill-branches/delete/{id}',
 		'LoloPinoyGrillBranchesController@destroy')
 		->name('lolo-pinoy-grill-branches.destroy');
+
+	Route::delete(
+		'/lolo-pinoy-grill-branches/delete-transaction-list/{id}',
+		'LoloPinoyGrillBranchesController@destroyTransactionList')
+		->name('lolo-pinoy-grill-branches.destroyTransactionList');
 
 	Route::get(
 		'/lolo-pinoy-grill-branches/requisition-slip-lists',
@@ -904,6 +930,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'/mr-potato/edit-mr-potato-payables-detail/{id}',
 		'MrPotatoController@editPayablesDetail')
 		->name('mr-potato.editPayablesDetail');
+
+	Route::post(
+		'/mr-potato/add-particulars/{id}',
+		'MrPotatoController@addParticulars')	
+		->name('mr-potato.addParticulars');
 
 	Route::get(
 		'/mr-potato/print-payables/{id}',
@@ -1151,9 +1182,14 @@ Route::group(['middleware' => ['auth']], function(){
 		'/ribos-bar/edit-ribos-bar-payables-detail/{id}',
 		'RibosBarController@editPayablesDetail')
 		->name('ribos-bar.editPayablesDetail');
+	
+	Route::post(
+		'/ribos-bar/add-particulars/{id}',
+		'RibosBarController@addParticulars')
+		->name('ribos-bar.addParticulars');
 
 	Route::post(
-		'/ribos-bar/edit-ribos-bar-payables-detail/{id}',
+		'/ribos-bar/add-payment/{id}',
 		'RibosBarController@addPayment')
 		->name('ribos-bar.addPayment');
 
@@ -1373,6 +1409,11 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('dno-resources-development.editPayablesDetail');
 
 	Route::post(
+		'/dno-personal/add-particulars/{id}',
+		'DnoPersonalController@addParticulars')
+		->name('dno-personal.addParticulars');
+
+	Route::post(
 		'/dno-personal/add-payment/{id}',
 		'DnoPersonalController@addPayment')
 		->name('dno-personal.addPayment');
@@ -1428,6 +1469,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dno-resources-development/edit-dno-resources-payables-detail/{id}',
 		'DnoResourcesDevelopmentController@editPayablesDetail')
 		->name('dno-resources-development.editPayablesDetail');
+	
+	Route::post(
+		'/dno-resources-developemtn/add-particulars/{id}',
+		'DnoResourcesDevelopmentController@addParticulars')
+		->name('dno-resources-development.addParticulars');
 
 	Route::post(
 		'/dno-resources-development/add-payment/{id}',

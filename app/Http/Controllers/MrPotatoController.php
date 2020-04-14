@@ -122,6 +122,41 @@ class MrPotatoController extends Controller
     }
 
     //
+    public function addParticulars(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $particulars = MrPotatoPaymentVoucher::find($id);
+
+        //add current amount
+        $add = $particulars['amount_due'] + $request->get('amount');
+
+        $addParticulars = new MrPotatoPaymentVoucher([
+            'user_id'=>$user->id,
+            'pv_id'=>$id,
+            'particulars'=>$request->get('particulars'),
+            'amount'=>$request->get('amount'),
+            'created_by'=>$name,
+
+        ]);
+
+        $addParticulars->save();
+
+        //update 
+        $particulars->amount_due = $add;
+        $particulars->save();
+        
+        Session::flash('particularsAdded', 'Particulars added.');
+
+        return redirect('mr-potato/edit-mr-potato-payables-detail/'.$id);
+    }
+
+    //
     public function addPayment(Request $request, $id){
          $ids = Auth::user()->id;
         $user = User::find($ids);
@@ -159,12 +194,25 @@ class MrPotatoController extends Controller
         $transactionList = MrPotatoPaymentVoucher::find($id);
 
           //
-        $getChequeNumbers = MrPotatoPaymentVoucher::where('pv_id', $id)->get()->toArray();
+        $getChequeNumbers = MrPotatoPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
-        //total the cheque amount
-        $tot = MrPotatoPaymentVoucher::where('pv_id', $id)->sum('cheque_amount');
+        //getParticular details
+        $getParticulars = MrPotatoPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+        
 
-         return view('mr-potato-payables-detail', compact('user', 'transactionList', 'getChequeNumbers','tot'));
+        //amount
+        $amount1 = MrPotatoPaymentVoucher::where('id', $id)->sum('amount');
+        $amount2 = MrPotatoPaymentVoucher::where('pv_id', $id)->sum('amount');
+        
+        $sum = $amount1 + $amount2;
+
+        $chequeAmount1 = MrPotatoPaymentVoucher::where('id', $id)->sum('cheque_amount');
+        $chequeAmount2 = MrPotatoPaymentVoucher::where('pv_id', $id)->sum('cheque_amount');
+        
+        $sumCheque = $chequeAmount1 + $chequeAmount2;
+
+        return view('mr-potato-payables-detail', compact('user', 'transactionList', 'getChequeNumbers',
+            'getParticulars', 'sum', 'sumCheque'));
     }
 
     //
@@ -574,15 +622,18 @@ class MrPotatoController extends Controller
                     'voucher_ref_number'=>$uVoucher,
                     'issued_date'=>$request->get('issuedDate'),
                     'delivered_date'=>$request->get('deliveredDate'),
-                    'amount_due'=>$request->get('amountDue'),
+                    'amount'=>$request->get('amount'),
+                    'amount_due'=>$request->get('amount'),
+                    'particulars'=>$request->get('particulars'),
                     'prepared_by'=>$name,
                     'created_by'=>$name,
                 ]);
 
                 $addPaymentVoucher->save();
-                Session::flash('addSuccess', 'Successfully created.');
+               
+                $insertedId = $addPaymentVoucher->id;
 
-                 return redirect('mr-potato/payment-voucher-form');
+                 return redirect('mr-potato/edit-mr-potato-payables-detail/'.$insertedId);
         }else{
              return redirect('mr-potato/payment-voucher-form/')->with('error', 'Invoice Number Already Exists. Please See Transaction List For Your Reference');
         }

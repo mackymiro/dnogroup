@@ -55,6 +55,19 @@
 				  						</tfoot>
 				  						<tbody>
 				  							@foreach($getTransactionLists as $getTransactionList)
+											<?php $id = $getTransactionList['id']; ?>
+											<?php
+												$amount1 = DB::table('lolo_pinoy_grill_branches_payment_vouchers')
+															->select('*')
+															->where('id', $id)
+															->sum('amount');
+												
+												$amount2 = DB::table('lolo_pinoy_grill_branches_payment_vouchers')
+															->select('*')
+															->where('pv_id', $id)
+															->sum('amount');
+												$compute = $amount1 + $amount2;
+											?>
 				  							<tr id="deletedId{{ $getTransactionList['id'] }}">
 			  									<td width="2%">
 			  										@if($user->role_type == 1)
@@ -70,7 +83,9 @@
 			  									</td>
 			  									<td>LPGB-{{ $getTransactionList['voucher_ref_number']}}</td>
 			  									<td>{{ $getTransactionList['issued_date']}}</td>
-			  									<td class="bg-danger" style="color:white;"><?php echo number_format($getTransactionList['amount_due'], 2);?></td>
+			  									<td class="bg-danger" style="color:white;">
+												  	<?php echo number_format($compute, 2); ?>
+												</td>
 			  									<td>{{ $getTransactionList['delivered_date']}}</td>
 			  									@if($getTransactionList['status'] == "FULLY PAID AND RELEASED")
 			  									<td class="bg-success" style="color:white; "><a class="anchor" href="{{ url('lolo-pinoy-grill-branches/view-lolo-pinoy-grill-branches-payables-details/'.$getTransactionList['id']) }}">{{ $getTransactionList['status'] }}</a></td>
@@ -113,18 +128,17 @@
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
 	 function confirmDelete(id){
-        var x = confirm("Do you want to delete this?");
+        const x = confirm("Do you want to delete this?");
         if(x){
             $.ajax({
               type: "DELETE",
-              url: '/lolo-pinoy-grill-commissary/delete-transaction-list/' + id,
+              url: '/lolo-pinoy-grill-branches/delete-transaction-list/' + id,
               data:{
                 _method: 'delete', 
                 "_token": "{{ csrf_token() }}",
                 "id": id
               },
               success: function(data){
-                console.log(data);
                 $("#deletedId"+id).fadeOut('slow');
                
               },

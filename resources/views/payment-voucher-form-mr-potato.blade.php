@@ -34,9 +34,7 @@
                               <form action="{{ action('MrPotatoController@paymentVoucherStore') }}" method="post">
                                 {{ csrf_field() }}
                           	  <div class="card-body">
-                                   @if(session('addSuccess'))
-                                        <p class="alert alert-success">{{ Session::get('addSuccess') }}</p>
-                                    @endif 
+                                 
                                     @if(session('error'))
                                         <p class="alert alert-danger">{{ Session::get('error') }}</p>
                                     @endif 
@@ -63,13 +61,21 @@
                                       <label>Delivered Date </label>
                                       <input type="text" name="deliveredDate" class="form-control" value="{{ old('deliveredDate') }}" />
                                   </div>
-                                  <div class="col-md-2">
-                                      <label>Amount Due</label>
-                                      <input type="text" name="amountDue" class="form-control" value="{{ old('amountDue') }}" />
-                                  </div>
+                                 
                       	  				</div>
                           	  		</div>
-                          	  	
+                          	  	  <div class="form-group">
+                                    <div class="form-row">
+                                      <div class="col-lg-4">
+                                        <label>Particulars</label>
+                                        <input type="text" name="particulars" class="form-control" required="required"/>
+                                      </div>
+                                      <div class="col-lg-2">
+                                        <label>Amount</label>
+                                        <input type="text" name="amount" class="form-control"  required="required"/>
+                                      </div>
+                                    </div>
+                                  </div>
                                   <div>
                                     <input type="submit" class="btn btn-success float-right" value="Add Payment Voucher" />
                                   </div>
