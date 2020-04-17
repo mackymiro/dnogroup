@@ -15,13 +15,188 @@ use App\RibosBarPaymentVoucher;
 use App\RibosBarSalesInvoice;
 use App\RibosBarBillingStatement;
 use App\RibosBarStatementOfAccount;
+use App\RibosBarCashiersForm;
 
 class RibosBarController extends Controller
 {
 
     //
+    public function printCashiersReport($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $cashiersId = RibosBarCashiersForm::find($id);
+
+        $cashiersReports = RibosBarCashiersForm::where('cf_id', $id)->get()->toArray();
+
+        $total = RibosBarCashiersForm::where('cf_id', $id)->sum('total');
+    
+        $pdf = PDF::loadView('printCashiersReport', compact('cashiersId', 'user', 'cashiersReports', 'total'));
+
+        return $pdf->download('ribos-bar-cashiers-report.pdf');
+    }
+
+    //
+    public function updateItem(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $updateItems = RibosBarCashiersForm::find($id);
+
+        $updateItems->items = $request->get('items');
+        $updateItems->opening_inventory = $request->get('openingInventory');
+        $updateItems->sold = $request->get('sold');
+        $updateItems->closing = $request->get('closing');
+        $updateItems->total = $request->get('total');
+
+        $updateItems->save();
+
+        Session::flash('updateItemSucc', 'Successfully updated.');
+
+        return redirect('ribos-bar/edit-cashiers-report-inventory-list/'.$request->get('cashiersId'));
+
+    }
+
+    //
+    public function  viewCashiersReportList($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        
+        //
+        $getViewCashierReport = RibosBarCashiersForm::find($id);
+
+        //
+        $getAllItems = RibosBarCashiersForm::where('cf_id', $id)->get()->toArray();
+
+        $total = RibosBarCashiersForm::where('cf_id', $id)->sum('total');
+        
+
+        return view('view-ribos-bar-cashiers-report-list', compact('user','getViewCashierReport', 'getAllItems', 'total'));
+    }
+
+    public function cashiersInventoryList(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //
+        $getAllCashiersReports = RibosBarCashiersForm::where('cf_id', NULL)->get()->toArray();
+
+        return view('ribos-bar-cashiers-repost-inventory-list', compact('user', 'getAllCashiersReports'));
+    }
+
+    //
+    public function  addCashiersList(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $addCashiersList = new RibosBarCashiersForm([
+            'user_id'=>$user->id,
+            'cf_id'=>$id,
+            'items'=>$request->get('items'),
+            'opening_inventory'=>$request->get('openingInventory'),
+            'sold'=>$request->get('sold'),
+            'closing'=>$request->get('closing'),
+            'total'=>$request->get('total'),
+            'created_by'=>$name,
+        ]);
+        
+        $addCashiersList->save();
+
+        Session::flash('cashiersAddSuccess', 'Successfully added.');
+
+        return redirect('ribos-bar/edit-cashiers-report-inventory-list/'.$id);
+
+    
+    }
+
+    //
+    public function updateCashiersForm(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $updateCashiersReport = RibosBarCashiersForm::find($id);
+
+        $updateCashiersReport->date = $request->get('date');
+        $updateCashiersReport->cashier_name = $request->get('cashierName');
+        $updateCashiersReport->bar_tender_name = $request->get('barTender');
+        $updateCashiersReport->shifting_schedule = $request->get('shiftSchedule');
+        $updateCashiersReport->starting_os = $request->get('startingOs');
+        $updateCashiersReport->closing_os = $request->get('closingOs');
+        $updateCashiersReport->cash_sales = $request->get('cashSales');
+        $updateCashiersReport->credit_card_sales = $request->get('ccSales');
+        $updateCashiersReport->signing_privilage_sales = $request->get('privilageSales');
+        $updateCashiersReport->total_reading = $request->get('totalReading');
+        $updateCashiersReport->created_by = $name;
+        $updateCashiersReport->save();
+
+        Session::flash('cashiersSuccess', 'Successfully updated.');
+
+        return redirect('ribos-bar/edit-cashiers-report-inventory-list/'.$id);
+
+    }
+
+    //
+    public function editCashiersForm($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //
+        $getCashiersReport = RibosBarCashiersForm::find($id);
+
+        //
+        $getCashiersReportItems = RibosBarCashiersForm::where('cf_id',  $id)->get()->toArray();
+
+        return view('edit-ribos-bar-cashier-form', compact('user', 'getCashiersReport', 'getCashiersReportItems'));
+    }
+
+    //
+    public function cashiersFormStore(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $cashiersForm = new RibosBarCashiersForm([
+            'user_id'=>$user->id,
+            'date'=>$request->get('date'),
+            'cashier_name'=>$request->get('cashierName'),
+            'bar_tender_name'=>$request->get('barTender'),
+            'shifting_schedule'=>$request->get('shiftSchedule'),
+            'starting_os'=>$request->get('startingOs'),
+            'closing_os'=>$request->get('closingOs'),
+            'created_by'=>$name,
+        ]);
+
+        $cashiersForm->save();
+        $insertedId = $cashiersForm->id;
+
+        return redirect('ribos-bar/edit-cashiers-report-inventory-list/'.$insertedId);
+    }
+
+    //
+    public function cashiersForm(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        return view('ribos-bar-cashiers-form', compact('user'));
+    }
+
+    //
     public function printPayablesRibosBar($id){
-          $ids = Auth::user()->id;
+        $ids = Auth::user()->id;
         $user = User::find($ids);
 
         $payableId = RibosBarPaymentVoucher::find($id);
@@ -1513,6 +1688,12 @@ class RibosBarController extends Controller
         Session::flash('SuccessE', 'Successfully updated');
 
         return redirect('ribos-bar/edit-ribos-bar-purchase-order/'.$id);
+    }
+
+    //  
+    public function destroyCashiersReport($id){
+        $cashiersReport = RibosBarCashiersForm::find($id);
+        $cashiersReport->delete();
     }
 
     //

@@ -176,7 +176,7 @@
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
    function confirmDelete(id){
-      var x = confirm("Do you want to delete this?");
+      const x = confirm("Do you want to delete this?");
         if(x){
             $.ajax({
               type: "DELETE",

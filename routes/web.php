@@ -1385,7 +1385,58 @@ Route::group(['middleware' => ['auth']], function(){
 		'RibosBarController@viewStatementAccount')
 		->name('ribos-bar.viewStatementAccount');
 
-	//DNO Personal
+	Route::get(
+		'/ribos-bar/cashiers-form',
+		'RibosBarController@cashiersForm')
+		->name('ribos-bar.cashiersForm');
+
+	Route::get(
+		'/ribos-bar/edit-cashiers-report-inventory-list/{id}',
+		'RibosBarController@editCashiersForm')
+		->name('ribos-bar.editCashiersForm');
+
+	Route::post(
+		'/ribos-bar/cashiers-store-form',
+		'RibosBarController@cashiersFormStore')
+		->name('ribos-bar.cashiersFormStore');
+
+	Route::patch(
+		'/ribos-bar/update-cashiers-form/{id}',
+		'RibosBarController@updateCashiersForm')
+		->name('ribos-bar.updateCashiersForm');	
+
+	Route::post(
+		'/ribos-bar/add-cashiers-list/{id}',
+		'RibosBarController@addCashiersList')
+		->name('ribos-bar.addCashiersList');
+
+	Route::get(
+		'/ribos-bar/cashiers-report/inventory-list',
+		'RibosBarController@cashiersInventoryList')
+		->name('ribos-bar.cashiersInventoryList');
+
+	Route::get(
+		'/ribos-bar/cashiers-report/view-inventory-list/{id}',
+		'RibosBarController@viewCashiersReportList')
+		->name('ribos-bar.viewCashiersReportList');
+
+	Route::patch(
+		'/ribos-bar/update-item/{id}',
+		'RibosBarController@updateItem')
+		->name('ribos-bar.updateItem');
+
+	Route::delete(
+		'/ribos-bar/cashiers-report-form/delete-item/{id}',
+		'RibosBarController@destroyCashiersReport')
+		->name('ribos-bar.destroyCashiersReport');
+
+	Route::get(
+		'/ribos-bar/cashiers-report/printCashiersReport/{id}',
+		'RibosBarController@printCashiersReport')
+		->name('ribos-bar.printCashiersReport');
+
+
+		//DNO Personal
 	Route::get('/dno-personal', 'DnoPersonalController@index')->name('dno-personal');
 
 	Route::get(

@@ -61,7 +61,7 @@
                                       
                                   </table>   
                              </div>
-	                          <div style="float:right; width: 50%">
+	                          <div style="float:right; width: 50%;;">
 	                              <table >
 	                                   <thead>
                                             <tr>
@@ -70,7 +70,7 @@
                                             </tr>
                                             <tr>
                                                 <th>DR #</th>
-                                                <th> {{ $deliveryId['dr_pno'] }}</th>
+                                                <th> {{ $deliveryId['dr_no'] }}</th>
                                             </tr>
                                             <tr>
                                                 <th>Date To Be Delivered</th>

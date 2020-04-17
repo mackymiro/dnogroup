@@ -31,7 +31,7 @@
 
 						Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
             	 	 </p>
-	            	 <h4 ><u>PAYMENT DETAILS (PAYMENT VOUCHER)</u></h4>
+	            	 <h4 ><u>Cashier's Report Form</u></h4>
 	            </div>
 				<div class="row">
 					<div class="col-lg-12">
@@ -42,34 +42,48 @@
                                     <table >
                                           <thead>
                                             <tr>
-                                                <th width="30%">Paid To</th>
-                                                <th> {{ $payableId['paid_to'] }}</th>
+                                                <th width="25%">Date</th>
+                                                <th> {{ $cashiersId['date'] }}</th>
                                             </tr>
                                             <tr>
-                                                <th>Status</th>
-                                                <th>{{ $payableId['status'] }}</th>
+                                                <th width="25%">Cashier's Name</th>
+                                                <th>{{ $cashiersId['cashier_name'] }}</th>
                                             </tr>
                                             <tr>
-                                                <th>Date</th>
-                                                <th> {{ $payableId['issued_date'] }} </th>
+                                                <th>Bar Tender</th>
+                                                <th> {{ $cashiersId['bar_tender_name'] }} </th>
                                             </tr>
-                                           
+                                            <tr>
+                                                <th>Starting OS #</th>
+                                                <th>{{ $cashiersId['starting_os'] }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Closing OS #</th>
+                                                <th>{{ $cashiersId['closing_os'] }}</th>
+                                            </tr>
                                         </thead>
                                       
                                   </table>   
                              </div>
-	                          <div style="float:right; width: 50%">
+	                          <div style="float:right; width: 50%;;">
 	                              <table >
 	                                   <thead>
                                             <tr>
-                                                <th width="20%">Amount Due</th>
-                                                <th><?php echo number_format($payableId['amount_due'], 2);?></th>
+                                                <th width="20%">Cash Sales</th>
+                                                <th>{{ $cashiersId['cash_sales'] }}</th>
                                             </tr>
                                             <tr>
-                                                <th>Invoice #</th>
-                                                <th> {{ $payableId['invoice_number'] }}</th>
+                                                <th>Credit Card Sales</th>
+                                                <th> {{ $cashiersId['credit_card_sales'] }}</th>
                                             </tr>
-                                           
+                                            <tr>
+                                                <th>Signing Privilage Sales</th>
+                                                <th>{{ $cashiersId['signing_privilage_sales'] }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Total Reading</th>
+                                                <th>{{ $cashiersId['total_reading'] }}</th>
+                                            </tr>
                                         </thead>
 	                              </table>
 	                          </div>
@@ -84,26 +98,33 @@
                           <table style="border:1px solid black;">
                           		  <thead>
                                       <tr>
-                                        <th style="height: 1%; text-align: center;">CHEQUE NO ISSUED</th>
-                                        <th style="height: 1%; text-align: center;">CHEQUE AMOUNT</th>
-                                       
+                                        <th style="height: 1%; text-align: center;">ITEMS</th>
+                                      
+                                        <th style="height: 1%; text-align: center;">OPENING INVENTORY</th>
+                                        <th style="height: 1%; text-align: center;">SOLD</th>
+                                        <th style="height: 1%; text-align: center;">CLOSING</th>
+                                        <th style="height: 1%; text-align: center;">TOTAL</th>
                                       </tr>
                                     </thead>
                                   <tbody>
-                                  	
-                                  	 	 @foreach($payablesVouchers as $payablesVoucher)
+                                  		
+                                  	 	 @foreach($cashiersReports as $cashiersReport)
                                         <tr style="border:1px solid black;">
-                                          <td style="text-align:center; border: 1px solid black;">{{ $payablesVoucher['cheque_number'] }}</td>
-                                         
-                                          <td style="text-align:center; border: 1px solid black;"><?php echo number_format($payablesVoucher['cheque_amount'], 2);?></td>
+                                          <td style="text-align:center; border: 1px solid black;">{{ $cashiersReport['items'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;">{{ $cashiersReport['opening_inventory'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;">{{ $cashiersReport['sold'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;">{{ $cashiersReport['closing'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;"><?php echo number_format($cashiersReport['total'], 2); ?></td>
                                         </tr> 
                                         @endforeach
                                       
 	                                      
 	                                       <tr style="border:1px solid black;">
-	                                       
-	                                        <td style=" text-align:center; border: 1px solid black;"><strong>Total</strong></td>
-	                                        <td style=" text-align:center; border: 1px solid black;"> <?php echo number_format($sum, 2)?></td>
+	                                        <td style=" border: 1px solid black;"></td>
+                                            <td style=" border: 1px solid black;"></td>
+                                            <td style=" border: 1px solid black;"></td>
+	                                        <td style=" border: 1px solid black;"><strong>Total</strong></td>
+	                                        <td style=" text-align:center; border: 1px solid black;"> <?php echo number_format($total, 2)?></td>
 	                                      </tr>
                                   </tbody>
                           </table>
@@ -119,7 +140,7 @@
                            				<tr>
                            					<td>
                            						________________________<br>
-                           						{{ $payableId['created_by']}}
+                           						{{ $cashiersId['created_by']}}
 
                            					</td>
                            					<td>
