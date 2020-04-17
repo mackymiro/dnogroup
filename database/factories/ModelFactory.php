@@ -22,3 +22,28 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'remember_token' => str_random(10),
     ];
 });
+
+$factory->define(App\RibosBarCashiersForm::class, function (Faker\Generator $faker) {
+
+    return [
+        'user_id' => rand(0,100),
+        'cf_id'=>rand(0,100),
+        'date'=>str_random(10),
+        'cashier_name'=>$faker->name,
+        'bar_tender_name'=>$faker->name,
+        'shifting_schedule'=>$faker->name,
+        'starting_os'=>str_random(10),
+        'cash_sales'=>rand(0,100),
+        'credit_card_sales'=>rand(0,100),
+        'signing_privilage_sales'=>str_random(10),
+        'total_reading'=>str_random(10),
+        'closing_os'=>str_random(10),
+        'items'=>str_random(10),
+        'opening_inventory'=>str_random(10),
+        'sold'=>str_random(10),
+        'closing'=>str_random(10),
+        'total'=>rand(0,100),
+        'created_by'=>str_random(10),
+       
+    ];
+});
