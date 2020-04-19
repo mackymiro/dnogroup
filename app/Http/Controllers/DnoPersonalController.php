@@ -10,13 +10,109 @@ use Session;
 use Auth; 
 use App\User;
 use App\DnoPersonalPaymentVoucher;
+use App\DnoPersonalCreditCard;
 
 class DnoPersonalController extends Controller
 {
 
     //
+    public function updateCard(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $updateCard = DnoPersonalCreditCard::find($id);
+        $updateCard->bank_name = $request->get('bankName');
+        $updateCard->account_no = $request->get('accountNo');
+        $updateCard->account_name = $request->get('accountName');
+        $updateCard->type_of_card = $request->get('typeOfCard');
+        $updateCard->save();
+
+        Session::flash('updatedCard', 'Successfully added a card.');
+
+        return redirect('dno-personal/credit-card/accounts/edit/'.$id);
+
+    }   
+
+    //
+    public function editCreditCardAccount($id){ 
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $getCreditCardDetail = DnoPersonalCreditCard::find($id);
+
+        $accountName = "Alan Dino";
+        $accountName2 = "MARY MARGARET O. DINO";
+
+        $getCreditCards1 = DnoPersonalCreditCard::where('account_name', $accountName)->get()->toArray();
+
+        $getCreditCards2 = DnoPersonalCreditCard::where('account_name', $accountName2)->get()->toArray();
+
+        return view('dno-personal-credit-card-edit', compact('user', 'getCrediCards1', 'getCreditCards2', 'getCreditCardDetail'));
+    }   
+
+    //
+    public function storeCreditCard(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        //validate
+        $this->validate($request, [
+        'bankName' =>'required',
+        'accountNo'=>'required',
+        'accountName'=>'required',
+        
+         ]);
+
+        $addCreditCard = new DnoPersonalCreditCard([
+            'user_id'=>$user->id,
+            'bank_name'=>$request->get('bankName'),
+            'account_no'=>$request->get('accountNo'),
+            'account_name'=>$request->get('accountName'),
+            'type_of_card'=>$request->get('typeOfCard'),
+            'created_by'=>$name,
+        ]);
+
+        $addCreditCard->save();
+
+        Session::flash('cardAdded', 'Successfully added a card.');
+
+        if (\Request::is('dno-personal/credit-card/ald-accounts')) { 
+            return redirect('dno-personal/credit-card/ald-accounts');
+        }else{
+            return redirect('dno-personal/credit-card/mod-accounts');
+        }
+        
+    }
+
+    //
+    public function creditCardAccount(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //
+        $accountName = "Alan Dino";
+        $accountName2 = "MARY MARGARET O. DINO";
+
+        $getCreditCards1 = DnoPersonalCreditCard::where('account_name', $accountName)->get()->toArray();
+
+        $getCreditCards2 = DnoPersonalCreditCard::where('account_name', $accountName2)->get()->toArray();
+
+        return view('dno-personal-credit-card', compact('user', 'getCreditCards1', 'getCreditCards2'));
+    }
+
+    //
     public function printPayablesDnoPersonal($id){
-           $ids = Auth::user()->id;
+        $ids = Auth::user()->id;
         $user = User::find($ids);
 
         $payableId = DnoPersonalPaymentVoucher::find($id);
@@ -300,7 +396,11 @@ class DnoPersonalController extends Controller
          $ids = Auth::user()->id;
         $user = User::find($ids);
 
-        return view('payment-voucher-form-dno-personal', compact('user'));
+        //getCreditCards
+        $getCreditCards = DnoPersonalCreditCard::get()->toArray();
+
+
+        return view('payment-voucher-form-dno-personal', compact('user', 'getCreditCards'));
     }
 
     /**
@@ -375,8 +475,14 @@ class DnoPersonalController extends Controller
     }
 
 
+    //
+    public function destroyCreditCard($id){
+        $creditCard = DnoPersonalCreditCard::find($id);
+        $creditCard->delete();
+    }
+
     public function destroyTransactionList($id){
-         $transactionList = DnoPersonalPaymentVoucher::find($id);
+        $transactionList = DnoPersonalPaymentVoucher::find($id);
         $transactionList->delete();
     }
 

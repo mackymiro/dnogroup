@@ -21,6 +21,30 @@ class RibosBarController extends Controller
 {
 
     //
+    public function printPO($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $purchaseOrder = RibosBarPurchaseOrder::find($id);
+
+          //
+        $pOrders = RibosBarPurchaseOrder::where('po_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = RibosBarPurchaseOrder::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = RibosBarPurchaseOrder::where('po_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+
+        $pdf = PDF::loadView('printRibosBarPO', compact('purchaseOrder', 'pOrders', 'sum'));
+
+        return $pdf->download('ribos-bar-purchase-order.pdf');
+    }
+
+    //
     public function printCashiersReport($id){
         $ids = Auth::user()->id;
         $user = User::find($ids);
@@ -1185,30 +1209,36 @@ class RibosBarController extends Controller
     public function updatePo(Request $request, $id){
         $order = RibosBarPurchaseOrder::find($id);
         
-        $order->quantity = $request->get('quant');
-        $order->description = $request->get('desc');
-        $order->unit_price = $request->get('unitP');
-        $order->amount = $request->get('amt');
-
+        $order->quantity = $request->get('quantity');
+        $order->description = $request->get('description');
+        $order->unit_price  = $request->get('unitPrice');
+        $order->amount = $request->get('amount');
+    
         $order->save();
 
         Session::flash('SuccessEdit', 'Successfully updated');
         return redirect('ribos-bar/edit-ribos-bar-purchase-order/'.$request->get('poId'));
     }
 
-    //
-    public function addNewPurchaseOrder(Request $request, $id){
-         $ids = Auth::user()->id;
+   
+    //add new
+    public function addNew(Request $request, $id){
+        $ids =  Auth::user()->id;
         $user = User::find($ids);
-        
+
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 
-        $name  = $firstName." ".$lastName;
+        $name  = $firstName.$lastName;
+
+        //
+          $this->validate($request, [
+            'amount'=>'required',
+        ]);
 
         $pO = RibosBarPurchaseOrder::find($id);
 
-         $addPurchaseOrder = new RibosBarPurchaseOrder([
+        $addNewParticulars = new RibosBarPurchaseOrder([
             'user_id'=>$user->id,
             'po_id'=>$id,
             'p_o_number'=>$pO['p_o_number'],
@@ -1219,20 +1249,11 @@ class RibosBarController extends Controller
             'created_by'=>$name,
         ]);
 
-        $addPurchaseOrder->save();
+        $addNewParticulars->save();
 
-        Session::flash('purchaseOrderSuccess', 'Successfully added purchase order');
+        Session::flash('addNewSuccess', 'Successfully added');
 
-        return redirect('ribos-bar/add-new/'.$id);
-    }
-
-    //add new
-    public function addNew($id){
-        $ids =  Auth::user()->id;
-        $user = User::find($ids);
-
-        
-        return view('add-new-ribos-bar-purchase-order', compact('user', 'id'));
+        return redirect('ribos-bar/edit-ribos-bar-purchase-order/'.$id);
     }
 
     //
@@ -1548,13 +1569,10 @@ class RibosBarController extends Controller
         $name  = $firstName." ".$lastName;
 
         //
-         $this->validate($request, [
+        $this->validate($request, [
             'paidTo' => 'required',
-            'address'=> 'required',
-            'quantity'=>'required',
+            'date'=> 'required',
             'description'=>'required',
-            'unitPrice'=>'required',
-            'amount'=>'required',
         ]);
 
            //get the latest insert id query in table purchase order
@@ -1571,17 +1589,17 @@ class RibosBarController extends Controller
             $uNum = sprintf("%06d",$newNum);
         }
 
-         $purchaseOrder = new RibosBarPurchaseOrder([
+        $purchaseOrder = new RibosBarPurchaseOrder([
             'user_id' =>$user->id,
-            'paid_to'=>$request->get('paidTo'),
-            'address'=>$request->get('address'),
             'p_o_number'=>$uNum,
+            'paid_to'=>$request->get('paidTo'),
             'date'=>$request->get('date'),
+            'address'=>$request->get('address'),
             'quantity'=>$request->get('quantity'),
             'description'=>$request->get('description'),
             'unit_price'=>$request->get('unitPrice'),
             'amount'=>$request->get('amount'),
-            'total_price'=>$request->get('amount'),
+            'prepared_by'=>$name,
             'created_by'=>$name,
         ]);
 
@@ -1672,7 +1690,7 @@ class RibosBarController extends Controller
         $unitPrice = $request->get('unitPrice');
         $amount = $request->get('amount');
 
-         $purchaseOrder = RibosBarPurchaseOrder::find($id);
+        $purchaseOrder = RibosBarPurchaseOrder::find($id);
         
         $purchaseOrder->paid_to = $paidTo;
         $purchaseOrder->address = $address;

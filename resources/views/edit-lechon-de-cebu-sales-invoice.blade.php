@@ -1,6 +1,18 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('title', 'Edit Sales Invoice |')
 @section('content')
+<style>
+.selcls { 
+    padding: 9px; 
+    border: solid 1px #517B97; 
+    outline: 0; 
+    background: -webkit-gradient(linear, left top, left 25, from(#FFFFFF), color-stop(4%, #CAD9E3), to(#FFFFFF)); 
+    background: -moz-linear-gradient(top, #FFFFFF, #CAD9E3 1px, #FFFFFF 25px); 
+    box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+    -moz-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+    -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+	} 
+</style> 
 <script>
   $(document).ready(function(){
       $('.alert-success').fadeIn().delay(3000).fadeOut();
@@ -42,22 +54,22 @@
 	                             		<div class="form-row">
 	                             			<div class="col-md-2">
 			                 					<label>Date</label>
-			                 					<input type="text" name="date" class="form-control" value="{{ $getSalesInvoice['date'] }}" />
+			                 					<input type="text" name="date" class="selcls form-control" value="{{ $getSalesInvoice['date'] }}" />
 			                 					
 			                     			</div>
 	                         				<div class="col-md-2">
 			                 					<label>Invoice #</label>
-			                 					<input type="text" name="invoiceNum" class="form-control" value="{{ $getSalesInvoice['invoice_number']}}" />
+			                 					<input type="text" name="invoiceNum" class="selcls form-control" value="{{ $getSalesInvoice['invoice_number']}}" />
 			                 					
 			                     			</div>
 			                     			<div class="col-md-4">
 			                     				<label>Ordered By</label>
-			                     				<input type="text" name="orderedBy" class="form-control" value="{{ $getSalesInvoice['ordered_by']}}" />
+			                     				<input type="text" name="orderedBy" class="selcls form-control" value="{{ $getSalesInvoice['ordered_by']}}" />
 			                     				
 			                     			</div>
 			                     			<div class="col-md-4">
 		                         				<label>Address</label>
-		                         				<input type="text" name="address" class="form-control" value="{{ $getSalesInvoice['address']}}" /> 
+		                         				<input type="text" name="address" class="selcls form-control" value="{{ $getSalesInvoice['address']}}" /> 
 		                         			</div>
 	                             		</div>
 	                             	</div>
@@ -65,24 +77,24 @@
                          				<div class="form-row">
                          					<div class="col-md-1">
 		                     					<label>Qty</label>
-		                     					<input type="text" name="qty" class="form-control" value="{{ $getSalesInvoice['qty']}}" />
+		                     					<input type="text" name="qty" class="selcls form-control" value="{{ $getSalesInvoice['qty']}}" />
 		                         			</div>
 		                         			 <div class="col-md-2">
 		                                        <label>Body 400/KLS</label>
-		                                        <input type="text" name="body" class="form-control" value="{{ $getSalesInvoice['body']}}" />
+		                                        <input type="text" name="body" class="selcls form-control" value="{{ $getSalesInvoice['body']}}" />
 		                                    </div>
 		                                    <div class="col-md-2">
 		                                        <label>Head & Feet 200/KLS</label>
-		                                        <input type="text" name="headFeet" class="form-control" value="{{ $getSalesInvoice['head_and_feet']}}" />
+		                                        <input type="text" name="headFeet" class="selcls form-control" value="{{ $getSalesInvoice['head_and_feet']}}" />
 		                                    </div>
 		                         			<div class="col-md-4">
 		                         				<label>Item Description</label>
-		                         				<input type="text" name="itemDescription" class="form-control" value="{{ $getSalesInvoice['item_description']}}" />
+		                         				<input type="text" name="itemDescription" class="selcls form-control" value="{{ $getSalesInvoice['item_description']}}" />
 		                         			</div>
 		                         		
 		                         			<div class="col-md-1">
 		                         				<label>Amount</label>
-		                         				<input type="text" name="amount" class="form-control" disabled="disabled" value="<?php echo number_format($getSalesInvoice['amount'], 2)?>" />
+		                         				<input type="text" name="amount" class="selcls form-control" disabled="disabled" value="<?php echo number_format($getSalesInvoice['amount'], 2)?>" />
 		                         			</div>
                      					</div>
                              		</div>
@@ -122,24 +134,24 @@
                              		<div id="deletedId{{ $sInvoice['id'] }}" class="form-row">
                          				<div class="col-md-1">
 	                     					<label>Qty</label>
-	                     					<input type="text" name="qty" class="form-control" value="{{ $sInvoice['qty']}}" />
+	                     					<input type="text" name="qty" class="selcls form-control" value="{{ $sInvoice['qty']}}" />
 	                         			</div>
 	                         				 <div class="col-md-2">
 		                                        <label>Body 400/KLS</label>
-		                                        <input type="text" name="body" class="form-control" value="{{ $sInvoice['body']}}" />
+		                                        <input type="text" name="body" class="selcls form-control" value="{{ $sInvoice['body']}}" />
 		                                    </div>
 		                                    <div class="col-md-2">
 		                                        <label>Head & Feet 200/KLS</label>
-		                                        <input type="text" name="headFeet" class="form-control" value="{{ $sInvoice['head_and_feet']}}" />
+		                                        <input type="text" name="headFeet" class="selcls form-control" value="{{ $sInvoice['head_and_feet']}}" />
 		                                    </div>
 		                         			<div class="col-md-4">
 		                         				<label>Item Description</label>
-		                         				<input type="text" name="itemDescription" class="form-control" value="{{ $sInvoice['item_description'] }}" />
+		                         				<input type="text" name="itemDescription" class="selcls form-control" value="{{ $sInvoice['item_description'] }}" />
 		                         			</div>
 		                         			
 		                         			<div class="col-md-1">
 		                         				<label>Amount</label>
-		                         				<input type="text" name="ampunt" class="form-control" disabled="disabled" value="<?php echo number_format(
+		                         				<input type="text" name="ampunt" class="selcls form-control" disabled="disabled" value="<?php echo number_format(
 		                         				$sInvoice['amount'], 2)?>" />
 		                         			</div>
 	                         				 <div class="col-lg-2">
@@ -181,31 +193,32 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
-	function confirmDelete(id){
-		var x = confirm("Do you want to delete this?");
+	const confirmDelete = (id) => {
+		const x = confirm("Do you want to delete this?");
 
-		if(x){
-			 $.ajax({
-              type: "DELETE",
-              url: '/lolo-pinoy-lechon-de-cebu/delete-sales-invoice/' + id,
-              data:{
-                _method: 'delete', 
-                "_token": "{{ csrf_token() }}",
-                "id": id
-              },
-              success: function(data){
-                console.log(data);
-                $("#deletedId"+id).fadeOut('slow');
-               
-              },
-              error: function(data){
-                console.log('Error:', data);
-              }
+			if(x){
+				$.ajax({
+				type: "DELETE",
+				url: '/lolo-pinoy-lechon-de-cebu/delete-sales-invoice/' + id,
+				data:{
+					_method: 'delete', 
+					"_token": "{{ csrf_token() }}",
+					"id": id
+				},
+				success: function(data){
+				
+					$("#deletedId"+id).fadeOut('slow');
+				
+				},
+				error: function(data){
+					console.log('Error:', data);
+				}
 
-            });
-		}else{
-			return false;
-		}
+				});
+			}else{
+				return false;
+			}
 	}
+	
 </script>
 @endsection

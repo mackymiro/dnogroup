@@ -13,9 +13,21 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <div class="sb-sidenav-menu-heading">&nbsp;Credit Cards</div>
-          <a class="dropdown-item" href="">ALD ACCOUNTS</a>
+          <a class="dropdown-item" href="{{ url('dno-personal') }}">ALD ACCOUNTS</a>
           <a class="dropdown-item" href="#">MOD ACCOUNTS</a>
            <div class="sb-sidenav-menu-heading">&nbsp;Cash Expenses</div>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           <i class="fas fa-credit-card"></i>
+          <span>Credit Card Accounts</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <div class="sb-sidenav-menu-heading">&nbsp;Credit Cards</div>
+          <a class="dropdown-item" href="{{ url('dno-personal/credit-card/ald-accounts') }}">ALD ACCOUNTS</a>
+          <a class="dropdown-item" href="{{ url('dno-personal/credit-card/mod-accounts') }}">MOD ACCOUNTS</a>
+           
         </div>
       </li>
        <li class="nav-item dropdown">

@@ -1,6 +1,18 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('title', 'Sales Invoice Form| ')
 @section('content')
+<style>
+.selcls { 
+    padding: 9px; 
+    border: solid 1px #517B97; 
+    outline: 0; 
+    background: -webkit-gradient(linear, left top, left 25, from(#FFFFFF), color-stop(4%, #CAD9E3), to(#FFFFFF)); 
+    background: -moz-linear-gradient(top, #FFFFFF, #CAD9E3 1px, #FFFFFF 25px); 
+    box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+    -moz-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+    -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+	} 
+</style> 
 <div id="wrapper">
 	<!-- Sidebar -->
      @include('sidebar.sidebar')
@@ -32,14 +44,14 @@
                                     <div class="col-md-2">
                                         
                                         <label>Date</label>
-                                        <input type="text" name="date" class="form-control" required="required" />
+                                        <input type="text" name="date" class="selcls form-control" required="required" />
                                        
 
                                     </div>
                          			<div class="col-md-2">
 
                      					<label>Invoice #</label>
-                     					<input type="text" name="invoiceNum" class="form-control" required="required" />
+                     					<input type="text" name="invoiceNum" class="selcls form-control" required="required" />
                      					@if($errors->has('invoiceNum'))
 		                                  <span class="alert alert-danger">
 		                                    <strong>{{ $errors->first('invoiceNum') }}</strong>
@@ -49,7 +61,7 @@
                          			</div>
                          			<div class="col-md-4">
                          				<label>Ordered By</label>
-                         				<input type="text" name="orderedBy" class="form-control" required="required" />
+                         				<input type="text" name="orderedBy" class="selcls form-control" required="required" />
                          				@if($errors->has('orderedBy'))
 		                                  <span class="alert alert-danger">
 		                                    <strong>{{ $errors->first('orderedBy') }}</strong>
@@ -58,7 +70,7 @@
                          			</div>
                          			<div class="col-md-4">
                          				<label>Address</label>
-                         				<input type="text" name="address" class="form-control" /> 
+                         				<input type="text" name="address" class="selcls form-control" /> 
                          			</div>
                          		</div>
                          	</div>
@@ -66,20 +78,20 @@
                          		<div class="form-row">
                          			<div class="col-lg-1">
                      					<label>Qty</label>
-                     					<input type="text" name="qty" class="form-control" />
+                     					<input type="text" name="qty" class="selcls form-control" />
                          			</div>
                          			
                                     <div class="col-md-2">
                                         <label>Body 400/KLS</label>
-                                        <input type="text" name="body" class="form-control" />
+                                        <input type="text" name="body" class="selcls form-control" />
                                     </div>
                                     <div class="col-md-2">
                                         <label>Head & Feet 200/KLS</label>
-                                        <input type="text" name="headFeet" class="form-control" />
+                                        <input type="text" name="headFeet" class="selcls form-control" />
                                     </div>
                          			<div class="col-md-4">
                          				<label>Item Description</label>
-                         				<input type="text" name="itemDescription" class="form-control" />
+                         				<input type="text" name="itemDescription" class="selcls form-control" />
                          			</div>
                          			
                          			

@@ -1,7 +1,19 @@
 @extends('layouts.dno-personal-app')
 @section('title', 'Payment Voucher Form |')
 @section('content')
-
+<style>
+.selcls { 
+    padding: 9px; 
+    border: solid 1px #517B97; 
+    min-height: 40px;
+    outline: 0; 
+    background: -webkit-gradient(linear, left top, left 25, from(#FFFFFF), color-stop(4%, #CAD9E3), to(#FFFFFF)); 
+    background: -moz-linear-gradient(top, #FFFFFF, #CAD9E3 1px, #FFFFFF 25px); 
+    box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+    -moz-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+    -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+	} 
+</style>
 <script>
   $(document).ready(function(){
       $('.alert-success').fadeIn().delay(3000).fadeOut();
@@ -43,24 +55,25 @@
                       	  				<div class="form-row">
                       	  						<div class="col-lg-4">
                       	  							<label>Paid To</label>
-                      	  							<input type="text" name="paidTo" class="form-control" required="required" />
+                      	  						  <select name="paidTo" class="selcls form-control">
+                                            <option value="0">--Please Select--</option>
+                                            @foreach($getCreditCards as $getCreditCard)
+                                            <option value="">{{ $getCreditCard['bank_name'] }}</option>
+                                            @endforeach
+                                        </select>
                       	  						</div>
-                                      @if ($errors->has('paidTo'))
-                                        <span class="alert alert-danger">
-                                          <strong>{{ $errors->first('paidTo') }}</strong>
-                                        </span>
-                                      @endif
+                                    
                     	  						  <div class="col-md-2">
-                                         <label>Invoice #</label>
-                                          <input type="text" name="invoiceNumber" class="form-control"  required="required" value="{{ old('invoiceNumber') }}" />
+                                         <label>Account #</label>
+                                          <input type="text" name="accountNo" class="selcls form-control"  required="required" value="{{ old('invoiceNumber') }}" />
                                       </div>
                       	  						<div class="col-md-2">
                                           <label>Issued Date </label>
-                                          <input type="text" name="issuedDate" class="form-control" value="{{ old('issuedDate') }}" />
+                                          <input type="text" name="issuedDate" class="selcls form-control" value="{{ old('issuedDate') }}" />
                                       </div>
                                        <div class="col-md-2">
                                           <label>Delivered Date </label>
-                                          <input type="text" name="deliveredDate" class="form-control" value="{{ old('deliveredDate') }}" />
+                                          <input type="text" name="deliveredDate" class="selcls form-control" value="{{ old('deliveredDate') }}" />
                                       </div>
                                      
                       	  				</div>
@@ -69,11 +82,11 @@
                                       <div class="form-row">
                                           <div class="col-lg-4">
                                               <label>Particulars</label>
-                                              <input type="text" name="particulars" class="form-control" required="required"/>
+                                              <input type="text" name="particulars" class="selcls form-control" required="required"/>
                                           </div>
                                           <div class="col-lg-2">
                                               <label>Amount</label>
-                                              <input type="text" name="amount" class="form-control"  required="required"/>
+                                              <input type="text" name="amount" class="selcls form-control"  required="required"/>
                                           </div>
                                       </div>
                                   </div>

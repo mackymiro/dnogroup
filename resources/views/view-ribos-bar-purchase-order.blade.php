@@ -27,7 +27,7 @@
                             View Purchase Order
                              <div class="float-right">
                                
-                                 <a href="{{ action('LoloPinoyLechonDeCebuController@printPO', $purchaseOrder['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                                 <a href="{{ action('RibosBarController@printPO', $purchaseOrder['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                                
                               </div>
                         </div>
@@ -38,9 +38,10 @@
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th width="20%">Paid To</th>
+                                                <th width="25%">Paid To</th>
                                                 <th>{{ $purchaseOrder['paid_to'] }}</th>
                                             </tr>
+		                                            
                                             <tr>
                                                 <th>Address</th>
                                                 <th>{{ $purchaseOrder['address']}}</th>
@@ -64,39 +65,42 @@
                                         </thead>
                                     </table>
                                    
-                                  </div>
+                                  </div
                                 </div>
                                </div>
                                <table class="table table-striped">
                                   <thead>
                                     <tr>
-                                      <th class="bg-info" style="color:white;">QUANTITY</th>
-                                      <th class="bg-info" style="color:white;">DESCRIPTION</th>
-                                      <th class="bg-info" style="color:white;">UNIT PRICE</th>
-                                      <th class="bg-info" style="color:white;">AMOUNT</th>
+                                        <th class="bg-info" style="color:white;">QUANTITY</th>
+		                                      <th class="bg-info" style="color:white;">DESCRIPTION</th>
+		                                      <th class="bg-info" style="color:white;">UNIT PRICE</th>
+		                                      <th class="bg-info" style="color:white;">AMOUNT</th>
+											                 
                                     </tr>
                                   </thead>
                                   <tbody>
 
                                     <tr>
-                                      <td>{{ $purchaseOrder['quantity']}}</td>
-                                      <td>{{ $purchaseOrder['description']}}</td>
-                                      <td>{{ $purchaseOrder['unit_price']}}</td>
-                                      <td><?php echo number_format($purchaseOrder['amount'], 2); ?></td>
+                                        <td>{{ $purchaseOrder['quantity']}}</td>
+                                        <td>{{ $purchaseOrder['description']}}</td>
+                                        <td>{{ $purchaseOrder['unit_price']}}</td>
+                                        <td><?php echo number_format($purchaseOrder['amount'], 2); ?></td>
+												                 
                                     </tr>
                                     @foreach($pOrders as $pOrder)
                                     <tr>
-                                      <td>{{ $pOrder['quantity'] }}</td>
-                                      <td>{{ $pOrder['description'] }}</td>
-                                      <td>{{ $pOrder['unit_price'] }}</td>
-                                      <td><?php echo number_format($pOrder['amount'], 2) ?></td>
+                                        <td>{{ $pOrder['quantity']}}</td>
+                                        <td>{{ $pOrder['description']}}</td>
+                                        <td>{{ $pOrder['unit_price']}}</td>
+                                        <td><?php echo number_format($pOrder['amount'], 2); ?></td>
                                     </tr> 
                                     @endforeach
-                                    <tr>
+                                    <tr>  
                                       <td></td>
                                       <td></td>
                                       <td><strong>Total</strong></td>
                                       <td>₱ <?php echo number_format($sum, 2)?></td>
+                                      
                                     </tr>
                                     </tbody>
                                </table>

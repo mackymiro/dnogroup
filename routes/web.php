@@ -826,10 +826,15 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('mr-potato.update');
 
 	//add new Po
-	Route::get(
+	Route::post	(
 		'/mr-potato/add-new/{id}', 
 		'MrPotatoController@addNew')
 		->name('mr-potato.addNew');
+
+	Route::get(
+		'/mr-potato/purchase-order/printPO/{id}',
+		'MrPotatoController@printPO')
+		->name('mr-potato.printPO');
 
 	Route::post(
 		'/mr-potato/add-new-purchase-order/{id}', 
@@ -1132,7 +1137,7 @@ Route::group(['middleware' => ['auth']], function(){
 		'RibosBarController@update')
 		->name('ribos-bar.update');
 
-	Route::get(
+	Route::post(
 		'/ribos-bar/add-new/{id}',
 		'RibosBarController@addNew')
 		->name('ribos-bar.addNew');
@@ -1146,6 +1151,12 @@ Route::group(['middleware' => ['auth']], function(){
 		'/ribos-bar/update-po/{id}',
 		'RibosBarController@updatePo')
 		->name('ribos-bar.updatePo');
+
+	Route::get(
+		'/ribos-bar/purchase-order/printPO/{id}',
+		'RibosBarController@printPO')
+		->name('ribos-bar.printPO');
+	
 
 	Route::delete(
 		'/ribos-bar/delete/{id}',
@@ -1436,7 +1447,7 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('ribos-bar.printCashiersReport');
 
 
-		//DNO Personal
+	//DNO Personal
 	Route::get('/dno-personal', 'DnoPersonalController@index')->name('dno-personal');
 
 	Route::get(
@@ -1488,6 +1499,36 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dno-personal/delete-transaction-list/{id}',
 		'DnoPersonalController@destroyTransactionList')
 		->name('dno-personal.destroyTransactionList');
+
+	Route::post(
+		'/dno-personal/store-credit-card',
+		'DnoPersonalController@storeCreditCard')
+		->name('dno-pesonal.storeCreditCard');
+
+	Route::get(
+		'/dno-personal/credit-card/ald-accounts',
+		'DnoPersonalController@creditCardAccount')
+		->name('dno-personal.creditCardAccount');
+
+	Route::get(
+		'/dno-personal/credit-card/mod-accounts',
+		'DnoPersonalController@creditCardAccount')
+		->name('db-personal.creditCardAccount');
+
+	Route::get(
+		'/dno-personal/credit-card/accounts/edit/{id}',
+		'DnoPersonalController@editCreditCardAccount')
+		->name('dno-personal.creditCardAccount');
+
+	Route::patch(
+		'/dno-personal/credit-card/update/{id}',
+		'DnoPersonalController@updateCard')
+		->name('dno-personal.updateCard');
+
+	Route::delete(
+		'/dno-personal/credit-card/delete/{id}',
+		'DnoPersonalController@destroyCreditCard')
+		->name('dno-personal.destroyCreditCard');
 
 	//DNO food ventures
 	Route::get(

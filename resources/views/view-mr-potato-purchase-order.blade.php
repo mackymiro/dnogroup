@@ -15,8 +15,12 @@
             </ol>
             <a href="{{ url('mr-potato/purchase-order-lists') }}">Back to Lists</a>
              <div class="col-lg-12">
-            	  <img src="{{ asset('images/mr-potato.png')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Mr Potato">
-            	 
+				<div style="float:left; margin-left:140px">
+					<img src="{{ asset('images/ribos.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Mr Potato">
+				</div>
+				<div style="flaot:left; margin-right:50px;">
+						<img src="{{ asset('images/mr-potato.png')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Mr Potato">
+				</div>
             	 <h4 class="text-center"><u>VIEW PURCHASE ORDER</u></h4>
             </div>
             <div class="row">
@@ -27,7 +31,7 @@
                             View Purchase Order
                              <div class="float-right">
                                
-                                 <a href="{{ action('LoloPinoyLechonDeCebuController@printPO', $purchaseOrder['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                                 <a href="{{ action('MrPotatoController@printPO', $purchaseOrder['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                                
                               </div>
                         </div>
@@ -38,12 +42,13 @@
 		                                    <table class="table table-bordered">
 		                                        <thead>
 		                                            <tr>
-		                                                <th width="20%">Paid To</th>
-		                                                <th>{{ $purchaseOrder['paid_to'] }}</th>
+		                                                <th width="25%">Branch Location</th>
+		                                                <th>{{ $purchaseOrder['branch_location'] }}</th>
 		                                            </tr>
-		                                            <tr>
-		                                                <th>Address</th>
-		                                                <th>{{ $purchaseOrder['address']}}</th>
+		                                            
+													<tr>
+		                                                <th>Ordered By</th>
+		                                                <th>{{ $purchaseOrder['ordered_by']}}</th>
 		                                            </tr>
 		                                        </thead>
 
@@ -68,25 +73,29 @@
                                  	 <table class="table table-striped">
                      	 		 		  <thead>
 		                                    <tr>
-		                                      <th class="bg-info" style="color:white;">QUANTITY</th>
-		                                      <th class="bg-info" style="color:white;">DESCRIPTION</th>
-		                                      <th class="bg-info" style="color:white;">UNIT PRICE</th>
-		                                      <th class="bg-info" style="color:white;">AMOUNT</th>
+		                                      <th class="bg-info" style="color:white;">PARTICULARS</th>
+		                                      <th class="bg-info" style="color:white;">QTY</th>
+		                                      <th class="bg-info" style="color:white;">UNIT</th>
+		                                      <th class="bg-info" style="color:white;">PRICE</th>
+											  <th class="bg-info" style="color:white;">SUBTOTAL</th>
 		                                    </tr>
 		                                  </thead>
 		                                   <tbody> 
 		                                   		<tr>
-			                                      <td>{{ $purchaseOrder['quantity']}}</td>
-			                                      <td>{{ $purchaseOrder['description']}}</td>
-			                                      <td>{{ $purchaseOrder['unit_price']}}</td>
-			                                      <td><?php echo number_format($purchaseOrder['amount'], 2); ?></td>
+			                                      <td>{{ $purchaseOrder['particulars']}}</td>
+			                                      <td>{{ $purchaseOrder['qty']}}</td>
+			                                      <td>{{ $purchaseOrder['unit']}}</td>
+			                                      <td><?php echo number_format($purchaseOrder['price'], 2); ?></td>
+												  <td><?php echo number_format($purchaseOrder['subtotal'], 2); ?></td>
 			                                    </tr>
 			                                    @foreach($pOrders as $pOrder)
 			                                    <tr>
-			                                      <td>{{ $pOrder['quantity'] }}</td>
-			                                      <td>{{ $pOrder['description'] }}</td>
-			                                      <td>{{ $pOrder['unit_price'] }}</td>
-			                                      <td><?php echo number_format($pOrder['amount'], 2) ?></td>
+			                                      <td>{{ $pOrder['particulars']}}</td>
+			                                      <td>{{ $pOrder['qty']}}</td>
+			                                      <td>{{ $pOrder['unit']}}</td>
+			                                      <td><?php echo number_format($pOrder['price'], 2); ?></td>
+												  <td><?php echo number_format($pOrder['subtotal'], 2); ?></td>
+												 
 			                                    </tr> 
 			                                    @endforeach
 			                                    <tr>
@@ -94,6 +103,7 @@
 			                                      <td></td>
 			                                      <td><strong>Total</strong></td>
 			                                      <td>₱ <?php echo number_format($sum, 2)?></td>
+												  <td></td>
 			                                    </tr>
 			                                    </tbody>
                                  	 </table>

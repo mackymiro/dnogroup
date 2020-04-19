@@ -27,7 +27,7 @@
 				  						<tr>
 				  							<th>Action</th>
 			  								<th>PO #</th>
-			  								<th>Paid to</th>
+			  								<th>Paid To</th>
 			  								<th>Date</th>
 			  								<th>Created by</th>
 				  						</tr>
@@ -35,8 +35,8 @@
 				  					<tfoot>
 				  						<tr>
 				  							<th>Action</th>
-			  								<th>PO Number</th>
-			  								<th>Paid to</th>
+			  								<th>PO #</th>
+			  								<th>Paid To</th>
 			  								<th>Date</th>
 			  								<th>Created by</th>
 				  						</tr>
@@ -82,30 +82,30 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
-    function confirmDelete(id){
-        var x = confirm("Do you want to delete this?");
-        if(x){
-            $.ajax({
-              type: "DELETE",
-              url: '/ribos-bar/delete/' + id,
-              data:{
-                _method: 'delete', 
-                "_token": "{{ csrf_token() }}",
-                "id": id
-              },
-              success: function(data){
-                console.log(data);
-                $("#deletedId"+id).fadeOut('slow');
-               
-              },
-              error: function(data){
-                console.log('Error:', data);
-              }
+    const confirmDelete = (id) => {
+        const x = confirm("Do you want to delete this?");
+          if(x){
+              $.ajax({
+                type: "DELETE",
+                url: '/ribos-bar/delete/' + id,
+                data:{
+                  _method: 'delete', 
+                  "_token": "{{ csrf_token() }}",
+                  "id": id
+                },
+                success: function(data){
+                  $("#deletedId"+id).fadeOut('slow');
+                
+                },
+                error: function(data){
+                  console.log('Error:', data);
+                }
 
-            });
-        }else{
-            return false;
-        }
+              });
+          }else{
+              return false;
+          }
     }
+  
 </script>
 @endsection

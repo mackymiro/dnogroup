@@ -37,65 +37,57 @@
                                  <p class="alert alert-success">{{ Session::get('SuccessE') }}</p>
                                 @endif 
                                <form action="{{ action('RibosBarController@update', $purchaseOrder['id']) }}" method="post">
-                               {{csrf_field()}}
-                              <input name="_method" type="hidden" value="PATCH">
-                              <div class="form-group">
-                                <div class="form-row">
-                                  <div class="col-lg-6">
-                                    <label>Paid to</label>
-                                  <input type="text" name="paidTo" class="form-control" required="required" value="{{ $purchaseOrder['paid_to'] }}" />
-                                  <label>Address</label>
-                                  <input type="text" name="address" class="form-control" required="required" value="{{ $purchaseOrder['address'] }}" />
-                                  <label>Checked By</label>
-                                  <select class="form-control" name="checkedBy">
-                                      <option value="0">--Please Select--</option>
-                                      @foreach($getUsers as $getUser)
-                                      <option value="{{ $getUser['first_name']}} {{ $getUser['last_name'] }}">{{ $getUser['first_name']}} {{ $getUser['last_name'] }}</option>
-                                      @endforeach
-                                  </select>
-                                  </div>
-                                  <div class="col-lg-6">
-                                    <label>P.O Number</label>
-                                    <input type="text" name="poNum" class="form-control" disabled="disabled"  value="{{ $purchaseOrder['p_o_number'] }}" />
-                                    <label>Date</label>
-                                    <input type="text" name="date" id="datepicker" class="form-control" required="required" value="{{ $purchaseOrder['date'] }}" />
-                                    <label>Requested By</label>
-                                    <select class="form-control" name="requestedBy">
-                                        <option value="0">--Please Select--</option>
-                                        @foreach($getUsers as $getUser)
-                                        <option value="{{ $getUser['first_name']}} {{ $getUser['last_name'] }}">{{ $getUser['first_name']}} {{ $getUser['last_name']}}</option>
-                                        @endforeach
-                                    </select>
-                                  </div>
+                                 {{csrf_field()}}
+                                <input name="_method" type="hidden" value="PATCH">
+                                <div class="form-group">
+	                            		<div class="form-row">
+                                      <div class="col-lg-4">
+                                          <label>Paid To</label>
+                                          <input type="text" name="paidTo" class="form-control" value="{{ $purchaseOrder['paid_to']}}" />
+                                          
+                                        </div>
+                                              
+                                      <div class="col-lg-2">
+                                        <label>Address</label>
+                                        <input type="text" name="address" class="form-control" value="{{ $purchaseOrder['address']}}" />
+                                      </div>
+                                 
+                                     <div class="col-lg-4">	
+                                        <label>Date</label>
+                                        <input type="text" name="date" class="form-control" value="{{ $purchaseOrder['date'] }}" />
+                                        
+                                      </div>
                                 </div>
                               </div>
-                              <div class="form-group">
-                                <div class="form-row">
-                                  <div class="col-lg-1">
-                                    <label>Quantity</label>
-                                    <input type="text" name="quantity" class="form-control" required="required" value="{{ $purchaseOrder['quantity'] }}" />
-
-                                  </div>
-                                  <div class="col-lg-4">
-                                    <label>Description</label>
-                                    <input type="text" name="description" class="form-control" required="required" value="{{ $purchaseOrder['description'] }}" />
-                                  </div>
-                                  <div class="col-lg-4">
-                                    <label>Unit Price</label>
-                                    <input type="text" name="unitPrice" class="form-control" required="required" value="{{ $purchaseOrder['unit_price'] }}" />
-                                  </div>
+                          	  <div class="form-group">
+	                            		<div class="form-row">
                                   <div class="col-lg-2">
-                                    <label>Amount</label>
-                                    <input type="text" name="amount" class="form-control" required="required" value="{{ $purchaseOrder['amount'] }}" />
+	                            				<label>Quantity</label>
+                                      <input type="text" name="quantity" class="form-control"  value="{{ $purchaseOrder['quantity']}}"/>
+	                            			</div>
+											
+	                            			<div class="col-lg-4">
+	                            				<label>Description</label>
+	                            				<input type="text" name="description" class="form-control"  value="{{ $purchaseOrder['description'] }}"/>
+	                            			
+	                            			</div>
+                                  
+                                    <div class="col-lg-2">
+	                            				<label>Unit Price</label>
+                                      <input type="text" name="unitPrice" class="form-control"  value="{{ $purchaseOrder['unit_price']}}"/>
+	                            			</div>
+                                    <div class="col-lg-2">
+                                        <label>Amount</label>
+                                        <input type="text" name="amount" class="form-control"  value="{{ $purchaseOrder['amount']}}" />
+                                        
+                                    </div>
                                   </div>
-                                  <br>
-                                  <div class="col-lg-12 float-right">
-                                    <br>
-                                    <br>
-                                    <input type="submit" class="btn btn-success"  value="Update Purchase Order" />
-                                  </div>
-                                </div>  
+	                            		
                               </div>
+                                  <br>
+	                                <div>
+	                                    <input type="submit" class="btn btn-success float-right" value="Update" />
+	                                </div>
                               
                               </form>
                          </div>
@@ -103,7 +95,69 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-12">
+            <div class="col-lg-4">
+                    <div class="card mb-3">
+                         <div class="card-header">
+                             <i class="fa fa-plus" aria-hidden="true"></i>
+                              Add 
+                          </div>
+                          <form action="{{ action('RibosBarController@addNew', $purchaseOrder['id'] )}}" method="post">
+                             {{csrf_field()}}
+                          <div class="card-body">
+                              @if(session('addNewSuccess'))
+	                             	<p class="alert alert-success">{{ Session::get('addNewSuccess') }}</p>
+	                            @endif
+                              <div class="form-group">  
+                                  <div class="form-row">
+                                      <div class="col-lg-8">
+                                          <label>Quantity</label>
+                                          <input type="text" name="quantity" class="form-control" />
+                                      </div>
+                                      
+                                  </div>
+                                  <div class="form-group">
+                                      <div class="form-row">
+                                          <div class="col-lg-8">
+                                              <label>Description</label>
+                                              <input type="text" name="description" class="form-control" />
+                                            
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="form-group">
+                                      <div class="form-row">
+                                        <div class="col-lg-8">
+                                            <label>Unit Price</label>
+                                            <input type="text" name="unitPrice" class="form-control" />
+                                        </div>
+                                      </div>
+                                  </div>
+                                  @if ($errors->has('amount'))
+                                    <span class="alert alert-danger">
+                                      <strong>{{ $errors->first('amount') }}</strong>
+                                    </span>
+											            @endif
+                                  <div class="form-group">
+                                      <div class="form-row">
+                                          <div class="col-lg-8">
+                                              <label>Amount</label>
+                                              <input type="text" name="amount" class="form-control" required="required" />
+                                            
+                                          </div>
+                                      </div>
+                                  </div>
+                                 
+                                  <div>
+                                    @if($user->role_type == 1)
+                                       <input type="submit" class="btn btn-primary" value="Add" />
+                                    @endif
+                                   </div>
+                              </div>
+                              </form>
+                          </div>
+                    </div>
+                </div>
+                <div class="col-lg-8">
                      <div class="card mb-3">
                         <div class="card-header">
                        <i class="fab fa-first-order" aria-hidden="true"></i>
@@ -114,49 +168,52 @@
                               @endif 
                             @foreach($pOrders as $pOrder)
                             <form action="{{ action('RibosBarController@updatePo', $pOrder['id']) }}" method="post">
+                            <div id="deletedId{{ $pOrder['id'] }}">
                             <div class="form-group">
                                  {{csrf_field()}}
                                  <input name="_method" type="hidden" value="PATCH">
 
-                                <div id="deletedId{{ $pOrder['id'] }}" class="form-row">
-                                    <div class="col-lg-1">
-                                      
-                                      <label>Quantity</label>
-                                      <input type="text" name="quant" class="form-control" required="required" value="{{ $pOrder['quantity'] }}" />
-
-                                    </div>
-                                    <div class="col-lg-2">
-                                      <label>Description</label>
-                                      <input type="text" name="desc" class="form-control" required="required" value="{{ $pOrder['description'] }}" />
+                                <div  class="form-row">
+                                <div class="col-lg-2">
+                                        <label>Quantity</label>
+                                        <input type="text" name="quantity" class="form-control" value="{{ $pOrder['quantity']}}" />
+                                    
                                     </div>
                                     <div class="col-lg-4">
-                                      <label>Unit Price</label>
-                                      <input type="text" name="unitP" class="form-control" required="required" value="{{ $pOrder['unit_price'] }}" />
+                                      <label>Description</label>
+                                      <input type="text" name="description" class="form-control" value="{{ $pOrder['description']}}" />
+                                    
                                     </div>
                                     <div class="col-lg-2">
-                                      <label>Amount</label>
-                                      <input type="text" name="amt" class="form-control" required="required" value="{{ $pOrder['amount'] }}" />
+                                      <label>Unit Price</label>
+                                      <input type="text" name="unitPrice" class="form-control" value="{{ $pOrder['unit_price']}}" />
+                                    
                                     </div>
-                                     <div class="col-lg-2">
-                                      <br>
-                                      <input type="hidden" name="poId" value="{{ $purchaseOrder['id'] }}" />
-                                      <input type="submit" class="btn btn-success" value="Update" />
-                                      @if($user->role_type == 1)
-                                      <a id="delete" onClick="confirmDelete('{{ $pOrder['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
-                                      @endif
+                                  
+                                    <div class="col-lg-2">
+                                      <label>Amount</label>
+                                      <input type="text" name="amount" class="form-control" value="{{ $pOrder['amount']}}" />
+                                     
                                     </div>
                                 </div>
                                
                             </div>
+                            <div class="form-group">
+                                    <div class="form-row">
+                                        <div class="col-lg-4">
+                                          
+                                            <input type="hidden" name="poId" value="{{ $purchaseOrder['id'] }}" />
+                                            <input type="submit" class="btn btn-success" value="Update" />
+                                            @if($user->role_type == 1)
+                                            <a id="delete" onClick="confirmDelete('{{ $pOrder['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
+                                            @endif
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div>
                           </form>
                             @endforeach
-                            <div>
-                              @if($user->role_type == 1)
-                              <a href="{{ url('ribos-bar/add-new/'.$purchaseOrder['id']) }}" class="btn btn-primary">Add New</a>
-                              @endif
-                            </div>
-                            
-                            <br>
+                          
                         </div>
                      </div>
                 </div>
@@ -181,31 +238,34 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
-   function confirmDelete(id){
-      var x = confirm("Do you want to delete this?");
-        if(x){
-            $.ajax({
-              type: "DELETE",
-              url: '/ribos-bar/delete/' + id,
-              data:{
-                _method: 'delete', 
-                "_token": "{{ csrf_token() }}",
-                "id": id
-              },
-              success: function(data){
-                console.log(data);
-                $("#deletedId"+id).fadeOut('slow');
-               
-              },
-              error: function(data){
-                console.log('Error:', data);
-              }
+   const confirmDelete = (id) => {
+      const  x = confirm("Do you want to delete this?");
+          if(x){
+              $.ajax({
+                type: "DELETE",
+                url: '/ribos-bar/delete/' + id,
+                data:{
+                  _method: 'delete', 
+                  "_token": "{{ csrf_token() }}",
+                  "id": id
+                },
+                success: function(data){
+                  console.log(data);
+                  $("#deletedId"+id).fadeOut('slow');
+                
+                },
+                error: function(data){
+                  console.log('Error:', data);
+                }
 
-            });
+              });
 
-        }else{
-            return false;
-        }
+          }else{
+              return false;
+          }
+
    }
+ 
 </script>
+
 @endsection

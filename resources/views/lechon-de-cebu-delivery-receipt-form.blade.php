@@ -1,6 +1,18 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('title', 'Delivery Receipt Form| ')
 @section('content')
+<style>
+.selcls { 
+    padding: 9px; 
+    border: solid 1px #517B97; 
+    outline: 0; 
+    background: -webkit-gradient(linear, left top, left 25, from(#FFFFFF), color-stop(4%, #CAD9E3), to(#FFFFFF)); 
+    background: -moz-linear-gradient(top, #FFFFFF, #CAD9E3 1px, #FFFFFF 25px); 
+    box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+    -moz-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+    -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+	} 
+</style>
 <div id="wrapper">
 	<!-- Sidebar -->
      @include('sidebar.sidebar')
@@ -31,7 +43,7 @@
                         		<div class="form-row">
                     				<div class="col-md-4">
                     					<label>Sold To</label>
-                    					<input type="text" name="soldTo" class="form-control" required="required" />
+                    					<input type="text" name="soldTo" class="selcls form-control" required="required" />
                     					@if ($errors->has('soldTo'))
 		                                  <span class="alert alert-danger">
 		                                    <strong>{{ $errors->first('soldTo') }}</strong>
@@ -41,7 +53,7 @@
                     				<div class="col-md-2">
                 						<label>Time</label>
                 						<div id="app-time">
-                                            <select name="time" class="form-control">
+                                            <select name="time" class="selcls form-control">
                                                 <option value="0">--Please Select--</option>
                                                 <option v-for="time in times" v-bind:value="time.value">
                                                     @{{ time.text }}
@@ -51,11 +63,11 @@
                     				</div>
                                     <div class="col-md-2">
                                         <label>Date To be Delivered</label>
-                                        <input type="text" name="dateDelivered" class="form-control" />
+                                        <input type="text" name="dateDelivered" class="selcls form-control" />
                                     </div>
                     				<div class="col-md-4">
                     					<label>Delivered To</label>
-                    					<input type="text" name="deliveredTo" class="form-control" />
+                    					<input type="text" name="deliveredTo" class="selcls form-control" />
                     				</div>
                         		</div>
                         	</div>
@@ -63,15 +75,15 @@
                         		<div class="form-row">
                         			<div class="col-md-4">
                         				<label>Contact Person</label>
-                        				<input type="text" name="contactPerson" class="form-control" />
+                        				<input type="text" name="contactPerson" class="selcls form-control" />
                         			</div>
                         			<div class="col-md-2">
                         				<label>Mobile #</label>
-                        				<input type="" name="mobile" class="form-control" />
+                        				<input type="" name="mobile" class="selcls form-control" />
                         			</div>
                         			<div class="col-md-4">
                         				<label>Special Instruction/Request</label>
-                        				<input type="text" name="specialInstruction" class="form-control" />
+                        				<input type="text" name="specialInstruction" class="selcls form-control" />
                         			</div>
                         		</div>
                         	</div>
@@ -79,11 +91,11 @@
                                 <div class="form-row">
                                     <div class="col-md-4">  
                                         <label>Consignee Name</label>
-                                        <input type="text" name="consigneeName" class="form-control" />
+                                        <input type="text" name="consigneeName" class="selcls form-control" />
                                     </div>
                                     <div class="col-md-4">
                                         <label>Consignee Contact #</label>
-                                        <input type="text" name="consigneeContact" class="form-control" />
+                                        <input type="text" name="consigneeContact" class="selcls form-control" />
                                     </div>
                                 </div>
                             </div>
@@ -91,15 +103,15 @@
                     			<div class="form-row">
                     				<div class="col-md-1">
                 						<label>QTY</label>
-                						<input type="text" name="qty" class="form-control" required="required" />
+                						<input type="text" name="qty" class="selcls form-control" required="required" />
                     				</div>
                     				<div class="col-md-4">
                     					<label>Description</label>
-                    					<input type="text" name="description" class="form-control" required="required" />
+                    					<input type="text" name="description" class="selcls form-control" required="required" />
                     				</div>
                     				<div class="col-md-2">
                     					<label>Price</label>
-                    					<input type="text" name="price" class="form-control" required="required" />
+                    					<input type="text" name="price" class="selcls form-control" required="required" />
                     				</div>
                     			</div>
                         	</div>

@@ -18,6 +18,30 @@ class MrPotatoController extends Controller
 {     
 
     //
+    public function printPO($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $purchaseOrder = MrPotatoPurchaseOrder::find($id);
+
+          //
+        $pOrders = MrPotatoPurchaseOrder::where('po_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = MrPotatoPurchaseOrder::where('id', $id)->sum('price');
+
+        //
+        $countAmount = MrPotatoPurchaseOrder::where('po_id', $id)->sum('price');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+
+        $pdf = PDF::loadView('printMrPotatoPO', compact('purchaseOrder', 'pOrders', 'sum'));
+
+        return $pdf->download('mr-potato-purchase-order.pdf');
+    }
+
+    //
     public function printPayables($id){
         $ids = Auth::user()->id;
         $user = User::find($ids);
@@ -902,10 +926,11 @@ class MrPotatoController extends Controller
     public function updatePo(Request $request, $id){
         $order = MrPotatoPurchaseOrder::find($id);
         
-        $order->quantity = $request->get('quantity');
-        $order->description = $request->get('description');
-        $order->unit_price = $request->get('unitPrice');
-        $order->amount = $request->get('amount');
+        $order->particulars = $request->get('particulars');
+        $order->qty = $request->get('qty');
+        $order->unit = $request->get('unit');
+        $order->price = $request->get('price');
+        $order->subtotal = $request->get('subtotal');
 
         $order->save();
 
@@ -914,44 +939,44 @@ class MrPotatoController extends Controller
         return redirect('mr-potato/edit-mr-potato-purchase-order/'.$request->get('poId'));
     }
 
-    //add new purchase order
-    public function addNewPurchaseOrder(Request $request, $id){
-         $ids = Auth::user()->id;
+  
+    //add new pO
+    public function addNew(Request $request, $id){
+
+        $ids = Auth::user()->id;
         $user = User::find($ids);
+        
         
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 
         $name  = $firstName.$lastName;
 
+         //
+         $this->validate($request, [
+            'price'=>'required',
+        ]);
+
         $pO = MrPotatoPurchaseOrder::find($id);
 
-        $addNewPurchaseOrder = new MrPotatoPurchaseOrder([
-             'user_id'=>$user->id,
+        $addNewParticulars = new MrPotatoPurchaseOrder([
+            'user_id'=>$user->id,
             'po_id'=>$id,
             'p_o_number'=>$pO['p_o_number'],
-            'quantity'=>$request->get('quantity'),
-            'description'=>$request->get('description'),
-            'unit_price'=>$request->get('unitPrice'),
-            'amount'=>$request->get('amount'),
-            'total_price'=>$request->get('amount'),
-            'prepared_by'=>$name,
+            'particulars'=>$request->get('particulars'),
+            'qty'=>$request->get('qty'),
+            'unit'=>$request->get('unit'),
+            'price'=>$request->get('price'),
+            'subtotal'=>$request->get('subtotal'),
             'created_by'=>$name,
         ]);
 
-        $addNewPurchaseOrder->save();
+        $addNewParticulars->save();
 
-        Session::flash('purchaseOrderSuccess', 'Successfully added purchase order');
+        Session::flash('addNewSuccess', 'Successfully added');
 
-        return redirect('mr-potato/add-new/'.$id);
-    }
+        return redirect('mr-potato/edit-mr-potato-purchase-order/'.$id);
 
-    //add new pO
-    public function addNew($id){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
-        
-        return view('add-new-mr-potato-purchase-order', compact('user', 'id'));
     }
 
     //purchase order
@@ -1008,12 +1033,10 @@ class MrPotatoController extends Controller
 
          //
          $this->validate($request, [
-            'paidTo' => 'required',
-            'address'=> 'required',
-            'quantity'=>'required',
-            'description'=>'required',
-            'unitPrice'=>'required',
-            'amount'=>'required',
+            'branchLocation' => 'required',
+            'orderedBy'=> 'required',
+            'unit'=>'required',
+            'price'=>'required',
         ]);
 
            //get the latest insert id query in table purchase order
@@ -1033,15 +1056,15 @@ class MrPotatoController extends Controller
 
         $purchaseOrder = new MrPotatoPurchaseOrder([
             'user_id' =>$user->id,
-            'paid_to'=>$request->get('paidTo'),
-            'address'=>$request->get('address'),
             'p_o_number'=>$uNum,
+            'branch_location'=>$request->get('branchLocation'),
             'date'=>$request->get('date'),
-            'quantity'=>$request->get('quantity'),
-            'description'=>$request->get('description'),
-            'unit_price'=>$request->get('unitPrice'),
-            'amount'=>$request->get('amount'),
-            'total_price'=>$request->get('amount'),
+            'ordered_by'=>$request->get('orderedBy'),
+            'particulars'=>$request->get('particulars'),
+            'qty'=>$request->get('qty'),
+            'unit'=>$request->get('unit'),
+            'price'=>$request->get('price'),
+            'subtotal'=>$request->get('subtotal'),
             'prepared_by'=>$name,
             'created_by'=>$name,
         ]);
@@ -1072,10 +1095,10 @@ class MrPotatoController extends Controller
         $pOrders = MrPotatoPurchaseOrder::where('po_id', $id)->get()->toArray();
 
           //count the total amount 
-        $countTotalAmount = MrPotatoPurchaseOrder::where('id', $id)->sum('amount');
+        $countTotalAmount = MrPotatoPurchaseOrder::where('id', $id)->sum('price');
 
         //
-        $countAmount = MrPotatoPurchaseOrder::where('po_id', $id)->sum('amount');
+        $countAmount = MrPotatoPurchaseOrder::where('po_id', $id)->sum('price');
 
         $sum  = $countTotalAmount + $countAmount;
 
@@ -1114,29 +1137,22 @@ class MrPotatoController extends Controller
          $ids = Auth::user()->id;
         $user = User::find($ids);
 
-         $firstName = $user->first_name;
+        $firstName = $user->first_name;
         $lastName = $user->last_name;
 
         $name  = $firstName.$lastName;
 
-        $paidTo = $request->get('paidTo');
-        $address = $request->get('address');
-        $quantity = $request->get('quantity');
-        $description = $request->get('description');
-        $date = $request->get('date');
-        $unitPrice = $request->get('unitPrice');
-        $amount = $request->get('amount');
-
         $purchaseOrder = MrPotatoPurchaseOrder::find($id);
 
-         $purchaseOrder->paid_to = $paidTo;
-        $purchaseOrder->address = $address;
-        $purchaseOrder->date = $date;
-        $purchaseOrder->quantity = $quantity;
-        $purchaseOrder->unit_price = $unitPrice;
-        $purchaseOrder->description = $description;
-        $purchaseOrder->amount = $amount;
-
+        $purchaseOrder->branch_location = $request->get('branchLocation');
+        $purchaseOrder->date = $request->get('date');
+        $purchaseOrder->ordered_by = $request->get('orderedBy');
+        $purchaseOrder->particulars = $request->get('particulars');
+        $purchaseOrder->qty = $request->get('qty');
+        $purchaseOrder->unit = $request->get('unit');
+        $purchaseOrder->price = $request->get('price');
+        $purchaseOrder->subtotal = $request->get('subtotal');
+ 
         $purchaseOrder->save();
 
         Session::flash('SuccessE', 'Successfully updated');
