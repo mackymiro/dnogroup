@@ -40,6 +40,7 @@
 				  								<th  class="bg-danger" style="color:white;">Amount Due</th>
 				  								<th>Delivered Date</th>
 				  								<th class="bg-success" style="color:white;">Status</th>
+												<th>Created By</th>
 					  						</tr>
 				  						</thead>
 				  						<tfoot>
@@ -51,6 +52,8 @@
 				  								<th  class="bg-danger" style="color:white;">Amount Due</th>
 				  								<th>Delivered Date</th>
 				  								<th class="bg-success" style="color:white;">Status</th>
+												 <th>Created By</th>
+
 					  						</tr>
 				  						</tfoot>
 				  						<tbody>
@@ -91,7 +94,8 @@
 			  									<td class="bg-success" style="color:white; "><a class="anchor" href="{{ url('dno-personal/view-dno-personal-payables-details/'.$getTransactionList['id']) }}">{{ $getTransactionList['status'] }}</a></td>
 			  									@else
 			  									<td class="bg-success" style="color:white; ">{{ $getTransactionList['status'] }}</td>
-			  									@endif
+												<td>{{ $getTransactionList['created_by']}}</td>
+												@endif
 				  							</tr>
 				  							@endforeach
 				  						</tbody>

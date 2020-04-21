@@ -1,5 +1,5 @@
 @extends('layouts.dno-personal-app')
-@section('title', 'View Transaction|')
+@section('title', 'View Personal Transaction|')
 @section('content')
 <style>
 .selcls { 
@@ -23,18 +23,13 @@
 	              <li class="breadcrumb-item">
 	                <a href="#">DNO Personal</a>
 	              </li>
-                  <li class="breadcrumb-item active">View Credit Card Transactions Details</li>
-                  @if (\Request::is('dno-personal/credit-card/ald-accounts/view/'.$viewTransaction['id'])) 
-                     <li class="breadcrumb-item active">ALD Accounts</li>
-                  @elseif(\Request::is('dno-personal/credit-card/mod-accounts/view/'.$viewTransaction['id']))
-                     <li class="breadcrumb-item active">MOD Accounts</li>
-                  @endif
-                 
+                  <li class="breadcrumb-item active">View Personal Transactions Details</li>
+                  <li class="breadcrumb-item active">ALD Accounts</li>
                  
 			</ol>
             <div class="row">
-                <div class="col-lg-12">
-                     <div class="card mb-3">
+                 <div class="col-lg-12">
+                    <div class="card mb-3">
                         <div class="card-header">
 							<i class="fa fa-file-invoice" aria-hidden="true"></i>
 							View Transaction 
@@ -44,8 +39,8 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th class="bg-info" style="color:#fff;" width="15%">ACCOUNT NO</th>
-                                        <th class="bg-success" style="color:#fff;">{{ $viewTransaction['account_no']}}</th>
+                                        <th class="bg-info" style="color:#fff;" width="15%">ACCOUNT NAME</th>
+                                        <th class="bg-success" style="color:#fff;">{{ $viewTransaction['account_name']}}</th>
                                     </tr>
 
                                 </thead>
@@ -56,60 +51,46 @@
                                         <label>Invoice #</label>
                                         <input type="text" name="invoiceNumber" class="selcls form-control" value="{{ $viewTransaction['invoice_number']}}" disabled="disabled" />
                                     </div>
-                                    <div class="col-lg-2">
+                                   <div class="col-lg-2">
                                         <label>Amount Due</label>
-                                        <input type="text" name="amountDue" style="color:white;" class="bg-danger form-control"  value="<?php echo number_format($sum, 2); ?>" />
+                                        <input type="text" name="amountDue" style="color:white;" class="bg-danger form-control" value="<?php echo number_format($sum, 2); ?>" />
                                     </div>
                                     <div class="col-lg-2">
-		  									<label>Voucher Ref #</label>
-		  									<input type="text" name="voucherRef" class="selcls form-control"  value="{{ $viewTransaction['voucher_ref_number'] }}" disabled="disabled" />
+                                        <label>Voucher Ref #</label>
+                                        <input type="text" name="voucherRef" class="selcls form-control" value="DP-{{ $viewTransaction['voucher_ref_number'] }}" disabled="disabled" />
                                     </div>
-                                    <div class="col-lg-2">
-                                        <label>Bank Name</label>
-                                        <input type="text" name="bankName" class="selcls form-control" value="{{ $viewTransaction['paid_to']}}" disabled="disabled" />
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <label>Account Name</label>
-                                        <input type="text" name="accountName" class="selcls form-control"  value="{{ $viewTransaction['account_name']}}" disabled="disabled" />
-                                    </div>
-                                    <div class="col-lg-4">
-                                        <label>Type Of Card</label>
-                                        <input type="text" name="typeOfCard" class="selcls form-control" value="{{ $viewTransaction['type_of_card'] }}" disabled="disabled" />
-                                    </div>
+                                  
                                     <div class="col-lg-2">
                                         <label>Payment Method</label>
-                                        <input type="text" name="paymentMethod" class="selcls form-control"  value="{{ $viewTransaction['method_of_payment'] }}" disabled="disabled" />
+                                        <input type="text" name="paymentMethod" class="selcls form-control" value="{{ $viewTransaction['method_of_payment'] }}" disabled="disabled" />
                                     </div>
                                     <div class="col-lg-4">
-		  									<label>Status</label>
-		  									<input type="text" name="status" class="selcls form-control" disabled="disabled" value="{{ $viewTransaction['status'] }}">
-			  							</div>
+                                        <label>Status</label>
+                                        <input type="text" name="status" class="selcls form-control" value="{{ $viewTransaction['status']}}" />
+                                    </div>  
                                 </div>
                             </div>
                         </div>
-                     </div>
-                </div>
+                    </div>
+                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                     <div class="card mb-3">
+                    <div class="card mb-3">
                          <div class="card-header">
 							<i class="fa fa-tasks" aria-hidden="true"></i>
 							View Particulars 
                          
 						</div>
                         <div class="card-body">
-                          
-                            <table class="table table-striped">
-                                <thead>
+                             <table class="table table-striped">
+                                 <thead>
                                     <tr>
                                         <th>PARTICULARS</th>
                                         <th>AMOUNT</th>
                                     </tr>
                                 </thead>
-                           
                                 <tbody>
-                                            
                                     <tr>	
                                         <td>{{ $viewTransaction['particulars']}}</td>
                                         <td><?php echo number_format($viewTransaction['amount'], 2); ?></td>
@@ -121,14 +102,14 @@
                                     </tr>
                                     @endforeach
                                 </tbody>
-                            </table>
+                             </table>
                         </div>
-                     </div>
+                    </div>
                 </div>
-            </div>
+            </div><!-- end of div row -->
             <div class="row">
-                 <div class="col-lg-12">
-                     <div class="card mb-3">
+                <div class="col-lg-12">
+                    <div class="card mb-3">
                         <div class="card-header">
 							<i class="fas fa-credit-card"></i>
 							Payment   
@@ -137,7 +118,7 @@
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>PAYMENT CHEQUE NUMBER</th>
+                                        <th>PAYMENT CASH NUMBER</th>
                                         @if($viewTransaction['method_of_payment'] == "Cash")
                                             <th>CASH AMOUNT</th>
                                         @else
@@ -146,7 +127,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach($getChequeNumbers as $getChequeNumber)
+                                     @foreach($getChequeNumbers as $getChequeNumber)
                                     <tr>
                                         <td>{{ $getChequeNumber['cheque_number']}}</td>
                                         <td><?php echo number_format($getChequeNumber['cheque_amount'], 2); ?></td>
@@ -159,22 +140,11 @@
                                 </tbody>
                             </table>
                         </div>
-                     </div>
-                 </div>
-            </div>
+                    </div>
+                </div>
+            </div><!-- end of div row -->
         </div>
     </div>
-     <!-- Sticky Footer -->
-     <footer class="sticky-footer">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <span>Copyright © Ribos Food Corporation 2019</span>
-            <br>
-            <br>
-            <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
-          </div>
-        </div>
-      </footer>
 </div>
 
 @endsection

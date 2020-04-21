@@ -10,8 +10,13 @@
 	              <li class="breadcrumb-item">
 	                <a href="#">DNO Personal</a>
 	              </li>
+                  <li class="breadcrumb-item active">Credit Card</li>
                   <li class="breadcrumb-item active">Transactions</li>
-                  <li class="breadcrumb-item active">ALD Accounts</li>
+                  @if (\Request::is('dno-personal/credit-card/ald-accounts/transactions/'.$creditCardDetail['id'])) 
+                     <li class="breadcrumb-item active">ALD Accounts</li>
+                  @elseif(\Request::is('dno-personal/credit-card/mod-accounts/transactions/'.$creditCardDetail['id']))
+                  <li class="breadcrumb-item active">MOD Accounts</li>
+                  @endif
                  
 			</ol>
             <div class="row">
@@ -75,13 +80,22 @@
 											?>
                                         <tr>
                                             
-                                            <td><a href="{{ url('dno-personal/credit-card/ald-accounts/view/'
-                                            .$getTransaction['id'])}}">{{ $getTransaction['invoice_number']}}</a></td>
-                                            <td>{{ $getTransaction['paid_to']}}</td>
+                                            
+                                            @if (\Request::is('dno-personal/credit-card/ald-accounts/transactions/'.$creditCardDetail['id'])) 
+                                            <td> <a href="{{ url('dno-personal/credit-card/ald-accounts/view/'
+                                                .$getTransaction['id'])}}">{{ $getTransaction['invoice_number']}}</a></td>
+                                                <td>{{ $getTransaction['paid_to'] }}</td>
+                                            @elseif(\Request::is('dno-personal/credit-card/mod-accounts/transactions/'.$creditCardDetail['id']))
+                                            <td> <a href="{{ url('dno-personal/credit-card/mod-accounts/view/'
+                                                .$getTransaction['id'])}}">{{ $getTransaction['invoice_number']}}</a></td>
+                                                <td>{{ $getTransaction['paid_to']}}</td>
+
+                                            @endif
+                                            </td>
                                             
                                             <td>{{ $getTransaction['account_name']}}</td>
                                             <td>{{ $getTransaction['issued_date'] }}</td>
-                                            <td></td>
+                                            <td>{{ $getTransaction['delivered_date']}}</td>
                                             <td class="bg-danger" style="color:white;"> <?php echo number_format($compute, 2);?></td>
                                            <?php if(isset($getTransaction['status']) == "FOR APPROVAL"): ?>
                                             <td class="bg-danger" style="color:white;">UNPAID</td>
@@ -113,5 +127,16 @@
             </div>
         </div>
     </div>
+     <!-- Sticky Footer -->
+     <footer class="sticky-footer">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright © Ribos Food Corporation 2019</span>
+            <br>
+            <br>
+            <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
+          </div>
+        </div>
+      </footer>
 </div>
 @endsection

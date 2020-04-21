@@ -267,6 +267,17 @@
 			</div>
 		</div>
 	</div>
+	 <!-- Sticky Footer -->
+	 <footer class="sticky-footer">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright © Ribos Food Corporation 2019</span>
+            <br>
+            <br>
+            <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
+          </div>
+        </div>
+      </footer>
 </div>
 <script>
 	//type of cards

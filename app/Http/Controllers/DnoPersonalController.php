@@ -14,6 +14,36 @@ use App\DnoPersonalCreditCard;
 
 class DnoPersonalController extends Controller
 {
+    //
+    public function personalTransaction($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+          //
+        $viewTransaction = DnoPersonalPaymentVoucher::find($id);
+    
+        //getParticular details
+        $getParticulars = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+        
+          //
+        $getChequeNumbers = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
+
+
+        //amount
+        $amount1 = DnoPersonalPaymentVoucher::where('id', $id)->sum('amount');
+        $amount2 = DnoPersonalPaymentVoucher::where('pv_id', $id)->sum('amount');
+        
+        $sum = $amount1 + $amount2;
+
+        //
+        $chequeAmount1 = DnoPersonalPaymentVoucher::where('id', $id)->sum('cheque_amount');
+        $chequeAmount2 = DnoPersonalPaymentVoucher::where('pv_id', $id)->sum('cheque_amount');
+        
+        $sumCheque = $chequeAmount1 + $chequeAmount2;
+
+        return view('dno-personal-personal-expenses-transaction', compact('user', 'viewTransaction', 
+        'sum', 'getParticulars', 'getChequeNumbers', 'sumCheque'));
+    }
 
     //
     public function viewTransaction($id){
@@ -423,8 +453,9 @@ class DnoPersonalController extends Controller
             $accountName = $request->get('accountName');
         }
 
+        
         $paidTo = explode("-", $request->get('paidTo'));
-        $paidToExp = $paidTo[1];
+        $paidToExp = isset($paidTo[1]);
     
         //check if invoice number already exists
         $target = DB::table(
@@ -486,8 +517,27 @@ class DnoPersonalController extends Controller
         $id =  Auth::user()->id;
         $user = User::find($id);
 
+        $acctName = "Alan Dino";
 
-        return view('dno-personal', compact('user'));
+        $modName = "MARY MARGARET O. DINO";
+
+        //getTransaction
+        $getTransactions = DnoPersonalPaymentVoucher::where('account_no', NULL)->where('account_name', $acctName)->get()->toArray();
+        
+        //getTransaction
+        $getModTransactions = DnoPersonalPaymentVoucher::where('account_no', NULL)->where('account_name', $modName)->get()->toArray();
+       
+
+         //get total amount due
+         $status = "FULLY PAID AND RELEASED";
+
+         $totalAmountDue = DnoPersonalPaymentVoucher::where('account_no',  NULl)->where('account_name', $acctName)
+         ->where('status' ,'!=', $status)->sum('amount_due');
+
+         $totalAmountDueMod = DnoPersonalPaymentVoucher::where('account_no',  NULl)->where('account_name', $modName)
+         ->where('status' ,'!=', $status)->sum('amount_due');
+
+        return view('dno-personal', compact('user', 'getTransactions', 'totalAmountDue', 'getModTransactions', 'totalAmountDueMod'));
     }
 
     /**

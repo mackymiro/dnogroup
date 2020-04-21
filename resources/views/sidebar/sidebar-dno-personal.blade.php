@@ -14,7 +14,7 @@
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <div class="sb-sidenav-menu-heading">&nbsp;Cash Expenses</div>
           <a class="dropdown-item" href="{{ url('dno-personal') }}">ALD ACCOUNTS</a>
-          <a class="dropdown-item" href="#">MOD ACCOUNTS</a>
+          <a class="dropdown-item" href="{{ url('dno-personal/personal-expenses/mod-accounts') }}">MOD ACCOUNTS</a>
           
         </div>
       </li>

@@ -49,7 +49,36 @@
 				  			 	 	@if(session('paymentAdded'))
 		                                <p class="alert alert-success">{{ Session::get('paymentAdded') }}</p>
 		                            @endif 
+									@if($transactionList['method_of_payment'] == "Cash")
+									<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-8">
+				  								<label>Payment Cash Number</label>
+				  								<input type="text" name="chequeNumber" class="form-control" required="required" />
+					  						</div> 
+
+    					  				</div>
+	    					  		</div>
 	    					  		<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-8">
+				  								<label>Cash Amount</label>
+				  								<input type="text" name="chequeAmount" class="form-control" required="required" />
+					  						</div> 
+					  					
+    					  				</div>
+	    					  		</div>
+	    					  		<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-4">
+				  								<input type="submit" class="btn btn-primary" value="Add" />
+					  						</div> 
+					  					
+    					  				</div>
+	    					  		</div>
+
+									@elseif($transactionList['method_of_payment'] == "Cheque")
+									<div class="form-group">
     					  				<div class="form-row">
 					  						<div class="col-lg-8">
 				  								<label>Payment Cheque Number</label>
@@ -75,6 +104,8 @@
 					  					
     					  				</div>
 	    					  		</div>
+									@endif
+	    					  		
 	    					  		</form>
 	    					  </div>
        					</div>
@@ -140,7 +171,48 @@
 
 				  			 		</thead>
 					  			 </table>
-				  				<div class="form-group">
+								@if($transactionList['method_of_payment'] == "Cash")
+								<div class="form-group">
+			  						<div class="form-row">
+			  							<div class="col-lg-2">
+		  									<label>Invoice #</label>
+		  									<input type="text" name="invoiceNumber" class="selcls form-control" value="{{ $transactionList['invoice_number']}}" disabled="disabled" />
+			  							</div>
+			  							<div class="col-lg-2">
+		  									<label>Amount Due</label>
+		  									<input type="text" name="amountDue" style="color:white;" class="bg-danger form-control" value="<?php echo number_format($sum, 2); ?>" />
+			  							</div>
+			  							<div class="col-lg-4">
+		  									<label>Voucher Ref #</label>
+		  									<input type="text" name="voucherRef" class="selcls form-control" value="DP-{{ $transactionList['voucher_ref_number'] }}" disabled="disabled" />
+			  							</div>
+										<div class="col-lg-4">
+											<label>Account Name</label>
+											<input type="text" name="accountName" class="selcls form-control" value="{{ $transactionList['account_name'] }}" disabled="disabled" />
+										</div>
+										
+									
+										<div class="col-lg-4">
+		  									<label>Payment Method</label>
+		  									<input type="text" name="paymentMethod" class="selcls form-control" value="{{ $transactionList['method_of_payment'] }}" disabled="disabled" />
+			  							</div>
+			  							<div class="col-lg-4">
+		  									<label>Status</label>
+		  									<div id="app-status">
+	  											<select name="status" class="selcls form-control">
+	  												<option value="0">--Please Select--</option>
+													<option v-for="status in statuses" v-bind:value="status.value"
+													:selected="status.value=={{json_encode($transactionList['status'])}}?true : false">
+													@{{ status.text }}
+												</option>
+	  											</select>
+		  									</div>
+			  							</div>
+			  						</div>
+				  				</div>
+
+								@elseif($transactionList['method_of_payment'] == "Cheque")
+								<div class="form-group">
 			  						<div class="form-row">
 			  							<div class="col-lg-2">
 		  									<label>Invoice #</label>
@@ -188,6 +260,9 @@
 			  							</div>
 			  						</div>
 				  				</div>
+
+								@endif
+				  				
 								<table class="table table-striped">
   									<thead>
   										<tr>

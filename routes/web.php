@@ -1541,9 +1541,29 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('dno-personal.viewTransaction');
 
 	Route::get(
+			'/dno-personal/credit-card/mod-accounts/view/{id}',
+			'DnoPersonalController@viewTransaction')
+			->name('dno-personal.viewTransaction');
+
+	Route::get(
 		'/dno-personal/credit-card/mod-accounts/transactions/{id}',
 		'DnoPersonalController@cardTransaction')
 		->name('dno-personal.cardTransaction');
+
+	Route::get(
+		'/dno-personal/personal-expenses/ald-accounts/transactions/{id}',
+		'DnoPersonalController@personalTransaction')
+		->name('dno-personal.personalTransaction');
+	
+	Route::get(
+		'/dno-personal/personal-expenses/mod-accounts/transactions/{id}',
+		'DnoPersonalController@personalTransaction')
+		->name('dno-personal.personalTransaction');
+	
+	Route::get(
+		'/dno-personal/personal-expenses/mod-accounts',
+		'DnoPersonalController@index')
+		->name('dno-personal.index');
 
 	//DNO food ventures
 	Route::get(
