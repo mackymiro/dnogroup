@@ -1,4 +1,5 @@
 @extends('layouts.dno-personal-app')
+@section('title', 'Credit Card Details|')
 @section('content')
 <style>
 .selcls { 
@@ -156,7 +157,7 @@
                                                 @endif
                                                 </td>
                                                 <td>{{ $getCreditCard1['bank_name']}}</td>
-                                                <td>{{ $getCreditCard1['account_no']}}</td>
+                                                <td><a href="{{ url('dno-personal/credit-card/ald-accounts/transactions/'.$getCreditCard1['id']) }}">{{ $getCreditCard1['account_no']}}</a></td>
                                                 <td>{{ $getCreditCard1['account_name'] }}</td>
                                                 <td>{{ $getCreditCard1['type_of_card']}}</td>
                                                 <td>{{ $getCreditCard1['created_by']}}</td>
@@ -174,7 +175,7 @@
                                                 @endif
                                                 </td>
                                                 <td>{{ $getCreditCard2['bank_name']}}</td>
-                                                <td>{{ $getCreditCard2['account_no']}}</td>
+                                                <td><a href="{{ url('dno-personal/credit-card/mod-accounts/transactions/'.$getCreditCard2['id']) }}">{{ $getCreditCard2['account_no']}}</a></td>
                                                 <td>{{ $getCreditCard2['account_name'] }}</td>
                                                 <td>{{ $getCreditCard2['type_of_card']}}</td>
                                                 <td>{{ $getCreditCard2['created_by']}}</td>

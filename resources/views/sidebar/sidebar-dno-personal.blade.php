@@ -12,10 +12,10 @@
           <span>Personal Expenses</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <div class="sb-sidenav-menu-heading">&nbsp;Credit Cards</div>
+          <div class="sb-sidenav-menu-heading">&nbsp;Cash Expenses</div>
           <a class="dropdown-item" href="{{ url('dno-personal') }}">ALD ACCOUNTS</a>
           <a class="dropdown-item" href="#">MOD ACCOUNTS</a>
-           <div class="sb-sidenav-menu-heading">&nbsp;Cash Expenses</div>
+          
         </div>
       </li>
       <li class="nav-item dropdown">

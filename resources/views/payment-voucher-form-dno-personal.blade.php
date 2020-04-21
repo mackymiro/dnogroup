@@ -53,19 +53,59 @@
                                     @endif
                           	  		<div class="form-group">
                       	  				<div class="form-row">
-                      	  						<div class="col-lg-4">
+                                      <div class="col-lg-2">
+                                          <label>Payment Method</label>
+                                          <div id="app-payment-method">
+                                              <select name="paymentMethod" class="payment selcls form-control">
+                                                  <option value="0">--Please Select--</option>
+                                                  <option v-for="payment in payments" v-bind:value="payment.value">
+                                                    @{{ payment.text }}
+                                                  </option>
+                                              </select>
+                                          </div>
+                                      </div>
+                                      <div class="col-lg-2">
+                      	  							<label>Invoice #</label>
+                      	  						  <input type="text" name="invoiceNumber" class="selcls form-control" />
+                      	  						</div>
+                      	  						<div id="paidTo" class="col-lg-4">
                       	  							<label>Paid To</label>
-                      	  						  <select name="paidTo" class="selcls form-control">
+                      	  						  <select name="paidTo" class="change selcls form-control">
                                             <option value="0">--Please Select--</option>
                                             @foreach($getCreditCards as $getCreditCard)
-                                            <option value="">{{ $getCreditCard['bank_name'] }}</option>
+                                            <option value="{{ $getCreditCard['id'] }}-{{ $getCreditCard['bank_name']}}">{{ $getCreditCard['bank_name'] }}</option>
                                             @endforeach
                                         </select>
                       	  						</div>
                                     
-                    	  						  <div class="col-md-2">
+                    	  						  <div id="acctNum" class="col-md-2">
                                          <label>Account #</label>
-                                          <input type="text" name="accountNo" class="selcls form-control"  required="required" value="{{ old('invoiceNumber') }}" />
+                                         <div id="accountNoHide">
+                                            <input type="text" name="accountNo" class="selcls form-control"  readonly="readonly" />
+                                         </div>
+                                         <div id="accountNo"></div> 
+                                      </div>
+                                      
+                                      <div id="acctName" class="col-md-4">
+                                         <label>Account Name</label>
+                                          <div id="accountNameHide">
+                                            <input type="text" name="accountName" class="selcls form-control"  readonly="readonly" />
+                                          </div>
+                                          <div id="accountName"></div>
+                                      </div>
+                                      <div id="acctNameCash" class="col-md-4">
+                                         <label>Account Name</label>
+                                          <div id="accountNameHide">
+                                            <input type="text" name="accountNameCash" class="selcls form-control" />
+                                          </div>
+                                          <div id="accountName"></div>
+                                      </div>
+                                      <div id="typeOfCC" class="col-md-4">
+                                         <label>Type Of Card</label>
+                                         <div id="typeOfCardHide">
+                                            <input type="text" name="typeOfCard" class="selcls form-control"  readonly="readonly" />
+                                         </div>
+                                         <div id="typeOfCard"></div>
                                       </div>
                       	  						<div class="col-md-2">
                                           <label>Issued Date </label>
@@ -114,16 +154,96 @@
       </footer>
 
 </div>
+<script type="text/javascript">
+    $(document).ready(function(){
+      $("#paidTo").hide();
+      $("#acctNo").hide();
+      $("#acctNum").hide();
+      $("#typeOfCC").hide();
+      $("#acctName").hide();
+
+      $(".payment").change(function(){
+          var payment = $(this).children("option:selected").val();
+          
+          if(payment === "Cash"){
+              
+              $("#paidTo").hide();
+              $("#acctNo").hide();
+              $("#acctNum").hide();
+              $("#typeOfCC").hide();
+              $("#acctName").hide();
+              $("#acctNameCash").show();
+
+              $("#paidTo").val('');
+              $("#acctNo").val('');
+              $("#acctNum").val('');
+              $("#typeOfCC").val('');
+              $("#acctName").val('');
+
+
+          }else if( payment === "Cheque"){
+              
+              $("#paidTo").show();
+              $("#acctNo").show();
+              $("#acctNum").show();
+              $("#typeOfCC").show();
+              $("#acctName").show();
+
+              $("#acctNameCash").hide();
+          }else{
+             
+          }
+      });
+
+      $(".change").change(function(){
+             
+              <?php
+                $getCreditCards = DB::table(
+                                  'dno_personal_credit_cards')
+                                  ->get();  ?>
+
+               <?php foreach($getCreditCards as $getCreditCard): ?>
+                    var paidTo =  $(this).children("option:selected").val();
+                    var paidToSplit = paidTo.split("-");
+                    var paidToSplitArr = paidToSplit[0];
+
+                    if(paidToSplitArr === "<?php echo $getCreditCard->id ?>"){
+                      <?php
+                            $getId = DB::table(
+                                          'dno_personal_credit_cards')
+                                        ->where('id', $getCreditCard->id)
+                                        ->get();
+                        ?>
+                      
+                        $("#accountNo").html('<input type="text" name="accountNo" class="selcls  form-control" value="<?php echo $getId[0]->account_no?>" readonly="readonly">');
+                        $("#accountNoHide").hide();
+
+                        $("#accountName").html('<input type="text" name="accountName" class="selcls form-control" value="<?php echo $getId[0]->account_name; ?>" readonly="readonly"> ');
+                        $("#accountNameHide").hide();
+
+                        $("#typeOfCard").html('<input type="text" name="typeOfCard" class="selcls form-control" value="<?php echo $getId[0]->type_of_card?>" readonly="readonly">');
+                        $("#typeOfCardHide").hide();
+                    }
+
+              <?php endforeach; ?>
+             
+        });
+
+    });
+</script>
+
 <script>
-  //branch data
+  //payment method
   new Vue({
   el: '#app-payment-method',
     data: {
       payments:[
-        { text:'Cash', value: 'Cash' },
-        { text:'Cheque', value: 'Cheque'}
+        { text:'Cash', value:'Cash' },
+        { text:'Cheque', value:'Cheque'}
       ]
     }
   })  
+
 </script>
+
 @endsection

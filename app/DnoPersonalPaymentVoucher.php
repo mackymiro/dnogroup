@@ -14,6 +14,7 @@ class DnoPersonalPaymentVoucher extends Model
         'date',
         'paid_to',
         'account_no',
+        'account_name',
         'particulars',
         'amount',
         'method_of_payment',
@@ -30,7 +31,6 @@ class DnoPersonalPaymentVoucher extends Model
         'status',
         'cheque_number',
         'cheque_amount',
-
-
+        'type_of_card',
     ];
 }

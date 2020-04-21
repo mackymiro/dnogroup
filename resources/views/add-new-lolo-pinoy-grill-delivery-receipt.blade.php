@@ -97,9 +97,9 @@
                                   ->get(); ?>
           <?php foreach($getRawMaterials as $key=>$getRawMaterial): ?>
               
-              var prodId = $(this).children("option:selected").val();
-              var prodIdSplit = prodId.split("-");
-              var prodArr = prodIdSplit[0];
+              const prodId = $(this).children("option:selected").val();
+              const prodIdSplit = prodId.split("-");
+              const prodArr = prodIdSplit[0];
   
               if(prodArr  == "<?php echo $getRawMaterial->id;?>"){
                     <?php 

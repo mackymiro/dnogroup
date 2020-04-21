@@ -116,5 +116,7 @@
       <script src="{{ asset('js/sb-admin.min.js') }} "></script>
       <script src="{{ asset('js/datatables-demo.js') }} "></script>
       <script src="{{ asset('js/chart-area-demo.js') }} "></script>
+
+      
 </body>
 </html>

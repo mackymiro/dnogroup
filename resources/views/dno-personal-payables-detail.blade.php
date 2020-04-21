@@ -1,6 +1,19 @@
 @extends('layouts.dno-personal-app')
 @section('title', 'Payables Form|')
 @section('content')
+<style>
+.selcls { 
+    padding: 9px; 
+    border: solid 1px #517B97; 
+    min-height: 40px;
+    outline: 0; 
+    background: -webkit-gradient(linear, left top, left 25, from(#FFFFFF), color-stop(4%, #CAD9E3), to(#FFFFFF)); 
+    background: -moz-linear-gradient(top, #FFFFFF, #CAD9E3 1px, #FFFFFF 25px); 
+    box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+    -moz-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+    -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
+	} 
+</style>
 <script>
   $(document).ready(function(){
       $('.alert-success').fadeIn().delay(3000).fadeOut();
@@ -122,7 +135,7 @@
 				  			 		<thead>
 				  			 			<tr>
 				  			 				<th width="15%">Paid To</th>
-				  			 				<th>{{ $transactionList['paid_to']}}</th>
+				  			 				<th>{{ $transactionList['account_name']}}</th>
 				  			 			</tr>
 
 				  			 		</thead>
@@ -131,7 +144,7 @@
 			  						<div class="form-row">
 			  							<div class="col-lg-2">
 		  									<label>Invoice #</label>
-		  									<input type="text" name="invoiceNumber" class="form-control" value="{{ $transactionList['invoice_number']}}" disabled="disabled" />
+		  									<input type="text" name="invoiceNumber" class="selcls form-control" value="{{ $transactionList['invoice_number']}}" disabled="disabled" />
 			  							</div>
 			  							<div class="col-lg-2">
 		  									<label>Amount Due</label>
@@ -139,12 +152,32 @@
 			  							</div>
 			  							<div class="col-lg-4">
 		  									<label>Voucher Ref #</label>
-		  									<input type="text" name="voucherRef" class="form-control" value="DP-{{ $transactionList['voucher_ref_number'] }}" disabled="disabled" />
+		  									<input type="text" name="voucherRef" class="selcls form-control" value="DP-{{ $transactionList['voucher_ref_number'] }}" disabled="disabled" />
+			  							</div>
+										<div class="col-lg-4">
+											<label>Bank Name</label>
+											<input type="text" name="bankName" class="selcls form-control" value="{{ $transactionList['paid_to'] }}" disabled="disabled" />
+										</div>
+										<div class="col-lg-4">
+		  									<label>Account #</label>
+		  									<input type="text" name="accountNum" class="selcls form-control" value="{{ $transactionList['account_no'] }}" disabled="disabled" />
+			  							</div>
+										<div class="col-lg-4">
+		  									<label>Account Name</label>
+		  									<input type="text" name="accountName" class="selcls form-control" value="{{ $transactionList['account_name'] }}" disabled="disabled" />
+			  							</div>
+										<div class="col-lg-4">
+		  									<label>Type Of Card</label>
+		  									<input type="text" name="typeOfCard" class="selcls form-control" value="{{ $transactionList['type_of_card'] }}" disabled="disabled" />
+			  							</div>
+										<div class="col-lg-4">
+		  									<label>Payment Method</label>
+		  									<input type="text" name="paymentMethod" class="selcls form-control" value="{{ $transactionList['method_of_payment'] }}" disabled="disabled" />
 			  							</div>
 			  							<div class="col-lg-4">
 		  									<label>Status</label>
 		  									<div id="app-status">
-	  											<select name="status" class="form-control">
+	  											<select name="status" class="selcls form-control">
 	  												<option value="0">--Please Select--</option>
 													<option v-for="status in statuses" v-bind:value="status.value"
 													:selected="status.value=={{json_encode($transactionList['status'])}}?true : false">
@@ -180,7 +213,11 @@
 				  					<thead>
 				  						<tr>
 				  							<th>PAYMENT CHEQUE NUMBER</th>
-				  							<th>CHEQUE AMOUNT</th>
+											@if($transactionList['method_of_payment'] == "Cash")
+				  								<th>CASH AMOUNT</th>
+											@else
+												<th>CHEQUE AMOUNT</th>
+											@endif
 				  						</tr>
 				  					</thead>
 				  					<tbody>

@@ -1530,6 +1530,21 @@ Route::group(['middleware' => ['auth']], function(){
 		'DnoPersonalController@destroyCreditCard')
 		->name('dno-personal.destroyCreditCard');
 
+	Route::get(
+		'/dno-personal/credit-card/ald-accounts/transactions/{id}',
+		'DnoPersonalController@cardTransaction')
+		->name('dno-personal.cardTransaction');
+
+	Route::get(
+		'/dno-personal/credit-card/ald-accounts/view/{id}',
+		'DnoPersonalController@viewTransaction')
+		->name('dno-personal.viewTransaction');
+
+	Route::get(
+		'/dno-personal/credit-card/mod-accounts/transactions/{id}',
+		'DnoPersonalController@cardTransaction')
+		->name('dno-personal.cardTransaction');
+
 	//DNO food ventures
 	Route::get(
 		'/dno-food-ventures',

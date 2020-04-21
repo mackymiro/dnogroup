@@ -122,7 +122,8 @@
               var prodIdSplit = prodId.split("-");
               var prodArr = prodIdSplit[0];
   
-              if(prodArr  == "<?php echo $getRawMaterial->id;?>"){
+              if(prodArr  === "<?php echo $getRawMaterial->id;?>"){
+                    console.log(prodArr);
                     <?php 
                         $getId = DB::table(
                                   'lolo_pinoy_grill_commissary_raw_materials')
