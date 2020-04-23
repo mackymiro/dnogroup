@@ -68,14 +68,20 @@
                       	  							<label>Invoice #</label>
                       	  						  <input type="text" name="invoiceNumber" class="selcls form-control" />
                       	  						</div>
+                                      <div id="paidToCash" class="col-lg-2">
+                      	  							<label>Paid To</label>
+                      	  						  <input type="text" name="paidToCash" class="selcls form-control"  />
+                      	  						</div>
+                                     
                       	  						<div id="paidTo" class="col-lg-4">
                       	  							<label>Paid To</label>
-                      	  						  <select name="paidTo" class="change selcls form-control">
+                      	  						  <select id="paidTo" name="paidTo" class="change selcls form-control">
                                             <option value="0">--Please Select--</option>
                                             @foreach($getCreditCards as $getCreditCard)
                                             <option value="{{ $getCreditCard['id'] }}-{{ $getCreditCard['bank_name']}}">{{ $getCreditCard['bank_name'] }}</option>
                                             @endforeach
                                         </select>
+                                        
                       	  						</div>
                                     
                     	  						  <div id="acctNum" class="col-md-2">
@@ -111,10 +117,7 @@
                                           <label>Issued Date </label>
                                           <input type="text" name="issuedDate" class="selcls form-control" value="{{ old('issuedDate') }}" />
                                       </div>
-                                       <div class="col-md-2">
-                                          <label>Delivered Date </label>
-                                          <input type="text" name="deliveredDate" class="selcls form-control" value="{{ old('deliveredDate') }}" />
-                                      </div>
+                                      
                                      
                       	  				</div>
                           	  		</div>
@@ -173,6 +176,7 @@
               $("#typeOfCC").hide();
               $("#acctName").hide();
               $("#acctNameCash").show();
+              $("#paidToCash").show();
 
               $("#paidTo").val('');
               $("#acctNo").val('');
@@ -180,6 +184,7 @@
               $("#typeOfCC").val('');
               $("#acctName").val('');
 
+             
 
           }else if( payment === "Cheque"){
               
@@ -190,6 +195,7 @@
               $("#acctName").show();
 
               $("#acctNameCash").hide();
+              $("#paidToCash").hide();
           }else{
              
           }
@@ -218,6 +224,7 @@
                         $("#accountNo").html('<input type="text" name="accountNo" class="selcls  form-control" value="<?php echo $getId[0]->account_no?>" readonly="readonly">');
                         $("#accountNoHide").hide();
 
+                       
                         $("#accountName").html('<input type="text" name="accountName" class="selcls form-control" value="<?php echo $getId[0]->account_name; ?>" readonly="readonly"> ');
                         $("#accountNameHide").hide();
 

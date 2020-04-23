@@ -14,6 +14,71 @@ use App\DnoPersonalCreditCard;
 
 class DnoPersonalController extends Controller
 {
+
+    //
+    public function printPersonalTransactions($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $personalExpenses = DnoPersonalPaymentVoucher::find($id);
+
+        $particulars = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('amount', '!=', NULL)->get()->toArray();
+
+        //
+        $payments = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('amount', NULL)->get()->toArray();
+
+        //count the total amount 
+        $countTotalAmount = DnoPersonalPaymentVoucher::where('id', $id)->sum('amount_due');
+            //
+        $countAmount = DnoPersonalPaymentVoucher::where('pv_id', $id)->sum('amount_due');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        //
+        $chequeAmount1 = DnoPersonalPaymentVoucher::where('id', $id)->sum('cheque_amount');
+        $chequeAmount2 = DnoPersonalPaymentVoucher::where('pv_id', $id)->sum('cheque_amount');
+        
+        $sumCheque = $chequeAmount1 + $chequeAmount2;
+
+        $pdf = PDF::loadView('printPersonalTransactions', compact('personalExpenses', 'user', 'particulars', 'sum', 
+        'payments', 'sumCheque'));
+
+        return $pdf->download('dno-personal-transaction.pdf');
+   
+    }
+
+    //
+    public function printCardTransactions($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $creditCard = DnoPersonalPaymentVoucher::find($id);
+
+        $particulars = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('amount', '!=', NULL)->get()->toArray();
+
+        //
+        $payments = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('amount', NULL)->get()->toArray();
+
+        //count the total amount 
+        $countTotalAmount = DnoPersonalPaymentVoucher::where('id', $id)->sum('amount_due');
+            //
+        $countAmount = DnoPersonalPaymentVoucher::where('pv_id', $id)->sum('amount_due');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        //
+        $chequeAmount1 = DnoPersonalPaymentVoucher::where('id', $id)->sum('cheque_amount');
+        $chequeAmount2 = DnoPersonalPaymentVoucher::where('pv_id', $id)->sum('cheque_amount');
+        
+        $sumCheque = $chequeAmount1 + $chequeAmount2;
+
+
+        $pdf = PDF::loadView('printCardTransactions', compact('creditCard', 'user', 'particulars', 'sum', 
+        'payments', 'sumCheque'));
+
+        return $pdf->download('dno-personal-card-transaction.pdf');
+    }
+
     //
     public function personalTransaction($id){
         $ids = Auth::user()->id;
@@ -245,6 +310,8 @@ class DnoPersonalController extends Controller
                     # code...
                     $payables = DnoPersonalPaymentVoucher::find($id);
 
+
+
                     $payables->status = $status;
                     $payables->save();
 
@@ -449,13 +516,16 @@ class DnoPersonalController extends Controller
 
         if($request->get('paymentMethod') == "Cash"){
             $accountName = $request->get('accountNameCash');
-        }else{
+            $paidTo = $request->get('paidToCash');
+            echo $paidTo;
+
+        }else if($request->get('paymentMethod') == "Cheque"){
             $accountName = $request->get('accountName');
+
+            $paidToCC = explode("-", $request->get('paidTo'));
+            $paidTo = $paidToCC[1]; 
         }
 
-        
-        $paidTo = explode("-", $request->get('paidTo'));
-        $paidToExp = isset($paidTo[1]);
     
         //check if invoice number already exists
         $target = DB::table(
@@ -467,14 +537,14 @@ class DnoPersonalController extends Controller
             # code...
               $addPaymentVoucher = new DnoPersonalPaymentVoucher([
                     'user_id'=>$user->id,
-                    'paid_to'=>$paidToExp,
+                    'paid_to'=>$paidTo,
                     'invoice_number'=>$request->get('invoiceNumber'),
                     'account_no'=>$request->get('accountNo'),
                     'account_name'=>$accountName,
                     'type_of_card'=>$request->get('typeOfCard'),
                     'voucher_ref_number'=>$uVoucher,
                     'issued_date'=>$request->get('issuedDate'),
-                    'delivered_date'=>$request->get('deliveredDate'),
+                    
                     'amount'=>$request->get('amount'),
                     'amount_due'=>$request->get('amount'),
                     'particulars'=>$request->get('particulars'),
@@ -521,11 +591,15 @@ class DnoPersonalController extends Controller
 
         $modName = "MARY MARGARET O. DINO";
 
+        $payment ="Cash";
+
         //getTransaction
-        $getTransactions = DnoPersonalPaymentVoucher::where('account_no', NULL)->where('account_name', $acctName)->get()->toArray();
+        $getTransactions = DnoPersonalPaymentVoucher::where('account_no', NULL)->where('account_name', $acctName)
+        ->where('method_of_payment', $payment)->get()->toArray();
         
         //getTransaction
-        $getModTransactions = DnoPersonalPaymentVoucher::where('account_no', NULL)->where('account_name', $modName)->get()->toArray();
+        $getModTransactions = DnoPersonalPaymentVoucher::where('account_no', NULL)->where('account_name', $modName)
+        ->where('method_of_payment', $payment)->get()->toArray();
        
 
          //get total amount due

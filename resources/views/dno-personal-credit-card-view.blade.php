@@ -37,8 +37,10 @@
                      <div class="card mb-3">
                         <div class="card-header">
 							<i class="fa fa-file-invoice" aria-hidden="true"></i>
-							View Transaction 
-                         
+							View Transaction    
+                            <div class="float-right">
+                               <a href="{{ action('DnoPersonalController@printCardTransactions', $viewTransaction['id']) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                             </div>
 						</div>
                         <div class="card-body">
                             <table class="table table-bordered">

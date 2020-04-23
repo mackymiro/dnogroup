@@ -166,7 +166,11 @@
 				  			 		<thead>
 				  			 			<tr>
 				  			 				<th width="15%">Paid To</th>
-				  			 				<th>{{ $transactionList['account_name']}}</th>
+											@if($transactionList['method_of_payment'] == "Cash")
+				  			 					<th>{{ $transactionList['paid_to']}}</th>
+											@else
+  												<th>{{ $transactionList['account_name']}}</th>
+											@endif
 				  			 			</tr>
 
 				  			 		</thead>
@@ -298,6 +302,7 @@
 				  					<tbody>
 				  						@foreach($getChequeNumbers as $getChequeNumber)
 				  						<tr>
+										  
 				  							<td>{{ $getChequeNumber['cheque_number']}}</td>
 				  							<td><?php echo number_format($getChequeNumber['cheque_amount'], 2); ?></td>
 				  						</tr>

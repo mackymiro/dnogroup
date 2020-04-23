@@ -1565,6 +1565,16 @@ Route::group(['middleware' => ['auth']], function(){
 		'DnoPersonalController@index')
 		->name('dno-personal.index');
 
+	Route::get(
+		'/dno-personal/credit-card/account/printCardTransactions/{id}',
+		'DnoPersonalController@printCardTransactions')
+		->name('dno-personal.printCardTransactions');
+
+	Route::get(
+		'/dno-personal/personal-account/printPersonalTransactions/{id}',
+		'DnoPersonalController@printPersonalTransactions')
+		->name('dno-personal.printPersonalTransactions');
+
 	//DNO food ventures
 	Route::get(
 		'/dno-food-ventures',

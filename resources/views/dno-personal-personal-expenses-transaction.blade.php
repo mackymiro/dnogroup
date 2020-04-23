@@ -33,14 +33,16 @@
                         <div class="card-header">
 							<i class="fa fa-file-invoice" aria-hidden="true"></i>
 							View Transaction 
-                         
+                            <div class="float-right">
+                               <a href="{{ action('DnoPersonalController@printPersonalTransactions', $viewTransaction['id']) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                             </div>
 						</div>
                         <div class="card-body">
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th class="bg-info" style="color:#fff;" width="15%">ACCOUNT NAME</th>
-                                        <th class="bg-success" style="color:#fff;">{{ $viewTransaction['account_name']}}</th>
+                                        <th class="bg-info" style="color:#fff;" width="15%">PAID TO </th>
+                                        <th class="bg-success" style="color:#fff;">{{ $viewTransaction['paid_to']}}</th>
                                     </tr>
 
                                 </thead>
@@ -59,12 +61,16 @@
                                         <label>Voucher Ref #</label>
                                         <input type="text" name="voucherRef" class="selcls form-control" value="DP-{{ $viewTransaction['voucher_ref_number'] }}" disabled="disabled" />
                                     </div>
+                                    <div class="col-lg-4">
+                                        <label>Account Name</label>
+                                        <input type="text" name="accountName" class="selcls form-control" value="{{ $viewTransaction['account_name'] }}" disabled="disabled" />
+                                    </div>
                                   
                                     <div class="col-lg-2">
                                         <label>Payment Method</label>
                                         <input type="text" name="paymentMethod" class="selcls form-control" value="{{ $viewTransaction['method_of_payment'] }}" disabled="disabled" />
                                     </div>
-                                    <div class="col-lg-4">
+                                    <div class="col-lg-2">
                                         <label>Status</label>
                                         <input type="text" name="status" class="selcls form-control" value="{{ $viewTransaction['status']}}" />
                                     </div>  
