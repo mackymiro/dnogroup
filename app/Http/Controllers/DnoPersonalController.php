@@ -16,6 +16,9 @@ class DnoPersonalController extends Controller
 {
 
     //
+
+
+    //
     public function printPersonalTransactions($id){
         $ids = Auth::user()->id;
         $user = User::find($ids);

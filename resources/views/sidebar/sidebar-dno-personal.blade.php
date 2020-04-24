@@ -36,7 +36,7 @@
           <span>Properties</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-            <div class="sb-sidenav-menu-heading">&nbsp;Cebu Properties</div>
+            <a class="dropdown-item" href="{{ url('dno-personal/cebu-properties') }}">Cebu Properties</a>
             <a class="dropdown-item" href="">House #28</a>
             <a class="dropdown-item" href="#">House #29</a>
             <a class="dropdown-item" href="#">House #50</a>
