@@ -78,6 +78,7 @@
 									</div>
 								</div>
 							</div>
+							
 							<div class="form-group">
 								<div class="form-row">
 									<div class="col-lg-12">
@@ -114,6 +115,7 @@
 						</form>
 					</div>
 				</div>
+				@if (\Request::is('dno-personal/credit-card/ald-accounts'))  
 				<div class="col-lg-8">
 					<div class="card mb-3">
 						<div class="card-header">
@@ -145,25 +147,64 @@
 										</tr>
 									</tfoot>
                                     <tbody>
-                                        @if (\Request::is('dno-personal/credit-card/ald-accounts'))  
-                                            @foreach($getCreditCards1 as $getCreditCard1)
-                                            <tr id="deletedId{{ $getCreditCard1['id'] }}">
-                                                <td>
-                                                @if($user->role_type !== 3)
-                                                    <a href="{{ url('dno-personal/credit-card/accounts/edit/'.$getCreditCard1['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-                                                @endif
-                                                @if($user->role_type == 1)
-                                                    <a id="delete" onClick="confirmDelete('{{ $getCreditCard1['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
-                                                @endif
-                                                </td>
-                                                <td>{{ $getCreditCard1['bank_name']}}</td>
-                                                <td><a href="{{ url('dno-personal/credit-card/ald-accounts/transactions/'.$getCreditCard1['id']) }}">{{ $getCreditCard1['account_no']}}</a></td>
-                                                <td>{{ $getCreditCard1['account_name'] }}</td>
-                                                <td>{{ $getCreditCard1['type_of_card']}}</td>
-                                                <td>{{ $getCreditCard1['created_by']}}</td>
-                                            </tr>
-                                            @endforeach
-                                        @else
+                                        
+										@foreach($getCreditCards1 as $getCreditCard1)
+										<tr id="deletedId{{ $getCreditCard1['id'] }}">
+											<td>
+											@if($user->role_type !== 3)
+												<a href="{{ url('dno-personal/credit-card/accounts/edit/'.$getCreditCard1['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+											@endif
+											@if($user->role_type == 1)
+												<a id="delete" onClick="confirmDelete('{{ $getCreditCard1['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+											@endif
+											</td>
+											<td>{{ $getCreditCard1['bank_name']}}</td>
+											<td><a href="{{ url('dno-personal/credit-card/ald-accounts/transactions/'.$getCreditCard1['id']) }}">{{ $getCreditCard1['account_no']}}</a></td>
+											<td>{{ $getCreditCard1['account_name'] }}</td>
+											<td>{{ $getCreditCard1['type_of_card']}}</td>
+											<td>{{ $getCreditCard1['created_by']}}</td>
+										</tr>
+										@endforeach
+                                     
+                                    </tbody>
+								</table>	
+							</div>
+						</div>
+					</div>
+				</div>
+				@else
+				<div class="col-lg-8">
+					<div class="card mb-3">
+						<div class="card-header">
+							<i class="fa fa-tasks" aria-hidden="true"></i>
+							All Lists
+						</div>
+						<div class="card-body">
+                            
+							<div  class="table-responsive">
+								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+									<thead>
+										<tr>
+											<th>Action</th>
+											<th width="160px;">Bank Name</th>
+											<th>Account No</th>
+											<th>Account Name</th>
+											<th width="320px;">Type Of Card</th>
+                                            <th width="320px;">Created By</th>
+										</tr>
+									</thead>
+									<tfoot>
+										<tr>
+											<th>Action</th>
+											<th width="160px;">Bank Name</th>
+											<th>Account No</th>
+											<th >Account Name</th>
+											<th width="320px;"> Type Of Card</th>
+                                            <th width="320px;">Created By</th>
+										</tr>
+									</tfoot>
+                                    <tbody>
+                                    
                                             @foreach($getCreditCards2 as $getCreditCard2)
                                             <tr id="deletedId{{ $getCreditCard2['id'] }}">
                                                 <td>
@@ -182,13 +223,14 @@
                                             </tr>
                                              @endforeach 
 
-                                        @endif
+                                    
                                     </tbody>
 								</table>	
 							</div>
 						</div>
 					</div>
 				</div>
+				@endif
 			</div>
 		</div>
 	</div>

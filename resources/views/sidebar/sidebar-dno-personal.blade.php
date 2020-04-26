@@ -36,13 +36,9 @@
           <span>Properties</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-            <a class="dropdown-item" href="{{ url('dno-personal/cebu-properties') }}">Cebu Properties</a>
-            <a class="dropdown-item" href="">House #28</a>
-            <a class="dropdown-item" href="#">House #29</a>
-            <a class="dropdown-item" href="#">House #50</a>
-            <div class="sb-sidenav-menu-heading">&nbsp;Manila Properties</div>
-            <a class="dropdown-item" href="">Greenbelt</a>
-            <a class="dropdown-item" href="#">Gotesco</a>
+            <a class="dropdown-item" href="{{ url('dno-personal/cebu-properties') }}">Cebu Properties</a> 
+            <a class="dropdown-item" href="{{ url('dno-personal/manila-properties') }}">Manila Properties</a>
+          
         </div>
       </li>
        <li class="nav-item dropdown">
@@ -51,7 +47,7 @@
           <span>Utilities</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-            <div class="sb-sidenav-menu-heading">&nbsp;Vehicles</div>
+            <a class="dropdown-item" href="{{ url('dno-personal/vehicles') }}">Vehicles</a>
             <a class="dropdown-item" href="">Hi-Ace Grandia</a>
             <a class="dropdown-item" href="#">Hilux</a>
            
@@ -63,7 +59,7 @@
           <span>Payables</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if($user->role_type == 1)
+          @if(Auth::user()['role_type'] == 1)
            <a class="dropdown-item" href="{{ url('dno-personal/payment-voucher-form') }}">Payment Voucher Form</a>
            <a class="dropdown-item" href="{{ url('dno-personal/payables/transaction-list') }}">Transaction List</a>
           @endif

@@ -8,7 +8,7 @@ class DnoPersonalPaymentVoucher extends Model
 {
     //
       protected $fillable = [
-    	'user_id',
+    	  'user_id',
         'pv_id',
         'reference_number',
         'date',

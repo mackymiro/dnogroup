@@ -45,7 +45,11 @@
                                         
                                         <label>Date</label>
                                         <input type="text" name="date" class="selcls form-control" required="required" />
-                                       
+										@if($errors->has('date'))
+		                                  <span class="alert alert-danger">
+		                                    <strong>{{ $errors->first('date') }}</strong>
+		                                  </span>
+		                                @endif
 
                                     </div>
                          			<div class="col-md-2">

@@ -51,3 +51,5 @@ $factory->define(App\RibosBarCashiersForm::class, function (Faker\Generator $fak
        
     ];
 });
+
+

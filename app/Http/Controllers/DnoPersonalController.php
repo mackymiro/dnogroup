@@ -11,12 +11,79 @@ use Auth;
 use App\User;
 use App\DnoPersonalPaymentVoucher;
 use App\DnoPersonalCreditCard;
+use App\DnoPersonalProperty;
 
 class DnoPersonalController extends Controller
 {
 
     //
+    public function vehicles(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        
+        return view('dno-personal-vehicles', compact('user'));
+    }
 
+    //
+    public function storeProperties(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        //validate
+        $this->validate($request, [
+            'propName' =>'required',
+            'propAccountCode'=>'required',
+            'propAccountName'=>'required',
+            'address'=>'required',
+            'unit'=>'required',
+        ]);
+
+        $addProperties = new DnoPersonalProperty([
+            'user_id'=>$user->id,
+            'property_name'=>$request->get('propName'),
+            'property_account_code'=>$request->get('propAccountCode'),
+            'property_account_name'=>$request->get('propAccountName'),
+            'address'=>$request->get('address'),
+            'unit'=>$request->get('unit'),
+            'status'=>$request->geT('status'),
+            'flag'=>$request->get('flag'),
+            'created_by'=>$name,
+        ]);
+
+        $addProperties->save();
+
+        Session::flash('addProperty', 'Successfully added a property.');
+
+        if($request->get('flag') == "Cebu Properties"){
+            return redirect('dno-personal/cebu-properties');
+        }else{
+            return redirect('dno-personal/manila-properties');
+        }
+        
+       
+    }
+
+    //
+    public function properties(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $cebuFlag = "Cebu Properties";
+        $manilaFlag = "Manila Properties";
+
+        //getCebuProperties
+        $getCebuProperties = DnoPersonalProperty::where('flag', $cebuFlag)->get()->toArray();
+
+        //getManilaProperties
+        $getManilaProperties = DnoPersonalProperty::where('flag', $manilaFlag)->get()->toArray();
+         
+        return view('dno-personal-properties', compact('user', 'getCebuProperties', 'getManilaProperties'));  
+    }
 
     //
     public function printPersonalTransactions($id){

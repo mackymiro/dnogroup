@@ -36,7 +36,7 @@
           <span>Purchase Order</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if($user->role_type == 1)
+          @if(Auth::user()['role_type'] == 1)
           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/purchase-order') }}">P.O Form</a>
           @endif
           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/purchase-order-lists') }}">Lists</a>
@@ -60,7 +60,7 @@
           <span>Billing Statement</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if($user->role_type == 1)
+          @if(Auth::user()['role_type'] == 1)
           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/billing-statement-form') }}">Billing Statement Form</a>
           @endif
           <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/billing-statement-lists') }}">Lists</a>

@@ -999,11 +999,11 @@ class LoloPinoyLechonDeCebuController extends Controller
 
            //validate
         $this->validate($request, [
+            'date'=>'required',
             'invoiceNum' =>'required',
             'orderedBy'=>'required',
            
         ]);
-
 
         //total kls
         /*$kls = $request->get('totalKls');
@@ -2317,7 +2317,6 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         return view('lechon-de-cebu-purchase-order', compact('user'));
     }
-
 
     /**
      * Display a listing of the resource.

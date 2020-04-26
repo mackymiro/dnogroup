@@ -44,18 +44,19 @@ class LoginTest extends TestCase
             'password' => $password,
         ]);
 
+        
         $response->assertRedirect('/home');
         $this->assertAuthenticatedAs($user);
 
     }
 
     public function test_user_cannot_view_a_login_form_when_authenticated(){
-        
-        $user = factory(User::class)->make();
+            
+            $user = factory(User::class)->make();
 
-        $response = $this->actingAs($user)->get('/login');
+            $response = $this->actingAs($user)->get('/login');
 
-        $response->assertRedirect('/home');
+            $response->assertRedirect('/home');
     }
 
     /**
@@ -69,6 +70,14 @@ class LoginTest extends TestCase
 
         $response->assertSuccessful();
         $response->assertViewIs('auth.login');
+    }
+
+    public function test_user_cannot_view_a_password_reset_when_authenticated(){
+        $user = factory(User::class)->make();
+
+        $response = $this->actingAs($user)->get('/password/reset');
+
+        $response->assertRedirect('/home');
     }
 
 
