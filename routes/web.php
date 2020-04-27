@@ -1515,7 +1515,7 @@ Route::group(['middleware' => ['auth']], function(){
 		'DnoPersonalController@creditCardAccount')
 		->name('db-personal.creditCardAccount');
 
-	Route::get(
+	Route::patch(
 		'/dno-personal/credit-card/accounts/edit/{id}',
 		'DnoPersonalController@editCreditCardAccount')
 		->name('dno-personal.creditCardAccount');

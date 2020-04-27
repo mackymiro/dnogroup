@@ -236,44 +236,19 @@ class DnoPersonalController extends Controller
         'totalAmountDue'));
     }
 
+  
     //
-    public function updateCard(Request $request, $id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        $firstName = $user->first_name;
-        $lastName = $user->last_name;
-
-        $name  = $firstName." ".$lastName;
-
-        $updateCard = DnoPersonalCreditCard::find($id);
-        $updateCard->bank_name = $request->get('bankName');
-        $updateCard->account_no = $request->get('accountNo');
-        $updateCard->account_name = $request->get('accountName');
-        $updateCard->type_of_card = $request->get('typeOfCard');
+    public function editCreditCardAccount(Request $request){
+       
+        $updateCard = DnoPersonalCreditCard::find($request->id);
+        $updateCard->bank_name = $request->bankName;
+        $updateCard->account_no = $request->accountNumber;
+        $updateCard->account_name = $request->accoutName;
+        $updateCard->type_of_card = $request->typeOfCard;
         $updateCard->save();
 
-        Session::flash('updatedCard', 'Successfully added a card.');
-
-        return redirect('dno-personal/credit-card/accounts/edit/'.$id);
-
-    }   
-
-    //
-    public function editCreditCardAccount($id){ 
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        $getCreditCardDetail = DnoPersonalCreditCard::find($id);
-
-        $accountName = "Alan Dino";
-        $accountName2 = "MARY MARGARET O. DINO";
-
-        $getCreditCards1 = DnoPersonalCreditCard::where('account_name', $accountName)->get()->toArray();
-
-        $getCreditCards2 = DnoPersonalCreditCard::where('account_name', $accountName2)->get()->toArray();
-
-        return view('dno-personal-credit-card-edit', compact('user', 'getCrediCards1', 'getCreditCards2', 'getCreditCardDetail'));
+        return response()->json($updateCard); 
+    
     }   
 
     //
@@ -378,11 +353,21 @@ class DnoPersonalController extends Controller
             switch ($request->get('action')) {
                 case 'PAID AND RELEASE':
                     # code...
+                    $ids = Auth::user()->id;
+                    $user = User::find($ids);
+            
+                    $firstName = $user->first_name;
+                    $lastName = $user->last_name;
+            
+                    $name  = $firstName." ".$lastName;
+
+                    //get the date today
+                    $getDate =  date("Y-m-d");
+
                     $payables = DnoPersonalPaymentVoucher::find($id);
-
-
-
                     $payables->status = $status;
+                    $payables->delivered_date = $getDate;
+                    $payables->created_by = $name; 
                     $payables->save();
 
                     Session::flash('payablesSuccess', 'FULLY PAID AND RELEASED.');

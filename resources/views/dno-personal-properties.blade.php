@@ -282,10 +282,10 @@
                                                 @foreach($getCebuProperties as $getCebuProperty)
                                                 <tr>
                                                     <td></td>
-                                                    <td>{{ $getCebuProperty['property_name'] }}</td>
-                                                    <td>{{ $getCebuProperty['property_account_code']}}</td>
-                                                    <td>{{ $getCebuProperty['property_account_name'] }}</td>
-                                                    <td>{{ $getCebuProperty['address']}}</td>
+                                                    <td><a href=""><p style="width:160px;">{{ $getCebuProperty['property_name'] }}</p></a></td>
+                                                    <td><p style="width:200px;">{{ $getCebuProperty['property_account_code']}}</p></td>
+                                                    <td><p style="width:200px;">{{ $getCebuProperty['property_account_name'] }}</p></td>
+                                                    <td><p style="width:200px;">{{ $getCebuProperty['address']}}</p></td>
                                                     <td>{{ $getCebuProperty['unit']}}</td>
                                                     <td>{{ $getCebuProperty['status']}}</td>
                                                 </tr>
@@ -339,10 +339,11 @@
                                                         <td>
 
                                                         </td>
-                                                        <td>{{ $getManilaProperty['property_name'] }}</td>
-                                                        <td>{{ $getManilaProperty['property_account_code']}}</td>
-                                                        <td>{{ $getManilaProperty['property_account_name'] }}</td>
-                                                        <td>{{ $getManilaProperty['address']}}</td>
+                                                        
+                                                        <td><a href=""><p style="width:160px;">{{ $getManilaProperty['property_name'] }}</p></a></td>
+                                                        <td><p style="width:200px;">{{ $getManilaProperty['property_account_code']}}</p></td>
+                                                        <td><p style="width:200px;">{{ $getManilaProperty['property_account_name'] }}</p></td>
+                                                        <td><p style="width:200px;">{{ $getManilaProperty['address']}}</p></td>
                                                         <td>{{ $getManilaProperty['unit']}}</td>
                                                         <td>{{ $getManilaProperty['status']}}</td>
                                                     </tr>
