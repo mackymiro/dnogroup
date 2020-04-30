@@ -81,12 +81,12 @@
 			                  Profile Details</div>
 		                  	 <div class="card-body">
 		                  	 	@if(session('updated'))
-									<p class="alert alert-success">{{ Session::get('updated') }}</p>
-								@endif
+                            <p class="alert alert-success">{{ Session::get('updated') }}</p>
+                          @endif
 
 		                  	 	@if(session('err'))
-									<p class="alert alert-danger">{{ Session::get('err') }}</p>
-								@endif
+                            <p class="alert alert-danger">{{ Session::get('err') }}</p>
+                          @endif
 		                  	 	<label>First Name</label>
 		                  	 	<input type="text" name="firstName" class="form-control" value="{{ $profile['first_name']}}" />
 		                  	 	<label>Last Name</label>

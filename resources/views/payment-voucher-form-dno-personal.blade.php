@@ -74,8 +74,8 @@
                       	  						</div>
                                      
                       	  						<div id="paidTo" class="col-lg-4">
-                      	  							<label>Paid To</label>
-                      	  						  <select id="paidTo" name="paidTo" class="change selcls form-control">
+                      	  							<label>Bank Card</label>
+                      	  						  <select id="paidTo" name="bankName" class="change selcls form-control">
                                             <option value="0">--Please Select--</option>
                                             @foreach($getCreditCards as $getCreditCard)
                                             <option value="{{ $getCreditCard['id'] }}-{{ $getCreditCard['bank_name']}}">{{ $getCreditCard['bank_name'] }}</option>
@@ -115,12 +115,64 @@
                                       </div>
                       	  						<div class="col-md-2">
                                           <label>Issued Date </label>
-                                          <input type="text" name="issuedDate" class="selcls form-control" value="{{ old('issuedDate') }}" />
-                                      </div>
-                                      
-                                     
+                                          <input type="text" id="issuedDate" name="issuedDate" class="selcls form-control" value="{{ old('issuedDate') }}" />
+                                      </div>                                     
                       	  				</div>
                           	  		</div>
+                                  <div class="form-group">
+                                      <div class="form-row">
+                                          <div  class="col-md-2">
+                                              <label>Category</label>
+                                              <select  name="category" class="category selcls form-control" > 
+                                                <option value="0">--Pleas Select--</option>
+                                                <optgroup label="Personal Expenses">
+                                                  <option value="ALD Accounts">ALD Accounts</option>
+                                                  <option value="MOD Accounts">MOD Accounts</option>
+                                                </optgroup>
+                                                <optgroup label="Properties">
+                                                  <option value="Cebu Properties">Cebu Properties</option>
+                                                  <option value="Manila Properties">Manila Properties</option>
+                                                </optgroup>
+                                                <optgroup label="Utilities">
+                                                  <option value="Vehicles">Vehicles</option>
+                                                  
+                                                </optgroup>
+                                              </select>
+                                          </div>
+                                          <div id="cebuProp" class="col-lg-2">
+                                              <label>Sub Category</label>
+                                              <select name="subCatCebu" class="selcls form-control" readonly="readonly">
+                                                  @foreach($getCebuProperties as $getCebuProperty)
+                                                  <option value="{{ $getCebuProperty['id']}}-{{ $getCebuProperty['property_name']}}">{{ $getCebuProperty['property_name']}}</option>
+                                                  @endforeach
+                                              </select>
+                                          </div>
+                                          <div id="manilaProp" class="col-lg-2">
+                                              <label>Sub Category</label>
+                                              <select name="subCatManila" class="selcls form-control">
+                                                  @foreach($getManilaProperties as $getManilaProperty)
+                                                  <option value="{{ $getManilaProperty['id']}}-{{ $getManilaProperty['property_name']}}">{{ $getManilaProperty['property_name']}}</option>
+                                                  @endforeach
+                                              </select>
+                                          </div>
+                                          <div id="utility" class="col-lg-2">
+                                              <label>Sub Category</label>
+                                              <select id="util" name="subCatUtility" class="selcls form-control">
+                                                  <option value="0">--Please Select--</option>
+                                                  @foreach($getUtilities as $getUtility)
+                                                  <option value="{{ $getUtility['id']}}-{{ $getUtility['vehicle_unit']}}">{{ $getUtility['vehicle_unit']}}</option>
+                                                  @endforeach
+                                              </select>
+                                          </div>
+                                          <div id="documentList" class="col-lg-2">
+                                              <label>Document List</label>
+                                              <select id="docu" name="documentList" class="selcls form-control">
+                                              </select>
+                                          </div>
+                                          
+                                      </div>
+                                  </div>
+                                
                                   <div class="form-group">
                                       <div class="form-row">
                                           <div class="col-lg-4">
@@ -164,9 +216,85 @@
       $("#acctNum").hide();
       $("#typeOfCC").hide();
       $("#acctName").hide();
+      $("#documentList").hide();
+
+      //for categories
+      $("#cebuProp").hide();
+      $("#manilaProp").hide();
+      $("#utility").hide();
+     
+
+      $("#util").change(function(){
+          const util =  $(this).children("option:selected").val();
+        
+          //make ajax call
+          $.ajax({
+              type: "GET",
+              url:'/dno-personal/get-data/' + util,
+              data:{
+                _method: 'get',
+                "id":util
+              },
+              success:function(data){
+                  var docu = $('#docu');
+                  console.log(data);
+                  data.forEach(function(val, index){
+                      console.log(val.document_name);
+                      docu.append(
+                                  $('<option ></option>').val(val.id).html(val.document_name)
+                            );
+                  });
+                 
+                  
+              },
+              error:function(data){
+                  console.log('Error:', data);
+              }
+
+          });
+      });
+
+      $(".category").change(function(){
+        
+          const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
+
+          if(cat === "Cebu Properties"){
+              $("#cebuProp").show();
+
+              $("#manilaProp").hide();
+              $("#utility").hide();
+              $("#documentList").hide();
+
+              $("#documentList").val('');
+          }else if(cat === "Manila Properties"){
+              $("#manilaProp").show();
+
+              $("#cebuProp").hide();
+              $("#utility").hide();
+              $("#documentList").hide();
+
+              $("#documentList").val('');
+          }else if(cat === "Vehicles"){
+              $("#utility").show();
+              $("#documentList").show();
+
+              $("#cebuProp").hide();
+              $("#manilaProp").hide();
+             
+             
+          }else{
+            $("#cebuProp").hide();
+            $("#manilaProp").hide();
+            $("#utility").hide();
+            $("#documentList").hide();
+
+          } 
+
+
+      });
 
       $(".payment").change(function(){
-          var payment = $(this).children("option:selected").val();
+          const payment = $(this).children("option:selected").val();
           
           if(payment === "Cash"){
               
@@ -184,7 +312,11 @@
               $("#typeOfCC").val('');
               $("#acctName").val('');
 
-             
+              $("#acct").val('');
+              $("#actName").val('');
+              $("#typeCC").val('');
+              $(".change").val('0');
+              $("#issuedDate").val('');
 
           }else if( payment === "Cheque"){
               
@@ -195,44 +327,54 @@
               $("#acctName").show();
 
               $("#acctNameCash").hide();
-              $("#paidToCash").hide();
-          }else{
-             
+              $("#paidToCash").show();
           }
       });
 
       $(".change").change(function(){
              
-              <?php
-                $getCreditCards = DB::table(
-                                  'dno_personal_credit_cards')
-                                  ->get();  ?>
+             const bankName =   $(this).children("option:selected").val();
+             const bankNameSplit  = bankName.split("-");
+             const bankNameSplitArr = bankNameSplit[0];
 
-               <?php foreach($getCreditCards as $getCreditCard): ?>
-                    var paidTo =  $(this).children("option:selected").val();
-                    var paidToSplit = paidTo.split("-");
-                    var paidToSplitArr = paidToSplit[0];
+             if(bankNameSplitArr != 0){
+                  <?php
+                    $getCreditCards = DB::table(
+                                      'dno_personal_credit_cards')
+                                      ->get();  ?>
 
-                    if(paidToSplitArr === "<?php echo $getCreditCard->id ?>"){
-                      <?php
-                            $getId = DB::table(
-                                          'dno_personal_credit_cards')
-                                        ->where('id', $getCreditCard->id)
-                                        ->get();
-                        ?>
-                      
-                        $("#accountNo").html('<input type="text" name="accountNo" class="selcls  form-control" value="<?php echo $getId[0]->account_no?>" readonly="readonly">');
-                        $("#accountNoHide").hide();
+                  <?php foreach($getCreditCards as $getCreditCard): ?>
+                        var paidTo =  $(this).children("option:selected").val();
+                        var paidToSplit = paidTo.split("-");
+                        var paidToSplitArr = paidToSplit[0];
 
-                       
-                        $("#accountName").html('<input type="text" name="accountName" class="selcls form-control" value="<?php echo $getId[0]->account_name; ?>" readonly="readonly"> ');
-                        $("#accountNameHide").hide();
+                        if(paidToSplitArr === "<?php echo $getCreditCard->id ?>"){
+                          <?php
+                                $getId = DB::table(
+                                              'dno_personal_credit_cards')
+                                            ->where('id', $getCreditCard->id)
+                                            ->get();
+                            ?>
+                          
+                            $("#accountNo").html('<input type="text" id="acct" name="accountNo" class="selcls  form-control" value="<?php echo $getId[0]->account_no?>" readonly="readonly">');
+                            $("#accountNoHide").hide();
 
-                        $("#typeOfCard").html('<input type="text" name="typeOfCard" class="selcls form-control" value="<?php echo $getId[0]->type_of_card?>" readonly="readonly">');
-                        $("#typeOfCardHide").hide();
-                    }
+            
+                            $("#accountName").html('<input type="text" id="actName" name="accountName" class="selcls form-control" value="<?php echo $getId[0]->account_name; ?>" readonly="readonly"> ');
+                            $("#accountNameHide").hide();
 
-              <?php endforeach; ?>
+                            $("#typeOfCard").html('<input type="text" id="typeCC" name="typeOfCard" class="selcls form-control" value="<?php echo $getId[0]->type_of_card?>" readonly="readonly">');
+                            $("#typeOfCardHide").hide();
+                        }
+
+                  <?php endforeach; ?>
+
+             }else{
+                  $("#acct").val('');
+                  $("#actName").val('');
+                  $("#typeCC").val('');
+             }
+             
              
         });
 

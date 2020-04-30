@@ -49,9 +49,7 @@ class ProfileController extends Controller
              return redirect('profile/create-user')->with('error', 'Email already exists');
 
         }
-
-
-     
+    
 
     }
 

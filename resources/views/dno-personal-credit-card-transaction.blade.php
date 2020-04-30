@@ -43,6 +43,7 @@
                                            
                                             <th>Invoice #</th>
                                             <th>Voucher Ref #</th>
+                                            <th>Paid To</th>
                                             <th>Bank Name</th>
                                             <th>Account Name</th>
                                             <th >Issued Date</th>
@@ -56,6 +57,7 @@
                                             
                                             <th>Invoice #</th>
                                             <th>Voucher Ref #</th>
+                                            <th>Paid To</th>
                                             <th>Bank Name</th>
                                           
                                             <th>Account Name</th>
@@ -93,6 +95,12 @@
                                          
                                             <td>{{ $getTransaction['voucher_ref_number']}}</td>
                                             <td>{{ $getTransaction['paid_to']}}</td>
+                                            <td>
+                                                <?php
+                                                    $exp = explode('-', $getTransaction['bank_card']);
+                                                    echo $exp[1];
+                                                ?>
+                                            </td>
                                             <td>{{ $getTransaction['account_name']}}</td>
                                             <td>{{ $getTransaction['issued_date']}}</td>
                                             <td>{{ $getTransaction['delivered_date']}}</td>

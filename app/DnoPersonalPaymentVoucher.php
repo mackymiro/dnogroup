@@ -8,13 +8,17 @@ class DnoPersonalPaymentVoucher extends Model
 {
     //
       protected $fillable = [
-    	  'user_id',
+    	'user_id',
         'pv_id',
         'reference_number',
         'date',
         'paid_to',
+        'bank_card',
         'account_no',
         'account_name',
+        'category',
+        'sub_category',
+        'sub_category_name',
         'particulars',
         'amount',
         'method_of_payment',
@@ -32,5 +36,7 @@ class DnoPersonalPaymentVoucher extends Model
         'cheque_number',
         'cheque_amount',
         'type_of_card',
+        'utility_sub_category',
+        'utility_sub_category_name',
     ];
 }

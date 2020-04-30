@@ -12,16 +12,341 @@ use App\User;
 use App\DnoPersonalPaymentVoucher;
 use App\DnoPersonalCreditCard;
 use App\DnoPersonalProperty;
+use App\DnoPersonalUtility; 
 
 class DnoPersonalController extends Controller
 {
+    //
+    public function vehicleUpdate(Request $request){
+        
+        $updateVehicle = DnoPersonalUtility::find($request->id);
+
+        $updateVehicle->vehicle_unit = $request->editVehicleUnit;
+        $updateVehicle->series = $request->editSeries;
+        $updateVehicle->denomination = $request->editDenomination;
+        $updateVehicle->body_type = $request->editBodyType;
+        $updateVehicle->year_model = $request->editYearModel;
+        $updateVehicle->mv_file_no = $request->editMVFile;
+        $updateVehicle->plate_no = $request->editPlateNo;
+        $updateVehicle->engine_no = $request->editEngineNo;
+        $updateVehicle->cr_no = $request->editCrNo;
+        $updateVehicle->location = $request->editLocation;
+
+        $updateVehicle->save();
+
+        return response()->json($updateVehicle); 
+
+    }   
+
+
+    //
+    public function storePMSDocument(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $document = $request->file('document');
+
+        if($document == ""){
+            Session::flash('errorUp', 'Please upload a file.');
+            return redirect('dno-personal/vehicles/view/'.$id);
+        }else{
+            $document = $request->file('document');
+            
+            $profileImageSaveAsName = time() . "." .$document->getClientOriginalExtension();
+            
+            if($document->getClientOriginalExtension() == "jpg"){
+                //upload the file to uploads folder
+                $upload_path = 'uploads/documents';
+                $image = $upload_path . $profileImageSaveAsName;
+
+                //move the image to uploads folder
+                $success = $document->move($upload_path, $profileImageSaveAsName);
+
+                $flag = "PMS List";
+
+                $getDate = date("Y-m-d");
+                $addDocument = new DnoPersonalUtility([
+                    'user_id'=>$user->id,
+                    'pu_id'=>$id,
+                    'upload_document'=>$profileImageSaveAsName,
+                    'document_name'=>$request->get('docName'),
+                    'flag'=>$flag,
+                    'date'=>$getDate,
+                    'created_by'=>$name,
+                ]);
+
+                $addDocument->save();
+
+                Session::flash('uploadPMSDocu', 'Document successfully uploaded');
+
+                return redirect('dno-personal/vehicles/view/'.$id);
+
+            }else if($document->getClientOriginalExtension() == "png"){
+                 //upload the file to uploads folder
+                 $upload_path = 'uploads/documents';
+                 $image = $upload_path . $profileImageSaveAsName;
+ 
+                 //move the image to uploads folder
+                 $success = $document->move($upload_path, $profileImageSaveAsName);
+
+                 $flag = "PMS List";
+
+                $getDate = date("Y-m-d");
+                $addDocument = new DnoPersonalUtility([
+                    'user_id'=>$user->id,
+                    'pu_id'=>$id,
+                    'upload_document'=>$profileImageSaveAsName,
+                    'document_name'=>$request->get('docName'),
+                    'flag'=>$flag,
+                    'date'=>$getDate,
+                    'created_by'=>$name,
+                ]);
+                 $addDocument->save();
+ 
+                 Session::flash('uploadPMSDocu', 'Document successfully uploaded');
+ 
+                 return redirect('dno-personal/vehicles/view/'.$id);
+
+
+            }else if($document->getClientOriginalExtension() == "jpeg"){
+                  //upload the file to uploads folder
+                  $upload_path = 'uploads/documents';
+                  $image = $upload_path . $profileImageSaveAsName;
+  
+                  //move the image to uploads folder
+                  $success = $document->move($upload_path, $profileImageSaveAsName);
+                  
+                  $flag = "PMS List";
+
+                  $getDate = date("Y-m-d");
+                  $addDocument = new DnoPersonalUtility([
+                      'user_id'=>$user->id,
+                      'pu_id'=>$id,
+                      'upload_document'=>$profileImageSaveAsName,
+                      'document_name'=>$request->get('docName'),
+                      'flag'=>$flag,
+                      'date'=>$getDate,
+                      'created_by'=>$name,
+                  ]);
+
+                  $addDocument->save();
+  
+                  Session::flash('uploadPMSDocu', 'Document successfully uploaded');
+  
+                  return redirect('dno-personal/vehicles/view/'.$id);
+            }else{
+
+                Session::flash('errorUp', 'Invalid file type.');
+                return redirect('dno-personal/vehicles/view/'.$id);
+            }
+
+        }
+        
+    }
+    
+    //
+    public function viewDocumentList($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //
+        $getViewDocument = DnoPersonalUtility::find($id);
+       
+        //getDocumentParticulars
+        $getDocumentParticulars = DnoPersonalPaymentVoucher::where('utility_sub_category', $id)->get()->toArray();
+        
+        return view('dno-personal-view-document-list', compact('user', 'getViewDocument', 'getDocumentParticulars'));
+        
+    }
+
+    //
+    public function storeDocument(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $document = $request->file('document');
+        
+        if($document == ""){
+            Session::flash('err', 'Please upload a file.');
+            return redirect('dno-personal/vehicles/view/'.$id);
+        }else{
+            $document = $request->file('document');
+            
+            $profileImageSaveAsName = time() . "." .$document->getClientOriginalExtension();
+            
+            if($document->getClientOriginalExtension() == "jpg"){
+                //upload the file to uploads folder
+                $upload_path = 'uploads/documents';
+                $image = $upload_path . $profileImageSaveAsName;
+
+                //move the image to uploads folder
+                $success = $document->move($upload_path, $profileImageSaveAsName);
+
+                $flag = "OR List";
+
+                $getDate = date("Y-m-d");
+                $addDocument = new DnoPersonalUtility([
+                    'user_id'=>$user->id,
+                    'pu_id'=>$id,
+                    'upload_document'=>$profileImageSaveAsName,
+                    'document_name'=>$request->get('docName'),
+                    'flag'=>$flag,
+                    'date'=>$getDate,
+                    'created_by'=>$name,
+                ]);
+
+                $addDocument->save();
+
+                Session::flash('uploadDocu', 'Document successfully uploaded');
+
+                return redirect('dno-personal/vehicles/view/'.$id);
+
+            }else if($document->getClientOriginalExtension() == "png"){
+                 //upload the file to uploads folder
+                 $upload_path = 'uploads/documents';
+                 $image = $upload_path . $profileImageSaveAsName;
+ 
+                 //move the image to uploads folder
+                 $success = $document->move($upload_path, $profileImageSaveAsName);
+
+                 $flag = "OR List";
+
+                $getDate = date("Y-m-d");
+                $addDocument = new DnoPersonalUtility([
+                    'user_id'=>$user->id,
+                    'pu_id'=>$id,
+                    'upload_document'=>$profileImageSaveAsName,
+                    'document_name'=>$request->get('docName'),
+                    'flag'=>$flag,
+                    'date'=>$getDate,
+                    'created_by'=>$name,
+                ]);
+
+                 $addDocument->save();
+ 
+                 Session::flash('uploadDocu', 'Document successfully uploaded');
+ 
+                 return redirect('dno-personal/vehicles/view/'.$id);
+
+
+            }else if($document->getClientOriginalExtension() == "jpeg"){
+                  //upload the file to uploads folder
+                  $upload_path = 'uploads/documents';
+                  $image = $upload_path . $profileImageSaveAsName;
+  
+                  //move the image to uploads folder
+                  $success = $document->move($upload_path, $profileImageSaveAsName);
+                  
+                  $flag = "OR List";
+
+                  $getDate = date("Y-m-d");
+                  $addDocument = new DnoPersonalUtility([
+                      'user_id'=>$user->id,
+                      'pu_id'=>$id,
+                      'upload_document'=>$profileImageSaveAsName,
+                      'document_name'=>$request->get('docName'),
+                      'flag'=>$flag,
+                      'date'=>$getDate,
+                      'created_by'=>$name,
+                  ]);
+
+                  $addDocument->save();
+  
+                  Session::flash('uploadDocu', 'Document successfully uploaded');
+  
+                  return redirect('dno-personal/vehicles/view/'.$id);
+            }else{
+
+                Session::flash('err', 'Invalid file type.');
+                return redirect('dno-personal/vehicles/view/'.$id);
+            }
+
+        }
+
+    }
+
+    //
+    public function viewVehicle($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //
+        $getVehicle = DnoPersonalUtility::find($id);
+
+        $flagOR = "OR List";
+        $flagPMS = "PMS List";
+
+        //get OR documents
+        $getORDocuments = DnoPersonalUtility::where('pu_id', $id)->where('flag', $flagOR)->get()->toArray();
+
+        //get PMS documents
+        $getPMSDocuments = DnoPersonalUtility::where('pu_id', $id)->where('flag', $flagPMS)->get()->toArray();
+
+        return view('dno-personal-view-vehicles', compact('user', 'getVehicle', 'getORDocuments', 'getPMSDocuments'));
+    }
+
+    //
+    public function storeVehicles(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        //check if vehicle unit already exists
+        $target = DB::table(
+            'dno_personal_utilities')
+            ->where('vehicle_unit', $request->vehicleUnit)
+            ->get()->first();
+        
+        if($target === NULL){
+            $addVehicle = new DnoPersonalUtility([
+                'user_id'=>$user->id,
+                'vehicle_unit'=>$request->vehicleUnit,
+                'series'=>$request->series,
+                'denomination'=>$request->denomination,
+                'body_type'=>$request->bodyType,
+                'year_model'=>$request->yearModel,
+                'mv_file_no'=>$request->mVFile,
+                'plate_no'=>$request->plateNo,
+                'engine_no'=>$request->engineNo,
+                'cr_no'=>$request->crNo,
+                'location'=>$request->location,
+                'created_by'=>$name,
+            ]);
+    
+            $addVehicle->save();
+    
+            return response()->json('Success: Vehicle has been added'); 
+        }else{
+
+            return response()->json('Error: Vehicle already exists');
+        }
+
+    
+    }
 
     //
     public function vehicles(){
         $ids = Auth::user()->id;
         $user = User::find($ids);
+
+        //getVehicles
+        $getVehicles = DnoPersonalUtility::where('pu_id', NULL)->get()->toArray();
         
-        return view('dno-personal-vehicles', compact('user'));
+        return view('dno-personal-vehicles', compact('user', 'getVehicles'));
     }
 
     //
@@ -239,14 +564,13 @@ class DnoPersonalController extends Controller
   
     //
     public function editCreditCardAccount(Request $request){
-       
         $updateCard = DnoPersonalCreditCard::find($request->id);
         $updateCard->bank_name = $request->bankName;
         $updateCard->account_no = $request->accountNumber;
         $updateCard->account_name = $request->accoutName;
         $updateCard->type_of_card = $request->typeOfCard;
         $updateCard->save();
-
+        
         return response()->json($updateCard); 
     
     }   
@@ -436,7 +760,16 @@ class DnoPersonalController extends Controller
         $name  = $firstName." ".$lastName;
 
         $particulars = DnoPersonalPaymentVoucher::find($id);
+       
+        if($particulars['category'] == "Vehicles"){
+            $util = $particulars['utility_sub_category'];
+            
+        }else{
+            $util = "NULL";
+            
+        }
     
+        
         //add current amount
         $add = $particulars['amount_due'] + $request->get('amount');
 
@@ -445,6 +778,7 @@ class DnoPersonalController extends Controller
             'pv_id'=>$id,
             'voucher_ref_number'=>$particulars['voucher_ref_number'],
             'particulars'=>$request->get('particulars'),
+            'utility_sub_category'=>$util,
             'amount'=>$request->get('amount'),
             'created_by'=>$name,
 
@@ -527,7 +861,7 @@ class DnoPersonalController extends Controller
         $user = User::find($ids);
 
          //
-        $getTransactionLists = DnoPersonalPaymentVoucher::where('pv_id', NULL)->get()->toArray();
+        $getTransactionLists = DnoPersonalPaymentVoucher::where('pv_id', NULL)->orderBy('id', 'desc')->get()->toArray();
 
            //get total amount due
         $status = "FULLY PAID AND RELEASED";
@@ -540,11 +874,6 @@ class DnoPersonalController extends Controller
 
     //
     public function paymentVoucherStore(Request $request){
-          //validate
-        $this->validate($request, [
-            'paidTo' =>'required',
-           
-        ]);
 
         $ids = Auth::user()->id;
         $user = User::find($ids);
@@ -572,16 +901,37 @@ class DnoPersonalController extends Controller
         if($request->get('paymentMethod') == "Cash"){
             $accountName = $request->get('accountNameCash');
             $paidTo = $request->get('paidToCash');
-            echo $paidTo;
+
 
         }else if($request->get('paymentMethod') == "Cheque"){
             $accountName = $request->get('accountName');
+            $paidTo = $request->get('paidToCash');
 
-            $paidToCC = explode("-", $request->get('paidTo'));
-            $paidTo = $paidToCC[1]; 
         }
 
-    
+
+        if($request->get('category') === "Cebu Properties"){
+            
+            $subCatExp = explode("-", $request->get('subCatCebu'));
+            $subCat = $subCatExp[0];
+            $subCatName = $subCatExp[1];
+           
+        }elseif($request->get('category') === "Manila Properties"){
+            $subCatExp = explode("-", $request->get('subCatManila'));
+            $subCat = $subCatExp[0];
+            $subCatName = $subCatExp[1];
+        
+        }elseif($request->get('category') === "Vehicles"){
+
+            $subCatExp = explode("-",$request->get('subCatUtility'));
+            $subCat = $subCatExp[0];
+            $subCatName = $subCatExp[1];
+          
+        }else{
+            $subCat = "NULL";
+            $subCatName = "NULL";
+        }
+        
         //check if invoice number already exists
         $target = DB::table(
                         'dno_personal_payment_vouchers')
@@ -593,17 +943,22 @@ class DnoPersonalController extends Controller
               $addPaymentVoucher = new DnoPersonalPaymentVoucher([
                     'user_id'=>$user->id,
                     'paid_to'=>$paidTo,
+                    'bank_card'=>$request->get('bankName'),
                     'invoice_number'=>$request->get('invoiceNumber'),
                     'account_no'=>$request->get('accountNo'),
                     'account_name'=>$accountName,
                     'type_of_card'=>$request->get('typeOfCard'),
                     'voucher_ref_number'=>$uVoucher,
-                    'issued_date'=>$request->get('issuedDate'),
-                    
+                    'issued_date'=>$request->get('issuedDate'),     
                     'amount'=>$request->get('amount'),
                     'amount_due'=>$request->get('amount'),
                     'particulars'=>$request->get('particulars'),
                     'method_of_payment'=>$request->get('paymentMethod'),
+                    'category'=>$request->get('category'),
+                    'sub_category'=>$subCat,
+                    'sub_category_name'=>$subCatName,
+                    'utility_sub_category'=>$request->get('documentList'),
+
                     'prepared_by'=>$name,
                     'created_by'=>$name,
             ]);
@@ -617,6 +972,14 @@ class DnoPersonalController extends Controller
         }
 
     }
+
+    //
+    public function getData($id){
+        $getDocuments = DnoPersonalUtility::where('pu_id', $id)->get()->toArray();
+
+        return response()->json($getDocuments); 
+
+    }
     
      //
     public function paymentVoucherForm(){
@@ -626,8 +989,20 @@ class DnoPersonalController extends Controller
         //getCreditCards
         $getCreditCards = DnoPersonalCreditCard::get()->toArray();
 
+        //getproperties
+        $flag = "Cebu Properties";
+        $flagM = "Manila Properties";
 
-        return view('payment-voucher-form-dno-personal', compact('user', 'getCreditCards'));
+        $getCebuProperties = DnoPersonalProperty::where('flag', $flag)->get()->toArray();
+
+        $getManilaProperties = DnoPersonalProperty::where('flag', $flagM)->get()->toArray();
+
+        //getUtilities
+        $getUtilities = DnoPersonalUtility::where('pu_id', NULL)->get()->toArray();
+       
+
+        return view('payment-voucher-form-dno-personal', compact('user', 'getCreditCards', 
+        'getCebuProperties', 'getManilaProperties', 'getUtilities'));
     }
 
     /**
@@ -642,28 +1017,28 @@ class DnoPersonalController extends Controller
         $id =  Auth::user()->id;
         $user = User::find($id);
 
-        $acctName = "Alan Dino";
+        $catName = "ALD Accounts";
 
-        $modName = "MARY MARGARET O. DINO";
+        $catNameMOD = "MOD Accounts";
 
         $payment ="Cash";
 
         //getTransaction
-        $getTransactions = DnoPersonalPaymentVoucher::where('account_no', NULL)->where('account_name', $acctName)
+        $getTransactions = DnoPersonalPaymentVoucher::where('account_no', NULL)->where('category', $catName)
         ->where('method_of_payment', $payment)->get()->toArray();
         
         //getTransaction
-        $getModTransactions = DnoPersonalPaymentVoucher::where('account_no', NULL)->where('account_name', $modName)
+        $getModTransactions = DnoPersonalPaymentVoucher::where('account_no', NULL)->where('category', $catNameMOD)
         ->where('method_of_payment', $payment)->get()->toArray();
        
 
          //get total amount due
          $status = "FULLY PAID AND RELEASED";
 
-         $totalAmountDue = DnoPersonalPaymentVoucher::where('account_no',  NULl)->where('account_name', $acctName)
+         $totalAmountDue = DnoPersonalPaymentVoucher::where('account_no',  NULl)->where('category', $catName)
          ->where('status' ,'!=', $status)->sum('amount_due');
 
-         $totalAmountDueMod = DnoPersonalPaymentVoucher::where('account_no',  NULl)->where('account_name', $modName)
+         $totalAmountDueMod = DnoPersonalPaymentVoucher::where('account_no',  NULl)->where('category', $catNameMOD)
          ->where('status' ,'!=', $status)->sum('amount_due');
 
         return view('dno-personal', compact('user', 'getTransactions', 'totalAmountDue', 'getModTransactions', 'totalAmountDueMod'));
@@ -724,6 +1099,12 @@ class DnoPersonalController extends Controller
         //
     }
 
+
+    //  
+    public function destroyVehicles($id){
+        $vehicle = DnoPersonalUtility::find($id);
+        $vehicle->delete();
+    }
 
     //
     public function destroyCreditCard($id){

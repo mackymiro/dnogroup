@@ -200,6 +200,16 @@
 		  									<label>Payment Method</label>
 		  									<input type="text" name="paymentMethod" class="selcls form-control" value="{{ $transactionList['method_of_payment'] }}" disabled="disabled" />
 			  							</div>
+										<div class="col-lg-4">
+		  									<label>Category</label>
+		  									<input type="text" name="category" class="selcls form-control" value="{{ $transactionList['category'] }}" disabled="disabled" />
+			  							</div>
+										@if($transactionList['sub_category_name'] != "NULL")
+										<div class="col-lg-4">
+		  									<label>&nbsp;</label>
+		  									<input type="text" name="subCateogry" class="selcls form-control" value="{{ $transactionList['sub_category_name'] }}" disabled="disabled" />
+			  							</div>
+										@endif
 			  							<div class="col-lg-4">
 		  									<label>Status</label>
 		  									<div id="app-status">

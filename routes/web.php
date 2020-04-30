@@ -1595,6 +1595,53 @@ Route::group(['middleware' => ['auth']], function(){
 		'DnoPersonalController@vehicles')
 		->name('dno-personal.vehicles');
 
+	Route::patch(
+		'/dno-personal/vehicles/update-vehicle/{id}',
+		'DnoPersonalController@vehicleUpdate')
+		->name('dno-personal.vehicleUpdate');
+
+	Route::delete(
+		'/dno-perosonal/vehicles/delete/{id}',
+		'DnoPersonalController@destroyVehicles')
+		->name('dno-personal.destroyVehicles');
+
+	Route::post(
+		'/dno-personal/vehicles/store-vehicles',
+		'DnoPersonalController@storeVehicles')
+		->name('dno-personal.storeVehicles');
+
+	Route::get(
+		'/dno-personal/vehicles/view/{id}',
+		'DnoPersonalController@viewVehicle')
+		->name('dno-personal.viewVehicle');
+
+	Route::post(
+		'/dno-personal/vehicles/store-document/{id}',
+		'DnoPersonalController@storeDocument')
+		->name('dno-personal.storeDocument');
+
+	Route::get(
+		'/dno-personal/vehicles/or-list/{id}',
+		'DnoPersonalController@viewDocumentList')
+		->name('dno-personal.viewDocumentList');
+	
+	Route::get(
+		'/dno-personal/vehicles/pms-list/{id}',
+		'DnoPersonalController@viewDocumentList')
+		->name('dno-personal.viewDocumentList');
+	
+	Route::post(
+		'/dno-personal/vehicles/store-pms/{id}',
+		'DnoPersonalController@storePMSDocument')
+		->name('dno-personal.storePMSDocument');
+
+		
+	Route::get(
+		'/dno-personal/get-data/{id}',
+		'DnoPersonalController@getData')
+		->name('dno-personal.getData');
+
+
 	//DNO food ventures
 	Route::get(
 		'/dno-food-ventures',

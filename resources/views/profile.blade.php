@@ -62,7 +62,7 @@
 							<?php if($user->photo == NULL ): ?>
 								<img src="{{ asset('images/profile-placeholder.gif')}}"  class="img-responsive" alt="">
 							<?php else: ?>
-								<img src="/uploads/<?php echo $user->photo; ?>"  width="284" height="295" class="img-responsive" alt="RMTG">
+								<img src="/uploads/<?php echo $user->photo; ?>"  width="284" height="295" class="img-responsive" alt="">
 							<?php endif; ?>
 								
 								

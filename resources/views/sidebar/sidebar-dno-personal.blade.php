@@ -48,9 +48,6 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
             <a class="dropdown-item" href="{{ url('dno-personal/vehicles') }}">Vehicles</a>
-            <a class="dropdown-item" href="">Hi-Ace Grandia</a>
-            <a class="dropdown-item" href="#">Hilux</a>
-           
         </div>
       </li>
        <li class="nav-item dropdown ">
