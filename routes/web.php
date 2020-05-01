@@ -1589,6 +1589,42 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dno-personal/store-properties',
 		'DnoPersonalController@storeProperties')
 		->name('dno-personal.storeProperties');
+		
+	
+	Route::get(
+		'/dno-personal/cebu-properties/view/{id}',
+		'DnoPersonalController@viewProperties')
+		->name('dno-personal.viewProperties');
+
+	Route::get(
+		'/dno-personal/manila-properties/view/{id}',
+		'DnoPersonalController@viewProperties')
+		->name('dno-personal.viewProperties');
+
+	Route::post(
+		'/dno-personal/properties/add-bill',
+		'DnoPersonalController@addOtherBills')
+		->name('dno-personal.addOtherBills');
+	
+	Route::post(
+		'/dno-personal/properties/add-pldt',
+		'DnoPersonalController@addPLDT')
+		->name('dno-personal.addPLDT');
+
+	Route::get(
+		'/dno-personal/cebu-properties/view-veco/{id}',
+		'DnoPersonalController@viewBills')
+		->name('dno-personal.viewBills');
+
+	Route::get(
+		'/dno-personal/cebu-properties/view-mcwd/{id}',
+		'DnoPersonalController@viewBills')
+		->name('dno-personal.viewBills');
+
+	Route::get(
+		'/dno-personal/cebu-properties/view-pldt/{id}',
+		'DnoPersonalController@viewBills')
+		->name('dno-personal.viewBills');
 
 	Route::get(
 		'/dno-personal/vehicles',

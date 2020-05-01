@@ -34,7 +34,7 @@ class DnoPersonalController extends Controller
 
         $updateVehicle->save();
 
-        return response()->json($updateVehicle); 
+        return response()->json('Success: successfully updated.'); 
 
     }   
 
@@ -350,6 +350,118 @@ class DnoPersonalController extends Controller
     }
 
     //
+    public function viewBills($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //
+        $viewBill = DnoPersonalProperty::find($id);
+        
+        return view('dno-personal-view-bills', compact('user', 'viewBill'));
+    } 
+
+    //
+    public function addPLDT(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //get the date today
+         $getDate =  date("Y-m-d");
+
+        //check if account no already exists
+        $target = DB::table(
+            'dno_personal_properties')
+            ->where('account_no', $request->accountNoPLDT)
+            ->get()->first();
+        
+        if($target == NULL){
+            $addPLDT = new DnoPersonalProperty([
+                'user_id'=>$user->id,
+                'pp_id'=>$request->propIdPLDT,
+                'account_no'=>$request->accountNoPLDT,
+                'account_name'=>$request->accountNamePLDT,
+                'telephone_no'=>$request->telephoneNO,
+                'meter_no'=>$request->meterNo,
+                'flag'=>$request->flagPLDT,
+                'date'=>$getDate,
+                'created_by'=>$name,
+
+            ]);
+            $addPLDT->save();
+            return response()->json('Success: successfully added an account.');
+        }else{
+            return response()->json('Error: account already exist.');
+        }
+
+
+    }
+    
+
+    //
+    public function addOtherBills(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //get the date today
+         $getDate =  date("Y-m-d");
+
+        //check if veco account and mcwd already exists
+        $target = DB::table(
+                    'dno_personal_properties')
+                    ->where('account_id', $request->accountId)
+                    ->get()->first();
+        if($target == NULL){
+            $addOtherBills = new DnoPersonalProperty([
+                'user_id'=>$user->id,
+                'pp_id'=>$request->propId,
+                'account_id'=>$request->accountId,
+                'account_name'=>$request->accountName,
+                'meter_no'=>$request->meterNo,
+                'flag'=>$request->flag,
+                'date'=>$getDate,
+                'created_by'=>$name,
+
+            ]);
+            $addOtherBills->save();
+            return response()->json('Success: successfully added an account.');
+
+        }else{
+            return response()->json('Error: Account ID already exist.'); 
+        }
+
+    }
+
+    //
+    public function viewProperties($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $viewProperty = DnoPersonalProperty::find($id);
+
+        $flag = "Veco";
+        $flagMc = "MCWD";
+        $flagPLDT = "PLDT";
+
+        $vecoDocuments = DnoPersonalProperty::where('pp_id', $id)->where('flag', $flag)->get()->toArray();
+
+        $mcwdDocuments = DnoPersonalProperty::where('pp_id', $id)->where('flag', $flagMc)->get()->toArray();
+
+        $PLDTDocuments = DnoPersonalProperty::where('pp_id', $id)->where('flag', $flagPLDT)->get()->toArray();
+
+        return view('dno-personal-view-property', compact('user', 'viewProperty', 'vecoDocuments', 'mcwdDocuments', 'PLDTDocuments'));
+    }
+
+    //
     public function storeProperties(Request $request){
         $ids = Auth::user()->id;
         $user = User::find($ids);
@@ -359,37 +471,32 @@ class DnoPersonalController extends Controller
 
         $name  = $firstName." ".$lastName;
 
-        //validate
-        $this->validate($request, [
-            'propName' =>'required',
-            'propAccountCode'=>'required',
-            'propAccountName'=>'required',
-            'address'=>'required',
-            'unit'=>'required',
-        ]);
-
-        $addProperties = new DnoPersonalProperty([
-            'user_id'=>$user->id,
-            'property_name'=>$request->get('propName'),
-            'property_account_code'=>$request->get('propAccountCode'),
-            'property_account_name'=>$request->get('propAccountName'),
-            'address'=>$request->get('address'),
-            'unit'=>$request->get('unit'),
-            'status'=>$request->geT('status'),
-            'flag'=>$request->get('flag'),
-            'created_by'=>$name,
-        ]);
-
-        $addProperties->save();
-
-        Session::flash('addProperty', 'Successfully added a property.');
-
-        if($request->get('flag') == "Cebu Properties"){
-            return redirect('dno-personal/cebu-properties');
+        //check if property unit already exists
+        $target = DB::table(
+                    'dno_personal_properties')
+                    ->where('property_name', $request->propName)
+                    ->get()->first();
+    
+        if($target  == NULL){
+            $addProperties = new DnoPersonalProperty([
+                'user_id'=>$user->id,
+                'property_name'=>$request->propName,
+                'property_account_code'=>$request->propAccountCode,
+                'property_account_name'=>$request->propAccountName,
+                'address'=>$request->address,
+                'unit'=>$request->unit,
+                'status'=>$request->status,
+                'flag'=>$request->flag,
+                'created_by'=>$name,
+            ]);
+    
+            $addProperties->save();
+            return response()->json('Success: successfully added a property.'); 
         }else{
-            return redirect('dno-personal/manila-properties');
+            return response()->json('Error: property has been existed.'); 
         }
-        
+      
+
        
     }
 

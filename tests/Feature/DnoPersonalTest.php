@@ -26,6 +26,7 @@ class DnoPersonalTest extends TestCase
 
         $response = $this->actingAs($user, 'web')->get('/dno-peronal/cebu-properties');
 
+        $response->assertStatus(200);
         $response->assertSuccessful();
         $response->assertViewIs('dno-personal-properties');
     
@@ -37,15 +38,13 @@ class DnoPersonalTest extends TestCase
     }   
 
      /* @test */
-
      public function test_user_can_view_a_vehicles_page(){
+        $user = factory(User::class)->make();
+        $response  = $this->actingAs($user, 'web')->get('/dno-personal/vehicles');
 
-            $user = factory(User::class)->make();
-            $response  = $this->actingAs($user, 'web')->get('/dno-personal/vehicles');
-
-            $response->assertStatus(200);
-            $response->assertSuccessful();
-            $response->assertViewIs('dno-personal-vehicles');
+        $response->assertStatus(200);
+        $response->assertSuccessful();
+        $response->assertViewIs('dno-personal-vehicles');
      }      
 
     /* @test */
@@ -82,15 +81,13 @@ class DnoPersonalTest extends TestCase
     }
 
      /* @test */
-    public function test_user_can_view_a_payment_voucher_transaction_list(){
-        $user = factory(User::class)->make();
-        $pVoucher = factory(DnoPersonalPaymentVoucher::class)->make();
-        $response  = $this->actingAs($user, $pVoucher,  'web')->get('/dno-personal/payables/transaction-list');
+    public function test_user_can_view_cebu_properties_view(){
+      
 
-        $response->assertStatus(200);
-        $response->assertSuccessful();
-        $response->assertViewIs('dno-personal-transaction-list');
+
     }
+
+
     
 
 }

@@ -244,7 +244,6 @@
                                   $('<option ></option>').val(val.id).html(val.document_name)
                             );
                   });
-                 
                   
               },
               error:function(data){

@@ -10,6 +10,7 @@ class DnoPersonalProperty extends Model
     protected $fillable = [
         'user_id',
         'pp_id',
+        'date',
         'property_name',
         'property_account_code',
         'property_account_name',
@@ -17,6 +18,11 @@ class DnoPersonalProperty extends Model
         'unit',
         'status',
         'flag',
+        'account_name',
+        'account_id',
+        'meter_no',
+        'account_no',
+        'telephone_no',
         'created_by',
     ];
 

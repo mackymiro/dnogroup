@@ -42,7 +42,7 @@
                             <div class="card-body">
                                 <div class="form-group">
                                     <div class="form-row">
-                                        <div class="col-lg-12 float-right">
+                                        <div class="col-lg-12 ">
                                             <!-- Button trigger modal -->
                                           
                                             <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addVehicle">Add Vehicle</a>
@@ -107,7 +107,7 @@
          </div>
       </div>
     <!-- Modal -->
-    <div class="modal fade" id="addVehicle" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="addVehicle" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static" >
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
             <div class="modal-header">
@@ -176,7 +176,7 @@
     </div><!-- end modal -->
     <!-- Modal -->
     @foreach($getVehicles as $getVehicle)
-    <div class="modal fade" id="vehicle<?php echo $getVehicle['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="vehicle<?php echo $getVehicle['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
             <div class="modal-header">
@@ -315,7 +315,7 @@
                 "editLocation":editLocation
             },
             success:function(data){
-                location.reload('/dno-personal/vehicles');          
+                
             },
             error:function(data){
                 console.log('Error:', data);
@@ -335,7 +335,10 @@
         const engineNo = $("#engineNo").val('');
         const crNo = $("#crNo").val('');
         const location = $("#location").val('');
+
+        document.location.reload();
     }
+
 
     const saveVehicle = () =>{
         const vehicleUnit = $("#vehicleUnit").val();
@@ -379,11 +382,11 @@
 
                     if(succDataArr == "Success"){
                        $("#succAdd").fadeIn().delay(3000).fadeOut();
-                       $("#succAdd").html('<p class="alert alert-success">'+ data + '</p>');
+                       $("#succAdd").html(`<p class="alert alert-success">${data}</p>`);
                     
                     }else{
                         $("#exists").fadeIn().delay(3000).fadeOut();
-                        $("#exists").html(' <p class="alert alert-danger">'+ data + '</p>');
+                        $("#exists").html(`<p class="alert alert-danger">${data}</p>`);
                     }
                     
 
