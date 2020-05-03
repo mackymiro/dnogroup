@@ -359,8 +359,47 @@ class DnoPersonalController extends Controller
         
         return view('dno-personal-view-bills', compact('user', 'viewBill'));
     } 
+    
+    //save method for skycable
+    public function addSky(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
 
-    //
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //get the date today
+        $getDate =  date("Y-m-d");
+
+        //check if account no already exists
+        $target = DB::table(
+            'dno_personal_properties')
+            ->where('account_no', $request->skyAccountNo)
+            ->get()->first();
+
+        if($target == NULL){
+            $addSky = new DnoPersonalProperty([
+                'user_id'=>$user->id,
+                'pp_id'=>$request->propIdSky,
+                'account_no'=>$request->skyAccountNo,
+                'account_name'=>$request->skyAccountName,
+                'flag'=>$request->flagSky,
+                'date'=>$getDate,
+                'created_by'=>$name,
+
+            ]);
+            $addSky->save();
+            return response()->json('Success: successfully added an account.');
+        }else{
+            return response()->json('Error: account already exist.');
+        }
+
+
+    }
+
+    //save method for pldt 
     public function addPLDT(Request $request){
         $ids = Auth::user()->id;
         $user = User::find($ids);
@@ -402,7 +441,7 @@ class DnoPersonalController extends Controller
     }
     
 
-    //
+    //save method for veco and mcwd
     public function addOtherBills(Request $request){
         $ids = Auth::user()->id;
         $user = User::find($ids);
@@ -442,6 +481,54 @@ class DnoPersonalController extends Controller
     }
 
     //
+    public function updateProperty(Request $request){
+        $property = DnoPersonalProperty::find($request->id);
+        $property->property_name = $request->propNameUpdate;
+        $property->property_account_code = $request->propAccountCodeUpdate;
+        $property->property_account_name = $request->propAccountNameUpdate;
+        $property->address = $request->addressUpdate;
+        $property->unit = $request->unitUpdate;
+        $property->status = $request->statusUpdate;
+        $property->save();
+
+        return response()->json('Success: successfully updated.');
+    }
+
+    //
+    public function updateSky(Request $request){
+        $updateSky = DnoPersonalProperty::find($request->id);
+        $updateSky->account_no = $request->skyAccountNoUpdate;
+        $updateSky->account_name =$request->skyAccountNameUpdate;
+        $updateSky->save();
+
+        return response()->json('Success: successfully updated.');
+    }
+
+    //
+    public function updatePldt(Request $request){   
+        $updatePLDT = DnoPersonalProperty::find($request->id);
+        $updatePLDT->account_no = $request->accountNoPLDTUpdate;
+        $updatePLDT->account_name = $request->accountNamePLDTUpdate;
+        $updatePLDT->telephone_no = $request->telephoneNOUpdate;
+        $updatePLDT->save();
+
+        return response()->json('Success: successfully updated');
+    }
+
+    //
+    public function updateProperties(Request $request){
+        $updateProperty = DnoPersonalProperty::find($request->id);
+
+        $updateProperty->account_id = $request->accountIdUpdate;
+        $updateProperty->account_name = $request->accountNameUpdate;
+        $updateProperty->meter_no = $request->meterNoUpdate;
+        $updateProperty->save();
+        return response()->json('Success: successfully updated.');
+
+        
+    }
+
+    //
     public function viewProperties($id){
         $ids = Auth::user()->id;
         $user = User::find($ids);
@@ -451,6 +538,7 @@ class DnoPersonalController extends Controller
         $flag = "Veco";
         $flagMc = "MCWD";
         $flagPLDT = "PLDT";
+        $flagSky = "SkyCable";
 
         $vecoDocuments = DnoPersonalProperty::where('pp_id', $id)->where('flag', $flag)->get()->toArray();
 
@@ -458,7 +546,10 @@ class DnoPersonalController extends Controller
 
         $PLDTDocuments = DnoPersonalProperty::where('pp_id', $id)->where('flag', $flagPLDT)->get()->toArray();
 
-        return view('dno-personal-view-property', compact('user', 'viewProperty', 'vecoDocuments', 'mcwdDocuments', 'PLDTDocuments'));
+        $skyDocuments = DnoPersonalProperty::where('pp_id', $id)->where('flag', $flagSky)->get()->toArray();
+
+        return view('dno-personal-view-property', compact('user', 'viewProperty', 'vecoDocuments', 
+        'mcwdDocuments', 'PLDTDocuments', 'skyDocuments'));
     }
 
     //
@@ -1206,6 +1297,11 @@ class DnoPersonalController extends Controller
         //
     }
 
+    //
+    public function destroyProperty($id){
+        $property = DnoPersonalProperty::find($id);
+        $property->delete();
+    }
 
     //  
     public function destroyVehicles($id){

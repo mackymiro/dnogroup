@@ -1580,6 +1580,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'DnoPersonalController@properties')
 		->name('dno-personal.properties');
 
+	Route::patch(
+		'/dno-personal/properties/update-property/{id}',
+		'DnoPersonalController@updateProperty')
+		->name('dno-personal.updateProperty');
+
 	Route::get(
 		'/dno-personal/manila-properties',
 		'DnoPersonalController@properties')
@@ -1611,6 +1616,16 @@ Route::group(['middleware' => ['auth']], function(){
 		'DnoPersonalController@addPLDT')
 		->name('dno-personal.addPLDT');
 
+	Route::post(
+		'/dno-persona/properties/add-skycable',
+		'DnoPersonalController@addSky')
+		->name('dno-personal.addSky');
+
+	Route::get(
+		'/dno-personal/cebu-properties/view-skycable/{id}',
+		'DnoPersonalController@viewBills')
+		->name('dno-personal.viewBills');
+
 	Route::get(
 		'/dno-personal/cebu-properties/view-veco/{id}',
 		'DnoPersonalController@viewBills')
@@ -1625,6 +1640,26 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dno-personal/cebu-properties/view-pldt/{id}',
 		'DnoPersonalController@viewBills')
 		->name('dno-personal.viewBills');
+	
+	Route::delete(
+		'/dno-personal/delete-property/{id}',
+		'DnoPersonalController@destroyProperty')
+		->name('dno-personal.destroyProperty');
+
+	Route::patch(
+		'/dno-personal/properties/update/{id}',
+		'DnoPersonalController@updateProperties')
+		->name('dno-persona.updteProperties');
+
+	Route::patch(
+		'/dno-personal/properties/update-pldt/{id}',
+		'DnoPersonalController@updatePldt')
+		->name('dno-personal.updatePLDT');
+
+	Route::patch(
+		'/dno-personal/properties/update-skycable/{id}',
+		'DnoPersonalController@updateSky')
+		->name('dno-personal.updateSky');
 
 	Route::get(
 		'/dno-personal/vehicles',

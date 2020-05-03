@@ -88,8 +88,16 @@
                                             </tfoot>
                                             <tbody>
                                                 @foreach($getCebuProperties as $getCebuProperty)
-                                                <tr>
-                                                    <td></td>
+                                                <tr id="deletedId<?php echo $getCebuProperty['id']; ?>">
+                                                    <td>
+                                                         @if($user->role_type !== 3)
+                                                            <!-- Button trigger modal -->
+                                                            <a data-toggle="modal" data-target="#editCebuProp<?php echo $getCebuProperty['id']?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                                        @endif
+                                                        @if($user->role_type == 1)
+                                                            <a id="delete" onClick="confirmDelete('{{ $getCebuProperty['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
+                                                        @endif
+                                                    </td>
                                                     <td><a href="{{ url('dno-personal/cebu-properties/view/'.$getCebuProperty['id'] ) }}"><p style="width:160px;">{{ $getCebuProperty['property_name'] }}</p></a></td>
                                                     <td><p style="width:200px;">{{ $getCebuProperty['property_account_code']}}</p></td>
                                                     <td><p style="width:200px;">{{ $getCebuProperty['property_account_name'] }}</p></td>
@@ -155,9 +163,15 @@
                                             </tfoot>
                                             <tbody>
                                                  @foreach($getManilaProperties as $getManilaProperty)
-                                                    <tr>
+                                                    <tr id="deletedId<?php echo $getManilaProperty['id']; ?>">
                                                         <td>
-
+                                                        @if($user->role_type !== 3)
+                                                            <!-- Button trigger modal -->
+                                                            <a data-toggle="modal" data-target="#manilaProp<?php echo $getManilaProperty['id']?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                                        @endif
+                                                        @if($user->role_type == 1)
+                                                            <a id="delete" onClick="confirmDelete('{{ $getManilaProperty['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
+                                                        @endif
                                                         </td>
                                                         
                                                         <td><a href="{{ url('dno-personal/manila-properties/view/'.$getManilaProperty['id']) }}"><p style="width:160px;">{{ $getManilaProperty['property_name'] }}</p></a></td>
@@ -183,11 +197,88 @@
     </div> 
     @if(\Request::is('dno-personal/cebu-properties'))
     <!-- Modal -->
+    @foreach($getCebuProperties as $getCebuProperty)
+    <div class="modal fade" id="editCebuProp<?php echo $getCebuProperty['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true"  data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Edit Property</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+        <div class="form-group">
+            <div class="form-row">
+               
+                <div id="succEditSky<?php echo $getCebuProperty['id']?>" class="col-lg-12"></div>
+                <div class="col-lg-12">
+                    <label>Property Name</label>
+                    <input type="text" id="propNameUpdate<?php echo $getCebuProperty['id']?>" name="propName" class="selcls form-control"  value="{{ $getCebuProperty['property_name']}}" />
+                </div>   
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-row">
+            <div class="col-lg-12">
+                <label>Property Account Code</label>
+                <input type="text" id="propAccountCodeUpdate<?php echo $getCebuProperty['id']?>" name="propAccountCode" class="selcls form-control" value="{{ $getCebuProperty['property_account_code']}}" />
+            </div>
+          
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-row">
+                <div class="col-lg-12">
+                    <label>Property Account Name</label>
+                    <input type="text" id="propAccountNameUpdate<?php echo $getCebuProperty['id']?>" name="propAccountName" class="selcls form-control" value="{{ $getCebuProperty['property_account_name']}}" />
+                </div>
+              
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-row">
+                <div class="col-lg-12">
+                    <label>Address</label>
+                    <input type="text" id="addressUpdate<?php echo $getCebuProperty['id']?>" name="address<?php echo $getCebuProperty['id']?>" class="selcls form-control" value="{{ $getCebuProperty['address']}}" />
+                </div>
+             
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-row">
+                <div class="col-lg-12">
+                    <label>Unit </label>
+                    <input type="text" id="unitUpdate<?php echo $getCebuProperty['id']?>" name="unit" class="selcls form-control" value="{{ $getCebuProperty['unit'] }}" />
+                </div>
+              
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-row">
+                <div class="col-lg-12">
+                    <label>Status</label>
+                    <input type="text" id="statusUpdate<?php echo $getCebuProperty['id']?>" name="status<?php echo $getCebuProperty['id']?>" class="selcls form-control"  value="{{ $getCebuProperty['status']}}" />
+                   
+                </div>
+            </div>
+        </div>
+       
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            <button onclick="updateProperty(<?php echo $getCebuProperty['id']?>)" type="button" class="btn btn-success">Update Property</button>
+        </div>
+        </div>
+    </div>
+    </div><!-- end of Modal -->
+    @endforeach
+    <!-- Modal -->
     <div class="modal fade" id="addCebuProperty" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true"  data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Add Properties</h5>
+            <h5 class="modal-title" id="exampleModalLongTitle">Add Property</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -261,6 +352,84 @@
     </div>
     </div><!-- end of Modal -->
     @else
+     <!-- Mdoal -->
+     @foreach($getManilaProperties as $getManilaProperty)
+     <div class="modal fade" id="manilaProp<?php echo $getManilaProperty['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Edit Property</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+        <div class="form-group">
+            <div class="form-row">
+               
+                <div id="succEditManila<?php echo $getManilaProperty['id']?>" class="col-lg-12"></div>
+                <div class="col-lg-12">
+                    <label>Property Name</label>
+                    <input type="text" id="propNameManilaUpdate<?php echo $getManilaProperty['id'] ?>" name="propNameManilaUpdate" class="selcls form-control"  value="{{ $getManilaProperty['property_name'] }}" />
+                </div>
+              
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-row">
+            <div class="col-lg-12">
+                <label>Property Account Code</label>
+                <input type="text" id="propAccountCodeManilaUpdate<?php echo $getManilaProperty['id']?>" name="propAccountCodeManilaUpdate" class="selcls form-control" value="{{ $getManilaProperty['property_account_code'] }}" />
+            </div>
+          
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-row">
+                <div class="col-lg-12">
+                    <label>Property Account Name</label>
+                    <input type="text" id="propAccountNameManilaUpdate<?php echo $getManilaProperty['id']?>" name="propAccountNameManilaUpdate" class="selcls form-control" value="{{ $getManilaProperty['property_account_name'] }}" />
+                </div>
+              
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-row">
+                <div class="col-lg-12">
+                    <label>Address</label>
+                    <input type="text" id="manilaAddressUpdate<?php echo $getManilaProperty['id']?>" name="manilaAddressUpdate" class="selcls form-control" value="{{ $getManilaProperty['address'] }}" />
+                </div>
+             
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-row">
+                <div class="col-lg-12">
+                    <label>Unit </label>
+                    <input type="text" id="manilaUnitUpdate<?php echo $getManilaProperty['id']?>" name="manilaUnitUpdate" class="selcls form-control" value="{{ $getManilaProperty['unit'] }}" />
+                </div>
+              
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-row">
+                <div class="col-lg-12">
+                    <label>Status</label>
+                    <input type="text" id="manilaStatusUpdate<?php echo $getManilaProperty['id']?>" name="manilaStatusUpdate" class="selcls form-control" value="{{ $getManilaProperty['status'] }}" />
+                  
+                </div>
+            </div>
+        </div>
+        
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            <button onclick="updateManilaProperty(<?php echo $getManilaProperty['id'] ?>)" type="button" class="btn btn-success">Update Property</button>
+        </div>
+        </div>
+    </div>
+    </div><!-- end of modal -->
+    @endforeach
     <!-- Mdoal -->
     <div class="modal fade" id="addManilaProperty" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -357,6 +526,121 @@
 <script type="text/javascript">
     $("#validate").hide();
     $("#validateManila").hide();
+
+    const updateManilaProperty = (id) => {
+        const propNameUpdate  = $("#propNameManilaUpdate"+id).val();
+        const propAccountCodeUpdate = $("#propAccountCodeManilaUpdate"+id).val();
+        const propAccountNameUpdate = $("#propAccountNameManilaUpdate"+id).val();
+        const addressUpdate = $("#manilaAddressUpdate"+id).val();
+        const unitUpdate = $("#manilaUnitUpdate"+id).val();
+        const statusUpdate = $("#manilaStatusUpdate"+id).val();
+
+         //make ajax call
+         $.ajax({
+            type:"PATCH",
+            url:'/dno-personal/properties/update-property/' + id,
+            data:{
+                _method:'patch',
+                "_token":"{{ csrf_token() }}",
+                "id":id,
+                "propNameUpdate":propNameUpdate,
+                "propAccountCodeUpdate":propAccountCodeUpdate,
+                "propAccountNameUpdate":propAccountNameUpdate,
+                "addressUpdate":addressUpdate,
+                "unitUpdate":unitUpdate,
+                "statusUpdate":statusUpdate,
+            },
+            success:function(data){
+                console.log(data);
+                const getData = data;
+                const succData = getData.split(":");
+                const succDataArr = succData[0];
+                if(succDataArr == "Success"){
+                    $("#succEditManila"+id).fadeIn().delay(3000).fadeOut();
+                    $("#succEditManila"+id).html(`<p class="alert alert-success"> ${data}</p>`);
+                    
+                    setTimeout(function(){
+                        document.location.reload();
+                    }, 3000);
+                }
+            },  
+            error:function(data){
+                console.log('Error:', data);
+            } 
+        });
+
+
+    }
+
+    const confirmDelete = (id) => {
+        const x = confirm("Do you want to delete this?");
+        if(x){
+            $.ajax({
+              type: "DELETE",
+              url: '/dno-personal/delete-property/' + id,
+              data:{
+                _method: 'delete', 
+                "_token": "{{ csrf_token() }}",
+                "id": id
+              },
+              success: function(data){
+                console.log(data);
+                $("#deletedId"+id).fadeOut('slow');
+               
+              },
+              error: function(data){
+                console.log('Error:', data);
+              }
+
+            });
+        }else{
+            return false;
+        }
+
+    }
+
+    const updateProperty = (id) =>{
+        const propNameUpdate  = $("#propNameUpdate"+id).val();
+        const propAccountCodeUpdate = $("#propAccountCodeUpdate"+id).val();
+        const propAccountNameUpdate = $("#propAccountNameUpdate"+id).val();
+        const addressUpdate = $("#addressUpdate"+id).val();
+        const unitUpdate = $("#unitUpdate"+id).val();
+        const statusUpdate = $("#statusUpdate"+id).val();
+
+        //make ajax call
+        $.ajax({
+            type:"PATCH",
+            url:'/dno-personal/properties/update-property/' + id,
+            data:{
+                _method:'patch',
+                "_token":"{{ csrf_token() }}",
+                "id":id,
+                "propNameUpdate":propNameUpdate,
+                "propAccountCodeUpdate":propAccountCodeUpdate,
+                "propAccountNameUpdate":propAccountNameUpdate,
+                "addressUpdate":addressUpdate,
+                "unitUpdate":unitUpdate,
+                "statusUpdate":statusUpdate,
+            },
+            success:function(data){
+                console.log(data);
+                const getData = data;
+                const succData = getData.split(":");
+                const succDataArr = succData[0];
+                if(succDataArr == "Success"){
+                    $("#succEditSky"+id).fadeIn().delay(3000).fadeOut();
+                    $("#succEditSky"+id).html(`<p class="alert alert-success"> ${data}</p>`);
+                    
+                    setTimeout(function(){
+                        document.location.reload();
+                    }, 3000);
+                }
+            },  
+            error:function(data){
+                console.log('Error:', data);
+            } 
+        });
+    }
 
     const cancelManila = () =>{
         $("#propNameManila").val('');

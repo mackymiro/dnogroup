@@ -32,6 +32,9 @@
                 @elseif(\Request::is('dno-personal/cebu-properties/view-pldt/'.$viewBill['id']))
                     <li class="breadcrumb-item active">PLDT </li>     
                     <li class="breadcrumb-item active">View PLDT Details</li>  
+                @elseif(\Request::is('dno-personal/cebu-properties/view-skycable/'.$viewBill['id']))
+                    <li class="breadcrumb-item active">SkyCable </li>     
+                    <li class="breadcrumb-item active">View SkyCable Details</li>  
                 @endif
             </ol>
             @if(\Request::is('dno-personal/cebu-properties/view-veco/'.$viewBill['id']))
@@ -205,6 +208,61 @@
                     </div>
                  </div>
             </div><!-- end of row -->
+            @elseif(\Request::is('dno-personal/cebu-properties/view-skycable/'.$viewBill['id']))
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card mb-3">
+                         <div class="card-header">
+                                <i class="fas fa-phone" aria-hidden="true"></i>
+                                View PLDT                   
+                         </div>
+                         <div class="card-body">
+                            <div class="form-group">
+                                <div class="form-row">
+                                    <div class="col-lg-2">
+                                        <label>Account No</label>
+                                        <input type="text" name="accountNo" class="selcls form-control" value="{{ $viewBill['account_no'] }}" disabled="disabled" />
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label>Account Name</label>
+                                        <input type="text" name="accountName" class="selcls form-control" value="{{ $viewBill['account_name'] }}" disabled="disabled" />
+                                    </div>
+                                  
+                                    <div class="col-lg-2">
+                                        <label>Date</label>
+                                        <input type="text" name="date" class="selcls form-control" value="{{ $viewBill['date'] }}" disabled="disabled" />
+                                    </div>
+
+                                </div>
+                            </div>
+                         </div>
+                    </div>
+                </div> 
+            </div><!-- end of row -->
+            <div class="row">
+                 <div class="col-lg-12">
+                     <div class="card mb-3">
+                         <div class="card-header">
+                            <i class="fas fa-receipt" aria-hidden="true"></i>
+                            Particulars
+                         </div>
+                         <div class="card-body">
+                            <div class="table-responsive">
+                                 <table class="table table-striped"  width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th width="300px;">PARTICULARS</th>
+                                            <th>AMOUNT</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                 </table>   
+                            </div>
+                         </div>
+                    </div>
+                 </div>
+            </div><!-- end of row -->
+
             @endif
         </div>
      </div>

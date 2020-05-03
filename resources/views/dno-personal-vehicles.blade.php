@@ -188,7 +188,7 @@
             <div class="modal-body">
                 <div class="form-group">
                     <div class="form-row">
-                       
+                        <div id="succEditVehicle<?php echo $getVehicle['id'] ?>" class="col-lg-12"></div>
                         <div class="col-lg-12">
                             <label>Vehicle Unit</label>
                             <input type="text" id="editVehicleUnit<?php echo $getVehicle['id'];?>" name="editVehicleUnit" class="selcls form-control" value="{{ $getVehicle['vehicle_unit']}}" />
@@ -312,10 +312,21 @@
                 "editPlateNo":editPlateNo,
                 "editEngineNo":editEngineNo,
                 "editCrNo":editCrNo,
-                "editLocation":editLocation
+                "editLocation":editLocation,
             },
             success:function(data){
-                
+                console.log(data);
+                const getData = data;
+                const succData = getData.split(":");
+                const succDataArr = succData[0];
+                if(succDataArr == "Success"){
+                    $("#succEditVehicle"+id).fadeIn().delay(3000).fadeOut();
+                    $("#succEditVehicle"+id).html(`<p class="alert alert-success"> ${data}</p>`);
+                    
+                    setTimeout(function(){
+                        document.location.reload();
+                    }, 3000);
+                }
             },
             error:function(data){
                 console.log('Error:', data);
@@ -383,6 +394,10 @@
                     if(succDataArr == "Success"){
                        $("#succAdd").fadeIn().delay(3000).fadeOut();
                        $("#succAdd").html(`<p class="alert alert-success">${data}</p>`);
+
+                       setTimeout(function(){
+                            document.location.reload();
+                        }, 3000);
                     
                     }else{
                         $("#exists").fadeIn().delay(3000).fadeOut();
