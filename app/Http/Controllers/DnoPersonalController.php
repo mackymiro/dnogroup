@@ -16,6 +16,39 @@ use App\DnoPersonalUtility;
 
 class DnoPersonalController extends Controller
 {
+    //
+    public function viewPettyCash($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //
+        $getPettyCash = DnoPersonalPaymentVoucher::find($id);
+
+        $getPettyCashSummaries = DnoPersonalPaymentVoucher::where('pv_id', $id)->get()->toArray();
+
+        //total
+        $totalPettyCash = DnoPersonalPaymentVoucher::where('id', $id)->where('pv_id', NULL)->sum('amount');
+
+        $pettyCashSummaryTotal = DnoPersonalPaymentVoucher::where('pv_id', $id)->sum('amount');
+
+        $sum = $totalPettyCash + $pettyCashSummaryTotal;
+
+
+        return view('dno-personal-view-petty-cash', compact('user', 'getPettyCash', 'getPettyCashSummaries', 'sum'));
+    }
+
+    //
+    public function pettyCashList(){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //getPetyCash
+        $cat = "Petty Cash";
+
+        $getPettyCashLists = DnoPersonalPaymentVoucher::where('category', $cat)->get()->toArray();
+
+        return view('dno-personal-petty-cash-list', compact('user', 'getPettyCashLists'));
+    }
 
     //view service provider
     public function viewServiceProvider($id){
@@ -1010,6 +1043,7 @@ class DnoPersonalController extends Controller
             'user_id'=>$user->id,
             'pv_id'=>$id,
             'voucher_ref_number'=>$particulars['voucher_ref_number'],
+            'date'=>$request->get('date'),
             'particulars'=>$request->get('particulars'),
             'sub_category_account_id'=>$subCatId,
             'utility_sub_category'=>$util,
@@ -1046,6 +1080,7 @@ class DnoPersonalController extends Controller
             'user_id'=>$user->id,
             'pv_id'=>$id,
             'voucher_ref_number'=>$paymentData['voucher_ref_number'],
+            'date'=>$reqeust->get('date'),
             'cheque_number'=>$request->get('chequeNumber'),
             'cheque_amount'=>$request->get('chequeAmount'),
             'created_by'=>$name,
@@ -1178,6 +1213,7 @@ class DnoPersonalController extends Controller
             $subCat = "NULL";
             $subCatName = "NULL";
             $bills = "NULL";
+            $selectAccountID = "NULL";
         }
 
     

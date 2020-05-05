@@ -36,6 +36,7 @@
 				  								<th>Action</th>
 				  								<th>Invoice #</th>
 				  								<th>Voucher Ref #</th>
+												<th  class="bg-info" style="color:#fff;">Category</th>
 												<th>Paid To</th>
 												<th>Account Name</th>
 				  								<th>Issued Date</th>
@@ -43,6 +44,7 @@
 				  								<th>Delivered Date</th>
 												<th style="width:230px;">Payment Method</th>
 				  								<th class="bg-success" style="color:white;">Status</th>
+												
 												<th>Created By</th>
 					  						</tr>
 				  						</thead>
@@ -51,6 +53,7 @@
 				  								<th>Action</th>
 				  								<th>Invoice #</th>
 				  								<th>Voucher Ref #</th>
+												<th  class="bg-info" style="color:#fff;">Category</th>
 												<th>Paid To</th>
 												<th>Account Name</th>
 				  								<th>Issued Date</th>
@@ -94,6 +97,7 @@
 			  										@endif
 			  									</td>
 			  									<td><p style="width:140px;">DP-{{ $getTransactionList['voucher_ref_number']}}</p></td>
+												<td class="bg-info" style="color:#fff;"><p style="width:150px;">{{ $getTransactionList['category']}}</p></td>
 												<td><p style="width:200px;">{{ $getTransactionList['paid_to']}}</p></td>
 												<td><p style="width:200px;">{{ $getTransactionList['account_name']}}</p></td>
 			  									<td><p style="width:130px;">{{ $getTransactionList['issued_date']}}</p></td>

@@ -9,7 +9,15 @@
       $('.alert-success').fadeIn().delay(3000).fadeOut();
       
   });
+  $(function() {
+    $( ".datepicker" ).datepicker();
+  });
 </script>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css" >
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
@@ -111,7 +119,7 @@
                                       </div>
                       	  						<div class="col-md-2">
                                           <label>Issued Date </label>
-                                          <input type="text" id="issuedDate" name="issuedDate" class="selcls form-control" value="{{ old('issuedDate') }}" />
+                                          <input type="text" id="issuedDate" name="issuedDate" class="datepicker selcls form-control" value="{{ old('issuedDate') }}" />
                                       </div>                                     
                       	  				</div>
                           	  		</div>
@@ -129,10 +137,11 @@
                                                   <option value="Cebu Properties">Cebu Properties</option>
                                                   <option value="Manila Properties">Manila Properties</option>
                                                 </optgroup>
-                                                <optgroup label="Utilities">
+                                                <optgroup label="Transportation">
                                                   <option value="Vehicles">Vehicles</option>
                                                   
                                                 </optgroup>
+                                                <option value="Petty Cash">Petty Cash</option>
                                               </select>
                                           </div>
                                           <div id="cebuProp" class="col-lg-2">

@@ -19,7 +19,15 @@
       $('.alert-success').fadeIn().delay(3000).fadeOut();
       
   });
+
+  $(function() {
+    $( ".datepicker" ).datepicker();
+  });
 </script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="wrapper">
 	 @include('sidebar.sidebar-dno-personal')
      <div id="content-wrapper">
@@ -52,7 +60,16 @@
 									@if($transactionList['method_of_payment'] == "Cash")
 									<div class="form-group">
     					  				<div class="form-row">
-					  						<div class="col-lg-8">
+					  						<div class="col-lg-12">
+				  								<label>Date</label>
+				  								<input type="text" name="date" class="datepicker form-control" required="required" />
+					  						</div> 
+
+    					  				</div>
+	    					  		</div>
+									<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-12">
 				  								<label>Payment Cash Number</label>
 				  								<input type="text" name="chequeNumber" class="form-control" required="required" />
 					  						</div> 
@@ -61,7 +78,7 @@
 	    					  		</div>
 	    					  		<div class="form-group">
     					  				<div class="form-row">
-					  						<div class="col-lg-8">
+					  						<div class="col-lg-12">
 				  								<label>Cash Amount</label>
 				  								<input type="text" name="chequeAmount" class="form-control" required="required" />
 					  						</div> 
@@ -90,7 +107,16 @@
 									@elseif($transactionList['method_of_payment'] == "Cheque")
 									<div class="form-group">
     					  				<div class="form-row">
-					  						<div class="col-lg-8">
+					  						<div class="col-lg-12">
+				  								<label>Date</label>
+				  								<input type="text" name="date" class="datepicker form-control" required="required" />
+					  						</div> 
+
+    					  				</div>
+	    					  		</div>
+									<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-12">
 				  								<label>Payment Cheque Number</label>
 				  								<input type="text" name="chequeNumber" class="form-control" required="required" />
 					  						</div> 
@@ -99,7 +125,7 @@
 	    					  		</div>
 	    					  		<div class="form-group">
     					  				<div class="form-row">
-					  						<div class="col-lg-8">
+					  						<div class="col-lg-12">
 				  								<label>Cheque Amount</label>
 				  								<input type="text" name="chequeAmount" class="form-control" required="required" />
 					  						</div> 
@@ -133,12 +159,17 @@
 		                            @endif 
   								<div class="form-group">
   									<div class="form-row">
-  										<div class="col-lg-8">
+										<div class="col-lg-12">
+											<label>Date</label>
+											<input type="text"  name="date" class="datepicker form-control" required="required" />
+										
+										</div>
+  										<div class="col-lg-12">
   											<label>Particulars</label>
 											<input type="text" name="particulars" class="form-control" required="required" />
 										
 										</div>
-										<div class="col-lg-8">
+										<div class="col-lg-12">
   											<label>Amount</label>
 											<input type="text" name="amount" class="form-control" required="required" />
 										
@@ -310,6 +341,7 @@
 								<table class="table table-striped">
   									<thead>
   										<tr>
+  											<th>DATE</th>
   											<th>PARTICULARS</th>
 											<th>AMOUNT</th>
 										</tr>
@@ -317,11 +349,13 @@
 									<tbody>
   										
 										<tr>	
+  											<td>{{ $transactionList['issued_date']}}</td>
   											<td>{{ $transactionList['particulars']}}</td>
 											<td><?php echo number_format($transactionList['amount'], 2); ?></td>
 										</tr>
 										@foreach($getParticulars as $getParticular)
 										<tr>
+  											<td>{{ $getParticular['date']}}</td>
   											<td>{{ $getParticular['particulars']}}</td>
 											<td><?php echo number_format($getParticular['amount'], 2); ?></td>
 										</tr>

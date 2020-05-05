@@ -87,7 +87,27 @@ class DnoPersonalTest extends TestCase
 
     }
 
+     /* @test */
+     public function test_user_can_view_petty_cash_list(){
+        $user = factory(User::class)->make();
+        $response  = $this->actingAs($user, 'web')->get('/dno-personal/petty-cash-list');
 
+        $response->assertStatus(200);
+        $response->assertSuccessful();
+        $response->assertViewIs('dno-personal-petty-cash-list');
+
+    }
+
+     /* @test */
+     public function test_user_can_view_petty_cash_view(){
+        $user = factory(User::class)->make();
+        $id = 1;
+        $response  = $this->actingAs($user, 'web')->get('/dno-personal/petty-cash/view/'.$id);
+
+        $response->assertStatus(200);
+        $response->assertSuccessful();
+        $response->assertViewIs('dno-personal-view-petty-cash');
+     }
     
 
 }

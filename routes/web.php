@@ -1743,6 +1743,16 @@ Route::group(['middleware' => ['auth']], function(){
 		'DnoPersonalController@getCebuProp')
 		->name('dno-personal.getCebuProp');
 
+	Route::get(
+		'/dno-personal/petty-cash-list',
+		'DnoPersonalController@pettyCashList')
+		->name('dno-personal.pettyCashList');
+	
+	Route::get(
+		'/dno-personal/petty-cash/view/{id}',
+		'DnoPersonalController@viewPettyCash')
+		->name('dno-personal.viewPettyCash');
+
 
 	//DNO food ventures
 	Route::get(
