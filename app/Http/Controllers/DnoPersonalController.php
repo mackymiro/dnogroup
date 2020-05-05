@@ -16,6 +16,22 @@ use App\DnoPersonalUtility;
 
 class DnoPersonalController extends Controller
 {
+
+    //view service provider
+    public function viewServiceProvider($id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        //
+         $viewBill = DnoPersonalPaymentVoucher::find($id);
+
+        //getParticular details
+        $getParticulars = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+     
+
+        return view('dno-personal-view-bills', compact('user', 'viewBill', 'getParticulars'));
+    }
+
     //
     public function vehicleUpdate(Request $request){
         
@@ -356,8 +372,12 @@ class DnoPersonalController extends Controller
 
         //
         $viewBill = DnoPersonalProperty::find($id);
-        
-        return view('dno-personal-view-bills', compact('user', 'viewBill'));
+
+        //
+        $viewParticulars = DnoPersonalPaymentVoucher::where('sub_category_account_id', $id)->get()->toArray();
+       
+
+        return view('dno-personal-view-bills', compact('user', 'viewBill', 'viewParticulars'));
     } 
     
     //save method for skycable
@@ -383,7 +403,7 @@ class DnoPersonalController extends Controller
             $addSky = new DnoPersonalProperty([
                 'user_id'=>$user->id,
                 'pp_id'=>$request->propIdSky,
-                'account_no'=>$request->skyAccountNo,
+                'account_id'=>$request->skyAccountNo,
                 'account_name'=>$request->skyAccountName,
                 'flag'=>$request->flagSky,
                 'date'=>$getDate,
@@ -422,7 +442,7 @@ class DnoPersonalController extends Controller
             $addPLDT = new DnoPersonalProperty([
                 'user_id'=>$user->id,
                 'pp_id'=>$request->propIdPLDT,
-                'account_no'=>$request->accountNoPLDT,
+                'account_id'=>$request->accountNoPLDT,
                 'account_name'=>$request->accountNamePLDT,
                 'telephone_no'=>$request->telephoneNO,
                 'meter_no'=>$request->meterNo,
@@ -539,6 +559,7 @@ class DnoPersonalController extends Controller
         $flagMc = "MCWD";
         $flagPLDT = "PLDT";
         $flagSky = "SkyCable";
+        $subCat = "Service Provider";
 
         $vecoDocuments = DnoPersonalProperty::where('pp_id', $id)->where('flag', $flag)->get()->toArray();
 
@@ -548,8 +569,15 @@ class DnoPersonalController extends Controller
 
         $skyDocuments = DnoPersonalProperty::where('pp_id', $id)->where('flag', $flagSky)->get()->toArray();
 
+        //service provider
+        $serviceProviders = DnoPersonalPaymentVoucher::where('sub_category', $id)->where('sub_category_bill_name', $subCat)->get()->toArray();
+
+        //
+        $viewParticulars = DnoPersonalPaymentVoucher::where('sub_category_account_id', $id)->get()->toArray();
+      
+
         return view('dno-personal-view-property', compact('user', 'viewProperty', 'vecoDocuments', 
-        'mcwdDocuments', 'PLDTDocuments', 'skyDocuments'));
+        'mcwdDocuments', 'PLDTDocuments', 'skyDocuments', 'serviceProviders', 'viewParticulars'));
     }
 
     //
@@ -685,7 +713,6 @@ class DnoPersonalController extends Controller
         
           //
         $getChequeNumbers = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
-
 
         //amount
         $amount1 = DnoPersonalPaymentVoucher::where('id', $id)->sum('amount');
@@ -941,7 +968,7 @@ class DnoPersonalController extends Controller
                 
                 default:
                     # code...
-                    return redirect('dno-personal/edit-dno-personalr-payables-detail/'.$id)->with('errorPaid', 'STATUS IS INVALID.');
+                    return redirect('dno-personal/edit-dno-personal-payables-detail/'.$id)->with('errorPaid', 'STATUS IS INVALID.');
                     break;
             }
         }  
@@ -959,12 +986,20 @@ class DnoPersonalController extends Controller
 
         $particulars = DnoPersonalPaymentVoucher::find($id);
        
-        if($particulars['category'] == "Vehicles"){
-            $util = $particulars['utility_sub_category'];
-            
+        if($particulars['category'] == "Cebu Properties"){
+            $subCatId = $particulars['sub_category_account_id'];
+            $util = "NULL";
+
+        }else if($particulars['category'] == "Manila Properties"){
+            $subCatId = $particulars['sub_category_account_id'];
+            $util = "NULL";
+
+        } else if($particulars['category'] == "Vehicles"){
+            $subCatId = $particulars['utility_sub_category'];
+
         }else{
             $util = "NULL";
-            
+            $subCatId = "NULL";
         }
     
         
@@ -976,6 +1011,7 @@ class DnoPersonalController extends Controller
             'pv_id'=>$id,
             'voucher_ref_number'=>$particulars['voucher_ref_number'],
             'particulars'=>$request->get('particulars'),
+            'sub_category_account_id'=>$subCatId,
             'utility_sub_category'=>$util,
             'amount'=>$request->get('amount'),
             'created_by'=>$name,
@@ -1096,6 +1132,8 @@ class DnoPersonalController extends Controller
             $uVoucher = sprintf("%06d",$newVoucherRef);
         } 
 
+
+        //if user select cash or cheque
         if($request->get('paymentMethod') == "Cash"){
             $accountName = $request->get('accountNameCash');
             $paidTo = $request->get('paidToCash');
@@ -1113,23 +1151,36 @@ class DnoPersonalController extends Controller
             $subCatExp = explode("-", $request->get('subCatCebu'));
             $subCat = $subCatExp[0];
             $subCatName = $subCatExp[1];
+
+            //
+            $bills = $request->get('otherBills');
+            $selectAccountID = $request->get('selectAccountID');
+          
            
         }elseif($request->get('category') === "Manila Properties"){
             $subCatExp = explode("-", $request->get('subCatManila'));
             $subCat = $subCatExp[0];
             $subCatName = $subCatExp[1];
+
+            $bills = $request->get('otherBills');
+            $selectAccountID = $request->get('selectAccountID');
+           
         
         }elseif($request->get('category') === "Vehicles"){
 
             $subCatExp = explode("-",$request->get('subCatUtility'));
             $subCat = $subCatExp[0];
             $subCatName = $subCatExp[1];
+
+            $selectAccountID = "NULL";
           
         }else{
             $subCat = "NULL";
             $subCatName = "NULL";
+            $bills = "NULL";
         }
-        
+
+    
         //check if invoice number already exists
         $target = DB::table(
                         'dno_personal_payment_vouchers')
@@ -1155,8 +1206,9 @@ class DnoPersonalController extends Controller
                     'category'=>$request->get('category'),
                     'sub_category'=>$subCat,
                     'sub_category_name'=>$subCatName,
+                    'sub_category_bill_name'=>$bills,
+                    'sub_category_account_id'=>$selectAccountID,
                     'utility_sub_category'=>$request->get('documentList'),
-
                     'prepared_by'=>$name,
                     'created_by'=>$name,
             ]);
@@ -1171,7 +1223,14 @@ class DnoPersonalController extends Controller
 
     }
 
-    //
+    //do ajax call
+    public function getCebuProp($id){ 
+        $getProp = DnoPersonalProperty::where('pp_id', $id)->get()->toArray();
+
+        return response()->json($getProp);
+    }
+
+    // do ajax call
     public function getData($id){
         $getDocuments = DnoPersonalUtility::where('pu_id', $id)->get()->toArray();
 
@@ -1181,7 +1240,7 @@ class DnoPersonalController extends Controller
     
      //
     public function paymentVoucherForm(){
-         $ids = Auth::user()->id;
+        $ids = Auth::user()->id;
         $user = User::find($ids);
 
         //getCreditCards
@@ -1197,10 +1256,13 @@ class DnoPersonalController extends Controller
 
         //getUtilities
         $getUtilities = DnoPersonalUtility::where('pu_id', NULL)->get()->toArray();
+
+        //get all flag expect cebu and manila properties
+        $getAllFlags = DnoPersonalProperty::where('flag', '!=', $flag)->where('flag', '!=', $flagM)->get()->toArray();
        
 
         return view('payment-voucher-form-dno-personal', compact('user', 'getCreditCards', 
-        'getCebuProperties', 'getManilaProperties', 'getUtilities'));
+        'getCebuProperties', 'getManilaProperties', 'getUtilities', 'getAllFlags'));
     }
 
     /**

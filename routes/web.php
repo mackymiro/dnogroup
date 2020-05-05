@@ -1602,6 +1602,11 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('dno-personal.viewProperties');
 
 	Route::get(
+		'/dno-personal/cebu-properties/view-service-provider/{id}',
+		'DnoPersonalController@viewServiceProvider')
+		->name('dno-personal.viewServiceProvider');
+
+	Route::get(
 		'/dno-personal/manila-properties/view/{id}',
 		'DnoPersonalController@viewProperties')
 		->name('dno-personal.viewProperties');
@@ -1640,6 +1645,27 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dno-personal/cebu-properties/view-pldt/{id}',
 		'DnoPersonalController@viewBills')
 		->name('dno-personal.viewBills');
+
+	Route::get(
+			'/dno-personal/manila-properties/view-veco/{id}',
+			'DnoPersonalController@viewBills')
+			->name('dno-personal.viewBills');
+
+	Route::get(
+		'/dno-personal/manila-properties/view-mcwd/{id}',
+		'DnoPersonalController@viewBills')
+		->name('dno-personal.viewBills');
+	
+	Route::get(
+			'/dno-personal/manila-properties/view-pldt/{id}',
+			'DnoPersonalController@viewBills')
+			->name('dno-personal.viewBills');
+	
+	Route::get(
+			'/dno-personal/manila-properties/view-skycable/{id}',
+			'DnoPersonalController@viewBills')
+			->name('dno-personal.viewBills');
+
 	
 	Route::delete(
 		'/dno-personal/delete-property/{id}',
@@ -1706,11 +1732,16 @@ Route::group(['middleware' => ['auth']], function(){
 		'DnoPersonalController@storePMSDocument')
 		->name('dno-personal.storePMSDocument');
 
-		
+	//do ajax call	
 	Route::get(
 		'/dno-personal/get-data/{id}',
 		'DnoPersonalController@getData')
 		->name('dno-personal.getData');
+
+	Route::get(
+		'/dno-personal/get-cebu-properties/{id}',
+		'DnoPersonalController@getCebuProp')
+		->name('dno-personal.getCebuProp');
 
 
 	//DNO food ventures

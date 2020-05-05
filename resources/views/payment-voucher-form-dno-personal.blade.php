@@ -2,17 +2,7 @@
 @section('title', 'Payment Voucher Form |')
 @section('content')
 <style>
-.selcls { 
-    padding: 9px; 
-    border: solid 1px #517B97; 
-    min-height: 40px;
-    outline: 0; 
-    background: -webkit-gradient(linear, left top, left 25, from(#FFFFFF), color-stop(4%, #CAD9E3), to(#FFFFFF)); 
-    background: -moz-linear-gradient(top, #FFFFFF, #CAD9E3 1px, #FFFFFF 25px); 
-    box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
-    -moz-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
-    -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
-	} 
+
 </style>
 <script>
   $(document).ready(function(){
@@ -20,6 +10,12 @@
       
   });
 </script>
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css" >
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
 <div id="wrapper">
 	<!-- Sidebar -->
     @include('sidebar.sidebar-dno-personal')
@@ -141,7 +137,8 @@
                                           </div>
                                           <div id="cebuProp" class="col-lg-2">
                                               <label>Sub Category</label>
-                                              <select name="subCatCebu" class="selcls form-control" readonly="readonly">
+                                              <select id="cebuPropId" name="subCatCebu" class="selcls form-control" >
+                                                  <option value="0">--Please Select--</option>
                                                   @foreach($getCebuProperties as $getCebuProperty)
                                                   <option value="{{ $getCebuProperty['id']}}-{{ $getCebuProperty['property_name']}}">{{ $getCebuProperty['property_name']}}</option>
                                                   @endforeach
@@ -150,9 +147,30 @@
                                           <div id="manilaProp" class="col-lg-2">
                                               <label>Sub Category</label>
                                               <select name="subCatManila" class="selcls form-control">
+                                                  <option value="0">--Please Select--</option>
                                                   @foreach($getManilaProperties as $getManilaProperty)
                                                   <option value="{{ $getManilaProperty['id']}}-{{ $getManilaProperty['property_name']}}">{{ $getManilaProperty['property_name']}}</option>
                                                   @endforeach
+                                              </select>
+                                          </div>
+                                          <div class="bills" class="col-lg-2">
+                                              <label>&nbsp</label>
+                                              <select  name="otherBills" class="otherBills selcls form-control">
+                                                  <option value="0">--Please Select --</option>
+                                                  <option value="Veco">Veco</option>
+                                                  <option value="MCWD">MCWD</option>
+                                                  <option value="PLDT">PLDT</option>
+                                                  <option value="SKYCABLE">SKYCABLE</option>
+                                                  <option value="Service Provider">Service Provider</option>
+                                              </select>
+                                          </div>
+                                       
+                                          <div id="selectAccountID" class="col-lg-2">
+                                            <label >Please Select Account ID</label>
+                                              <select data-live-search="true" name="selectAccountID" class="form-control selectpicker">
+                                                @foreach($getAllFlags as $getAllFlag)
+                                                <option value="{{ $getAllFlag['id']}}">{{ $getAllFlag['account_id']}}</option>
+                                                @endforeach
                                               </select>
                                           </div>
                                           <div id="utility" class="col-lg-2">
@@ -217,12 +235,53 @@
       $("#typeOfCC").hide();
       $("#acctName").hide();
       $("#documentList").hide();
+      $(".bills").hide();
+  
+      $("#selectAccountID").hide();
 
       //for categories
       $("#cebuProp").hide();
       $("#manilaProp").hide();
       $("#utility").hide();
-     
+      
+      $("#cebuPropId").change(function(){
+          const cebuProp = $(this).children("option:selected").val();
+          const cebuPropSplit = cebuProp.split("-");
+          const cebuPropArr = cebuPropSplit[0];
+        
+          //make ajax call
+          $.ajax({
+              type: "GET",
+              url:'/dno-personal/get-cebu-properties/' + cebuPropArr,
+              data:{
+                  _method:'get',
+                  "id":cebuPropArr,
+              },
+              success:function(data){
+                  console.log(data);
+              },
+              error:function(data){
+                  console.log('Error:', data);
+              }
+          });
+      }); 
+
+
+      $(".otherBills").change(function(){
+         const bills = $(this).children("option:selected").val();
+         if(bills == "Veco"){
+             $("#selectAccountID").show();
+         }else if(bills == "MCWD"){
+             $("#selectAccountID").show();
+         }else if(bills == "PLDT"){
+             $("#selectAccountID").show();
+         }else if(bills == "SKYCABLE"){
+             $("#selectAccountID").show();
+         }else{
+            $("#selectAccountID").hide();
+
+         }
+      });
 
       $("#util").change(function(){
           const util =  $(this).children("option:selected").val();
@@ -254,15 +313,16 @@
       });
 
       $(".category").change(function(){
-        
           const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
 
           if(cat === "Cebu Properties"){
               $("#cebuProp").show();
+              $(".bills").show();
 
               $("#manilaProp").hide();
               $("#utility").hide();
               $("#documentList").hide();
+              $("#selectAccountID").hide();
 
               $("#documentList").val('');
           }else if(cat === "Manila Properties"){
@@ -271,6 +331,8 @@
               $("#cebuProp").hide();
               $("#utility").hide();
               $("#documentList").hide();
+              $(".bills").show();
+              $("#selectAccountID").hide();
 
               $("#documentList").val('');
           }else if(cat === "Vehicles"){
@@ -278,15 +340,17 @@
               $("#documentList").show();
 
               $("#cebuProp").hide();
+              $(".bills").hide();
               $("#manilaProp").hide();
-             
-             
+              $("#selectAccountID").hide();
+               
           }else{
             $("#cebuProp").hide();
+            $(".bills").hide();
             $("#manilaProp").hide();
             $("#utility").hide();
             $("#documentList").hide();
-
+            $("#selectAccountID").hide();
           } 
 
 

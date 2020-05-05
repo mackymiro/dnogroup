@@ -81,6 +81,7 @@
                         </div>
                     </div>
                 </div><!-- end of row-->
+                @if(\Request::is('dno-personal/cebu-properties/view/'.$viewProperty['id']))
                 <div class="row">
                      <div class="col-lg-12">
                          <div class="card mb-3">
@@ -107,6 +108,7 @@
                                                 <th>Account Name</th>
                                                 <th >Meter No</th>
                                                 <th>Date</th>
+                                                <th>Status</th>
                                                 <th>Created By</th>
                                             </tr>
                                         </thead>
@@ -117,6 +119,7 @@
                                                 <th>Account Name</th>
                                                 <th >Meter No</th>
                                                 <th>Date</th>
+                                                <th>Status</th>
                                                 <th>Created By</th>
                                             </tr>
                                         </tfoot>
@@ -132,10 +135,36 @@
                                                         <a id="delete" onClick="confirmDelete('{{ $vecoDocument['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
                                                     @endif
                                                 </td>
+                                              
                                                 <td><a href="{{ url('dno-personal/cebu-properties/view-veco/'.$vecoDocument['id']) }}">{{ $vecoDocument['account_id']}}</a></td>
+                                            
                                                 <td>{{ $vecoDocument['account_name']}}</td>
                                                 <td>{{ $vecoDocument['meter_no']}}</td>
                                                 <td>{{ $vecoDocument['date']}}</td>
+                                                <?php
+                                                    $viewParticulars  =  DB::table(
+                                                                            'dno_personal_payment_vouchers')
+                                                                        ->where('sub_category_account_id', $vecoDocument['id'])
+                                                                        ->get();
+                                               ?>   
+                                                
+                                               <?php if($viewParticulars === ""): ?>
+                                                    <td class="bg-danger " style="color:#fff;">UNPAID</td>
+                                               <?php else:?>
+                                                @foreach($viewParticulars as $viewParticular)
+                                                <?php if($viewParticular->status == "FOR APPROVAL" ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FOR CONFIRMATION " ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FULLY PAID AND RELEASED" ): ?>
+                                                    <td class="bg-success" style="color:#fff;">PAID</td>
+                                                <?php elseif($viewParticular->status == ""):?>
+                                                    <t class="bg-danger" style="color:#fff;"d>UNPAID</td>
+                                                <?php endif;?>
+                                                
+                                                @endforeach
+                                                <?php endif;?>
+                                             
                                                 <td>{{ $vecoDocument['created_by']}}</td>
                                             </tr>
                                             @endforeach
@@ -146,6 +175,104 @@
                          </div>
                      </div>
                 </div><!-- end of row-->
+                @elseif(\Request::is('dno-personal/manila-properties/view/'.$viewProperty['id']))
+                <div class="row">
+                     <div class="col-lg-12">
+                         <div class="card mb-3">
+                            <div class="card-header">
+                                <i class="fas fa-bolt"></i>
+                                Veco
+                             </div>
+                             <div class="card-body">
+                                <div class="form-group">
+                                    <div class="form-row">
+                                        <div class="col-lg-12 ">
+                                            <!-- Button trigger modal -->
+                                          
+                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addVeco" >Add Veco </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered display"  width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Action</th>
+                                                <th>Account ID</th>
+                                                <th>Account Name</th>
+                                                <th >Meter No</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                             <tr>
+                                                <th>Action</th>
+                                                <th>Account ID</th>
+                                                <th>Account Name</th>
+                                                <th >Meter No</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody> 
+                                            @foreach($vecoDocuments as $vecoDocument)
+                                            <tr id="deletedId<?php echo $vecoDocument['id'];?>">
+                                                <td >
+                                                    @if($user->role_type !== 3)
+                                                        <!-- Button trigger modal -->
+                                                        <a data-toggle="modal" data-target="#editVeco<?php echo $vecoDocument['id']?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                                    @endif
+                                                    @if($user->role_type == 1)
+                                                        <a id="delete" onClick="confirmDelete('{{ $vecoDocument['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
+                                                    @endif
+                                                </td>
+                                             
+                                                <td><a href="{{ url('dno-personal/manila-properties/view-veco/'.$vecoDocument['id']) }}">{{ $vecoDocument['account_id']}}</a></td>
+                                               
+                                                <td>{{ $vecoDocument['account_name']}}</td>
+                                                <td>{{ $vecoDocument['meter_no']}}</td>
+                                                <td>{{ $vecoDocument['date']}}</td>
+                                               
+                                               <?php
+                                                    $viewParticulars  =  DB::table(
+                                                                            'dno_personal_payment_vouchers')
+                                                                        ->where('sub_category_account_id', $vecoDocument['id'])
+                                                                        ->get();
+                                               ?>   
+                                                
+                                               <?php if($viewParticulars === ""): ?>
+                                                    <td class="bg-danger " style="color:#fff;">UNPAID</td>
+                                               <?php else:?>
+                                                @foreach($viewParticulars as $viewParticular)
+                                                <?php if($viewParticular->status == "FOR APPROVAL" ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FOR CONFIRMATION " ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FULLY PAID AND RELEASED" ): ?>
+                                                    <td class="bg-success" style="color:#fff;">PAID</td>
+                                                <?php elseif($viewParticular->status == ""):?>
+                                                    <t class="bg-danger" style="color:#fff;"d>UNPAID</td>
+                                                <?php endif;?>
+                                                
+                                                @endforeach
+                                                <?php endif;?>
+                                               
+                                                <td>{{ $vecoDocument['created_by']}}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                             </div> 
+                         </div>
+                     </div>
+                </div><!-- end of row-->
+
+                @endif
+                @if(\Request::is('dno-personal/cebu-properties/view/'.$viewProperty['id']))
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card mb-3">
@@ -172,6 +299,7 @@
                                                 <th>Account Name</th>
                                                 <th >Meter No</th>
                                                 <th>Date</th>
+                                                <th>Status</th>
                                                 <th>Created By</th>
                                             </tr>
                                         </thead>
@@ -182,6 +310,7 @@
                                                 <th>Account Name</th>
                                                 <th >Meter No</th>
                                                 <th>Date</th>
+                                                <th>Status</th>
                                                 <th>Created By</th>
                                             </tr>
                                         </tfoot>
@@ -197,10 +326,31 @@
                                                         <a id="delete" onClick="confirmDelete('{{ $mcwdDocument['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
                                                     @endif
                                                 </td>
-                                                <td><a href="{{ url('dno-personal/cebu-properties/view-mcwd/'.$mcwdDocument['id']) }}">{{ $mcwdDocument['account_id']}}</a></td>
+                                               
+                                                    <td><a href="{{ url('dno-personal/cebu-properties/view-mcwd/'.$mcwdDocument['id']) }}">{{ $mcwdDocument['account_id']}}</a></td>
+                                             
                                                 <td>{{ $mcwdDocument['account_name']}}</td>
                                                 <td>{{ $mcwdDocument['meter_no']}}</td>
                                                 <td>{{ $mcwdDocument['date']}}</td>
+                                                <?php
+                                                    $viewParticulars  =  DB::table(
+                                                                            'dno_personal_payment_vouchers')
+                                                                        ->where('sub_category_account_id', $mcwdDocument['id'])
+                                                                        ->get();
+                                               ?>   
+                                                
+                                                @foreach($viewParticulars as $viewParticular)
+                                                <?php if($viewParticular->status == "FOR APPROVAL" ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FOR CONFIRMATION " ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FULLY PAID AND RELEASED" ): ?>
+                                                    <td class="bg-success" style="color:#fff;">PAID</td>
+                                             
+                                                <?php endif;?>
+                                                
+                                                @endforeach
+                                              
                                                 <td>{{ $mcwdDocument['created_by']}}</td>
                                             </tr>
                                             @endforeach
@@ -211,6 +361,103 @@
                         </div>
                     </div>  
                 </div><!-- end of row-->
+                @elseif(\Request::is('dno-personal/manila-properties/view/'.$viewProperty['id']))
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card mb-3">
+                             <div class="card-header">
+                                <i class="fas fa-water"></i>
+                                MCWD
+                             </div>
+                             <div class="card-body">
+                                <div class="form-group">
+                                    <div class="form-row">
+                                        <div class="col-lg-12 ">
+                                            <!-- Button trigger modal -->
+                                          
+                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addMCWD" >Add MCWD </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                <table class="table table-bordered display"  width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Action</th>
+                                                <th>Account ID</th>
+                                                <th>Account Name</th>
+                                                <th >Meter No</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                             <tr>
+                                                <th>Action</th>
+                                                <th>Account ID</th>
+                                                <th>Account Name</th>
+                                                <th >Meter No</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody> 
+                                            @foreach($mcwdDocuments as $mcwdDocument)
+                                            <tr id="deletedId<?php echo $mcwdDocument['id'];?>">
+                                                <td>
+                                                    @if($user->role_type !== 3)
+                                                        <!-- Button trigger modal -->
+                                                        <a data-toggle="modal" data-target="#editMCWD<?php echo $mcwdDocument['id']?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                                    @endif
+                                                    @if($user->role_type == 1)
+                                                        <a id="delete" onClick="confirmDelete('{{ $mcwdDocument['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
+                                                    @endif
+                                                </td>
+                                             
+                                                    <td><a href="{{ url('dno-personal/manila-properties/view-mcwd/'.$mcwdDocument['id']) }}">{{ $mcwdDocument['account_id']}}</a></td>
+                                               
+                                            
+                                                <td>{{ $mcwdDocument['account_name']}}</td>
+                                                <td>{{ $mcwdDocument['meter_no']}}</td>
+                                                <td>{{ $mcwdDocument['date']}}</td>
+                                                <?php
+                                                    $viewParticulars  =  DB::table(
+                                                                            'dno_personal_payment_vouchers')
+                                                                        ->where('sub_category_account_id', $mcwdDocument['id'])
+                                                                        ->get();
+                                               ?>   
+                                                
+                                               <?php if($viewParticulars === ""): ?>
+                                                    <td class="bg-danger " style="color:#fff;">UNPAID</td>
+                                               <?php else:?>
+                                                @foreach($viewParticulars as $viewParticular)
+                                                <?php if($viewParticular->status == "FOR APPROVAL" ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FOR CONFIRMATION " ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FULLY PAID AND RELEASED" ): ?>
+                                                    <td class="bg-success" style="color:#fff;">PAID</td>
+                                              
+                                                <?php endif;?>
+                                                
+                                                @endforeach
+                                                <?php endif;?>
+                                                <td>{{ $mcwdDocument['created_by']}}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                             </div>
+                        </div>
+                    </div>  
+                </div><!-- end of row-->
+
+
+                @endif
+                @if(\Request::is('dno-personal/cebu-properties/view/'.$viewProperty['id']))
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card mb-3">
@@ -237,6 +484,7 @@
                                                 <th>Account Name</th>
                                                 <th >Telephone No</th>
                                                 <th>Date</th>
+                                                <th>Status</th>
                                                 <th>Created By</th>
                                             </tr>
                                         </thead>
@@ -247,6 +495,7 @@
                                                 <th>Account Name</th>
                                                 <th >Telephone No</th>
                                                 <th>Date</th>
+                                                <th>Status</th>
                                                 <th>Created By</th>
                                             </tr>
                                         </tfoot>
@@ -262,10 +511,37 @@
                                                         <a id="delete" onClick="confirmDelete('{{ $PLDTDocument['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
                                                     @endif
                                                 </td>
-                                                <td><a href="{{ url('dno-personal/cebu-properties/view-pldt/'.$PLDTDocument['id']) }}">{{ $PLDTDocument['account_no']}}</a></td>
+                                                @if(\Request::is('dno-personal/cebu-properties/view/'.$viewProperty['id']))
+                                                    <td><a href="{{ url('dno-personal/cebu-properties/view-pldt/'.$PLDTDocument['id']) }}">{{ $PLDTDocument['account_id']}}</a></td>
+                                                @else
+                                                    <td><a href="{{ url('dno-personal/manila-properties/view-pldt/'.$PLDTDocument['id']) }}">{{ $PLDTDocument['account_id']}}</a></td>
+                                              
+                                                @endif
                                                 <td>{{ $PLDTDocument['account_name']}}</td>
                                                 <td>{{ $PLDTDocument['telephone_no']}}</td>
                                                 <td>{{ $PLDTDocument['date']}}</td>
+                                                <?php
+                                                    $viewParticulars  =  DB::table(
+                                                                            'dno_personal_payment_vouchers')
+                                                                        ->where('sub_category_account_id', $PLDTDocument['id'])
+                                                                        ->get();
+                                               ?>   
+                                                
+                                               <?php if($viewParticulars === ""): ?>
+                                                    <td class="bg-danger " style="color:#fff;">UNPAID</td>
+                                               <?php else:?>
+                                                @foreach($viewParticulars as $viewParticular)
+                                                <?php if($viewParticular->status == "FOR APPROVAL" ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FOR CONFIRMATION " ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FULLY PAID AND RELEASED" ): ?>
+                                                    <td class="bg-success" style="color:#fff;">PAID</td>
+                                               
+                                                <?php endif;?>
+                                                
+                                                @endforeach
+                                                <?php endif;?>
                                                 <td>{{ $PLDTDocument['created_by']}}</td>
                                             </tr>
                                             @endforeach
@@ -276,6 +552,103 @@
                         </div>
                     </div>  
                 </div><!-- end of row-->
+                @elseif(\Request::is('dno-personal/manila-properties/view/'.$viewProperty['id']))
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card mb-3">
+                             <div class="card-header">
+                                <i class="fas fa-phone"></i>
+                                PLDT
+                             </div>
+                             <div class="card-body">
+                                <div class="form-group">
+                                    <div class="form-row">
+                                        <div class="col-lg-12 ">
+                                            <!-- Button trigger modal -->
+                                          
+                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addPLDT" >Add PLDT </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                <table class="table table-bordered display"  width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Action</th>
+                                                <th>Account No</th>
+                                                <th>Account Name</th>
+                                                <th >Telephone No</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Action</th>
+                                                <th>Account No</th>
+                                                <th>Account Name</th>
+                                                <th >Telephone No</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody> 
+                                            @foreach($PLDTDocuments as $PLDTDocument)
+                                            <tr id="deletedId<?php echo $PLDTDocument['id']?>">
+                                                <td>
+                                                    @if($user->role_type !== 3)
+                                                        <!-- Button trigger modal -->
+                                                        <a data-toggle="modal" data-target="#editPLDT<?php echo $PLDTDocument['id']?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                                    @endif
+                                                    @if($user->role_type == 1)
+                                                        <a id="delete" onClick="confirmDelete('{{ $PLDTDocument['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
+                                                    @endif
+                                                </td>
+                                              
+                                                <td><a href="{{ url('dno-personal/manila-properties/view-pldt/'.$PLDTDocument['id']) }}">{{ $PLDTDocument['account_id']}}</a></td>
+                                              
+                                          
+                                                <td>{{ $PLDTDocument['account_name']}}</td>
+                                                <td>{{ $PLDTDocument['telephone_no']}}</td>
+                                                <td>{{ $PLDTDocument['date']}}</td>
+                                                <?php
+                                                    $viewParticulars  =  DB::table(
+                                                                            'dno_personal_payment_vouchers')
+                                                                        ->where('sub_category_account_id', $PLDTDocument['id'])
+                                                                        ->get();
+                                               ?>   
+                                                
+                                               <?php if($viewParticulars === ""): ?>
+                                                    <td class="bg-danger " style="color:#fff;">UNPAID</td>
+                                               <?php else:?>
+                                                @foreach($viewParticulars as $viewParticular)
+                                                <?php if($viewParticular->status == "FOR APPROVAL" ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FOR CONFIRMATION " ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FULLY PAID AND RELEASED" ): ?>
+                                                    <td class="bg-success" style="color:#fff;">PAID</td>
+                                              
+                                                <?php endif;?>
+                                                
+                                                @endforeach
+                                                <?php endif;?>
+                                                <td>{{ $PLDTDocument['created_by']}}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                             </div>
+                        </div>
+                    </div>  
+                </div><!-- end of row-->
+
+
+                @endif
+                @if(\Request::is('dno-personal/cebu-properties/view/'.$viewProperty['id']))
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card mb-3">
@@ -301,6 +674,7 @@
                                                 <th>Account No</th>
                                                 <th>Account Name</th>
                                                 <th>Date</th>
+                                                <th>Status</th>
                                                 <th>Created By</th>
                                             </tr>
                                         </thead>
@@ -310,6 +684,7 @@
                                                 <th>Account No</th>
                                                 <th>Account Name</th>
                                                 <th>Date</th>
+                                                <th>Status</th>
                                                 <th>Created By</th>
                                             </tr>
                                         </tfoot>
@@ -326,9 +701,32 @@
                                                         <a id="delete" onClick="confirmDelete('{{ $skyDocument['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
                                                     @endif
                                                 </td>
-                                                <td><a href="{{ url('dno-personal/cebu-properties/view-skycable/'.$skyDocument['id']) }}">{{ $skyDocument['account_no']}}</a></td>
+                                               
+                                                <td><a href="{{ url('dno-personal/cebu-properties/view-skycable/'.$skyDocument['id']) }}">{{ $skyDocument['account_id']}}</a></td>
+                                              
                                                 <td>{{ $skyDocument['account_name']}}</td>
                                                 <td>{{ $skyDocument['date']}}</td>
+                                                <?php
+                                                    $viewParticulars  =  DB::table(
+                                                                            'dno_personal_payment_vouchers')
+                                                                        ->where('sub_category_account_id', $skyDocument['id'])
+                                                                        ->get();
+                                               ?>   
+                                                
+                                              
+                                                @foreach($viewParticulars as $viewParticular)
+                                                <?php if($viewParticular->status == "FOR APPROVAL" ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FOR CONFIRMATION " ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FULLY PAID AND RELEASED" ): ?>
+                                                    <td class="bg-success" style="color:#fff;">PAID</td>
+                                              
+                                                <?php endif;?>
+                                                
+                                                @endforeach
+                                              
+                                               
                                                 <td>{{ $skyDocument['created_by']}}</td>
                                             </tr>
                                             @endforeach
@@ -339,7 +737,227 @@
                         </div>
                     </div>  
                 </div><!-- end of row-->
-                
+                @elseif(\Request::is('dno-personal/manila-properties/view/'.$viewProperty['id']))
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card mb-3">
+                             <div class="card-header">
+                                <i class="fab fa-skyatlas"></i>
+                                SKYCABLE
+                             </div>
+                             <div class="card-body">
+                                <div class="form-group">
+                                    <div class="form-row">
+                                        <div class="col-lg-12 ">
+                                            <!-- Button trigger modal -->
+                                          
+                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addSky" >Add SkyCable </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                <table class="table table-bordered display"  width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Action</th>
+                                                <th>Account No</th>
+                                                <th>Account Name</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Action</th>
+                                                <th>Account No</th>
+                                                <th>Account Name</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody> 
+                                            @foreach($skyDocuments as $skyDocument)
+                                            <tr id="deletedId<?php echo $skyDocument['id']?>">
+                                               
+                                                <td>
+                                                    @if($user->role_type !== 3)
+                                                        <!-- Button trigger modal -->
+                                                        <a data-toggle="modal" data-target="#editSky<?php echo $skyDocument['id']?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                                    @endif
+                                                    @if($user->role_type == 1)
+                                                        <a id="delete" onClick="confirmDelete('{{ $skyDocument['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
+                                                    @endif
+                                                </td>
+                                            
+                                                <td><a href="{{ url('dno-personal/manila-properties/view-skycable/'.$skyDocument['id']) }}">{{ $skyDocument['account_id']}}</a></td>
+                                               
+                                             
+                                                <td>{{ $skyDocument['account_name']}}</td>
+                                                <td>{{ $skyDocument['date']}}</td>
+                                                <?php
+                                                    $viewParticulars  =  DB::table(
+                                                                            'dno_personal_payment_vouchers')
+                                                                        ->where('sub_category_account_id', $skyDocument['id'])
+                                                                        ->get();
+                                               ?>   
+                                                
+                                               <?php if($viewParticulars === ""): ?>
+                                                    <td class="bg-danger " style="color:#fff;">UNPAID</td>
+                                               <?php else:?>
+                                                @foreach($viewParticulars as $viewParticular)
+                                                <?php if($viewParticular->status == "FOR APPROVAL" ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FOR CONFIRMATION " ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FULLY PAID AND RELEASED" ): ?>
+                                                    <td class="bg-success" style="color:#fff;">PAID</td>
+                                                <?php elseif($viewParticular->status == ""):?>
+                                                    <t class="bg-danger" style="color:#fff;"d>UNPAID</td>
+                                                <?php endif;?>
+                                                
+                                                @endforeach
+                                                <?php endif;?>
+                                                <td>{{ $skyDocument['created_by']}}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                             </div>
+                        </div>
+                    </div>  
+                </div><!-- end of row-->
+
+                @endif
+                @if(\Request::is('dno-personal/cebu-properties/view/'.$viewProperty['id']))
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card mb-3">
+                             <div class="card-header">
+                                <i class="fa fa-industry" aria-hidden="true"></i>
+
+                                Supplier/Service Provider
+                             </div>
+                             <div class="card-body">
+                                
+                                <div class="table-responsive">
+                                <table class="table table-bordered display"  width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                               
+                                                <th>Invoice #</th>
+                                                <th>Paid To</th>
+                                                <th>Issued Date</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                               
+                                                <th>Invoice #</th>
+                                                <th>Paid To</th>
+                                                <th>Issued Date</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody> 
+                                            @foreach($serviceProviders as $serviceProvider)
+                                            <tr>
+                                               
+                                               
+                                                <td><a href="{{ url('dno-personal/cebu-properties/view-service-provider/'.$serviceProvider['id']) }}">{{ $serviceProvider['invoice_number']}}</a></td>
+                                               
+                                                <td>{{ $serviceProvider['paid_to']}}</td>
+                                                <td>{{ $serviceProvider['issued_date']}}</td>
+                                                
+                                                <?php if($serviceProvider['status'] === "FOR APPROVAL"): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($serviceProvider['status'] === "FOR CONFIRMATION"): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($serviceProvider['status'] === "FULLY PAID AND RELEASED"): ?>
+                                                    <td class="bg-success" style="color:#fff;">PAID</td>
+                                               
+                                                <?php endif;?>
+                                                <td>{{ $serviceProvider['created_by']}}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                             </div>
+                        </div>
+                    </div>  
+                </div><!-- end of row-->
+                @elseif(\Request::is('dno-personal/manila-properties/view/'.$viewProperty['id']))
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card mb-3">
+                             <div class="card-header">
+                                <i class="fa fa-industry" aria-hidden="true"></i>
+
+                                Supplier/Service Provider
+                             </div>
+                             <div class="card-body">
+                                
+                                <div class="table-responsive">
+                                <table class="table table-bordered display"  width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                               
+                                                <th>Invoice #</th>
+                                                <th>Paid To</th>
+                                                <th>Issued Date</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                               
+                                                <th>Invoice #</th>
+                                                <th>Paid To</th>
+                                                <th>Issued Date</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody> 
+                                            @foreach($serviceProviders as $serviceProvider)
+                                            <tr>
+                                               
+                                              
+                                                <td><a href="{{ url('dno-personal/manila-properties/view-service-provider/'.$serviceProvider['id']) }}">{{ $serviceProvider['invoice_number']}}</a></td>
+                                               
+                                              
+                                                <td>{{ $serviceProvider['paid_to']}}</td>
+                                                <td>{{ $serviceProvider['issued_date']}}</td>
+                                                
+                                                <?php if($serviceProvider['status'] === "FOR APPROVAL"): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($serviceProvider['status'] === "FOR CONFIRMATION"): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($serviceProvider['status'] === "FULLY PAID AND RELEASED"): ?>
+                                                    <td class="bg-success" style="color:#fff;">PAID</td>
+                                                <?php else: ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php endif;?>
+                                                <td>{{ $serviceProvider['created_by']}}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                             </div>
+                        </div>
+                    </div>  
+                </div><!-- end of row-->
+
+
+                @endif
                 
          </div>
      </div>

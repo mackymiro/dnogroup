@@ -68,15 +68,25 @@
 					  					
     					  				</div>
 	    					  		</div>
-	    					  		<div class="form-group">
-    					  				<div class="form-row">
-					  						<div class="col-lg-4">
-				  								<input type="submit" class="btn btn-primary" value="Add" />
-					  						</div> 
-					  					
-    					  				</div>
-	    					  		</div>
-
+									@if($transactionList['status'] != "FULLY PAID AND RELEASED")
+									<div class="form-group">
+										<div class="form-row">
+											<div class="col-lg-4">
+												<input type="submit" class="btn btn-primary" value="Add" />
+											</div> 
+										
+										</div>
+									</div>
+  									@else
+  									<div class="form-group">
+										<div class="form-row">
+											<div class="col-lg-4">
+												<input type="submit" class="btn btn-primary" value="Add" disabled/>
+											</div> 
+										
+										</div>
+									</div>
+									@endif
 									@elseif($transactionList['method_of_payment'] == "Cheque")
 									<div class="form-group">
     					  				<div class="form-row">
@@ -109,6 +119,7 @@
 	    					  		</form>
 	    					  </div>
        					</div>
+						
 						<div class="card mb-3">
 							<div class="card-header">
 								<i class="fas fa-tasks"></i>
@@ -135,6 +146,8 @@
 										
 									</div>
 								</div>
+								@if($transactionList['status'] != "FOR APPROVAL" && $transactionList['status'] != "FOR CONFIRMATION"
+								&& $transactionList['status'] != "FULLY PAID AND RELEASED")
 								<div class="form-group">
 									<div class="form-row">
 										<div class="col-lg-4">
@@ -143,10 +156,21 @@
 									
 									</div>
 								</div>
+								@else	
+								<div class="form-group">
+									<div class="form-row">
+										<div class="col-lg-4">
+											<input type="submit" class="btn btn-primary" value="Add" disabled />
+										</div> 
+									
+									</div>
+								</div>
+								@endif
 								</form>
 							</div>
 						</div>
                		</div>
+				
                		<div class="col-lg-8">
                			<div class="card mb-3">
                				<div class="card-header">
@@ -208,6 +232,12 @@
 										<div class="col-lg-4">
 		  									<label>&nbsp;</label>
 		  									<input type="text" name="subCateogry" class="selcls form-control" value="{{ $transactionList['sub_category_name'] }}" disabled="disabled" />
+			  							</div>
+										@endif
+										@if($transactionList['sub_category_bill_name'] != "NULL")
+										<div class="col-lg-4">
+		  									<label>&nbsp;</label>
+		  									<input type="text" name="subCateogryBillBName" class="selcls form-control" value="{{ $transactionList['sub_category_bill_name'] }}" disabled="disabled" />
 			  							</div>
 										@endif
 			  							<div class="col-lg-4">
@@ -331,9 +361,11 @@
 			  							<div class="col-lg-4">
 			  								<input type="submit" class="btn btn-success" name="action" value="PAID AND RELEASE" value="PAID AND RELEASE" />
 			  							</div>
+										<?php if($transactionList['status'] != "FULLY PAID AND RELEASED"):?>
 			  							<div class="col-lg-4">
 			  								<input type="submit" class="btn btn-primary" name="action" value="PAID & HOLD" value="PAID & HOLD" />
 			  							</div>
+										<?php endif; ?>
 				  					</div>
 				  				</div>
 				  			</form>
