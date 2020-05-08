@@ -191,7 +191,7 @@
                                               <br>
                                               <input type="hidden" name="drId" value="{{ $getDeliveryReceipt['id'] }}" />
                                               <input type="submit" class="btn btn-success" value="Update" />
-                                              @if($user->role_type == 1)
+                                              @if(Auth::user()['role_type'] == 1)
                                               <a id="delete" onClick="confirmDelete('{{ $dReceipt['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
                                               @endif
                                         </div>
@@ -201,7 +201,7 @@
                                     </form>
                                    @endforeach
                             	 <div>
-                                  @if($user->role_type == 1)
+                                  @if(Auth::user()['role_type'] == 1)
                                   <a href="{{ url('lolo-pinoy-grill-commissary/add-new-lolo-pinoy-grill-delivery-receipt/'.$getDeliveryReceipt['id'] ) }}" class="btn btn-primary">Add New</a>
                                   @endif
                                 </div>

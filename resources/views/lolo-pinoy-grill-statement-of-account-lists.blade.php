@@ -45,7 +45,7 @@
                             @foreach($statementOfAccounts as $statementOfAccount)
                             <tr id="deletedId{{ $statementOfAccount['id']}}">
                               <td>
-                                 @if($user->role_type !== 3)
+                                 @if(Auth::user()['role_type'] !== 3)
                                   <a href="{{ url('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-statement-of-account/'.$statementOfAccount['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                   @endif
                                 

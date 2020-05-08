@@ -70,7 +70,7 @@
 											?>
 				  							<tr id="deletedId{{ $getTransactionList['id'] }}">
 			  									<td width="2%">
-			  										@if($user->role_type == 1)
+			  										@if(Auth::user()['role_type'] == 1)
 					  									<a id="delete" onClick="confirmDelete('{{ $getTransactionList['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
 				              						@endif
 			  									</td>
@@ -127,8 +127,8 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
-	 function confirmDelete(id){
-        const x = confirm("Do you want to delete this?");
+	const confirmDelete = (id) =>{
+		const x = confirm("Do you want to delete this?");
         if(x){
             $.ajax({
               type: "DELETE",
@@ -151,6 +151,6 @@
         }else{
             return false;
         }
-    }
+	}
 </script>
 @endsection

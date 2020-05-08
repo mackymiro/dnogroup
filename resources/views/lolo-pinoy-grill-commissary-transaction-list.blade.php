@@ -70,7 +70,7 @@
 											?>
 				  							<tr id="deletedId{{ $getTransactionList['id'] }}">
 			  									<td width="2%">
-			  										@if($user->role_type == 1)
+			  										@if(Auth::user()['role_type'] == 1)
 					  									<a id="delete" onClick="confirmDelete('{{ $getTransactionList['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
 				              						@endif
 			  									</td>

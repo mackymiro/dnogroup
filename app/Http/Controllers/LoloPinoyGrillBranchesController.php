@@ -11,33 +11,157 @@ use Auth;
 use App\User;
 use App\LoloPinoyGrillBranchesPaymentVoucher;
 use App\LoloPinoyGrillBranchesRequisitionSlip;
+use App\LoloPinoyGrillBranchesUtility;
 
 class LoloPinoyGrillBranchesController extends Controller
 {
 
     //
-    public function salesInvoiceForm(){
-        $id =  Auth::user()->id;
-        $user = User::find($id);
+    public function viewBills($id){
+         //
+        $viewBill = LoloPinoyGrillBranchesUtility::find($id);
+        //view particulars
+    
+        $viewParticulars = LoloPinoyGrillBranchesPaymentVoucher::where('sub_category_account_id', $id)->get()->toArray();
 
-        return view('lolo-pinoy-grill-branches-sales-invoice-form', compact('user'));
+        return view('lolo-pinoy-grill-branches-view-utility', compact('viewBill', 'viewParticulars'));
+    }
+
+    //
+    public function addInternet(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //get the date today
+         $getDate =  date("Y-m-d");
+
+        //check if internet account already exists
+        $target = DB::table(
+                'lolo_pinoy_grill_branches_utilities')
+                ->where('account_id', $request->accountId)
+                ->get()->first();
+
+        if($target ==  NULL){
+    
+            $addInternet = new LoloPinoyGrillBranchesUtility([
+                'user_id'=>$user->id,
+                'account_id'=>$request->accountIdInternet,
+                'account_name'=>$request->accountNameInternet,
+                'date'=>$getDate,
+                'flag'=>$request->flagInternet,
+                'created_by'=>$name,
+            ]);
+
+            $addInternet->save();
+            return response()->json('Success: successfully added an account.');
+        }else{
+            return response()->json('Error: Account ID already exist.');
+        }
+    }
+
+    //
+    public function addBills(Request $request){
+       
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        //get the date today
+        $getDate =  date("Y-m-d");
+
+         //check if veco account and mcwd already exists
+         $target = DB::table(
+                'lolo_pinoy_grill_branches_utilities')
+                ->where('account_id', $request->accountId)
+                ->get()->first();
+
+        if($target == NULL){
+            $addBills = new LoloPinoyGrillBranchesUtility([
+                'user_id'=>$user->id,
+                'account_id'=>$request->accountId,
+                'account_name'=>$request->accountName,
+                'meter_no'=>$request->meterNo,
+                'date'=>$getDate,
+                'flag'=>$request->flag,
+                'created_by'=>$name,
+            ]);
+
+            $addBills->save();
+            return response()->json('Success: successfully added an account.');
+        }else{
+            return response()->json('Error: Account ID already exist.');
+        }
+
+    }
+
+    //
+    public function utilities(){
+        $flag = "Veco";
+        $flagMCWD = "MCWD";
+        $flagInternet = "Internet";
+
+        $vecoDocuments = LoloPinoyGrillBranchesUtility::where('flag', $flag)->get()->toArray();
+
+        $mcwdDocuments = LoloPinoyGrillBranchesUtility::where('flag', $flagMCWD)->get()->toArray();
+
+        $internetDocuments = LoloPinoyGrillBranchesUtility::where('flag', $flagInternet)->get()->toArray();
+
+        return view('lolo-pinoy-grill-branches-utilities', compact('vecoDocuments', 'mcwdDocuments', 'internetDocuments'));
+    }
+
+    //
+    public function viewPettyCash($id){
+        //
+        $getPettyCash = LoloPinoyGrillBranchesPaymentVoucher::find($id);
+
+        //
+        $getPettyCashSummaries = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->get()->toArray();
+
+        //total
+        $totalPettyCash = LoloPinoyGrillBranchesPaymentVoucher::where('id', $id)->where('pv_id', NULL)->sum('amount');
+
+        $pettyCashSummaryTotal = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->sum('amount');
+
+        $sum = $totalPettyCash + $pettyCashSummaryTotal;
+
+        return view('lolo-pinoy-grill-branches-view-petty-cash', compact('getPettyCash', 'getPettyCashSummaries', 'sum'));
+    }
+
+    //
+    public function pettyCashList(){
+        $cat = "Petty Cash";
+        $getPettyCashLists = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', NULL)->where('category',$cat)->get()->toArray();
+
+        return view('lolo-pinoy-grill-branches-petty-cash-list', compact('getPettyCashLists'));
+    }
+
+    //
+    public function salesInvoiceForm(){
+
+
+        return view('lolo-pinoy-grill-branches-sales-invoice-form');
     }
 
     //
     public function reqTransactionList(){
-       $id =  Auth::user()->id;
-        $user = User::find($id);
-
+    
         $requisitionLists = LoloPinoyGrillBranchesRequisitionSlip::where('rs_id', NULL)->get()->toArray();
 
-        return view('lolo-pinoy-grill-branches-requisition-slip-transaction-list', compact('user', 'requisitionLists'));
+        return view('lolo-pinoy-grill-branches-requisition-slip-transaction-list', compact('requisitionLists'));
     }
 
     //  
     public function printRS($id){
-          $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+    
         $requisitionSlip = LoloPinoyGrillBranchesRequisitionSlip::find($id);
 
           //
@@ -52,12 +176,9 @@ class LoloPinoyGrillBranchesController extends Controller
 
     //
     public function requisitionSlipList(){
-          $id =  Auth::user()->id;
-        $user = User::find($id);
-
         $requisitionLists = LoloPinoyGrillBranchesRequisitionSlip::where('rs_id', NULL)->get()->toArray();
 
-        return view('lolo-pinoy-grill-branches-all-lists', compact('user', 'requisitionLists'));
+        return view('lolo-pinoy-grill-branches-all-lists', compact('requisitionLists'));
     }
 
     //
@@ -110,26 +231,17 @@ class LoloPinoyGrillBranchesController extends Controller
 
     //
     public function addNew($id){
-        $ids =  Auth::user()->id;
-        $user = User::find($ids);
-
-        
-        return view('add-new-lolo-pinoy-grill-branches-requisition-slip', compact('user', 'id'));
+        return view('add-new-lolo-pinoy-grill-branches-requisition-slip', compact('id'));
     }
 
     //
     public function requisitionSlip(){
-          $id =  Auth::user()->id;
-        $user = User::find($id);
-
-        return view('lolo-pinoy-grill-branches-requisition-slip', compact('user'));
+    
+        return view('lolo-pinoy-grill-branches-requisition-slip');
     }
 
     //
     public function printPayables($id){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
-
         $payableId = LoloPinoyGrillBranchesPaymentVoucher::find($id);
 
         $payablesVouchers = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->get()->toArray();
@@ -144,23 +256,21 @@ class LoloPinoyGrillBranchesController extends Controller
         $sum  = $countTotalAmount + $countAmount;
        
 
-        $pdf = PDF::loadView('printPayablesLoloPinoyGrillBranches', compact('payableId', 'user', 'payablesVouchers', 'sum'));
+        $pdf = PDF::loadView('printPayablesLoloPinoyGrillBranches', compact('payableId', 'payablesVouchers', 'sum'));
 
         return $pdf->download('lolo-pinoy-grill-branches-payment-voucher.pdf');
     }   
 
     //
     public function viewPayableDetails($id){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+    
         //
         $viewPaymentDetail = LoloPinoyGrillBranchesPaymentVoucher::find($id);
 
         //
         $getViewPaymentDetails = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
-        return view('view-lolo-pinoy-grill-branches-payable-details', compact('user', 'viewPaymentDetail', 'getViewPaymentDetails'));
+        return view('view-lolo-pinoy-grill-branches-payable-details', compact('viewPaymentDetail', 'getViewPaymentDetails'));
     }
 
     //
@@ -245,12 +355,24 @@ class LoloPinoyGrillBranchesController extends Controller
 
         //add current amount
         $add = $particulars['amount_due'] + $request->get('amount');
+
+        //get Category
+        $cat = $particulars['category'];
+
+        //get current voucher ref number
+        $voucherRef = $particulars['voucher_ref_number'];
+
+        $subAccountId = $particulars['sub_category_account_id'];
         
         $addParticulars = new LoloPinoyGrillBranchesPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
             'particulars'=>$request->get('particulars'),
             'amount'=>$request->get('amount'),
+            'voucher_ref_number'=>$voucherRef,
+            'category'=>$cat,
+            'sub_category_account_id'=>$subAccountId,
+            'date'=>$request->get('date'),
             'created_by'=>$name,
 
         ]);
@@ -299,9 +421,7 @@ class LoloPinoyGrillBranchesController extends Controller
 
     //
     public function editPayablesDetail(Request $request, $id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-        
+
         //
         $transactionList = LoloPinoyGrillBranchesPaymentVoucher::find($id);
 
@@ -324,15 +444,12 @@ class LoloPinoyGrillBranchesController extends Controller
         $sumCheque = $chequeAmount1 + $chequeAmount2;
       
 
-         return view('lolo-pinoy-grill-branches-payables-detail', compact('user', 'transactionList', 
+         return view('lolo-pinoy-grill-branches-payables-detail', compact('transactionList', 
             'getChequeNumbers','sum', 'getParticulars', 'sumCheque'));
     }
 
     //
     public function transactionList(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
          //
         $getTransactionLists = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', NULL)->get()->toArray();
 
@@ -341,7 +458,7 @@ class LoloPinoyGrillBranchesController extends Controller
 
         $totalAmoutDue = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', NULL)->where('status' ,'!=', $status)->sum('amount_due');
 
-        return view('lolo-pinoy-grill-branches-transaction-list', compact('user', 'getTransactionLists', 'totalAmoutDue'));
+        return view('lolo-pinoy-grill-branches-transaction-list', compact('getTransactionLists', 'totalAmoutDue'));
     }
 
     //
@@ -351,7 +468,6 @@ class LoloPinoyGrillBranchesController extends Controller
             'paidTo' =>'required',
            
         ]);
-
 
         $ids = Auth::user()->id;
         $user = User::find($ids);
@@ -376,11 +492,29 @@ class LoloPinoyGrillBranchesController extends Controller
             $uVoucher = sprintf("%06d",$newVoucherRef);
         } 
 
+          //get the category
+       if($request->get('category') == "Petty Cash"){
+
+            $subCat = "NULL";
+            $subCatAcctId = "NULL";
+
+       }else if($request->get('category') == "Utilities"){
+
+            $subCat = $request->get('bills');
+            $subCatAcctId = $request->get('selectAccountID');
+
+       }else if($request->get('category') == "None"){
+            $subCat = "NULL";
+            $subCatAcctId = "NULL";
+       }
+
+
         //check if invoice number already exists
         $target = DB::table(
                         'lolo_pinoy_grill_branches_payment_vouchers')
                         ->where('invoice_number', $request->get('invoiceNumber'))
                         ->get()->first();
+
         if ($target === NULL) {
             # code...   
             $addPaymentVoucher = new LoloPinoyGrillBranchesPaymentVoucher([
@@ -393,6 +527,9 @@ class LoloPinoyGrillBranchesController extends Controller
                 'amount'=>$request->get('amount'),
                 'amount_due'=>$request->get('amount'),
                 'particulars'=>$request->get('particulars'),
+                'category'=>$request->get('category'),
+                'sub_category'=>$subCat,
+                'sub_category_account_id'=>$subCatAcctId,
                 'prepared_by'=>$name,
                 'created_by'=>$name,
 
@@ -413,10 +550,10 @@ class LoloPinoyGrillBranchesController extends Controller
 
     //
     public function paymentVoucherForm(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
+        $getAllFlags = LoloPinoyGrillBranchesUtility::where('u_id', NULL)->get()->toArray();
 
-        return view('payment-voucher-form-lolo-pinoy-grill-branches', compact('user'));
+        return view('payment-voucher-form-lolo-pinoy-grill-branches', compact('getAllFlags'));
+        
     }
 
 
@@ -428,11 +565,8 @@ class LoloPinoyGrillBranchesController extends Controller
     public function index()
     {
         //
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
 
-
-        return view('lolo-pinoy-grill-branches', compact('user'));
+        return view('lolo-pinoy-grill-branches');
 
 
     }
@@ -520,16 +654,13 @@ class LoloPinoyGrillBranchesController extends Controller
     public function show($id)
     {
         //
-          $ids = Auth::user()->id;
-        $user = User::find($ids);
-
         $requisitionSlip = LoloPinoyGrillBranchesRequisitionSlip::find($id);
 
         //
         $rSlips = LoloPinoyGrillBranchesRequisitionSlip::where('rs_id', $id)->get()->toArray();
     
 
-        return view('view-lolo-pinoy-grill-branches-requisition-slip', compact('user', 'requisitionSlip', 'rSlips'));
+        return view('view-lolo-pinoy-grill-branches-requisition-slip', compact('requisitionSlip', 'rSlips'));
 
     }
 
@@ -542,9 +673,7 @@ class LoloPinoyGrillBranchesController extends Controller
     public function edit($id)
     {
         //
-          $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+    
         $requisitionSlip = LoloPinoyGrillBranchesRequisitionSlip::find($id);
 
         $rSlips = LoloPinoyGrillBranchesRequisitionSlip::where('rs_id', $id)->get()->toArray();
@@ -553,7 +682,7 @@ class LoloPinoyGrillBranchesController extends Controller
         $getUsers = User::get()->toArray();
        
 
-        return view('edit-lolo-pinoy-grill-branches-requisition-slip', compact('user', 'requisitionSlip', 'rSlips', 'getUsers'));
+        return view('edit-lolo-pinoy-grill-branches-requisition-slip', compact('requisitionSlip', 'rSlips', 'getUsers'));
 
     }
 
@@ -601,6 +730,7 @@ class LoloPinoyGrillBranchesController extends Controller
 
 
     }
+
 
     public function destroyTransactionList($id){
         $transactionList = LoloPinoyGrillBranchesPaymentVoucher::find($id);

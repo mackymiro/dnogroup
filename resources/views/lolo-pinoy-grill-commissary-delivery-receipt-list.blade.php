@@ -55,10 +55,10 @@
 				  							@foreach($getAllDeliveryReceipts as $getAllDeliveryReceipt)
 					  						<tr id="deletedId{{ $getAllDeliveryReceipt['id'] }}">
 					  							<td>
-			               						 @if($user->role_type !== 3)
+			               						 @if(Auth::user()['role_type'] !== 3)
 			  										<a href="{{ url('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-delivery-receipt/'.$getAllDeliveryReceipt['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
 			               						 @endif
-			              						@if($user->role_type == 1)
+			              						@if(Auth::user()['role_type'] == 1)
 					  								<a id="delete" onClick="confirmDelete('{{ $getAllDeliveryReceipt['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
 			              						@endif
 									  				<a href="{{ url('lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-commissary-delivery-receipt/'.$getAllDeliveryReceipt['id'])}}" title="View"><i class="fas fa-low-vision"></i></a>

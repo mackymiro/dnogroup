@@ -24,7 +24,7 @@
           <span>Requisition Slip</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if($user->role_type == 1)
+          @if(Auth::user()['role_type'] == 1)
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/requisition-slip') }}">Requisition Form</a>
           @endif
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/requisition-slip-lists') }}">Lists</a>
@@ -37,7 +37,7 @@
           <span>Transaction List</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if($user->role_type == 1)
+          @if(Auth::user()['role_type'] == 1)
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/requistion/transaction-list') }}">Lists</a>
           @endif
                   
@@ -49,10 +49,7 @@
           <span>Petty Cash</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if($user->role_type == 1)
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/petty-cash/transaction-list') }}">Transaction List</a>
-          @endif
-         
+            <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/petty-cash-list') }}">Petty Cash List</a>
         </div>
       </li>
      <li class="nav-item dropdown ">
@@ -61,6 +58,7 @@
           <span>Utility</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/utilities') }}">List</a>
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/petty-cash/transaction-list') }}">Veco</a>
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/petty-cash/transaction-list') }}">Phone & Internet</a>
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/petty-cash/transaction-list') }}">Water</a>
@@ -75,7 +73,7 @@
           <span>Payables</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if($user->role_type == 1)
+          @if(Auth::user()['role_type'] == 1)
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/payment-voucher-form') }}">Payment Voucher Form</a>
           @endif
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/payables/transaction-list') }}">Transaction List</a>
@@ -88,7 +86,7 @@
           <span>Store Stock</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if($user->role_type == 1)
+          @if(Auth::user()['role_type'] == 1)
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/purchase-order') }}">Delivery In Transactions</a>
           @endif
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/purchase-order-lists') }}">Stock Status</a>

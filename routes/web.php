@@ -690,6 +690,51 @@ Route::group(['middleware' => ['auth']], function(){
 		'/lolo-pinoy-grill-commissary/commissary/production',
 		'LoloPinoyGrillCommissaryController@production')
 		->name('lolo-pinoy-grill-commissary.production');
+	
+	Route::get(
+		'/lolo-pinoy-grill-commissary/petty-cash-list',
+		'LoloPinoyGrillCommissaryController@pettyCashList')
+		->name('lolo-pinoy-grill-commissary.pettyCashList');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/utilities',
+		'LoloPinoyGrillCommissaryController@utilities')
+		->name('lolo-pinoy-grill-commissary.utilities');
+
+	Route::post(
+		'/lolo-pinoy-grill-commissary/utilities/add-bill',
+		'LoloPinoyGrillCommissaryController@addBills')
+		->name('lolo-pinoy-grill-commissary.addBills');
+	
+	Route::post(
+		'/lolo-pinoy-grill-commissary/utilities/add-internet',
+		'LoloPinoyGrillCommissaryController@addInternet')
+		->name('lolo-pinoy-grill-commissary.addInternet');
+	
+	Route::get(
+		'/lolo-pinoy-grill-commissary/utilities/view-veco/{id}',
+		'LoloPinoyGrillCommissaryController@viewBills')
+		->name('lolo-pinoy-grill-commissary.viewBills');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/utilities/view-mcwd/{id}',
+		'LoloPinoyGrillCommissaryController@viewBills')
+		->name('lolo-pinoy-grill-commissary.viewBills');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/utilities/view-internet/{id}',
+		'LoloPinoyGrillCommissaryController@viewBills')
+		->name('lolo-pinoy-grill-commissary.viewBills');
+
+	Route::delete(
+		'/lolo-pinoy-grill-commissary/utilities/delete/{id}',
+		'LoloPinoyGrillCommissaryController@destroyUtility')
+		->name('lolo-pinoy-grill-commissary.destroyUtility');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/petty-cash/view/{id}',
+		'LoloPinoyGrillCommissaryController@viewPettyCash')
+		->name('lolo-pinoy-grill-commissary.viewPettyCash');
 
 	//Lolo Pinoy Grill Branches
 	Route::get('/lolo-pinoy-grill-branches', 'LoloPinoyGrillBranchesController@index')->name('lolo-pinoy-grill-branches.index');
@@ -697,7 +742,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/lolo-pinoy-grill-branches/payment-voucher-form',
 		'LoloPinoyGrillBranchesController@paymentVoucherForm')
-		->name('lolo-pinoy-grill-branches.payment-voucher-form');
+		->name('lolo-pinoy-grill-branches.paymentVoucherForm');
 
 	Route::post(
 		'/lolo-pinoy-grill-branches/payment-voucher-store',
@@ -808,6 +853,46 @@ Route::group(['middleware' => ['auth']], function(){
 		'/lolo-pinoy-grill-branches/sales-invoice-form',
 		'LoloPinoyGrillBranchesController@salesInvoiceForm')
 		->name('lolo-pinoy-grill-branches.salesInvoiceForm');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/petty-cash-list',
+		'LoloPinoyGrillBranchesController@pettyCashList')
+		->name('lolo-pinoy-grill-branches.pettyCashList');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/petty-cash/view/{id}',
+		'LoloPinoyGrillBranchesController@viewPettyCash')
+		->name('lolo-pinoy-grill-branches.viewPettyCash');
+	
+	Route::get(
+		'/lolo-pinoy-grill-branches/utilities',
+		'LoloPinoyGrillBranchesController@utilities')
+		->name('lolo-pinoy-grill-branches.utilities');
+
+	Route::post(
+		'/lolo-pinoy-grill-branches/utilities/add-bill',
+		'LoloPinoyGrillBranchesController@addBills')
+		->name('lolo-pinoy-grill-branches.addBills');
+
+	Route::post(
+		'/lolo-pinoy-grill-branches/utilities/add-internet',
+		'LoloPinoyGrillBranchesController@addInternet')
+		->name('lolo-pinoy-grill-branches.addInternet');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/utilities/view-veco/{id}',
+		'LoloPinoyGrillBranchesController@viewBills')
+		->name('lolo-pioy-grill-branches.viewBills');
+	
+	Route::get(
+		'/lolo-pinoy-grill-branches/utilities/view-mcwd/{id}',
+		'LoloPinoyGrillBranchesController@viewBills')
+		->name('lolo-pioy-grill-branches.viewBills');
+	
+	Route::get(
+			'/lolo-pinoy-grill-branches/utilities/view-internet/{id}',
+			'LoloPinoyGrillBranchesController@viewBills')
+			->name('lolo-pioy-grill-branches.viewBills');
 
 	//Mr Potato
 	Route::get('/mr-potato', 'MrPotatoController@index')->name('mr-potato.index');

@@ -119,7 +119,7 @@
                                       </div>
                       	  						<div class="col-md-2">
                                           <label>Issued Date </label>
-                                          <input type="text" id="issuedDate" name="issuedDate" class="datepicker selcls form-control" value="{{ old('issuedDate') }}" />
+                                          <input type="text" id="issuedDate" name="issuedDate" class="datepicker selcls form-control"  />
                                       </div>                                     
                       	  				</div>
                           	  		</div>

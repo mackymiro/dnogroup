@@ -1,35 +1,35 @@
-@extends('layouts.dno-personal-app')
+@extends('layouts.lolo-pinoy-grill-commissary-app')
 @section('title', 'View Petty Cash |')
 @section('content')
 <div id="wrapper">
-    <!-- Sidebar -->
-    @include('sidebar.sidebar-dno-personal')
-    <div id="content-wrapper">
+     <!-- Sidebar -->
+     @include('sidebar.sidebar-lolo-pinoy-grill')
+     <div id="content-wrapper">
         <div class="container-fluid">
-            <!-- Breadcrumbs-->
+              <!-- Breadcrumbs-->
             <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                <a href="#">Dno Personal</a>
-              </li>
-              <li class="breadcrumb-item ">Petty Cash</li>
-              <li class="breadcrumb-item active">View Petty Cash</li>
+                <li class="breadcrumb-item">
+                <a href="#">Lolo Pinoy Grill Commissary</a>
+                </li>
+                <li class="breadcrumb-item ">Petty Cash</li>
+                <li class="breadcrumb-item active">View Petty Cash</li>
             </ol>
-            <a href="{{ url('/dno-personal/petty-cash-list') }}">Back to Lists</a>
+            <a href="{{ url('lolo-pinoy-grill-commissary/petty-cash-list') }}">Back to Lists</a>
             <div class="col-lg-12">
-                <img src="{{ asset('images/DIC-LOGO.png')}}"  width="255" height="172" class="img-responsive mx-auto d-block" alt="DNO Personal">
-                
+                <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill ">
+            	
                 <h4 class="text-center"><u>PETTY CASH SUMMARY</u></h4>
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card mb-3">
-                        <div class="card-header">
+                     <div class="card mb-3">
+                         <div class="card-header">
                             <i class="fas fa-money-bill-alt"></i>
                             Petty Cash Summary
                            
                         </div>
                         <div class="card-body">
-                            <table class="table table-striped">
+                             <table class="table table-striped">
                                 <thead>
                                     <tr>
                                         <th>DATE</th>
@@ -61,21 +61,10 @@
                                 </tbody>
                              </table>
                         </div>
-                    </div>
+                     </div>
                 </div>
-            </div>  
+            </div><!-- end of row-->
         </div>
-    </div>
-        <!-- Sticky Footer -->
-        <footer class="sticky-footer">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <span>Copyright © Ribos Food Corporation 2019</span>
-            <br>
-            <br>
-            <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
-          </div>
-        </div>
-      </footer> 
+     </div>
 </div>
 @endsection

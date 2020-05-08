@@ -66,7 +66,7 @@
                     <li class="breadcrumb-item active">Cebu Properties</li>
                     <li class="breadcrumb-item active">SkyCable </li>     
                     <li class="breadcrumb-item active">View SkyCable Details</li>
-                 @elseif(\Request::is('dno-personal/manila-properties/view-servic-provider/'.$viewBill['id']))
+                 @elseif(\Request::is('dno-personal/manila-properties/view-service-provider/'.$viewBill['id']))
                     <li class="breadcrumb-item active">Properties</li>
                     <li class="breadcrumb-item active">Manila Properties</li>
                     <li class="breadcrumb-item active">Service Provider</li>     
