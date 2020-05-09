@@ -553,10 +553,9 @@ class LoloPinoyGrillCommissaryController extends Controller
         return view('add-delivery-in-raw-material-lolo-pinoy-grill', compact('getRawMaterial', 'id'));
     }
 
-    //
-    public function viewRawMaterialDetails($id){
     
-        //
+    public function viewRawMaterialDetails($id){
+
         $viewRawDetail = LoloPinoyGrillCommissaryRawMaterial::find($id);
 
         //transaction table

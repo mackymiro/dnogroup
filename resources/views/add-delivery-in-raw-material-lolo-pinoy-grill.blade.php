@@ -7,7 +7,7 @@
   });
 </script>
 <div id="wrapper">
-	 @include('sidebar.sidebar')
+	 @include('sidebar.sidebar-lolo-pinoy-grill')
 	 <div id="content-wrapper">
  		<div class="container-fluid">
  			<!-- Breadcrumbs-->

@@ -48,10 +48,10 @@
                       @foreach($requisitionLists as $requisitionList)
 				  						<tr id="deletedId{{ $requisitionList['id'] }}">
 				  							<td>
-                          @if($user->role_type != 3)
+                          @if(Auth::user()['role_type'] != 3)
                           <a href="{{ url('lolo-pinoy-grill-branches/edit/'.$requisitionList['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                           @endif
-                          @if($user->role_type == 1)
+                          @if(Auth::user()['role_type'] == 1)
 				  								<a id="delete" onClick="confirmDelete('{{ $requisitionList['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
                           @endif
 				  								<a href="{{ url('lolo-pinoy-grill-branches/view/'.$requisitionList['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>

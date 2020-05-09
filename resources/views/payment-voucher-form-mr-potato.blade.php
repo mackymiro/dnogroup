@@ -6,7 +6,21 @@
       $('.alert-success').fadeIn().delay(3000).fadeOut();
       
   });
+  $(function() {
+    $( ".datepicker" ).datepicker();
+  });
 </script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css" >
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+
 <div id="wrapper">
 	<!-- Sidebar -->
     @include('sidebar.sidebar-mr-potato')
@@ -39,30 +53,50 @@
                                         <p class="alert alert-danger">{{ Session::get('error') }}</p>
                                     @endif 
                           	  		<div class="form-group">
-                      	  				<div class="form-row">
-                  	  						<div class="col-lg-4">
-                  	  							<label>Paid To</label>
-                  	  							<input type="text" name="paidTo" class="form-control" required="required" />
-                  	  						</div>
-                                  @if ($errors->has('paidTo'))
-                                    <span class="alert alert-danger">
-                                      <strong>{{ $errors->first('paidTo') }}</strong>
-                                    </span>
-                                  @endif
-                  	  						 <div class="col-md-2">
-                                     <label>Invoice #</label>
-                                      <input type="text" name="invoiceNumber" class="form-control"  required="required" value="{{ old('invoiceNumber') }}" />
-                                  </div>
-                  	  						<div class="col-md-2">
-                                      <label>Issued Date </label>
-                                      <input type="text" name="issuedDate" class="form-control" value="{{ old('issuedDate') }}" />
-                                  </div>
-                                   <div class="col-md-2">
-                                      <label>Delivered Date </label>
-                                      <input type="text" name="deliveredDate" class="form-control" value="{{ old('deliveredDate') }}" />
-                                  </div>
-                                 
-                      	  				</div>
+                                      <div class="form-row">
+                                          <div class="col-lg-4">
+                                            <label>Paid To</label>
+                                            <input type="text" name="paidTo" class="form-control" required="required" />
+                                          </div>
+                                          @if ($errors->has('paidTo'))
+                                            <span class="alert alert-danger">
+                                              <strong>{{ $errors->first('paidTo') }}</strong>
+                                            </span>
+                                          @endif
+                                          <div class="col-md-2">
+                                            <label>Invoice #</label>
+                                              <input type="text" name="invoiceNumber" class="form-control"  required="required" value="{{ old('invoiceNumber') }}" />
+                                          </div>
+                                          <div class="col-md-2">
+                                              <label>Issued Date </label>
+                                              <input type="text" name="issuedDate" class="datepicker form-control" value="{{ old('issuedDate') }}" />
+                                          </div>
+                                          <div  class="col-md-2">
+                                              <label>Category </label>
+                                              <select  name="category" class="category selcls form-control" > 
+                                                <option value="None">None</option>
+                                               	<option value="Petty Cash">Petty Cash</option>
+											                        	<option value="Utilities">Utilities</option>
+                                              </select>
+                                           </div>
+                                           <div id="bills" class="col-md-2">
+                                              <label>Bills </label>
+                                              <select  name="bills" class="category selcls form-control" > 
+                                                <option value="0">--Pleas Select--</option>
+                                               	<option value="PLDT">PLDT</option>
+                                                <option value="MCWD">MCWD</option>
+                                                <option value="Internet">Internet</option>
+                                              </select>
+                                          	</div>
+                                            <div id="selectId" class="col-md-2">
+                                              <label>Please Select Account ID </label>
+                                              <select data-live-search="true" name="selectAccountID" class="form-control selectpicker">
+                                                @foreach($getAllFlags as $getAllFlag)
+                                                  <option value="{{ $getAllFlag['id']}}">{{ $getAllFlag['account_id']}}</option>
+                                                @endforeach
+                                              </select>	
+                                          	</div>
+                                      </div>
                           	  		</div>
                           	  	  <div class="form-group">
                                     <div class="form-row">
@@ -100,6 +134,25 @@
       </footer>
 
 </div>
+<script type="text/javascript">
+    $("#bills").hide();
+    $("#selectId").hide();
+    
+    $(".category").change(function(){
+        const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
+        if(cat === "Petty Cash"){
+          $("#bills").hide();
+            $("#selectId").hide();
+        }else if(cat === "Utilities"){
+          $("#bills").show();
+            $("#selectId").show();
+
+        }else if(cat === "0"){
+            $("#bills").hide();
+            $("#selectId").hide();
+        }
+    });	
+</script>
 <script>
   //branch data
   new Vue({

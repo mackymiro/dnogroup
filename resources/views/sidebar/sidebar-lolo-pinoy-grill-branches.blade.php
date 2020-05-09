@@ -3,7 +3,7 @@
        <li class="nav-item active">
         <a class="nav-link" href="{{ url('/') }}">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Ribos Food Corporation</span>
+          <span>Ribo's Food Corporation</span>
         </a>
       </li>
      <li class="nav-item dropdown">
@@ -43,7 +43,7 @@
                   
         </div>
       </li>
-       <li class="nav-item dropdown ">
+      <li class="nav-item dropdown ">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
          <i class="fas fa-money-bill-alt"></i>
           <span>Petty Cash</span>
@@ -59,14 +59,8 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/utilities') }}">List</a>
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/petty-cash/transaction-list') }}">Veco</a>
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/petty-cash/transaction-list') }}">Phone & Internet</a>
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/petty-cash/transaction-list') }}">Water</a>
-           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/petty-cash/transaction-list') }}">Rental</a>
         </div>
       </li>
-
-    
        <li class="nav-item dropdown ">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fa fa-credit-card" aria-hidden="true"></i>

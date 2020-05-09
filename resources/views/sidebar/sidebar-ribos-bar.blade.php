@@ -3,7 +3,7 @@
        <li class="nav-item active">
         <a class="nav-link" href="{{ url('/') }}">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Ribos Food Corporation</span>
+          <span>Ribo's Food Corporation</span>
         </a>
       </li>
       <li class="nav-item dropdown">
@@ -45,7 +45,7 @@
           <span>Purchase Order</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if($user->role_type == 1)
+          @if(Auth::user()['role_type'] == 1)
           <a class="dropdown-item" href="{{ url('ribos-bar/purchase-order') }}">P.O Form</a>
           @endif
           <a class="dropdown-item" href="{{ url('ribos-bar/purchase-order-lists') }}">Lists</a>
@@ -69,11 +69,29 @@
           <span>Billing Statement</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if($user->role_type == 1)
+          @if(Auth::user()['role_type'] == 1)
           <a class="dropdown-item" href="{{ url('ribos-bar/billing-statement-form') }}">Billing Statement Form</a>
           @endif
           <a class="dropdown-item" href="{{ url('ribos-bar/billing-statement-lists') }}">Lists</a>
          
+        </div>
+      </li>
+      <li class="nav-item dropdown ">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+         <i class="fas fa-money-bill-alt"></i>
+          <span>Petty Cash</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+            <a class="dropdown-item" href="{{ url('ribos-bar/petty-cash-list') }}">Petty Cash List</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown ">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+         <i class="fas fa-tools"></i>
+          <span>Utility</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item" href="{{ url('ribos-bar/utilities') }}">List</a>
         </div>
       </li>
        <li class="nav-item dropdown">
@@ -88,5 +106,19 @@
             <a class="dropdown-item" href="{{ url('ribos-bar/cheque-vouchers') }}">Cheque Vouchers</a>  -->
         </div>
       </li>
-     
+      <li class="nav-item dropdown ">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           <i class="fas fa-store"></i>
+          <span>Store Stock</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item" href="{{ url('ribos-bar/store-stock/raw-materials') }}">RAW Materials</a>
+          <a class="dropdown-item" href="{{ url('ribos-bar/store-stock/production') }}">Production</a>
+          <a class="dropdown-item" href="{{ url('ribos-bar/store-stock/stocks-inventory') }}">Stocks Inventory</a>     
+          <a class="dropdown-item" href="{{ url('ribos-bar/store-stock/delivery-outlets') }}">Delivery Outlets</a>
+
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/commissary/inventory-of-stocks') }}">Inventory Of Stocks</a>
+         
+        </div>
+      </li>
  </ul>

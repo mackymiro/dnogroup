@@ -13,15 +13,121 @@ use App\MrPotatoPurchaseOrder;
 use App\MrPotatoDeliveryReceipt;
 use App\MrPotatoPaymentVoucher;
 use App\MrPotatoSalesInvoice;
+use App\MrPotatoUtility;
 
 class MrPotatoController extends Controller
 {     
 
     //
-    public function printPO($id){
+    public function viewBills($id){
+         //
+        $viewBill = MrPotatoUtility::find($id);
+        
+        //view particulars
+         $viewParticulars = MrPotatoPaymentVoucher::where('sub_category_account_id', $id)->get()->toArray();
+ 
+        return view('mr-potato-view-utility', compact('viewBill', 'viewParticulars'));
+    }
+
+    //
+    public function addInternet(Request $request){
         $ids = Auth::user()->id;
         $user = User::find($ids);
 
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //get the date today
+         $getDate =  date("Y-m-d");
+
+        //check if internet account already exists
+        $target = DB::table(
+                'mr_potato_utilities')
+                ->where('account_id', $request->accountIdInternet)
+                ->get()->first();
+
+        if($target ==  NULL){
+    
+            $addInternet = new MrPotatoUtility([
+                'user_id'=>$user->id,
+                'account_id'=>$request->accountIdInternet,
+                'account_name'=>$request->accountNameInternet,
+                'date'=>$getDate,
+                'flag'=>$request->flagInternet,
+                'created_by'=>$name,
+            ]);
+
+            $addInternet->save();
+            return response()->json('Success: successfully added an account.');
+        }else{
+            return response()->json('Error: Account ID already exist.');
+        }
+    }
+
+    //
+    public function addBills(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        //get the date today
+        $getDate =  date("Y-m-d");
+
+         //check if veco account and mcwd already exists
+        $target = DB::table(
+                'mr_potato_utilities')
+                ->where('account_id', $request->accountId)
+                ->get()->first();
+
+        if($target == NULL){
+
+            $addBills = new MrPotatoUtility([
+                'user_id'=>$user->id,
+                'account_id'=>$request->accountId,
+                'account_name'=>$request->accountName,
+                'meter_no'=>$request->meterNo,
+                'date'=>$getDate,
+                'flag'=>$request->flag,
+                'created_by'=>$name,
+            ]);
+
+            $addBills->save();
+            return response()->json('Success: successfully added an account.');
+        }else{
+            return response()->json('Error: Account ID already exist.');
+        }
+        
+    }
+
+    //
+    public function utilities(){
+        $flag = "Veco";
+        $flagMCWD = "MCWD";
+        $flagInternet = "Internet";
+
+        $vecoDocuments = MrPotatoUtility::where('flag', $flag)->get()->toArray();
+
+        $mcwdDocuments = MrPotatoUtility::where('flag', $flagMCWD)->get()->toArray();
+
+        $internetDocuments = MrPotatoUtility::where('flag', $flagInternet)->get()->toArray();
+
+        return view('mr-potato-utilities', compact('vecoDocuments', 'mcwdDocuments', 'internetDocuments'));
+    }
+
+    //
+    public function pettyCashList(){
+        return view('mr-potato-petty-cash-list');
+    }
+
+    //
+    public function printPO($id){
+       
         $purchaseOrder = MrPotatoPurchaseOrder::find($id);
 
           //
@@ -43,8 +149,7 @@ class MrPotatoController extends Controller
 
     //
     public function printPayables($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
+     
 
         $payableId = MrPotatoPaymentVoucher::find($id);
 
@@ -58,23 +163,21 @@ class MrPotatoController extends Controller
 
         $sum  = $countTotalAmount + $countAmount;
        
-         $pdf = PDF::loadView('printPayablesMrPotato', compact('payableId', 'user', 'payablesVouchers', 'sum'));
+         $pdf = PDF::loadView('printPayablesMrPotato', compact('payableId',  'payablesVouchers', 'sum'));
 
         return $pdf->download('mr-potato-payment-voucher.pdf');
     }  
 
     //
     public function viewPayableDetails($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+       
         //
         $viewPaymentDetail = MrPotatoPaymentVoucher::find($id);
 
         //
         $getViewPaymentDetails = MrPotatoPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
-        return view('view-mr-potato-payable-details', compact('user', 'viewPaymentDetail', 'getViewPaymentDetails'));
+        return view('view-mr-potato-payable-details', compact('viewPaymentDetail', 'getViewPaymentDetails'));
     }
 
     //
@@ -160,13 +263,24 @@ class MrPotatoController extends Controller
         //add current amount
         $add = $particulars['amount_due'] + $request->get('amount');
 
+        //get Category
+        $cat = $particulars['category'];
+
+        //get current voucher ref number
+        $voucherRef = $particulars['voucher_ref_number'];
+
+        $subAccountId = $particulars['sub_category_account_id'];
+
         $addParticulars = new MrPotatoPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
             'particulars'=>$request->get('particulars'),
             'amount'=>$request->get('amount'),
+            'voucher_ref_number'=>$voucherRef,
+            'category'=>$cat,
+            'sub_category_account_id'=>$subAccountId,
+            'date'=>$request->get('date'),
             'created_by'=>$name,
-
         ]);
 
         $addParticulars->save();
@@ -212,8 +326,7 @@ class MrPotatoController extends Controller
 
     //
     public function editPayablesDetail(Request $request, $id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
+     
 
         $transactionList = MrPotatoPaymentVoucher::find($id);
 
@@ -235,15 +348,13 @@ class MrPotatoController extends Controller
         
         $sumCheque = $chequeAmount1 + $chequeAmount2;
 
-        return view('mr-potato-payables-detail', compact('user', 'transactionList', 'getChequeNumbers',
+        return view('mr-potato-payables-detail', compact('transactionList', 'getChequeNumbers',
             'getParticulars', 'sum', 'sumCheque'));
     }
 
     //
     public function transactionList(){
-          $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+    
          //
         $getTransactionLists = MrPotatoPaymentVoucher::where('pv_id', NULL)->get()->toArray();
 
@@ -252,15 +363,14 @@ class MrPotatoController extends Controller
 
         $totalAmoutDue = MrPotatoPaymentVoucher::where('pv_id', NULL)->where('status' ,'!=', $status)->sum('amount_due');
 
-        return view('mr-potato-transaction-list', compact('user', 'getTransactionLists', 'totalAmoutDue'));
+        return view('mr-potato-transaction-list', compact('getTransactionLists', 'totalAmoutDue'));
 
     }
 
 
     //
     public function printDelivery($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
+       
 
         $deliveryId = MrPotatoDeliveryReceipt::find($id);
 
@@ -283,16 +393,14 @@ class MrPotatoController extends Controller
 
         $sum2  = $countTotalAmount + $countAmount;
 
-        $pdf = PDF::loadView('mr-potato-printDelivery', compact('deliveryId', 'user', 'deliveryReceipts', 'sum'));
+        $pdf = PDF::loadView('mr-potato-printDelivery', compact('deliveryId', 'deliveryReceipts', 'sum'));
 
         return $pdf->download('mr-potato-delivery-receipt.pdf');
     }
 
     //
     public function viewSalesInvoice($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+      
         $viewSalesInvoice = MrPotatoSalesInvoice::find($id);
 
         $salesInvoices = MrPotatoSalesInvoice::where('si_id', $id)->get()->toArray();
@@ -305,7 +413,7 @@ class MrPotatoController extends Controller
 
         $sum  = $countTotalAmount + $countAmount;
 
-        return view('view-mr-potato-sales-invoice', compact('user', 'viewSalesInvoice', 'salesInvoices', 'sum'));
+        return view('view-mr-potato-sales-invoice', compact('viewSalesInvoice', 'salesInvoices', 'sum'));
     }
 
     //
@@ -376,11 +484,8 @@ class MrPotatoController extends Controller
 
     //
     public function addNewSalesInvoice($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-       
-
-        return view('add-new-mr-potato-sales-invoice', compact('user', 'id'));
+    
+        return view('add-new-mr-potato-sales-invoice', compact('id'));
     }
 
     //
@@ -420,15 +525,13 @@ class MrPotatoController extends Controller
 
     //]
     public function editSalesInvoice($id){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+    
          //getSalesInvoice
         $getSalesInvoice = MrPotatoSalesInvoice::find($id);
 
         $sInvoices  = MrPotatoSalesInvoice::where('si_id', $id)->get()->toArray();
 
-        return view('edit-mr-potato-sales-invoice', compact('user', 'getSalesInvoice', 'sInvoices'));
+        return view('edit-mr-potato-sales-invoice', compact('getSalesInvoice', 'sInvoices'));
     }
 
     //store sales invoice form
@@ -482,36 +585,30 @@ class MrPotatoController extends Controller
 
     //sales invoice form
     public function salesInvoiceForm(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
 
-        return view('mr-potato-sales-invoice-form', compact('user'));
+        return view('mr-potato-sales-invoice-form');
     }                                                   
 
     //
     public function chequeVouchers(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
 
         //getAllChequeVouchers
         $method = "Cheque";
 
         $getAllChequeVouchers = MrPotatoPaymentVoucher::where('method_of_payment', $method)->get()->toArray(); 
 
-        return view('cheque-vouchers-lists-mr-potato', compact('user', 'getAllChequeVouchers')); 
+        return view('cheque-vouchers-lists-mr-potato', compact('getAllChequeVouchers')); 
     }
 
     //
     public function cashVouchers(){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+    
          //getAllCashVouchers
         $method = "Cash";
 
         $getAllCashVouchers = MrPotatoPaymentVoucher::where('method_of_payment', $method)->get()->toArray();
 
-        return view('cash-vouchers-list-mr-potato', compact('user', 'getAllCashVouchers'));
+        return view('cash-vouchers-list-mr-potato', compact('getAllCashVouchers'));
 
     }
 
@@ -560,10 +657,8 @@ class MrPotatoController extends Controller
 
     //
     public function addNewPaymentVoucher($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        return view('add-new-mr-potato-payment-voucher', compact('user', 'id'));
+      
+        return view('add-new-mr-potato-payment-voucher', compact('id'));
     }
 
 
@@ -588,16 +683,13 @@ class MrPotatoController extends Controller
 
 
     public function editPaymentVoucher($id){    
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
           //getPaymentVoucher 
         $getPaymentVoucher = MrPotatoPaymentVoucher::find($id);
 
         //pVoucher
         $pVouchers = MrPotatoPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
-        return view('edit-payment-voucher-mr-potato', compact('user', 'getPaymentVoucher', 'pVouchers'));
+        return view('edit-payment-voucher-mr-potato', compact('getPaymentVoucher', 'pVouchers'));
     }
 
     //store voucher
@@ -631,6 +723,21 @@ class MrPotatoController extends Controller
             $uVoucher = sprintf("%06d",$newVoucherRef);
         } 
 
+          //get the category
+       if($request->get('category') == "Petty Cash"){
+             $subCat = "NULL";
+             $subCatAcctId = "NULL";
+
+        }else if($request->get('category') == "Utilities"){
+            $subCat = $request->get('bills');
+            $subCatAcctId = $request->get('selectAccountID');
+
+        }else if($request->get('category') == "None"){
+            $subCat = "NULL";
+            $subCatAcctId = "NULL";
+        }
+
+
          //check if invoice number already exists
         $target = DB::table(
                         'mr_potato_payment_vouchers')
@@ -649,6 +756,9 @@ class MrPotatoController extends Controller
                     'amount'=>$request->get('amount'),
                     'amount_due'=>$request->get('amount'),
                     'particulars'=>$request->get('particulars'),
+                    'category'=>$request->get('category'),
+                    'sub_category'=>$subCat,
+                    'sub_category_account_id'=>$subCatAcctId,
                     'prepared_by'=>$name,
                     'created_by'=>$name,
                 ]);
@@ -667,18 +777,13 @@ class MrPotatoController extends Controller
 
     //
     public function paymentVoucherForm(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        return view('payment-voucher-form-mr-potato', compact('user'));
+        $getAllFlags = MrPotatoUtility::where('u_id', NULL)->get()->toArray();
+        return view('payment-voucher-form-mr-potato', compact('getAllFlags'));
     }
 
     //
     public function viewDeliveryReceipt($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-
+    
         $viewDeliveryReceipt = MrPotatoDeliveryReceipt::find($id);
 
         $deliveryReceipts = MrPotatoDeliveryReceipt::where('dr_id', $id)->get()->toArray();
@@ -700,18 +805,16 @@ class MrPotatoController extends Controller
 
         $sum2  = $countTotalAmount + $countAmount;
 
-        return view('view-mr-potato-delivery-receipt', compact('user', 'viewDeliveryReceipt', 'deliveryReceipts', 'countUnit', 'sum', 'sum2'));
+        return view('view-mr-potato-delivery-receipt', compact('viewDeliveryReceipt', 'deliveryReceipts', 'countUnit', 'sum', 'sum2'));
     }
 
     //
     public function deliveryReceiptList(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+      
          //getAllDeliveryReceipt
         $getAllDeliveryReceipts = MrPotatoDeliveryReceipt::where('dr_id', NULL)->get()->toArray();
 
-        return view('mr-potato-delivery-receipt-list', compact('user', 'getAllDeliveryReceipts'));
+        return view('mr-potato-delivery-receipt-list', compact('getAllDeliveryReceipts'));
     }
 
     //
@@ -787,10 +890,7 @@ class MrPotatoController extends Controller
 
     //add new
     public function addNewDelivery($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        return view('add-new-mr-potato-delivery-receipt', compact('user', 'id'));
+        return view('add-new-mr-potato-delivery-receipt', compact('id'));
     }
 
     //update 
@@ -821,8 +921,6 @@ class MrPotatoController extends Controller
     }
 
     public function editDeliveryReceipt($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
         
         //getDeliveryReceipt
         $getDeliveryReceipt = MrPotatoDeliveryReceipt::find($id);
@@ -830,7 +928,7 @@ class MrPotatoController extends Controller
          //dReceipts
         $dReceipts = MrPotatoDeliveryReceipt::where('dr_id', $id)->get()->toArray();
 
-        return view('edit-mr-potato-delivery-receipt', compact('user','getDeliveryReceipt', 'dReceipts'));
+        return view('edit-mr-potato-delivery-receipt', compact('getDeliveryReceipt', 'dReceipts'));
     }
 
     //store delivery receipt
@@ -906,20 +1004,15 @@ class MrPotatoController extends Controller
     }
 
     public function deliveryReceiptForm(){
-        $id =  Auth::user()->id;
-        $user = User::find($id);
-
-        return view('mr-potato-delivery-receipt-form', compact('user'));
+        return view('mr-potato-delivery-receipt-form');
     }
 
     //purchase order all lists
     public function purchaseOrderAllLists(){
-        $id =  Auth::user()->id;
-        $user = User::find($id);
 
         $purchaseOrders = MrPotatoPurchaseOrder::where('po_id', NULL)->get()->toArray();
 
-        return view('mr-potato-purchase-order-lists', compact('user', 'purchaseOrders')); 
+        return view('mr-potato-purchase-order-lists', compact('purchaseOrders')); 
     }
 
     //update Po
@@ -981,11 +1074,8 @@ class MrPotatoController extends Controller
 
     //purchase order
     public function purchaseOrder(){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
 
-
-        return view('mr-potato-purchase-order', compact('user'));
+        return view('mr-potato-purchase-order');
     }
 
     /**
@@ -996,12 +1086,10 @@ class MrPotatoController extends Controller
     public function index()
     {
         //
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+     
         $getAllSalesInvoices = MrPotatoSalesInvoice::where('si_id', NULL)->get()->toArray();
 
-        return view('mr-potato', compact('user', 'getAllSalesInvoices'));
+        return view('mr-potato', compact('getAllSalesInvoices'));
     }
 
     /**
@@ -1085,9 +1173,7 @@ class MrPotatoController extends Controller
     public function show($id)
     {
         //
-          $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+        
         $purchaseOrder = MrPotatoPurchaseOrder::find($id);
 
 
@@ -1102,7 +1188,7 @@ class MrPotatoController extends Controller
 
         $sum  = $countTotalAmount + $countAmount;
 
-         return view('view-mr-potato-purchase-order', compact('user', 'purchaseOrder', 'pOrders', 'sum'));
+         return view('view-mr-potato-purchase-order', compact('purchaseOrder', 'pOrders', 'sum'));
     }
 
     /**
@@ -1114,14 +1200,12 @@ class MrPotatoController extends Controller
     public function edit($id)
     {
         //
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
 
         $purchaseOrder = MrPotatoPurchaseOrder::find($id);
 
         $pOrders = MrPotatoPurchaseOrder::where('po_id', $id)->get()->toArray();
 
-         return view('edit-mr-potato-purchase-order', compact('user', 'purchaseOrder', 'pOrders'));
+         return view('edit-mr-potato-purchase-order', compact('purchaseOrder', 'pOrders'));
     }
 
     /**

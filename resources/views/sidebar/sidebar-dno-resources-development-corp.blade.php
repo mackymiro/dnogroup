@@ -3,7 +3,7 @@
        <li class="nav-item active">
         <a class="nav-link" href="{{ url('/') }}">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Ribos Food Corporation</span>
+          <span>Ribo's Food Corporation</span>
         </a>
       </li>
   	   <li class="nav-item dropdown ">

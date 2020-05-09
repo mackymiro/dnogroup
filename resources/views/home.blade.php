@@ -57,7 +57,7 @@
       <li class="nav-item">
         <a class="nav-link" href="{{ url('ribos-bar') }}">
           <i class="fas fa-book"></i>
-          <span>Ribos Bar</span>
+          <span>Ribo's Bar</span>
         </a>
       </li>
       <li class="nav-item">
@@ -164,7 +164,7 @@
                 <div class="card-body-icon">
                   <img src="{{ asset('images/ribos.jpg')}}" width="200" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
                 </div>
-                <div class="mr-5">Ribos Bar</div>
+                <div class="mr-5">Ribo's Bar</div>
               </div>
               <a class="card-footer text-white clearfix small z-1" href="{{ url('ribos-bar') }}">
                 <span class="float-left">View Details</span>

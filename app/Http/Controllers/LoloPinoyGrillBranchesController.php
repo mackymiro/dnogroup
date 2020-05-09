@@ -492,7 +492,7 @@ class LoloPinoyGrillBranchesController extends Controller
             $uVoucher = sprintf("%06d",$newVoucherRef);
         } 
 
-          //get the category
+        //get the category
        if($request->get('category') == "Petty Cash"){
 
             $subCat = "NULL";

@@ -1,22 +1,22 @@
-@extends('layouts.lolo-pinoy-grill-branches-app')
+@extends('layouts.ribos-bar-app')
 @section('title', 'View Petty Cash |')
 @section('content')
 <div id="wrapper">
      <!-- Sidebar -->
-     @include('sidebar.sidebar-lolo-pinoy-grill-branches')
+     @include('sidebar.sidebar-ribos-bar')
      <div id="content-wrapper">
          <div class="container-fluid">
                 <!-- Breadcrumbs-->
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                    <a href="#">Lolo Pinoy Grill Branches</a>
+                    <a href="#">Ribo's Bar</a>
                     </li>
                     <li class="breadcrumb-item ">Petty Cash</li>
                     <li class="breadcrumb-item active">View Petty Cash</li>
                 </ol>
                 <a href="{{ url('lolo-pinoy-grill-branches/petty-cash-list') }}">Back to Lists</a>
                 <div class="col-lg-12">
-                    <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill ">
+                    <img src="{{ asset('images/ribos.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill ">
                     
                     <h4 class="text-center"><u>PETTY CASH SUMMARY</u></h4>
                  </div>

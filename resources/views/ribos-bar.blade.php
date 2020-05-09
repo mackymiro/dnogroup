@@ -51,10 +51,10 @@
 	                                          @foreach($getAllSalesInvoices as $getAllSalesInvoice)
 		                                          <tr id="deletedId{{ $getAllSalesInvoice['id']}}">
 		                                          <td>
-		                                             @if($user->role_type !== 3)
+		                                             @if(Auth::user()['role_type'] !== 3)
 		                                            <a href="{{ url('ribos-bar/edit-ribos-bar-sales-invoice/'.$getAllSalesInvoice['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
 		                                             @endif
-		                                            @if($user->role_type == 1)
+		                                            @if(Auth::user()['role_type'] == 1)
 		                                            <a id="delete" onClick="confirmDelete('{{ $getAllSalesInvoice['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
 		                                            @endif
 		                                            <a href="{{ url('ribos-bar/view-ribos-bar-sales-invoice/'.$getAllSalesInvoice['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>

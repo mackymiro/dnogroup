@@ -47,7 +47,8 @@ class LoloPinoyGrillBranchesTest extends TestCase
 
         $response  = $this->actingAs($user, 'web')->get('/lolo-pinoy-grill-branches/utilities');
         $response->assertStatus(200);
-        $response->assertSuccessful('lolo-pinoy-grill-branches-utilities');
+        $response->assertSuccessful();
+        $response->assetViewIs('lolo-pinoy-grill-branches-utilities');
     }     
     
      /* @test */ 

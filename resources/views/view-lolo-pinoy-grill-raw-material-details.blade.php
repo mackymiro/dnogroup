@@ -3,7 +3,7 @@
 @section('content')
 <div id="wrapper">
 	<!-- Sidebar -->
-   	@include('sidebar.sidebar')
+   	@include('sidebar.sidebar-lolo-pinoy-grill')
    	<div id="content-wrapper">
    		<div class="container-fluid">
    			 <!-- Breadcrumbs-->
@@ -15,7 +15,7 @@
               <li class="breadcrumb-item ">RAW Materials</li>
               <li class="breadcrumb-item active">Item Details</li>
             </ol>
-            <a href="{{ url('lolo-pinoy-lechon-de-cebu/commissary/raw-materials') }}">Back to Lists</a>
+            <a href="{{ url('lolo-pinoy-grill-commissary/commissary/raw-materials') }}">Back to Lists</a>
             <div class="col-lg-12">
             	 <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill">
             	 
@@ -100,10 +100,7 @@
 		            	 				<th>
 		            	 				
 		            	 				</th>
-		            	 				
 		            	 			</tr>
-
-
 		            	 		</tbody>
 		            	 		
 		            	 	</table>

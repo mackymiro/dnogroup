@@ -1,4 +1,4 @@
-@extends('layouts.lolo-pinoy-grill-branches-app')
+@extends('layouts.ribos-bar-app')
 @section('title', 'Utilities List |')
 @section('content')
 <style>
@@ -20,19 +20,19 @@
   });   
 </script>
 <div id="wrapper">
-    @include('sidebar.sidebar-lolo-pinoy-grill-branches')
+    @include('sidebar.sidebar-ribos-bar')
     <div id="content-wrapper">
         <div class="container-fluid">
-            <!-- Breadcrumbs-->
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="#">Lolo Pinoy Grill Branches</a>
-                    </li>
-                    <li class="breadcrumb-item active">Utilities</li>
-                    <li class="breadcrumb-item ">Utilities List</li>
-                </ol>
-                <div class="row">
-                    <div class="col-lg-12">
+             <!-- Breadcrumbs-->
+             <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="#">Ribo's Bar</a>
+                </li>
+                <li class="breadcrumb-item active">Utilities</li>
+                <li class="breadcrumb-item ">Utilities List</li>
+            </ol>
+            <div class="row">
+                <div class="col-lg-12">
                          <div class="card mb-3">
                             <div class="card-header">
                                 <i class="fas fa-bolt"></i>
@@ -73,14 +73,14 @@
                                             </tr>
                                         </tfoot>
                                         <tbody> 
-                                             @foreach($vecoDocuments as $vecoDocument)
+                                            @foreach($vecoDocuments as $vecoDocument)
                                                 <tr id="deletedId{{ $vecoDocument['id']}}">
                                                     <td>
                                                         @if(Auth::user()['role_type'] == 1)
                                                             <a id="delete" onClick="confirmDelete('{{ $vecoDocument['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
                                                         @endif
                                                     </td>
-                                                    <td><a href="{{ url('/lolo-pinoy-grill-branches/utilities/view-veco/'.$vecoDocument['id']) }}">{{ $vecoDocument['account_id']}}</a></td>
+                                                    <td><a href="{{ url('/ribos-bar/utilities/view-veco/'.$vecoDocument['id']) }}">{{ $vecoDocument['account_id']}}</a></td>
                                                     <td>{{ $vecoDocument['account_name']}}</td>
                                                     <td>{{ $vecoDocument['meter_no']}}</td>
                                                     <td>{{ $vecoDocument['date']}}</td>
@@ -144,7 +144,7 @@
                                                             <a id="delete" onClick="confirmDelete('{{ $mcwdDocument['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
                                                         @endif
                                                     </td>
-                                                    <td><a href="{{ url('/lolo-pinoy-grill-branches/utilities/view-mcwd/'.$mcwdDocument['id']) }}">{{ $mcwdDocument['account_id']}}</a></td>
+                                                    <td><a href="{{ url('/ribos-bar/utilities/view-mcwd/'.$mcwdDocument['id']) }}">{{ $mcwdDocument['account_id']}}</a></td>
                                                     <td>{{ $mcwdDocument['account_name']}}</td>
                                                     <td>{{ $mcwdDocument['meter_no']}}</td>
                                                     <td>{{ $mcwdDocument['date']}}</td>
@@ -199,20 +199,20 @@
                                             </tr>
                                         </tfoot>
                                         <tbody>
-                                              @foreach($internetDocuments as $internetDocument)
-                                                <tr id="deletedId{{ $internetDocument['id']}}">
-                                                    <td>
-                                                        @if(Auth::user()['role_type'] == 1)
-                                                            <a id="delete" onClick="confirmDelete('{{ $internetDocument['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
-                                                        @endif
-                                                    </td>
-                                                    <td><a href="{{ url('/lolo-pinoy-grill-branches/utilities/view-internet/'.$internetDocument['id']) }}">{{ $internetDocument['account_id']}}</a></td>
-                                                    <td>{{ $internetDocument['account_name']}}</td>
-                                                    <td>{{ $internetDocument['date']}}</td>
-                                                    <td></td>
-                                                    <td>{{ $internetDocument['created_by']}}</td>
-                                                </tr>
-                                                @endforeach
+                                            @foreach($internetDocuments as $internetDocument)
+                                            <tr id="deletedId{{ $internetDocument['id']}}">
+                                                <td>
+                                                    @if(Auth::user()['role_type'] == 1)
+                                                        <a id="delete" onClick="confirmDelete('{{ $internetDocument['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
+                                                    @endif
+                                                </td>
+                                                <td><a href="{{ url('/ribos-bar/utilities/view-internet/'.$internetDocument['id']) }}">{{ $internetDocument['account_id']}}</a></td>
+                                                <td>{{ $internetDocument['account_name']}}</td>
+                                                <td>{{ $internetDocument['date']}}</td>
+                                                <td></td>
+                                                <td>{{ $internetDocument['created_by']}}</td>
+                                            </tr>
+                                            @endforeach
                                         </tbody>
                                     </table>
                                  </div>
@@ -220,60 +220,47 @@
                         </div>
                     </div>
                 </div><!-- end of row -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="card mb-3">
-                            <div class="card-header">
-                                 <i class="fas fa-globe"></i>
-                                Rental 
-                            </div>
-                            <div class="card-body">
-
-                            </div>
-                        </div>
-                    </div>
-                </div><!-- end of row -->
         </div>
     </div>
-     <!-- Modal -->
-     <div class="modal fade" id="addInternet" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Add Internet Account</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <div class="form-row">
-                        <div id="validateInternet" class="col-lg-12">
-                            <p  class="alert alert-danger">Please Fill up the fields</p>
+    <!-- Modal -->
+      <div class="modal fade" id="addInternet" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Add Internet Account</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="form-row">
+                            <div id="validateInternet" class="col-lg-12">
+                                <p  class="alert alert-danger">Please Fill up the fields</p>
+                            </div>
+                            <div id="existsInternet" class="col-lg-12"></div>
+                            <div id="succAddInternet" class="col-lg-12"></div>
+                            <div class="col-lg-12">
+                                
+                                <label>Account ID</label>
+                                <input type="text" id="accountIdInternet" name="accountIdInternet" class="selcls form-control" />
+                            </div>
+                            <div class="col-lg-12">
+                                <label>Account Name</label>
+                                <input type="text" id="accountNameInternet" name="accountNameInternet" class="selcls form-control" />
+                            </div>
+                            <input type="hidden" id="flagInternet" value="Internet" />
+                        
                         </div>
-                        <div id="existsInternet" class="col-lg-12"></div>
-                        <div id="succAddInternet" class="col-lg-12"></div>
-                        <div class="col-lg-12">
-                            
-                            <label>Account ID</label>
-                            <input type="text" id="accountIdInternet" name="accountIdInternet" class="selcls form-control" />
-                        </div>
-                        <div class="col-lg-12">
-                            <label>Account Name</label>
-                            <input type="text" id="accountNameInternet" name="accountNameInternet" class="selcls form-control" />
-                        </div>
-                        <input type="hidden" id="flagInternet" value="Internet" />
-                      
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" onclick="closeInternet()" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="button" onclick="saveInternet()" class="btn btn-success">Add Internet Account </button>
+                <div class="modal-footer">
+                    <button type="button" onclick="closeInternet()" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="saveInternet()" class="btn btn-success">Add Internet Account </button>
+                </div>
             </div>
         </div>
-    </div>
-    </div><!-- end of Modal -->
+      </div><!-- end of Modal -->
       <!-- Modal -->
       <div class="modal fade" id="addMCWD" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -316,8 +303,8 @@
         </div>
     </div>
     </div><!-- end of Modal -->
-    <!-- Modal -->
-    <div class="modal fade" id="addVeco" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+     <!-- Modal -->
+     <div class="modal fade" id="addVeco" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
             <div class="modal-header">
@@ -358,25 +345,25 @@
         </div>
     </div>
     </div><!-- end of Modal -->
-       <!-- Sticky Footer -->
-       <footer class="sticky-footer">
-        <div class="container my-auto">
-          <div class="copyright text-center my-auto">
-            <span>Copyright © Ribos Food Corporation 2019</span>
-            <br>
-            <br>
-            <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
-          </div>
+    <!-- Sticky Footer -->
+    <footer class="sticky-footer">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+        <span>Copyright © Ribos Food Corporation 2019</span>
+        <br>
+        <br>
+        <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
         </div>
-      </footer> 
-</div>
+    </div>
+    </footer> 
+</div><!-- end of wrapper -->
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
-    $("#validate").hide();  
-    $("#validateMCWD").hide();
-    $("#validateInternet").hide();
-
-    const saveInternet = () =>{
+     $("#validate").hide();  
+     $("#validateMCWD").hide();
+     $("#validateInternet").hide();
+     
+     const saveInternet = () =>{
         const accountIdInternet = $("#accountIdInternet").val();
         const accountNameInternet = $("#accountNameInternet").val();
         const flagInternet = $("#flagInternet").val();
@@ -384,10 +371,10 @@
         if(accountIdInternet == "" || accountNameInternet == ""){
             $("#validateInternet").fadeIn().delay(3000).fadeOut();
         }else{
-             //make ajax call
-             $.ajax({
+            //make ajax call
+            $.ajax({
                 type: "POST",
-                url: '/lolo-pinoy-grill-branches/utilities/add-internet',
+                url: '/ribos-bar/utilities/add-internet',
                 data:{
                     _method: 'post',
                     "_token": "{{ csrf_token() }}",
@@ -417,9 +404,9 @@
                 }
             });
         }
-    }
+     }
 
-    const saveMCWD = () =>{
+     const saveMCWD = () =>{
         const accountIdMCWD = $("#accountIdMCWD").val();
         const accountNameMCWD = $("#accountNameMCWD").val();
         const meterNoMCWD = $("#meterNoMCWD").val();
@@ -431,7 +418,7 @@
             //make ajax call
             $.ajax({
                 type: "POST",
-                url: '/lolo-pinoy-grill-branches/utilities/add-bill',
+                url: '/ribos-bar/utilities/add-bill',
                 data:{
                     _method: 'post',
                     "_token": "{{ csrf_token() }}",
@@ -462,24 +449,13 @@
                 }
             });
         }
-    }
+     }
 
-    const closeInternet = () =>{
-        $("#accountIdInternet").val('');
-        $("#accountNameInternet").val('');
-    }
-    
-    const closeMCWD = () =>{
-        $("#accountIdMCWD").val('');
-        $("#accountNameMCWD").val('');
-        $("#meterNoMCWD").val('');
-    }
-
-    const closeVeco = () => {
+     const closeVeco = () =>{
         $("#accountId").val('');
         $("#accountName").val('');
         $("#meterNo").val('');
-    }
+     }
 
      const saveVeco = () =>{
         const accountId = $("#accountId").val();
@@ -490,11 +466,10 @@
         if(accountId == "" || accountName == "" || meterNo == ""){
             $("#validate").fadeIn().delay(3000).fadeOut();
         }else{
-           
              //make ajax call
              $.ajax({
                 type: "POST",
-                url: '/lolo-pinoy-grill-branches/utilities/add-bill',
+                url: '/ribos-bar/utilities/add-bill',
                 data:{
                     _method: 'post',
                     "_token": "{{ csrf_token() }}",
@@ -524,6 +499,7 @@
                     console.log('Error:', data);
                 }
             });
+
         }
      }
 </script>

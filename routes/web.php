@@ -1142,6 +1142,36 @@ Route::group(['middleware' => ['auth']], function(){
 		'MrPotatoController@printDelivery')
 		->name('mr-potato.printDelivery');
 
+	Route::get(
+		'/mr-potato/petty-cash-list',
+		'MrPotatoController@pettyCashList')
+		->name('mr-potato.pettyCashList');
+
+	Route::get(
+		'/mr-potato/utilities',
+		'MrPotatoController@utilities')
+		->name('mr-potato.utilities');
+
+	Route::post(
+		'/mr-potato/utilities/add-bill',
+		'MrPotatoController@addBills')
+		->name('mr-potato.addBills');
+	
+	Route::post(
+		'/mr-potato/utilities/add-internet',
+		'MrPotatoController@addInternet')
+		->name('mr-potato.addInternet');
+
+	Route::get(
+		'/mr-potato/utilities/view-veco/{id}',
+		'MrPotatoController@viewBills')
+		->name('mr-potato.viewBills');
+	
+	Route::get(
+		'/mr-potato/utilities/view-mcwd/{id}',
+		'MrPotatoController@viewBills')
+		->name('mr-potato.viewBills');
+
 	//Ribos Bar
 	Route::get('/ribos-bar', 'RibosBarController@index')->name('ribos-bar.index');
 
@@ -1531,7 +1561,72 @@ Route::group(['middleware' => ['auth']], function(){
 		'RibosBarController@printCashiersReport')
 		->name('ribos-bar.printCashiersReport');
 
+	Route::get(
+		'ribos-bar/petty-cash-list',
+		'RibosBarController@pettyCashList')
+		->name('ribos-bar.pettyCashList');
+	
+	Route::get(
+		'/ribos-bar/utilities',
+		'RibosBarController@utilities')
+		->name('ribos-bar.utilities');
+	
+	Route::post(
+		'/ribos-bar/utilities/add-bill',
+		'RibosBarController@addBills')
+		->name('ribos-bar.addBills');
+	
+	Route::post(
+		'/ribos-bar/utilities/add-internet',
+		'RibosBarController@addInternet')
+		->name('ribos-bar.addInternet');
 
+	Route::get(
+		'/ribos-bar/utilities/view-veco/{id}',
+		'RibosBarController@viewBills')
+		->name('ribos-bar.viewBills');
+
+	Route::get(
+		'/ribos-bar/utilities/view-mcwd/{id}',
+		'RibosBarController@viewBills')
+		->name('ribos-bar.viewBills');
+	
+	Route::get(
+		'/ribos-bar/utilities/view-internet/{id}',
+		'RibosBarController@viewBills')
+		->name('ribos-bar.viewBills');
+	
+	Route::get(
+		'/ribos-bar/petty-cash/view/{id}',
+		'RibosBarController@viewPettyCash')
+		->name('ribo-bar.viewPettyCash');
+
+	Route::get(
+		'/ribos-bar/store-stock/raw-materials',
+		'RibosBarController@rawMaterials')
+		->name('ribos-bar.rawMaterials');
+	
+	Route::post(
+		'/ribos-bar/store-stock/raw-materials/add-raw',
+		'RibosBarController@addRawMaterial')
+		->name('ribos-bar.addRawMaterial');
+
+	Route::get(
+		'/ribos-bar/store-stock/view-raw-material-details/{id}',
+		'RibosBarController@viewRawMaterialDetails')
+		->name('ribos-bar.viewRawMaterialDetails');
+
+	Route::post(
+		'/ribos-bar/store-stock/add-delivery-in',
+		'RibosBarController@addDeliveryIn')
+		->name('ribos-bar.addDeliveryIn');
+	
+	Route::post(
+			'/ribos-bar/store-stock/request-stock-out',
+			'RibosBarController@addDeliveryIn')
+			->name('ribos-bar.addDeliveryIn');
+	
+		
 	//DNO Personal
 	Route::get('/dno-personal', 'DnoPersonalController@index')->name('dno-personal');
 

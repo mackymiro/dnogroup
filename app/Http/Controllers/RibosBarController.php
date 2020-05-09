@@ -16,18 +16,280 @@ use App\RibosBarSalesInvoice;
 use App\RibosBarBillingStatement;
 use App\RibosBarStatementOfAccount;
 use App\RibosBarCashiersForm;
+use App\RibosBarUtility;
+use App\RibosBarRawMaterial;
 
 class RibosBarController extends Controller
 {
 
-    //
+    public function addDeliveryIn(Request $request){
+
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $rawMaterial = RibosBarRawMaterial::find($request->id);
+      
+        $qty = $request->qty;
+
+         //compute qty times unit price
+         $compute  = $qty * $rawMaterial->unit_price;
+         $sum = $compute;
+
+        //get date today
+        $getDateToday =  date('Y-m-d');
+
+        //condition if request stock out 
+        if($request->rStockOut == "REQUEST STOCK OUT"){
+            $requestingBranch  = $request->requestingBranch;
+        }else{
+            $requestingBranch = "NULL";
+        }
+
+        //check if the reference no is already exits
+        $target =  DB::table(
+                'ribos_bar_raw_materials')
+                ->where('reference_no', $request->refNo)
+                ->get()->first();
+        if($target == NULL){
+            $addDeliveryIn = new RibosBarRawMaterial([
+                'user_id'=>$user->id,
+                'rm_id'=>$request->id,
+                'product_id_no'=>$request->productId,
+                'description'=>$request->description,
+                'date'=>$getDateToday,
+                'item'=>$rawMaterial->product_name,
+                'reference_no'=>$request->refNo,
+                'qty'=>$request->qty,
+                'unit'=>$rawMaterial->unit,
+                'amount'=>$sum,
+                'status'=>$request->status,
+                'cheque_no_issued'=>$request->chequeNoIssued,
+                'requesting_branch'=>$requestingBranch,
+                'created_by'=>$name,
+            ]);
+    
+            $addDeliveryIn->save();
+    
+            return response()->json('Success: successfull added a data');
+        }else{
+            return response()->json('Error: Reference no already exist.');
+        }
+       
+
+
+    }
+
+    public function viewRawMaterialDetails($id){
+        $viewRawDetail = RibosBarRawMaterial::find($id);
+        
+        //transaction table
+        $getViewRawDetails = RibosBarRawMaterial::where('rm_id', $id)->get()->toArray();
+
+        return view('view-ribos-bar-raw-material-details', compact('viewRawDetail', 'getViewRawDetails'));
+    }
+
+    public function addRawMaterial(Request $request){   
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        //get the latest insert id query in table commissary RAW material product id no
+        $dataProductId = DB::select('SELECT id, product_id_no FROM ribos_bar_raw_materials ORDER BY id DESC LIMIT 1');
+
+         //if code is not zero add plus 1 product id no
+         if(isset($dataProductId[0]->product_id_no) != 0){
+            //if code is not 0
+            $newProd = $dataProductId[0]->product_id_no +1;
+            $uProd = sprintf("%06d",$newProd);   
+
+        }else{
+            //if code is 0 
+            $newProd = 1;
+            $uProd = sprintf("%06d",$newProd);
+        } 
+
+        //check if product name exists
+        $target = DB::table(
+                'ribos_bar_raw_materials')
+                ->where('product_name', $request->prductName)
+                ->get()->first();
+
+        if($target == NULL){
+
+            $addNewRawMaterial = new RibosBarRawMaterial([
+                'user_id'=>$user->id,
+                'branch'=>$request->branch,
+                'product_id_no'=>$uProd,
+                'product_name'=>$request->prductName,
+                'unit_price'=>$request->unitPrice,
+                'unit'=>$request->unit,
+                'in'=>$request->inData,
+                'out'=>$request->outData,
+                'stock_amount'=>$request->stockOutAmount,
+                'remaining_stock'=>$request->remainingStock,
+                'amount'=>$request->amount,
+                'supplier'=>$request->supplier,
+                'created_by'=>$name,
+    
+            ]);
+            $addNewRawMaterial->save();
+            return response()->json('Success: successfully added a RAW Material');
+
+        }else{
+            return response()->json('Error: Product name already exist.');
+        }
+       
+
+
+    }
+
+    public function rawMaterials(){
+        $getRawMaterials = RibosBarRawMaterial::where('rm_id', NULL)->get()->toArray();
+        return view('ribos-bar-raw-materials', compact('getRawMaterials'));
+    }
+
+    public function viewPettyCash($id){ 
+        $getPettyCash = RibosBarPaymentVoucher::find($id);
+
+        $getPettyCashSummaries = RibosBarPaymentVoucher::where('pv_id', $id)->get()->toArray();
+
+        //total
+        $totalPettyCash = RibosBarPaymentVoucher::where('id', $id)->where('pv_id', NULL)->sum('amount');
+
+        $pettyCashSummaryTotal = RibosBarPaymentVoucher::where('pv_id', $id)->sum('amount');
+
+        $sum = $totalPettyCash + $pettyCashSummaryTotal;
+
+          
+        return view('ribos-bar-view-petty-cash', compact('getPettyCash', 'getPettyCashSummaries', 'sum'));
+    }
+
+  
+    public function viewBills($id){
+        
+        $viewBill = RibosBarUtility::find($id);
+
+        $viewParticulars = RibosBarPaymentVoucher::where('sub_category_account_id', $id)->get()->toArray();
+ 
+      
+        return view('ribos-bar-view-utility', compact('viewBill', 'viewParticulars'));
+    }
+
+  
+    public function addInternet(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //get the date today
+         $getDate =  date("Y-m-d");
+
+        //check if internet account already exists
+        $target = DB::table(
+                'ribos_bar_utilities')
+                ->where('account_id', $request->accountIdInternet)
+                ->get()->first();
+
+        if($target ==  NULL){
+
+            $addInternet = new RibosBarUtility([
+                'user_id'=>$user->id,
+                'account_id'=>$request->accountIdInternet,
+                'account_name'=>$request->accountNameInternet,
+                'date'=>$getDate,
+                'flag'=>$request->flagInternet,
+                'created_by'=>$name,
+            ]);
+
+            $addInternet->save();
+            return response()->json('Success: successfully added an account.');
+        }else{
+            return response()->json('Error: Account ID already exist.');
+        }
+    }
+
+   
+    public function addBills(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        //get the date today
+        $getDate =  date("Y-m-d");
+
+         //check if veco account and mcwd already exists
+        $target = DB::table(
+            'ribos_bar_utilities')
+            ->where('account_id', $request->accountId)
+            ->get()->first();
+        
+        if($target == NULL){
+
+            $addBills = new RibosBarUtility([
+                'user_id'=>$user->id,
+                'account_id'=>$request->accountId,
+                'account_name'=>$request->accountName,
+                'meter_no'=>$request->meterNo,
+                'date'=>$getDate,
+                'flag'=>$request->flag,
+                'created_by'=>$name,
+            ]);
+
+            $addBills->save();
+            return response()->json('Success: successfully added an account.');
+        }else{
+            return response()->json('Error: Account ID already exist.');
+        }
+        
+
+    }
+
+  
+    public function utilities(){
+        $flag = "Veco";
+        $flagMCWD = "MCWD";
+        $flagInternet = "Internet";
+
+        $vecoDocuments = RibosBarUtility::where('flag', $flag)->get()->toArray();
+        $mcwdDocuments = RibosBarUtility::where('flag', $flagMCWD)->get()->toArray();
+
+        $internetDocuments = RibosBarUtility::where('flag', $flagInternet)->get()->toArray();
+
+
+        return view('ribos-bar-utilities', compact('vecoDocuments', 'mcwdDocuments', 'internetDocuments'));
+    }
+
+ 
+    public function pettyCashList(){
+        $cat = "Petty Cash";
+        $getPettyCashLists = RibosBarPaymentVoucher::where('pv_id', NULL)->where('category',$cat)->get()->toArray();
+
+        return view('ribos-bar-petty-cash-list', compact('getPettyCashLists'));
+    }
+
+   
     public function printPO($id){
         $ids = Auth::user()->id;
         $user = User::find($ids);
 
         $purchaseOrder = RibosBarPurchaseOrder::find($id);
-
-          //
         $pOrders = RibosBarPurchaseOrder::where('po_id', $id)->get()->toArray();
 
           //count the total amount 
@@ -43,28 +305,23 @@ class RibosBarController extends Controller
 
         return $pdf->download('ribos-bar-purchase-order.pdf');
     }
-
-    //
+    
+    
     public function printCashiersReport($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+      
         $cashiersId = RibosBarCashiersForm::find($id);
 
         $cashiersReports = RibosBarCashiersForm::where('cf_id', $id)->get()->toArray();
 
         $total = RibosBarCashiersForm::where('cf_id', $id)->sum('total');
     
-        $pdf = PDF::loadView('printCashiersReport', compact('cashiersId', 'user', 'cashiersReports', 'total'));
+        $pdf = PDF::loadView('printCashiersReport', compact('cashiersId', 'cashiersReports', 'total'));
 
         return $pdf->download('ribos-bar-cashiers-report.pdf');
     }
 
-    //
+   
     public function updateItem(Request $request, $id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
         $updateItems = RibosBarCashiersForm::find($id);
 
         $updateItems->items = $request->get('items');
@@ -81,34 +338,27 @@ class RibosBarController extends Controller
 
     }
 
-    //
+
     public function  viewCashiersReportList($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-        
-        //
+    
         $getViewCashierReport = RibosBarCashiersForm::find($id);
 
-        //
         $getAllItems = RibosBarCashiersForm::where('cf_id', $id)->get()->toArray();
 
         $total = RibosBarCashiersForm::where('cf_id', $id)->sum('total');
         
 
-        return view('view-ribos-bar-cashiers-report-list', compact('user','getViewCashierReport', 'getAllItems', 'total'));
+        return view('view-ribos-bar-cashiers-report-list', compact('getViewCashierReport', 'getAllItems', 'total'));
     }
 
     public function cashiersInventoryList(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
 
-        //
         $getAllCashiersReports = RibosBarCashiersForm::where('cf_id', NULL)->get()->toArray();
 
-        return view('ribos-bar-cashiers-repost-inventory-list', compact('user', 'getAllCashiersReports'));
+        return view('ribos-bar-cashiers-repost-inventory-list', compact('getAllCashiersReports'));
     }
 
-    //
+
     public function  addCashiersList(Request $request, $id){
         $ids = Auth::user()->id;
         $user = User::find($ids);
@@ -138,7 +388,7 @@ class RibosBarController extends Controller
     
     }
 
-    //
+   
     public function updateCashiersForm(Request $request, $id){
         $ids = Auth::user()->id;
         $user = User::find($ids);
@@ -169,21 +419,17 @@ class RibosBarController extends Controller
 
     }
 
-    //
+   
     public function editCashiersForm($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        //
+     
         $getCashiersReport = RibosBarCashiersForm::find($id);
 
-        //
         $getCashiersReportItems = RibosBarCashiersForm::where('cf_id',  $id)->get()->toArray();
 
-        return view('edit-ribos-bar-cashier-form', compact('user', 'getCashiersReport', 'getCashiersReportItems'));
+        return view('edit-ribos-bar-cashier-form', compact('getCashiersReport', 'getCashiersReportItems'));
     }
 
-    //
+
     public function cashiersFormStore(Request $request){
         $ids = Auth::user()->id;
         $user = User::find($ids);
@@ -209,8 +455,8 @@ class RibosBarController extends Controller
 
         return redirect('ribos-bar/edit-cashiers-report-inventory-list/'.$insertedId);
     }
-
-    //
+    
+    
     public function cashiersForm(){
         $ids = Auth::user()->id;
         $user = User::find($ids);
@@ -218,11 +464,9 @@ class RibosBarController extends Controller
         return view('ribos-bar-cashiers-form', compact('user'));
     }
 
-    //
+   
     public function printPayablesRibosBar($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+    
         $payableId = RibosBarPaymentVoucher::find($id);
 
         $payablesVouchers = RibosBarPaymentVoucher::where('pv_id', $id)->get()->toArray();
@@ -230,34 +474,28 @@ class RibosBarController extends Controller
           //count the total amount 
         $countTotalAmount = RibosBarPaymentVoucher::where('id', $id)->sum('amount_due');
 
-
-          //
         $countAmount = RibosBarPaymentVoucher::where('pv_id', $id)->sum('amount_due');
 
         $sum  = $countTotalAmount + $countAmount;
        
 
-        $pdf = PDF::loadView('printPayablesRibosBar', compact('payableId', 'user', 'payablesVouchers', 'sum'));
+        $pdf = PDF::loadView('printPayablesRibosBar', compact('payableId',  'payablesVouchers', 'sum'));
 
         return $pdf->download('ribos-bar-payment-voucher.pdf');
     }
     
-    //
+  
     public function viewPayableDetails($id){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        //
+       
         $viewPaymentDetail = RibosBarPaymentVoucher::find($id);
 
-        //
         $getViewPaymentDetails = RibosBarPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
-        return view('view-ribos-bar-payable-details', compact('user', 'viewPaymentDetail', 'getViewPaymentDetails'));
+        return view('view-ribos-bar-payable-details', compact('viewPaymentDetail', 'getViewPaymentDetails'));
 
     }
 
-    //
+
     public function accept(Request $request, $id){
          //get the status 
         $status = $request->get('status');
@@ -337,13 +575,25 @@ class RibosBarController extends Controller
         $particulars = RibosBarPaymentVoucher::find($id);
 
          //add current amount
-         $add = $particulars['amount_due'] + $request->get('amount');
+        $add = $particulars['amount_due'] + $request->get('amount');
+
+         //get Category
+        $cat = $particulars['category'];
+
+        //get current voucher ref number
+        $voucherRef = $particulars['voucher_ref_number'];
+
+        $subAccountId = $particulars['sub_category_account_id'];
 
         $addParticulars = new RibosBarPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
             'particulars'=>$request->get('particulars'),
             'amount'=>$request->get('amount'),
+            'voucher_ref_number'=>$voucherRef,
+            'category'=>$cat,
+            'sub_category_account_id'=>$subAccountId,
+            'date'=>$request->get('date'),
             'created_by'=>$name,
 
         ]);
@@ -391,9 +641,6 @@ class RibosBarController extends Controller
 
     //
     public function editPayablesDetail(Request $request, $id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
         $transactionList = RibosBarPaymentVoucher::find($id);
 
           //
@@ -413,15 +660,12 @@ class RibosBarController extends Controller
          
          $sumCheque = $chequeAmount1 + $chequeAmount2;
 
-         return view('ribos-bar-payables-detail', compact('user', 'transactionList', 'getChequeNumbers','sum'
+         return view('ribos-bar-payables-detail', compact('transactionList', 'getChequeNumbers','sum'
             , 'getParticulars', 'sumCheque'));
     }
 
     //
     public function transactionList(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
          //
         $getTransactionLists = RibosBarPaymentVoucher::where('pv_id', NULL)->get()->toArray();
 
@@ -430,26 +674,22 @@ class RibosBarController extends Controller
 
         $totalAmoutDue = RibosBarPaymentVoucher::where('pv_id', NULL)->where('status' ,'!=', $status)->sum('amount_due');
 
-        return view('ribos-bar-transaction-list', compact('user', 'getTransactionLists', 'totalAmoutDue'));
+        return view('ribos-bar-transaction-list', compact('getTransactionLists', 'totalAmoutDue'));
 
     }
 
     //
     public function viewStatementAccount($id){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+    
         //getStatementAccounts
         $getStatementAccounts = RibosBarStatementOfAccount::where('id', $id)->get()->toArray();
 
-        return view('view-ribos-bar-statement-account', compact('user','getStatementAccounts'));
+        return view('view-ribos-bar-statement-account', compact('getStatementAccounts'));
     }
 
     //
     public function statementOfAccountList(){
-        $ids =  Auth::user()->id;
-        $user = User::find($ids);
-
+       
         $status = "Unpaid";
         $paid = "Paid";
 
@@ -459,7 +699,7 @@ class RibosBarController extends Controller
         $statementOfAccountPaids = RibosBarStatementOfAccount::where('soa_id', NULL)->where('status', $paid)->get()->toArray();
 
 
-        return view('ribos-bar-statement-of-account-lists', compact('user', 'statementOfAccounts', 'statementOfAccountPaids'));
+        return view('ribos-bar-statement-of-account-lists', compact('statementOfAccounts', 'statementOfAccountPaids'));
     }
 
     //
@@ -488,16 +728,13 @@ class RibosBarController extends Controller
 
     //
     public function editStatementOfAccount($id){
-        $ids =  Auth::user()->id;
-        $user = User::find($ids);
-
-
+     
          //getStatementOfAccount
         $getStatementOfAccount = RibosBarStatementOfAccount::find($id);
 
         $sAccounts = RibosBarStatementOfAccount::where('soa_id', $id)->get()->toArray();
         
-        return view('edit-ribos-bar-statement-of-account', compact('user', 'getStatementOfAccount', 'sAccounts'));
+        return view('edit-ribos-bar-statement-of-account', compact('getStatementOfAccount', 'sAccounts'));
     }
 
     //
@@ -564,17 +801,11 @@ class RibosBarController extends Controller
 
     //
     public function statementOfAccountForm(){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-
-        return view('ribos-bar-statement-of-account', compact('user'));
+        return view('ribos-bar-statement-of-account');
     }
 
     //
     public function viewBillingStatement($id){
-          $ids = Auth::user()->id;
-        $user = User::find($ids);
 
         $viewBillingStatement = RibosBarBillingStatement::find($id);
         
@@ -590,18 +821,16 @@ class RibosBarController extends Controller
         $sum  = $countTotalAmount + $countAmount;
 
 
-        return view('view-ribos-bar-billing-statement', compact('user', 'viewBillingStatement', 'billingStatements', 'sum'));
+        return view('view-ribos-bar-billing-statement', compact('viewBillingStatement', 'billingStatements', 'sum'));
     }
 
     //
     public function billingStatementLists(){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+      
         $billingStatements = RibosBarBillingStatement::where('billing_statement_id', NULL)->get()->toArray();
 
 
-        return view('ribos-bar-billing-statement-lists', compact('user', 'billingStatements'));
+        return view('ribos-bar-billing-statement-lists', compact('billingStatements'));
     }
 
     //
@@ -662,10 +891,8 @@ class RibosBarController extends Controller
 
     //
     public function addNewBilling($id){
-         $ids =  Auth::user()->id;
-        $user = User::find($ids);
 
-        return view('add-new-ribos-bar-billing-statement', compact('user', 'id'));
+        return view('add-new-ribos-bar-billing-statement', compact('id'));
     }
 
     //
@@ -696,9 +923,7 @@ class RibosBarController extends Controller
 
     //
     public function editBillingStatement($id){
-         $ids =  Auth::user()->id;
-        $user = User::find($ids);
-
+      
         $billingStatement = RibosBarBillingStatement::find($id);
        
         $bStatements = RibosBarBillingStatement::where('billing_statement_id', $id)->get()->toArray();
@@ -706,7 +931,7 @@ class RibosBarController extends Controller
         //get the purchase order lists
         $getPurchaseOrders = RibosBarPurchaseOrder::where('po_id', NULL)->get()->toArray();
         
-        return view('edit-ribos-bar-billing-statement-form', compact('user', 'billingStatement', 'bStatements', 'getPurchaseOrders'));
+        return view('edit-ribos-bar-billing-statement-form', compact('billingStatement', 'bStatements', 'getPurchaseOrders'));
     }
 
     //
@@ -779,20 +1004,17 @@ class RibosBarController extends Controller
 
     //
     public function billingStatementForm(){
-        $id =  Auth::user()->id;
-        $user = User::find($id);
 
         //get the purchase order lists
         $getPurchaseOrders = RibosBarPurchaseOrder::where('po_id', NULL)->get()->toArray();
        
 
-        return view('ribos-bar-billing-statement-form', compact('user', 'getPurchaseOrders'));
+        return view('ribos-bar-billing-statement-form', compact('getPurchaseOrders'));
     }
 
     //
     public function viewSalesInvoice($id){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
+       
 
         $viewSalesInvoice = RibosBarSalesInvoice::find($id);
 
@@ -806,7 +1028,7 @@ class RibosBarController extends Controller
 
         $sum  = $countTotalAmount + $countAmount;
 
-        return view('view-ribos-bar-sales-invoice', compact('user', 'viewSalesInvoice', 'salesInvoices', 'sum'));
+        return view('view-ribos-bar-sales-invoice', compact('viewSalesInvoice', 'salesInvoices', 'sum'));
     }
 
     //
@@ -879,11 +1101,8 @@ class RibosBarController extends Controller
 
     //
     public function addNewSalesInvoice($id){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
-       
-
-        return view('add-new-ribos-bar-sales-invoice', compact('user', 'id'));
+     
+        return view('add-new-ribos-bar-sales-invoice', compact('id'));
     }
 
     //
@@ -923,15 +1142,13 @@ class RibosBarController extends Controller
 
     //
     public function editSalesInvoice($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+      
         //getSalesInvoice
         $getSalesInvoice = RibosBarSalesInvoice::find($id);
 
         $sInvoices  = RibosBarSalesInvoice::where('si_id', $id)->get()->toArray();
 
-        return view('edit-ribos-bar-sales-invoice', compact('user', 'getSalesInvoice', 'sInvoices'));
+        return view('edit-ribos-bar-sales-invoice', compact('getSalesInvoice', 'sInvoices'));
     }
 
     //
@@ -984,17 +1201,12 @@ class RibosBarController extends Controller
 
     //
     public function salesInvoiceForm(){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        return view('ribos-bar-sales-invoice-form', compact('user'));
+        return view('ribos-bar-sales-invoice-form');
     }
 
     //
     public function viewPaymentVoucher($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+    
         //paymentVoucher
         $paymentVoucher = RibosBarPaymentVoucher::find($id);
 
@@ -1009,33 +1221,29 @@ class RibosBarController extends Controller
 
         $sum  = $countTotalAmount + $countAmount;
 
-        return view('view-payment-voucher-ribos-bar', compact('user', 'paymentVoucher', 'pVouchers', 'sum'));
+        return view('view-payment-voucher-ribos-bar', compact('paymentVoucher', 'pVouchers', 'sum'));
     }
 
     //
     public function chequeVoucher(){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+      
         //getAllChequeVouchers
         $method = "Cheque";
 
         $getAllChequeVouchers = RibosBarPaymentVoucher::where('method_of_payment', $method)->get()->toArray(); 
 
-        return view('cheque-vouchers-lists-ribos-bar', compact('user', 'getAllChequeVouchers'));
+        return view('cheque-vouchers-lists-ribos-bar', compact('getAllChequeVouchers'));
     }
 
     //
     public function cashVoucher(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+      
         //getAllCashVouchers
         $method = "Cash";
 
         $getAllCashVouchers = RibosBarPaymentVoucher::where('method_of_payment', $method)->get()->toArray();
 
-        return view('cash-vouchers-list-ribos-bar', compact('user', 'getAllCashVouchers'));
+        return view('cash-vouchers-list-ribos-bar', compact('getAllCashVouchers'));
     }
 
     //
@@ -1083,10 +1291,8 @@ class RibosBarController extends Controller
 
     //
     public function addNewPaymentVoucher($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
 
-        return view('add-new-ribos-bar-payment-voucher', compact('user', 'id'));
+        return view('add-new-ribos-bar-payment-voucher', compact('id'));
     }
 
     //
@@ -1110,16 +1316,14 @@ class RibosBarController extends Controller
 
     //
     public function editPaymentVoucher($id){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+      
           //getPaymentVoucher 
         $getPaymentVoucher = RibosBarPaymentVoucher::find($id);
 
         //pVoucher
         $pVouchers = RibosBarPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
-        return view('edit-payment-voucher-ribos-bar', compact('user', 'getPaymentVoucher', 'pVouchers'));
+        return view('edit-payment-voucher-ribos-bar', compact('getPaymentVoucher', 'pVouchers'));
     }
 
     //
@@ -1130,7 +1334,7 @@ class RibosBarController extends Controller
            
         ]);
 
-         $ids = Auth::user()->id;
+        $ids = Auth::user()->id;
         $user = User::find($ids);
 
         $firstName = $user->first_name;
@@ -1153,8 +1357,21 @@ class RibosBarController extends Controller
             $uVoucher = sprintf("%06d",$newVoucherRef);
         } 
 
+           //get the category
+       if($request->get('category') == "Petty Cash"){
+             $subCat = "NULL";
+             $subCatAcctId = "NULL";
 
-          //check if invoice number already exists
+        }else if($request->get('category') == "Utilities"){
+            $subCat = $request->get('bills');
+            $subCatAcctId = $request->get('selectAccountID');
+
+        }else if($request->get('category') == "None"){
+            $subCat = "NULL";
+            $subCatAcctId = "NULL";
+        }
+
+        //check if invoice number already exists
         $target = DB::table(
                         'ribos_bar_payment_vouchers')
                         ->where('invoice_number', $request->get('invoiceNumber'))
@@ -1172,6 +1389,9 @@ class RibosBarController extends Controller
                     'amount'=>$request->get('amount'),
                     'amount_due'=>$request->get('amount'),
                     'particulars'=>$request->get('particulars'),
+                    'category'=>$request->get('category'),
+                    'sub_category'=>$subCat,
+                    'sub_category_account_id'=>$subCatAcctId,
                     'prepared_by'=>$name,
                     'created_by'=>$name,
             ]);
@@ -1189,20 +1409,17 @@ class RibosBarController extends Controller
 
     //payment voucher form
     public function paymentVoucherForm(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        return view('payment-voucher-form-ribos-bar', compact('user'));
+    
+        $getAllFlags = RibosBarUtility::where('u_id', NULL)->get()->toArray();
+        return view('payment-voucher-form-ribos-bar', compact('getAllFlags'));
     }
 
     //
     public function purchaseOrderList(){
-        $id =  Auth::user()->id;
-        $user = User::find($id);
-
+      
         $purchaseOrders = RibosBarPurchaseOrder::where('po_id', NULL)->get()->toArray();
 
-        return view('ribos-bar-purchase-order-lists', compact('user', 'purchaseOrders'));
+        return view('ribos-bar-purchase-order-lists', compact('purchaseOrders'));
     }
 
     //
@@ -1258,16 +1475,12 @@ class RibosBarController extends Controller
 
     //
     public function purchaseOrder(){
-         $id =  Auth::user()->id;
-        $user = User::find($id);
 
-        return view('ribos-bar-purchase-order', compact('user'));
+        return view('ribos-bar-purchase-order');
     }
 
     //print delivery
     public function printDelivery($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
 
         $deliveryId = RibosBarDeliveryReceipt::find($id);
 
@@ -1282,7 +1495,7 @@ class RibosBarController extends Controller
 
         $sum  = $countTotalAmount + $countAmount;
 
-         $pdf = PDF::loadView('ribos-bar-printDelivery', compact('deliveryId', 'user', 'deliveryReceipts', 'sum'));
+         $pdf = PDF::loadView('ribos-bar-printDelivery', compact('deliveryId', 'deliveryReceipts', 'sum'));
 
         return $pdf->download('ribos-bar-delivery-receipt.pdf');
 
@@ -1290,9 +1503,6 @@ class RibosBarController extends Controller
 
     //
     public function viewDeliveryReceipt($id){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
-
 
         $viewDeliveryReceipt = RibosBarDeliveryReceipt::find($id);
 
@@ -1315,18 +1525,16 @@ class RibosBarController extends Controller
 
         $sum2  = $countTotalAmount + $countAmount;
 
-        return view('view-ribos-bar-delivery-receipt', compact('user', 'viewDeliveryReceipt', 'deliveryReceipts', 'countUnit', 'sum', 'sum2'));
+        return view('view-ribos-bar-delivery-receipt', compact('viewDeliveryReceipt', 'deliveryReceipts', 'countUnit', 'sum', 'sum2'));
     }
 
     //
     public function deliveryReceiptList(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+      
          //getAllDeliveryReceipt
         $getAllDeliveryReceipts = RibosBarDeliveryReceipt::where('dr_id', NULL)->get()->toArray();
 
-        return view('ribos-bar-delivery-receipt-list', compact('user', 'getAllDeliveryReceipts'));
+        return view('ribos-bar-delivery-receipt-list', compact('getAllDeliveryReceipts'));
     }
 
     //
@@ -1401,10 +1609,8 @@ class RibosBarController extends Controller
 
     //
     public function addNewDelivery($id){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
 
-        return view('add-new-ribos-bar-delivery-receipt', compact('user', 'id'));
+        return view('add-new-ribos-bar-delivery-receipt', compact('id'));
     }
 
     //
@@ -1435,8 +1641,6 @@ class RibosBarController extends Controller
 
     //
     public function editDeliveryReceipt($id){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
         
         //getDeliveryReceipt
         $getDeliveryReceipt = RibosBarDeliveryReceipt::find($id);
@@ -1444,7 +1648,7 @@ class RibosBarController extends Controller
          //dReceipts
         $dReceipts = RibosBarDeliveryReceipt::where('dr_id', $id)->get()->toArray();
 
-        return view('edit-ribos-bar-delivery-receipt', compact('user','getDeliveryReceipt', 'dReceipts'));
+        return view('edit-ribos-bar-delivery-receipt', compact('getDeliveryReceipt', 'dReceipts'));
     }   
 
     //store delivery receipt
@@ -1519,10 +1723,8 @@ class RibosBarController extends Controller
 
     //
     public function deliveryReceiptForm(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        return view('ribos-bar-delivery-receipt-form', compact('user'));
+     
+        return view('ribos-bar-delivery-receipt-form');
     }
 
     /**
@@ -1533,12 +1735,10 @@ class RibosBarController extends Controller
     public function index()
     {
         //
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+      
          $getAllSalesInvoices = RibosBarSalesInvoice::where('si_id', NULL)->get()->toArray();
 
-        return view('ribos-bar', compact('user', 'getAllSalesInvoices')); 
+        return view('ribos-bar', compact('getAllSalesInvoices')); 
     }
 
     /**
@@ -1620,9 +1820,7 @@ class RibosBarController extends Controller
     public function show($id)
     {
         //
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+      
         $purchaseOrder = RibosBarPurchaseOrder::find($id);
 
 
@@ -1638,7 +1836,7 @@ class RibosBarController extends Controller
         $sum  = $countTotalAmount + $countAmount;
     
 
-        return view('view-ribos-bar-purchase-order', compact('user', 'purchaseOrder', 'pOrders', 'sum'));
+        return view('view-ribos-bar-purchase-order', compact('purchaseOrder', 'pOrders', 'sum'));
     }
 
     /**
@@ -1650,8 +1848,7 @@ class RibosBarController extends Controller
     public function edit($id)
     {
         //
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
+       
 
         $purchaseOrder = RibosBarPurchaseOrder::find($id);
 
@@ -1661,7 +1858,7 @@ class RibosBarController extends Controller
         $getUsers = User::get()->toArray();
        
 
-        return view('edit-ribos-bar-purchase-order', compact('user', 'purchaseOrder', 'pOrders', 'getUsers'));
+        return view('edit-ribos-bar-purchase-order', compact('purchaseOrder', 'pOrders', 'getUsers'));
     }
 
     /**
