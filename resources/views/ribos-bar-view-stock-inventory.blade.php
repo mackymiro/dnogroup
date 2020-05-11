@@ -1,45 +1,39 @@
-@extends('layouts.lolo-pinoy-grill-commissary-app')
+@extends('layouts.ribos-bar-app')
 @section('title', 'View Stock Inventory Item Details |')
 @section('content')
 <div id="wrapper">
-	<!-- Sidebar -->
-   	@include('sidebar.sidebar-lolo-pinoy-grill')
-   	<div id="content-wrapper">
-   		<div class="container-fluid">
-   			 <!-- Breadcrumbs-->
-            <ol class="breadcrumb">
+    <!-- Sidebar -->
+   	@include('sidebar.sidebar-ribos-bar')
+    <div id="content-wrapper">
+        <div class="container-fluid">
+             <!-- Breadcrumbs-->
+             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">Lolo Pinoy Grill Commissary</a>
+                <a href="#">Ribo's Bar</a>
               </li>
-              <li class="breadcrumb-item ">Commissary</li>
+              <li class="breadcrumb-item ">Store Stock</li>
               <li class="breadcrumb-item ">Stock Inventory</li>
               <li class="breadcrumb-item active">Item Details</li>
             </ol>
-            <a href="{{ url('lolo-pinoy-grill-commissary/commissary/stocks-inventory') }}">Back to Lists</a>
-             <div class="col-lg-12">
-            	 <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill">
+            <a href="{{ url('ribos-bar/store-stock/stocks-inventory') }}">Back to Lists</a>
+            <div class="col-lg-12">
+            	 <img src="{{ asset('images/ribos.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Ribo's Bar">
             	 
             	 <h4 class="text-center"><u>STOCK INVENTORY ITEM DETAILS </u></h4>
-
-
             </div>
             <div class="row">
-            	<div class="col-lg-12">
-            		<div class="card mb-3">
-            			 <div class="card-header">
-                              <i class="fas fa-apple-alt" aria-hidden="true"></i>
+                <div class="col-lg-12">
+                    <div class="card mb-3">
+                         <div class="card-header">
+                              <i class="fas fa-store" aria-hidden="true"></i>
                            Stock Inventory View Item Details
-                           	 <div class="float-right">
-			                   <button class="btn btn-success" onclick="myFunction()"> <i class="fa fa-print fa-2x" aria-hidden="true"></i></button>
-			                  
-			               	</div>
+                           	
                         </div>
                         <div class="card-body">
-                        	<table class="table table-bordered">
-								<thead>
+                            <table class="table table-bordered">
+                                <thead>
 									<tr>
 										<th colspan="3">Date</th>
-
 									</tr>
 									<tr>
 
@@ -48,22 +42,22 @@
 										<th>SUPPLIER</th>
 									</tr>
 								</thead>
-		            	 		<tbody>
+                                <tbody>
 		            	 			<tr>
 		            	 				<td>{{ $viewStockDetail['product_name'] }}</td>
 		            	 				<td>{{ $viewStockDetail['unit_price']}}</td>
 		            	 				<td>{{ $viewStockDetail['supplier']}}</td>
 		            	 			</tr>
 		            	 		</tbody>
-                        	</table>
-                        	<table class="table table-bordered">
-                        		<thead>
+                            </table>
+                            <table class="table table-bordered">
+                                <thead>
 		            	 			<tr>
 		            	 				<th colspan="2" class="bg-danger" style="color:white;">SUMMARY REPORT</th>
 		            	 				<th class="bg-danger" style="color:white;">TOTAL VALUE</th>
 		            	 			</tr>
 		            	 		</thead>
-		            	 		<tbody>
+                                 <tbody>
 		            	 			<tr>
 		            	 				<th>TOTAL IN</th>
 		            	 				<th>{{ $viewStockDetail['in']}} {{ $viewStockDetail['unit']}}</th>
@@ -97,15 +91,14 @@
 
 
 		            	 		</tbody>
-		            	 		
-                        	</table>
-                        	<table class="table table-bordered">
-                        		<thead>
+                            </table>
+                            <table class="table table-bordered">
+                                <thead>
 		            	 			<tr>
 		            	 				<th colspan="11" class="bg-info" style="color:white;">TRANSACTION</th>
 		            	 			</tr>
 		            	 		</thead>
-		            	 		<tbody>
+                                 <tbody>
 		            	 			<tr>
 		            	 				<th>DATE</th>
 		            	 				<th>REFERENCE #</th>
@@ -145,15 +138,15 @@
 		            	 			</tr>
 		            	 			@endforeach
 		            	 		</tbody>
-                        	</table>
-                        </div>
-            		</div>
-            	</div>
+                            </table>
+                        </div> 
+                    </div>
+                </div>  
             </div>
-   		</div>
-   	</div>
-   	 <!-- Sticky Footer -->
-      <footer class="sticky-footer">
+        </div>
+    </div>  
+     <!-- Sticky Footer -->
+     <footer class="sticky-footer">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
             <span>Copyright © Ribos Food Corporation 2019</span>
@@ -163,5 +156,5 @@
           </div>
         </div>
       </footer>
-</div>
+</div>  
 @endsection

@@ -10,15 +10,74 @@ use Auth;
 use Session;
 use App\User;
 use App\DnoResourcesDevelopmentCorpPaymentVoucher;
+use App\DnoResourcesDevelopmentCorpPurchaseOrder;
 
 class DnoResourcesDevelopmentController extends Controller
 {
 
-    //
-    public function printPayables($id){
-        $ids = Auth::user()->id;
+    public function purchaseOrderList(){
+        $purchaseOrders = DnoResourcesDevelopmentCorpPurchaseOrder::where('po_id', NULL)->get()->toArray();
+
+        return view('dno-resources-purchase-order-lists', compact('purchaseOrders'));
+    }
+
+    public function updatePo(Request $request, $id){
+        $order = DnoResourcesDevelopmentCorpPurchaseOrder::find($id);
+        
+        $order->quantity = $request->get('quantity');
+        $order->description = $request->get('description');
+        $order->unit = $request->get('unit');
+        $order->unit_price  = $request->get('unitPrice');
+        $order->amount = $request->get('amount');
+    
+        $order->save();
+        Session::flash('SuccessEdit', 'Successfully updated');
+        return redirect('dno-resources/edit-dno-resources-purchase-order/'.$request->get('poId'));
+    }
+
+
+    public function addNew(Request $request, $id){
+        $ids =  Auth::user()->id;
         $user = User::find($ids);
 
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+        //
+          $this->validate($request, [
+            'amount'=>'required',
+        ]);
+
+        $pO = DnoResourcesDevelopmentCorpPurchaseOrder::find($id);
+
+        $addNewParticulars = new DnoResourcesDevelopmentCorpPurchaseOrder([
+            'user_id'=>$user->id,
+            'po_id'=>$id,
+            'p_o_number'=>$pO['p_o_number'],
+            'quantity'=>$request->get('quantity'),
+            'description'=>$request->get('description'),
+            'unit'=>$request->get('unit'),
+            'unit_price'=>$request->get('unitPrice'),
+            'amount'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+
+        $addNewParticulars->save();
+
+        Session::flash('addNewSuccess', 'Successfully added');
+
+        return redirect('dno-resources/edit-dno-resources-purchase-order/'.$id);
+
+    }
+
+    public function purchaseOrder(){
+        return view('dno-resources-purchase-order');
+    }
+
+    public function printPayables($id){
+    
         $payableId = DnoResourcesDevelopmentCorpPaymentVoucher::find($id);
 
         $payablesVouchers = DnoResourcesDevelopmentCorpPaymentVoucher::where('pv_id', $id)->get()->toArray();
@@ -33,23 +92,20 @@ class DnoResourcesDevelopmentController extends Controller
         $sum  = $countTotalAmount + $countAmount;
        
 
-        $pdf = PDF::loadView('printPayablesDnoResources', compact('payableId', 'user', 'payablesVouchers', 'sum'));
+        $pdf = PDF::loadView('printPayablesDnoResources', compact('payableId', 'payablesVouchers', 'sum'));
 
         return $pdf->download('dno-resources-payment-voucher.pdf');
     }
 
-    //
-    public function viewPayableDetails($id){
-           $ids = Auth::user()->id;
-        $user = User::find($ids);
 
-        //
+    public function viewPayableDetails($id){
+    
         $viewPaymentDetail = DnoResourcesDevelopmentCorpPaymentVoucher::find($id);
 
         //
         $getViewPaymentDetails = DnoResourcesDevelopmentCorpPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
-        return view('view-dno-resources-payable-details', compact('user', 'viewPaymentDetail', 'getViewPaymentDetails'));
+        return view('view-dno-resources-payable-details', compact('viewPaymentDetail', 'getViewPaymentDetails'));
     }
 
     //
@@ -337,6 +393,53 @@ class DnoResourcesDevelopmentController extends Controller
     public function store(Request $request)
     {
         //
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $this->validate($request, [
+            'paidTo' => 'required',
+            'description'=>'required',
+        ]);
+
+          //get the latest insert id query in table purchase order
+          $data = DB::select('SELECT id, p_o_number FROM dno_resources_development_corp_purchase_orders ORDER BY id DESC LIMIT 1');
+
+          //if code is not zero add plus 1
+           if(isset($data[0]->p_o_number) != 0){
+              //if code is not 0
+              $newNum = $data[0]->p_o_number +1;
+              $uNum = sprintf("%06d",$newNum);    
+          }else{
+              //if code is 0 
+              $newNum = 1;
+              $uNum = sprintf("%06d",$newNum);
+          }
+
+          $purchaseOrder = new DnoResourcesDevelopmentCorpPurchaseOrder([
+                'user_id' =>$user->id,
+                'p_o_number'=>$uNum,
+                'paid_to'=>$request->get('paidTo'),
+                'date'=>$request->get('date'),
+                'address'=>$request->get('address'),
+                'quantity'=>$request->get('quantity'),
+                'description'=>$request->get('description'),
+                'unit'=>$request->get('unit'),
+                'unit_price'=>$request->get('unitPrice'),
+                'amount'=>$request->get('amount'),
+                'prepared_by'=>$name,
+                'created_by'=>$name
+          ]);
+
+          $purchaseOrder->save();
+
+          $insertedId = $purchaseOrder->id;
+
+          return redirect('dno-resources/edit-dno-resources-purchase-order/'.$insertedId);
     }
 
     /**
@@ -348,6 +451,21 @@ class DnoResourcesDevelopmentController extends Controller
     public function show($id)
     {
         //
+        $purchaseOrder = DnoResourcesDevelopmentCorpPurchaseOrder::find($id);
+
+
+        //
+        $pOrders = DnoResourcesDevelopmentCorpPurchaseOrder::where('po_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = DnoResourcesDevelopmentCorpPurchaseOrder::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = DnoResourcesDevelopmentCorpPurchaseOrder::where('po_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        return view('view-dno-resources-purchase-order', compact('purchaseOrder', 'pOrders', 'sum'));
     }
 
     /**
@@ -359,6 +477,11 @@ class DnoResourcesDevelopmentController extends Controller
     public function edit($id)
     {
         //
+        $purchaseOrder = DnoResourcesDevelopmentCorpPurchaseOrder::find($id);
+
+        $pOrders = DnoResourcesDevelopmentCorpPurchaseOrder::where('po_id', $id)->get()->toArray();
+
+        return view('edit-dno-resources-purchase-order', compact('purchaseOrder', 'pOrders'));
     }
 
     /**
@@ -388,5 +511,7 @@ class DnoResourcesDevelopmentController extends Controller
     public function destroy($id)
     {
         //
+        $purchaseOrder = DnoResourcesDevelopmentCorpPurchaseOrder::find($id);
+        $purchaseOrder->delete();
     }
 }

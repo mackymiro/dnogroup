@@ -45,9 +45,8 @@
                       @foreach($purchaseOrders as $purchaseOrder)
 				  						<tr id="deletedId{{ $purchaseOrder['id'] }}">
 				  							<td>
-                          @if($user->role_type != 3)
+                          
                           <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit/'.$purchaseOrder['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-                          @endif
                           @if($user->role_type == 1)
 				  								<a id="delete" onClick="confirmDelete('{{ $purchaseOrder['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
                           @endif

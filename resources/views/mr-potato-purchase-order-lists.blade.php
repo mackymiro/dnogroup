@@ -44,10 +44,10 @@
 				  						@foreach($purchaseOrders as $purchaseOrder)
 				  						<tr id="deletedId{{ $purchaseOrder['id'] }}">
 				  							<td>
-			  								  @if($user->role_type != 3)
+			  								  @if(Auth::user()['role_type'] != 3)
 					                          <a href="{{ url('mr-potato/edit-mr-potato-purchase-order/'.$purchaseOrder['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
 					                          @endif
-					                          @if($user->role_type == 1)
+					                          @if(Auth::user()['role_type'] == 1)
 										  		<a id="delete" onClick="confirmDelete('{{ $purchaseOrder['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
 						                       @endif
 				  								<a href="{{ url('mr-potato/view-mr-potato-purchase-order/'.$purchaseOrder['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>

@@ -245,10 +245,9 @@ class LoloPinoyGrillCommissaryController extends Controller
         return redirect('lolo-pinoy-grill-commissary/view-inventory-of-stocks/'.$request->get('iSId'));
     }
 
-    //
+    
     public function viewInventoryOfStocks($id){
     
-        //
         $viewStockDetail = LoloPinoyGrillCommissaryRawMaterial::find($id);
 
         //transaction table
@@ -258,7 +257,7 @@ class LoloPinoyGrillCommissaryController extends Controller
         return view('view-lolo-pinoy-grill-commissary-inventory-stock', compact('viewStockDetail', 'getViewStockDetails'));
     }
 
-    //
+
     public function inventoryOfStocks(){
         //getRawMaterial
         $getRawMaterials = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', NULL)->get()->toArray();
@@ -424,18 +423,16 @@ class LoloPinoyGrillCommissaryController extends Controller
 
     }
 
-    //
+    
     public function commissaryDeliveryOutlet(){
-
-        //
         $getDeliveryOutlets = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', '!=', NULL)->get()->toArray();
 
         return view('commissary-delivery-outlet-lolo-pinoy-grill', compact('getDeliveryOutlets'));
     }
 
-    //
+    
     public function viewStockInventory($id){
-        //
+        
         $viewStockDetail = LoloPinoyGrillCommissaryRawMaterial::find($id);
 
         //transaction table

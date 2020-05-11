@@ -1573,6 +1573,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $user = User::find($ids);
 
         return view('payment-voucher-form',compact('user'));
+        
     }
 
   

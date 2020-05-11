@@ -1,4 +1,4 @@
-@extends('layouts.ribos-bar-app')
+@extends('layouts.dno-resources-development-corp-app')
 @section('title', 'Edit Purchase Order |')
 @section('content')
 
@@ -8,7 +8,7 @@
   });
 </script>
 <div id="wrapper">
-	 @include('sidebar.sidebar-ribos-bar')
+	 @include('sidebar.sidebar-dno-resources-development-corp')
 
     <div id="content-wrapper">   
      
@@ -20,10 +20,10 @@
               </li>
               <li class="breadcrumb-item active">Update Purchase Order Form</li>
             </ol>
-            <a href="{{ url('ribos-bar/purchase-order-lists') }}">Back to Lists</a>
+            <a href="{{ url('dno-resources/purchase-order-lists') }}">Back to Lists</a>
             <div class="col-lg-12">
-            	 <img src="{{ asset('images/ribos.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
-            	 
+                <img src="{{ asset('images/dno-resources.jpg')}}" width="420" height="250" class="img-responsive mx-auto d-block" alt="DNO Resources and Development Corp">
+	            
             	 <h4 class="text-center"><u>PURCHASE ORDER</u></h4>
             </div>
             <div class="row">
@@ -71,16 +71,19 @@
 	                            				<input type="text" name="description" class="form-control"  value="{{ $purchaseOrder['description'] }}"/>
 	                            			
 	                            			</div>
-                                  
-                                    <div class="col-lg-2">
-	                            				<label>Unit Price</label>
-                                      <input type="text" name="unitPrice" class="form-control"  value="{{ $purchaseOrder['unit_price']}}"/>
+                                            <div class="col-lg-2">
+                                                <label>Unit </label>
+                                                <input type="text" name="unit" class="form-control" value="{{$purchaseOrder['unit']}}" />
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <label>Unit Price</label>
+                                                <input type="text" name="unitPrice" class="form-control"  value="{{ $purchaseOrder['unit_price']}}"/>
 	                            			</div>
-                                    <div class="col-lg-2">
-                                        <label>Amount</label>
-                                        <input type="text" name="amount" class="form-control"  value="{{ $purchaseOrder['amount']}}" />
+                                         <div class="col-lg-2">
+                                            <label>Amount</label>
+                                            <input type="text" name="amount" class="form-control"  value="{{ $purchaseOrder['amount']}}" />
                                         
-                                    </div>
+                                        </div>
                                   </div>
 	                            		
                               </div>
@@ -101,7 +104,7 @@
                              <i class="fa fa-plus" aria-hidden="true"></i>
                               Add 
                           </div>
-                          <form action="{{ action('RibosBarController@addNew', $purchaseOrder['id'] )}}" method="post">
+                          <form action="{{ action('DnoResourcesDevelopmentController@addNew', $purchaseOrder['id'] )}}" method="post">
                              {{csrf_field()}}
                           <div class="card-body">
                               @if(session('addNewSuccess'))
@@ -122,6 +125,14 @@
                                               <input type="text" name="description" class="form-control" />
                                             
                                           </div>
+                                      </div>
+                                  </div>
+                                  <div class="form-group">
+                                      <div class="form-row">
+                                        <div class="col-lg-8">
+                                            <label>Unit </label>
+                                            <input type="text" name="unit" class="form-control" />
+                                        </div>
                                       </div>
                                   </div>
                                   <div class="form-group">
@@ -167,7 +178,7 @@
                                <p class="alert alert-success">{{ Session::get('SuccessEdit') }}</p>
                               @endif 
                             @foreach($pOrders as $pOrder)
-                            <form action="{{ action('RibosBarController@updatePo', $pOrder['id']) }}" method="post">
+                            <form action="{{ action('DnoResourcesDevelopmentController@updatePo', $pOrder['id']) }}" method="post">
                             <div id="deletedId{{ $pOrder['id'] }}">
                             <div class="form-group">
                                  {{csrf_field()}}
@@ -182,6 +193,11 @@
                                     <div class="col-lg-4">
                                       <label>Description</label>
                                       <input type="text" name="description" class="form-control" value="{{ $pOrder['description']}}" />
+                                    
+                                    </div>
+                                    <div class="col-lg-2">
+                                      <label>Unit </label>
+                                      <input type="text" name="unitPrice" class="form-control" value="{{ $pOrder['unit']}}" />
                                     
                                     </div>
                                     <div class="col-lg-2">
@@ -243,7 +259,7 @@
           if(x){
               $.ajax({
                 type: "DELETE",
-                url: '/ribos-bar/delete/' + id,
+                url: '/dno-resources/delete/' + id,
                 data:{
                   _method: 'delete', 
                   "_token": "{{ csrf_token() }}",

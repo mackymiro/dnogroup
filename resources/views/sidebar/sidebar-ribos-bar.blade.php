@@ -45,9 +45,9 @@
           <span>Purchase Order</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if(Auth::user()['role_type'] == 1)
+        
           <a class="dropdown-item" href="{{ url('ribos-bar/purchase-order') }}">P.O Form</a>
-          @endif
+         
           <a class="dropdown-item" href="{{ url('ribos-bar/purchase-order-lists') }}">Lists</a>
          
         </div>
@@ -94,6 +94,7 @@
           <a class="dropdown-item" href="{{ url('ribos-bar/utilities') }}">List</a>
         </div>
       </li>
+      @if(Auth::user()['role_type'] != 3)
        <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fa fa-credit-card" aria-hidden="true"></i>
@@ -106,6 +107,7 @@
             <a class="dropdown-item" href="{{ url('ribos-bar/cheque-vouchers') }}">Cheque Vouchers</a>  -->
         </div>
       </li>
+      @endif
       <li class="nav-item dropdown ">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fas fa-store"></i>
@@ -117,7 +119,7 @@
           <a class="dropdown-item" href="{{ url('ribos-bar/store-stock/stocks-inventory') }}">Stocks Inventory</a>     
           <a class="dropdown-item" href="{{ url('ribos-bar/store-stock/delivery-outlets') }}">Delivery Outlets</a>
 
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/commissary/inventory-of-stocks') }}">Inventory Of Stocks</a>
+          <a class="dropdown-item" href="{{ url('ribos-bar/store-stock/inventory-of-stocks') }}">Inventory Of Stocks</a>
          
         </div>
       </li>

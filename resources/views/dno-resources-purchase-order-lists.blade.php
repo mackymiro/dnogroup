@@ -1,16 +1,16 @@
-@extends('layouts.ribos-bar-app')
+@extends('layouts.dno-resources-development-corp-app')
 @section('title', 'Purchase Order Lists |')
 @section('content')
 <div id="wrapper">
 	<!-- Sidebar -->
 
-	 @include('sidebar.sidebar-ribos-bar')
+	 @include('sidebar.sidebar-dno-resources-development-corp')
      <div id="content-wrapper">
      	<div class="container-fluid">
      		 <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">Ribo's Bar</a>
+                <a href="#">DNO Resources and Development Corp</a>
               </li>
               <li class="breadcrumb-item active">Purchase Order All Lists</li>
             </ol>
@@ -42,23 +42,23 @@
 				  						</tr>
 				  					</tfoot>
 				  					<tbody>
-                      @foreach($purchaseOrders as $purchaseOrder)
-				  						<tr id="deletedId{{ $purchaseOrder['id'] }}">
-				  							<td>
-                          @if(Auth::user()['role_type'] != 3)
-                          <a href="{{ url('ribos-bar/edit-ribos-bar-purchase-order/'.$purchaseOrder['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-                          @endif
-                          @if(Auth::user()['role_type'] == 1)
-				  								<a id="delete" onClick="confirmDelete('{{ $purchaseOrder['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
-                          @endif
-				  								<a href="{{ url('ribos-bar/view-ribos-bar-purchase-order/'.$purchaseOrder['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
-				  							</td>
-                        <td><a href="#">P.O-{{ $purchaseOrder['p_o_number'] }}</a></td>
-                        <td>{{ $purchaseOrder['paid_to'] }}</td>
-                        <td>{{ $purchaseOrder['date'] }}</td>
-                        <td>{{ $purchaseOrder['created_by'] }}</td>
-				  						</tr>
-                      @endforeach
+                                        @foreach($purchaseOrders as $purchaseOrder)
+                                        <tr id="deletedId{{ $purchaseOrder['id'] }}">
+                                            <td>
+                                            @if(Auth::user()['role_type'] != 3)
+                                            <a href="{{ url('dno-resources-development/edit-dno-resources-purchase-order/'.$purchaseOrder['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                            @endif
+                                            @if(Auth::user()['role_type'] == 1)
+                                            <a id="delete" onClick="confirmDelete('{{ $purchaseOrder['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                                            @endif
+                                            <a href="{{ url('dno-resources-development/view-dno-resources-purchase-order/'.$purchaseOrder['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
+                                            </td>
+                                            <td><a href="#">P.O-{{ $purchaseOrder['p_o_number'] }}</a></td>
+                                            <td>{{ $purchaseOrder['paid_to'] }}</td>
+                                            <td>{{ $purchaseOrder['date'] }}</td>
+                                            <td>{{ $purchaseOrder['created_by'] }}</td>
+                                        </tr>
+                                        @endforeach
 				  					</tbody>
 				  				</table>
 					  		</div>

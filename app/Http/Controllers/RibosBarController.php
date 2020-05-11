@@ -22,6 +22,63 @@ use App\RibosBarRawMaterial;
 class RibosBarController extends Controller
 {
 
+    public function inventoryStockUpdate(Request $request, $id){
+        $updateInventoryStock = RibosBarRawMaterial::find($id);
+
+        $updateInventoryStock->date = $request->get('date');
+        $updateInventoryStock->reference_no = $request->get('referenceNumber');
+        $updateInventoryStock->description  =$request->get('description');
+        $updateInventoryStock->item = $request->get('item');
+        $updateInventoryStock->qty = $request->get('qty');
+        $updateInventoryStock->unit = $request->get('unit');
+        $updateInventoryStock->amount = $request->get('amount');
+        $updateInventoryStock->status = $request->get('status');
+        $updateInventoryStock->requesting_branch = $request->get('requestingBranch');
+        $updateInventoryStock->cheque_no_issued = $request->get('chequeNoIssued');
+        $updateInventoryStock->remarks = $request->get('remarks');
+
+        $updateInventoryStock->save();
+        Session::flash('viewInventoryOfStocks', 'Successfully updated.');
+
+        return redirect('ribos-bar/store-stock/view-inventory-of-stocks/'.$request->get('iSId'));
+    }
+    
+    public function viewInventoryOfStocks($id){
+        $viewStockDetail = RibosBarRawMaterial::find($id);
+        
+        //transaction table
+        $getViewStockDetails = RibosBarRawMaterial::where('rm_id', $id)->get()->toArray();
+
+        return view('ribos-bar-view-inventory-stock', compact('viewStockDetail', 'getViewStockDetails'));
+    }
+
+    public function inventoryOfStocks(){
+        //getRawMaterial
+        $getRawMaterials = RibosBarRawMaterial::where('rm_id', NULL)->get()->toArray();
+
+        return view('ribos-bar-stocks-inventory', compact('getRawMaterials'));
+    }
+
+    public function viewStockInventory($id){
+        $viewStockDetail = RibosBarRawMaterial::find($id);
+        //transaction table
+        $getViewStockDetails = RibosBarRawMaterial::where('rm_id', $id)->get()->toArray();
+
+        return view('ribos-bar-view-stock-inventory', compact('viewStockDetail', 'getViewStockDetails'));
+    }
+
+    public function deliveryOutlet(){
+        $getDeliveryOutlets = RibosBarRawMaterial::where('rm_id', '!=', NULL)->get()->toArray();
+        return view('ribos-bar-delivery-outlet', compact('getDeliveryOutlets'));
+    }
+
+    public function stocksInventory(){
+        //getRawMaterial
+        $getRawMaterials = RibosBarRawMaterial::where('rm_id', NULL)->get()->toArray();
+        
+        return view('ribos-bar-store-stock-inventory', compact('getRawMaterials'));
+    }
+
     public function addDeliveryIn(Request $request){
 
         $ids = Auth::user()->id;
@@ -1847,9 +1904,7 @@ class RibosBarController extends Controller
      */
     public function edit($id)
     {
-        //
-       
-
+        
         $purchaseOrder = RibosBarPurchaseOrder::find($id);
 
         $pOrders = RibosBarPurchaseOrder::where('po_id', $id)->get()->toArray();

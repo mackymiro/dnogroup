@@ -110,5 +110,53 @@ class RibosBarTest extends TestCase
         $response->assertViewIs('view-ribos-bar-raw-material-details');
     }
 
+     /* @test */ 
+    public function test_user_can_view_store_stock_stock_inventory(){
+        $user = factory(User::class)->make();
+        $response  = $this->actingAs($user, 'web')->get('/ribos-bar/store-stock/stocks-inventory');
+        $response->assertStatus(200);
+        $response->assertSuccessful();
+        $response->assertViewIs('ribos-bar-store-stock-inventory');
+    }
+
+     /* @test */ 
+    public function test_user_can_view_store_stock_delivery_outlet(){
+        $user = factory(User::class)->make();
+        $response  = $this->actingAs($user, 'web')->get('/ribos-bar/store-stock/delivery-outlets');
+        $response->assertStatus(200);
+        $response->assertSuccessful();
+        $response->assertViewIs('ribos-bar-delivery-outlet');
+    }
+
+     /* @test */ 
+    public function test_user_can_view_inventory(){
+        $user = factory(User::class)->make();
+        $id = 1;
+        $response  = $this->actingAs($user, 'web')->get('/ribos-bar/store-stock/view-stock-inventory/'.$id);
+        $response->assertStatus(200);
+        $response->assertSuccessful();
+        $response->assertViewIs('ribos-bar-view-stock-inventory');
+
+    }
+
+      /* @test */ 
+    public function test_user_can_view_inventory_of_stocks_store_stock(){
+        $user = factory(User::class)->make();
+        $response  = $this->actingAs($user, 'web')->get('/ribos-bar/store-stock/inventory-of-stocks');
+        $response->assertStatus(200);
+        $response->assertSuccessful();
+        $response->assertViewIs('ribos-bar-stocks-inventory');
+    }
+
+    /* @test */ 
+    public function test_user_can_view_inventory_of_stocks_view(){
+        $user = factory(User::class)->make();
+        $id = 1;
+        $response  = $this->actingAs($user, 'web')->get('/ribos-bar/store-stock/view-inventory-of-stocks/'.$id);
+        $response->assertStatus(200);
+        $response->assertSuccessful();
+        $response->assertViewIs('ribos-bar-view-inventory-stock');
+    }
+
 }
 

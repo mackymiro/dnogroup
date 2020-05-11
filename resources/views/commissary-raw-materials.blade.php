@@ -66,8 +66,9 @@
 			  							<tr id="deletedId{{ $getRawMaterial['id']}}">
 		  									<td>
 					                          <a href="{{ url('lolo-pinoy-lechon-de-cebu/commissary/edit-raw-materials/'.$getRawMaterial['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-	  										<a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getRawMaterial['id'] }}')" title="Delete"><i class="fas fa-trash"></i></a>
-	  									
+	  										<?php if($user->role_type != 3): ?>
+											  <a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getRawMaterial['id'] }}')" title="Delete"><i class="fas fa-trash"></i></a>
+											  <?php endif;?>
 		  									</td>
 					                        <td>{{ $getRawMaterial['product_id_no'] }}</td>
 					                        <td ><p style="width:200px;"><a  href="{{ url('lolo-pinoy-lechon-de-cebu/view-raw-material-details/'.$getRawMaterial['id']) }}">{{ $getRawMaterial['product_name'] }}</a></p></td>

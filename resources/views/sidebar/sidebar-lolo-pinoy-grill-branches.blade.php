@@ -24,9 +24,9 @@
           <span>Requisition Slip</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if(Auth::user()['role_type'] == 1)
+    
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/requisition-slip') }}">Requisition Form</a>
-          @endif
+        
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/requisition-slip-lists') }}">Lists</a>
          
         </div>
@@ -36,10 +36,9 @@
            <i class="fab fa-first-order"></i>
           <span>Transaction List</span>
         </a>
-        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if(Auth::user()['role_type'] == 1)
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">      
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/requistion/transaction-list') }}">Lists</a>
-          @endif
+      
                   
         </div>
       </li>
@@ -61,19 +60,21 @@
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/utilities') }}">List</a>
         </div>
       </li>
+       @if(Auth::user()['role_type'] != 3)
        <li class="nav-item dropdown ">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fa fa-credit-card" aria-hidden="true"></i>
           <span>Payables</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if(Auth::user()['role_type'] == 1)
+         
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/payment-voucher-form') }}">Payment Voucher Form</a>
-          @endif
+         
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/payables/transaction-list') }}">Transaction List</a>
          
         </div>
       </li>
+      @endif 
        <li class="nav-item dropdown ">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fas fa-store"></i>

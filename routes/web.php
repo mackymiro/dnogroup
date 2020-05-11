@@ -16,21 +16,731 @@ Route::get('/', function () {
     return redirect(route('login'));
 });
 
+Route::group(['middleware' =>'App\Http\Middleware\UserMiddleware'], function(){
+	Route::get(
+		'/profile/create-user',
+		'ProfileController@createUser')
+		->name('profile.createUser');
+	
+	Route::post(
+		'/profile/store-create-user',
+		'ProfileController@storeCreateUser')
+		->name('profile.storeCreateUser');
+
+	//route for delete delivery receipt
+	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-delivery-receipt/{id}', 
+		'LoloPinoyLechonDeCebuController@destroyDeliveryReceipt')
+		->name('lolo-pinoy-lechon-de-cebu.destroyDeliveryReceipt');
+
+
+	//route for payment vouchers
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/payment-voucher-form', 
+		'LoloPinoyLechonDeCebuController@paymentVoucherForm')
+		->name('lolo-pinoy-lechon-de-cebu.paymentVoucherForm');
+
+	//route for payment vouchers store
+	Route::post(
+		'/lolo-pinoy-lechon-de-cebu/payment-voucher-store', 
+		'LoloPinoyLechonDeCebuController@paymentVoucherStore')
+		->name('lolo-pinoy-lechon-de-cebu.paymnentVoucherStore');
+
+	
+	//route for edit payment vouchers
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/edit-payment-voucher/{id}', 
+		'LoloPinoyLechonDeCebuController@editPaymentVoucher')
+		->name('lolo-pinoy-lechon-de-cebu.editPaymentVoucher');
+
+	//route update payment vouhcer
+	Route::patch(
+		'/lolo-pinoy-lechon-de-cebu/update-payment-voucher/{id}', 
+		'LoloPinoyLechonDeCebuController@updatePaymentVoucher')
+		->name('lolo-pinoy-lechon-de-cebu.updatePaymentVoucher');
+
+	//Route for add new payment voucher
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/add-new-payment-voucher/{id}', 
+		'LoloPinoyLechonDeCebuController@addNewPaymentVoucher')
+		->name('lolo-pinoy-lechon-de-cebu.addNewPaymentVoucher');
+
+	Route::get(
+			'/lolo-pinoy-lechon-de-cebu/payables/transaction-list',
+			'LoloPinoyLechonDeCebuController@transactionList')
+			->name('lolo-pinoy-lechon-de-cebu.transactionList');
+	
+	Route::get(
+			'/lolo-pinoy-lechon-de-cebu/edit-payables-detail/{id}',
+			'LoloPinoyLechonDeCebuController@editPayablesDetail')
+			->name('lolo-pinoy-lechon-de-cebu.editPayablesDetail');
+
+	
+	Route::delete(
+		'/lolo-pinoy-lechon-de-cebu/delete-transaction-list/{id}',
+		'LoloPinoyLechonDeCebuController@destroyTransactionList')
+		->name('lolo-pinoy-lechon-de-cebu.destroyTransactionList');
+	
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/view-payables-details/{id}',
+		'LoloPinoyLechonDeCebuController@viewPayableDetails')
+		->name('lolo-pinoy-lechon-de-cebu.viewPayableDetails');
+	
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/printPayables/{id}',
+		'LoloPinoyLechonDeCebuController@printPayables')
+		->name('lolo-pinoy-lechon-de-cebu.printPayables');
+
+	//delete for lechon de cebu purchase order
+	Route::delete('/lolo-pinoy-lechon-de-cebu/delete/{id}', 'LoloPinoyLechonDeCebuController@destroy')->name('lolo-pinoy-lechon-de-cebu.destroy');
+
+	//delete for lechon de cebu billint statement
+	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-billing-statement/{id}', 'LoloPinoyLechonDeCebuController@destroyBillingStatement')->name('lolo-pinoy-lechon-de-cebu.destroyBillingStatement');
+	
+	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-payment-voucher/{id}', 'LoloPinoyLechonDeCebuController@destroyPaymentVoucher')->name('lolo-pinoy-lechon-de-cebu.destroyPaymentVoucher');
+	
+	//route for delete sales invoice 
+	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-sales-invoice/{id}', 'LoloPinoyLechonDeCebuController@destroySalesInvoice')->name('lolo-pinoy-lechon-de-cebu.destroySalesInvoice');
+	
+	//delete comissary RAW materials
+	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-raw-materials/{id}', 'LoloPinoyLechonDeCebuController@destroyRawMaterial')->name('lolo-pinoy-lechon-de-cebu.destroyRawMaterial');
+	
+	//destroy delivery receipt
+	Route::delete('/lolo-pinoy-grill-commissary/delete-delivery-receipt/{id}', 'LoloPinoyGrillCommissaryController@destroyDeliveryReceipt')->name('lolo-pinoy-grill-commissary.destroyDeliveryReceipt');
+	
+	//delete 
+	Route::delete('/lolo-pinoy-grill-commissary/delete/{id}', 'LoloPinoyGrillCommissaryController@destroy')->name('lolo-pinoy-grill-commissary.delete');
+	
+	//destroy billing statement
+	Route::delete('/lolo-pinoy-grill-commissary/delete-billing-statement/{id}', 'LoloPinoyGrillCommissaryController@destroyBillingStatement')->name('lolo-pinoy-grill-commissary.destroyBillingStatement');
+	
+	Route::delete(
+		'/lolo-pinoy-grill-commissary/delete-transaction-list/{id}',
+		'LoloPinoyGrillCommissaryController@destroyTransactionList')
+		->name('lolo-pinoy-grill-commissary.destroyTransactionList');
+
+	//delete
+	Route::delete('/lolo-pinoy-grill-commissary/delete-payment-voucher/{id}', 'LoloPinoyGrillCommissaryController@destroyPaymentVoucher')->name('lolo-pinoy-grill-commissary.destroyPaymentVoucher');
+	
+	//delete
+	Route::delete('/lolo-pinoy-grill-commissary/delete-sales-invoice/{id}', 'LoloPinoyGrillCommissaryController@destroySalesInvoice')->name('lolo-pinoy-grill-commissary.destroySalesInvoice');
+	
+	Route::delete('/lolo-pinoy-grill-commissary/delete-statement-account/{id}', 'LoloPinoyGrillCommissaryController@destroyStatementAccount')->name('lolo-pinoy-grill-commissary.destroyStatementAccount');
+	
+	Route::delete(
+		'/lolo-pinoy-grill-commissary/delete-raw-materials/{id}',
+		'LoloPinoyGrillCommissaryController@destroyRawMaterial')
+		->name('lolo-pinoy-grill-commissary.destroyRawMaterial');
+	
+	Route::delete(
+		'/lolo-pinoy-grill-commissary/utilities/delete/{id}',
+		'LoloPinoyGrillCommissaryController@destroyUtility')
+		->name('lolo-pinoy-grill-commissary.destroyUtility');
+	
+	Route::delete(
+		'/lolo-pinoy-grill-branches/delete/{id}',
+		'LoloPinoyGrillBranchesController@destroy')
+		->name('lolo-pinoy-grill-branches.destroy');
+	
+	Route::delete(
+		'/lolo-pinoy-grill-branches/delete-transaction-list/{id}',
+		'LoloPinoyGrillBranchesController@destroyTransactionList')
+		->name('lolo-pinoy-grill-branches.destroyTransactionList');
+
+	//delete
+	Route::delete(
+		'/mr-potato/delete/{id}',
+		'MrPotatoController@destroy')
+		->name('mr-potato.destroy');
+
+	Route::delete(
+			'/mr-potato/delete-delivery-receipt/{id}',
+			'MrPotatoController@destroyDeliveryReceipt')
+			->name('mr-potato.destroyDeliveryReceipt');
+	
+	Route::delete(
+		'/mr-potato/delete-transaction-list/{id}',
+		'MrPotatoController@destroyTransactionList')
+		->name('mr-potato.destroyTransactionList');
+
+	Route::delete(
+		'/mr-potato/delete-payment-voucher/{id}',
+		'MrPotatoController@destroyPaymentVoucher')
+		->name('mr-potato.destroyPaymentVoucher');
+
+	Route::delete(
+		'/mr-potato/delete-sales-invoice/{id}',
+		'MrPotatoController@destroySalesInvoice')
+		->name('mr-potato.destroySalesInvoice');	
+	
+	Route::delete(
+			'/ribos-bar/delete-delivery-receipt/{id}',
+			'RibosBarController@destroyDeliveryReceipt')
+			->name('ribos-bar.destroyDeliveryReceipt');
+
+	Route::delete(
+		'/ribos-bar/delete/{id}',
+		'RibosBarController@destroy')
+		->name('ribos-bar.destroy');
+
+	Route::delete(
+		'/ribos-bar/delete-transaction-list/{id}',
+		'RibosBarController@destroyTransactionList')
+		->name('ribos-bar.destroyTransactionList');
+	
+	Route::delete(
+			'/ribos-bar/delete-payment-voucher/{id}',
+			'RibosBarController@destroyPaymentVoucher')
+			->name('ribos-bar.destroyPaymentVoucher');
+	
+	//delete
+	Route::delete(
+		'/ribos-bar/delete-sales-invoice/{id}',
+		'RibosBarController@destroySalesInvoice')
+		->name('ribos-bar.destroySalesInvoice');
+
+	Route::delete(
+		'/ribos-bar/delete-billing-statement/{id}',
+		'RibosBarController@destroyBillingStatement')
+		->name('ribos-bar.destroyBillingStatement');
+
+	Route::delete(
+		'/ribos-bar/cashiers-report-form/delete-item/{id}',
+		'RibosBarController@destroyCashiersReport')
+		->name('ribos-bar.destroyCashiersReport');
+	
+	Route::delete(
+		'/dno-personal/delete-transaction-list/{id}',
+		'DnoPersonalController@destroyTransactionList')
+		->name('dno-personal.destroyTransactionList');
+
+	Route::delete(
+		'/dno-personal/credit-card/delete/{id}',
+		'DnoPersonalController@destroyCreditCard')
+		->name('dno-personal.destroyCreditCard');
+	
+	Route::delete(
+		'/dno-personal/delete-property/{id}',
+		'DnoPersonalController@destroyProperty')
+		->name('dno-personal.destroyProperty');
+
+	Route::delete(
+		'/dno-perosonal/vehicles/delete/{id}',
+		'DnoPersonalController@destroyVehicles')
+		->name('dno-personal.destroyVehicles');
+	
+	Route::delete(
+		'/dno-resources-development/delete-transaction-list/{id}',
+		'DnoResourcesDevelopmentController@destroyTransactionList')
+		->name('dno-resources-development.destroyTransactionList');
+
+	Route::delete(
+		'/dno-resources-development/delete/{id}',
+		'DnoResourcesDevelopmentController@destroy')
+		->name('dno-resources-development.destroy');
+
+	//payment voucher form
+	Route::get('/lolo-pinoy-grill-commissary/payment-voucher-form', 'LoloPinoyGrillCommissaryController@paymentVoucherForm')->name('lolo-pinoy-grill-commissary.paymentVoucherForm');
+
+	//save 
+	Route::post('/lolo-pinoy-grill-commissary/payment-voucher-store', 'LoloPinoyGrillCommissaryController@paymentVoucherStore')->name('lolo-pinoy-grill-commissary.paymentVoucherStore');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/payables/transaction-list',
+		'LoloPinoyGrillCommissaryController@transactionList')
+		->name('lolo-pinoy-grill-commissary.transactionList');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/printPayables/{id}',
+		'LoloPinoyGrillCommissaryController@printPayables')
+		->name('lolo-pinoy-grill-commissary.printPayables');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-payables-detail/{id}',
+		'LoloPinoyGrillCommissaryController@editPayablesDetail')
+		->name('lolo-pinoy-grill-commissary.editPayablesDetail');
+	
+	Route::post(
+		'/lolo-pinoy-grill-commissary/add-particulars/{id}',
+		'LoloPinoyGrillCommissaryController@addParticulars')
+		->name('lolo-pinoy-grill-commissary.addParticulars');
+
+	Route::post(
+		'/lolo-pinoy-grill-commissary/add-payment/{id}',
+		'LoloPinoyGrillCommissaryController@addPayment')
+		->name('lolo-pinoy-grill-commissary.addPayment');
+
+	Route::patch(
+		'/lolo-pinoy-grill-commissary/accept/{id}',
+		'LoloPinoyGrillCommissaryController@accept')
+		->name('lolo-pinoy-grill-commissary.accept');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-payables-details/{id}',
+		'LoloPinoyGrillCommissaryController@viewPayableDetails')
+		->name('lolo-pinoy-grill-commissary.viewPayableDetails');
+
+
+	//edit payment voucher
+	Route::get('/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-payment-voucher/{id}', 'LoloPinoyGrillCommissaryController@editPaymentVoucher')->name('lolo-pinoy-grill-commissary.editPaymentVoucher');
+
+	Route::patch('/lolo-pinoy-grill-commissary/update-payment-voucher/{id}', 'LoloPinoyGrillCommissaryController@updatePaymentVoucher')->name('lolo-pinoy-grill-commissary.updatePaymentVoucher');
+
+	Route::get('/lolo-pinoy-grill-commissary/add-new-lolo-pinoy-grill-payment-voucher/{id}', 'LoloPinoyGrillCommissaryController@addNewPaymentVoucher')->name('lolo-pinoy-grill-commissary.addNewPaymentVoucher');
+
+	Route::post('/lolo-pinoy-grill-commissary/add-new-payment-voucher-data/{id}', 'LoloPinoyGrillCommissaryController@addNewPaymentVoucherData')->name('lolo-pinoy-grill-commissary.addNewPaymentVoucherData');
+
+	Route::patch('/lolo-pinoy-grill-commissary/update-pv/{id}', 'LoloPinoyGrillCommissaryController@updatePV')->name('lolo-pinoy-grill-commissary.updatePV');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/payment-voucher-form',
+		'LoloPinoyGrillBranchesController@paymentVoucherForm')
+		->name('lolo-pinoy-grill-branches.paymentVoucherForm');
+
+	Route::post(
+		'/lolo-pinoy-grill-branches/payment-voucher-store',
+		'LoloPinoyGrillBranchesController@paymentVoucherStore')
+		->name('lolo-pinoy-grill-branches.paymentVoucherStore');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/payables/transaction-list',
+		'LoloPinoyGrillBranchesController@transactionList')
+		->name('lolo-pinoy-grill-branches.transactionList');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/edit-lolo-pinoy-grill-branches-payables-detail/{id}',
+		'LoloPinoyGrillBranchesController@editPayablesDetail')
+		->name('lolo-pinoy-grill-branches.editPayablesDetail');
+
+	Route::post(
+		'/lolo-pinoy-grill-branches/add-particulars/{id}',
+		'LoloPinoyGrillBranchesController@addParticulars')
+		->name('lolo-pinoy-grill-branhces.addParticulars');
+
+	Route::patch(
+		'/lolo-pinoy-grill-branches/accept/{id}',
+		'LoloPinoyGrillBranchesController@accept')
+		->name('lolo-pinoy-grill-branches.accept');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/view-lolo-pinoy-grill-branches-payables-details/{id}',
+		'LoloPinoyGrillBranchesController@viewPayableDetails')
+		->name('lolo-pinoy-grill-branches.viewPayableDetails');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/printPayables/{id}',
+		'LoloPinoyGrillBranchesController@printPayables')
+		->name('lolo-pinoy-grill-branches.printPayables');
+
+	Route::post(
+		'/lolo-pinoy-grill-branches/add-payment/{id}',
+		'LoloPinoyGrillBranchesController@addPayment')
+		->name('lolo-pinoy-grill-branches.addPayment');
+
+	//payment voucher mr potato
+	Route::get(
+		'/mr-potato/payment-voucher-form',
+		'MrPotatoController@paymentVoucherForm')
+		->name('mr-potato.paymentVoucherForm');
+
+	Route::post(
+		'/mr-potato/store-payment',
+		'MrPotatoController@paymentVoucherStore')
+		->name('mr-potato.paymentVoucherStore');
+
+	Route::get(
+		'/mr-potato/payables/transaction-list',
+		'MrPotatoController@transactionList')
+		->name('mr-potato.transactionList');
+
+	Route::get(
+		'/mr-potato/edit-mr-potato-payables-detail/{id}',
+		'MrPotatoController@editPayablesDetail')
+		->name('mr-potato.editPayablesDetail');
+
+	Route::post(
+		'/mr-potato/add-particulars/{id}',
+		'MrPotatoController@addParticulars')	
+		->name('mr-potato.addParticulars');
+
+	Route::get(
+		'/mr-potato/print-payables/{id}',
+		'MrPotatoController@printPayables')
+		->name('mr-potato.printPayables');
+
+	Route::post(
+		'/mr-potato/add-payment/{id}',
+		'MrPotatoController@addPayment')
+		->name('mr-potato.addPayment');
+
+	Route::patch(
+		'/mr-potato/accept/{id}',
+		'MrPotatoController@accept')
+		->name('mr-potato.accept');
+
+	Route::get(
+		'/mr-potato/view-mr-potato-payables-details/{id}',
+		'MrPotatoController@viewPayableDetails')
+		->name('mr-potato.viewPayableDetails');
+
+
+
+	Route::get(
+		'/mr-potato/edit-mr-potato-payment-voucher/{id}',
+		'MrPotatoController@editPaymentVoucher')
+		->name('mr-potato.editPaymentVoucher');
+
+	Route::patch(
+		'/mr-potato/update-payment-voucher/{id}',
+		'MrPotatoController@updatePaymentVoucher')
+		->name('mr-potato.updatePaymentVoucher');
+
+	Route::get(
+		'/mr-potato/add-new-mr-potato-payment-voucher/{id}',
+		'MrPotatoController@addNewPaymentVoucher')
+		->name('mr-potato.addNewPaymentVoucher');
+
+	Route::post(
+		'/mr-potato/add-new-payment-voucher-data/{id}',
+		'MrPotatoController@addNewPaymentVoucherData')
+		->name('mr-potato.addNewPaymentVoucherData');
+
+	Route::patch(
+		'/mr-potato/update-pv/{id}',
+		'MrPotatoController@updatePV')
+		->name('mr-potato.updatePV');
+	
+		Route::get(
+			'/ribos-bar/payment-voucher-form',
+			'RibosBarController@paymentVoucherForm')
+			->name('ribos-bar.paymentVoucherForm');
+	
+	//store
+	Route::post(
+		'/ribos-bar/payment-voucher-store',
+		'RibosBarController@paymentVoucherStore')
+		->name('ribos-bar.paymentVoucherStore');
+
+	Route::get(
+		'/ribos-bar/payables/transaction-list',
+		'RibosBarController@transactionList')
+		->name('ribos-bar.transactionList');
+
+	Route::get(
+		'/ribos-bar/edit-ribos-bar-payables-detail/{id}',
+		'RibosBarController@editPayablesDetail')
+		->name('ribos-bar.editPayablesDetail');
+	
+	Route::post(
+		'/ribos-bar/add-particulars/{id}',
+		'RibosBarController@addParticulars')
+		->name('ribos-bar.addParticulars');
+
+	Route::post(
+		'/ribos-bar/add-payment/{id}',
+		'RibosBarController@addPayment')
+		->name('ribos-bar.addPayment');
+
+	Route::patch(
+		'/ribos-bar/accept/{id}',
+		'RibosBarController@accept')
+		->name('ribos-bar.accept');
+
+	Route::get(
+		'/ribos-bar/view-ribos-bar-payables-details/{id}',
+		'RibosBarController@viewPayableDetails')
+		->name('ribos-bar.viewPayableDetails');
+
+	
+
+	Route::get(
+		'/ribos-bar/print-payables/{id}',
+		'RibosBarController@printPayablesRibosBar')
+		->name('ribos-bar.printPayablesRibosBar');
+
+	Route::get(
+		'/ribos-bar/edit-ribos-bar-payment-voucher/{id}',
+		'RibosBarController@editPaymentVoucher')
+		->name('ribos-bar.editPaymentVoucher');
+
+	Route::patch(
+		'/ribos-bar/update-payment-voucher/{id}',
+		'RibosBarController@updatePaymentVoucher')
+		->name('ribos-bar.updatePaymentVoucher');
+
+	Route::get(
+		'/ribos-bar/add-new-ribos-bar-payment-voucher/{id}',
+		'RibosBarController@addNewPaymentVoucher')
+		->name('ribos-bar.addNewPaymentVoucher');
+
+	Route::post(
+		'/ribos-bar/add-new-payment-voucher-data/{id}',
+		'RibosBarController@addNewPaymentVoucherData')
+		->name('ribos-bar.addNewPaymentVoucherData');
+
+	Route::patch(
+		'/ribos-bar/update-pv/{id}',
+		'RibosBarController@updatePV')
+		->name('ribos-bar.updatePV');
+	
+	Route::get(
+		'/dno-personal/payment-voucher-form',
+		'DnoPersonalController@paymentVoucherForm')
+		->name('dno-personal.paymentVoucherForm');
+
+	Route::post(
+		'/dno-personal/payment-voucher-store/',
+		'DnoPersonalController@paymentVoucherStore')
+		->name('dno-personal.paymentVoucherStore');
+
+	Route::get(
+		'/dno-personal/payables/transaction-list',
+		'DnoPersonalController@transactionList')
+		->name('dno-personal.transactionList');
+
+	Route::get(
+		'/dno-personal/edit-dno-personal-payables-detail/{id}',
+		'DnoPersonalController@editPayablesDetail')
+		->name('dno-resources-development.editPayablesDetail');
+
+	Route::post(
+		'/dno-personal/add-particulars/{id}',
+		'DnoPersonalController@addParticulars')
+		->name('dno-personal.addParticulars');
+
+	Route::post(
+		'/dno-personal/add-payment/{id}',
+		'DnoPersonalController@addPayment')
+		->name('dno-personal.addPayment');
+
+	Route::patch(
+		'/dno-personal/accept/{id}',
+		'DnoPersonalController@accept')
+		->name('dno-personal.accept');
+
+	Route::get(
+		'/dno-personal/view-dno-personal-payables-details/{id}',
+		'DnoPersonalController@viewPayableDetails')
+		->name('dno-personal.viewPayableDetails');
+
+	Route::get(
+		'/dno-personal/printPayables/{id}',
+		'DnoPersonalController@printPayablesDnoPersonal')
+		->name('dno-personal.printPayablesDnoPersonal');
+	
+	Route::get(
+		'/dno-resources-development/payment-voucher-form',
+		'DnoResourcesDevelopmentController@paymentVoucherForm')
+		->name('dno-resources-development.paymentVoucherForm');
+
+	Route::post(
+		'/dno-resources-development/payment-voucher-store',
+		'DnoResourcesDevelopmentController@paymentVoucherStore')
+		->name('dno-resources-development.paymentVoucherStore');
+
+	Route::get(
+		'/dno-resources-development/payables/transaction-list',
+		'DnoResourcesDevelopmentController@transactionList')
+		->name('dno-resources-development.transactionList');
+
+	Route::get(
+		'/dno-resources-development/edit-dno-resources-payables-detail/{id}',
+		'DnoResourcesDevelopmentController@editPayablesDetail')
+		->name('dno-resources-development.editPayablesDetail');
+	
+	Route::post(
+		'/dno-resources-developemtn/add-particulars/{id}',
+		'DnoResourcesDevelopmentController@addParticulars')
+		->name('dno-resources-development.addParticulars');
+
+	Route::post(
+		'/dno-resources-development/add-payment/{id}',
+		'DnoResourcesDevelopmentController@addPayment')
+		->name('dno-resources-development.addPayment');
+
+	Route::patch(
+		'/dno-resources-development/accept/{id}',
+		'DnoResourcesDevelopmentController@accept')
+		->name('dno-resources-development.accept');
+
+	Route::get(
+		'/dno-resources-development/view-dno-resources-payables-details/{id}',
+		'DnoResourcesDevelopmentController@viewPayableDetails')
+		->name('dno-resources-development.viewPayableDetails');
+
+	Route::get(
+		'/dno-resources-development/printPayables/{id}',
+		'DnoResourcesDevelopmentController@printPayables')
+		->name('dno-resources-development.printPayables');
+
+
+});
+
+Route::group(['middleware' =>'App\Http\Middleware\SalesMiddleware'], function(){
+	Route::get(
+		'/profile/create-user',
+		'ProfileController@createUser')
+		->name('profile.createUser');
+	
+	Route::post(
+		'/profile/store-create-user',
+		'ProfileController@storeCreateUser')
+		->name('profile.storeCreateUser');
+
+	//delete for lechon de cebu billint statement
+	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-billing-statement/{id}', 'LoloPinoyLechonDeCebuController@destroyBillingStatement')->name('lolo-pinoy-lechon-de-cebu.destroyBillingStatement');
+	
+	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-payment-voucher/{id}', 'LoloPinoyLechonDeCebuController@destroyPaymentVoucher')->name('lolo-pinoy-lechon-de-cebu.destroyPaymentVoucher');
+	
+	//route for delete sales invoice 
+	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-sales-invoice/{id}', 'LoloPinoyLechonDeCebuController@destroySalesInvoice')->name('lolo-pinoy-lechon-de-cebu.destroySalesInvoice');
+	
+	//delete comissary RAW materials
+	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-raw-materials/{id}', 'LoloPinoyLechonDeCebuController@destroyRawMaterial')->name('lolo-pinoy-lechon-de-cebu.destroyRawMaterial');
+	
+	//destroy delivery receipt
+	Route::delete('/lolo-pinoy-grill-commissary/delete-delivery-receipt/{id}', 'LoloPinoyGrillCommissaryController@destroyDeliveryReceipt')->name('lolo-pinoy-grill-commissary.destroyDeliveryReceipt');
+	
+	//delete 
+	Route::delete('/lolo-pinoy-grill-commissary/delete/{id}', 'LoloPinoyGrillCommissaryController@destroy')->name('lolo-pinoy-grill-commissary.delete');
+	
+	//destroy billing statement
+	Route::delete('/lolo-pinoy-grill-commissary/delete-billing-statement/{id}', 'LoloPinoyGrillCommissaryController@destroyBillingStatement')->name('lolo-pinoy-grill-commissary.destroyBillingStatement');
+	
+	Route::delete(
+		'/lolo-pinoy-grill-commissary/delete-transaction-list/{id}',
+		'LoloPinoyGrillCommissaryController@destroyTransactionList')
+		->name('lolo-pinoy-grill-commissary.destroyTransactionList');
+
+	//delete
+	Route::delete('/lolo-pinoy-grill-commissary/delete-payment-voucher/{id}', 'LoloPinoyGrillCommissaryController@destroyPaymentVoucher')->name('lolo-pinoy-grill-commissary.destroyPaymentVoucher');
+	
+	//delete
+	Route::delete('/lolo-pinoy-grill-commissary/delete-sales-invoice/{id}', 'LoloPinoyGrillCommissaryController@destroySalesInvoice')->name('lolo-pinoy-grill-commissary.destroySalesInvoice');
+	
+	Route::delete('/lolo-pinoy-grill-commissary/delete-statement-account/{id}', 'LoloPinoyGrillCommissaryController@destroyStatementAccount')->name('lolo-pinoy-grill-commissary.destroyStatementAccount');
+	
+	Route::delete(
+		'/lolo-pinoy-grill-commissary/delete-raw-materials/{id}',
+		'LoloPinoyGrillCommissaryController@destroyRawMaterial')
+		->name('lolo-pinoy-grill-commissary.destroyRawMaterial');
+	
+	Route::delete(
+		'/lolo-pinoy-grill-commissary/utilities/delete/{id}',
+		'LoloPinoyGrillCommissaryController@destroyUtility')
+		->name('lolo-pinoy-grill-commissary.destroyUtility');
+	
+	Route::delete(
+		'/lolo-pinoy-grill-branches/delete/{id}',
+		'LoloPinoyGrillBranchesController@destroy')
+		->name('lolo-pinoy-grill-branches.destroy');
+	
+	Route::delete(
+		'/lolo-pinoy-grill-branches/delete-transaction-list/{id}',
+		'LoloPinoyGrillBranchesController@destroyTransactionList')
+		->name('lolo-pinoy-grill-branches.destroyTransactionList');
+
+	//delete
+	Route::delete(
+		'/mr-potato/delete/{id}',
+		'MrPotatoController@destroy')
+		->name('mr-potato.destroy');
+
+	Route::delete(
+			'/mr-potato/delete-delivery-receipt/{id}',
+			'MrPotatoController@destroyDeliveryReceipt')
+			->name('mr-potato.destroyDeliveryReceipt');
+	
+	Route::delete(
+		'/mr-potato/delete-transaction-list/{id}',
+		'MrPotatoController@destroyTransactionList')
+		->name('mr-potato.destroyTransactionList');
+
+	Route::delete(
+		'/mr-potato/delete-payment-voucher/{id}',
+		'MrPotatoController@destroyPaymentVoucher')
+		->name('mr-potato.destroyPaymentVoucher');
+
+	Route::delete(
+		'/mr-potato/delete-sales-invoice/{id}',
+		'MrPotatoController@destroySalesInvoice')
+		->name('mr-potato.destroySalesInvoice');	
+	
+	Route::delete(
+			'/ribos-bar/delete-delivery-receipt/{id}',
+			'RibosBarController@destroyDeliveryReceipt')
+			->name('ribos-bar.destroyDeliveryReceipt');
+
+	Route::delete(
+		'/ribos-bar/delete/{id}',
+		'RibosBarController@destroy')
+		->name('ribos-bar.destroy');
+
+	Route::delete(
+		'/ribos-bar/delete-transaction-list/{id}',
+		'RibosBarController@destroyTransactionList')
+		->name('ribos-bar.destroyTransactionList');
+	
+	Route::delete(
+			'/ribos-bar/delete-payment-voucher/{id}',
+			'RibosBarController@destroyPaymentVoucher')
+			->name('ribos-bar.destroyPaymentVoucher');
+	
+	//delete
+	Route::delete(
+		'/ribos-bar/delete-sales-invoice/{id}',
+		'RibosBarController@destroySalesInvoice')
+		->name('ribos-bar.destroySalesInvoice');
+
+	Route::delete(
+		'/ribos-bar/delete-billing-statement/{id}',
+		'RibosBarController@destroyBillingStatement')
+		->name('ribos-bar.destroyBillingStatement');
+
+	Route::delete(
+		'/ribos-bar/cashiers-report-form/delete-item/{id}',
+		'RibosBarController@destroyCashiersReport')
+		->name('ribos-bar.destroyCashiersReport');
+	
+	Route::delete(
+		'/dno-personal/delete-transaction-list/{id}',
+		'DnoPersonalController@destroyTransactionList')
+		->name('dno-personal.destroyTransactionList');
+
+	Route::delete(
+		'/dno-personal/credit-card/delete/{id}',
+		'DnoPersonalController@destroyCreditCard')
+		->name('dno-personal.destroyCreditCard');
+	
+	Route::delete(
+		'/dno-personal/delete-property/{id}',
+		'DnoPersonalController@destroyProperty')
+		->name('dno-personal.destroyProperty');
+
+	Route::delete(
+		'/dno-perosonal/vehicles/delete/{id}',
+		'DnoPersonalController@destroyVehicles')
+		->name('dno-personal.destroyVehicles');
+	
+	Route::delete(
+		'/dno-resources-development/delete-transaction-list/{id}',
+		'DnoResourcesDevelopmentController@destroyTransactionList')
+		->name('dno-resources-development.destroyTransactionList');
+
+	Route::delete(
+		'/dno-resources-development/delete/{id}',
+		'DnoResourcesDevelopmentController@destroy')
+		->name('dno-resources-development.destroy');
+
+
+	
+});
+
+
 Route::group(['middleware' => ['auth']], function(){
 	//route for profile
 	Route::get('/profile', 'ProfileController@index')->name('profile.index');
 	Route::get('/profile/edit/{id}', 'ProfileController@edit')->name('profile.edit');
 	Route::post('/profile/update/{id}', 'ProfileController@update')->name('profile.update');
-
-	Route::get(
-		'/profile/create-user',
-		'ProfileController@createUser')
-		->name('profile.createUser');
-
-	Route::post(
-		'/profile/store-create-user',
-		'ProfileController@storeCreateUser')
-		->name('profile.storeCreateUser');
 
 	//route for change password
 	Route::get('/change-password', 'ChangePasswordController@index')->name('change-password.index');
@@ -64,11 +774,6 @@ Route::group(['middleware' => ['auth']], function(){
 	//view purchase order lechon de cebu
 	Route::get('lolo-pinoy-lechon-de-cebu/view/{id}', 'LoloPinoyLechonDeCebuController@show')->name('lolo-pinoy-lechon-de-cebu.show');
 
-	//delete for lechon de cebu purchase order
-	Route::delete('/lolo-pinoy-lechon-de-cebu/delete/{id}', 'LoloPinoyLechonDeCebuController@destroy')->name('lolo-pinoy-lechon-de-cebu.destroy');
-
-	//delete for lechon de cebu billint statement
-	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-billing-statement/{id}', 'LoloPinoyLechonDeCebuController@destroyBillingStatement')->name('lolo-pinoy-lechon-de-cebu.destroyBillingStatement');
 
 	//
 	Route::patch('/lolo-pinoy-lechon-de-cebu/update-po/{id}', 'LoloPinoyLechonDeCebuController@updatePo')->name('lolo-pinoy-lechon-de-cebu.updatePo');
@@ -158,17 +863,6 @@ Route::group(['middleware' => ['auth']], function(){
 	//route for commissary stocks inventory
 	Route::get('/lolo-pinoy-lechon-de-cebu/commissary/stocks-inventory', 'LoloPinoyLechonDeCebuController@stocksInventory')->name('lolo-pinoy-lechon-de-cebu.stocksInventory');
 
-	//
-	Route::get(
-		'/lolo-pinoy-lechon-de-cebu/payables/transaction-list',
-		'LoloPinoyLechonDeCebuController@transactionList')
-		->name('lolo-pinoy-lechon-de-cebu.transactionList');
-
-	//
-	Route::get(
-		'/lolo-pinoy-lechon-de-cebu/edit-payables-detail/{id}',
-		'LoloPinoyLechonDeCebuController@editPayablesDetail')
-		->name('lolo-pinoy-lechon-de-cebu.editPayablesDetail');
 
 	Route::post(
 		'/lolo-pinoy-lechon-de-cebu/add-payment/{id}',
@@ -185,43 +879,12 @@ Route::group(['middleware' => ['auth']], function(){
 		'LoloPinoyLechonDeCebuController@accept')
 		->name('lolo-pinoy-lechon-de-cebu.accept');
 
-	Route::delete(
-		'/lolo-pinoy-lechon-de-cebu/delete-transaction-list/{id}',
-		'LoloPinoyLechonDeCebuController@destroyTransactionList')
-		->name('lolo-pinoy-lechon-de-cebu.destroyTransactionList');
 
-	Route::get(
-		'/lolo-pinoy-lechon-de-cebu/view-payables-details/{id}',
-		'LoloPinoyLechonDeCebuController@viewPayableDetails')
-		->name('lolo-pinoy-lechon-de-cebu.viewPayableDetails');
-
-	Route::get(
-		'/lolo-pinoy-lechon-de-cebu/printPayables/{id}',
-		'LoloPinoyLechonDeCebuController@printPayables')
-		->name('lolo-pinoy-lechon-de-cebu.printPayables');
-
-	//route for payment vouchers
-	Route::get('/lolo-pinoy-lechon-de-cebu/payment-voucher-form', 'LoloPinoyLechonDeCebuController@paymentVoucherForm')->name('lolo-pinoy-lechon-de-cebu.paymentVoucherForm');
-
-	//route for payment vouchers store
-	Route::post('/lolo-pinoy-lechon-de-cebu/payment-voucher-store', 'LoloPinoyLechonDeCebuController@paymentVoucherStore')->name('lolo-pinoy-lechon-de-cebu.paymnentVoucherStore');
-
-
-	//route for edit payment vouchers
-	Route::get('/lolo-pinoy-lechon-de-cebu/edit-payment-voucher/{id}', 'LoloPinoyLechonDeCebuController@editPaymentVoucher')->name('lolo-pinoy-lechon-de-cebu.editPaymentVoucher');
-
-	//route update payment vouhcer
-	Route::patch('/lolo-pinoy-lechon-de-cebu/update-payment-voucher/{id}', 'LoloPinoyLechonDeCebuController@updatePaymentVoucher')->name('lolo-pinoy-lechon-de-cebu.updatePaymentVoucher');
-
-	//Route for add new payment voucher
-	Route::get('/lolo-pinoy-lechon-de-cebu/add-new-payment-voucher/{id}', 'LoloPinoyLechonDeCebuController@addNewPaymentVoucher')->name('lolo-pinoy-lechon-de-cebu.addNewPaymentVoucher');
 
 	//route for add new payment voucher data
 	Route::post('/lolo-pinoy-lechon-de-cebu/add-new-payment-voucher-data/{id}', 'LoloPinoyLechonDeCebuController@addNewPaymentVoucherData')->name('lolo-pinoy-lechon-de-cebu.addNewPaymentVoucherData');
 
 	Route::patch('/lolo-pinoy-lechon-de-cebu/update-pv/{id}', 'LoloPinoyLechonDeCebuController@updatePV')->name('lolo-pinoy-lechon-de-cebu.updatePV');
-
-	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-payment-voucher/{id}', 'LoloPinoyLechonDeCebuController@destroyPaymentVoucher')->name('lolo-pinoy-lechon-de-cebu.destroyPaymentVoucher');
 
 	//route for payment voucher cash vouchers
 	Route::get('/lolo-pinoy-lechon-de-cebu/cash-vouchers', 'LoloPinoyLechonDeCebuController@cashVouchers')->name('lolo-pinoy-lechon-de-cebu.cashVouchers');
@@ -256,8 +919,6 @@ Route::group(['middleware' => ['auth']], function(){
 	//route for update delivery recipt add new
 	Route::patch('/lolo-pinoy-lechon-de-cebu/update-dr/{id}', 'LoloPinoyLechonDeCebuController@updateDr')->name('lolo-pinoy-lechon-de-cebu.updateDr');
 
-	//route for delete delivery receipt
-	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-delivery-receipt/{id}', 'LoloPinoyLechonDeCebuController@destroyDeliveryReceipt')->name('lolo-pinoy-lechon-de-cebu.destroyDeliveryReceipt');
 
 	//route for view delivery receipt
 	Route::get('/lolo-pinoy-lechon-de-cebu/view-delivery-receipt/{id}', 'LoloPinoyLechonDeCebuController@viewDeliveryReceipt')->name('lolo-pinoy-lechon-de-cebu.viewDeliveryReceipt');
@@ -299,8 +960,6 @@ Route::group(['middleware' => ['auth']], function(){
 	//update Sales invoice add new
 	Route::patch('/lolo-pinoy-lechon-de-cebu/update-si/{id}', 'LoloPinoyLechonDeCebuController@updateSi')->name('lolo-pinoy-lechon-de-cebu.upodateSi');
 
-	//route for delete sales invoice 
-	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-sales-invoice/{id}', 'LoloPinoyLechonDeCebuController@destroySalesInvoice')->name('lolo-pinoy-lechon-de-cebu.destroySalesInvoice');
 
 	//route for sales invoice view 
 	Route::get('/lolo-pinoy-lechon-de-cebu/view-sales-invoice/{id}', 'LoloPinoyLechonDeCebuController@viewSalesInvoice')->name('lolo-pinoy-lechon-de-cebu.viewSalesInvoice');
@@ -325,9 +984,7 @@ Route::group(['middleware' => ['auth']], function(){
 	//update commissary RAW materials
 	Route::patch('/lolo-pinoy-lechon-de-cebu/comissary/update-raw-material/{id}','LoloPinoyLechonDeCebuController@updateRawMaterial')->name('lolo-pinoy-lechon-de-cebu.updateRawMaterial');
 
-	//delete comissary RAW materials
-	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-raw-materials/{id}', 'LoloPinoyLechonDeCebuController@destroyRawMaterial')->name('lolo-pinoy-lechon-de-cebu.destroyRawMaterial');
-
+	
 	//route for view RAW material details
 	Route::get('/lolo-pinoy-lechon-de-cebu/view-raw-material-details/{id}', 'LoloPinoyLechonDeCebuController@viewRawMaterialDetails')->name('lolo-pinoy-lechon-de-cebu.viewRawMaterialDetails');
 
@@ -405,8 +1062,6 @@ Route::group(['middleware' => ['auth']], function(){
 	//
 	Route::patch('/lolo-pinoy-grill-commissary/update-dr/{id}', 'LoloPinoyGrillCommissaryController@updateDr')->name('lolo-pinoy-grill-commissary.updateDr');
 
-	//destroy delivery receipt
-	Route::delete('/lolo-pinoy-grill-commissary/delete-delivery-receipt/{id}', 'LoloPinoyGrillCommissaryController@destroyDeliveryReceipt')->name('lolo-pinoy-grill-commissary.destroyDeliveryReceipt');
 
 	//delivery receipt lists
 	Route::get('/lolo-pinoy-grill-commissary/delivery-receipt/lists', 'LoloPinoyGrillCommissaryController@deliveryReceiptList')->name('lolo-pinoy-grill-commissary.deliveryReceiptList');
@@ -440,8 +1095,6 @@ Route::group(['middleware' => ['auth']], function(){
 
 	Route::patch('/lolo-pinoy-grill-commissary/update-po/{id}', 'LoloPinoyGrillCommissaryController@updatePo')->name('lolo-pinoy-grill-commissary.updatePo');
 
-	//delete 
-	Route::delete('/lolo-pinoy-grill-commissary/delete/{id}', 'LoloPinoyGrillCommissaryController@destroy')->name('lolo-pinoy-grill-commissary.delete');
 
 	//lolo pinoy grill commissary purchase order lists
 	Route::get('/lolo-pinoy-grill-commissary/purchase-order-lists', 'LoloPinoyGrillCommissaryController@purchaseOrderAllLists')->name('lolo-pinoy-grill-commissary.purchaseOrderAllLists');
@@ -465,8 +1118,6 @@ Route::group(['middleware' => ['auth']], function(){
 	//update billing statement in add new
 	Route::patch('/lolo-pinoy-grill-commissary/update-billing-statement/{id}', 'LoloPinoyGrillCommissaryController@updateBillingStatement')->name('lolo-pinoy-grill-commissary.updateBillingStatement');
 
-	//destroy billing statement
-	Route::delete('/lolo-pinoy-grill-commissary/delete-billing-statement/{id}', 'LoloPinoyGrillCommissaryController@destroyBillingStatement')->name('lolo-pinoy-grill-commissary.destroyBillingStatement');
 
 	//billing statement lists
 	Route::get('/lolo-pinoy-grill-commissary/billing-statement-lists', 'LoloPinoyGrillCommissaryController@billingStatementLists')->name('lolo-pinoy-grill-commissary.billingStatementLists');
@@ -474,66 +1125,7 @@ Route::group(['middleware' => ['auth']], function(){
 	//view billing statement
 	Route::get('/lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-billing-statement/{id}', 'LoloPinoyGrillCommissaryController@viewBillingStatement')->name('lolo-pinoy-grill-commissary.viewBillingStatement');
 
-	//payment voucher form
-	Route::get('/lolo-pinoy-grill-commissary/payment-voucher-form', 'LoloPinoyGrillCommissaryController@paymentVoucherForm')->name('lolo-pinoy-grill-commissary.paymentVoucherForm');
-
-	//save 
-	Route::post('/lolo-pinoy-grill-commissary/payment-voucher-store', 'LoloPinoyGrillCommissaryController@paymentVoucherStore')->name('lolo-pinoy-grill-commissary.paymentVoucherStore');
-
-	Route::get(
-		'/lolo-pinoy-grill-commissary/payables/transaction-list',
-		'LoloPinoyGrillCommissaryController@transactionList')
-		->name('lolo-pinoy-grill-commissary.transactionList');
-
-	Route::get(
-		'/lolo-pinoy-grill-commissary/printPayables/{id}',
-		'LoloPinoyGrillCommissaryController@printPayables')
-		->name('lolo-pinoy-grill-commissary.printPayables');
-
-	Route::get(
-		'/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-payables-detail/{id}',
-		'LoloPinoyGrillCommissaryController@editPayablesDetail')
-		->name('lolo-pinoy-grill-commissary.editPayablesDetail');
 	
-	Route::post(
-		'/lolo-pinoy-grill-commissary/add-particulars/{id}',
-		'LoloPinoyGrillCommissaryController@addParticulars')
-		->name('lolo-pinoy-grill-commissary.addParticulars');
-
-	Route::post(
-		'/lolo-pinoy-grill-commissary/add-payment/{id}',
-		'LoloPinoyGrillCommissaryController@addPayment')
-		->name('lolo-pinoy-grill-commissary.addPayment');
-
-	Route::patch(
-		'/lolo-pinoy-grill-commissary/accept/{id}',
-		'LoloPinoyGrillCommissaryController@accept')
-		->name('lolo-pinoy-grill-commissary.accept');
-
-	Route::get(
-		'/lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-payables-details/{id}',
-		'LoloPinoyGrillCommissaryController@viewPayableDetails')
-		->name('lolo-pinoy-grill-commissary.viewPayableDetails');
-
-	Route::delete(
-		'/lolo-pinoy-grill-commissary/delete-transaction-list/{id}',
-		'LoloPinoyGrillCommissaryController@destroyTransactionList')
-		->name('lolo-pinoy-grill-commissary.destroyTransactionList');
-
-	//edit payment voucher
-	Route::get('/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-payment-voucher/{id}', 'LoloPinoyGrillCommissaryController@editPaymentVoucher')->name('lolo-pinoy-grill-commissary.editPaymentVoucher');
-
-	Route::patch('/lolo-pinoy-grill-commissary/update-payment-voucher/{id}', 'LoloPinoyGrillCommissaryController@updatePaymentVoucher')->name('lolo-pinoy-grill-commissary.updatePaymentVoucher');
-
-	Route::get('/lolo-pinoy-grill-commissary/add-new-lolo-pinoy-grill-payment-voucher/{id}', 'LoloPinoyGrillCommissaryController@addNewPaymentVoucher')->name('lolo-pinoy-grill-commissary.addNewPaymentVoucher');
-
-	Route::post('/lolo-pinoy-grill-commissary/add-new-payment-voucher-data/{id}', 'LoloPinoyGrillCommissaryController@addNewPaymentVoucherData')->name('lolo-pinoy-grill-commissary.addNewPaymentVoucherData');
-
-	Route::patch('/lolo-pinoy-grill-commissary/update-pv/{id}', 'LoloPinoyGrillCommissaryController@updatePV')->name('lolo-pinoy-grill-commissary.updatePV');
-
-	//delete
-	Route::delete('/lolo-pinoy-grill-commissary/delete-payment-voucher/{id}', 'LoloPinoyGrillCommissaryController@destroyPaymentVoucher')->name('lolo-pinoy-grill-commissary.destroyPaymentVoucher');
-
 	//cash vouchers lolo pinoy grill
 	Route::get('/lolo-pinoy-grill-commissary/cash-vouchers', 'LoloPinoyGrillCommissaryController@cashVouchers')->name('lolo-pinoy-grill-commissary.cashVouchers');
 
@@ -558,8 +1150,6 @@ Route::group(['middleware' => ['auth']], function(){
 
 	Route::patch('/lolo-pinoy-grill-commissary/update-si/{id}', 'LoloPinoyGrillCommissaryController@updateSi')->name('lolo-pinoy-grill-commissary.updateSi');
 
-	//delete
-	Route::delete('/lolo-pinoy-grill-commissary/delete-sales-invoice/{id}', 'LoloPinoyGrillCommissaryController@destroySalesInvoice')->name('lolo-pinoy-grill-commissary.destroySalesInvoice');
 
 	//view 
 	Route::get('/lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-sales-invoice/{id}', 'LoloPinoyGrillCommissaryController@viewSalesInvoice')->name('lolo-pinoy-grill-commissary.viewSalesInvoice');
@@ -592,7 +1182,6 @@ Route::group(['middleware' => ['auth']], function(){
 	//
 	Route::get('/lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-statement-account/{id}', 'LoloPinoyGrillCommissaryController@viewStatementAccount')->name('lolo-pinoy-grill-commissary.viewStatementAccount');
 
-	Route::delete('/lolo-pinoy-grill-commissary/delete-statement-account/{id}', 'LoloPinoyGrillCommissaryController@destroyStatementAccount')->name('lolo-pinoy-grill-commissary.destroyStatementAccount');
 
 	Route::get(
 		'/lolo-pinoy-grill-commissary/printDelivery/{id}',
@@ -625,10 +1214,7 @@ Route::group(['middleware' => ['auth']], function(){
 		'LoloPinoyGrillCommissaryController@updateRawMaterial')
 		->name('lolo-pinoy-grill-commissary.updateRawMaterial');
 
-	Route::delete(
-		'/lolo-pinoy-grill-commissary/delete-raw-materials/{id}',
-		'LoloPinoyGrillCommissaryController@destroyRawMaterial')
-		->name('lolo-pinoy-grill-commissary.destroyRawMaterial');
+
 
 	Route::get(
 		'/lolo-pinoy-grill-commissary/commissary/stocks-inventory',
@@ -726,10 +1312,7 @@ Route::group(['middleware' => ['auth']], function(){
 		'LoloPinoyGrillCommissaryController@viewBills')
 		->name('lolo-pinoy-grill-commissary.viewBills');
 
-	Route::delete(
-		'/lolo-pinoy-grill-commissary/utilities/delete/{id}',
-		'LoloPinoyGrillCommissaryController@destroyUtility')
-		->name('lolo-pinoy-grill-commissary.destroyUtility');
+
 
 	Route::get(
 		'/lolo-pinoy-grill-commissary/petty-cash/view/{id}',
@@ -739,51 +1322,7 @@ Route::group(['middleware' => ['auth']], function(){
 	//Lolo Pinoy Grill Branches
 	Route::get('/lolo-pinoy-grill-branches', 'LoloPinoyGrillBranchesController@index')->name('lolo-pinoy-grill-branches.index');
 
-	Route::get(
-		'/lolo-pinoy-grill-branches/payment-voucher-form',
-		'LoloPinoyGrillBranchesController@paymentVoucherForm')
-		->name('lolo-pinoy-grill-branches.paymentVoucherForm');
-
-	Route::post(
-		'/lolo-pinoy-grill-branches/payment-voucher-store',
-		'LoloPinoyGrillBranchesController@paymentVoucherStore')
-		->name('lolo-pinoy-grill-branches.paymentVoucherStore');
-
-	Route::get(
-		'/lolo-pinoy-grill-branches/payables/transaction-list',
-		'LoloPinoyGrillBranchesController@transactionList')
-		->name('lolo-pinoy-grill-branches.transactionList');
-
-	Route::get(
-		'/lolo-pinoy-grill-branches/edit-lolo-pinoy-grill-branches-payables-detail/{id}',
-		'LoloPinoyGrillBranchesController@editPayablesDetail')
-		->name('lolo-pinoy-grill-branches.editPayablesDetail');
-
-	Route::post(
-		'/lolo-pinoy-grill-branches/add-particulars/{id}',
-		'LoloPinoyGrillBranchesController@addParticulars')
-		->name('lolo-pinoy-grill-branhces.addParticulars');
-
-	Route::patch(
-		'/lolo-pinoy-grill-branches/accept/{id}',
-		'LoloPinoyGrillBranchesController@accept')
-		->name('lolo-pinoy-grill-branches.accept');
-
-	Route::get(
-		'/lolo-pinoy-grill-branches/view-lolo-pinoy-grill-branches-payables-details/{id}',
-		'LoloPinoyGrillBranchesController@viewPayableDetails')
-		->name('lolo-pinoy-grill-branches.viewPayableDetails');
-
-	Route::get(
-		'/lolo-pinoy-grill-branches/printPayables/{id}',
-		'LoloPinoyGrillBranchesController@printPayables')
-		->name('lolo-pinoy-grill-branches.printPayables');
-
-	Route::post(
-		'/lolo-pinoy-grill-branches/add-payment/{id}',
-		'LoloPinoyGrillBranchesController@addPayment')
-		->name('lolo-pinoy-grill-branches.addPayment');
-
+	
 	Route::get(
 		'/lolo-pinoy-grill-branches/requisition-slip',
 		'LoloPinoyGrillBranchesController@requisitionSlip')
@@ -819,15 +1358,6 @@ Route::group(['middleware' => ['auth']], function(){
 		'LoloPinoyGrillBranchesController@updateRs')
 		->name('lolo-pinoy-grill-branches.updateRs');
 
-	Route::delete(
-		'/lolo-pinoy-grill-branches/delete/{id}',
-		'LoloPinoyGrillBranchesController@destroy')
-		->name('lolo-pinoy-grill-branches.destroy');
-
-	Route::delete(
-		'/lolo-pinoy-grill-branches/delete-transaction-list/{id}',
-		'LoloPinoyGrillBranchesController@destroyTransactionList')
-		->name('lolo-pinoy-grill-branches.destroyTransactionList');
 
 	Route::get(
 		'/lolo-pinoy-grill-branches/requisition-slip-lists',
@@ -931,11 +1461,7 @@ Route::group(['middleware' => ['auth']], function(){
 		'MrPotatoController@updatePo')
 		->name('mr-potato.updatePo');
 
-	//delete
-	Route::delete(
-		'/mr-potato/delete/{id}',
-		'MrPotatoController@destroy')
-		->name('mr-potato.destroy');
+	
 
 	//purchase order lists
 	Route::get(
@@ -985,10 +1511,7 @@ Route::group(['middleware' => ['auth']], function(){
 		'MrPotatoController@updateDr')
 		->name('mr-potato.updateDr');
 
-	Route::delete(
-		'/mr-potato/delete-delivery-receipt/{id}',
-		'MrPotatoController@destroyDeliveryReceipt')
-		->name('mr-potato.destroyDeliveryReceipt');
+
 
 	Route::get(
 		'/mr-potato/delivery-receipt-lists',
@@ -1000,86 +1523,7 @@ Route::group(['middleware' => ['auth']], function(){
 		'MrPotatoController@viewDeliveryReceipt')
 		->name('mr-potato.viewDeliveryReceipt');
 
-	//payment voucher mr potato
-	Route::get(
-		'/mr-potato/payment-voucher-form',
-		'MrPotatoController@paymentVoucherForm')
-		->name('mr-potato.paymentVoucherForm');
 
-	Route::post(
-		'/mr-potato/store-payment',
-		'MrPotatoController@paymentVoucherStore')
-		->name('mr-potato.paymentVoucherStore');
-
-	Route::get(
-		'/mr-potato/payables/transaction-list',
-		'MrPotatoController@transactionList')
-		->name('mr-potato.transactionList');
-
-	Route::get(
-		'/mr-potato/edit-mr-potato-payables-detail/{id}',
-		'MrPotatoController@editPayablesDetail')
-		->name('mr-potato.editPayablesDetail');
-
-	Route::post(
-		'/mr-potato/add-particulars/{id}',
-		'MrPotatoController@addParticulars')	
-		->name('mr-potato.addParticulars');
-
-	Route::get(
-		'/mr-potato/print-payables/{id}',
-		'MrPotatoController@printPayables')
-		->name('mr-potato.printPayables');
-
-	Route::post(
-		'/mr-potato/add-payment/{id}',
-		'MrPotatoController@addPayment')
-		->name('mr-potato.addPayment');
-
-	Route::patch(
-		'/mr-potato/accept/{id}',
-		'MrPotatoController@accept')
-		->name('mr-potato.accept');
-
-	Route::get(
-		'/mr-potato/view-mr-potato-payables-details/{id}',
-		'MrPotatoController@viewPayableDetails')
-		->name('mr-potato.viewPayableDetails');
-
-	Route::delete(
-		'/mr-potato/delete-transaction-list/{id}',
-		'MrPotatoController@destroyTransactionList')
-		->name('mr-potato.destroyTransactionList');
-
-	Route::get(
-		'/mr-potato/edit-mr-potato-payment-voucher/{id}',
-		'MrPotatoController@editPaymentVoucher')
-		->name('mr-potato.editPaymentVoucher');
-
-	Route::patch(
-		'/mr-potato/update-payment-voucher/{id}',
-		'MrPotatoController@updatePaymentVoucher')
-		->name('mr-potato.updatePaymentVoucher');
-
-	Route::get(
-		'/mr-potato/add-new-mr-potato-payment-voucher/{id}',
-		'MrPotatoController@addNewPaymentVoucher')
-		->name('mr-potato.addNewPaymentVoucher');
-
-	Route::post(
-		'/mr-potato/add-new-payment-voucher-data/{id}',
-		'MrPotatoController@addNewPaymentVoucherData')
-		->name('mr-potato.addNewPaymentVoucherData');
-
-	Route::patch(
-		'/mr-potato/update-pv/{id}',
-		'MrPotatoController@updatePV')
-		->name('mr-potato.updatePV');
-
-	Route::delete(
-		'/mr-potato/delete-payment-voucher/{id}',
-		'MrPotatoController@destroyPaymentVoucher')
-		->name('mr-potato.destroyPaymentVoucher');
 
 	Route::get(
 		'/mr-potato/cash-vouchers',
@@ -1127,10 +1571,7 @@ Route::group(['middleware' => ['auth']], function(){
 		'MrPotatoController@updateSi')
 		->name('mr-potato.updateSi');
 
-	Route::delete(
-		'/mr-potato/delete-sales-invoice/{id}',
-		'MrPotatoController@destroySalesInvoice')
-		->name('mr-potato.destroySalesInvoice');	
+	
 
 	Route::get(
 		'/mr-potato/view-mr-potato-sales-invoice/{id}',
@@ -1211,10 +1652,7 @@ Route::group(['middleware' => ['auth']], function(){
 		'RibosBarController@updateDr')
 		->name('ribos-bar.updateDr');
 
-	Route::delete(
-		'/ribos-bar/delete-delivery-receipt/{id}',
-		'RibosBarController@destroyDeliveryReceipt')
-		->name('ribos-bar.destroyDeliveryReceipt');
+
 
 	Route::get(
 		'/ribos-bar/delivery-receipt-lists',
@@ -1273,11 +1711,6 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('ribos-bar.printPO');
 	
 
-	Route::delete(
-		'/ribos-bar/delete/{id}',
-		'RibosBarController@destroy')
-		->name('ribos-bar.destroy');
-
 	Route::get(
 		'/ribos-bar/purchase-order-lists',
 		'RibosBarController@purchaseOrderList')
@@ -1287,87 +1720,6 @@ Route::group(['middleware' => ['auth']], function(){
 		'/ribos-bar/view-ribos-bar-purchase-order/{id}',
 		'RibosBarController@show')
 		->name('ribos-bar.show');
-
-	Route::get(
-		'/ribos-bar/payment-voucher-form',
-		'RibosBarController@paymentVoucherForm')
-		->name('ribos-bar.paymentVoucherForm');
-
-	//store
-	Route::post(
-		'/ribos-bar/payment-voucher-store',
-		'RibosBarController@paymentVoucherStore')
-		->name('ribos-bar.paymentVoucherStore');
-
-	Route::get(
-		'/ribos-bar/payables/transaction-list',
-		'RibosBarController@transactionList')
-		->name('ribos-bar.transactionList');
-
-	Route::get(
-		'/ribos-bar/edit-ribos-bar-payables-detail/{id}',
-		'RibosBarController@editPayablesDetail')
-		->name('ribos-bar.editPayablesDetail');
-	
-	Route::post(
-		'/ribos-bar/add-particulars/{id}',
-		'RibosBarController@addParticulars')
-		->name('ribos-bar.addParticulars');
-
-	Route::post(
-		'/ribos-bar/add-payment/{id}',
-		'RibosBarController@addPayment')
-		->name('ribos-bar.addPayment');
-
-	Route::patch(
-		'/ribos-bar/accept/{id}',
-		'RibosBarController@accept')
-		->name('ribos-bar.accept');
-
-	Route::get(
-		'/ribos-bar/view-ribos-bar-payables-details/{id}',
-		'RibosBarController@viewPayableDetails')
-		->name('ribos-bar.viewPayableDetails');
-
-	Route::delete(
-		'/ribos-bar/delete-transaction-list/{id}',
-		'RibosBarController@destroyTransactionList')
-		->name('ribos-bar.destroyTransactionList');
-
-	Route::get(
-		'/ribos-bar/print-payables/{id}',
-		'RibosBarController@printPayablesRibosBar')
-		->name('ribos-bar.printPayablesRibosBar');
-
-	Route::get(
-		'/ribos-bar/edit-ribos-bar-payment-voucher/{id}',
-		'RibosBarController@editPaymentVoucher')
-		->name('ribos-bar.editPaymentVoucher');
-
-	Route::patch(
-		'/ribos-bar/update-payment-voucher/{id}',
-		'RibosBarController@updatePaymentVoucher')
-		->name('ribos-bar.updatePaymentVoucher');
-
-	Route::get(
-		'/ribos-bar/add-new-ribos-bar-payment-voucher/{id}',
-		'RibosBarController@addNewPaymentVoucher')
-		->name('ribos-bar.addNewPaymentVoucher');
-
-	Route::post(
-		'/ribos-bar/add-new-payment-voucher-data/{id}',
-		'RibosBarController@addNewPaymentVoucherData')
-		->name('ribos-bar.addNewPaymentVoucherData');
-
-	Route::patch(
-		'/ribos-bar/update-pv/{id}',
-		'RibosBarController@updatePV')
-		->name('ribos-bar.updatePV');
-
-	Route::delete(
-		'/ribos-bar/delete-payment-voucher/{id}',
-		'RibosBarController@destroyPaymentVoucher')
-		->name('ribos-bar.destroyPaymentVoucher');
 
 	Route::get(
 		'/ribos-bar/cash-vouchers',
@@ -1420,11 +1772,7 @@ Route::group(['middleware' => ['auth']], function(){
 		'RibosBarController@updateSi')
 		->name('ribos-bar.updateSi');
 
-	//delete
-	Route::delete(
-		'/ribos-bar/delete-sales-invoice/{id}',
-		'RibosBarController@destroySalesInvoice')
-		->name('ribos-bar.destroySalesInvoice');
+	
 
 	Route::get(
 		'/ribos-bar/view-ribos-bar-sales-invoice/{id}',
@@ -1466,10 +1814,7 @@ Route::group(['middleware' => ['auth']], function(){
 		'RibosBarController@updateBillingStatement')
 		->name('ribos-bar.updateBillingStatement');
 
-	Route::delete(
-		'/ribos-bar/delete-billing-statement/{id}',
-		'RibosBarController@destroyBillingStatement')
-		->name('ribos-bar.destroyBillingStatement');
+
 
 	Route::get(
 		'/ribos-bar/billing-statement-lists',
@@ -1551,10 +1896,7 @@ Route::group(['middleware' => ['auth']], function(){
 		'RibosBarController@updateItem')
 		->name('ribos-bar.updateItem');
 
-	Route::delete(
-		'/ribos-bar/cashiers-report-form/delete-item/{id}',
-		'RibosBarController@destroyCashiersReport')
-		->name('ribos-bar.destroyCashiersReport');
+	
 
 	Route::get(
 		'/ribos-bar/cashiers-report/printCashiersReport/{id}',
@@ -1626,59 +1968,41 @@ Route::group(['middleware' => ['auth']], function(){
 			'RibosBarController@addDeliveryIn')
 			->name('ribos-bar.addDeliveryIn');
 	
+	Route::get(
+		'/ribos-bar/store-stock/stocks-inventory',
+		'RibosBarController@stocksInventory')
+		->name('ribos-bar.stocksInventory');
+
+	Route::get(
+		'/ribos-bar/store-stock/delivery-outlets',
+		'RibosBarController@deliveryOutlet')
+		->name('ribos-bar.deliveryOutlet');
+	
+	Route::get(
+		'/ribos-bar/store-stock/view-stock-inventory/{id}',
+		'RibosBarController@viewStockInventory')
+		->name('ribos-bar.viewStockInventory');
+
+	Route::get(
+		'/ribos-bar/store-stock/inventory-of-stocks',
+		'RibosBarController@inventoryOfStocks')
+		->name('ribos-bar.inventoryOfStocks');	
+		
+	Route::get(
+		'/ribos-bar/store-stock/view-inventory-of-stocks/{id}',
+		'RibosBarController@viewInventoryOfStocks')
+		->name('ribos-bar.viewInventoryOfStocks');
+
+	Route::patch(
+		'/ribos-bar/inventory-stock-update/{id}',
+		'RibosBarController@inventoryStockUpdate')
+		->name('ribos-bar.inventoryStockUpdate');
 		
 	//DNO Personal
 	Route::get('/dno-personal', 'DnoPersonalController@index')->name('dno-personal');
 
-	Route::get(
-		'/dno-personal/payment-voucher-form',
-		'DnoPersonalController@paymentVoucherForm')
-		->name('dno-personal.paymentVoucherForm');
+	
 
-	Route::post(
-		'/dno-personal/payment-voucher-store/',
-		'DnoPersonalController@paymentVoucherStore')
-		->name('dno-personal.paymentVoucherStore');
-
-	Route::get(
-		'/dno-personal/payables/transaction-list',
-		'DnoPersonalController@transactionList')
-		->name('dno-personal.transactionList');
-
-	Route::get(
-		'/dno-personal/edit-dno-personal-payables-detail/{id}',
-		'DnoPersonalController@editPayablesDetail')
-		->name('dno-resources-development.editPayablesDetail');
-
-	Route::post(
-		'/dno-personal/add-particulars/{id}',
-		'DnoPersonalController@addParticulars')
-		->name('dno-personal.addParticulars');
-
-	Route::post(
-		'/dno-personal/add-payment/{id}',
-		'DnoPersonalController@addPayment')
-		->name('dno-personal.addPayment');
-
-	Route::patch(
-		'/dno-personal/accept/{id}',
-		'DnoPersonalController@accept')
-		->name('dno-personal.accept');
-
-	Route::get(
-		'/dno-personal/view-dno-personal-payables-details/{id}',
-		'DnoPersonalController@viewPayableDetails')
-		->name('dno-personal.viewPayableDetails');
-
-	Route::get(
-		'/dno-personal/printPayables/{id}',
-		'DnoPersonalController@printPayablesDnoPersonal')
-		->name('dno-personal.printPayablesDnoPersonal');
-
-	Route::delete(
-		'/dno-personal/delete-transaction-list/{id}',
-		'DnoPersonalController@destroyTransactionList')
-		->name('dno-personal.destroyTransactionList');
 
 	Route::post(
 		'/dno-personal/store-credit-card',
@@ -1705,10 +2029,7 @@ Route::group(['middleware' => ['auth']], function(){
 		'DnoPersonalController@updateCard')
 		->name('dno-personal.updateCard');
 
-	Route::delete(
-		'/dno-personal/credit-card/delete/{id}',
-		'DnoPersonalController@destroyCreditCard')
-		->name('dno-personal.destroyCreditCard');
+
 
 	Route::get(
 		'/dno-personal/credit-card/ald-accounts/transactions/{id}',
@@ -1846,11 +2167,6 @@ Route::group(['middleware' => ['auth']], function(){
 			'DnoPersonalController@viewBills')
 			->name('dno-personal.viewBills');
 
-	
-	Route::delete(
-		'/dno-personal/delete-property/{id}',
-		'DnoPersonalController@destroyProperty')
-		->name('dno-personal.destroyProperty');
 
 	Route::patch(
 		'/dno-personal/properties/update/{id}',
@@ -1877,10 +2193,7 @@ Route::group(['middleware' => ['auth']], function(){
 		'DnoPersonalController@vehicleUpdate')
 		->name('dno-personal.vehicleUpdate');
 
-	Route::delete(
-		'/dno-perosonal/vehicles/delete/{id}',
-		'DnoPersonalController@destroyVehicles')
-		->name('dno-personal.destroyVehicles');
+
 
 	Route::post(
 		'/dno-personal/vehicles/store-vehicles',
@@ -1946,55 +2259,43 @@ Route::group(['middleware' => ['auth']], function(){
 		'DnoResourcesDevelopmentController@index')
 		->name('dno-resources-development');
 
-	Route::get(
-		'/dno-resources-development/payment-voucher-form',
-		'DnoResourcesDevelopmentController@paymentVoucherForm')
-		->name('dno-resources-development.paymentVoucherForm');
-
-	Route::post(
-		'/dno-resources-development/payment-voucher-store',
-		'DnoResourcesDevelopmentController@paymentVoucherStore')
-		->name('dno-resources-development.paymentVoucherStore');
-
-	Route::get(
-		'/dno-resources-development/payables/transaction-list',
-		'DnoResourcesDevelopmentController@transactionList')
-		->name('dno-resources-development.transactionList');
-
-	Route::get(
-		'/dno-resources-development/edit-dno-resources-payables-detail/{id}',
-		'DnoResourcesDevelopmentController@editPayablesDetail')
-		->name('dno-resources-development.editPayablesDetail');
 	
-	Route::post(
-		'/dno-resources-developemtn/add-particulars/{id}',
-		'DnoResourcesDevelopmentController@addParticulars')
-		->name('dno-resources-development.addParticulars');
+	Route::get(
+		'/dno-resources-development/purchase-order',
+		'DnoResourcesDevelopmentController@purchaseOrder')
+		->name('dno-resources-development.purchaseOrder');
 
 	Route::post(
-		'/dno-resources-development/add-payment/{id}',
-		'DnoResourcesDevelopmentController@addPayment')
-		->name('dno-resources-development.addPayment');
+		'/dno-resources-development/store',
+		'DnoResourcesDevelopmentController@store')
+		->name('dno-resources-development.store');
+	
+	Route::get(
+		'/dno-resources-development/edit-dno-resources-purchase-order/{id}',
+		'DnoResourcesDevelopmentController@edit')
+		->name('dno-resources-development.edit');
+
+	Route::post(
+		'/dno-resources-development/add-new/{id}',
+		'DnoResourcesDevelopmentController@addNew')
+		->name('dno-resources-development.addNew');
 
 	Route::patch(
-		'/dno-resources-development/accept/{id}',
-		'DnoResourcesDevelopmentController@accept')
-		->name('dno-resources-development.accept');
+		'/dno-resources-development/update-po/{id}',
+		'DnoResourcesDevelopmentController@updatePo')
+		->name('dno-resources-development.updatePo');
+
+
 
 	Route::get(
-		'/dno-resources-development/view-dno-resources-payables-details/{id}',
-		'DnoResourcesDevelopmentController@viewPayableDetails')
-		->name('dno-resources-development.viewPayableDetails');
-
-	Route::delete(
-		'/dno-resources-development/delete-transaction-list/{id}',
-		'DnoResourcesDevelopmentController@destroyTransactionList')
-		->name('dno-resources-development.destroyTransactionList');
+		'/dno-resources-development/purchase-order-lists',
+		'DnoResourcesDevelopmentController@purchaseOrderList')
+		->name('dno-resources-development.purchaseOrderList');
 
 	Route::get(
-		'/dno-resources-development/printPayables/{id}',
-		'DnoResourcesDevelopmentController@printPayables')
-		->name('dno-resources-development.printPayables');
+		'/dno-resources-development/view-dno-resources-purchase-order/{id}',
+		'DnoResourcesDevelopmentController@show')
+		->name('dno-resources-development.show');
 		
 });
 

@@ -52,9 +52,9 @@
                                           @foreach($getAllSalesInvoices as $getAllSalesInvoice)
                                           <tr id="deletedId{{ $getAllSalesInvoice['id']}}">
                                           <td>
-                                             @if($user->role_type !== 3)
+                                          
                                             <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-sales-invoice/'.$getAllSalesInvoice['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-                                             @endif
+                                            
                                             @if($user->role_type == 1)
                                             <a id="delete" onClick="confirmDelete('{{ $getAllSalesInvoice['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
                                             @endif

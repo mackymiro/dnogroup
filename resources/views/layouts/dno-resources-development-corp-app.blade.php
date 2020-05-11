@@ -35,7 +35,7 @@
  <div id="app">
         <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-    <a class="navbar-brand mr-1" href="{{ url('/dno-personal') }}">DNO Resources and Development Corp</a>
+    <a class="navbar-brand mr-1" href="{{ url('/dno-resources-development') }}">DNO Resources and Development Corp</a>
 
     <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
       <i class="fas fa-bars"></i>
@@ -53,7 +53,7 @@
       <li class="nav-item dropdown no-arrow mx-1">
          
       <a class="nav-link dropdown-toggle" href="#" aria-haspopup="true" aria-expanded="false">
-      Welcome! {{ ucfirst(Auth::user()->first_name) }} {{ ucfirst(Auth::user()->last_name) }} <span class="caret"></span>
+      Welcome! {{ ucfirst(Auth::user()['first_name']) }} {{ ucfirst(Auth::user()['last_name']) }} <span class="caret"></span>
           </a>
         </li>
     
@@ -65,17 +65,17 @@
           <div class="dropdown-header text-center">
             <strong>
                   Account Type: 
-                  @if($user->role_type == 1)
+                  @if(Auth::user()['role_type'] == 1)
                     Admin
-                  @elseif($user->role_type == 2)
+                  @elseif(Auth::user()['role_type'] == 2)
                     Sales
-                  @elseif($user->role_type == 3)
+                  @elseif(Auth::user()['role_type'] == 3)
                     User
                   @endif                  
            </strong>
            </div>
           <a class="dropdown-item" href="{{ url('profile') }}"><i class="fa fa-user"></i> Profile</a>
-           @if($user->role_type == 1)
+           @if(Auth::user()['role_type'] == 1)
            <a class="dropdown-item" href="{{ url('profile/create-user') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Create User</a>
            @endif
           <a class="dropdown-item" href="{{ url('change-password') }}"><i class="fa fa-key" aria-hidden="true"></i> Change Password</a>

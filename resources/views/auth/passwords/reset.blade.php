@@ -8,7 +8,8 @@
     <div class="card card-login mx-auto mt-5">
         <div class="card-header">Reset password </div>
         <a style="text-align:center;" class="navbar-brand" href="{{ url('/') }}">
-            <img src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive" alt="Lolo Pinoys Lechon de Cebu">
+        <img src="{{ asset('images/ribos.jpg')}}" width="300" height="200" class="img-responsive" alt="Ribos Food Corporation">
+      
         </a>
          <div class="card-body">
             <form class="form-horizontal" method="POST" action="{{ route('password.request') }}">

@@ -111,8 +111,7 @@
                         	<form action="{{ action('LoloPinoyGrillCommissaryController@inventoryStockUpdate', $getViewStockDetail['id']) }}" method="post">
                         	  {{csrf_field()}}
 	                         <input name="_method" type="hidden" value="PATCH">
-	                         
-                        	<div class="form-group">
+							<div class="form-group">
                     			<div class="form-row">
                 					<div class="col-lg-2">
             							<label>Date</label>
