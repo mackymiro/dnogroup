@@ -62,8 +62,9 @@
 										<tr id="deletedId{{ $getRawMaterial['id']}}">
 											<td>
 											<a href="{{ url('lolo-pinoy-grill-commissary/commissary/edit-raw-materials/'.$getRawMaterial['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+											@if(Auth::user()['role_type'] != 3 && Auth::user()['role_type'] != 2)
 											<a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getRawMaterial['id'] }}')" title="Delete"><i class="fas fa-trash"></i></a>
-										
+											@endif
 											</td>
 											<td>{{ $getRawMaterial['product_id_no'] }}</td>
 											<td><p style="width: 180px;"><a href="{{ url('lolo-pinoy-grill-commissary/view-raw-material-details/'.$getRawMaterial['id']) }}">{{ $getRawMaterial['product_name'] }}</a></p></td>

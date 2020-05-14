@@ -6,6 +6,8 @@ use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
+use Illuminate\Session\TokenMismatchException;
+
 class Handler extends ExceptionHandler
 {
     /**
@@ -44,6 +46,14 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof ModelNotFoundException) {
+            $exception = new NotFoundHttpException($exception->getMessage(), $exception);
+        }
+    
+        if ($exception instanceof TokenMismatchException) {
+             return redirect(route('login'))->withError('error_message', 'You page session expired. Please try to login again');
+        }
+
         return parent::render($request, $exception);
     }
 

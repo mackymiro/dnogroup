@@ -16,16 +16,22 @@ Route::get('/', function () {
     return redirect(route('login'));
 });
 
-Route::group(['middleware' =>'App\Http\Middleware\UserMiddleware'], function(){
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group(['middleware' =>['user']], function(){
 	Route::get(
 		'/profile/create-user',
 		'ProfileController@createUser')
-		->name('profile.createUser');
+		->name('profile.createUser')
+		->middleware(['user','auth']);
 	
 	Route::post(
 		'/profile/store-create-user',
 		'ProfileController@storeCreateUser')
-		->name('profile.storeCreateUser');
+		->name('profile.storeCreateUser')
+		->middleware(['user','auth']);
 
 	//route for delete delivery receipt
 	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-delivery-receipt/{id}', 
@@ -575,16 +581,18 @@ Route::group(['middleware' =>'App\Http\Middleware\UserMiddleware'], function(){
 
 });
 
-Route::group(['middleware' =>'App\Http\Middleware\SalesMiddleware'], function(){
+Route::group(['middleware' =>['sales']], function(){
 	Route::get(
 		'/profile/create-user',
 		'ProfileController@createUser')
-		->name('profile.createUser');
+		->name('profile.createUser')
+		->middleware(['user','auth']);
 	
 	Route::post(
 		'/profile/store-create-user',
 		'ProfileController@storeCreateUser')
-		->name('profile.storeCreateUser');
+		->name('profile.storeCreateUser')
+		->middleware(['user','auth']);
 
 	//delete for lechon de cebu billint statement
 	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-billing-statement/{id}', 'LoloPinoyLechonDeCebuController@destroyBillingStatement')->name('lolo-pinoy-lechon-de-cebu.destroyBillingStatement');
@@ -2300,6 +2308,3 @@ Route::group(['middleware' => ['auth']], function(){
 });
 
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
