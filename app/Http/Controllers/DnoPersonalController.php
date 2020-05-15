@@ -1080,7 +1080,7 @@ class DnoPersonalController extends Controller
             'user_id'=>$user->id,
             'pv_id'=>$id,
             'voucher_ref_number'=>$paymentData['voucher_ref_number'],
-            'date'=>$reqeust->get('date'),
+            'date'=>$request->get('date'),
             'cheque_number'=>$request->get('chequeNumber'),
             'cheque_amount'=>$request->get('chequeAmount'),
             'created_by'=>$name,
@@ -1276,12 +1276,10 @@ class DnoPersonalController extends Controller
     
      //
     public function paymentVoucherForm(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+      
         //getCreditCards
         $getCreditCards = DnoPersonalCreditCard::get()->toArray();
-
+      
         //getproperties
         $flag = "Cebu Properties";
         $flagM = "Manila Properties";
@@ -1297,7 +1295,7 @@ class DnoPersonalController extends Controller
         $getAllFlags = DnoPersonalProperty::where('flag', '!=', $flag)->where('flag', '!=', $flagM)->get()->toArray();
        
 
-        return view('payment-voucher-form-dno-personal', compact('user', 'getCreditCards', 
+        return view('payment-voucher-form-dno-personal', compact('getCreditCards', 
         'getCebuProperties', 'getManilaProperties', 'getUtilities', 'getAllFlags'));
     }
 

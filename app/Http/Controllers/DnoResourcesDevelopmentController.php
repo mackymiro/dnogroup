@@ -11,9 +11,110 @@ use Session;
 use App\User;
 use App\DnoResourcesDevelopmentCorpPaymentVoucher;
 use App\DnoResourcesDevelopmentCorpPurchaseOrder;
+use App\DnoResourcesDevelopmentCorpDeliveryTransactionForm; 
 
 class DnoResourcesDevelopmentController extends Controller
 {
+    public function viewDeliveryTransaction($id){
+        $deliveryTransaction = DnoResourcesDevelopmentCorpDeliveryTransactionForm::find($id);
+
+        $getTotal = DnoResourcesDevelopmentCorpDeliveryTransactionForm::where('id', $id)->sum('total');
+
+        $getSum = DnoResourcesDevelopmentCorpDeliveryTransactionForm::where('dt_id', $id)->sum('total');
+
+        $sum = $getTotal + $getSum;
+
+        $dTransactions = DnoResourcesDevelopmentCorpDeliveryTransactionForm::where('dt_id', $id)->get()->toArray();
+        return view('view-dno-resources-delivery-transaction', compact('deliveryTransaction', 'dTransactions', 'sum'));
+    }
+
+    public function deliveryRecords(){
+        $deliveryTransactions = DnoResourcesDevelopmentCorpDeliveryTransactionForm::where('dt_id', NULL)->get()->toArray();
+
+        return view('dno-resources-delivery-records', compact('deliveryTransactions'));
+    }
+
+    public function updateDT(Request $request, $id){
+        $updateDt = DnoResourcesDevelopmentCorpDeliveryTransactionForm::find($id);
+        $updateDt->delivery_description = $request->get('deliveryDescription');
+        $updateDt->qty = $request->get('qty');
+        $updateDt->total = $request->get('total');
+
+        $updateDt->save();
+        Session::flash('SuccessEdit', 'Successfully edited.');
+        return redirect()->route('editDeliveryTransaction', ['id'=>$request->get('dtId')]);
+    }
+
+    public function addDelivery(Request $request, $id){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+        $addTransaction = new DnoResourcesDevelopmentCorpDeliveryTransactionForm([
+            'user_id'=>$user->id,
+            'dt_id'=>$id,
+            'delivery_description'=>$request->get('deliveryDescription'),
+            'qty'=>$request->get('qty'),
+            'total'=>$request->get('total'),
+            'created_by'=>$name,
+        ]);
+        $addTransaction->save();
+
+        Session::flash('addNewSuccess', 'Successfully added.');
+        return redirect()->route('editDeliveryTransaction', ['id'=>$id]);
+
+    }
+
+    public function editDeliveryTransaction($id){
+        $deliveryT = DnoResourcesDevelopmentCorpDeliveryTransactionForm::find($id);
+
+        $deliveryTransactions = DnoResourcesDevelopmentCorpDeliveryTransactionForm::where('dt_id', $id)->get()->toArray();
+
+        return view('dno-resources-edit-delivery-transaction', compact('deliveryT', 'deliveryTransactions'));
+    }
+
+    public function addDeliveryTransaction(Request $request){
+         //
+         $this->validate($request, [
+            'supplierName'=>'required',
+            'deliveryDescription'=>'required',
+        ]);
+
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+        $addDeliveryTransaction = new DnoResourcesDevelopmentCorpDeliveryTransactionForm([
+            'user_id'=>$user->id,
+            'supplier_name'=>$request->get('supplierName'),
+            'delivery_date'=>$request->get('deliveryDate'),
+            'delivered_to'=>$request->get('deliveredTo'),
+            'dr_no'=>$request->get('drNo'),
+            'delivery_description'=>$request->get('deliveryDescription'),
+            'qty'=>$request->get('qty'),
+            'total'=>$request->get('total'),
+            'created_by'=>$name,
+        ]);
+
+        $addDeliveryTransaction->save();
+        $insertedId = $addDeliveryTransaction->id;
+
+        return redirect()->route('editDeliveryTransaction', ['id'=>$insertedId]);
+    
+
+    }
+
+    public function deliveryForm(){
+        return view('dno-resources-delivery-form');
+    }
 
     public function purchaseOrderList(){
         $purchaseOrders = DnoResourcesDevelopmentCorpPurchaseOrder::where('po_id', NULL)->get()->toArray();
@@ -68,8 +169,7 @@ class DnoResourcesDevelopmentController extends Controller
 
         Session::flash('addNewSuccess', 'Successfully added');
 
-        return redirect('dno-resources/edit-dno-resources-purchase-order/'.$id);
-
+        return redirect()->route('edit', ['id'=>$id]);
     }
 
     public function purchaseOrder(){
@@ -439,7 +539,8 @@ class DnoResourcesDevelopmentController extends Controller
 
           $insertedId = $purchaseOrder->id;
 
-          return redirect('dno-resources/edit-dno-resources-purchase-order/'.$insertedId);
+          return redirect()->route('edit', ['id'=>$insertedId]);
+
     }
 
     /**
@@ -496,7 +597,12 @@ class DnoResourcesDevelopmentController extends Controller
         //
     }
 
-    //
+
+    public function destroyDeliveryTransaction($id){
+        $deliveryTransaction = DnoResourcesDevelopmentCorpDeliveryTransactionForm::find($id);
+        $deliveryTransaction->delete();
+    }
+    
     public function destroyTransactionList($id){
          $transactionList = DnoResourcesDevelopmentCorpPaymentVoucher::find($id);
         $transactionList->delete();

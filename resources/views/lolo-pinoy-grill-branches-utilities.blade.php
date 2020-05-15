@@ -376,6 +376,10 @@
     $("#validateMCWD").hide();
     $("#validateInternet").hide();
 
+    const confirmDelete = (id) => {
+        
+    }
+
     const saveInternet = () =>{
         const accountIdInternet = $("#accountIdInternet").val();
         const accountNameInternet = $("#accountNameInternet").val();

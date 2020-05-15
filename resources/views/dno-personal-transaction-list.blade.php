@@ -106,11 +106,9 @@
 												</td>
 			  									<td><p style="width:160px;">{{ $getTransactionList['delivered_date']}}</p></td>
 												<td><p style="width:190px;">{{ $getTransactionList['method_of_payment'] }}</p></td>
-			  									@if($getTransactionList['status'] == "FULLY PAID AND RELEASED")
-			  									<td class="bg-success" style="color:white; "><a class="anchor" href="{{ url('dno-personal/view-dno-personal-payables-details/'.$getTransactionList['id']) }}">{{ $getTransactionList['status'] }}</a></td>
-			  									@else
-			  									<td class="bg-success" style="color:white; "><p style="width:240px;">{{ $getTransactionList['status'] }}</p></td>
-												@endif
+			  									
+			  									<td class="bg-success" style="color:white; "><p style="width:240px;"><a  class="anchor" href="{{ url('dno-personal/view-dno-personal-payables-details/'.$getTransactionList['id']) }}">{{ $getTransactionList['status'] }}</a></p></td>
+			  									
 												<td><p style="width:190px;">{{ $getTransactionList['created_by']}}</p></td>
 												
 				  							</tr>

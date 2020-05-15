@@ -20,7 +20,7 @@
               </li>
               <li class="breadcrumb-item active">Update Purchase Order Form</li>
             </ol>
-            <a href="{{ url('dno-resources/purchase-order-lists') }}">Back to Lists</a>
+            <a href="{{ url('dno-resources-development/purchase-order-lists') }}">Back to Lists</a>
             <div class="col-lg-12">
                 <img src="{{ asset('images/dno-resources.jpg')}}" width="420" height="250" class="img-responsive mx-auto d-block" alt="DNO Resources and Development Corp">
 	            
@@ -215,17 +215,17 @@
                                
                             </div>
                             <div class="form-group">
-                                    <div class="form-row">
-                                        <div class="col-lg-4">
-                                          
-                                            <input type="hidden" name="poId" value="{{ $purchaseOrder['id'] }}" />
-                                            <input type="submit" class="btn btn-success" value="Update" />
-                                            @if(Auth::user()['role_type'] == 1)
-                                            <a id="delete" onClick="confirmDelete('{{ $pOrder['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
-                                            @endif
-                                        </div> 
-                                    </div>
-                                </div>
+                                  <div class="form-row">
+                                      <div class="col-lg-4">
+                                        
+                                          <input type="hidden" name="poId" value="{{ $purchaseOrder['id'] }}" />
+                                          <input type="submit" class="btn btn-success" value="Update" />
+                                          @if(Auth::user()['role_type'] == 1)
+                                          <a id="delete" onClick="confirmDelete('{{ $pOrder['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
+                                          @endif
+                                      </div> 
+                                  </div>
+                              </div>
                             </div>
                           </form>
                             @endforeach
@@ -259,7 +259,7 @@
           if(x){
               $.ajax({
                 type: "DELETE",
-                url: '/dno-resources/delete/' + id,
+                url: '/dno-resources-development/delete/' + id,
                 data:{
                   _method: 'delete', 
                   "_token": "{{ csrf_token() }}",

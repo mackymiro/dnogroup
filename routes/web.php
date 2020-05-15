@@ -24,45 +24,45 @@ Route::group(['middleware' =>['user']], function(){
 	Route::get(
 		'/profile/create-user',
 		'ProfileController@createUser')
-		->name('profile.createUser')
+		->name('createUser')
 		->middleware(['user','auth']);
 	
 	Route::post(
 		'/profile/store-create-user',
 		'ProfileController@storeCreateUser')
-		->name('profile.storeCreateUser')
+		->name('storeCreateUser')
 		->middleware(['user','auth']);
 
 	//route for delete delivery receipt
 	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-delivery-receipt/{id}', 
 		'LoloPinoyLechonDeCebuController@destroyDeliveryReceipt')
-		->name('lolo-pinoy-lechon-de-cebu.destroyDeliveryReceipt');
+		->name('destroyDeliveryReceipt');
 
 
 	//route for payment vouchers
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/payment-voucher-form', 
 		'LoloPinoyLechonDeCebuController@paymentVoucherForm')
-		->name('lolo-pinoy-lechon-de-cebu.paymentVoucherForm');
+		->name('paymentVoucherForm');
 
 	//route for payment vouchers store
 	Route::post(
 		'/lolo-pinoy-lechon-de-cebu/payment-voucher-store', 
 		'LoloPinoyLechonDeCebuController@paymentVoucherStore')
-		->name('lolo-pinoy-lechon-de-cebu.paymnentVoucherStore');
+		->name('paymnentVoucherStore');
 
 	
 	//route for edit payment vouchers
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/edit-payment-voucher/{id}', 
 		'LoloPinoyLechonDeCebuController@editPaymentVoucher')
-		->name('lolo-pinoy-lechon-de-cebu.editPaymentVoucher');
+		->name('editPaymentVoucher');
 
 	//route update payment vouhcer
 	Route::patch(
 		'/lolo-pinoy-lechon-de-cebu/update-payment-voucher/{id}', 
 		'LoloPinoyLechonDeCebuController@updatePaymentVoucher')
-		->name('lolo-pinoy-lechon-de-cebu.updatePaymentVoucher');
+		->name('updatePaymentVoucher');
 
 	//Route for add new payment voucher
 	Route::get(
@@ -745,6 +745,7 @@ Route::group(['middleware' =>['sales']], function(){
 
 
 Route::group(['middleware' => ['auth']], function(){
+	
 	//route for profile
 	Route::get('/profile', 'ProfileController@index')->name('profile.index');
 	Route::get('/profile/edit/{id}', 'ProfileController@edit')->name('profile.edit');
@@ -2271,22 +2272,22 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/dno-resources-development/purchase-order',
 		'DnoResourcesDevelopmentController@purchaseOrder')
-		->name('dno-resources-development.purchaseOrder');
+		->name('purchaseOrder');
 
 	Route::post(
 		'/dno-resources-development/store',
 		'DnoResourcesDevelopmentController@store')
-		->name('dno-resources-development.store');
+		->name('store');
 	
 	Route::get(
 		'/dno-resources-development/edit-dno-resources-purchase-order/{id}',
 		'DnoResourcesDevelopmentController@edit')
-		->name('dno-resources-development.edit');
+		->name('edit');
 
 	Route::post(
 		'/dno-resources-development/add-new/{id}',
 		'DnoResourcesDevelopmentController@addNew')
-		->name('dno-resources-development.addNew');
+		->name('addNew');
 
 	Route::patch(
 		'/dno-resources-development/update-po/{id}',
@@ -2298,12 +2299,57 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/dno-resources-development/purchase-order-lists',
 		'DnoResourcesDevelopmentController@purchaseOrderList')
-		->name('dno-resources-development.purchaseOrderList');
+		->name('purchaseOrderList');
+
+	Route::delete(
+		'/dno-resources-development/delete/{id}',
+		'DnoResourcesDevelopmentController@destroy')
+		->name('destroy');
 
 	Route::get(
 		'/dno-resources-development/view-dno-resources-purchase-order/{id}',
 		'DnoResourcesDevelopmentController@show')
-		->name('dno-resources-development.show');
+		->name('show');
+
+	Route::get(
+		'/dno-resources-development/delivery-form',
+		'DnoResourcesDevelopmentController@deliveryForm')
+		->name('deliveryForm');
+	
+	Route::post(
+		'/dno-resources-development/store-delivery-transaction',
+		'DnoResourcesDevelopmentController@addDeliveryTransaction')
+		->name('addDeliveryTransaction');
+
+	Route::get(
+		'/dno-resources-development/edit-delivery-transaction/{id}',
+		'DnoResourcesDevelopmentController@editDeliveryTransaction')
+		->name('editDeliveryTransaction');
+
+	Route::post(
+		'/dno-resources-development/add-delivery-transaction/{id}',
+		'DnoResourcesDevelopmentController@addDelivery')
+		->name('addDelivery');
+
+	Route::patch(
+		'/dno-resources-development/update-dt/{id}',
+		'DnoResourcesDevelopmentController@updateDT')
+		->name('updateDT');
+	
+	Route::delete(
+		'/dno-resources-development/delivery-transaction/delete/{id}',
+		'DnoResourcesDevelopmentController@destroyDeliveryTransaction')
+		->name('destroyDeliveryTransaction');
+
+	Route::get(
+		'/dno-resources-development/delivery-transaction/records',
+		'DnoResourcesDevelopmentController@deliveryRecords')
+		->name('deliveryRecords');
+
+	Route::get(
+		'/dno-resources-development/view-dno-resources-delivery-transaction/{id}',
+		'DnoResourcesDevelopmentController@viewDeliveryTransaction')
+		->name('viewDeliveryTransaction');
 		
 });
 

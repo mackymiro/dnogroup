@@ -13,7 +13,7 @@
               </li>
               <li class="breadcrumb-item active">View Purchase Order</li>
             </ol>
-            <a href="{{ url('ribos-bar/purchase-order-lists') }}">Back to Lists</a>
+            <a href="{{ url('dno-resources-development/purchase-order-lists') }}">Back to Lists</a>
              <div class="col-lg-12">
                  <img src="{{ asset('images/dno-resources.jpg')}}" width="420" height="250" class="img-responsive mx-auto d-block" alt="DNO Resources and Development Corp">
 	             <h4 class="text-center"><u>VIEW PURCHASE ORDER</u></h4>
@@ -64,7 +64,7 @@
                                         </thead>
                                     </table>
                                    
-                                  </div
+                                  </div>
                                 </div>
                                </div>
                                <table class="table table-striped">

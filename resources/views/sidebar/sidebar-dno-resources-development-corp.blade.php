@@ -12,13 +12,40 @@
           <span>Purchase Order</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if(Auth::user()['role_type'] == 1)
+        
           <a class="dropdown-item" href="{{ url('dno-resources-development/purchase-order') }}">P.O Form</a>
-          @endif
+       
           <a class="dropdown-item" href="{{ url('dno-resources-development/purchase-order-lists') }}">Lists</a>
          
         </div>
       </li>
+      <li class="nav-item dropdown ">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           <i class="fas fa-shipping-fast"></i>
+          <span>Delivery Transaction</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+        
+          <a class="dropdown-item" href="{{ url('dno-resources-development/delivery-form') }}">Delivery Form</a>
+       
+          <a class="dropdown-item" href="{{ url('dno-resources-development/delivery-transaction/records') }}">Delivery Transaction <br>Record</a>
+         
+        </div>
+      </li>
+      <li class="nav-item dropdown ">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-hotel"></i>
+          <span>D Botique hotel</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+         
+          <a class="dropdown-item" href="{{ url('') }}">On Going Construction</a>
+         
+          <a class="dropdown-item" href="{{ url('') }}">Progress Report</a>
+         
+        </div>
+      </li>
+    
       @if(Auth::user()['role_type'] != 3)
   	   <li class="nav-item dropdown ">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
