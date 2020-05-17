@@ -13,6 +13,15 @@
     -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
 	} 
 </style>
+<script>
+    $(function() {
+        $( ".datepicker" ).datepicker();
+    });
+</script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="wrapper">
 	<!-- Sidebar -->
      @include('sidebar.sidebar')
@@ -63,7 +72,7 @@
                     				</div>
                                     <div class="col-md-2">
                                         <label>Date To be Delivered</label>
-                                        <input type="text" name="dateDelivered" class="selcls form-control" />
+                                        <input type="text" name="dateDelivered" class="datepicker selcls form-control" />
                                     </div>
                     				<div class="col-md-4">
                     					<label>Delivered To</label>

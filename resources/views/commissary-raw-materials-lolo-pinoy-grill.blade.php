@@ -40,7 +40,7 @@
 	  				  					  	<th>Stock Out Amount</th>
 					                        <th>Remaining Stock</th>
 					                        <th>Amount</th>
-                                   <th>Supplier</th>
+											<th>Supplier</th>
 	  				  						<th>Created By</th>
 			  						   </thead>
 			  						   <tfoot>
@@ -54,7 +54,7 @@
 					  						<th>Stock Out Amount</th>
 						                    <th>Remaining Stock</th>
 						                    <th>Amount</th>
-                                 <th>Supplier</th>
+                                 			<th>Supplier</th>
 					  						<th>Created By</th>
 										</tfoot>
 										<tbody>

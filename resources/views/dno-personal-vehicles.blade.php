@@ -319,14 +319,14 @@
                 const getData = data;
                 const succData = getData.split(":");
                 const succDataArr = succData[0];
-                if(succDataArr == "Success"){
-                    $("#succEditVehicle"+id).fadeIn().delay(3000).fadeOut();
-                    $("#succEditVehicle"+id).html(`<p class="alert alert-success"> ${data}</p>`);
-                    
-                    setTimeout(function(){
-                        document.location.reload();
-                    }, 3000);
-                }
+                    if(succDataArr == "Success"){
+                        $("#succEditVehicle"+id).fadeIn().delay(3000).fadeOut();
+                        $("#succEditVehicle"+id).html(`<p class="alert alert-success"> ${data}</p>`);
+                        
+                        setTimeout(function(){
+                            document.location.reload();
+                        }, 3000);
+                    }
             },
             error:function(data){
                 console.log('Error:', data);

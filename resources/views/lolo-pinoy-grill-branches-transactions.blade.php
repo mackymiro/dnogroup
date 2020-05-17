@@ -1,17 +1,17 @@
 @extends('layouts.lolo-pinoy-grill-branches-app')
-@section('title', 'Sales Form| ')
+@section('title', 'Transaction Form| ')
 @section('content')
 <div id="wrapper">
-	<!-- Sidebar -->
-     @include('sidebar.sidebar-lolo-pinoy-grill-branches')
-     <div id="content-wrapper">
-     	<div class="container-fluid">
-     		 <!-- Breadcrumbs-->
-            <ol class="breadcrumb">
+    <!-- Sidebar -->
+    @include('sidebar.sidebar-lolo-pinoy-grill-branches')
+    <div id="content-wrapper">
+        <div class="container-fluid">
+             <!-- Breadcrumbs-->
+             <ol class="breadcrumb">
               <li class="breadcrumb-item">
                 <a href="#">Lolo Pinoy Grill Bracnhes</a>
               </li>
-              <li class="breadcrumb-item active">Sales Invoice Form</li>
+              <li class="breadcrumb-item active">Sales Invoice Form Transaction</li>
             </ol>
             <div class="col-lg-12">
             	<img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill ">
@@ -133,31 +133,77 @@
                             Items 
                         </div>
                         <div class="card-body">
-                           
-                            <table id="output" class="table table-bordered">
+                            <form action="{{ action('LoloPinoyGrillBranchesController@settleTransactions', $transaction['id']) }}" method="post">
+                            {{ csrf_field() }}
+                            <div class="form-group">
+                                <div class="form-row">
+                                    <div class="col-lg-2">
+                                        <label>Invoice #</label>
+                                        <input type="text" name="invoiceNum" class="form-control form-control-lg" required />
+                                    </div> 
+                                    <div class="col-lg-2">
+                                        <label>Ordered By</label>
+                                        <div id="app-order">
+                                            <select name="orderedBy" class="form-control form-control-lg">
+                                                <option v-for="order in orders" v-bind:value="order.value">
+                                                    @{{ order.text }}
+                                                </option>
+                                            </select>
+                                        </div>
+
+                                    </div> 
+                                    <div class="col-lg-2">
+                                        <label>Table #</label>
+                                        <input type="text" name="tableNo" class="form-control form-control-lg" />
+                                    </div> 
+                                </div>
+                            </div>
+                            <table  id="output" class="table table-striped">
                                 <thead>
-                                    <th>QTY</th>
-                                    <th>ITEM DESCRIPTION</th>
-                                    <th>AMOUNT</th>
+                                    <th class="bg-success" style="color:#ffff">QTY</th>
+                                    <th class="bg-success" style="color:#ffff">ITEM DESCRIPTION</th>
+                                    <th class="bg-success" style="color:#ffff">AMOUNT</th>
                                 </thead>
                                 <tbody id="rows">
-                                    
+                                    <tr>
+                                        <td>{{ $transaction['qty']}}</td>
+                                        <td>{{ $transaction['item_description']}}</td>
+                                        <td>{{ $transaction['amount']}}</td>
+                                    </tr>
+                                    @foreach($getTransactions as $getTransaction)
+                                    <tr>
+                                      <td>{{ $getTransaction['qty']}}</td>
+                                      <td>{{ $getTransaction['item_description']}}</td>
+                                      <td>{{ $getTransaction['amount']}}</td>
+                                    </tr>
+                                    @endforeach
                                 </tbody>
                                 <tr>
                                     <td></td>
-                                    <td class="bg-danger" style="color:#fff;">Total</td>
+                                    <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Total</td>
+                                    <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?php echo number_format($transaction['total_amount_of_sales'], 2);?></span></td>
                                 </tr>
                             </table>
-                           
+                            <div class="form-group">
+                                <div class="form-row">
+                                    <div class="col-lg-4">
+                                        <button class="btn btn-success btn-lg">SETTLE</button>
+                                        <input type="hidden" id="transactionId" name="transactionId" value="{{ $id }}" />
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <button class="btn btn-danger btn-lg">CANCEL</button>
+                                    </div>
+                                </div>
+                            </div>
+                         </form>
                         </div>
                      </div>
                  </div>
             </div><!-- end of row-->
-           
-     	</div>
-     </div>
-       <!-- Modal -->
-    <div class="modal fade" id="softdrinks" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        </div>      
+    </div>
+     <!-- Modal -->
+     <div class="modal fade" id="softdrinks" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
         <div class="modal-header">
@@ -191,8 +237,8 @@
         </div>
     </div>
     </div><!--end of MOdal -->
-      <!-- Modal -->
-    <div class="modal fade" id="food" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+     <!-- Modal -->
+     <div class="modal fade" id="food" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
         <div class="modal-header">
@@ -226,7 +272,7 @@
         </div>
     </div>
     </div><!--end of MOdal -->
-     <!-- Modal -->
+    <!-- Modal -->
     <div class="modal fade" id="bbq" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -281,10 +327,12 @@
       </footer>
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-<script type="text/javascript">
+<script type="text/javascript"> 
 
     
-    $('#bbq').on('show.bs.modal', function (event) {
+
+
+      $('#bbq').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var recipient = button.data('menu') // Extract info from data-* attributes
         var price = button.data('price');
@@ -321,6 +369,7 @@
         modal.find('.modal-body #softDrinksName').val(recipient);
     })
 
+
     $("#originalPriceDrinks").show();
     checkDrinks = function(){
         const originalPriceDrinks = $("#originalPriceDrinks").val();
@@ -340,65 +389,92 @@
     }
 
     const addDrinks = () =>{
+        const transactionId = $("#transactionId").val();
         const quantityDrinks = $(".quantityDrinks").val();
         const originalPriceDrinks = $("#originalPriceDrinks").val();
         const softDrinksName = $("#softDrinksName").val();
         const newPriceDrinks = $("#newPriceDrinks").val();
       
         if(quantityDrinks == "1"){
-        
+            const table =  document.getElementById("output");
+            const row = document.createElement("tr");
+            
+            const item = row.insertCell(0);
+            const qty = row.insertCell(1);
+            const amount = row.insertCell(2);
+
+    
+            qty.innerHTML = `${quantityDrinks}`;
+            item.innerHTML = `${softDrinksName}`;
+            amount.innerHTML = `${originalPriceDrinks}`;
+           
+            
+            row.append(qty);
+            row.append(item);
+            row.append(amount);
+            document.getElementById("rows").appendChild(row);
+
             //make ajax call
             $.ajax({
                 type: 'POST',
-                url: '/lolo-pinoy-grill-branches/sales-form/add-transaction',
+                url: '/lolo-pinoy-grill-branches/sales-form/transaction/additional',
                 data:{
                     _method:'post',
                     "_token":"{{ csrf_token() }}",
+                    "transactionId":transactionId,
                     "quantity":quantityDrinks,
                     "itemDescription":softDrinksName,
                     "amount":originalPriceDrinks,
                 },
                 success:function(data){
                     console.log(data);
-                    setTimeout(function(){
-                        window.location = "/lolo-pinoy-grill-branches/sales-form/transaction/" + data;
-                    }, 1000);
-                
+                   
                 },
                 error:function(data){
                     console.log('Error', data);
-                }
+                }  
             });
-
-
 
             $('#softdrinks').modal('hide');
         }else{
+            const table =  document.getElementById("output");
+            const row = document.createElement("tr");
             
-             //make ajax call
-             $.ajax({
+            const item = row.insertCell(0);
+            const qty = row.insertCell(1);
+            const amount = row.insertCell(2);
+
+    
+            qty.innerHTML = `${quantityDrinks}`;
+            item.innerHTML = `${softDrinksName}`;
+            amount.innerHTML = `${newPriceDrinks}`;
+           
+            
+            row.append(qty);
+            row.append(item);
+            row.append(amount);
+            document.getElementById("rows").appendChild(row);
+            
+            //make ajax call
+            $.ajax({
                 type: 'POST',
-                url: '/lolo-pinoy-grill-branches/sales-form/add-transaction',
+                url: '/lolo-pinoy-grill-branches/sales-form/transaction/additional',
                 data:{
                     _method:'post',
                     "_token":"{{ csrf_token() }}",
+                    "transactionId":transactionId,
                     "quantity":quantityDrinks,
                     "itemDescription":softDrinksName,
                     "amount":newPriceDrinks,
                 },
                 success:function(data){
                     console.log(data);
-                    setTimeout(function(){
-                        window.location = "/lolo-pinoy-grill-branches/sales-form/transaction/" + data;
-                    }, 1000);
-                
+                   
                 },
                 error:function(data){
                     console.log('Error', data);
-                }
+                }  
             });
-
-
             $('#softdrinks').modal('hide');
         }
     }
@@ -420,57 +496,90 @@
         }
     }
 
-
     const addFood = () =>{
+        const transactionId = $("#transactionId").val();
         const quantityFood = $(".quantityFood").val();
         const originalPriceFood = $("#originalPriceFood").val();
         const newPriceFood = $("#newPriceFood").val();
         const foodNameNotBbq = $("#foodNameNotBbq").val();
       
         if(quantityFood == "1"){
-            //make ajax call
-            $.ajax({
+            console.log(originalPriceFood);
+            const table =  document.getElementById("output");
+            const row = document.createElement("tr");
+            
+            const item = row.insertCell(0);
+            const qty = row.insertCell(1);
+            const amount = row.insertCell(2);
+
+    
+            qty.innerHTML = `${quantityFood}`;
+            item.innerHTML = `${foodNameNotBbq}`;
+            amount.innerHTML = `${originalPriceFood}`;
+           
+            
+            row.append(qty);
+            row.append(item);
+            row.append(amount);
+            document.getElementById("rows").appendChild(row);
+
+             //make ajax call
+             $.ajax({
                 type: 'POST',
-                url: '/lolo-pinoy-grill-branches/sales-form/add-transaction',
+                url: '/lolo-pinoy-grill-branches/sales-form/transaction/additional',
                 data:{
                     _method:'post',
                     "_token":"{{ csrf_token() }}",
+                    "transactionId":transactionId,
                     "quantity":quantityFood,
                     "itemDescription":foodNameNotBbq,
                     "amount":originalPriceFood,
                 },
                 success:function(data){
                     console.log(data);
-                    setTimeout(function(){
-                        window.location = "/lolo-pinoy-grill-branches/sales-form/transaction/" + data;
-                    }, 1000);
-                
+                   
                 },
                 error:function(data){
                     console.log('Error', data);
                 }
-            });
+             });
 
             $('#food').modal('hide');
         }else{
            
-            //make ajax call
+            const table =  document.getElementById("output");
+            const row = document.createElement("tr");
+            
+            const item = row.insertCell(0);
+            const qty = row.insertCell(1);
+            const amount = row.insertCell(2);
+
+    
+            qty.innerHTML = `${quantityFood}`;
+            item.innerHTML = `${foodNameNotBbq}`;
+            amount.innerHTML = `${newPriceFood}`;
+           
+            
+            row.append(qty);
+            row.append(item);
+            row.append(amount);
+            document.getElementById("rows").appendChild(row);
+
+            //make ajax
             $.ajax({
                 type: 'POST',
-                url: '/lolo-pinoy-grill-branches/sales-form/add-transaction',
+                url: '/lolo-pinoy-grill-branches/sales-form/transaction/additional',
                 data:{
                     _method:'post',
                     "_token":"{{ csrf_token() }}",
+                    "transactionId":transactionId,
                     "quantity":quantityFood,
                     "itemDescription":foodNameNotBbq,
                     "amount":newPriceFood,
                 },
                 success:function(data){
                     console.log(data);
-                    setTimeout(function(){
-                        window.location = "/lolo-pinoy-grill-branches/sales-form/transaction/" + data;
-                    }, 1000);
-                
+                   
                 },
                 error:function(data){
                     console.log('Error', data);
@@ -481,6 +590,7 @@
             closeFood();
         }
     }
+
 
 
 
@@ -502,7 +612,6 @@
                    
     };
 
-
     const closeDrinks = () =>{
         $(".quantityDrinks").val('1');
         $("#priceDrinks").hide();
@@ -522,7 +631,9 @@
         $("#originalPrice").show();
     }
 
+
     const addBBQ = () =>{
+        const transactionId = $("#transactionId").val();
         const quantity = $(".quantityBBQ").val();
         const newPrice = $("#newPrice").val();
         const originalPrice = $("#originalPrice").val();
@@ -552,20 +663,18 @@
             //make ajax call
             $.ajax({
                 type: 'POST',
-                url: '/lolo-pinoy-grill-branches/sales-form/add-transaction',
+                url: '/lolo-pinoy-grill-branches/sales-form/transaction/additional',
                 data:{
                     _method:'post',
                     "_token":"{{ csrf_token() }}",
+                    "transactionId":transactionId,
                     "quantity":quantity,
                     "itemDescription":combineFoodName,
                     "amount":originalPrice,
                 },
                 success:function(data){
                     console.log(data);
-                    setTimeout(function(){
-                        window.location = "/lolo-pinoy-grill-branches/sales-form/transaction/" + data;
-                    }, 1000);
-                
+                   
                 },
                 error:function(data){
                     console.log('Error', data);
@@ -573,6 +682,7 @@
             });
 
             $('#bbq').modal('hide');
+           
            
         }else{
             console.log(newPrice);
@@ -594,37 +704,32 @@
             row.append(amount);
             document.getElementById("rows").appendChild(row);
 
-             //make ajax call
-             $.ajax({
+              //make ajax call
+              $.ajax({
                 type: 'POST',
-                url: '/lolo-pinoy-grill-branches/sales-form/add-transaction',
+                url: '/lolo-pinoy-grill-branches/sales-form/transaction/additional',
                 data:{
                     _method:'post',
                     "_token":"{{ csrf_token() }}",
+                    "transactionId":transactionId,
                     "quantity":quantity,
                     "itemDescription":combineFoodName,
                     "amount":newPrice,
                 },
                 success:function(data){
                     console.log(data);
-                    setTimeout(function(){
-                        window.location = "/lolo-pinoy-grill-branches/sales-form/transaction/" + data;
-                    }, 1000);
-                
+                    $('#bbq').modal('hide');
                 },
                 error:function(data){
                     console.log('Error', data);
                 }
-             });
+            });
            
-            $('#bbq').modal('hide');
+           
         }
        
         
     }
-
-
-  
 </script>
 <script >
    

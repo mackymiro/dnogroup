@@ -1,6 +1,15 @@
 @extends('layouts.lolo-pinoy-grill-commissary-app')
 @section('title', 'Delivery Receipt Lists| ')
 @section('content')
+<script>
+    $(function() {
+        $( ".datepicker" ).datepicker();
+    });
+</script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="wrapper">
 	 @include('sidebar.sidebar-mr-potato')
 	  <div id="content-wrapper">
@@ -55,10 +64,10 @@
 				  							@foreach($getAllDeliveryReceipts as $getAllDeliveryReceipt)
 					  						<tr id="deletedId{{ $getAllDeliveryReceipt['id'] }}">
 					  							<td>
-			               						 @if($user->role_type !== 3)
+			               						 @if(Auth::user()['role_type'] !== 3)
 			  										<a href="{{ url('mr-potato/edit-mr-potato-delivery-receipt/'.$getAllDeliveryReceipt['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
 			               						 @endif
-			              						@if($user->role_type == 1)
+			              						@if(Auth::user()['role_type'] == 1)
 					  								<a id="delete" onClick="confirmDelete('{{ $getAllDeliveryReceipt['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
 			              						@endif
 									  				<a href="{{ url('mr-potato/view-mr-potato-delivery-receipt/'.$getAllDeliveryReceipt['id'])}}" title="View"><i class="fas fa-low-vision"></i></a>

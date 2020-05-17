@@ -9,10 +9,10 @@
      <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fas fa-cash-register"></i>
-          <span>Sales Invoice</span>
+          <span>Sales Form</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/sales-invoice-form')}}">Sales Invoice Form</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/sales-form')}}">Sales Form</a>
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/') }}">Transaction List</a>
          
         </div>
@@ -81,11 +81,10 @@
           <span>Store Stock</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if(Auth::user()['role_type'] == 1)
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/purchase-order') }}">Delivery In Transactions</a>
-          @endif
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/purchase-order-lists') }}">Stock Status</a>
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/purchase-order-lists') }}">Stock Inventory</a>
+             <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/store-stock/delivery-in-transactions') }}">Delivery In Transactions</a>
+      
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/store-stock/stock-status') }}">Stock Status</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/store-stock/stock-inventory') }}">Stock Inventory</a>
          
         </div>
       </li>

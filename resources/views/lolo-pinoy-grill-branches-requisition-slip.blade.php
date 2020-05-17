@@ -1,7 +1,15 @@
 @extends('layouts.lolo-pinoy-grill-branches-app')
 @section('title', 'Requisition Slip |')
 @section('content')
-
+<script>
+    $(function() {
+        $( ".datepicker" ).datepicker();
+    });
+</script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="wrapper">
 	<!-- Sidebar -->
     @include('sidebar.sidebar-lolo-pinoy-grill-branches')
@@ -37,11 +45,11 @@
                                       </div>
                                       <div class="col-lg-2">
                                           <label>Request Date</label>
-                                          <input type="text" name="requestDate" class="form-control" />
+                                          <input type="text" name="requestDate" class="datepicker form-control" />
                                       </div>
                                       <div class="col-lg-2">
                                           <label>Date Released</label>
-                                          <input type="text" name="dateReleased" class="form-control" />
+                                          <input type="text" name="dateReleased" class="datepicker form-control" />
                                       </div>
                                   </div>
                               </div>

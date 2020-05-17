@@ -911,7 +911,10 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('/lolo-pinoy-lechon-de-cebu/store-delivery-receipt', 'LoloPinoyLechonDeCebuController@storeDeliveryReceipt')->name('lolo-pinoy-lechon-de-cebu.storeDeliveryReceipt');
 
 	//route edit delivery receipt
-	Route::get('/lolo-pinoy-lechon-de-cebu/edit-delivery-receipt/{id}', 'LoloPinoyLechonDeCebuController@editDeliveryReceipt')->name('lolo-pinoy-lechon-de-cebu.editDeliveryReceipt');
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/edit-delivery-receipt/{id}', 
+		'LoloPinoyLechonDeCebuController@editDeliveryReceipt')
+		->name('editDeliveryReceipt');
 
 
 	//route update delviery receipt
@@ -1389,9 +1392,39 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('lolo-pinoy-grill-branches.reqTransactionList');
 
 	Route::get(
-		'/lolo-pinoy-grill-branches/sales-invoice-form',
+		'/lolo-pinoy-grill-branches/sales-form',
 		'LoloPinoyGrillBranchesController@salesInvoiceForm')
 		->name('lolo-pinoy-grill-branches.salesInvoiceForm');
+
+	Route::post(
+		'/lolo-pinoy-grill-branches/sales-form/add-transaction',
+		'LoloPinoyGrillBranchesController@addSalesTransaction')
+		->name('addSalesTransaction');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/sales-form/transaction/{id}',
+		'LoloPinoyGrillBranchesController@salesTransaction')
+		->name('salesTransaction');
+
+	Route::post(
+		'/lolo-pinoy-grill-branches/sales-form/transaction/additional',
+		'LoloPinoyGrillBranchesController@addSalesAdditional')
+		->name('addSalesAdditional');
+
+	Route::post(
+		'/lolo-pinoy-grill-branches/sales-form/transaction/settle-transaction/{id}',
+		'LoloPinoyGrillBranchesController@settleTransactions')
+		->name('settleTransactions');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/sales-form/transaction/detail-transaction/{id}',
+		'LoloPinoyGrillBranchesController@detailTransactions')
+		->name('detailTransactions');
+
+	Route::post(
+		'/lolo-pinoy-grill-branches/sales-form/transaction/pay/{id}',
+		'LoloPinoyGrillBranchesController@payCash')
+		->name('payCash');
 
 	Route::get(
 		'/lolo-pinoy-grill-branches/petty-cash-list',
@@ -1426,12 +1459,27 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/lolo-pinoy-grill-branches/utilities/view-mcwd/{id}',
 		'LoloPinoyGrillBranchesController@viewBills')
-		->name('lolo-pioy-grill-branches.viewBills');
+		->name('viewBills');
 	
 	Route::get(
 			'/lolo-pinoy-grill-branches/utilities/view-internet/{id}',
 			'LoloPinoyGrillBranchesController@viewBills')
-			->name('lolo-pioy-grill-branches.viewBills');
+			->name('viewBills');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/store-stock/stock-status',
+		'LoloPinoyGrillBranchesController@stockStatus')
+		->name('stockStatus');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/store-stock/stock-inventory',
+		'LoloPinoyGrillBranchesController@stockInventory')
+		->name('stockInventory');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/store-stock/view-stock-inventory/{id}',
+		'LoloPinoyGrillBranchesController@viewStockInventory')
+		->name('viewStockInventory');
 
 	//Mr Potato
 	Route::get('/mr-potato', 'MrPotatoController@index')->name('mr-potato.index');
@@ -1525,7 +1573,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/mr-potato/delivery-receipt-lists',
 		'MrPotatoController@deliveryReceiptList')
-		->name('mr-potato.deliveryReceiptList');
+		->name('deliveryReceiptList');
 
 	Route::get(
 		'/mr-potato/view-mr-potato-delivery-receipt/{id}',

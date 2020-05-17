@@ -1,6 +1,15 @@
 @extends('layouts.lolo-pinoy-grill-commissary-app')
 @section('title', 'Purchase Order Form |')
 @section('content')
+<script>
+    $(function() {
+        $( ".datepicker" ).datepicker();
+    });
+</script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="wrapper">
 		<!-- Sidebar -->
     	@include('sidebar.sidebar-lolo-pinoy-grill')
@@ -50,7 +59,7 @@
 	                                    		  <label>P.O Number</label>
 			                                      <input type="text" name="poNum" class="form-control" disabled="disabled" />
 			                                      <label>Date</label>
-			                                      <input type="text" name="date" id="datepicker" class="form-control" required="required" />
+			                                      <input type="text" name="date" class="datepicker form-control" required="required" />
 			                                      @if ($errors->has('date'))
 			                                        <span class="alert alert-danger">
 			                                          <strong>{{ $errors->first('date') }}</strong>

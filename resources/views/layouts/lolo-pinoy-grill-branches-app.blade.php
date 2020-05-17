@@ -29,7 +29,21 @@
     
     <script src="https://cdn.jsdelivr.net/npm/vue"></script>
     <script src="{{ asset('vendor/jquery/jquery.min.js') }} "></script>
+    <script type="text/javascript">
+      function doRefresh(){
+            $("#totalCharge").fadeOut(500);
+            $("#totalCharge").fadeIn(500);     
+            $("#totalCharge").show();
+            setTimeout(function() {
+             doRefresh();
+            }, 2000);
+        }
 
+        $(document).ready(function () {
+          doRefresh(); 
+        });
+
+  </script>
 </head>
 <body>
  <div id="app">
@@ -117,5 +131,6 @@
       <script src="{{ asset('js/sb-admin.min.js') }} "></script>
       <script src="{{ asset('js/datatables-demo.js') }} "></script>
       <script src="{{ asset('js/chart-area-demo.js') }} "></script>
+     
 </body>
 </html>

@@ -1,11 +1,25 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('title', 'Edit Delivery Receipt |')
 @section('content')
+
 <script>
   $(document).ready(function(){
       $('.alert-success').fadeIn().delay(3000).fadeOut();
+
+    
   });
 </script>
+
+<script>
+    $(function() {
+        $( ".datepicker" ).datepicker();
+    });
+</script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 <div id="wrapper">
 	 @include('sidebar.sidebar')
 	<div id="content-wrapper">
@@ -59,7 +73,7 @@
                               </div>
                               <div class="col-md-2">
                                     <label>Date To be Delivered</label>
-                                    <input type="text" name="dateDelivered" class="form-control" value="{{ $getDeliveryReceipt['date_to_be_delivered']}}" />
+                                    <input type="text" name="dateDelivered" class="datepicker form-control" value="{{ $getDeliveryReceipt['date_to_be_delivered']}}" />
                               </div>
 	                    				<div class="col-md-4">
 	                    					<label>Delivered To</label>
@@ -225,7 +239,7 @@
         }
     })  
 </script>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
 <script type="text/javascript">
     const confirmDelete = (id) => {
         const x = confirm("Do you want to delete this?");

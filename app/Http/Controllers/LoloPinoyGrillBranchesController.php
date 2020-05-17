@@ -12,16 +12,152 @@ use App\User;
 use App\LoloPinoyGrillBranchesPaymentVoucher;
 use App\LoloPinoyGrillBranchesRequisitionSlip;
 use App\LoloPinoyGrillBranchesUtility;
+use App\LoloPinoyGrillCommissaryRawMaterial;
+use App\LoloPinoyGrillBranchesSalesForm;
+
 
 class LoloPinoyGrillBranchesController extends Controller
 {
 
-    //
+    //pay cash
+    public function payCash(Request $request, $id){
+         //validate
+         $this->validate($request, [
+            'cash' =>'required|integer|min:0',
+           
+        ]);
+
+        $payCash = LoloPinoyGrillBranchesSalesForm::find($id);
+        
+        $payTotal = $request->get('cash') - $payCash->total_amount_of_sales;
+        
+        $payCash->cash_amount = $request->get('cash');
+        $payCash->change = $payTotal; 
+        $payCash->save();
+
+        Session::flash('successPay', 'Paid Successfully. Kindly click the OK button below.');
+        return redirect()->route('detailTransactions', ['id'=>$id]);
+        
+    }
+
+    //detail transaction
+    public function detailTransactions($id){    
+        $transaction = LoloPinoyGrillBranchesSalesForm::find($id); 
+         //getTransactions
+        $getTransactions = LoloPinoyGrillBranchesSalesForm::where('sf_id', $id)->get()->toArray();
+        return view('lolo-pinoy-grill-branches-detail-transactions', compact('transaction', 'getTransactions'));
+    }
+
+    //settle transactions
+    public function settleTransactions(Request $request, $id){
+        
+        $settleTransactions = LoloPinoyGrillBranchesSalesForm::find($id);
+        $settleTransactions->invoice_number = $request->get('invoiceNum');
+        $settleTransactions->ordered_by = $request->get('orderedBy');
+        $settleTransactions->table_no = $request->get('tableNo');
+        $settleTransactions->save();
+
+        return redirect()->route('detailTransactions', ['id'=>$id]);
+
+    }
+
+    //save additional transactions
+    public function addSalesAdditional(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //get the date today
+        $getDate =  date("Y-m-d");
+
+        //get transaction id
+        $getTransId = LoloPinoyGrillBranchesSalesForm::find($request->transactionId);
+
+        //compute 
+        $amt = $request->amount + $getTransId->total_amount_of_sales;
+
+        //update
+        $getTransId->total_amount_of_sales = $amt;
+        $getTransId->save();
+
+        $addAdditional = new LoloPinoyGrillBranchesSalesForm([
+            'user_id'=>$user->id,
+            'sf_id'=>$request->transactionId,
+            'date'=>$getDate,
+            'qty'=>$request->quantity,
+            'item_description'=>$request->itemDescription,
+            'amount'=>$request->amount,
+            'created_by'=>$name,
+        ]);
+        $addAdditional->save();
+    
+        return response()->json($addAdditional);
+
+    }
+
+    public function salesTransaction($id){
+        $transaction = LoloPinoyGrillBranchesSalesForm::find($id);
+
+        //getTransactions
+        $getTransactions = LoloPinoyGrillBranchesSalesForm::where('sf_id', $id)->get()->toArray();
+
+
+        return view('lolo-pinoy-grill-branches-transactions', compact('id', 'transaction', 'getTransactions'));
+    }
+
+    //save first transactions
+    public function addSalesTransaction(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //get the date today
+        $getDate =  date("Y-m-d");
+
+        $addNewSales = new LoloPinoyGrillBranchesSalesForm([
+            'user_id'=>$user->id,
+            'date'=>$getDate,
+            'qty'=>$request->quantity,
+            'item_description'=>$request->itemDescription,
+            'amount'=>$request->amount,
+            'total_amount_of_sales'=>$request->amount,
+            'created_by'=>$name,
+        ]);
+        $addNewSales->save();
+        $insertId = $addNewSales->id; 
+
+        return response()->json($insertId);
+
+    }
+
+    public function viewStockInventory($id){
+        $viewStockInventory = LoloPinoyGrillCommissaryRawMaterial::find($id);
+        $getStoreStockDetails = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', $id)->get()->toArray();
+        return view('view-lolo-pinoy-grill-branches-store-stock', compact('viewStockInventory', 'getStoreStockDetails'));
+    }
+
+    public function stockInventory(){
+        $getCommissaryRawMaterials = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', NULL)->get()->toArray();
+
+        return view('lolo-pinoy-grill-branches-stock-inventory', compact('getCommissaryRawMaterials'));
+    }
+
+    public function stockStatus(){
+
+    }
+    
     public function viewBills($id){
-         //
+        
         $viewBill = LoloPinoyGrillBranchesUtility::find($id);
         //view particulars
-    
         $viewParticulars = LoloPinoyGrillBranchesPaymentVoucher::where('sub_category_account_id', $id)->get()->toArray();
 
         return view('lolo-pinoy-grill-branches-view-utility', compact('viewBill', 'viewParticulars'));
