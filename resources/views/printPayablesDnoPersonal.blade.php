@@ -31,7 +31,7 @@
 
 						Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
             	 	 </p>
-	            	 <h4 ><u>PAYMENT DETAILS (PAYMENT VOUCHER)</u></h4>
+	            	 <h4 ><u>PAYMENT VOUCHER</u></h4>
 	            </div>
 				<div class="row">
 					<div class="col-lg-12">
@@ -69,6 +69,10 @@
                                                 <th>Invoice #</th>
                                                 <th> {{ $payableId['invoice_number'] }}</th>
                                             </tr>
+											<tr>
+												<th>Payment Method</th>
+												<th>{{ $payableId['method_of_payment']}}</th>
+											</tr>
                                            
                                         </thead>
 	                              </table>
@@ -78,9 +82,36 @@
                           <br>
                           <br>
                           <br>
+						  <br>
+						  <br>
+						  <table style="border:1px solid black;">
+								<thead>
+									<tr>
+										<th style="height: 1%; text-align: center;">DATE</th>
+										<th style="height: 1%; text-align: center;">PARTICULARS</th>
+										<th style="height: 1%; text-align: center;">AMOUNT</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr style="border: 1px solid black;">
+										<td style="text-align:center; border: 1px solid black;">{{ $payableId['issued_date']}}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $payableId['particulars']}}</td>
+										<td style="text-align:center; border: 1px solid black;"><?php echo number_format($payableId['amount'], 2); ?></td>
+									</tr>
+
+									@foreach($getParticulars as $getParticular)
+									<tr style="border:1px solid black;">
+										<td style="text-align:center; border: 1px solid black;">{{ $getParticular['date']}}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $getParticular['particulars']}}</td>
+										<td style="text-align:center; border: 1px solid black;"><?php echo number_format($getParticular['amount'], 2); ?></td>
+									</tr>
+									@endforeach
+								</tbody>
+						  </table>
                           <br>
                           <br>
                           <br>
+						  @if($payableId['method_of_payment'] === "Cheque")
                           <table style="border:1px solid black;">
                           		  <thead>
                                       <tr>
@@ -107,12 +138,42 @@
 	                                      </tr>
                                   </tbody>
                           </table>
+						  @else
+						  <table style="border:1px solid black;">
+                          		  <thead>
+                                      <tr>
+                                        <th style="height: 1%; text-align: center;">CASH NO ISSUED</th>
+                                        <th style="height: 1%; text-align: center;">CASH AMOUNT</th>
+                                       
+                                      </tr>
+                                    </thead>
+                                  <tbody>
+                                  	
+                                  	 	 @foreach($payablesVouchers as $payablesVoucher)
+                                        <tr style="border:1px solid black;">
+                                          <td style="text-align:center; border: 1px solid black;">{{ $payablesVoucher['cheque_number'] }}</td>
+                                         
+                                          <td style="text-align:center; border: 1px solid black;"><?php echo number_format($payablesVoucher['cheque_amount'], 2);?></td>
+                                        </tr> 
+                                        @endforeach
+                                      
+	                                      
+	                                       <tr style="border:1px solid black;">
+	                                       
+	                                        <td style=" text-align:center; border: 1px solid black;"><strong>Total</strong></td>
+	                                        <td style=" text-align:center; border: 1px solid black;"> <?php echo number_format($sum, 2)?></td>
+	                                      </tr>
+                                  </tbody>
+                          </table>
+
+						  @endif
                            <div style="margin-top:100px;">
                            		<table  >
                            			<thead>
                            				<tr>
                        						<th style="width:30%;">Prepared By</th>
                        						<th>Approved By</th>
+											<th>Date</th>
                            				</tr>
                            			</thead>
                            			<tbody>
@@ -124,9 +185,11 @@
                            					</td>
                            					<td>
                            						________________________<br>
-                           						AprilAn Maturan<br>
-                           						Finance Officer
+                           						
                            					</td>
+											<td>
+												________________________
+											</td>
                            					
                            				</tr>
                            			</tbody>

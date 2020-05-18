@@ -61,13 +61,42 @@
                                                       <th width="20%">Amount Due</th>
                                                       <th><?php echo number_format($viewPaymentDetail['amount_due'], 2); ?></th>
                                                   </tr>
+                                                  <tr>  
+                                                     <th width="35%">Payment Method</th> 
+                                                     <th>{{ $viewPaymentDetail['method_of_payment']}}</th>
+                                                  </tr>
                                                  
                                               </thead>
                                           </table>
                                       </div>
                                   </div>
                               </div>
-                             
+                              <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>DATE</th>
+                                            <th>PARTICULARS</th>
+                                            <th>AMOUNT</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                         <tr>	
+  											<td>{{ $viewPaymentDetail['issued_date']}}</td>
+  											<td>{{ $viewPaymentDetail['particulars']}}</td>
+											<td><?php echo number_format($viewPaymentDetail['amount'], 2); ?></td>
+										</tr>
+                                        @foreach($getParticulars as $getParticular)
+                                        <tr>
+                                            <td>{{ $getParticular['date']}}</td>
+                                            <td>{{ $getParticular['particulars']}}</td>
+                                            <td><?php echo number_format($getParticular['amount'], 2) ?></td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                              </table>
+                              
+                              @if($viewPaymentDetail['method_of_payment'] === "Cheque")
                               <table class="table table-striped ">
                                     <thead>
                                         <tr>
@@ -84,6 +113,25 @@
                                         @endforeach
                                     </tbody>
                               </table>
+                              @else
+                              <table class="table table-striped ">
+                                    <thead>
+                                        <tr>
+                                            <th>CASH NO ISSUED</th>
+                                            <th>CASH AMOUNT</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($getViewPaymentDetails as $getViewPaymentDetail)
+                                        <tr>
+                                           <td>{{ $getViewPaymentDetail['cheque_number']}}</td>
+                                           <td><?php echo number_format($getViewPaymentDetail['cheque_amount'], 2)?></td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                              </table>
+
+                              @endif
                               <br>
                               <br>
 

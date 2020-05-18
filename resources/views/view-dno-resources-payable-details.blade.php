@@ -67,7 +67,21 @@
                                       </div>
                                   </div>
                               </div>
-                             
+                              <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>DATE</th>
+                                            <th>PARTICULARS</th>
+                                            <th>AMOUNT</th>
+                                        </tr>
+
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                              </table>
                               <table class="table table-striped ">
                                     <thead>
                                         <tr>

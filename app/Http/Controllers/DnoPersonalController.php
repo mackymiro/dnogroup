@@ -895,7 +895,12 @@ class DnoPersonalController extends Controller
 
         $payableId = DnoPersonalPaymentVoucher::find($id);
 
+         //getParticular details
+         $getParticulars = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+        
+
         $payablesVouchers = DnoPersonalPaymentVoucher::where('pv_id', $id)->get()->toArray();
+        
 
           //count the total amount 
         $countTotalAmount = DnoPersonalPaymentVoucher::where('id', $id)->sum('amount_due');
@@ -907,7 +912,7 @@ class DnoPersonalController extends Controller
         $sum  = $countTotalAmount + $countAmount;
        
 
-        $pdf = PDF::loadView('printPayablesDnoPersonal', compact('payableId', 'user', 'payablesVouchers', 'sum'));
+        $pdf = PDF::loadView('printPayablesDnoPersonal', compact('payableId', 'user', 'payablesVouchers', 'sum', 'getParticulars'));
 
         return $pdf->download('dno-personal-payment-voucher.pdf');
     }
@@ -915,16 +920,18 @@ class DnoPersonalController extends Controller
 
     //
     public function viewPayableDetails($id){
-          $ids = Auth::user()->id;
+        $ids = Auth::user()->id;
         $user = User::find($ids);
 
-        //
         $viewPaymentDetail = DnoPersonalPaymentVoucher::find($id);
 
-        //
         $getViewPaymentDetails = DnoPersonalPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
-        return view('view-dno-personal-payable-details', compact('user', 'viewPaymentDetail', 'getViewPaymentDetails'));
+         //getParticular details
+         $getParticulars = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+        
+
+        return view('view-dno-personal-payable-details', compact('user', 'viewPaymentDetail', 'getViewPaymentDetails', 'getParticulars'));
     }
 
     //
