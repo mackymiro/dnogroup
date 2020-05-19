@@ -13,28 +13,145 @@ use App\DnoPersonalPaymentVoucher;
 use App\DnoPersonalCreditCard;
 use App\DnoPersonalProperty;
 use App\DnoPersonalUtility; 
+use App\DnoPersonalPettyCash;
 
 class DnoPersonalController extends Controller
 {
-    //
-    public function viewPettyCash($id){
+
+    public function updatePC(Request $request, $id){
+        
+        $updatePC = DnoPersonalPettyCash::find($id);
+
+        $updatePC->date = $request->get('date');
+        $updatePC->petty_cash_summary = $request->get('pettyCashSummary');
+        $updatePC->amount = $request->get('amount');
+        $updatePC->save();
+
+        Session::flash('updatePC', 'Successfully updated.');
+        return redirect()->route('editPettyCash', ['id'=>$request->get('pcId')]);
+
+    }
+
+    public function updatePettyCash(Request $request, $id){
+        $update = DnoPersonalPettyCash::find($id);
+        $update->date = $request->get('date');
+        $update->petty_cash_name = $request->get('pettyCashName');
+        $update->petty_cash_summary = $request->get('pettyCashSummary');
+        $update->amount = $request->get('amount');
+
+        $update->save();
+        Session::flash('editSuccess', 'Successfully updated.'); 
+
+        return redirect()->route('editPettyCash', ['id'=>$id]);
+    }
+
+    public function printPettyCash($id){
+        $getPettyCash = DnoPersonalPettyCash::find($id);
+
+        $getPettyCashSummaries = DnoPersonalPettyCash::where('pc_id', $id)->get()->toArray();
+
+        //total
+        $totalPettyCash = DnoPersonalPettyCash::where('id', $id)->where('pc_id', NULL)->sum('amount');
+
+        $pettyCashSummaryTotal = DnoPersonalPettyCash::where('pc_id', $id)->sum('amount');
+
+        $sum = $totalPettyCash + $pettyCashSummaryTotal;
+
+        $pdf = PDF::loadView('printPettyCash', compact('getPettyCash', 'getPettyCashSummaries', 'sum'));
+
+        return $pdf->download('dno-personal-petty-cash.pdf');
+    }
+
+    public function addNewPettyCash(Request $request, $id){
         $ids = Auth::user()->id;
         $user = User::find($ids);
 
-        //
-        $getPettyCash = DnoPersonalPaymentVoucher::find($id);
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
 
-        $getPettyCashSummaries = DnoPersonalPaymentVoucher::where('pv_id', $id)->get()->toArray();
+        $name  = $firstName." ".$lastName;
+
+        $pettyCash = DnoPersonalPettyCash::find($id);
+      
+
+        $addNew = new DnoPersonalPettyCash([
+            'user_id'=>$user->id,
+            'pc_id'=>$id,
+            'petty_cash_no'=>$pettyCash->petty_cash_no,
+            'date'=>$request->get('date'),
+            'petty_cash_summary'=>$request->get('pettyCashSummary'),
+            'amount'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+        $addNew->save();
+
+        Session::flash('addNewSuccess', 'Successfully added.');
+
+        return redirect()->route('editPettyCash', ['id'=>$id]);
+    }
+
+    public function editPettyCash($id){
+        $pettyCash = DnoPersonalPettyCash::find($id);
+
+        $pettyCashSummaries = DnoPersonalPettyCash::where('pc_id', $id)->get()->toArray();
+        return view('edit-dno-personal-petty-cash', compact('pettyCash', 'pettyCashSummaries'));
+    }
+
+    public function addPettyCash(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        //get the latest insert id query in table petty cash petty cash no
+        $dataCashNo = DB::select('SELECT id, petty_cash_no FROM dno_personal_petty_cashes ORDER BY id DESC LIMIT 1');
+
+        //if code is not zero add plus 1 petty cash no
+        if(isset($dataCashNo[0]->petty_cash_no) != 0){
+            //if code is not 0
+            $newProd = $dataCashNo[0]->petty_cash_no +1;
+            $uProd = sprintf("%06d",$newProd);   
+
+        }else{
+            //if code is 0 
+            $newProd = 1;
+            $uProd = sprintf("%06d",$newProd);
+        } 
+       
+        $addPettyCash = new DnoPersonalPettyCash([
+            'user_id'=>$user->id,
+            'date'=>$request->date,
+            'petty_cash_no'=>$uProd,
+            'petty_cash_name'=>$request->pettyCashName,
+            'petty_cash_summary'=>$request->pettyCashSummary,
+            'amount'=>$request->amount,
+            'created_by'=>$name,
+        ]);
+
+        $addPettyCash->save();
+        $insertId = $addPettyCash->id;
+      
+        return response()->json($insertId);
+    }
+
+    public function viewPettyCash($id){
+         //
+        $getPettyCash = DnoPersonalPettyCash::find($id);
+
+        $getPettyCashSummaries = DnoPersonalPettyCash::where('pc_id', $id)->get()->toArray();
 
         //total
-        $totalPettyCash = DnoPersonalPaymentVoucher::where('id', $id)->where('pv_id', NULL)->sum('amount');
+        $totalPettyCash = DnoPersonalPettyCash::where('id', $id)->where('pc_id', NULL)->sum('amount');
 
-        $pettyCashSummaryTotal = DnoPersonalPaymentVoucher::where('pv_id', $id)->sum('amount');
+        $pettyCashSummaryTotal = DnoPersonalPettyCash::where('pc_id', $id)->sum('amount');
 
         $sum = $totalPettyCash + $pettyCashSummaryTotal;
 
 
-        return view('dno-personal-view-petty-cash', compact('user', 'getPettyCash', 'getPettyCashSummaries', 'sum'));
+        return view('dno-personal-view-petty-cash', compact('getPettyCash', 'getPettyCashSummaries', 'sum'));
     }
 
     //
@@ -47,7 +164,10 @@ class DnoPersonalController extends Controller
 
         $getPettyCashLists = DnoPersonalPaymentVoucher::where('category', $cat)->get()->toArray();
 
-        return view('dno-personal-petty-cash-list', compact('user', 'getPettyCashLists'));
+        $pettyCashLists = DnoPersonalPettyCash::where('pc_id', NULL)->get()->toArray();
+
+
+        return view('dno-personal-petty-cash-list', compact('user', 'getPettyCashLists', 'pettyCashLists'));
     }
 
     //view service provider
@@ -1399,6 +1519,12 @@ class DnoPersonalController extends Controller
     {
         //
     }
+
+    public function destroyPettyCash($id){
+        $pettyCash = DnoPersonalPettyCash::find($id);
+        $pettyCash->delete();
+    }
+
 
     //
     public function destroyProperty($id){

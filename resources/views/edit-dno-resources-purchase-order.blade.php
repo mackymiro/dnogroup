@@ -1,7 +1,6 @@
 @extends('layouts.dno-resources-development-corp-app')
 @section('title', 'Edit Purchase Order |')
 @section('content')
-
 <script>
   $(document).ready(function(){
       $('.alert-success').fadeIn().delay(3000).fadeOut();
@@ -13,7 +12,7 @@
     <div id="content-wrapper">   
      
     	<div class="container-fluid">
-    		 <!-- Breadcrumbs-->
+        <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
                 <a href="#">Ribo's Bar</a>

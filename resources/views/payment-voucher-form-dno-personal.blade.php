@@ -1,9 +1,6 @@
 @extends('layouts.dno-personal-app')
 @section('title', 'Payment Voucher Form |')
 @section('content')
-<style>
-
-</style>
 <script>
   $(document).ready(function(){
       $('.alert-success').fadeIn().delay(3000).fadeOut();

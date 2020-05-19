@@ -2297,12 +2297,46 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dno-personal/petty-cash-list',
 		'DnoPersonalController@pettyCashList')
 		->name('dno-personal.pettyCashList');
+
+	Route::post(
+		'/dno-personal/petty-cash/add',
+		'DnoPersonalController@addPettyCash')
+		->name('addPettyCash');
+
+	Route::get(
+		'/dno-personal/edit-petty-cash/{id}',
+		'DnoPersonalController@editPettyCash')
+		->name('editPettyCash');
+
+	Route::post(
+		'/dno-personal/petty-cash/add-new/{id}',
+		'DnoPersonalController@addNewPettyCash')
+		->name('addNewPettyCash');
 	
 	Route::get(
 		'/dno-personal/petty-cash/view/{id}',
 		'DnoPersonalController@viewPettyCash')
 		->name('dno-personal.viewPettyCash');
+	
+	Route::get(
+		'/dno-personal/petty-cash/print/{id}',
+		'DnoPersonalController@printPettyCash')
+		->name('printPettyCash');
 
+	Route::patch(
+		'/dno-personal/petty-cash/update/{id}',
+		'DnoPersonalController@updatePettyCash')
+		->name('updatePettyCash');
+
+	Route::patch(
+		'/dno-personal/petty-cash/updatePC/{id}',
+		'DnoPersonalController@updatePC')
+		->name('updatePC');
+
+	Route::delete(
+		'/dno-personal/petty-cash/delete/{id}',
+		'DnoPersonalController@destroyPettyCash')
+		->name('destroyPettyCash');
 
 	//DNO food ventures
 	Route::get(

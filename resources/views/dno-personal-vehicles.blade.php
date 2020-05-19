@@ -363,8 +363,8 @@
         const crNo = $("#crNo").val();
         const location = $("#location").val();
 
-        if(vehicleUnit == "" || series == "" || denomination == "" || bodyType == "" || yearModel == "" 
-        || mVFile == "" || plateNo == "" || engineNo =="" || crNo == "" || location == ""){
+        if(vehicleUnit.length === 0 || series.length === 0 || denomination.length === 0 || bodyType.length === 0 || yearModel.length === 0 
+        || mVFile.length === 0 || plateNo.length === 0 || engineNo.length === 0 || crNo.length === 0 || location.length === 0){
             $("#validate").fadeIn().delay(3000).fadeOut();
         }else{
             //save the data 

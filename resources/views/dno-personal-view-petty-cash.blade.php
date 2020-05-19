@@ -26,6 +26,9 @@
                         <div class="card-header">
                             <i class="fas fa-money-bill-alt"></i>
                             Petty Cash Summary
+                            <div class="float-right">
+                               <a href="{{ action('DnoPersonalController@printPettyCash', $getPettyCash['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                             </div>
                            
                         </div>
                         <div class="card-body">
@@ -40,15 +43,15 @@
                                 <tbody>
                                     <tr>    
                                       
-                                        <td>{{ $getPettyCash['issued_date']}}</td>
-                                        <td>{{ $getPettyCash['particulars']}}</td>
+                                        <td>{{ $getPettyCash['date']}}</td>
+                                        <td>{{ $getPettyCash['petty_cash_summary']}}</td>
                                         <td><?php echo number_format($getPettyCash['amount'], 2)?></td>
                                     </tr>
                                     @foreach($getPettyCashSummaries as $getPettyCashSummarry)
                                     <tr>
                                        
                                         <td>{{ $getPettyCashSummarry['date']}}</td>
-                                        <td>{{ $getPettyCashSummarry['particulars']}}</td>
+                                        <td>{{ $getPettyCashSummarry['petty_cash_summary']}}</td>
                                         <td><?php echo number_format($getPettyCashSummarry['amount'], 2)?></td>
                                        
                                     </tr>
