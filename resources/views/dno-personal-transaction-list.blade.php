@@ -82,18 +82,18 @@
 											?>
 				  							<tr id="deletedId{{ $getTransactionList['id'] }}">
 			  									<td width="2%">
-			  										@if($user->role_type == 1)
+			  										@if(Auth::user()['role_type'] == 1)
 					  									<a id="delete" onClick="confirmDelete('{{ $getTransactionList['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
 				              						@endif
 			  									</td>
 			  									<td>
 			  										@if($getTransactionList['status'] != "FULLY PAID AND RELEASED")
-			  											<p style="width:100px;">
+			  											<p style="width:250px;">
 														  <a href="{{ url('dno-personal/edit-dno-personal-payables-detail/'.$getTransactionList['id']) }}" title="Edit">{{ $getTransactionList['invoice_number']}}</a>
 
 														</p>
 			  										@else
-			  											<p style="width:180px;">{{ $getTransactionList['invoice_number']}}</p>
+			  											<p style="width:250px;">{{ $getTransactionList['invoice_number']}}</p>
 			  										@endif
 			  									</td>
 			  									<td><p style="width:140px;">DP-{{ $getTransactionList['voucher_ref_number']}}</p></td>
@@ -120,8 +120,8 @@
     					  		<table class="table table-bordered">
 					  				<thead>
 					  					<tr>
-					  						<th width="20%" class="bg-info" style="color:white;">TOTAL BALANCE DUE</th>
-					  						<th class="bg-danger" style="color:white;"><?php echo number_format($totalAmoutDue, 2);?></th>
+					  						<th width="30%" class="bg-info" style="color:white; font-size:28px;">TOTAL BALANCE DUE</th>
+					  						<th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?php echo number_format($totalAmoutDue, 2);?></span></th>
 					  					</tr>
 
 					  				</thead>
@@ -146,6 +146,18 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
+      function doRefresh(){
+            $("#totalDue").fadeOut(500);
+            $("#totalDue").fadeIn(500);     
+            setTimeout(function() {
+             doRefresh();
+            }, 1000);
+        }
+
+        $(document).ready(function () {
+          doRefresh(); 
+        });
+
 	const confirmDelete = (id) => {
 		const x = confirm("Do you want to delete this?");
         if(x){

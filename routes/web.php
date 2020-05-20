@@ -506,7 +506,7 @@ Route::group(['middleware' =>['user']], function(){
 	Route::get(
 		'/dno-personal/edit-dno-personal-payables-detail/{id}',
 		'DnoPersonalController@editPayablesDetail')
-		->name('dno-resources-development.editPayablesDetail');
+		->name('editPayablesDetail');
 
 	Route::post(
 		'/dno-personal/add-particulars/{id}',

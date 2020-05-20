@@ -17,6 +17,7 @@ class DnoPersonalPaymentVoucher extends Model
         'account_no',
         'account_name',
         'category',
+        'use_credit_card',
         'sub_category',
         'sub_category_name',
         'sub_category_bill_name',

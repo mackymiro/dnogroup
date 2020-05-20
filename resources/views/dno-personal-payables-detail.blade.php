@@ -221,11 +221,9 @@
 				  			 		<thead>
 				  			 			<tr>
 				  			 				<th width="15%">Paid To</th>
-											@if($transactionList['method_of_payment'] == "Cash")
-				  			 					<th>{{ $transactionList['paid_to']}}</th>
-											@else
-  												<th>{{ $transactionList['account_name']}}</th>
-											@endif
+										
+  												<th>{{ $transactionList['paid_to']}}</th>
+											
 				  			 			</tr>
 
 				  			 		</thead>
@@ -303,20 +301,28 @@
 			  							</div>
 										<div class="col-lg-4">
 											<label>Bank Name</label>
-											<input type="text" name="bankName" class="selcls form-control" value="{{ $transactionList['paid_to'] }}" disabled="disabled" />
+											<?php
+												$bankCard = explode("-", $transactionList['bank_card']);
+
+											?>
+											<input type="text" name="bankName" class="selcls form-control" value="{{ $bankCard[1] }}" disabled="disabled" />
 										</div>
+										@if($transactionList['use_credit_card'] != "No")
 										<div class="col-lg-4">
 		  									<label>Account #</label>
 		  									<input type="text" name="accountNum" class="selcls form-control" value="{{ $transactionList['account_no'] }}" disabled="disabled" />
 			  							</div>
+										@endif
 										<div class="col-lg-4">
 		  									<label>Account Name</label>
 		  									<input type="text" name="accountName" class="selcls form-control" value="{{ $transactionList['account_name'] }}" disabled="disabled" />
 			  							</div>
+										@if($transactionList['use_credit_card'] != "No")
 										<div class="col-lg-4">
 		  									<label>Type Of Card</label>
 		  									<input type="text" name="typeOfCard" class="selcls form-control" value="{{ $transactionList['type_of_card'] }}" disabled="disabled" />
 			  							</div>
+										@endif
 										<div class="col-lg-4">
 		  									<label>Payment Method</label>
 		  									<input type="text" name="paymentMethod" class="selcls form-control" value="{{ $transactionList['method_of_payment'] }}" disabled="disabled" />

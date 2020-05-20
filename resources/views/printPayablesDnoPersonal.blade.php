@@ -45,6 +45,14 @@
                                                 <th width="30%">Paid To</th>
                                                 <th> {{ $payableId['paid_to'] }}</th>
                                             </tr>
+											<tr>
+                                                <th width="30%">Account No</th>
+                                                <th> {{ $payableId['account_no'] }}</th>
+                                            </tr>
+											<tr>
+                                                <th>Voucher Ref No</th>
+                                                <th> DP-{{ $payableId['voucher_ref_number'] }} </th>
+                                            </tr>
                                             <tr>
                                                 <th>Status</th>
                                                 <th>{{ $payableId['status'] }}</th>
@@ -52,8 +60,7 @@
                                             <tr>
                                                 <th>Date</th>
                                                 <th> {{ $payableId['issued_date'] }} </th>
-                                            </tr>
-                                           
+                                            </tr>                           
                                         </thead>
                                       
                                   </table>   

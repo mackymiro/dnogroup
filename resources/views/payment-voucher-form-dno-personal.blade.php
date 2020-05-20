@@ -57,10 +57,20 @@
                                       <div class="col-lg-2">
                                           <label>Payment Method</label>
                                           <div id="app-payment-method">
-                                              <select name="paymentMethod" class="payment selcls form-control">
+                                              <select name="paymentMethod" class="payment form-control">
                                                   <option value="0">--Please Select--</option>
                                                   <option v-for="payment in payments" v-bind:value="payment.value">
                                                     @{{ payment.text }}
+                                                  </option>
+                                              </select>
+                                          </div>
+                                      </div>
+                                      <div class="col-lg-2">
+                                          <label>Use Credit Card</label>
+                                          <div id="app-use-card">
+                                              <select name="useCC" class="use-card form-control"> 
+                                                  <option v-for="card in cards" v-bind:value="card.value">
+                                                    @{{ card.text }}
                                                   </option>
                                               </select>
                                           </div>
@@ -76,7 +86,7 @@
                                      
                       	  						<div id="paidTo" class="col-lg-4">
                       	  							<label>Bank Card</label>
-                      	  						  <select id="paidTo" name="bankName" class="change selcls form-control">
+                      	  						  <select  data-live-search="true"  name="bankName" class="change selectpicker form-control">
                                             <option value="0">--Please Select--</option>
                                             @foreach($getCreditCards as $getCreditCard)
                                             <option value="{{ $getCreditCard['id'] }}-{{ $getCreditCard['bank_name']}}">{{ $getCreditCard['bank_name'] }}</option>
@@ -122,13 +132,17 @@
                           	  		</div>
                                   <div class="form-group">
                                       <div class="form-row">
-                                          <div  class="col-md-2">
+                                          <div  class="col-md-4">
                                               <label>Category</label>
                                               <select  name="category" class="category selcls form-control" > 
                                                 <option value="0">--Pleas Select--</option>
                                                 <optgroup label="Personal Expenses">
                                                   <option value="ALD Accounts">ALD Accounts</option>
                                                   <option value="MOD Accounts">MOD Accounts</option>
+                                                </optgroup>
+                                                <optgroup label="Credit Cards">
+                                                   <option value="ALD Accounts">ALD Accounts</option>
+                                                   <option value="MOD Accounts">MOD Accounts</option>
                                                 </optgroup>
                                                 <optgroup label="Properties">
                                                   <option value="Cebu Properties">Cebu Properties</option>
@@ -210,7 +224,7 @@
                                       </div>
                                   </div>
                                   <div>
-                                    <input type="submit" class="btn btn-success float-right" value="Add Payment Voucher" />
+                                    <input type="submit" class="btn btn-success float-right" value="Save Payment Voucher" />
                                   </div>
                                   <br>
                           	  </div>
@@ -362,6 +376,30 @@
 
       });
 
+      $(".use-card").change(function(){
+          const useCard = $(this).children("option:selected").val();
+   
+          if(useCard == "No"){
+             $("#paidTo").hide();
+             $("#acctName").hide();
+             $("#typeOfCC").hide();
+
+             $("#acctNameCash").show();
+
+              $("#acct").val('');
+              $("#actName").val('');
+              $("#typeCC").val('');
+              $(".change").val('');
+              $("#issuedDate").val('');
+          }else{
+             $("#paidTo").show();
+             $("#acctName").show();
+             $("#typeOfCC").show();
+
+             $("#acctNameCash").hide();
+          }
+      });
+
       $(".payment").change(function(){
           const payment = $(this).children("option:selected").val();
           
@@ -386,17 +424,20 @@
               $("#typeCC").val('');
               $(".change").val('0');
               $("#issuedDate").val('');
+              $(".use-card").val('No');
 
           }else if( payment === "Cheque"){
               
-              $("#paidTo").show();
-              $("#acctNo").show();
-              $("#acctNum").show();
-              $("#typeOfCC").show();
-              $("#acctName").show();
-
-              $("#acctNameCash").hide();
+              $("#paidTo").hide();
+              $("#acctNo").hide();
+              $("#acctNum").hide();
+              $("#typeOfCC").hide();
+              $("#acctName").hide();
+              $("#acctNameCash").show();
               $("#paidToCash").show();
+              $("#actName").show(); 
+
+              $(".use-card").val('No');
           }
       });
 
@@ -461,6 +502,17 @@
       ]
     }
   })  
+
+  //credit card
+  new Vue({
+  el: '#app-use-card',
+    data:{
+      cards:[
+        {text: 'No', value: 'No'},
+        {text: 'Use Card', value: 'Use Card'}
+      ]
+    }
+  })
 
 </script>
 

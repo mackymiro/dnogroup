@@ -994,18 +994,15 @@ class DnoPersonalController extends Controller
 
     //
     public function creditCardAccount(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        //
-        $accountName = "Alan Dino";
+    
+        $accountName = "ALAN L DINO";
         $accountName2 = "MARY MARGARET O. DINO";
 
         $getCreditCards1 = DnoPersonalCreditCard::where('account_name', $accountName)->get()->toArray();
 
         $getCreditCards2 = DnoPersonalCreditCard::where('account_name', $accountName2)->get()->toArray();
 
-        return view('dno-personal-credit-card', compact('user', 'getCreditCards1', 'getCreditCards2'));
+        return view('dno-personal-credit-card', compact('getCreditCards1', 'getCreditCards2'));
     }
 
     //
@@ -1251,21 +1248,19 @@ class DnoPersonalController extends Controller
         , 'getParticulars', 'sumCheque'));
     }
 
-    //
+    
     public function transactionList(){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-         //
+     
+        //
         $getTransactionLists = DnoPersonalPaymentVoucher::where('pv_id', NULL)->orderBy('id', 'desc')->get()->toArray();
-
-           //get total amount due
+       
+        //get total amount due
         $status = "FULLY PAID AND RELEASED";
 
         $totalAmoutDue = DnoPersonalPaymentVoucher::where('pv_id', NULL)->where('status' ,'!=', $status)->sum('amount_due');
         
 
-        return view('dno-personal-transaction-list', compact('user', 'getTransactionLists', 'totalAmoutDue'));
+        return view('dno-personal-transaction-list', compact('getTransactionLists', 'totalAmoutDue'));
     }
 
     //
@@ -1307,7 +1302,17 @@ class DnoPersonalController extends Controller
 
         }
 
+        //select if you choose credit card
+        if($request->get('useCC') == "No"){
+            $accountName = $request->get('accountNameCash');
+            $paidTo = $request->get('paidToCash');
 
+        }else{
+            $accountName = $request->get('accountName');
+            $paidTo = $request->get('paidToCash');
+        }
+
+    
         if($request->get('category') === "Cebu Properties"){
             
             $subCatExp = explode("-", $request->get('subCatCebu'));
@@ -1366,6 +1371,7 @@ class DnoPersonalController extends Controller
                     'amount_due'=>$request->get('amount'),
                     'particulars'=>$request->get('particulars'),
                     'method_of_payment'=>$request->get('paymentMethod'),
+                    'use_credit_card'=>$request->get('useCC'),
                     'category'=>$request->get('category'),
                     'sub_category'=>$subCat,
                     'sub_category_name'=>$subCatName,

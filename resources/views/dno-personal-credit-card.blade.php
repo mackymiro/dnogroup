@@ -152,11 +152,11 @@
 										@foreach($getCreditCards1 as $getCreditCard1)
 										<tr id="deletedId{{ $getCreditCard1['id'] }}">
 											<td>
-											@if($user->role_type !== 3)
+											@if(Auth::user()['role_type'] !== 3)
 												<!-- Button trigger modal -->
 											<a data-toggle="modal" data-target="#creditCard<?php echo $getCreditCard1['id']?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
 											@endif
-											@if($user->role_type == 1)
+											@if(Auth::user()['role_type'] == 1)
 												<a id="delete" onClick="confirmDelete('{{ $getCreditCard1['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
 											@endif
 											</td>
@@ -210,12 +210,12 @@
                                             @foreach($getCreditCards2 as $getCreditCard2)
                                             <tr id="deletedId{{ $getCreditCard2['id'] }}">
                                                 <td>
-                                                @if($user->role_type !== 3)
+                                                @if(Auth::user()['role_type'] !== 3)
 														<!-- Button trigger modal -->
 													<a data-toggle="modal" data-target="#creditCard<?php echo $getCreditCard2['id']?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
 											
 												@endif
-												@if($user->role_type == 1)
+												@if(Auth::user()['role_type'] == 1)
                                                     <a id="delete" onClick="confirmDelete('{{ $getCreditCard2['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
                                                 @endif
                                                 </td>

@@ -32,7 +32,6 @@
                              </div>
                         </div>
                           
-                    
                          <div class="card-body">
                               <div class="form-group">  
                                   <div class="form-row">
@@ -50,6 +49,14 @@
                                                   <tr>
                                                       <th width="15%">Date</th>
                                                       <th>{{ $viewPaymentDetail['issued_date']}}</th>
+                                                  </tr>
+                                                  <tr>
+                                                      <th width="35%">Invoice #</th>
+                                                      <th>{{ $viewPaymentDetail['invoice_number']}}</th>
+                                                  </tr>
+                                                  <tr>
+                                                      <th width="35%">Voucher Ref #</th>
+                                                      <th>DP-{{ $viewPaymentDetail['voucher_ref_number']}}</th>
                                                   </tr>
                                               </thead>
                                           </table>
