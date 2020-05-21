@@ -93,6 +93,9 @@
           @if(Auth::user()['role_type'] == 1)
            <a class="dropdown-item" href="{{ url('profile/create-user') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Create User</a>
            @endif
+           @if(Auth::user()['role_type'] == 1)
+           <a class="dropdown-item" href="{{ url('profile/create-branch') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Create Branch Account</a>
+           @endif
           <a class="dropdown-item" href="{{ url('change-password') }}"><i class="fa fa-key" aria-hidden="true"></i> Change Password</a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="{{ route('logout') }}"

@@ -9,7 +9,7 @@
      		 <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">Lolo Pinoy Grill Bracnhes</a>
+                <a href="#">Lolo Pinoy Grill Branches</a>
               </li>
               <li class="breadcrumb-item active">Sales Invoice Form</li>
             </ol>

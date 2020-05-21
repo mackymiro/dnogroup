@@ -31,7 +31,7 @@
 
 						Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
             	 	 </p>
-	            	 <h4 ><u>PAYMENT DETAILS (PAYMENT VOUCHER)</u></h4>
+	            	 <h4 ><u>PAYMENT VOUCHER</u></h4>
 	            </div>
 				<div class="row">
 					<div class="col-lg-12">
@@ -78,6 +78,29 @@
                           <br>
                           <br>
                           <br>
+						  <table style="border:1px solid black;">
+								<thead>
+									<tr>
+										<th style="height: 1%; text-align: center;">DATE</th>
+										<th style="height: 1%; text-align: center;">PARTICULARS</th>
+										<th style="height: 1%; text-align: center;">AMOUNT</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr style="border: 1px solid black;">
+										<td style="text-align:center; border: 1px solid black;">{{ $payableId['issued_date']}}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $payableId['particulars']}}</td>
+										<td style="text-align:center; border: 1px solid black; font-size:18px;"><?php echo number_format($payableId['amount'], 2); ?></td>
+									</tr>
+									@foreach($getParticulars as $getParticular)
+									<tr style="border:1px solid black;">
+										<td style="text-align:center; border: 1px solid black;">{{ $getParticular['date']}}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $getParticular['particulars']}}</td>
+										<td style="text-align:center; border: 1px solid black; font-size:18px;"><?php echo number_format($getParticular['amount'], 2); ?></td>
+									</tr>
+									@endforeach
+								</tbody>	
+						  </table>
                           <br>
                           <br>
                           <br>
@@ -112,7 +135,10 @@
                            			<thead>
                            				<tr>
                        						<th style="width:30%;">Prepared By</th>
+											<th>Checked By</th></th>
                        						<th>Approved By</th>
+											<th>Date</th>
+											
                            				</tr>
                            			</thead>
                            			<tbody>
@@ -124,8 +150,16 @@
                            					</td>
                            					<td>
                            						________________________<br>
-                           						AprilAn Maturan<br>
+                           						Aprilane Maturan<br>
                            						Finance Officer
+                           					</td>
+											<td>
+                           						________________________<br>
+                           						
+                           					</td>
+											<td>
+                           						________________________<br>
+                           						
                            					</td>
                            					
                            				</tr>

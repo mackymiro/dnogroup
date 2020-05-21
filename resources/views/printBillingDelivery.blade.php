@@ -124,6 +124,7 @@
                            				<tr>
                        						<th style="width:30%;">Prepared By</th>
                        						<th>Approved By</th>
+											<th>Recieved By</th>
                            				</tr>
                            			</thead>
                            			<tbody>
@@ -135,8 +136,12 @@
                            					</td>
                            					<td>
                            						________________________<br>
-                           						AprilAn Maturan<br>
+                           						Aprilane Maturan<br>
                            						Finance Officer
+                           					</td>
+											   <td>
+                           						________________________<br>
+                           						
                            					</td>
                            					
                            				</tr>

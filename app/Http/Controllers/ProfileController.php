@@ -13,7 +13,11 @@ use Session;
 class ProfileController extends Controller
 {
 
-    //
+    public function createBranch(){
+
+        return view('create-branch');
+    }
+    
     public function storeCreateUser(Request $request){
          //validate
         $this->validate($request,[
@@ -55,10 +59,8 @@ class ProfileController extends Controller
 
     //
     public function createUser(){
-        $id =  Auth::user()->id;
-        $user = User::find($id);
-
-        return view('create-user', compact('user'));        
+     
+        return view('create-user');        
     }
 
 
@@ -70,11 +72,8 @@ class ProfileController extends Controller
     public function index()
     {
         //
-        $id =  Auth::user()->id;
-        $user = User::find($id);
 
-
-        return view('profile', compact('user'));
+        return view('profile');
     }
 
     /**
@@ -119,11 +118,8 @@ class ProfileController extends Controller
     {
         //
         $profile = User::find($id);
-       
-         $id =  Auth::user()->id;
-        $user = User::find($id);
 
-        return view('edit-profile', compact('profile', 'user'));
+        return view('edit-profile', compact('profile'));
 
     }
 

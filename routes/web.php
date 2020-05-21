@@ -33,6 +33,16 @@ Route::group(['middleware' =>['user']], function(){
 		->name('storeCreateUser')
 		->middleware(['user','auth']);
 
+	Route::get(
+		'/profile/create-branch',
+		'ProfileController@createBranch')
+		->name('createBranch');
+
+	Route::post(
+		'/profile/store-create-branch',
+		'ProfileController@storeCreateBranch')
+		->name('storeCreateBranch');
+
 	//route for delete delivery receipt
 	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-delivery-receipt/{id}', 
 		'LoloPinoyLechonDeCebuController@destroyDeliveryReceipt')
@@ -1394,7 +1404,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/lolo-pinoy-grill-branches/sales-form',
 		'LoloPinoyGrillBranchesController@salesInvoiceForm')
-		->name('lolo-pinoy-grill-branches.salesInvoiceForm');
+		->name('salesInvoiceForm');
 
 	Route::post(
 		'/lolo-pinoy-grill-branches/sales-form/add-transaction',

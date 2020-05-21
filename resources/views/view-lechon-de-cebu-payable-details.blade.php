@@ -73,7 +73,29 @@
                                       </div>
                                   </div>
                               </div>
-                             
+                              <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>DATE</th>
+                                            <th>PARTICULARS</th>
+                                            <th>AMOUNT</th>
+                                        </tr>
+                                    </thead>  
+                                    <tbody> 
+                                        <tr>
+                                            <td>{{ $viewPaymentDetail['issued_date'] }}</td>
+                                            <td>{{ $viewPaymentDetail['particulars']}}</td>
+                                            <td><?php echo number_format($viewPaymentDetail['amount'], 2); ?></td>
+                                        </tr>
+                                        @foreach($getParticulars as $getParticular)
+										<tr>
+  											<td>{{ $getParticular['date']}}</td>
+  											<td>{{ $getParticular['particulars']}}</td>
+											<td><?php echo number_format($getParticular['amount'], 2); ?></td>
+										</tr>
+										@endforeach
+                                    </tbody>  
+                              </table>
                               <table class="table table-striped ">
                                     <thead>
                                         <tr>

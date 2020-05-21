@@ -283,8 +283,9 @@ class LoloPinoyGrillBranchesController extends Controller
     //
     public function salesInvoiceForm(){
 
-
-        return view('lolo-pinoy-grill-branches-sales-invoice-form');
+        return view('lolo-pinoy-grill-branches-login-form');
+        
+        //return view('lolo-pinoy-grill-branches-sales-invoice-form');
     }
 
     //
@@ -700,9 +701,10 @@ class LoloPinoyGrillBranchesController extends Controller
      */
     public function index()
     {
-        //
+        
+        $getTransactionBranches = LoloPinoyGrillBranchesSalesForm::where('sf_id', NULL)->get()->toArray();
 
-        return view('lolo-pinoy-grill-branches');
+        return view('lolo-pinoy-grill-branches', compact('getTransactionBranches'));
 
 
     }

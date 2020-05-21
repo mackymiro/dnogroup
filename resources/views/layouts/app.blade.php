@@ -68,18 +68,21 @@
           <div class="dropdown-header text-center">
             <strong>
                   Account Type: 
-                  @if($user->role_type == 1)
+                  @if(Auth::user()['role_type'] == 1)
                     Admin
-                  @elseif($user->role_type == 2)
+                  @elseif(Auth::user()['role_type'] == 2)
                     Sales
-                  @elseif($user->role_type == 3)
+                  @elseif(Auth::user()['role_type'] == 3)
                     User
                   @endif                  
            </strong>
            </div>
           <a class="dropdown-item" href="{{ url('profile') }}"><i class="fa fa-user"></i> Profile</a>
-          @if($user->role_type == 1)
+          @if(Auth::user()['role_type'] == 1)
            <a class="dropdown-item" href="{{ url('profile/create-user') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Create User</a>
+           @endif
+           @if(Auth::user()['role_type'] == 1)
+           <a class="dropdown-item" href="{{ url('profile/create-branch') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Create Branch Account</a>
            @endif
           <a class="dropdown-item" href="{{ url('change-password') }}"><i class="fa fa-key" aria-hidden="true"></i> Change Password</a>
           <div class="dropdown-divider"></div>

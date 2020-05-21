@@ -28,7 +28,7 @@
                <img  src="{{ asset('images/pdf/lolo-pinoy-grill.jpg')}}"   alt="Lolo Pinoy Grill">    
             </div>
             <div style="float:right; width:500px; margin-right:230px; margin-top:20px;">
-               <p style="font-size:12px; text-align: left;">
+               <p style="font-size:16px; text-align: left;">
                 Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
                 Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
 

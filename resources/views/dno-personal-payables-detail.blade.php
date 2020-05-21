@@ -299,14 +299,26 @@
 		  									<label>Voucher Ref #</label>
 		  									<input type="text" name="voucherRef" class="selcls form-control" value="DP-{{ $transactionList['voucher_ref_number'] }}" disabled="disabled" />
 			  							</div>
+  										@if($transactionList['use_credit_card'] == "No")
 										<div class="col-lg-4">
 											<label>Bank Name</label>
 											<?php
 												$bankCard = explode("-", $transactionList['bank_card']);
-
+												$bank = isset($bankCard);
 											?>
-											<input type="text" name="bankName" class="selcls form-control" value="{{ $bankCard[1] }}" disabled="disabled" />
+											<input type="text" name="bankName" class="selcls form-control" value="{{ $bank[1] }}" disabled="disabled" />
 										</div>
+										@elseif($transactionList['use_credit_card' ] == "Use Card")
+										<div class="col-lg-4">
+											<label>Bank Name</label>
+											<?php
+												$bankCard = explode("-", $transactionList['bank_card']);
+												$bank = $bankCard;
+											?>
+											<input type="text" name="bankName" class="selcls form-control" value="{{ $bank[1] }}" disabled="disabled" />
+										</div>
+  										@endif
+
 										@if($transactionList['use_credit_card'] != "No")
 										<div class="col-lg-4">
 		  									<label>Account #</label>
@@ -371,7 +383,11 @@
 				  				<table class="table table-striped">
 				  					<thead>
 				  						<tr>
-				  							<th>PAYMENT CHEQUE NUMBER</th>
+										    @if($transactionList['method_of_payment'] == "Cash")
+											<th>PAYMENT CASH NUMBER</th>
+											@else
+											<th>PAYMENT CHEQUE NUMBER</th>
+											@endif
 											@if($transactionList['method_of_payment'] == "Cash")
 				  								<th>CASH AMOUNT</th>
 											@else

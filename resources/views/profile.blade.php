@@ -59,10 +59,10 @@
 		                  <i class="fa fa-user"></i>
 		                  Profile</div>
 		                   <div class="card-body">
-							<?php if($user->photo == NULL ): ?>
+							<?php if(Auth::user()['photo'] == NULL ): ?>
 								<img src="{{ asset('images/profile-placeholder.gif')}}"  class="img-responsive" alt="">
 							<?php else: ?>
-								<img src="/uploads/<?php echo $user->photo; ?>"  width="284" height="295" class="img-responsive" alt="">
+								<img src="/uploads/<?php echo Auth::user()['photo']; ?>"  width="284" height="295" class="img-responsive" alt="">
 							<?php endif; ?>
 								
 								
@@ -79,23 +79,23 @@
 	                  	 		<thead>
 	                  	 			<tr>
 	                  	 				<td width="20%">First Name</td>
-	                  	 				<td width="70%">{{ $user['first_name']}}</td>
+	                  	 				<td width="70%">{{ Auth::user()['first_name']}}</td>
 	                  	 			</tr>
 	                  	 		</thead>
 	                  	 		<tbody>
                   	 				<tr>
                   	 					<td>Last Name</td>
-                  	 					<td>{{ $user['last_name']}}</td>
+                  	 					<td>{{ Auth::user()['last_name']}}</td>
                   	 				</tr>
                   	 				<tr>
                   	 					<td>Email Address</td>
-                  	 					<td>{{ $user['email'] }}</td>
+                  	 					<td>{{ Auth::user()['email'] }}</td>
                   	 				</tr>
 
 	                  	 		</tbody>
 	                  	 	</table>
 	                  	 	<div>
-              	 			<a href="{{ url('profile/edit/'.$user['id']) }}" class="btn btn-success float-right"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
+              	 			<a href="{{ url('profile/edit/'.Auth::user()['id']) }}" class="btn btn-success float-right"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</a>
 	                  	 	</div>
 	                  	 </div>
             	 	</div>

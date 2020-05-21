@@ -93,6 +93,10 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $payableId = LechonDeCebuPaymentVoucher::find($id);
 
+          //getParticular details
+          $getParticulars = LechonDeCebuPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+      
+
         $payablesVouchers = LechonDeCebuPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
           //count the total amount 
@@ -105,7 +109,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $sum  = $countTotalAmount + $countAmount;
        
 
-        $pdf = PDF::loadView('printPayables', compact('payableId', 'user', 'payablesVouchers', 'sum'));
+        $pdf = PDF::loadView('printPayables', compact('payableId', 'user', 'payablesVouchers', 'sum', 'getParticulars'));
 
         return $pdf->download('lechon-de-cebu-payment-voucher.pdf');
     }
@@ -121,7 +125,12 @@ class LoloPinoyLechonDeCebuController extends Controller
         //
         $getViewPaymentDetails = LechonDeCebuPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
-        return view('view-lechon-de-cebu-payable-details', compact('user', 'viewPaymentDetail', 'getViewPaymentDetails'));
+         //getParticular details
+         $getParticulars = LechonDeCebuPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+        
+
+
+        return view('view-lechon-de-cebu-payable-details', compact('user', 'viewPaymentDetail', 'getViewPaymentDetails', 'getParticulars'));
     }
 
     //

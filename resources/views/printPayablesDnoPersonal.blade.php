@@ -45,10 +45,19 @@
                                                 <th width="30%">Paid To</th>
                                                 <th> {{ $payableId['paid_to'] }}</th>
                                             </tr>
+											@if($payableId['method_of_payment']  == "Cheque")
 											<tr>
                                                 <th width="30%">Account No</th>
                                                 <th> {{ $payableId['account_no'] }}</th>
                                             </tr>
+											@endif
+											@if($payableId['method_of_payment'] == "Cash")
+											<tr>
+                                                <th width="30%">Account Name</th>
+                                                <th> {{ $payableId['account_name'] }}</th>
+                                            </tr>
+											@endif 
+											
 											<tr>
                                                 <th>Voucher Ref No</th>
                                                 <th> DP-{{ $payableId['voucher_ref_number'] }} </th>
@@ -65,6 +74,7 @@
                                       
                                   </table>   
                              </div>
+							 
 	                          <div style="float:right; width: 50%">
 	                              <table >
 	                                   <thead>
@@ -91,6 +101,8 @@
                           <br>
 						  <br>
 						  <br>
+						  <br>
+					
 						  <table style="border:1px solid black;">
 								<thead>
 									<tr>
@@ -179,6 +191,7 @@
                            			<thead>
                            				<tr>
                        						<th style="width:30%;">Prepared By</th>
+											<th>Checked By</th>
                        						<th>Approved By</th>
 											<th>Date</th>
                            				</tr>
@@ -189,6 +202,11 @@
                            						________________________<br>
                            						{{ $payableId['created_by']}}
 
+                           					</td>
+											<td>
+                           						________________________<br>
+                           						Aprilane Maturan<br>
+                           						Finance Officer
                            					</td>
                            					<td>
                            						________________________<br>
