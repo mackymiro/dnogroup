@@ -71,7 +71,7 @@
     					  				<div class="form-row">
 					  						<div class="col-lg-12">
 				  								<label>Payment Cash Number</label>
-				  								<input type="text" name="chequeNumber" class="form-control" required="required" />
+				  								<input type="text" name="chequeNumber" class="form-control" />
 					  						</div> 
 
     					  				</div>

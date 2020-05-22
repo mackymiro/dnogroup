@@ -12,6 +12,41 @@ use Session;
 
 class ProfileController extends Controller
 {
+    public function storeCreateBranch(Request $request){
+        $firstName = "NULL";
+        $lastName = "NULL";
+        $email = "NULL";
+        $roleType = 0;
+
+        $status = 0;
+
+         //check if branch already created
+        $target = DB::table(
+                    'users')
+                    ->where('select_branch', $request->get('selectBranch'))
+                    ->get()->first();
+        if($target == NULL){
+            $createBranchAccess = new User([
+                'first_name'=>$firstName,
+                'last_name'=>$lastName,
+                'email'=>$email,
+                'role_type'=>$roleType,
+                'select_branch'=>$request->get('selectBranch'),
+                'password' => bcrypt($request->get('password')),
+                'status'=>$status,
+            
+            ]);
+            $createBranchAccess->save();
+            Session::flash('createBranch', 'Successfully created a branch access.');
+            return redirect()->route('createBranch');
+        }else{
+            return redirect()->route('createBranch')->with('error', 'You already created an access for this.');
+        }
+       
+        
+
+
+    }
 
     public function createBranch(){
 
@@ -118,6 +153,7 @@ class ProfileController extends Controller
     {
         //
         $profile = User::find($id);
+      
 
         return view('edit-profile', compact('profile'));
 

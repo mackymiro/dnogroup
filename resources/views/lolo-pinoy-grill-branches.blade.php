@@ -1,5 +1,12 @@
 @extends('layouts.lolo-pinoy-grill-branches-app')
 @section('content')
+<script>
+  $(document).ready(function(){
+    
+
+      $('table.display').DataTable( {} );
+  });
+</script>
 <div id="wrapper">
 	 @include('sidebar.sidebar-lolo-pinoy-grill-branches')
 	 <div id="content-wrapper">
@@ -9,7 +16,12 @@
 	              <li class="breadcrumb-item">
 	                <a href="#">Lolo Pinoy Grill Branches</a>
 	              </li>
-				  <li class="breadcrumb-item ">Transaction Lists</li>
+  				 @if(!empty($data))
+				  <li class="breadcrumb-item active">
+  					{{ $data }}
+				  </li>
+				 @endif
+				  <li class="breadcrumb-item active">Transaction Lists</li>
 			  
 			</ol>
 			<div class="row">
@@ -21,13 +33,14 @@
                          
 						</div>
 						<div class="card-body">
+							@if($data  == "Urgello")
 							<div class="table-responsive">
-								<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+								<table class="table table-bordered display" width="100%" cellspacing="0">
 									 <thead>
 										<tr>
 											<th>Date</th>
 											<th>Branch</th>
-											<th>Total Amount Of Sales</th>
+											<th class="bg-danger" style="color:#fff;">Total Amount Of Sales</th>
 											<th >Total Discounts (Seniors/PWD's)</th>
 											<th >Gift Cert</th>
 										
@@ -38,7 +51,7 @@
 										<tr>
 											<th>Date</th>
 											<th>Branch</th>
-											<th>Total Amount Of Sales</th>
+											<th class="bg-danger" style="color:#fff;">Total Amount Of Sales</th>
 											<th >Total Discounts (Seniors/PWD's)</th>
 											<th >Gift Cert</th>
 										
@@ -50,7 +63,55 @@
 										<tr>
 											<td>{{ $getTransactionBranch['date']}}</td>
 											<td>{{ $getTransactionBranch['branch']}}</td>
-											<td><?php echo number_format($getTransactionBranch['total_amount_of_sales'], 2); ?></td>
+											<td class="bg-danger" style="color:#fff;"><?php echo number_format($getTransactionBranch['total_amount_of_sales'], 2); ?></td>
+											<td><?php echo number_format($getTransactionBranch['total_discounts_seniors_pwds']); ?></td>
+											<td><?php echo number_format($getTransactionBranch['gift_cert'], 2)?></td>
+											<td>{{ $getTransactionBranch['created_by']}}</td>
+										</tr>
+										@endforeach
+									</tbody>
+								</table>
+							</div><!-- end of table responsive  -->
+							<table class="table table-bordered">
+  								<thead>	
+									<tr>
+										<th width="20%" class="bg-info" style="color:white;">TOTAL SALES </th>
+										<th class="bg-danger" style="color:white; font-size:30px;">₱ <?php echo number_format($sum, 2)?></th>
+									</tr>
+								
+								</thead>
+							</table>
+							@elseif($data == "Velez")
+							<div class="table-responsive">
+								<table class="table table-bordered display" width="100%" cellspacing="0">
+									 <thead>
+										<tr>
+											<th>Date</th>
+											<th>Branch</th>
+											<th class="bg-danger" style="color:#fff;">Total Amount Of Sales</th>
+											<th >Total Discounts (Seniors/PWD's)</th>
+											<th >Gift Cert</th>
+										
+											<th>Created By</th>
+										</tr>
+									</thead>
+									<tfoot>	
+										<tr>
+											<th>Date</th>
+											<th>Branch</th>
+											<th class="bg-danger" style="color:#fff;">Total Amount Of Sales</th>
+											<th >Total Discounts (Seniors/PWD's)</th>
+											<th >Gift Cert</th>
+										
+											<th>Created By</th>
+										</tr>
+									</tfoot>
+									<tbody>	
+										@foreach($getTransactionBranches as $getTransactionBranch)
+										<tr>
+											<td>{{ $getTransactionBranch['date']}}</td>
+											<td>{{ $getTransactionBranch['branch']}}</td>
+											<td class="bg-danger" style="color:#fff;"><?php echo number_format($getTransactionBranch['total_amount_of_sales'], 2); ?></td>
 											<td><?php echo number_format($getTransactionBranch['total_discounts_seniors_pwds']); ?></td>
 											<td><?php echo number_format($getTransactionBranch['gift_cert'], 2)?></td>
 											<td>{{ $getTransactionBranch['created_by']}}</td>
@@ -59,6 +120,114 @@
 									</tbody>
 								</table>
 							</div>
+							<table class="table table-bordered">
+  								<thead>	
+									<tr>
+										<th width="20%" class="bg-info" style="color:white;">TOTAL SALES </th>
+										<th class="bg-danger" style="color:white; font-size:30px;">₱ <?php echo number_format($sum, 2)?></th>
+									</tr>
+								
+								</thead>
+							</table>
+							@elseif($data == "Banilad")
+							<div class="table-responsive">
+								<table class="table table-bordered display" width="100%" cellspacing="0">
+									 <thead>
+										<tr>
+											<th>Date</th>
+											<th>Branch</th>
+											<th class="bg-danger" style="color:#fff;">Total Amount Of Sales</th>
+											<th >Total Discounts (Seniors/PWD's)</th>
+											<th >Gift Cert</th>
+										
+											<th>Created By</th>
+										</tr>
+									</thead>
+									<tfoot>	
+										<tr>
+											<th>Date</th>
+											<th>Branch</th>
+											<th class="bg-danger" style="color:#fff;">Total Amount Of Sales</th>
+											<th >Total Discounts (Seniors/PWD's)</th>
+											<th >Gift Cert</th>
+										
+											<th>Created By</th>
+										</tr>
+									</tfoot>
+									<tbody>	
+										@foreach($getTransactionBranches as $getTransactionBranch)
+										<tr>
+											<td>{{ $getTransactionBranch['date']}}</td>
+											<td>{{ $getTransactionBranch['branch']}}</td>
+											<td class="bg-danger" style="color:#fff;"><?php echo number_format($getTransactionBranch['total_amount_of_sales'], 2); ?></td>
+											<td><?php echo number_format($getTransactionBranch['total_discounts_seniors_pwds']); ?></td>
+											<td><?php echo number_format($getTransactionBranch['gift_cert'], 2)?></td>
+											<td>{{ $getTransactionBranch['created_by']}}</td>
+										</tr>
+										@endforeach
+									</tbody>
+								</table>
+							</div>
+							<table class="table table-bordered">
+  								<thead>	
+									<tr>
+										<th width="20%" class="bg-info" style="color:white;">TOTAL SALES </th>
+										<th class="bg-danger" style="color:white; font-size:30px;">₱ <?php echo number_format($sum, 2)?></th>
+									</tr>
+								
+								</thead>
+							</table>
+							@elseif($data  == "GQS")
+							<div class="table-responsive">
+								<table class="table table-bordered display" width="100%" cellspacing="0">
+									 <thead>
+										<tr>
+											<th>Date</th>
+											<th>Branch</th>
+											<th class="bg-danger" style="color:#fff;">Total Amount Of Sales</th>
+											<th >Total Discounts (Seniors/PWD's)</th>
+											<th >Gift Cert</th>
+										
+											<th>Created By</th>
+										</tr>
+									</thead>
+									<tfoot>	
+										<tr>
+											<th>Date</th>
+											<th>Branch</th>
+											<th class="bg-danger" style="color:#fff;">Total Amount Of Sales</th>
+											<th >Total Discounts (Seniors/PWD's)</th>
+											<th >Gift Cert</th>
+										
+											<th>Created By</th>
+										</tr>
+									</tfoot>
+									<tbody>	
+										@foreach($getTransactionBranches as $getTransactionBranch)
+										<tr>
+											<td>{{ $getTransactionBranch['date']}}</td>
+											<td>{{ $getTransactionBranch['branch']}}</td>
+											<td class="bg-danger" style="color:#fff;"><?php echo number_format($getTransactionBranch['total_amount_of_sales'], 2); ?></td>
+											<td><?php echo number_format($getTransactionBranch['total_discounts_seniors_pwds']); ?></td>
+											<td><?php echo number_format($getTransactionBranch['gift_cert'], 2)?></td>
+											<td>{{ $getTransactionBranch['created_by']}}</td>
+										</tr>
+										@endforeach
+									</tbody>
+								</table>
+							</div>
+							<table class="table table-bordered">
+  								<thead>	
+									<tr>
+										<th width="20%" class="bg-info" style="color:white;">TOTAL SALES </th>
+										<th class="bg-danger" style="color:white; font-size:30px;">₱ <?php echo number_format($sum, 2)?></th>
+									</tr>
+								
+								</thead>
+							</table>
+							@else
+  								<h1> Login To Branch To View Transactions </h1>
+							@endif
 						</div>
 					</div>
 				</div>

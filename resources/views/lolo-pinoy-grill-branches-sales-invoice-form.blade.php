@@ -11,19 +11,29 @@
               <li class="breadcrumb-item">
                 <a href="#">Lolo Pinoy Grill Branches</a>
               </li>
-              <li class="breadcrumb-item active">Sales Invoice Form</li>
-            </ol>
+              <li class="breadcrumb-item active">{{ Session::get('sessionBranch') }}</li>
+                 
+              <li class="breadcrumb-item active">Sales Invoice Form</li> 
+            </ol>          
             <div class="col-lg-12">
             	<img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill ">
             	 
             	 <h4 class="text-center"><u>SALES INVOICE FORM</u></h4>
+                   
             </div>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card mb-3">
                         <div class="card-header">
                              <i class="fas fa-utensils"></i>
-                            Menu </div>
+                            Menu
+                            <div class="float-right">
+                                <form action="{{ action('LoloPinoyGrillBranchesController@logOutBranch') }}" method="post">
+                                     {{ csrf_field() }}
+                                     <button type="submit" class="btn btn-danger btn-lg"><i class="fas fa-sign-out-alt"></i> Log Out Branch</button>
+                                </form>
+                            </div>  
+                        </div>
                           <div class="card-body">
                                 <div class="form-group">
                                   <div class="form-row">
@@ -344,7 +354,7 @@
         const originalPriceDrinks = $("#originalPriceDrinks").val();
         const softDrinksName = $("#softDrinksName").val();
         const newPriceDrinks = $("#newPriceDrinks").val();
-      
+        const branch = "{{ Session::get('sessionBranch') }}";
         if(quantityDrinks == "1"){
         
             //make ajax call
@@ -356,12 +366,13 @@
                     "_token":"{{ csrf_token() }}",
                     "quantity":quantityDrinks,
                     "itemDescription":softDrinksName,
+                    "branch":branch,
                     "amount":originalPriceDrinks,
                 },
                 success:function(data){
                     console.log(data);
                     setTimeout(function(){
-                        window.location = "/lolo-pinoy-grill-branches/sales-form/transaction/" + data;
+                        window.location = "/lolo-pinoy-grill-branches/{{ Session::get('sessionBranch') }}/sales-form/transaction/" + data;
                     }, 1000);
                 
                 },
@@ -384,12 +395,13 @@
                     "_token":"{{ csrf_token() }}",
                     "quantity":quantityDrinks,
                     "itemDescription":softDrinksName,
+                    "branch":branch,
                     "amount":newPriceDrinks,
                 },
                 success:function(data){
                     console.log(data);
                     setTimeout(function(){
-                        window.location = "/lolo-pinoy-grill-branches/sales-form/transaction/" + data;
+                        window.location = "/lolo-pinoy-grill-branches/{{ Session::get('sessionBranch') }}/sales-form/transaction/" + data;
                     }, 1000);
                 
                 },
@@ -426,6 +438,7 @@
         const originalPriceFood = $("#originalPriceFood").val();
         const newPriceFood = $("#newPriceFood").val();
         const foodNameNotBbq = $("#foodNameNotBbq").val();
+        const branch = "{{ Session::get('sessionBranch') }}";
       
         if(quantityFood == "1"){
             //make ajax call
@@ -437,12 +450,13 @@
                     "_token":"{{ csrf_token() }}",
                     "quantity":quantityFood,
                     "itemDescription":foodNameNotBbq,
+                    "branch":branch,
                     "amount":originalPriceFood,
                 },
                 success:function(data){
                     console.log(data);
                     setTimeout(function(){
-                        window.location = "/lolo-pinoy-grill-branches/sales-form/transaction/" + data;
+                        window.location = "/lolo-pinoy-grill-branches/{{ Session::get('sessionBranch') }}/sales-form/transaction/" + data;
                     }, 1000);
                 
                 },
@@ -463,12 +477,13 @@
                     "_token":"{{ csrf_token() }}",
                     "quantity":quantityFood,
                     "itemDescription":foodNameNotBbq,
+                    "branch":branch,
                     "amount":newPriceFood,
                 },
                 success:function(data){
                     console.log(data);
                     setTimeout(function(){
-                        window.location = "/lolo-pinoy-grill-branches/sales-form/transaction/" + data;
+                        window.location = "/lolo-pinoy-grill-branches/{{ Session::get('sessionBranch') }}/sales-form/transaction/" + data;
                     }, 1000);
                 
                 },
@@ -530,6 +545,8 @@
         const foodName = $("#foodName").val();
       
         const combineFoodName = `${foodName} - ${flavor}`;
+        const branch = "{{ Session::get('sessionBranch') }}";
+
         if(quantity == "1"){
             console.log(originalPrice);
             const table =  document.getElementById("output");
@@ -558,12 +575,13 @@
                     "_token":"{{ csrf_token() }}",
                     "quantity":quantity,
                     "itemDescription":combineFoodName,
+                    "branch":branch,
                     "amount":originalPrice,
                 },
                 success:function(data){
                     console.log(data);
                     setTimeout(function(){
-                        window.location = "/lolo-pinoy-grill-branches/sales-form/transaction/" + data;
+                        window.location = "/lolo-pinoy-grill-branches/{{ Session::get('sessionBranch') }}/sales-form/transaction/" + data;
                     }, 1000);
                 
                 },
@@ -603,12 +621,13 @@
                     "_token":"{{ csrf_token() }}",
                     "quantity":quantity,
                     "itemDescription":combineFoodName,
+                    "branch":branch,
                     "amount":newPrice,
                 },
                 success:function(data){
                     console.log(data);
                     setTimeout(function(){
-                        window.location = "/lolo-pinoy-grill-branches/sales-form/transaction/" + data;
+                        window.location = "/lolo-pinoy-grill-branches/{{ Session::get('sessionBranch') }}/sales-form/transaction/" + data;
                     }, 1000);
                 
                 },

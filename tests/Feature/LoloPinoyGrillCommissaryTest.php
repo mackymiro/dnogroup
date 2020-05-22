@@ -75,4 +75,7 @@ class LoloPinoyGrillCommissaryTest extends TestCase
         $response->assertSuccessful();
         $response->assertViewIs('lolo-pinoy-grill-commissary-view-petty-cash');
      }
+
+     /* @test */
+
 }

@@ -11,6 +11,7 @@
               <li class="breadcrumb-item">
                 <a href="#">Lolo Pinoy Grill Branches</a>
               </li>
+              {{ Session::get('data') }}
               <li class="breadcrumb-item active">Branch Login</li>
 
             </ol>
@@ -37,7 +38,14 @@
                                                 Login Branch Here
                                             </div>
                                             <div class="card-body">
-                                                <form action="" method="post">
+                                                <form action="{{ action('LoloPinoyGrillBranchesController@loginSales') }}" method="post">
+                                                {{ csrf_field() }}
+                                                @if(session('error'))
+                                                    <p class="alert alert-danger">{{ Session::get('error') }}</p>
+                                                @endif 
+                                                @if(session('noAccess'))
+                                                    <p class="alert alert-danger">{{ Session::get('noAccess') }}</p>
+                                                @endif 
                                                 <div class="form-group">
                                                     <div class="form-row">
                                                         <div class="col-lg-12">

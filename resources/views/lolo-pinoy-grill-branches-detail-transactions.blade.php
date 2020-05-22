@@ -12,6 +12,7 @@
                   <li class="breadcrumb-item">
                   <a href="#">Lolo Pinoy Grill Bracnhes</a>
                   </li>
+                  <li class="breadcrumb-item active">{{ $data }}</li>
                   <li class="breadcrumb-item active">Sales Invoice Form Transactions</li>
                   <li class="breadcrumb-item active">Detail Transactions</li>
                   </ol>
@@ -138,7 +139,7 @@
                                            <div class="form-group">
                                                 <div class="form-row">
                                                       <div class="col-lg-4">
-                                                            <button class="btn btn-success btn-lg">OKAY</button>
+                                                            <a href="{{ url('lolo-pinoy-grill-branches/sales-form') }}" class="btn btn-success btn-lg">OKAY</a>
                                                       </div>
                                                 </div>
                                            </div>   

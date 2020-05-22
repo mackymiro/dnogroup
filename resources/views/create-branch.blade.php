@@ -62,6 +62,12 @@
                         <div class="card-body">
                             <form action="{{ action('ProfileController@storeCreateBranch') }}" method="post">
                             {{ csrf_field() }}
+                            @if(session('createBranch'))
+                                 <p class="alert alert-success">{{ Session::get('createBranch') }}</p>
+                             @endif 
+                            @if(session('error'))
+                                 <p class="alert alert-danger">{{ Session::get('error') }}</p>
+                             @endif 
                             <div class="form-group">
                                 <div class="form-row">
                                     <div class="col-lg-4">
@@ -97,8 +103,39 @@
                  <div class="col-lg-6">
                      <div class="card mb-3">
                         <div class="card-header">
-		                  <i class="fa fa-user-plus"></i>
-		                  Reset Branch Password
+                          <i class="fa fa-user-plus"></i>
+                          Reset Branch Password
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                 <div class="form-row">
+                                    <div class="col-lg-4">
+                                        <label>Select Branch</label>
+                                        <div id="app-reset"> 
+                                            <select name="selectBranch" class="form-control">
+                                                <option v-for="branch in branches" v-bind:value="branch.value">
+                                                    @{{ branch.text }}
+                                                </option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label>Set Password</label>
+                                        <input type="password" name="password" class="form-control" required />
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-row">
+                                    <div>
+                                        <button class="btn btn-success"><i class="fa fa-key" aria-hidden="true"></i>
+
+                                            Reset Password
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                      </div>
                  </div>
@@ -121,6 +158,18 @@
     //branches
     new Vue({
         el: '#app-branches',
+            data:{
+                branches:[
+                    {text:'Urgello', value:'Urgello'},
+                    {text:'Velez', value:'Velez'},
+                    {text:'Banilad', value:'Banilad'},
+                    {text:'GQS', value:'GQS' }
+                ]
+            }
+    });
+
+    new Vue({
+        el: '#app-reset',
             data:{
                 branches:[
                     {text:'Urgello', value:'Urgello'},

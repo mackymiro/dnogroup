@@ -140,12 +140,12 @@
 									@if(\Request::is('dno-personal'))
 									<tr>
 										<th width="20%" class="bg-info" style="color:white;">TOTAL BALANCE DUE</th>
-										<th class="bg-danger" style="color:white;"><?php echo number_format($totalAmountDue, 2);?></th>
+										<th class="bg-danger" style="color:white; font-size:30px;"><?php echo number_format($totalAmountDue, 2);?></th>
 									</tr>
 									@elseif(\Request::is('dno-personal/personal-expenses/mod-accounts'))
 									<tr>
 										<th width="20%" class="bg-info" style="color:white;">TOTAL BALANCE DUE</th>
-										<th class="bg-danger" style="color:white;"><?php echo number_format($totalAmountDueMod, 2);?></th>
+										<th class="bg-danger" style="color:white; font-size:30px;"><?php echo number_format($totalAmountDueMod, 2);?></th>
 									</tr>
 									@endif
 								</thead>

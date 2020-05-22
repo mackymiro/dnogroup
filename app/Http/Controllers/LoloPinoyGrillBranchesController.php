@@ -14,10 +14,62 @@ use App\LoloPinoyGrillBranchesRequisitionSlip;
 use App\LoloPinoyGrillBranchesUtility;
 use App\LoloPinoyGrillCommissaryRawMaterial;
 use App\LoloPinoyGrillBranchesSalesForm;
-
+use Hash;
 
 class LoloPinoyGrillBranchesController extends Controller
 {
+    //logout session in branches
+    public function logOutBranch(Request $request){
+        $request->session()->forget('sessionBranch');
+        return redirect()->route('salesInvoiceForm');
+
+    }
+
+    //redirect to branch
+    public function salesInvoiceFormBranch(Request $request, $type){
+        $data = $request->session()->get('sessionBranch');
+        if(empty($data)){
+            return redirect()->route('salesInvoiceForm');
+        }else{
+            return view('lolo-pinoy-grill-branches-sales-invoice-form');
+        }
+        
+    }
+
+    //login branch 
+    public function loginSales(Request $request){
+
+        //get the data from the users table
+        $getBranch = User::where('select_branch', $request->get('selectBranch'))->get()->toArray();
+       
+        if($getBranch == NULL){
+            $findAccess = User::find(isset($getBranch[0]['id']));
+            return redirect()->route('salesInvoiceForm')->with('noAccess', 'No Access'); 
+        }else{
+            $findAccess = User::find($getBranch[0]['id']);
+
+            $password = $request->get('password');
+            //check if  password is the same 
+            if(Hash::check($password, $findAccess['password'])){
+                $stat = "1";
+                $updateStatus = User::find($findAccess['id']);
+                $updateStatus->status = $stat;
+                $updateStatus->save();
+                
+                $value = $findAccess['select_branch'];
+                Session::put('sessionBranch', $value);
+
+                //redirect to what branch selected in login
+                return redirect()->route('salesInvoiceFormBranch', ['branch'=>$findAccess['select_branch']]);
+
+            }else{
+                $request->session()->flash('error', 'Password does not match.');
+                return redirect()->route('salesInvoiceForm');
+            }
+        
+        }
+
+    }   
 
     //pay cash
     public function payCash(Request $request, $id){
@@ -41,16 +93,19 @@ class LoloPinoyGrillBranchesController extends Controller
     }
 
     //detail transaction
-    public function detailTransactions($id){    
+    public function detailTransactions(Request $request, $id){
+        $data = $request->session()->get('sessionBranch');
+
         $transaction = LoloPinoyGrillBranchesSalesForm::find($id); 
          //getTransactions
         $getTransactions = LoloPinoyGrillBranchesSalesForm::where('sf_id', $id)->get()->toArray();
-        return view('lolo-pinoy-grill-branches-detail-transactions', compact('transaction', 'getTransactions'));
+        return view('lolo-pinoy-grill-branches-detail-transactions', compact('transaction', 'getTransactions', 'data'));
     }
 
     //settle transactions
     public function settleTransactions(Request $request, $id){
         
+
         $settleTransactions = LoloPinoyGrillBranchesSalesForm::find($id);
         $settleTransactions->invoice_number = $request->get('invoiceNum');
         $settleTransactions->ordered_by = $request->get('orderedBy');
@@ -91,6 +146,7 @@ class LoloPinoyGrillBranchesController extends Controller
             'qty'=>$request->quantity,
             'item_description'=>$request->itemDescription,
             'amount'=>$request->amount,
+            'branch'=>$request->branch,
             'created_by'=>$name,
         ]);
         $addAdditional->save();
@@ -99,7 +155,7 @@ class LoloPinoyGrillBranchesController extends Controller
 
     }
 
-    public function salesTransaction($id){
+    public function salesTransaction($type, $id){
         $transaction = LoloPinoyGrillBranchesSalesForm::find($id);
 
         //getTransactions
@@ -129,6 +185,7 @@ class LoloPinoyGrillBranchesController extends Controller
             'item_description'=>$request->itemDescription,
             'amount'=>$request->amount,
             'total_amount_of_sales'=>$request->amount,
+            'branch'=>$request->branch,
             'created_by'=>$name,
         ]);
         $addNewSales->save();
@@ -281,11 +338,16 @@ class LoloPinoyGrillBranchesController extends Controller
     }
 
     //
-    public function salesInvoiceForm(){
-
-        return view('lolo-pinoy-grill-branches-login-form');
+    public function salesInvoiceForm(Request $request){
+        $data = $request->session()->get('sessionBranch');
+       if(empty($data)){
+            return view('lolo-pinoy-grill-branches-login-form', compact('data'));      
+       }else{
+            return redirect()->route('salesInvoiceFormBranch', ['type'=>$data]);
         
-        //return view('lolo-pinoy-grill-branches-sales-invoice-form');
+       }
+        
+        
     }
 
     //
@@ -699,12 +761,14 @@ class LoloPinoyGrillBranchesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        
-        $getTransactionBranches = LoloPinoyGrillBranchesSalesForm::where('sf_id', NULL)->get()->toArray();
+        $data =  $request->session()->get('sessionBranch');
 
-        return view('lolo-pinoy-grill-branches', compact('getTransactionBranches'));
+        $getTransactionBranches = LoloPinoyGrillBranchesSalesForm::where('sf_id', NULL)->where('branch', $data)->get()->toArray();
+
+        $sum = LoloPinoyGrillBranchesSalesForm::where('sf_id', NULL)->where('branch', $data)->sum('total_amount_of_sales');
+        return view('lolo-pinoy-grill-branches', compact('getTransactionBranches', 'data', 'sum'));
 
 
     }

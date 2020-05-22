@@ -14,6 +14,7 @@
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/sales-invoice-form')}}">Sales Invoice Form</a>
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/') }}">Lists</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/view-list-per-branch') }}">View List Per Branch</a>
          
         </div>
       </li>

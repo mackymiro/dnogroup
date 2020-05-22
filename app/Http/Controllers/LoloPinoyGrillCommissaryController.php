@@ -21,7 +21,10 @@ use App\LoloPinoyGrillCommissaryUtility;
 class LoloPinoyGrillCommissaryController extends Controller
 {
 
-    //
+    public function listPerBranch(){
+        
+    }
+
     public function viewPettyCash($id){
         //
         $getPettyCash = LoloPinoyGrillCommissaryPaymentVoucher::find($id);

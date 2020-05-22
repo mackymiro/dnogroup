@@ -11,6 +11,7 @@
               <li class="breadcrumb-item">
                 <a href="#">Lolo Pinoy Grill Bracnhes</a>
               </li>
+              <li class="breadcrumb-item active">{{ Session::get('sessionBranch') }}</li>
               <li class="breadcrumb-item active">Sales Invoice Form Transaction</li>
             </ol>
             <div class="col-lg-12">
@@ -135,7 +136,8 @@
                         <div class="card-body">
                             <form action="{{ action('LoloPinoyGrillBranchesController@settleTransactions', $transaction['id']) }}" method="post">
                             {{ csrf_field() }}
-                            <div class="form-group">
+                            
+                            <div class="form-group"> 
                                 <div class="form-row">
                                     <div class="col-lg-2">
                                         <label>Invoice #</label>
@@ -394,7 +396,7 @@
         const originalPriceDrinks = $("#originalPriceDrinks").val();
         const softDrinksName = $("#softDrinksName").val();
         const newPriceDrinks = $("#newPriceDrinks").val();
-      
+        const branch = "{{ Session::get('sessionBranch') }}";
         if(quantityDrinks == "1"){
             const table =  document.getElementById("output");
             const row = document.createElement("tr");
@@ -424,6 +426,7 @@
                     "transactionId":transactionId,
                     "quantity":quantityDrinks,
                     "itemDescription":softDrinksName,
+                    "branch":branch,
                     "amount":originalPriceDrinks,
                 },
                 success:function(data){
@@ -465,6 +468,7 @@
                     "transactionId":transactionId,
                     "quantity":quantityDrinks,
                     "itemDescription":softDrinksName,
+                    "branch":branch,
                     "amount":newPriceDrinks,
                 },
                 success:function(data){
@@ -502,7 +506,8 @@
         const originalPriceFood = $("#originalPriceFood").val();
         const newPriceFood = $("#newPriceFood").val();
         const foodNameNotBbq = $("#foodNameNotBbq").val();
-      
+        
+        const branch = "{{ Session::get('sessionBranch') }}";
         if(quantityFood == "1"){
             console.log(originalPriceFood);
             const table =  document.getElementById("output");
@@ -533,6 +538,7 @@
                     "transactionId":transactionId,
                     "quantity":quantityFood,
                     "itemDescription":foodNameNotBbq,
+                    "branch":branch,
                     "amount":originalPriceFood,
                 },
                 success:function(data){
@@ -575,6 +581,7 @@
                     "transactionId":transactionId,
                     "quantity":quantityFood,
                     "itemDescription":foodNameNotBbq,
+                    "branch":branch,
                     "amount":newPriceFood,
                 },
                 success:function(data){
@@ -641,6 +648,7 @@
         const foodName = $("#foodName").val();
       
         const combineFoodName = `${foodName} - ${flavor}`;
+        const branch = "{{ Session::get('sessionBranch') }}";
         if(quantity == "1"){
             console.log(originalPrice);
             const table =  document.getElementById("output");
@@ -670,6 +678,7 @@
                     "transactionId":transactionId,
                     "quantity":quantity,
                     "itemDescription":combineFoodName,
+                    "branch":branch,
                     "amount":originalPrice,
                 },
                 success:function(data){
@@ -714,6 +723,7 @@
                     "transactionId":transactionId,
                     "quantity":quantity,
                     "itemDescription":combineFoodName,
+                    "branch":branch,
                     "amount":newPrice,
                 },
                 success:function(data){

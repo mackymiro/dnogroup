@@ -88,7 +88,7 @@ Route::group(['middleware' =>['user']], function(){
 	Route::get(
 			'/lolo-pinoy-lechon-de-cebu/edit-payables-detail/{id}',
 			'LoloPinoyLechonDeCebuController@editPayablesDetail')
-			->name('lolo-pinoy-lechon-de-cebu.editPayablesDetail');
+			->name('editPayablesDetail');
 
 	
 	Route::delete(
@@ -138,35 +138,46 @@ Route::group(['middleware' =>['user']], function(){
 	Route::delete('/lolo-pinoy-grill-commissary/delete-payment-voucher/{id}', 'LoloPinoyGrillCommissaryController@destroyPaymentVoucher')->name('lolo-pinoy-grill-commissary.destroyPaymentVoucher');
 	
 	//delete
-	Route::delete('/lolo-pinoy-grill-commissary/delete-sales-invoice/{id}', 'LoloPinoyGrillCommissaryController@destroySalesInvoice')->name('lolo-pinoy-grill-commissary.destroySalesInvoice');
+	Route::delete(
+		'/lolo-pinoy-grill-commissary/delete-sales-invoice/{id}', 
+		'LoloPinoyGrillCommissaryController@destroySalesInvoice')
+		->name('destroySalesInvoice');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/view-list-per-branch',
+		'LoloPinoyGrillCommissaryController@listPerBranch')
+		->name('listPerBranch');
 	
-	Route::delete('/lolo-pinoy-grill-commissary/delete-statement-account/{id}', 'LoloPinoyGrillCommissaryController@destroyStatementAccount')->name('lolo-pinoy-grill-commissary.destroyStatementAccount');
+	Route::delete(
+		'/lolo-pinoy-grill-commissary/delete-statement-account/{id}', 
+		'LoloPinoyGrillCommissaryController@destroyStatementAccount')
+		->name('destroyStatementAccount');
 	
 	Route::delete(
 		'/lolo-pinoy-grill-commissary/delete-raw-materials/{id}',
 		'LoloPinoyGrillCommissaryController@destroyRawMaterial')
-		->name('lolo-pinoy-grill-commissary.destroyRawMaterial');
+		->name('destroyRawMaterial');
 	
 	Route::delete(
 		'/lolo-pinoy-grill-commissary/utilities/delete/{id}',
 		'LoloPinoyGrillCommissaryController@destroyUtility')
-		->name('lolo-pinoy-grill-commissary.destroyUtility');
+		->name('destroyUtility');
 	
 	Route::delete(
 		'/lolo-pinoy-grill-branches/delete/{id}',
 		'LoloPinoyGrillBranchesController@destroy')
-		->name('lolo-pinoy-grill-branches.destroy');
+		->name('destroy');
 	
 	Route::delete(
 		'/lolo-pinoy-grill-branches/delete-transaction-list/{id}',
 		'LoloPinoyGrillBranchesController@destroyTransactionList')
-		->name('lolo-pinoy-grill-branches.destroyTransactionList');
+		->name('destroyTransactionList');
 
 	//delete
 	Route::delete(
 		'/mr-potato/delete/{id}',
 		'MrPotatoController@destroy')
-		->name('mr-potato.destroy');
+		->name('destroy');
 
 	Route::delete(
 			'/mr-potato/delete-delivery-receipt/{id}',
@@ -1401,10 +1412,25 @@ Route::group(['middleware' => ['auth']], function(){
 		'LoloPinoyGrillBranchesController@reqTransactionList')
 		->name('lolo-pinoy-grill-branches.reqTransactionList');
 
+	Route::post(
+		'/lolo-pinoy-grill-branches/sales-form/login-branch',
+		'LoloPinoyGrillBranchesController@loginSales')
+		->name('loginSales');
+
 	Route::get(
 		'/lolo-pinoy-grill-branches/sales-form',
 		'LoloPinoyGrillBranchesController@salesInvoiceForm')
 		->name('salesInvoiceForm');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/{type}/sales-form',
+		'LoloPinoyGrillBranchesController@salesInvoiceFormBranch')
+		->name('salesInvoiceFormBranch');
+
+	Route::post(
+		'lolo-pinoy-grill-branches/sales-form/logout-branch',
+		'LoloPinoyGrillBranchesController@logOutBranch')
+		->name('logOutBranch');
 
 	Route::post(
 		'/lolo-pinoy-grill-branches/sales-form/add-transaction',
@@ -1412,7 +1438,7 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('addSalesTransaction');
 
 	Route::get(
-		'/lolo-pinoy-grill-branches/sales-form/transaction/{id}',
+		'/lolo-pinoy-grill-branches/{type}/sales-form/transaction/{id}',
 		'LoloPinoyGrillBranchesController@salesTransaction')
 		->name('salesTransaction');
 

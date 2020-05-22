@@ -1565,10 +1565,10 @@ class LoloPinoyLechonDeCebuController extends Controller
 
              $insertedId = $addPaymentVoucher->id;
             
-             return redirect('lolo-pinoy-lechon-de-cebu/edit-payables-detail/'.$insertedId);
+             return redirect()->route('editPayablesDetail', ['id'=>$insertedId]);
 
         }else{
-            return redirect('lolo-pinoy-lechon-de-cebu/payment-voucher-form/')->with('error', 'Invoice Number Already Exists. Please See Transaction List For Your Reference');
+            return redirect()->route('paymentVoucherForm')->with('error', 'Invoice Number Already Exists. Please See Transaction List For Your Reference');
         }
 
 
