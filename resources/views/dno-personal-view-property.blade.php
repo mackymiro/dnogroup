@@ -95,7 +95,7 @@
                                         <div class="col-lg-12 ">
                                             <!-- Button trigger modal -->
                                           
-                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addVeco" >Add Veco </a>
+                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addVeco" ><i class="fa fa-plus" aria-hidden="true"></i> Add Veco </a>
                                         </div>
                                     </div>
                                 </div>
@@ -104,7 +104,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Action</th>
-                                                <th>Account ID</th>
+                                                <th>Account Id</th>
                                                 <th>Account Name</th>
                                                 <th >Meter No</th>
                                                 <th>Date</th>
@@ -115,7 +115,7 @@
                                         <tfoot>
                                              <tr>
                                                 <th>Action</th>
-                                                <th>Account ID</th>
+                                                <th>Account Id</th>
                                                 <th>Account Name</th>
                                                 <th >Meter No</th>
                                                 <th>Date</th>
@@ -125,7 +125,7 @@
                                         </tfoot>
                                         <tbody> 
                                             @foreach($vecoDocuments as $vecoDocument)
-                                            <tr id="deletedId<?php echo $vecoDocument['id'];?>">
+                                            <tr class="deletedId<?php echo $vecoDocument['id'];?>">
                                                 <td >
                                                     @if($user->role_type !== 3)
                                                         <!-- Button trigger modal -->
@@ -181,7 +181,7 @@
                          <div class="card mb-3">
                             <div class="card-header">
                                 <i class="fas fa-bolt"></i>
-                                Veco
+                                MERALCO
                              </div>
                              <div class="card-body">
                                 <div class="form-group">
@@ -189,7 +189,7 @@
                                         <div class="col-lg-12 ">
                                             <!-- Button trigger modal -->
                                           
-                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addVeco" >Add Veco </a>
+                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addMeralco" ><i class="fa fa-plus" aria-hidden="true"></i> Add Meralco </a>
                                         </div>
                                     </div>
                                 </div>
@@ -198,7 +198,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Action</th>
-                                                <th>Account ID</th>
+                                                <th>Account Id</th>
                                                 <th>Account Name</th>
                                                 <th >Meter No</th>
                                                 <th>Date</th>
@@ -209,7 +209,7 @@
                                         <tfoot>
                                              <tr>
                                                 <th>Action</th>
-                                                <th>Account ID</th>
+                                                <th>Account Id</th>
                                                 <th>Account Name</th>
                                                 <th >Meter No</th>
                                                 <th>Date</th>
@@ -218,28 +218,28 @@
                                             </tr>
                                         </tfoot>
                                         <tbody> 
-                                            @foreach($vecoDocuments as $vecoDocument)
-                                            <tr id="deletedId<?php echo $vecoDocument['id'];?>">
+                                            @foreach($meralcoDocuments as $meralcoDocument)
+                                            <tr class="deletedId<?php echo $meralcoDocument['id'];?>">
                                                 <td >
-                                                    @if($user->role_type !== 3)
+                                                    @if(Auth::user()['role_type'] !== 3)
                                                         <!-- Button trigger modal -->
-                                                        <a data-toggle="modal" data-target="#editVeco<?php echo $vecoDocument['id']?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                                        <a data-toggle="modal" data-target="#editMeralco<?php echo $meralcoDocument['id']?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                                     @endif
-                                                    @if($user->role_type == 1)
-                                                        <a id="delete" onClick="confirmDelete('{{ $vecoDocument['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
+                                                    @if(Auth::user()['role_type'] == 1)
+                                                        <a id="delete" onClick="confirmDelete('{{ $meralcoDocument['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
                                                     @endif
                                                 </td>
                                              
-                                                <td><a href="{{ url('dno-personal/manila-properties/view-veco/'.$vecoDocument['id']) }}">{{ $vecoDocument['account_id']}}</a></td>
+                                                <td><a href="{{ url('dno-personal/manila-properties/view-meralco/'.$meralcoDocument['id']) }}">{{ $meralcoDocument['account_id']}}</a></td>
                                                
-                                                <td>{{ $vecoDocument['account_name']}}</td>
-                                                <td>{{ $vecoDocument['meter_no']}}</td>
-                                                <td>{{ $vecoDocument['date']}}</td>
+                                                <td>{{ $meralcoDocument['account_name']}}</td>
+                                                <td>{{ $meralcoDocument['meter_no']}}</td>
+                                                <td>{{ $meralcoDocument['date']}}</td>
                                                
                                                <?php
                                                     $viewParticulars  =  DB::table(
                                                                             'dno_personal_payment_vouchers')
-                                                                        ->where('sub_category_account_id', $vecoDocument['id'])
+                                                                        ->where('sub_category_account_id', $meralcoDocument['id'])
                                                                         ->get();
                                                ?>   
                                                 
@@ -260,7 +260,7 @@
                                                 @endforeach
                                                 <?php endif;?>
                                                
-                                                <td>{{ $vecoDocument['created_by']}}</td>
+                                                <td>{{ $meralcoDocument['created_by']}}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -286,7 +286,7 @@
                                         <div class="col-lg-12 ">
                                             <!-- Button trigger modal -->
                                           
-                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addMCWD" >Add MCWD </a>
+                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addMCWD" ><i class="fa fa-plus" aria-hidden="true"></i> Add MCWD </a>
                                         </div>
                                     </div>
                                 </div>
@@ -295,7 +295,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Action</th>
-                                                <th>Account ID</th>
+                                                <th>Account Id</th>
                                                 <th>Account Name</th>
                                                 <th >Meter No</th>
                                                 <th>Date</th>
@@ -306,7 +306,7 @@
                                         <tfoot>
                                              <tr>
                                                 <th>Action</th>
-                                                <th>Account ID</th>
+                                                <th>Account Id</th>
                                                 <th>Account Name</th>
                                                 <th >Meter No</th>
                                                 <th>Date</th>
@@ -375,7 +375,7 @@
                                         <div class="col-lg-12 ">
                                             <!-- Button trigger modal -->
                                           
-                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addMCWD" >Add MCWD </a>
+                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addMCWD" ><i class="fa fa-plus" aria-hidden="true"></i> Add MCWD </a>
                                         </div>
                                     </div>
                                 </div>
@@ -384,7 +384,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Action</th>
-                                                <th>Account ID</th>
+                                                <th>Account Id</th>
                                                 <th>Account Name</th>
                                                 <th >Meter No</th>
                                                 <th>Date</th>
@@ -395,7 +395,7 @@
                                         <tfoot>
                                              <tr>
                                                 <th>Action</th>
-                                                <th>Account ID</th>
+                                                <th>Account Id</th>
                                                 <th>Account Name</th>
                                                 <th >Meter No</th>
                                                 <th>Date</th>
@@ -405,7 +405,7 @@
                                         </tfoot>
                                         <tbody> 
                                             @foreach($mcwdDocuments as $mcwdDocument)
-                                            <tr id="deletedId<?php echo $mcwdDocument['id'];?>">
+                                            <tr class="deletedId<?php echo $mcwdDocument['id'];?>">
                                                 <td>
                                                     @if($user->role_type !== 3)
                                                         <!-- Button trigger modal -->
@@ -471,7 +471,7 @@
                                         <div class="col-lg-12 ">
                                             <!-- Button trigger modal -->
                                           
-                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addPLDT" >Add PLDT </a>
+                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addPLDT" ><i class="fa fa-plus" aria-hidden="true"></i> Add PLDT </a>
                                         </div>
                                     </div>
                                 </div>
@@ -480,7 +480,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Action</th>
-                                                <th>Account No</th>
+                                                <th>Account Id</th>
                                                 <th>Account Name</th>
                                                 <th >Telephone No</th>
                                                 <th>Date</th>
@@ -491,7 +491,7 @@
                                         <tfoot>
                                             <tr>
                                                 <th>Action</th>
-                                                <th>Account No</th>
+                                                <th>Account Id</th>
                                                 <th>Account Name</th>
                                                 <th >Telephone No</th>
                                                 <th>Date</th>
@@ -501,7 +501,7 @@
                                         </tfoot>
                                         <tbody> 
                                             @foreach($PLDTDocuments as $PLDTDocument)
-                                            <tr id="deletedId<?php echo $PLDTDocument['id']?>">
+                                            <tr class="deletedId<?php echo $PLDTDocument['id']?>">
                                                 <td>
                                                     @if($user->role_type !== 3)
                                                         <!-- Button trigger modal -->
@@ -552,6 +552,195 @@
                         </div>
                     </div>  
                 </div><!-- end of row-->
+                <div class="row">
+                     <div class="col-lg-12">
+                        <div class="card mb-3">
+                             <div class="card-header">
+                                <i class="fas fa-phone"></i>
+                                GLOBE TELECOM
+                             </div>
+                             <div class="card-body">
+                                 <div class="form-group">
+                                    <div class="form-row">
+                                        <div class="col-lg-12 ">
+                                            <!-- Button trigger modal -->
+                                          
+                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addGlobe" ><i class="fa fa-plus" aria-hidden="true"></i> Add Globe Telecom </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                     <table class="table table-bordered display"  width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Action</th>
+                                                <th>Account Id</th>
+                                                <th>Account Name</th>
+                                                <th >Telephone No</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Action</th>
+                                                <th>Account Id</th>
+                                                <th>Account Name</th>
+                                                <th >Telephone No</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody> 
+                                            @foreach($globeDocuments as $globeDocument)
+                                            <tr class="deletedId<?php echo $globeDocument['id']?>">
+                                                <td>
+                                                    @if(Auth::user()['role_type'] !== 3)
+                                                        <!-- Button trigger modal -->
+                                                        <a data-toggle="modal" data-target="#editGlobe<?php echo $globeDocument['id']?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                                    @endif
+                                                    @if(Auth::user()['role_type'] == 1)
+                                                        <a id="delete" onClick="confirmDelete('{{ $globeDocument['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
+                                                    @endif
+                                                </td>
+                                                @if(\Request::is('dno-personal/manila-properties/view/'.$viewProperty['id']))
+                                                    <td><a href="{{ url('dno-personal/manila-properties/view-globe/'.$globeDocument['id']) }}">{{ $globeDocument['account_id']}}</a></td>
+                                                @else
+                                                    <td><a href="{{ url('dno-personal/manila-properties/view-globe/'.$globeDocument['id']) }}">{{ $globeDocument['account_id']}}</a></td>
+                                              
+                                                @endif
+                                                <td>{{ $globeDocument['account_name']}}</td>
+                                                <td>{{ $globeDocument['telephone_no']}}</td>
+                                                <td>{{ $globeDocument['date']}}</td>
+                                                <?php
+                                                    $viewParticulars  =  DB::table(
+                                                                            'dno_personal_payment_vouchers')
+                                                                        ->where('sub_category_account_id', $globeDocument['id'])
+                                                                        ->get();
+                                               ?>   
+                                                
+                                               <?php if($viewParticulars === ""): ?>
+                                                    <td class="bg-danger " style="color:#fff;">UNPAID</td>
+                                               <?php else:?>
+                                                @foreach($viewParticulars as $viewParticular)
+                                                <?php if($viewParticular->status == "FOR APPROVAL" ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FOR CONFIRMATION " ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FULLY PAID AND RELEASED" ): ?>
+                                                    <td class="bg-success" style="color:#fff;">PAID</td>
+                                               
+                                                <?php endif;?>
+                                                
+                                                @endforeach
+                                                <?php endif;?>
+                                                <td>{{ $globeDocument['created_by']}}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                             </div> 
+                        </div>
+                     </div>
+                </div><!-- end of row -->
+                <div class="row">
+                     <div class="col-lg-12">
+                        <div class="card mb-3">
+                             <div class="card-header">
+                                <i class="fas fa-phone"></i>
+                                SMART COMMUNICATIONS INC
+                             </div>
+                             <div class="card-body">
+                                <div class="form-group">
+                                    <div class="form-row">
+                                        <div class="col-lg-12 ">
+                                            <!-- Button trigger modal -->
+                                          
+                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addSmart" ><i class="fa fa-plus" aria-hidden="true"></i> Add Smart Communications </a>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered display"  width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Action</th>
+                                                <th>Account Id</th>
+                                                <th>Account Name</th>
+                                                <th >Telephone No</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Action</th>
+                                                <th>Account Id</th>
+                                                <th>Account Name</th>
+                                                <th >Telephone No</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody> 
+                                            @foreach($smartDocuments as $smartDocument)
+                                            <tr class="deletedId<?php echo $smartDocument['id']?>">
+                                                <td>
+                                                    @if(Auth::user()['role_type'] !== 3)
+                                                        <!-- Button trigger modal -->
+                                                        <a data-toggle="modal" data-target="#editSmart<?php echo $smartDocument['id']?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                                    @endif
+                                                    @if(Auth::user()['role_type'] == 1)
+                                                        <a id="delete" onClick="confirmDelete('{{ $smartDocument['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
+                                                    @endif
+                                                </td>
+                                                @if(\Request::is('dno-personal/manila-properties/view/'.$viewProperty['id']))
+                                                    <td><a href="{{ url('dno-personal/cebu-properties/view-globe/'.$smartDocument['id']) }}">{{ $smartDocument['account_id']}}</a></td>
+                                                @else
+                                                    <td><a href="{{ url('dno-personal/cebu-properties/view-globe/'.$globeDocument['id']) }}">{{ $smartDocument['account_id']}}</a></td>
+                                              
+                                                @endif
+                                                <td>{{ $smartDocument['account_name']}}</td>
+                                                <td>{{ $smartDocument['telephone_no']}}</td>
+                                                <td>{{ $smartDocument['date']}}</td>
+                                                <?php
+                                                    $viewParticulars  =  DB::table(
+                                                                            'dno_personal_payment_vouchers')
+                                                                        ->where('sub_category_account_id', $smartDocument['id'])
+                                                                        ->get();
+                                               ?>   
+                                                
+                                               <?php if($viewParticulars === ""): ?>
+                                                    <td class="bg-danger " style="color:#fff;">UNPAID</td>
+                                               <?php else:?>
+                                                @foreach($viewParticulars as $viewParticular)
+                                                <?php if($viewParticular->status == "FOR APPROVAL" ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FOR CONFIRMATION " ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FULLY PAID AND RELEASED" ): ?>
+                                                    <td class="bg-success" style="color:#fff;">PAID</td>
+                                               
+                                                <?php endif;?>
+                                                
+                                                @endforeach
+                                                <?php endif;?>
+                                                <td>{{ $smartDocument['created_by']}}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                             </div>
+                        </div>
+                     </div>
+                </div><!-- end of row-->
                 @elseif(\Request::is('dno-personal/manila-properties/view/'.$viewProperty['id']))
                 <div class="row">
                     <div class="col-lg-12">
@@ -566,7 +755,7 @@
                                         <div class="col-lg-12 ">
                                             <!-- Button trigger modal -->
                                           
-                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addPLDT" >Add PLDT </a>
+                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addPLDT" ><i class="fa fa-plus" aria-hidden="true"></i> Add PLDT </a>
                                         </div>
                                     </div>
                                 </div>
@@ -575,7 +764,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Action</th>
-                                                <th>Account No</th>
+                                                <th>Account Id</th>
                                                 <th>Account Name</th>
                                                 <th >Telephone No</th>
                                                 <th>Date</th>
@@ -586,7 +775,7 @@
                                         <tfoot>
                                             <tr>
                                                 <th>Action</th>
-                                                <th>Account No</th>
+                                                <th>Account Id</th>
                                                 <th>Account Name</th>
                                                 <th >Telephone No</th>
                                                 <th>Date</th>
@@ -596,7 +785,7 @@
                                         </tfoot>
                                         <tbody> 
                                             @foreach($PLDTDocuments as $PLDTDocument)
-                                            <tr id="deletedId<?php echo $PLDTDocument['id']?>">
+                                            <tr class="deletedId<?php echo $PLDTDocument['id']?>">
                                                 <td>
                                                     @if($user->role_type !== 3)
                                                         <!-- Button trigger modal -->
@@ -645,8 +834,195 @@
                         </div>
                     </div>  
                 </div><!-- end of row-->
+                <div class="row">
+                     <div class="col-lg-12">
+                        <div class="card mb-3">
+                             <div class="card-header">
+                                <i class="fas fa-phone"></i>
+                                GLOBE TELECOM
+                             </div>
+                             <div class="card-body">
+                                 <div class="form-group">
+                                    <div class="form-row">
+                                        <div class="col-lg-12 ">
+                                            <!-- Button trigger modal -->
+                                          
+                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addGlobe" ><i class="fa fa-plus" aria-hidden="true"></i> Add Globe Telecom </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                     <table class="table table-bordered display"  width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Action</th>
+                                                <th>Account Id</th>
+                                                <th>Account Name</th>
+                                                <th >Telephone No</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Action</th>
+                                                <th>Account Id</th>
+                                                <th>Account Name</th>
+                                                <th >Telephone No</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody> 
+                                            @foreach($globeDocuments as $globeDocument)
+                                            <tr class="deletedId<?php echo $globeDocument['id']?>">
+                                                <td>
+                                                    @if($user->role_type !== 3)
+                                                        <!-- Button trigger modal -->
+                                                        <a data-toggle="modal" data-target="#editGlobe<?php echo $globeDocument['id']?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                                    @endif
+                                                    @if($user->role_type == 1)
+                                                        <a id="delete" onClick="confirmDelete('{{ $globeDocument['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
+                                                    @endif
+                                                </td>
+                                                @if(\Request::is('dno-personal/cebu-properties/view/'.$viewProperty['id']))
+                                                    <td><a href="{{ url('dno-personal/cebu-properties/view-globe/'.$globeDocument['id']) }}">{{ $globeDocument['account_id']}}</a></td>
+                                                @else
+                                                    <td><a href="{{ url('dno-personal/manila-properties/view-globe/'.$globeDocument['id']) }}">{{ $globeDocument['account_id']}}</a></td>
+                                              
+                                                @endif
+                                                <td>{{ $globeDocument['account_name']}}</td>
+                                                <td>{{ $globeDocument['telephone_no']}}</td>
+                                                <td>{{ $globeDocument['date']}}</td>
+                                                <?php
+                                                    $viewParticulars  =  DB::table(
+                                                                            'dno_personal_payment_vouchers')
+                                                                        ->where('sub_category_account_id', $globeDocument['id'])
+                                                                        ->get();
+                                               ?>   
+                                                
+                                               <?php if($viewParticulars === ""): ?>
+                                                    <td class="bg-danger " style="color:#fff;">UNPAID</td>
+                                               <?php else:?>
+                                                @foreach($viewParticulars as $viewParticular)
+                                                <?php if($viewParticular->status == "FOR APPROVAL" ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FOR CONFIRMATION " ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FULLY PAID AND RELEASED" ): ?>
+                                                    <td class="bg-success" style="color:#fff;">PAID</td>
+                                               
+                                                <?php endif;?>
+                                                
+                                                @endforeach
+                                                <?php endif;?>
+                                                <td>{{ $globeDocument['created_by']}}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                             </div> 
+                        </div>
+                     </div>
+                </div>
+                <div class="row">
+                <div class="col-lg-12">
+                        <div class="card mb-3">
+                             <div class="card-header">
+                                <i class="fas fa-phone"></i>
+                                SMART COMMUNICATIONS INC
+                             </div>
+                             <div class="card-body">
+                                <div class="form-group">
+                                    <div class="form-row">
+                                        <div class="col-lg-12 ">
+                                            <!-- Button trigger modal -->
+                                          
+                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addSmart" ><i class="fa fa-plus" aria-hidden="true"></i> Add Smart Communications </a>
+                                        </div>
 
-
+                                    </div>
+                                </div>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered display"  width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>Action</th>
+                                                <th>Account Id</th>
+                                                <th>Account Name</th>
+                                                <th >Telephone No</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </thead>
+                                        <tfoot>
+                                            <tr>
+                                                <th>Action</th>
+                                                <th>Account Id</th>
+                                                <th>Account Name</th>
+                                                <th >Telephone No</th>
+                                                <th>Date</th>
+                                                <th>Status</th>
+                                                <th>Created By</th>
+                                            </tr>
+                                        </tfoot>
+                                        <tbody> 
+                                            @foreach($smartDocuments as $smartDocument)
+                                            <tr class="deletedId<?php echo $smartDocument['id']?>">
+                                                <td>
+                                                    @if(Auth::user()['role_type'] !== 3)
+                                                        <!-- Button trigger modal -->
+                                                        <a data-toggle="modal" data-target="#editGlobe<?php echo $smartDocument['id']?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                                    @endif
+                                                    @if(Auth::user()['role_type'] == 1)
+                                                        <a id="delete" onClick="confirmDelete('{{ $smartDocument['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
+                                                    @endif
+                                                </td>
+                                                @if(\Request::is('dno-personal/manila-properties/view/'.$viewProperty['id']))
+                                                    <td><a href="{{ url('dno-personal/cebu-properties/view-globe/'.$smartDocument['id']) }}">{{ $smartDocument['account_id']}}</a></td>
+                                                @else
+                                                    <td><a href="{{ url('dno-personal/cebu-properties/view-globe/'.$globeDocument['id']) }}">{{ $smartDocument['account_id']}}</a></td>
+                                              
+                                                @endif
+                                                <td>{{ $smartDocument['account_name']}}</td>
+                                                <td>{{ $smartDocument['telephone_no']}}</td>
+                                                <td>{{ $smartDocument['date']}}</td>
+                                                <?php
+                                                    $viewParticulars  =  DB::table(
+                                                                            'dno_personal_payment_vouchers')
+                                                                        ->where('sub_category_account_id', $smartDocument['id'])
+                                                                        ->get();
+                                               ?>   
+                                                
+                                               <?php if($viewParticulars === ""): ?>
+                                                    <td class="bg-danger " style="color:#fff;">UNPAID</td>
+                                               <?php else:?>
+                                                @foreach($viewParticulars as $viewParticular)
+                                                <?php if($viewParticular->status == "FOR APPROVAL" ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FOR CONFIRMATION " ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FULLY PAID AND RELEASED" ): ?>
+                                                    <td class="bg-success" style="color:#fff;">PAID</td>
+                                               
+                                                <?php endif;?>
+                                                
+                                                @endforeach
+                                                <?php endif;?>
+                                                <td>{{ $smartDocument['created_by']}}</td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                             </div>
+                        </div>
+                     </div>
+                </div><!-- end of row-->
                 @endif
                 @if(\Request::is('dno-personal/cebu-properties/view/'.$viewProperty['id']))
                 <div class="row">
@@ -662,7 +1038,7 @@
                                         <div class="col-lg-12 ">
                                             <!-- Button trigger modal -->
                                           
-                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addSky" >Add SkyCable </a>
+                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addSky" ><i class="fa fa-plus" aria-hidden="true"></i> Add SkyCable </a>
                                         </div>
                                     </div>
                                 </div>
@@ -690,7 +1066,7 @@
                                         </tfoot>
                                         <tbody> 
                                             @foreach($skyDocuments as $skyDocument)
-                                            <tr id="deletedId<?php echo $skyDocument['id']?>">
+                                            <tr class="deletedId<?php echo $skyDocument['id']?>">
                                                
                                                 <td>
                                                     @if($user->role_type !== 3)
@@ -751,7 +1127,7 @@
                                         <div class="col-lg-12 ">
                                             <!-- Button trigger modal -->
                                           
-                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addSky" >Add SkyCable </a>
+                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addSky" ><i class="fa fa-plus" aria-hidden="true"></i> Add SkyCable </a>
                                         </div>
                                     </div>
                                 </div>
@@ -779,7 +1155,7 @@
                                         </tfoot>
                                         <tbody> 
                                             @foreach($skyDocuments as $skyDocument)
-                                            <tr id="deletedId<?php echo $skyDocument['id']?>">
+                                            <tr class="deletedId<?php echo $skyDocument['id']?>">
                                                
                                                 <td>
                                                     @if($user->role_type !== 3)
@@ -961,6 +1337,172 @@
                 
          </div>
      </div>
+     @foreach($smartDocuments as $smartDocument)
+      <div class="modal fade" id="editSmart<?php echo $smartDocument['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit Smart Communications Account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="form-row">
+                        <div id="succEditGlobe" class="col-lg-12"></div>
+                        <div class="col-lg-12">
+                           
+                            <label>Account Name</label>
+                            <input type="text" id="accountNameGlobeUpdate<?php echo $smartDocument['id']?>" name="accountNamePLDTUpdate" class="selcls form-control"  value="{{ $smartDocument['account_name']}}" />
+                        </div>
+                        <div class="col-lg-12">
+                            <label>Account Id</label>
+                            <input type="text" id="accountNoGlobeUpdate<?php echo $smartDocument['id']?>" name="accountNoPLDTUpdate" class="selcls form-control" value="{{ $smartDocument['account_id']}}"/>
+                        </div>
+                        <div class="col-lg-12">
+                            <label>Telephone No</label>
+                           
+                            <input type="text" id="telephoneNOGlobeUpdate<?php echo $smartDocument['id']?>" name="telephoneNOUpdate" class="selcls form-control" value="{{ $smartDocument['telephone_no']}}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button onclick="updateSmart(<?php echo $smartDocument['id']?>)" type="button" class="btn btn-success">Update Smart</button>
+            </div>
+            </div>
+        </div>
+    </div><!-- end of Modal -->
+    @endforeach
+    <!-- Modal -->
+    <div class="modal fade" id="addSmart" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Add Smart Communications Account</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="form-row">
+                            <div id="validateSmart" class="col-lg-12">
+                                <p  class="alert alert-danger">Please Fill up the fields</p>
+                            </div>
+                            <div id="existsSmart" class="col-lg-12"></div>
+                             <div id="succAddSmart" class="col-lg-12"></div>
+                            <div class="col-lg-12">
+                           
+                            <label>Account Name</label>
+                            <input type="text" id="accountNameSmart" name="accountNameSmart" class="selcls form-control" />
+                            </div>
+                            <div class="col-lg-12">
+                                <label>Account Id</label>
+                                <input type="text" id="accountIdSmart" name="accountIdSmart" class="selcls form-control" />
+                            </div>
+                            <div class="col-lg-12">
+                                <label>Telephone No</label>
+                                <input type="hidden" id="flagSmart" value="Smart" />
+                                <input type="hidden" id="propIdSmart" value="{{ $viewProperty['id'] }}" />
+                                <input type="text" id="telephoneNOSmart" name="telephoneNOSmart" class="selcls form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="closeSmart()" type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button onclick="saveSmart()" type="button" class="btn btn-success">Add Smart</button>
+                </div>
+                </div>
+            </div>
+        </div><!-- end of MOdal -->
+      <!-- Modal -->
+
+     @foreach($globeDocuments as $globeDocument)
+      <div class="modal fade" id="editGlobe<?php echo $globeDocument['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit Globe Account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="form-row">
+                        <div id="succEditGlobe" class="col-lg-12"></div>
+                        <div class="col-lg-12">
+                           
+                            <label>Account Name</label>
+                            <input type="text" id="accountNameGlobeUpdate<?php echo $globeDocument['id']?>" name="accountNamePLDTUpdate" class="selcls form-control"  value="{{ $globeDocument['account_name']}}" />
+                        </div>
+                        <div class="col-lg-12">
+                            <label>Account Id</label>
+                            <input type="text" id="accountNoGlobeUpdate<?php echo $globeDocument['id']?>" name="accountNoPLDTUpdate" class="selcls form-control" value="{{ $globeDocument['account_id']}}"/>
+                        </div>
+                        <div class="col-lg-12">
+                            <label>Telephone No</label>
+                           
+                            <input type="text" id="telephoneNOGlobeUpdate<?php echo $globeDocument['id']?>" name="telephoneNOUpdate" class="selcls form-control" value="{{ $globeDocument['telephone_no']}}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button onclick="updateGlobe(<?php echo $globeDocument['id']?>)" type="button" class="btn btn-success">Update Globe</button>
+            </div>
+            </div>
+        </div>
+    </div><!-- end of Modal -->
+    @endforeach
+      <!-- Modal -->
+    <div class="modal fade" id="addGlobe" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Add Globe Telecom Account</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="form-row">
+                            <div id="validateGlobe" class="col-lg-12">
+                                <p  class="alert alert-danger">Please Fill up the fields</p>
+                            </div>
+                            <div id="existsGlobe" class="col-lg-12"></div>
+                             <div id="succAddGlobe" class="col-lg-12"></div>
+                            <div class="col-lg-12">
+                           
+                            <label>Account Name</label>
+                            <input type="text" id="accountNameGlobe" name="accountNameGlobe" class="selcls form-control" />
+                            </div>
+                            <div class="col-lg-12">
+                                <label>Account Id</label>
+                                <input type="text" id="accountNoGlobe" name="accountNoGlobe" class="selcls form-control" />
+                            </div>
+                            <div class="col-lg-12">
+                                <label>Telephone No</label>
+                                <input type="hidden" id="flagGlobe" value="Globe" />
+                                <input type="hidden" id="propIdGlobe" value="{{ $viewProperty['id'] }}" />
+                                <input type="text" id="telephoneNOGlobe" name="telephoneNO" class="selcls form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="closeGlobe()" type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                    <button onclick="saveGlobe()" type="button" class="btn btn-success">Add Globe Telecom</button>
+                </div>
+                </div>
+            </div>
+        </div><!-- end of MOdal -->
       <!-- Modal -->
     @foreach($skyDocuments as $skyDocument)
     <div class="modal fade" id="editSky<?php echo $skyDocument['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
@@ -979,7 +1521,7 @@
                              <div id="succEditSky" class="col-lg-12"></div>
                             <div class="col-lg-12">
                                 <label>Account No</label>
-                                <input type="text" id="skyAccountNoUpdate<?php echo $skyDocument['id']?>" name="skyAccountNoUpdate" class="selcls form-control" value="{{ $skyDocument['account_no']}}" />
+                                <input type="text" id="skyAccountNoUpdate<?php echo $skyDocument['id']?>" name="skyAccountNoUpdate" class="selcls form-control" value="{{ $skyDocument['account_id']}}" />
                             </div>
                             <div class="col-lg-12">
                                 <label>Account Name</label>
@@ -1058,7 +1600,7 @@
                         </div>
                         <div class="col-lg-12">
                             <label>Account No</label>
-                            <input type="text" id="accountNoPLDTUpdate<?php echo $PLDTDocument['id']?>" name="accountNoPLDTUpdate" class="selcls form-control" value="{{ $PLDTDocument['account_no']}}"/>
+                            <input type="text" id="accountNoPLDTUpdate<?php echo $PLDTDocument['id']?>" name="accountNoPLDTUpdate" class="selcls form-control" value="{{ $PLDTDocument['account_id']}}"/>
                         </div>
                         <div class="col-lg-12">
                             <label>Telephone No</label>
@@ -1108,7 +1650,7 @@
                             <label>Telephone No</label>
                             <input type="hidden" id="flagPLDT" value="PLDT" />
                             <input type="hidden" id="propIdPLDT" value="{{ $viewProperty['id'] }}" />
-                            <input type="text" id="telephoneNO" name="telephoneNO" class="selcls form-control" />
+                            <input type="text" id="telephoneNOPLDT" name="telephoneNO" class="selcls form-control" />
                         </div>
                     </div>
                 </div>
@@ -1245,6 +1787,90 @@
         </div>
     </div><!-- end of Modal -->
     @endforeach
+     <!-- Modal -->
+
+     @foreach($meralcoDocuments as $meralcoDocument)
+     <div class="modal fade" id="editMeralco<?php echo $meralcoDocument['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">>
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Edit Meralco Account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="form-row">
+                       
+                        <div id="succUpdateMeralco" class="col-lg-12"></div>
+                        <div class="col-lg-12">
+                           
+                            <label>Account ID</label>
+                            <input type="text" id="accountIdUpdateMeralco<?php echo $meralcoDocument['id']?>" name="accountIdUpdate" class="selcls form-control" value="{{ $meralcoDocument['account_id']}}" />
+                        </div>
+                        <div class="col-lg-12">
+                            <label>Account Name</label>
+                            <input type="text" id="accountNameUpdateMeralco<?php echo $meralcoDocument['id']?>" name="accountNameUpdate" class="selcls form-control" value="{{ $meralcoDocument['account_name']}}"  />
+                        </div>
+                        <div class="col-lg-12">
+                            <label>Meter No</label>
+                            <input type="text" id="meterNoUpdateMeralco<?php echo $meralcoDocument['id']?>" name="meterNoUpdate" class="selcls form-control"  value="{{ $meralcoDocument['meter_no']}}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button onclick="updateMeralco(<?php echo $meralcoDocument['id']?>)" type="button" class="btn btn-success">Update Meralco</button>
+            </div>
+            </div>
+        </div>
+    </div><!-- end of Modal -->
+    @endforeach
+     <!-- Modal -->
+     <div class="modal fade" id="addMeralco" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">>
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Add Meralco Account</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <div class="form-row">
+                        <div id="validateMeralco" class="col-lg-12">
+                            <p  class="alert alert-danger">Please Fill up the fields</p>
+                        </div>
+                        <div id="existsMeralco" class="col-lg-12"></div>
+                         <div id="succAddMeralco" class="col-lg-12"></div>
+                        <div class="col-lg-12">
+                           
+                            <label>Account ID</label>
+                            <input type="text" id="accountIdMeralco" name="accountId" class="selcls form-control" />
+                        </div>
+                        <div class="col-lg-12">
+                            <label>Account Name</label>
+                            <input type="text" id="accountNameMeralco" name="accountName" class="selcls form-control" />
+                        </div>
+                        <div class="col-lg-12">
+                            <label>Meter No</label>
+                            <input type="hidden" id="flagMeralco" value="Meralco" />
+                            <input type="hidden" id="propIdMeralco" value="{{ $viewProperty['id'] }}" />
+                            <input type="text" id="meterNoMeralco" name="meterNo" class="selcls form-control" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="closeMeralco()" type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button onclick="saveMeralco()" type="button" class="btn btn-success">Add Meralco</button>
+            </div>
+            </div>
+        </div>
+    </div><!-- end of Modal -->
     <!-- Modal -->
     <div class="modal fade" id="addVeco" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">>
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -1304,9 +1930,12 @@
 <script type="text/javascript">
    
    $("#validate").hide();
+   $("#validateMeralco").hide();
    $("#validateMCWD").hide();
    $("#validatePLDT").hide();
+   $("#validateGlobe").hide();
    $("#validateSky").hide();
+   $("#validateSmart").hide();
 
     const updateSkyCable = (id) => {
         const skyAccountNoUpdate = $("#skyAccountNoUpdate"+id).val();
@@ -1341,6 +1970,43 @@
                 console.log('Error:', data);
             }
         });
+    }
+
+    const updateGlobe = (id) =>{
+        const accountNameGlobeUpdate = $("#accountNameGlobeUpdate"+id).val();
+        const accountNoGlobeUpdate = $("#accountNoGlobeUpdate"+id).val();
+        const telephoneNo = $("#telephoneNOGlobeUpdate"+id).val();
+        //make ajax call
+        $.ajax({
+            type:"PATCH",
+            url:'/dno-personal/properties/update-globe/' + id,
+            data:{
+                _method:'patch',
+                "_token":"{{ csrf_token() }}",
+                "id":id,
+                "accountNameGlobeUpdate":accountNameGlobeUpdate,
+                "accountNoGlobeUpdate":accountNoGlobeUpdate,
+                "telephoneNo":telephoneNo,
+            },
+            success:function(data){
+                console.log(data);
+                const getData = data;
+                const succData = getData.split(":");
+                const succDataArr = succData[0];
+                if(succDataArr == "Success"){
+                    $("#succEditGlobe").fadeIn().delay(3000).fadeOut();
+                    $("#succEditGlobe").html(`<p class="alert alert-success"> ${data}</p>`);
+                    
+                    setTimeout(function(){
+                        document.location.reload();
+                    }, 3000);
+                }
+            },
+            error:function(data){
+                console.log('Error:', data);
+            }
+        });
+        
     }
 
     const updatePLDT = (id) => {
@@ -1417,6 +2083,43 @@
         });
     }
 
+    const updateMeralco = (id) =>{
+        const accountIdUpdate = $("#accountIdUpdateMeralco"+id).val();
+        const accountNameUpdate = $("#accountNameUpdateMeralco"+id).val();
+        const meterNoUpdate = $("#meterNoUpdate"+id).val();
+        
+        //make ajax call
+        $.ajax({
+            type:"PATCH",
+            url:'/dno-personal/properties/update/' + id,
+            data:{
+                _method:'patch',
+                "_token":"{{ csrf_token() }}",
+                "id":id,
+                "accountIdUpdate":accountIdUpdate,
+                "accountNameUpdate":accountNameUpdate,
+                "meterNoUpdate":meterNoUpdate,
+            },
+            success:function(data){
+                console.log(data);
+                const getData = data;
+                const succData = getData.split(":");
+                const succDataArr = succData[0];
+                if(succDataArr == "Success"){
+                    $("#succUpdateMeralco").fadeIn().delay(3000).fadeOut();
+                    $("#succUpdateMeralco").html(`<p class="alert alert-success"> ${data}</p>`);
+                    
+                    setTimeout(function(){
+                        document.location.reload();
+                    }, 3000);
+                }
+            },
+            error:function(data){
+                console.log('Error:', data);
+            }       
+        });
+    }
+
     const updateVeco = (id) => {
         const accountIdUpdate = $("#accountIdUpdate" +id).val();
         const accountNameUpdate = $("#accountNameUpdate" +id).val();
@@ -1468,7 +2171,7 @@
               },
               success: function(data){
                 console.log(data);
-                $("#deletedId"+id).fadeOut('slow');
+                $(".deletedId"+id).fadeOut('slow');
                
               },
               error: function(data){
@@ -1492,7 +2195,7 @@
         const propIdSky = $("#propIdSky").val();
         const flagSky = $("#flagSky").val();
         
-        if(skyAccountNo == "" || skyAccountName == ""){
+        if(skyAccountNo.length === 0 || skyAccountName.length === 0){
             $("#validateSky").fadeIn().delay(3000).fadeOut();
         }else{
             //make ajax call
@@ -1530,23 +2233,119 @@
             });
         }       
 
+    }
 
+    const saveSmart = () =>{
+        const accountName = $("#accountNameSmart").val();
+        const accountIdSmart = $("#accountIdSmart").val();
+        const telephone = $("#telephoneNOSmart").val();
+        const flag = $("#flagSmart").val();
+        const propId = $("#propIdSmart").val();
+
+        if(accountName.length === 0 || accountIdSmart.length === 0 || telephone.length === 0){
+            $("#validateSmart").fadeIn().delay(3000).fadeOut();
+        }else{
+            //make ajax call
+            $.ajax({
+                type: "POST",
+                url: '/dno-personal/properties/add-smart',
+                data:{
+                    _method: 'post',
+                    "_token": "{{ csrf_token() }}",
+                    "accountName":accountName,
+                    "accountId":accountIdSmart,
+                    "telephoneNo":telephone,
+                    "flag":flag,
+                    "propId":propId
+                },
+                success:function(data){
+                    console.log(data);
+                    const getData = data;
+                    const succData = getData.split(":");
+                    const succDataArr = succData[0];
+                    if(succDataArr == "Success"){
+                       $("#succAddSmart").fadeIn().delay(3000).fadeOut();
+                       $("#succAddSmart").html(`<p class="alert alert-success"> ${data}</p>`);
+                      
+                        setTimeout(function(){
+                            document.location.reload();
+                        }, 3000);
+                    }else{
+                        $("#existsSmart").fadeIn().delay(3000).fadeOut();
+                        $("#existsSmart").html(`<p class="alert alert-danger">${data}</p>`);
+                    }
+                },
+                error:function(data){
+                    console.log('Error:', data);
+                }
+            });
+        }
+
+
+    }
+
+
+    const saveGlobe = () =>{
+        const accountNameGlobe = $("#accountNameGlobe").val();
+        const accountNoGlobe = $("#accountNoGlobe").val();
+        const telephoneNo = $("#telephoneNOGlobe").val();
+        const flag = $("#flagGlobe").val();
+        const propId = $("#propIdGlobe").val();
+
+        if(accountNameGlobe.length === 0 || accountNoGlobe.length === 0 || telephoneNo.length === 0){
+            $("#validateGlobe").fadeIn().delay(3000).fadeOut();
+        }else{
+            //make ajax call
+            $.ajax({
+                type: "POST",
+                url: '/dno-personal/properties/add-globe',
+                data:{
+                    _method: 'post',
+                    "_token": "{{ csrf_token() }}",
+                    "accountName":accountNameGlobe,
+                    "accountId":accountNoGlobe,
+                    "telephoneNo":telephoneNo,
+                    "flag":flag,
+                    "propId":propId
+                },
+                success:function(data){
+                    console.log(data);
+                    const getData = data;
+                    const succData = getData.split(":");
+                    const succDataArr = succData[0];
+                    if(succDataArr == "Success"){
+                       $("#succAddGlobe").fadeIn().delay(3000).fadeOut();
+                       $("#succAddGlobe").html(`<p class="alert alert-success"> ${data}</p>`);
+                      
+                        setTimeout(function(){
+                            document.location.reload();
+                        }, 3000);
+                    }else{
+                        $("#existsGlobe").fadeIn().delay(3000).fadeOut();
+                        $("#existsGlobe").html(`<p class="alert alert-danger">${data}</p>`);
+                    }
+                },
+                error:function(data){
+                    console.log('Error:', data);
+                }
+            });
+        }
     }
 
     const closePLDT = () =>{
         $("#accountNamePLDT").val('');
         $("#accountNoPLDT").val('');
-        $("#telephoneNO").val('');
+        $("#telephoneNOPLDT").val('');
     }
 
     const savePLDT = () => {
         const accountNamePLDT = $("#accountNamePLDT").val();
         const accountNoPLDT = $("#accountNoPLDT").val();
-        const telephoneNO = $("#telephoneNO").val();
+        const telephoneNO = $("#telephoneNOPLDT").val();
         const flagPLDT = $("#flagPLDT").val();
         const propIdPLDT = $("#propIdPLDT").val();
 
-        if(accountNamePLDT == "" || accountNoPLDT == "" || telephoneNO == ""){
+        if(accountNamePLDT.length === 0|| accountNoPLDT.lenght === 0 || telephoneNO.length === 0){
             $("#validatePLDT").fadeIn().delay(3000).fadeOut();
         }else{
             //make ajax call
@@ -1556,11 +2355,11 @@
                 data:{
                     _method: 'post',
                     "_token": "{{ csrf_token() }}",
-                    "accountNamePLDT":accountNamePLDT,
-                    "accountNoPLDT":accountNoPLDT,
-                    "telephoneNO":telephoneNO,
-                    "flagPLDT":flagPLDT,
-                    "propIdPLDT":propIdPLDT
+                    "accountName":accountNamePLDT,
+                    "accountId":accountNoPLDT,
+                    "telephoneNo":telephoneNO,
+                    "flag":flagPLDT,
+                    "propId":propIdPLDT
                 },
                 success: function(data){
                     console.log(data);
@@ -1599,7 +2398,7 @@
         const flag = $("#flagMCWD").val();
         const propId = $("#propIdMCWD").val();
         
-        if(accountId == "" || accountName == "" || meterNo == ""){
+        if(accountId.length === 0 || accountName.length === 0 || meterNo.length === 0){
             $("#validateMCWD").fadeIn().delay(3000).fadeOut();
         }else{
             //make ajax call
@@ -1638,6 +2437,53 @@
             });
         }
     }
+
+    const saveMeralco = () =>{
+        const accountId = $("#accountIdMeralco").val();
+        const accountName = $("#accountNameMeralco").val();
+        const meterNo = $("#meterNoMeralco").val();
+        const flag = $("#flagMeralco").val();
+        const propId = $("#propIdMeralco").val();
+
+        if(accountId.length === 0 || accountName.length == 0 || meterNo.length === 0){
+            $("#validateMeralco").fadeIn().delay(3000).fadeOut();
+        }else{
+            //make ajax call
+            $.ajax({
+                type: "POST",
+                url: '/dno-personal/properties/add-bill',
+                data:{
+                    _method: 'post',
+                    "_token": "{{ csrf_token() }}",
+                    "accountId":accountId,
+                    "accountName":accountName,
+                    "meterNo":meterNo,
+                    "flag":flag,
+                    "propId":propId
+                },
+                success:function(data){
+                    console.log(data);
+                    const getData = data;
+                    const succData = getData.split(":");
+                    const succDataArr = succData[0];
+                    if(succDataArr == "Success"){
+                       $("#succAddMeralco").fadeIn().delay(3000).fadeOut();
+                       $("#succAddMeralco").html(`<p class="alert alert-success"> ${data}</p>`);
+                      
+                        setTimeout(function(){
+                            document.location.reload();
+                        }, 3000);
+                    }else{
+                        $("#existsMeralco").fadeIn().delay(3000).fadeOut();
+                        $("#existsMeralco").html(`<p class="alert alert-danger">${data}</p>`);
+                    }
+                },
+                error:function(data){
+                    console.log('Error:', data);
+                }
+            });
+        }
+    }
    
     const closeVeco = () =>{
         $("#accountId").val('');
@@ -1652,7 +2498,7 @@
         const flag = $("#flagVeco").val();
         const propId = $("#propId").val();
        
-        if(accountId == "" || accountName == ""  || meterNo == ""){
+        if(accountId.length === 0 || accountName.length === 0 || meterNo.length === 0){
             $("#validate").fadeIn().delay(3000).fadeOut();
         }else{  
 

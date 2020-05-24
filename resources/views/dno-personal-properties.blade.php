@@ -53,7 +53,7 @@
                                         <div class="col-lg-12 ">
                                             <!-- Button trigger modal -->
                                           
-                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addCebuProperty" >Add Property</a>
+                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addCebuProperty" ><i class="fa fa-plus" aria-hidden="true"></i> Add Property</a>
                                         </div>
                                     </div>
                                 </div>
@@ -128,7 +128,7 @@
                                         <div class="col-lg-12 ">
                                             <!-- Button trigger modal -->
                                           
-                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addManilaProperty" >Add Property</a>
+                                            <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addManilaProperty" ><i class="fa fa-plus" aria-hidden="true"></i> Add Property</a>
                                         </div>
                                     </div>
                                 </div>

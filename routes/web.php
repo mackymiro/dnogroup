@@ -2212,8 +2212,18 @@ Route::group(['middleware' => ['auth']], function(){
 	
 	Route::post(
 		'/dno-personal/properties/add-pldt',
-		'DnoPersonalController@addPLDT')
-		->name('dno-personal.addPLDT');
+		'DnoPersonalController@addCommunications')
+		->name('addPLDT');
+
+	Route::post(
+		'/dno-personal/properties/add-globe',
+		'DnoPersonalController@addCommunications')
+		->name('addGlobe');
+
+	Route::post(
+		'/dno-personal/properties/add-smart',
+		'DnoPersonalController@addCommunications')
+		->name('addSmart');
 
 	Route::post(
 		'/dno-persona/properties/add-skycable',
@@ -2233,43 +2243,63 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/dno-personal/cebu-properties/view-mcwd/{id}',
 		'DnoPersonalController@viewBills')
-		->name('dno-personal.viewBills');
+		->name('viewBills');
 
 	Route::get(
 		'/dno-personal/cebu-properties/view-pldt/{id}',
 		'DnoPersonalController@viewBills')
-		->name('dno-personal.viewBills');
+		->name('viewBills');
+	
+	Route::get(
+			'/dno-personal/cebu-properties/view-globe/{id}',
+			'DnoPersonalController@viewBills')
+			->name('viewBills');
 
 	Route::get(
 			'/dno-personal/manila-properties/view-veco/{id}',
 			'DnoPersonalController@viewBills')
-			->name('dno-personal.viewBills');
+			->name('viewBills');
+
+	Route::get(
+		'/dno-personal/manila-properties/view-meralco/{id}',
+		'DnoPersonalController@viewBills')
+		->name('viewBills');
 
 	Route::get(
 		'/dno-personal/manila-properties/view-mcwd/{id}',
 		'DnoPersonalController@viewBills')
-		->name('dno-personal.viewBills');
+		->name('viewBills');
 	
 	Route::get(
 			'/dno-personal/manila-properties/view-pldt/{id}',
 			'DnoPersonalController@viewBills')
-			->name('dno-personal.viewBills');
+			->name('viewBills');
+	
+	Route::get(
+				'/dno-personal/manila-properties/view-globe/{id}',
+				'DnoPersonalController@viewBills')
+				->name('viewBills');
 	
 	Route::get(
 			'/dno-personal/manila-properties/view-skycable/{id}',
 			'DnoPersonalController@viewBills')
-			->name('dno-personal.viewBills');
+			->name('viewBills');
 
 
 	Route::patch(
 		'/dno-personal/properties/update/{id}',
 		'DnoPersonalController@updateProperties')
-		->name('dno-persona.updteProperties');
+		->name('updteProperties');
 
 	Route::patch(
 		'/dno-personal/properties/update-pldt/{id}',
 		'DnoPersonalController@updatePldt')
 		->name('dno-personal.updatePLDT');
+
+	Route::patch(
+		'/dno-personal/properties/update-globe/{id}',
+		'DnoPersonalController@updateGlobe')
+		->name('updateGlobe');
 
 	Route::patch(
 		'/dno-personal/properties/update-skycable/{id}',

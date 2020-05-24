@@ -571,9 +571,11 @@ class DnoPersonalController extends Controller
 
 
     }
+    
+  
 
-    //save method for pldt 
-    public function addPLDT(Request $request){
+    //save method for pldt, globe telecom and smart
+    public function addCommunications(Request $request){
         $ids = Auth::user()->id;
         $user = User::find($ids);
 
@@ -588,18 +590,17 @@ class DnoPersonalController extends Controller
         //check if account no already exists
         $target = DB::table(
             'dno_personal_properties')
-            ->where('account_no', $request->accountNoPLDT)
+            ->where('account_no', $request->accountId)
             ->get()->first();
         
         if($target == NULL){
             $addPLDT = new DnoPersonalProperty([
                 'user_id'=>$user->id,
-                'pp_id'=>$request->propIdPLDT,
-                'account_id'=>$request->accountNoPLDT,
-                'account_name'=>$request->accountNamePLDT,
-                'telephone_no'=>$request->telephoneNO,
-                'meter_no'=>$request->meterNo,
-                'flag'=>$request->flagPLDT,
+                'pp_id'=>$request->propId,
+                'account_id'=>$request->accountId,
+                'account_name'=>$request->accountName,
+                'telephone_no'=>$request->telephoneNo,
+                'flag'=>$request->flag,
                 'date'=>$getDate,
                 'created_by'=>$name,
 
@@ -677,10 +678,19 @@ class DnoPersonalController extends Controller
         return response()->json('Success: successfully updated.');
     }
 
-    //
+    public function updateGlobe(Request $request){   
+        $updateGlobe = DnoPersonalProperty::find($request->id);
+        $updateGlobe->account_no = $request->accountNoGlobeUpdate;
+        $updateGlobe->account_name = $request->accountNameGlobeUpdate;
+        $updateGlobe->telephone_no = $request->telephoneNo;
+        $updateGlobe->save();
+
+        return response()->json('Success: successfully updated');
+    }
+
     public function updatePldt(Request $request){   
         $updatePLDT = DnoPersonalProperty::find($request->id);
-        $updatePLDT->account_no = $request->accountNoPLDTUpdate;
+        $updatePLDT->account_id = $request->accountNoPLDTUpdate;
         $updatePLDT->account_name = $request->accountNamePLDTUpdate;
         $updatePLDT->telephone_no = $request->telephoneNOUpdate;
         $updatePLDT->save();
@@ -709,16 +719,25 @@ class DnoPersonalController extends Controller
         $viewProperty = DnoPersonalProperty::find($id);
 
         $flag = "Veco";
+        $flagMeralco = "Meralco";
         $flagMc = "MCWD";
         $flagPLDT = "PLDT";
+        $flagGlobe = "Globe";
+        $flagSmart = "Smart";
         $flagSky = "SkyCable";
         $subCat = "Service Provider";
 
         $vecoDocuments = DnoPersonalProperty::where('pp_id', $id)->where('flag', $flag)->get()->toArray();
 
+        $meralcoDocuments = DnoPersonalProperty::where('pp_id', $id)->where('flag', $flagMeralco)->get()->toArray();
+
         $mcwdDocuments = DnoPersonalProperty::where('pp_id', $id)->where('flag', $flagMc)->get()->toArray();
 
         $PLDTDocuments = DnoPersonalProperty::where('pp_id', $id)->where('flag', $flagPLDT)->get()->toArray();
+
+        $globeDocuments = DnoPersonalProperty::where('pp_id', $id)->where('flag', $flagGlobe)->get()->toArray();
+
+        $smartDocuments = DnoPersonalProperty::where('pp_id', $id)->where('flag', $flagSmart)->get()->toArray();
 
         $skyDocuments = DnoPersonalProperty::where('pp_id', $id)->where('flag', $flagSky)->get()->toArray();
 
@@ -729,8 +748,8 @@ class DnoPersonalController extends Controller
         $viewParticulars = DnoPersonalPaymentVoucher::where('sub_category_account_id', $id)->get()->toArray();
       
 
-        return view('dno-personal-view-property', compact('user', 'viewProperty', 'vecoDocuments', 
-        'mcwdDocuments', 'PLDTDocuments', 'skyDocuments', 'serviceProviders', 'viewParticulars'));
+        return view('dno-personal-view-property', compact('user', 'viewProperty', 'vecoDocuments', 'meralcoDocuments',
+        'mcwdDocuments', 'PLDTDocuments', 'globeDocuments', 'smartDocuments', 'skyDocuments', 'serviceProviders', 'viewParticulars'));
     }
 
     //

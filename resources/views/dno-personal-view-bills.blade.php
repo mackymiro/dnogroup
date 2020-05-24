@@ -37,6 +37,12 @@
                     <li class="breadcrumb-item active">Cebu Properties</li>
                     <li class="breadcrumb-item active">PLDT </li>     
                     <li class="breadcrumb-item active">View PLDT Details</li>  
+                      <li class="breadcrumb-item ">View MCWD Details</li>  
+                @elseif(\Request::is('dno-personal/cebu-properties/view-globe/'.$viewBill['id']))
+                     <li class="breadcrumb-item active">Properties</li>
+                    <li class="breadcrumb-item active">Cebu Properties</li>
+                    <li class="breadcrumb-item active">Globe Telecom </li>     
+                    <li class="breadcrumb-item active">View Globe Telecom Details</li>  
                 @elseif(\Request::is('dno-personal/cebu-properties/view-skycable/'.$viewBill['id']))
                     <li class="breadcrumb-item active">Properties</li>
                     <li class="breadcrumb-item active">Cebu Properties</li>
@@ -155,13 +161,13 @@
                     </div>
                  </div>
             </div><!-- end of row -->
-            @elseif(\Request::is('dno-personal/manila-properties/view-veco/'.$viewBill['id']))
+            @elseif(\Request::is('dno-personal/manila-properties/view-meralco/'.$viewBill['id']))
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card mb-3">
                          <div class="card-header">
                                 <i class="fas fa-bolt" aria-hidden="true"></i>
-                                View Veco                   
+                                View Meralco                   
                          </div>
                          <div class="card-body">
                             <div class="form-group">
@@ -471,6 +477,85 @@
                     </div>
                  </div>
             </div><!-- end of row -->
+            @elseif(\Request::is('dno-personal/cebu-properties/view-globe/'.$viewBill['id']))
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card mb-3">
+                         <div class="card-header">
+                            <i class="fas fa-phone" aria-hidden="true"></i>
+                            View Globe                   
+                         </div>
+                         <div class="card-body">
+                         <div class="form-group">
+                                <div class="form-row">
+                                    <div class="col-lg-2">
+                                        <label>Account No</label>
+                                        <input type="text" name="accountNo" class="selcls form-control" value="{{ $viewBill['account_id'] }}" disabled="disabled" />
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <label>Account Name</label>
+                                        <input type="text" name="accountName" class="selcls form-control" value="{{ $viewBill['account_name'] }}" disabled="disabled" />
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label>Telephone No</label>
+                                        <input type="text" name="meterNo" class="selcls form-control" value="{{ $viewBill['telephone_no'] }}" disabled="disabled" />
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label>Date</label>
+                                        <input type="text" name="date" class="selcls form-control" value="{{ $viewBill['date'] }}" disabled="disabled" />
+                                    </div>
+                                    @foreach($viewParticulars as $viewParticular)
+                                    <div class="col-lg-2">
+                                        <label>Status</label>
+                                        <?php if($viewParticular['status'] == "FOR APPROVAL" ): ?>
+                                            <input type="text" name="date" class="bg-danger form-control" style="color:#ffff;" value="UNPAID" disabled="disabled" />
+                                        <?php elseif($viewParticular['status'] == "FOR CONFIRMATION " ): ?>
+                                            <input type="text" name="date" class="bg-danger form-control" style="color:#ffff;" value="UNPAID" disabled="disabled" />
+                                        <?php elseif($viewParticular['status'] == "FULLY PAID AND RELEASED" ): ?>
+                                            <input type="text" name="date" class="bg-success form-control" style="color:#ffff;" value="PAID" disabled="disabled" />
+                                        <?php elseif($viewParticular['status'] == ""):?>
+                                            <input type="text" name="date" class="bg-danger form-control" style="color:#ffff;" value="UNPAID" disabled="disabled" />
+                                       
+                                        <?php endif;?>
+                                    </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                         </div>
+                    </div>
+                </div>
+            </div><!-- end of row -->
+            <div class="row">
+            <div class="col-lg-12">
+                     <div class="card mb-3">
+                         <div class="card-header">
+                            <i class="fas fa-receipt" aria-hidden="true"></i>
+                            Particulars
+                         </div>
+                         <div class="card-body">
+                            <div class="table-responsive">
+                                 <table class="table table-striped"  width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th width="300px;">PARTICULARS</th>
+                                            <th>AMOUNT</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($viewParticulars as $viewParticular)
+                                        <tr>
+                                            <td>{{ $viewParticular['particulars']}}</td>
+                                            <td><?php echo number_format($viewParticular['amount'], 2); ?></td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                 </table>   
+                            </div>
+                         </div>
+                    </div>
+                 </div>
+            </div>
             @elseif(\Request::is('dno-personal/manila-properties/view-pldt/'.$viewBill['id']))
             <div class="row">
                 <div class="col-lg-12">
