@@ -11,9 +11,7 @@ use App\User;
 
 class LoginTest extends TestCase
 {
-
-
-    
+        
     public function test_user_cannot_login_with_incorrect_password(){
         $user = factory(User::class)->create([
             'password' => bcrypt($password = 'hello-world'),
