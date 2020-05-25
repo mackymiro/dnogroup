@@ -4,9 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class RibosBarPaymentVoucher extends Model
+class DongFangCorporationPaymentVoucher extends Model
 {
-      protected $fillable = [
+    protected $fillable = [
         'user_id',
         'pv_id',
         'reference_number',
@@ -20,7 +20,6 @@ class RibosBarPaymentVoucher extends Model
         'approved_by',
         'date_approved',
         'received_by_date',
-        'created_by',
         'invoice_number',
         'voucher_ref_number',
         'issued_date',
@@ -32,7 +31,8 @@ class RibosBarPaymentVoucher extends Model
         'status',
         'cheque_number',
         'cheque_amount',
-
+        'created_by',
 
     ];
+
 }

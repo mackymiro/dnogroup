@@ -567,12 +567,12 @@ class RibosBarController extends Controller
 
                     Session::flash('payablesSuccess', 'FULLY PAID AND RELEASED.');
 
-                    return redirect('ribos-bar/edit-ribos-bar-payables-detail/'.$id);
+                    return redirect()->route('editPayablesDetailRibosBar', ['id'=>$id]);
                     break;
                 
                 default:
                     # code...
-                    return redirect('ribos-bar/edit-ribos-bar-payables-detail/'.$id)->with('errorPaid', 'STATUS IS INVALID.');
+                    return redirect()->route('editPayablesDetailRibosBar', ['id'=>$id])->with('errorPaid', 'STATUS IS INVALID.');
                     break;
             }
 
@@ -587,13 +587,13 @@ class RibosBarController extends Controller
 
                      Session::flash('payablesSuccess', 'Status set for approval.');
 
-                     return redirect('ribos-bar/edit-ribos-bar-payables-detail/'.$id);
+                     return redirect()->route('editPayablesDetailRibosBar', ['id'=>$id]);
 
                     break;
                 
                 default:
                     # code...
-                    return redirect('ribos-bar/edit-ribos-bar-payables-detail/'.$id)->with('errorPaid', 'STATUS IS INVALID.');
+                    return redirect()->route('editPayablesDetailRibosBar', ['id'=>$id])->with('errorPaid', 'STATUS IS INVALID.');
                     break;
             }
         }else{
@@ -608,13 +608,13 @@ class RibosBarController extends Controller
 
                     Session::flash('payablesSuccess', 'Status set for confirmation.');
 
-                    return redirect('ribos-bar/edit-ribos-bar-payables-detail/'.$id);
+                    return redirect()->route('editPayablesDetailRibosBar', ['id'=>$id]);
                     
                     break;
                 
                 default:
                     # code...
-                    return redirect('ribos-bar/edit-ribos-bar-payables-detail/'.$id)->with('errorPaid', 'STATUS IS INVALID.');
+                    return redirect()->route('editPayablesDetailRibosBar', ['id'=>$id])->with('errorPaid', 'STATUS IS INVALID.');
                     break;
             }
         }  
@@ -662,8 +662,7 @@ class RibosBarController extends Controller
         $particulars->save();
         
         Session::flash('particularsAdded', 'Particulars added.');
-
-        return redirect('/ribos-bar/edit-ribos-bar-payables-detail/'.$id);
+        return redirect()->route('editPayablesDetailRibosBar', ['id'=>$id]);
     }
 
     //
@@ -693,14 +692,14 @@ class RibosBarController extends Controller
 
         Session::flash('paymentAdded', 'Payment added.');
 
-         return redirect('ribos-bar/edit-ribos-bar-payables-detail/'.$id);
+         return redirect()->route('editPayablesDetailRibosBar', ['id'=>$id]);
     }
 
-    //
+    
     public function editPayablesDetail(Request $request, $id){
         $transactionList = RibosBarPaymentVoucher::find($id);
 
-          //
+        
         $getChequeNumbers = RibosBarPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
         //getParticular details
@@ -710,7 +709,7 @@ class RibosBarController extends Controller
         $amount1 = RibosBarPaymentVoucher::where('id', $id)->sum('amount');
         $amount2 = RibosBarPaymentVoucher::where('pv_id', $id)->sum('amount');
           
-         $sum = $amount1 + $amount2;
+        $sum = $amount1 + $amount2;
 
          $chequeAmount1 = RibosBarPaymentVoucher::where('id', $id)->sum('cheque_amount');
          $chequeAmount2 = RibosBarPaymentVoucher::where('pv_id', $id)->sum('cheque_amount');
@@ -723,10 +722,9 @@ class RibosBarController extends Controller
 
     //
     public function transactionList(){
-         //
         $getTransactionLists = RibosBarPaymentVoucher::where('pv_id', NULL)->get()->toArray();
 
-           //get total amount due
+        //get total amount due
         $status = "FULLY PAID AND RELEASED";
 
         $totalAmoutDue = RibosBarPaymentVoucher::where('pv_id', NULL)->where('status' ,'!=', $status)->sum('amount_due');
@@ -1455,10 +1453,9 @@ class RibosBarController extends Controller
 
             $addPaymentVoucher->save();
             $insertedId = $addPaymentVoucher->id;
-
-            return redirect('ribos-bar/edit-ribos-bar-payables-detail/'.$insertedId);
+            return redirect()->route('editPayablesDetailRibosBar', ['id'=>$insertedId]);
         }else{
-             return redirect('ribos-bar/payment-voucher-form/')->with('error', 'Invoice Number Already Exists. Please See Transaction List For Your Reference');
+            return redirect()->route('paymentVoucherFormRibosBar')->with('error', 'Invoice Number Already Exists. Please See Transaction List For Your Reference');
         }
 
     

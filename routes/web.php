@@ -436,16 +436,16 @@ Route::group(['middleware' =>['user']], function(){
 		'MrPotatoController@updatePV')
 		->name('mr-potato.updatePV');
 	
-		Route::get(
+	Route::get(
 			'/ribos-bar/payment-voucher-form',
 			'RibosBarController@paymentVoucherForm')
-			->name('ribos-bar.paymentVoucherForm');
+			->name('paymentVoucherFormRibosBar');
 	
 	//store
 	Route::post(
 		'/ribos-bar/payment-voucher-store',
 		'RibosBarController@paymentVoucherStore')
-		->name('ribos-bar.paymentVoucherStore');
+		->name('paymentVoucherStore');
 
 	Route::get(
 		'/ribos-bar/payables/transaction-list',
@@ -455,22 +455,22 @@ Route::group(['middleware' =>['user']], function(){
 	Route::get(
 		'/ribos-bar/edit-ribos-bar-payables-detail/{id}',
 		'RibosBarController@editPayablesDetail')
-		->name('ribos-bar.editPayablesDetail');
+		->name('editPayablesDetailRibosBar');
 	
 	Route::post(
 		'/ribos-bar/add-particulars/{id}',
 		'RibosBarController@addParticulars')
-		->name('ribos-bar.addParticulars');
+		->name('addParticulars');
 
 	Route::post(
 		'/ribos-bar/add-payment/{id}',
 		'RibosBarController@addPayment')
-		->name('ribos-bar.addPayment');
+		->name('addPayment');
 
 	Route::patch(
 		'/ribos-bar/accept/{id}',
 		'RibosBarController@accept')
-		->name('ribos-bar.accept');
+		->name('accept');
 
 	Route::get(
 		'/ribos-bar/view-ribos-bar-payables-details/{id}',
@@ -2498,6 +2498,52 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dno-resources-development/view-dno-resources-delivery-transaction/{id}',
 		'DnoResourcesDevelopmentController@viewDeliveryTransaction')
 		->name('viewDeliveryTransaction');
+
+	//Dong Fang Corporation
+	Route::get(
+		'/dong-fang-corporation',
+		'DongFangCorporationController@index')
+		->name('index');
+
+	Route::get(
+		'/dong-fang-corporation/payment-voucher-form',
+		'DongFangCorporationController@paymentVoucherForm')
+		->name('paymentVoucherFormDongFang');
+	
+	Route::post(
+		'/dong-fang-corporation/payment-voucher-store',
+		'DongFangCorporationController@paymentVoucherStore')
+		->name('paymentVoucherStoreDongFang');
+
+	Route::get(
+		'/dong-fang-corporation/edit-dong-fang-payables-detail/{id}',
+		'DongFangCorporationController@editPayablesDetail')
+		->name('editPayablesDetailDongFang');
+	
+	Route::patch(
+		'/dong-fang-corporation/accept/{id}',
+		'DongFangCorporationController@accept')
+		->name('accept');
+
+	Route::post(
+		'/dong-fang-corporation/add-payment/{id}',
+		'DongFangCorporationController@addPayment')
+		->name('addPayment');
+
+	Route::post(
+		'/dong-fang-corportaion/add-particulars/{id}',
+		'DongFangCorporationController@addParticulars')
+		->name('addParticulars');
+	
+	Route::get(
+		'/dong-fang-corporation/payables/transaction-list',
+		'DongFangCorporationController@transactionList')
+		->name('transactionList');
+
+	Route::delete(
+		'/dong-fang-corporation/delete-transaction-list/{id}',
+		'DongFangCorporationController@destroyTransaction')
+		->name('destroyTransaction');
 		
 });
 

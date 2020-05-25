@@ -42,9 +42,10 @@
 	            <div class="row">
 	            	<div class="col-lg-12">
 	            		<div class="card mb-3">
-	            			<div class="card-header">
+	            			        <div class="card-header">
                               <i class="fas fa-file-invoice" aria-hidden="true"></i>
-                          	  Payment Voucher</div>
+                          	  Payment Voucher
+                            </div>
                               <form action="{{ action('DnoPersonalController@paymentVoucherStore') }}" method="post">
                                 {{ csrf_field() }}
                           	  <div class="card-body">

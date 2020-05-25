@@ -78,7 +78,18 @@
           <span>DNO Resources and Development Corp</span>
         </a>
       </li>
-     
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <i class="fas fa-book"></i>
+          <span>Dong Fang Corporation</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <i class="fas fa-book"></i>
+          <span>WLG Corporation</span>
+        </a>
+      </li>
     </ul>
     <div id="content-wrapper">
         <div class="container-fluid">
@@ -211,9 +222,41 @@
             <div class="card text-white bg-info o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                  <img src="{{ asset('images/dno-resources.jpg')}}" width="200" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
+                  <img src="{{ asset('images/dno-resources.jpg')}}" width="200" height="178" class="img-responsive mx-auto d-block" alt="DNO Resources and Development Corp">
                 </div>
                 <div class="mr-5">DNO Resources and Development Corp</div>
+              </div>
+              <a class="card-footer text-white clearfix small z-1" href="{{ url('dno-resources-development') }}">
+                <span class="float-left">View Details</span>
+                <span class="float-right">
+                  <i class="fas fa-angle-right"></i>
+                </span>
+              </a>
+            </div>
+          </div>
+          <div class="col-xl-3 col-sm-6 mb-3">
+            <div class="card text-white bg-primary o-hidden h-100">
+              <div class="card-body">
+                <div class="card-body-icon">
+                  <img src="{{ asset('images/dong-fang-corporation.png')}}" width="200" height="178" class="img-responsive mx-auto d-block" alt="Dong Fang Corporation">
+                </div>
+                <div class="mr-5">Dong Fang Corporation</div>
+              </div>
+              <a class="card-footer text-white clearfix small z-1" href="{{ url('dong-fang-corporation') }}">
+                <span class="float-left">View Details</span>
+                <span class="float-right">
+                  <i class="fas fa-angle-right"></i>
+                </span>
+              </a>
+            </div>
+          </div>
+          <div class="col-xl-3 col-sm-6 mb-3">
+            <div class="card text-white bg-warning o-hidden h-100">
+              <div class="card-body">
+                <div class="card-body-icon">
+                  <img src="" width="200" height="178" class="img-responsive mx-auto d-block" alt="WLG Corporation">
+                </div>
+                <div class="mr-5">WLG Corporation</div>
               </div>
               <a class="card-footer text-white clearfix small z-1" href="{{ url('dno-resources-development') }}">
                 <span class="float-left">View Details</span>
