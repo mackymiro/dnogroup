@@ -154,6 +154,7 @@
                                                   
                                                 </optgroup>
                                                 <option value="Petty Cash">Petty Cash</option>
+                                                <option value="Payroll">Payroll</option>
                                               </select>
                                           </div>
                                           <div id="cebuProp" class="col-lg-2">

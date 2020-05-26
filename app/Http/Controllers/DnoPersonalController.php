@@ -156,9 +156,6 @@ class DnoPersonalController extends Controller
 
     //
     public function pettyCashList(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
         //getPetyCash
         $cat = "Petty Cash";
 
@@ -167,7 +164,7 @@ class DnoPersonalController extends Controller
         $pettyCashLists = DnoPersonalPettyCash::where('pc_id', NULL)->get()->toArray();
 
 
-        return view('dno-personal-petty-cash-list', compact('user', 'getPettyCashLists', 'pettyCashLists'));
+        return view('dno-personal-petty-cash-list', compact('getPettyCashLists', 'pettyCashLists'));
     }
 
     //view service provider

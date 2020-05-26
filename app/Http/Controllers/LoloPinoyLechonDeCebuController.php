@@ -17,13 +17,125 @@ use App\LechonDeCebuDeliveryReceipt;
 use App\LechonDeCebuDeliveryReceiptDuplicateCopy;
 use App\LechonDeCebuSalesInvoice;
 use App\CommissaryRawMaterial;
+use App\LechonDeCebuPettyCash;
 use Session;
 
 
 class LoloPinoyLechonDeCebuController extends Controller
 {   
 
-    //
+    public function viewPettyCash($id){
+        $getPettyCash = LechonDeCebuPettyCash::find($id);
+
+        $getPettyCashSummaries = LechonDeCebuPettyCash::where('pc_id', $id)->get()->toArray();
+
+        //total
+        $totalPettyCash = LechonDeCebuPettyCash::where('id', $id)->where('pc_id', NULL)->sum('amount');
+
+        $pettyCashSummaryTotal = LechonDeCebuPettyCash::where('pc_id', $id)->sum('amount');
+
+        $sum = $totalPettyCash + $pettyCashSummaryTotal;
+
+
+        return view('lechon-de-cebu-view-petty-cash', compact('getPettyCash', 'getPettyCashSummaries', 'sum'));
+    }
+
+    public function updatePC(Request $request, $id){
+        $updatePC = LechonDeCebuPettyCash::find($id);
+
+        $updatePC->date = $request->get('date');
+        $updatePC->petty_cash_summary = $request->get('pettyCashSummary');
+        $updatePC->amount = $request->get('amount');
+        $updatePC->save();
+
+        Session::flash('updatePC', 'Successfully updated.');
+        return redirect()->route('editPettyCashLechonDeCebu', ['id'=>$request->get('pcId')]);
+    }
+
+    public function addNewPettyCash(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $pettyCash = LechonDeCebuPettyCash::find($id);
+
+        $addNew = new LechonDeCebuPettyCash([
+            'user_id'=>$user->id,
+            'pc_id'=>$id,
+            'petty_cash_no'=>$pettyCash->petty_cash_no,
+            'date'=>$request->get('date'),
+            'petty_cash_summary'=>$request->get('pettyCashSummary'),
+            'amount'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+        $addNew->save();
+        Session::flash('addNewSuccess', 'Successfully added.');
+
+        return redirect()->route('editPettyCashLechonDeCebu', ['id'=>$id]);
+    }
+
+    public function editPettyCash($id){
+        $pettyCash = LechonDeCebuPettyCash::find($id);
+
+        $pettyCashSummaries = LechonDeCebuPettyCash::where('pc_id', $id)->get()->toArray();
+        return view('edit-lechon-de-cebu-petty-cash', compact('pettyCash', 'pettyCashSummaries'));
+    }
+
+    public function addPettyCash(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //get the latest insert id query in table petty cash petty cash no
+        $dataCashNo = DB::select('SELECT id, petty_cash_no FROM lechon_de_cebu_petty_cashes ORDER BY id DESC LIMIT 1');
+
+         //if code is not zero add plus 1 petty cash no
+        if(isset($dataCashNo[0]->petty_cash_no) != 0){
+            //if code is not 0
+            $newProd = $dataCashNo[0]->petty_cash_no +1;
+            $uProd = sprintf("%06d",$newProd);   
+
+        }else{
+            //if code is 0 
+            $newProd = 1;
+            $uProd = sprintf("%06d",$newProd);
+        } 
+
+          
+        $addPettyCash = new LechonDeCebuPettyCash([
+            'user_id'=>$user->id,
+            'date'=>$request->date,
+            'petty_cash_no'=>$uProd,
+            'petty_cash_name'=>$request->pettyCashName,
+            'petty_cash_summary'=>$request->pettyCashSummary,
+            'amount'=>$request->amount,
+            'created_by'=>$name,
+        ]);
+
+        $addPettyCash->save();
+        $insertId = $addPettyCash->id;
+      
+        return response()->json($insertId);
+
+
+    }
+
+    public function pettyCashList(){
+       
+ 
+         $pettyCashLists = LechonDeCebuPettyCash::where('pc_id', NULL)->get()->toArray();
+
+        return view('lechon-de-cebu-petty-cash-list', compact('pettyCashLists'));
+    }
+
     public function inventoryStockUpdate(Request $request, $id){
         $updateInventoryStock = CommissaryRawMaterial::find($id);
 
@@ -2517,6 +2629,11 @@ class LoloPinoyLechonDeCebuController extends Controller
         return redirect('lolo-pinoy-lechon-de-cebu/edit/'.$id);
 
 
+    }
+
+    public function destroyPettyCash($id){
+        $pettyCash = LechonDeCebuPettyCash::find($id);
+        $pettyCash->delete();
     }
 
     public function destroyTransactionList($id){

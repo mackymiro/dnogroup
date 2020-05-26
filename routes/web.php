@@ -48,6 +48,40 @@ Route::group(['middleware' =>['user']], function(){
 		'LoloPinoyLechonDeCebuController@destroyDeliveryReceipt')
 		->name('destroyDeliveryReceipt');
 
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/petty-cash-list',
+		'LoloPinoyLechonDeCebuController@pettyCashList')
+		->name('pettyCashListLechonDeCebu');
+
+	Route::post(
+		'/lolo-pinoy-lechon-de-cebu/petty-cash/add',
+		'LoloPinoyLechonDeCebuController@addPettyCash')
+		->name('addPettyCashLechonDeCebu');
+
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/edit-petty-cash/{id}',
+		'LoloPinoyLechonDeCebuController@editPettyCash')
+		->name('editPettyCashLechonDeCebu');
+	
+	Route::post(
+		'/lolo-pinoy-lechon-de-cebu/add-new-petty-cash/{id}',
+		'LoloPinoyLechonDeCebuController@addNewPettyCash')
+		->name('addNewPettyCashLechonDeCebu');	
+
+	Route::patch(
+		'/lolo-pinoy-lechon-de-cebu/updatePC/{id}',
+		'LoloPinoyLechonDeCebuController@updatePC')
+		->name('updatePCLechonDeCebu');
+
+	Route::delete(
+		'/lolo-pinoy-lechon-de-cebu/petty-cash/delete/{id}',
+		'LoloPinoyLechonDeCebuController@destroyPettyCash')
+		->name('destroyPettyCashLechonDeCebu');
+
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/petty-cash/view/{id}',
+		'LoloPinoyLechonDeCebuController@viewPettyCash')
+		->name('viewPettCashLechonDeCebu');
 
 	//route for payment vouchers
 	Route::get(
@@ -68,7 +102,7 @@ Route::group(['middleware' =>['user']], function(){
 		'LoloPinoyLechonDeCebuController@editPaymentVoucher')
 		->name('editPaymentVoucher');
 
-	//route update payment vouhcer
+	//route update payment voucher
 	Route::patch(
 		'/lolo-pinoy-lechon-de-cebu/update-payment-voucher/{id}', 
 		'LoloPinoyLechonDeCebuController@updatePaymentVoucher')
