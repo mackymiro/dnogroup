@@ -37,7 +37,7 @@ class DongFangCorporationController extends Controller
          //add current amount
          $add = $particulars['amount_due'] + $request->get('amount');
 
-           //get current voucher ref number
+        //get current voucher ref number
         $voucherRef = $particulars['voucher_ref_number'];
 
         $addParticulars = new DongFangCorporationPaymentVoucher([

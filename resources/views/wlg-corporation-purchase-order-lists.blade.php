@@ -1,17 +1,17 @@
-@extends('layouts.lolo-pinoy-grill-commissary-app')
+@extends('layouts.wlg-corporation-app')
 @section('title', 'Purchase Order Lists |')
 @section('content')
 <div id="wrapper">
 	<!-- Sidebar -->
-	@include('sidebar.sidebar-lolo-pinoy-grill')
+	@include('sidebar.sidebar-wlg-corporation')
 	<div id="content-wrapper">
 		<div class="container-fluid">
 			 <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">Lolo Pinoy Grill Commissary</a>
+                <a href="#">WLG Corporation</a>
               </li>
-              <li class="breadcrumb-item active">Purchase Order All Lists</li>
+              <li class="breadcrumb-item active">Purchase Lists</li>
             </ol>
             <div class="row">
             	<div class="col-lg-12">
@@ -45,12 +45,12 @@
 				  						<tr>
 				  							<td>
 			  								  @if(Auth::user()['role_type'] != 3)
-					                          <a href="{{ url('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-purchase-order/'.$purchaseOrder['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+					                          <a href="{{ url('wlg-corporation/edit-wlg-corporation-purchase-order/'.$purchaseOrder['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
 					                          @endif
 					                          @if(Auth::user()['role_type'] == 1)
 										  		<a id="delete" onClick="confirmDelete('{{ $purchaseOrder['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
 						                       @endif
-				  								<a href="{{ url('lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-commissary-purchase-order/'.$purchaseOrder['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
+				  								<a href="{{ url('wlg-corporation/view-wlg-corporation-purchase-order/'.$purchaseOrder['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
 				  							</td>
 				  							 <td><a href="#">P.O-{{ $purchaseOrder['p_o_number'] }}</a></td>
 					                        <td>{{ $purchaseOrder['paid_to'] }}</td>
@@ -67,8 +67,8 @@
             </div>
 		</div>
 	</div>
-	 <!-- Sticky Footer -->
-	 <footer class="sticky-footer">
+     <!-- Sticky Footer -->
+     <footer class="sticky-footer">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
             <span>Copyright © Ribos Food Corporation 2019</span>

@@ -118,7 +118,7 @@
                              		</div>
                              		 <br>
 	                                <div>
-	                                    <input type="submit" class="btn btn-success float-right" value="Add Purchase Order" />
+										<button type="submit" class="btn btn-success float-right"><i class="fa fa-plus" aria-hidden="true"></i>  Add Purchase Order</button>
 	                                </div>
 	                            	</form>
 	                             </div>	
@@ -127,5 +127,16 @@
 		            </div>
 	 		</div>	
     	 </div>
+	<!-- Sticky Footer -->
+	<footer class="sticky-footer">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright © Ribos Food Corporation 2019</span>
+            <br>
+            <br>
+            <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
+          </div>
+        </div>
+      </footer>
 </div>
 @endsection

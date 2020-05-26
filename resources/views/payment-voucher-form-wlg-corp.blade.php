@@ -15,34 +15,34 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="wrapper">
-    <!-- Sidebar -->
-    @include('sidebar.sidebar-dong-fang-corporation')
+   <!-- Sidebar -->
+    @include('sidebar.sidebar-wlg-corporation')
     <div id="content-wrapper">
         <div class="container-fluid">
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                <a href="#">Dong Fang Corporation</a>
+                <a href="#">WLG Corporation</a>
                 </li>
                 <li class="breadcrumb-item active">Payables</li>
                 <li class="breadcrumb-item ">Payment Voucher Form</li>
             </ol>
             <div class="col-lg-12">
-                 <img src="{{ asset('images/dong-fang-corporation.png')}}" width="277" height="139" class="img-responsive mx-auto d-block" alt="DNO Personal">
+                 <img src="{{ asset('images/wlg-corporation.png')}}" width="235" height="114" class="img-responsive mx-auto d-block" alt="WLG Corporation">
 	            	 
                 <h4 class="text-center"><u>PAYMENT VOUCHER</u></h4>
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="card mb-3">
-                         <div class="card-header">
+                     <div class="card mb-3">
+                        <div class="card-header">
                               <i class="fas fa-file-invoice" aria-hidden="true"></i>
                           	  Payment Voucher
                         </div>
-                        <form action="{{ action('DongFangCorporationController@paymentVoucherStore') }}" method="post">
+                        <form action="{{ action('WlgCorporationController@paymentVoucherStore') }}" method="post">
                         {{ csrf_field() }}
                         <div class="card-body">
-                            @if(session('error'))
+                              @if(session('error'))
                                 <p class="alert alert-danger">{{ Session::get('error') }}</p>
                             @endif
                             <div class="form-group">
@@ -79,11 +79,11 @@
                             </div>
                         </div>
                         </form>
-                    </div>      
+                     </div>
                 </div>
             </div><!-- end of row -->
         </div>
-    </div><!-- end of content-wrapper -->
+    </div>
       <!-- Sticky Footer -->
       <footer class="sticky-footer">
         <div class="container my-auto">
@@ -96,4 +96,5 @@
         </div>
       </footer>
 </div>
+
 @endsection

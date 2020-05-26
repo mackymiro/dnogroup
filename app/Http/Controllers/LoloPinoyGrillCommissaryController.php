@@ -1510,7 +1510,7 @@ class LoloPinoyGrillCommissaryController extends Controller
         $order->save();
 
         Session::flash('SuccessEdit', 'Successfully updated');
-        return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-purchase-order/'.$request->get('poId'));
+        return redirect()->route('editLoloPinoyGrill', ['id'=>$request->get('poId')]);
     }
 
     //store add new purchase order
@@ -1862,7 +1862,6 @@ class LoloPinoyGrillCommissaryController extends Controller
         $name  = $firstName.$lastName;
 
 
-        //
          $this->validate($request, [
             'paidTo' => 'required',
             'address'=> 'required',
@@ -1907,8 +1906,7 @@ class LoloPinoyGrillCommissaryController extends Controller
 
          $insertedId = $purchaseOrder->id;
          
-        return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-purchase-order/'.$insertedId);
-
+        return redirect()->route('editLoloPinoyGrill', ['id'=>$insertedId]);
     }
 
     /**

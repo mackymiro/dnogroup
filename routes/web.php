@@ -1113,7 +1113,10 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('/lolo-pinoy-grill-commissary/store', 'LoloPinoyGrillCommissaryController@store')->name('lolo-pinoy-grill-commissary');
 
 	//edit purchase order lolo pinoy grill
-	Route::get('/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-purchase-order/{id}', 'LoloPinoyGrillCommissaryController@edit')->name('lolo-pinoy-grill-commissary.edit');
+	Route::get(
+	'/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-purchase-order/{id}', 
+	'LoloPinoyGrillCommissaryController@edit')
+	->name('editLoloPinoyGrill');
 
 	//update purchase order lolo pinoy grill
 	Route::patch('/lolo-pinoy-grill-commissary/update/{id}', 'LoloPinoyGrillCommissaryController@update')->name('lolo-pinoy-grill-commissary.update');
@@ -2523,7 +2526,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::patch(
 		'/dong-fang-corporation/accept/{id}',
 		'DongFangCorporationController@accept')
-		->name('accept');
+		->name('acceptDongFang');
 
 	Route::post(
 		'/dong-fang-corporation/add-payment/{id}',
@@ -2544,7 +2547,97 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dong-fang-corporation/delete-transaction-list/{id}',
 		'DongFangCorporationController@destroyTransaction')
 		->name('destroyTransaction');
-		
+
+	//WLG Corporation
+	Route::get(
+		'/wlg-corporation',
+		'WlgCorporationController@index')
+		->name('indexWlg');
+	
+	Route::get(
+		'/wlg-corporation/payment-voucher-form',
+		'WlgCorporationController@paymentVoucherForm')
+		->name('paymentVoucherFormWlg');
+
+	Route::post(
+		'/wlg-corporation/payment-voucher-store',
+		'WlgCorporationController@paymentVoucherStore')
+		->name('paymentVoucherStoreWlg');
+
+	Route::get(
+		'/wlg-corporation/edit-wlg-corporation-payables-detail/{id}',
+		'WlgCorporationController@editPayablesDetail')
+		->name('editPayablesDetailWlg');
+
+	Route::post(
+		'/wlg-corporation/add-particulars/{id}',
+		'WlgCorporationController@addParticulars')
+		->name('addParticularsWlg');
+
+	Route::patch(
+		'/wlg-corporation/accept/{id}',
+		'WlgCorporationController@accept')
+		->name('acceptWlg');
+
+	Route::post(
+		'/wlg-corporation/add-payment/{id}',
+		'WlgCorporationController@addPayment')
+		->name('addPaymentWlg');
+	
+	Route::get(
+		'/wlg-corporation/payables/transaction-list',
+		'WlgCorporationController@transactionList')
+		->name('transactionListWlg');
+
+	Route::delete(
+		'/wlg-corporation/delete-transaction-list/{id}',
+		'WlgCorporationController@destroyTransaction')
+		->name('destroyTransactionWlg');
+
+	Route::get(
+		'/wlg-corporation/purchase-order',
+		'WlgCorporationController@purchaseOrderForm')
+		->name('purchaseOrderFormWlg');
+
+	Route::post(
+		'/wlg-corporation/store',
+		'WlgCorporationController@store')
+		->name('storeWlg');
+
+	Route::get(
+		'/wlg-corporation/edit-wlg-corporation-purchase-order/{id}',
+		'WlgCorporationController@edit')
+		->name('editWlg');
+
+	Route::post(
+		'/wlg-corporation/add-new-particulars/{id}',
+		'WlgCorporationController@addNewParticulars')
+		->name('addNewParticularsWlg');
+	
+	Route::patch(
+		'/wlg-corporation/update-po/{id}',
+		'WlgCorporationController@updatePo')
+		->name('updatePoWlg');
+
+	Route::delete(
+		'/wlg-corporation/delete/{id}',
+		'WlgCorporationController@destroy')
+		->name('destroyWlg');
+
+	Route::get(
+		'/wlg-corporation/purchase-order-lists',
+		'WlgCorporationController@purchaseOrderAllLists')
+		->name('purchaseOrderAllListsWlg');
+	
+	Route::get(
+		'/wlg-corporation/view-wlg-corporation-purchase-order/{id}',
+		'WlgCorporationController@show')
+		->name('showWlg');
+	
+	Route::get(
+		'/wlg-corporation/printPurchaseOrder/{id}',
+		'WlgCorporationController@printPO')
+		->name('printPOWlg');
 });
 
 

@@ -79,13 +79,13 @@
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{{ url('dong-fang-corporation')}}">
           <i class="fas fa-book"></i>
           <span>Dong Fang Corporation</span>
         </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{{ url('wlg-corporation') }}">
           <i class="fas fa-book"></i>
           <span>WLG Corporation</span>
         </a>
@@ -254,11 +254,11 @@
             <div class="card text-white bg-warning o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                  <img src="" width="200" height="178" class="img-responsive mx-auto d-block" alt="WLG Corporation">
+                  <img src="{{ asset('images/wlg-corporation.png') }}" width="200" height="178" class="img-responsive mx-auto d-block" alt="WLG Corporation">
                 </div>
                 <div class="mr-5">WLG Corporation</div>
               </div>
-              <a class="card-footer text-white clearfix small z-1" href="{{ url('dno-resources-development') }}">
+              <a class="card-footer text-white clearfix small z-1" href="{{ url('wlg-corporation') }}">
                 <span class="float-left">View Details</span>
                 <span class="float-right">
                   <i class="fas fa-angle-right"></i>
