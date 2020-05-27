@@ -8,16 +8,16 @@
 		<div class="container-fluid">
 			<!-- Breadcrumbs-->
 			<ol class="breadcrumb">
-	              <li class="breadcrumb-item">
-	                <a href="#">DNO Personal</a>
-	              </li>
-				  <li class="breadcrumb-item active">Personal Expenses</li>
-				  @if(\Request::is('dno-personal')) 
+				<li class="breadcrumb-item">
+					<a href="#">DNO Personal</a>
+				</li>
+				<li class="breadcrumb-item active">Personal Expenses</li>
+				@if(\Request::is('dno-personal')) 
 					<li class="breadcrumb-item ">ALD Accounts</li>
-				  @elseif(\Request::is('dno-personal/personal-expenses/mod-accounts'))
+				@elseif(\Request::is('dno-personal/personal-expenses/mod-accounts'))
 					<li class="breadcrumb-item ">MOD Accounts</li>
-				  @endif
-	              
+				@endif
+				
 			</ol>
 			<div class="row">
 				<div class="col-lg-12">

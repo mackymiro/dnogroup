@@ -8,6 +8,19 @@
       </li>
       <li class="nav-item dropdown ">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           <i class="fa fa-file-invoice"></i>
+          <span>Invoice</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          @if(Auth::user()['role_type'] == 1)
+          <a class="dropdown-item" href="{{ url('wlg-corporation/invoice-form') }}">Invoice Form</a>
+          @endif
+          <a class="dropdown-item" href="{{ url('wlg-corporation/') }}">Lists</a>
+         
+        </div>
+      </li>
+      <li class="nav-item dropdown ">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fab fa-first-order"></i>
           <span>Purchase Order</span>
         </a>

@@ -10,13 +10,81 @@ use PDF;
 use App\User;
 use App\WlgCorporationPaymentVoucher;
 use App\WlgCorporationPurchaseOrder;
+use App\WlgCorporationInvoice;
+
 
 class WlgCorporationController extends Controller
 {
+
+    public function editInvoice($id){   
+        
+        return view('edit-wlg-corportaion-invoice');
+    }
+
+    public function addInvoice(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+
+        $this->validate($request, [
+            'date' => 'required',
+            'deliveryTerms'=> 'required',
+            'shipper'=>'required',
+            'descGoods'=>'required',
+        ]);
+
+         //check if invoice number already exists
+         $target = DB::table(
+            'wlg_corporation_invoices')
+            ->where('invoice_number', $request->get('invoiceNumber'))
+            ->get()->first();
+
+        $status = "Invoice Form";
+        if($target === NULL){
+            $addInvoice = new WlgCorporationInvoice([
+                'user_id'=>$user->id,
+                'date'=>$request->get('date'),
+                'delivery_terms'=>$request->get('deliveryTerms'),
+                'tranport_by'=>$request->get('transportBy'),
+                'invoice_number'=>$request->get('invoiceNumber'),
+                'shipper'=>$request->get('shipper'),
+                'consignee'=>$request->get('consignee'),
+                'notify_party'=>$request->get('notifyParty'),
+                'attention'=>$request->get('attention'),
+                'number_of_goods'=>$request->get('no'),
+                'description_of_goods'=>$request->get('descGoods'),
+                'qty'=>$request->get('qty'),
+                'unit_price'=>$request->get('unitPrice'),
+                'total_amount'=>$request->get('totalAmount'),
+                'status'=>$status,
+                'created_by'=>$name,
+            ]);
+    
+            $addInvoice->save();
+            $insertedId = $addInvoice->id;
+    
+            return redirect()->route('editInvoiceWlg', ['id'=>$insertedId]);
+        }else{
+            return redirect()->route('invoiceFormWlg')->with('error', 'Invoice Number Already Exists.');
+        }
+
+      
+        
+    }
+
+    public function invoiceForm(){
+        
+        return view('wlg-corporation-invoice-form');
+    }
+
     public function printPO($id){
         $purchaseOrder = WlgCorporationPurchaseOrder::find($id);
 
-        //
         $pOrders = WlgCorporationPurchaseOrder::where('po_id', $id)->get()->toArray();
 
             //count the total amount 

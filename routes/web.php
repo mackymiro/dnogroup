@@ -2672,6 +2672,21 @@ Route::group(['middleware' => ['auth']], function(){
 		'/wlg-corporation/printPurchaseOrder/{id}',
 		'WlgCorporationController@printPO')
 		->name('printPOWlg');
+
+	Route::get(
+		'/wlg-corporation/invoice-form',
+		'WlgCorporationController@invoiceForm')
+		->name('invoiceFormWlg');
+
+	Route::post(
+		'/wlg-corporation/add-invoice',
+		'WlgCorporationController@addInvoice')
+		->name('addInvoiceWlg');
+
+	Route::get(
+		'/wlg-corporation/edit-invoice/{id}',
+		'WlgCorporationController@editInvoice')
+		->name('editInvoiceWlg');
 });
 
 
