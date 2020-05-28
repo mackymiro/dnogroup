@@ -90,11 +90,11 @@
                                                 @foreach($getCebuProperties as $getCebuProperty)
                                                 <tr id="deletedId<?php echo $getCebuProperty['id']; ?>">
                                                     <td>
-                                                         @if($user->role_type !== 3)
+                                                         @if(Auth::user()['role_type'] != 3)
                                                             <!-- Button trigger modal -->
                                                             <a data-toggle="modal" data-target="#editCebuProp<?php echo $getCebuProperty['id']?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                                         @endif
-                                                        @if($user->role_type == 1)
+                                                        @if(Auth::user()['role_type'] == 1 || Auth::user()['role_type'] == 2)
                                                             <a id="delete" onClick="confirmDelete('{{ $getCebuProperty['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
                                                         @endif
                                                     </td>
@@ -165,11 +165,11 @@
                                                  @foreach($getManilaProperties as $getManilaProperty)
                                                     <tr id="deletedId<?php echo $getManilaProperty['id']; ?>">
                                                         <td>
-                                                        @if($user->role_type !== 3)
+                                                        @if(Auth::user()['role_type'] != 3)
                                                             <!-- Button trigger modal -->
                                                             <a data-toggle="modal" data-target="#manilaProp<?php echo $getManilaProperty['id']?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                                         @endif
-                                                        @if($user->role_type == 1)
+                                                        @if(Auth::user()['role_type'] == 1 || Auth::user()['role_type'] == 2)
                                                             <a id="delete" onClick="confirmDelete('{{ $getManilaProperty['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>                                                        
                                                         @endif
                                                         </td>

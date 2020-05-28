@@ -270,11 +270,6 @@ Route::group(['middleware' =>['user']], function(){
 		->name('ribos-bar.destroyCashiersReport');
 	
 	Route::delete(
-		'/dno-personal/delete-transaction-list/{id}',
-		'DnoPersonalController@destroyTransactionList')
-		->name('dno-personal.destroyTransactionList');
-
-	Route::delete(
 		'/dno-personal/credit-card/delete/{id}',
 		'DnoPersonalController@destroyCreditCard')
 		->name('dno-personal.destroyCreditCard');
@@ -738,10 +733,7 @@ Route::group(['middleware' =>['sales']], function(){
 		'RibosBarController@destroy')
 		->name('ribos-bar.destroy');
 
-	Route::delete(
-		'/ribos-bar/delete-transaction-list/{id}',
-		'RibosBarController@destroyTransactionList')
-		->name('ribos-bar.destroyTransactionList');
+
 	
 	Route::delete(
 			'/ribos-bar/delete-payment-voucher/{id}',
@@ -763,26 +755,7 @@ Route::group(['middleware' =>['sales']], function(){
 		'/ribos-bar/cashiers-report-form/delete-item/{id}',
 		'RibosBarController@destroyCashiersReport')
 		->name('ribos-bar.destroyCashiersReport');
-	
-	Route::delete(
-		'/dno-personal/delete-transaction-list/{id}',
-		'DnoPersonalController@destroyTransactionList')
-		->name('dno-personal.destroyTransactionList');
-
-	Route::delete(
-		'/dno-personal/credit-card/delete/{id}',
-		'DnoPersonalController@destroyCreditCard')
-		->name('dno-personal.destroyCreditCard');
-	
-	Route::delete(
-		'/dno-personal/delete-property/{id}',
-		'DnoPersonalController@destroyProperty')
-		->name('dno-personal.destroyProperty');
-
-	Route::delete(
-		'/dno-perosonal/vehicles/delete/{id}',
-		'DnoPersonalController@destroyVehicles')
-		->name('dno-personal.destroyVehicles');
+		
 	
 	Route::delete(
 		'/dno-resources-development/delete-transaction-list/{id}',
@@ -1746,6 +1719,11 @@ Route::group(['middleware' => ['auth']], function(){
 	//Ribos Bar
 	Route::get('/ribos-bar', 'RibosBarController@index')->name('ribos-bar.index');
 
+	Route::delete(
+		'/ribos-bar/delete-transaction-list/{id}',
+		'RibosBarController@destroyTransactionList')
+		->name('ribos-bar.destroyTransactionList');
+
 	Route::get(
 		'/ribos-bar/delivery-receipt-form',
 		'RibosBarController@deliveryReceiptForm')
@@ -2131,9 +2109,21 @@ Route::group(['middleware' => ['auth']], function(){
 	//DNO Personal
 	Route::get('/dno-personal', 'DnoPersonalController@index')->name('dno-personal');
 
+	Route::delete(
+		'/dno-personal/delete-transaction-list/{id}',
+		'DnoPersonalController@destroyTransactionList')
+		->name('dno-personal.destroyTransactionList');
 	
+	Route::delete(
+			'/dno-personal/delete-property/{id}',
+			'DnoPersonalController@destroyProperty')
+			->name('dno-personal.destroyProperty');
 
-
+	Route::delete(
+			'/dno-personal/credit-card/delete/{id}',
+			'DnoPersonalController@destroyCreditCard')
+			->name('dno-personal.destroyCreditCard');
+			
 	Route::post(
 		'/dno-personal/store-credit-card',
 		'DnoPersonalController@storeCreditCard')
@@ -2148,6 +2138,9 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dno-personal/credit-card/mod-accounts',
 		'DnoPersonalController@creditCardAccount')
 		->name('db-personal.creditCardAccount');
+
+
+	
 
 	Route::patch(
 		'/dno-personal/credit-card/accounts/edit/{id}',
@@ -2353,7 +2346,10 @@ Route::group(['middleware' => ['auth']], function(){
 		'DnoPersonalController@vehicleUpdate')
 		->name('dno-personal.vehicleUpdate');
 
-
+	Route::delete(
+			'/dno-perosonal/vehicles/delete/{id}',
+			'DnoPersonalController@destroyVehicles')
+			->name('dno-personal.destroyVehicles');
 
 	Route::post(
 		'/dno-personal/vehicles/store-vehicles',
@@ -2589,6 +2585,26 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('indexWlg');
 	
 	Route::get(
+		'/wlg-corporation/pro-forma-invoice/lists',
+		'WlgCorporationController@index')
+		->name('indexProFormaWlg');
+	
+	Route::get(
+		'/wlg-corporation/commercial-invoice/lists',
+		'WlgCorporationController@index')
+		->name('indexCommercialInvoice');
+
+	Route::get(
+		'/wlg-corporation/quotation-invoice/lists',
+		'WlgCorporationController@index')
+		->name('indexQuotation');
+	
+	Route::get(
+		'/wlg-corporation/packing-list/lists',
+		'WlgCorporationController@index')
+		->name('indexPackingList');
+		
+	Route::get(
 		'/wlg-corporation/payment-voucher-form',
 		'WlgCorporationController@paymentVoucherForm')
 		->name('paymentVoucherFormWlg');
@@ -2678,15 +2694,158 @@ Route::group(['middleware' => ['auth']], function(){
 		'WlgCorporationController@invoiceForm')
 		->name('invoiceFormWlg');
 
+	Route::get(
+			'/wlg-corporation/pro-forma-invoice',
+			'WlgCorporationController@invoiceForm')
+			->name('invoiceFormProForma');
+
+	Route::get(
+		'/wlg-corporation/commercial-invoice',
+		'WlgCorporationController@invoiceForm')
+		->name('invoiceFormCommercial');
+
+	Route::get(
+		'/wlg-corporation/quotation-invoice',
+		'WlgCorporationController@invoiceForm')
+		->name('invoiceFormQuotation');
+	
+	Route::get(
+		'/wlg-corporation/packing-list',
+		'WlgCorporationController@invoiceForm')
+		->name('invoiceFormPackingList');
+
 	Route::post(
 		'/wlg-corporation/add-invoice',
 		'WlgCorporationController@addInvoice')
 		->name('addInvoiceWlg');
 
+	Route::post(
+		'/wlg-corporation/add-pro-forma-invoice',
+		'WlgCorporationController@addProFormaInvoice')
+		->name('addProFormaInvoiceWlf');
+
+	Route::post(
+		'/wlg-corporation/add-commercial-invoice',
+		'WlgCorporationController@addCommercialInvoice')
+		->name('addCommercialInvoiceWlg');
+
+	
+	Route::post(
+		'/wlg-corporation/add-quotation-invoice',
+		'WlgCorporationController@addQuotationInvoice')
+		->name('addQuotationInvoiceWlg');
+	
+	Route::post(
+		'/wlg-corporation/add-packing-list',
+		'WlgCorporationController@addPackingList')
+		->name('addPackingListWlg');
+
 	Route::get(
 		'/wlg-corporation/edit-invoice/{id}',
 		'WlgCorporationController@editInvoice')
 		->name('editInvoiceWlg');
+
+	Route::get(
+		'/wlg-corporation/edit-pro-forma-invoice/{id}',
+		'WlgCorporationController@editInvoiceProForma')
+		->name('editInvoiceProForma');
+
+	Route::get(
+		'/wlg-corporation/edit-commercial-invoice/{id}',
+		'WlgCorporationController@editCommercialInvoice')
+		->name('editCommercialInvoiceWlg');
+
+	Route::get(
+		'/wlg-corporation/edit-quotation-invoice/{id}',
+		'WlgCorporationController@editQuotationInvoice')
+		->name('editQuotationInvoiceWlg');
+
+	Route::get(
+		'/wlg-corporation/edit-packing-list/{id}',
+		'WlgCorporationController@editPackingList')
+		->name('editPackingListWlg');
+	
+	Route::post(
+		'/wlg-corporation/add-new/{id}',
+		'WlgCorporationController@addNewInvoice')
+		->name('addNewInvoiceWlg');
+	
+	Route::post(
+		'/wlg-corporation/add-new-pro-forma/{id}',
+		'WlgCorporationController@addNewInvoiceProForma')
+		->name('addNewInvoiceProFormaWlg');
+
+	Route::post(
+		'/wlg-corporation/add-new-commerical-invoice/{id}',
+		'WlgCorporationController@addNewCommercialInvoice')
+		->name('addNewCommercialInvoiceWlg');
+	
+	Route::post(
+		'/wlg-corporation/add-new-quotation-invoice/{id}',
+		'WlgCorporationController@addNewQuotation')
+		->name('addNewQuotationWlg');
+	
+	Route::post(
+		'/wlg-corporation/add-new-packing-list/{id}',
+		'WlgCorporationController@addNewPackingList')
+		->name('addNewPackingListWlg');
+	
+
+	Route::patch(
+		'/wlg-corporation/update-invoice/{id}',
+		'WlgCorporationController@updateIF')
+		->name('updateIFWlg');
+
+	Route::patch(
+		'/wlg-corporation/update-invoice-pro-forma/{id}',
+		'WlgCorporationController@updateProForma')
+		->name('updateProFormaWlg');
+
+	Route::patch(
+		'/wlg-corporation/update-commercial-invoice/{id}',
+		'WlgCorporationController@updateCommercialInvoice')
+		->name('updateCommercialInvoiceWlg');
+
+	Route::patch(
+		'/wlg-corporation/update-quotation-invoice/{id}',
+		'WlgCorporationController@updateQuotation')
+		->name('updateQuotationWlg');
+	
+	Route::patch(
+		'/wlg-corporation/update-packing-list/{id}',
+		'WlgCorporationController@updatePackingList')
+		->name('updatePackingListWlg');
+	
+	Route::delete(
+		'/wlg-corporation/invoice/delete/{id}',
+		'WlgCorporationController@destroyInvoice')
+		->name('destroyInvoiceWlg');
+
+	Route::get(
+		'/wlg-corporation/view-invoice/{id}',
+		'WlgCorporationController@viewInvoice')
+		->name('viewInvoiceWlg');
+
+	Route::get(
+		'/wlg-corporation/view-pro-forma-invoice/{id}',
+		'WlgCorporationController@viewInvoice')
+		->name('viewInvoiceProForma');
+
+	Route::get(
+		'/wlg-corporation/view-commercial-invoice/{id}',
+		'WlgCorporationController@viewInvoice')
+		->name('viewInvoiceCommercialInvoice');
+
+	Route::get(
+		'/wlg-corporation/view-quotation-invoice/{id}',
+		'WlgCorporationController@viewInvoice')
+		->name('viewInvoiceQuotation');
+
+	Route::get(
+		'/wlg-corporation/view-packing-list/{id}',
+		'WlgCorporationController@viewInvoice')
+		->name('viewInvoicePackingList');
+	
 });
 
 

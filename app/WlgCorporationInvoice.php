@@ -21,6 +21,8 @@ class WlgCorporationInvoice extends Model
         'number_of_goods',
         'description_of_goods',
         'qty',
+        'kg_cbm',
+        'gross_weight',
         'unit_price',
         'total_amount',
         'status',

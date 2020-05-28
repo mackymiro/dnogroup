@@ -3,7 +3,7 @@
 @section('content')
 <div id="wrapper">
 	<!-- Sidebar -->
-    @include('sidebar.sidebar')
+    @include('sidebar.sidebar-wlg-corporation')
     <div id="content-wrapper">
     	<div class="container-fluid">
     		 <!-- Breadcrumbs-->

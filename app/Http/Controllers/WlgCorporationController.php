@@ -15,10 +15,485 @@ use App\WlgCorporationInvoice;
 
 class WlgCorporationController extends Controller
 {
+   
 
+    public function viewInvoice($id){
+        $viewInvoice = WlgCorporationInvoice::find($id);
+
+        $invoices = WlgCorporationInvoice::where('if_id', $id)->get()->toArray();
+
+        $totInvoice = WlgCorporationInvoice::where('id', $id)->sum('total_amount');
+        $totInvoice2 = WlgCorporationInvoice::where('if_id', $id)->sum('total_amount');
+
+        $sum =  $totInvoice + $totInvoice2;
+
+        return view('view-wlg-corporation-invoice', compact('viewInvoice', 'invoices', 'sum'));
+    }
+
+    //update packing list
+    public function updatePackingList(Request $request, $id){
+        $updateInvoice = WlgCorporationInvoice::find($id);
+        $updateInvoice->number_of_goods = $request->get('no');
+        $updateInvoice->description_of_goods = $request->get('descGoods');
+        $updateInvoice->qty = $request->get('qty');
+        $updateInvoice->kg_cbm = $request->get('kg');
+        $updateInvoice->gross_weight = $request->get('grossWeight');
+        $updateInvoice->save();
+
+        Session::flash('successEdit', 'Successfully updated');
+        return redirect()->route('editPackingListWlg', ['id'=>$request->get('packingListId')]);
+    }
+
+    //update quotatation invoice
+    public function updateQuotation(Request $request, $id){
+        $updateInvoice = WlgCorporationInvoice::find($id);
+        $updateInvoice->number_of_goods = $request->get('no');
+        $updateInvoice->description_of_goods = $request->get('descGoods');
+        $updateInvoice->qty = $request->get('qty');
+        $updateInvoice->unit_price = $request->get('unitPrice');
+        $updateInvoice->total_amount = $request->get('totalAmount');
+        $updateInvoice->save();
+
+        Session::flash('successEdit', 'Successfully updated');
+        return redirect()->route('editQuotationInvoiceWlg', ['id'=>$request->get('quotationId')]);
+    }
+
+    //update commercial invoice
+    public function updateCommercialInvoice(Request $request, $id){
+        $updateInvoice = WlgCorporationInvoice::find($id);
+        $updateInvoice->number_of_goods = $request->get('no');
+        $updateInvoice->description_of_goods = $request->get('descGoods');
+        $updateInvoice->qty = $request->get('qty');
+        $updateInvoice->unit_price = $request->get('unitPrice');
+        $updateInvoice->total_amount = $request->get('totalAmount');
+        $updateInvoice->save();
+
+        Session::flash('successEdit', 'Successfully updated');
+        return redirect()->route('editCommercialInvoiceWlg', ['id'=>$request->get('commercialInvoiceId')]);
+    }
+
+
+    //update pro-forma invoice
+    public function updateProForma(Request $request, $id){
+        $updateInvoice = WlgCorporationInvoice::find($id);
+        $updateInvoice->number_of_goods = $request->get('no');
+        $updateInvoice->description_of_goods = $request->get('descGoods');
+        $updateInvoice->qty = $request->get('qty');
+        $updateInvoice->unit_price = $request->get('unitPrice');
+        $updateInvoice->total_amount = $request->get('totalAmount');
+        $updateInvoice->save();
+
+        Session::flash('successEdit', 'Successfully updated');
+        return redirect()->route('editInvoiceProForma', ['id'=>$request->get('proFormaId')]);
+    }
+
+    //update invoice form
+    public function updateIF(Request $request, $id){
+       
+        $updateInvoice = WlgCorporationInvoice::find($id);
+        $updateInvoice->number_of_goods = $request->get('no');
+        $updateInvoice->description_of_goods = $request->get('descGoods');
+        $updateInvoice->qty = $request->get('qty');
+        $updateInvoice->unit_price = $request->get('unitPrice');
+        $updateInvoice->total_amount = $request->get('totalAmount');
+        $updateInvoice->save();
+
+        Session::flash('successEdit', 'Successfully updated');
+        return redirect()->route('editInvoiceWlg', ['id'=>$request->get('iFId')]);
+    }
+
+    //add new packing list
+    public function addNewPackingList(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $addNewInvoice = new WlgCorporationInvoice([
+            'user_id'=>$user->id,
+            'if_id'=>$id,
+            'number_of_goods'=>$request->get('no'),
+            'description_of_goods'=>$request->get('descGoods'),
+            'qty'=>$request->get('qty'),
+            'kg_cbm'=>$request->get('kg'),
+            'gross_weight'=>$request->get('grossWeight'),
+            'created_by'=>$name,
+        ]);
+
+        $addNewInvoice->save();
+        Session::flash('successAdd', 'Successfully added');
+
+        return redirect()->route('editPackingListWlg', ['id'=>$id]);
+    }
+
+
+    //add new for quotation
+    public function addNewQuotation(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $addNewInvoice = new WlgCorporationInvoice([
+            'user_id'=>$user->id,
+            'if_id'=>$id,
+            'number_of_goods'=>$request->get('no'),
+            'description_of_goods'=>$request->get('descGoods'),
+            'qty'=>$request->get('qty'),
+            'unit_price'=>$request->get('unitPrice'),
+            'total_amount'=>$request->get('totalAmount'),
+            'created_by'=>$name,
+        ]);
+
+        $addNewInvoice->save();
+        Session::flash('successAdd', 'Successfully added');
+
+        return redirect()->route('editQuotationInvoiceWlg', ['id'=>$id]);
+
+    }
+
+    //add new for commercial invoice
+    public function addNewCommercialInvoice(Request $request, $id){ 
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $addNewInvoice = new WlgCorporationInvoice([
+            'user_id'=>$user->id,
+            'if_id'=>$id,
+            'number_of_goods'=>$request->get('no'),
+            'description_of_goods'=>$request->get('descGoods'),
+            'qty'=>$request->get('qty'),
+            'unit_price'=>$request->get('unitPrice'),
+            'total_amount'=>$request->get('totalAmount'),
+            'created_by'=>$name,
+        ]);
+
+        $addNewInvoice->save();
+        Session::flash('successAdd', 'Successfully added');
+
+        return redirect()->route('editCommercialInvoiceWlg', ['id'=>$id]);
+    }
+
+    //add new for pro-forma invoice
+    public function addNewInvoiceProForma(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $addNewInvoice = new WlgCorporationInvoice([
+            'user_id'=>$user->id,
+            'if_id'=>$id,
+            'number_of_goods'=>$request->get('no'),
+            'description_of_goods'=>$request->get('descGoods'),
+            'qty'=>$request->get('qty'),
+            'unit_price'=>$request->get('unitPrice'),
+            'total_amount'=>$request->get('totalAmount'),
+            'created_by'=>$name,
+        ]);
+
+        $addNewInvoice->save();
+        Session::flash('successAdd', 'Successfully added');
+
+        return redirect()->route('editInvoiceProForma', ['id'=>$id]);
+
+    }
+
+    //add new for invoice form
+    public function addNewInvoice(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $addNewInvoice = new WlgCorporationInvoice([
+            'user_id'=>$user->id,
+            'if_id'=>$id,
+            'number_of_goods'=>$request->get('no'),
+            'description_of_goods'=>$request->get('descGoods'),
+            'qty'=>$request->get('qty'),
+            'unit_price'=>$request->get('unitPrice'),
+            'total_amount'=>$request->get('totalAmount'),
+            'created_by'=>$name,
+        ]);
+
+        $addNewInvoice->save();
+        Session::flash('successAdd', 'Successfully added');
+
+        return redirect()->route('editInvoiceWlg', ['id'=>$id]);
+
+    }
+    
+
+    //edit page for packing list
+    public function editPackingList($id){
+        $invoice  = WlgCorporationInvoice::find($id);
+
+        $invoiceForms = WlgCorporationInvoice::where('if_id', $id)->get()->toArray();
+        return view('edit-wlg-corportaion-invoice', compact('invoice', 'invoiceForms'));
+    }
+
+    //edit page for quitation invoice
+    public function editQuotationInvoice($id){
+        $invoice  = WlgCorporationInvoice::find($id);
+
+        $invoiceForms = WlgCorporationInvoice::where('if_id', $id)->get()->toArray();
+        return view('edit-wlg-corportaion-invoice', compact('invoice', 'invoiceForms'));
+    }
+
+    //edit page for commercial page
+    public function editCommercialInvoice($id){
+        $invoice  = WlgCorporationInvoice::find($id);
+
+        $invoiceForms = WlgCorporationInvoice::where('if_id', $id)->get()->toArray();
+        return view('edit-wlg-corportaion-invoice', compact('invoice', 'invoiceForms'));
+    }
+
+    //edit page for pro-forma invoice form 
+    public function editInvoiceProForma($id){
+        $invoice  = WlgCorporationInvoice::find($id);
+
+        $invoiceForms = WlgCorporationInvoice::where('if_id', $id)->get()->toArray();
+        return view('edit-wlg-corportaion-invoice', compact('invoice', 'invoiceForms'));
+    }
+
+    //edit page for invoice form
     public function editInvoice($id){   
+        $invoice  = WlgCorporationInvoice::find($id);
+
+        $invoiceForms = WlgCorporationInvoice::where('if_id', $id)->get()->toArray();
+        return view('edit-wlg-corportaion-invoice', compact('invoice', 'invoiceForms'));
+    }
+
+    public function addPackingList(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $this->validate($request, [
+            'date' => 'required',
+            'deliveryTerms'=> 'required',
+            'shipper'=>'required',
+            'descGoods'=>'required',
+        ]);
+
+           //check if invoice number already exists
+           $target = DB::table(
+            'wlg_corporation_invoices')
+            ->where('invoice_number', $request->get('invoiceNumber'))
+            ->get()->first();
+
+        $status = "Packing List";
+        if($target === NULL){
+            $addInvoice = new WlgCorporationInvoice([
+                'user_id'=>$user->id,
+                'date'=>$request->get('date'),
+                'delivery_terms'=>$request->get('deliveryTerms'),
+                'tranport_by'=>$request->get('transportBy'),
+                'invoice_number'=>$request->get('invoiceNumber'),
+                'shipper'=>$request->get('shipper'),
+                'consignee'=>$request->get('consignee'),
+                'notify_party'=>$request->get('notifyParty'),
+                'attention'=>$request->get('attention'),
+                'number_of_goods'=>$request->get('no'),
+                'description_of_goods'=>$request->get('descGoods'),
+                'qty'=>$request->get('qty'),
+                'kg_cbm'=>$request->get('kg'),
+                'gross_weight'=>$request->get('grossWeight'),
+                'status'=>$status,
+                'created_by'=>$name,
+            ]);
+    
+            $addInvoice->save();
+            $insertedId = $addInvoice->id;
+    
+            return redirect()->route('editPackingListWlg', ['id'=>$insertedId]);
+        }else{
+            return redirect()->route('invoiceFormPackingList')->with('error', 'Invoice Number Already Exists.');
+        }
+
+    }
+
+    public function addQuotationInvoice(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
         
-        return view('edit-wlg-corportaion-invoice');
+        $this->validate($request, [
+            'date' => 'required',
+            'deliveryTerms'=> 'required',
+            'shipper'=>'required',
+            'descGoods'=>'required',
+        ]);
+
+          //check if invoice number already exists
+        $target = DB::table(
+            'wlg_corporation_invoices')
+            ->where('invoice_number', $request->get('invoiceNumber'))
+            ->get()->first();
+
+        $status = "Quotation Invoice";
+        if($target === NULL){
+            $addInvoice = new WlgCorporationInvoice([
+                'user_id'=>$user->id,
+                'date'=>$request->get('date'),
+                'delivery_terms'=>$request->get('deliveryTerms'),
+                'tranport_by'=>$request->get('transportBy'),
+                'invoice_number'=>$request->get('invoiceNumber'),
+                'shipper'=>$request->get('shipper'),
+                'consignee'=>$request->get('consignee'),
+                'notify_party'=>$request->get('notifyParty'),
+                'attention'=>$request->get('attention'),
+                'number_of_goods'=>$request->get('no'),
+                'description_of_goods'=>$request->get('descGoods'),
+                'qty'=>$request->get('qty'),
+                'unit_price'=>$request->get('unitPrice'),
+                'total_amount'=>$request->get('totalAmount'),
+                'status'=>$status,
+                'created_by'=>$name,
+            ]);
+    
+            $addInvoice->save();
+            $insertedId = $addInvoice->id;
+    
+            return redirect()->route('editQuotationInvoiceWlg', ['id'=>$insertedId]);
+        }else{
+            return redirect()->route('invoiceFormQuotation')->with('error', 'Invoice Number Already Exists.');
+        }
+
+        
+    }
+
+    public function addCommercialInvoice(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+        
+        $this->validate($request, [
+            'date' => 'required',
+            'deliveryTerms'=> 'required',
+            'shipper'=>'required',
+            'descGoods'=>'required',
+        ]);
+
+         //check if invoice number already exists
+        $target = DB::table(
+            'wlg_corporation_invoices')
+            ->where('invoice_number', $request->get('invoiceNumber'))
+            ->get()->first();
+
+        $status = "Commercial Invoice";
+        if($target === NULL){
+            $addInvoice = new WlgCorporationInvoice([
+                'user_id'=>$user->id,
+                'date'=>$request->get('date'),
+                'delivery_terms'=>$request->get('deliveryTerms'),
+                'tranport_by'=>$request->get('transportBy'),
+                'invoice_number'=>$request->get('invoiceNumber'),
+                'shipper'=>$request->get('shipper'),
+                'consignee'=>$request->get('consignee'),
+                'notify_party'=>$request->get('notifyParty'),
+                'attention'=>$request->get('attention'),
+                'number_of_goods'=>$request->get('no'),
+                'description_of_goods'=>$request->get('descGoods'),
+                'qty'=>$request->get('qty'),
+                'unit_price'=>$request->get('unitPrice'),
+                'total_amount'=>$request->get('totalAmount'),
+                'status'=>$status,
+                'created_by'=>$name,
+            ]);
+    
+            $addInvoice->save();
+            $insertedId = $addInvoice->id;
+    
+            return redirect()->route('editCommercialInvoiceWlg', ['id'=>$insertedId]);
+        }else{
+            return redirect()->route('invoiceFormCommercial')->with('error', 'Invoice Number Already Exists.');
+        }
+
+    }
+
+    public function addProFormaInvoice(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+
+        $this->validate($request, [
+            'date' => 'required',
+            'deliveryTerms'=> 'required',
+            'shipper'=>'required',
+            'descGoods'=>'required',
+        ]);
+
+         //check if invoice number already exists
+         $target = DB::table(
+            'wlg_corporation_invoices')
+            ->where('invoice_number', $request->get('invoiceNumber'))
+            ->get()->first();
+
+        $status = "Pro-Forma Invoice";
+        if($target === NULL){
+            $addInvoice = new WlgCorporationInvoice([
+                'user_id'=>$user->id,
+                'date'=>$request->get('date'),
+                'delivery_terms'=>$request->get('deliveryTerms'),
+                'tranport_by'=>$request->get('transportBy'),
+                'invoice_number'=>$request->get('invoiceNumber'),
+                'shipper'=>$request->get('shipper'),
+                'consignee'=>$request->get('consignee'),
+                'notify_party'=>$request->get('notifyParty'),
+                'attention'=>$request->get('attention'),
+                'number_of_goods'=>$request->get('no'),
+                'description_of_goods'=>$request->get('descGoods'),
+                'qty'=>$request->get('qty'),
+                'unit_price'=>$request->get('unitPrice'),
+                'total_amount'=>$request->get('totalAmount'),
+                'status'=>$status,
+                'created_by'=>$name,
+            ]);
+    
+            $addInvoice->save();
+            $insertedId = $addInvoice->id;
+    
+            return redirect()->route('editInvoiceProForma', ['id'=>$insertedId]);
+        }else{
+            return redirect()->route('invoiceFormProForma')->with('error', 'Invoice Number Already Exists.');
+        }
+
     }
 
     public function addInvoice(Request $request){
@@ -71,8 +546,7 @@ class WlgCorporationController extends Controller
             return redirect()->route('editInvoiceWlg', ['id'=>$insertedId]);
         }else{
             return redirect()->route('invoiceFormWlg')->with('error', 'Invoice Number Already Exists.');
-        }
-
+        }     
       
         
     }
@@ -389,8 +863,25 @@ class WlgCorporationController extends Controller
      */
     public function index()
     {
+        $statusForma = "Pro-Forma Invoice";
+        $statusComm = "Commercial Invoice";
+        $statusQuo = "Quotation Invoice";
+        $statusPacking = "Packing List";
+        $status = "Invoice Form";
+
+        $invoices = WlgCorporationInvoice::where('if_id', NULL)->where('status', $status)->get()->toArray();
+
+        $invoiceProFormas = WlgCorporationInvoice::where('if_id', NULL)->where('status', $statusForma)->get()->toArray();
+
+        $invoiceCommercialInvoices = WlgCorporationInvoice::where('if_id', NULL)->where('status', $statusComm)->get()->toArray();
         
-        return view('wlg-corporation');
+        $invoiceQuotations = WlgCorporationInvoice::where('if_id', NULL)->where('status', $statusQuo)->get()->toArray();
+        
+        $packingLists = WlgCorporationInvoice::where('if_id', NULL)->where('status', $statusPacking)->get()->toArray();
+     
+
+        return view('wlg-corporation', compact('invoices', 'invoiceProFormas', 'invoiceCommercialInvoices', 
+        'invoiceQuotations', 'packingLists'));
     }
 
     /**
@@ -507,6 +998,12 @@ class WlgCorporationController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+
+    public function destroyInvoice($id){
+        $invoice = WlgCorporationInvoice::find($id);
+        $invoice->delete();
     }
 
     public function destroyTransaction($id){
