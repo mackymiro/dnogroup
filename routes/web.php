@@ -2578,6 +2578,46 @@ Route::group(['middleware' => ['auth']], function(){
 		'DongFangCorporationController@destroyTransaction')
 		->name('destroyTransaction');
 
+	Route::get(
+		'/dong-fang-corporation/billing-statement-form',
+		'DongFangCorporationController@billingStatementForm')
+		->name('billingStatementFormDongFang');
+	
+	Route::post(
+		'/dong-fang-corporation/store-billing-statement',
+		'DongFangCorporationController@storeBillingStamtement')
+		->name('storeBillingStatementDongFang');
+
+	Route::get(
+		'/dong-fang-corporation/edit-billing-statment/{id}',
+		'DongFangCorporationController@editBillingStatement')
+		->name('editBillingStatementDongFang');
+
+	Route::post(
+		'/dong-fang-corporation/add-new-billing-statment/{id}',
+		'DongFangCorporationController@addNewBillingStatement')
+		->name('addNewBillingStatementDongFang');
+
+	Route::patch(
+		'/dong-fang-corporation/update-bl/{id}',
+		'DongFangCorporationController@updateBL')
+		->name('updateBLDongFang');
+
+	Route::delete(
+		'/dong-fang-corporation/billing-statement/delete/{id}',
+		'DongFangCorporationController@destroyBillingStatment')
+		->name('destroyBillingStatmentDongFang');
+
+	Route::get(
+		'/dong-fang-corporation/billing-statement/list',
+		'DongFangCorporationController@billingStatementList')
+		->name('billingStatementListDongFang');
+
+	Route::get(
+		'/dong-fang-corporation/view-billing-statement/{id}',
+		'DongFangCorporationController@viewBillingStatement')
+		->name('viewBillingStatementDongFang');
+
 	//WLG Corporation
 	Route::get(
 		'/wlg-corporation',

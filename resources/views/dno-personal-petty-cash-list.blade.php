@@ -19,14 +19,14 @@
      @include('sidebar.sidebar-dno-personal')
      <div id="content-wrapper">
         <div class="container-fluid">
-             <!-- Breadcrumbs-->
-             <ol class="breadcrumb">
+            <!-- Breadcrumbs-->
+            <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                  <a href="#">DNO Personal</a>
+                <a href="#">DNO Personal</a>
                 </li>
                 <li class="breadcrumb-item active">Petty Cash</li>
                 <li class="breadcrumb-item ">Petty Cash List</li>
-              </ol>
+            </ol>
               <div class="row">
                     <div class="col-lg-12">
                         <div class="card mb-3">

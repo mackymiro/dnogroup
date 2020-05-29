@@ -1,17 +1,11 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('title', 'Edit Delivery Receipt |')
 @section('content')
-
 <script>
   $(document).ready(function(){
       $('.alert-success').fadeIn().delay(3000).fadeOut();
-
-    
   });
-</script>
-
-<script>
-    $(function() {
+  $(function() {
         $( ".datepicker" ).datepicker();
     });
 </script>

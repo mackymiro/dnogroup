@@ -110,7 +110,7 @@
                                     <div class="col-lg-12">
                                         <br>
                                        
-                                        <button type="submit" class="btn btn-success"> <i class="fas fa-plus" aria-hidden="true"></i> Add</button>
+                                        <button type="submit" class="btn btn-primary"> <i class="fas fa-plus" aria-hidden="true"></i> Add</button>
                                     </div>
                                 </div>
                                 </form>

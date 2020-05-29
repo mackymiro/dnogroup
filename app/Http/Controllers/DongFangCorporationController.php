@@ -8,9 +8,133 @@ use Auth;
 use Session;
 use App\User; 
 use App\DongFangCorporationPaymentVoucher;
+use App\DongFangCorporationBillingStatement;
 
 class DongFangCorporationController extends Controller
 {
+    public function viewBillingStatement($id){
+        $viewBillingStatement = DongFangCorporationBillingStatement::find($id);
+
+        $billingStatements = DongFangCorporationBillingStatement::where('bs_id', $id)->get()->toArray();
+
+        $billTotal = DongFangCorporationBillingStatement::where('id', $id)->sum('amount');
+        $billTotal2 = DongFangCorporationBillingStatement::where('bs_id', $id)->sum('amount');
+
+        $sum = $billTotal + $billTotal2;
+
+        return view('view-dong-fang-corporation-billing-statement', compact('viewBillingStatement', 'billingStatements', 'sum'));
+    }
+
+    public function billingStatementList(){
+        $billingLists = DongFangCorporationBillingStatement::where('bs_id', NULL)->get()->toArray();
+        return view('dong-fang-corporation-billing-list', compact('billingLists'));
+    }
+
+    public function updateBL(Request $request, $id){
+        $updateBilling = DongFangCorporationBillingStatement::find($id);
+        $updateBilling->date_detail = $request->get('dateDetails');
+        $updateBilling->no_pax = $request->get('noPax');
+        $updateBilling->particular = $request->get('particular');
+        $updateBilling->price_per_pax = $request->get('pricePerPax');
+        $updateBilling->amount = $request->get('amount');
+        $updateBilling->save();
+
+        Session::flash('updateBilling', 'Successfully updated.');
+        return redirect()->route('editBillingStatementDongFang', ['id'=>$request->get('bsId')]); 
+    }
+
+    public function addNewBillingStatement(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $addNewBilling = new DongFangCorporationBillingStatement([
+            'user_id'=>$user->id,
+            'bs_id'=>$id,
+            'date'=>$request->get('dateDetails'),
+            'no_pax'=>$request->get('noPax'),
+            'particular'=>$request->get('particular'),
+            'price_per_pax'=>$request->get('pricePerPax'),
+            'amount'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+        $addNewBilling->save();
+        Session::flash('billingsAdded', 'Successfully added.');
+        return redirect()->route('editBillingStatementDongFang', ['id'=>$id]);
+
+    }
+
+    public function editBillingStatement($id){
+        $billingStatement = DongFangCorporationBillingStatement::find($id);
+
+        $billingLists = DongFangCorporationBillingStatement::where('bs_id', $id)->get()->toArray();
+        return view('edit-dong-fang-billing-statement', compact('billingStatement', 'billingLists'));
+    }
+
+    public function storeBillingStamtement(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        //validate
+        $this->validate($request, [
+            'accountNo' =>'required',
+            'companyName'=>'required',
+            'particular'=>'required',          
+        ]);
+
+        
+        //check if invoice number already exists
+        $target = DB::table(
+            'dong_fang_corporation_billing_statements')
+            ->where('account_no', $request->get('accountNo'))
+            ->get()->first();
+
+        if($target === NULL){
+            $storeBilling = new DongFangCorporationBillingStatement([
+                'user_id'=>$user->id,
+                'date'=>$request->get('date'),
+                'account_no'=>$request->get('accountNo'),
+                'company_name'=>$request->get('companyName'),
+                'address'=>$request->get('address'),
+                'billing_statement_no'=>$request->get('billingStatementNo'),
+                'attention'=>$request->get('attention'),
+                'ref_no'=>$request->get('refNumber'),
+                'po_no'=>$request->get('poNumber'),
+                'terms'=>$request->get('terms'),
+                'due_date'=>$request->get('dueDate'),
+                'date_detail'=>$request->get('dateDetails'),
+                'no_pax'=>$request->get('noPax'),
+                'particular'=>$request->get('particular'),
+                'price_per_pax'=>$request->get('pricePerPax'),
+                'amount'=>$request->get('amount'),
+                'created_by'=>$name,
+            ]);
+    
+            $storeBilling->save();
+            $insertedId = $storeBilling->id;
+    
+            return redirect()->route('editBillingStatementDongFang', ['id'=>$insertedId]);
+        }else{
+            return redirect()->route('billingStatementFormDongFang')->with('error', 'Account Number Already Exists. Please See Transaction List For Your Reference');
+
+        }
+       
+    }
+
+    public function billingStatementForm(){
+
+        return view('dong-fang-billing-statement-form');
+    }
+
     public function transactionList(){
         $getTransactionLists = DongFangCorporationPaymentVoucher::where('pv_id', NULL)->get()->toArray();
 
@@ -305,6 +429,11 @@ class DongFangCorporationController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    public function destroyBillingStatment($id){
+        $billingStatement = DongFangCorporationBillingStatement::find($id);
+        $billingStatement->delete();
     }
 
     public function destroyTransaction($id){

@@ -44,12 +44,12 @@
 			  							@foreach($billingStatements as $billingStatement)
 			  							<tr id="deletedId{{ $billingStatement['id'] }}">
 			  								<td>
-                          @if($user->role_type !== 3)
+                         						 @if(Auth::user()['role_type'] !== 3)
 			  									<a href="{{ url('ribos-bar/edit-ribos-bar-billing-statement/'.$billingStatement['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-                          @endif
-                          @if($user->role_type == 1)
+												@endif
+												@if(Auth::user()['role_type'] == 1)
 				  								<a id="delete" onClick="confirmDelete('{{ $billingStatement['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
-                          @endif
+												@endif
 				  								<a href="{{ url('ribos-bar/view-ribos-bar-billing-statement/'.$billingStatement['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
 
 			  								</td>
