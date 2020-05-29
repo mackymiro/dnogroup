@@ -69,6 +69,10 @@
                                                 <th>Invoice #</th>
                                                 <th> {{ $payableId['invoice_number'] }}</th>
                                             </tr>
+											<tr>
+                                                <th>Voucher Ref #</th>
+                                                <th>LPLDC-{{ $payableId['voucher_ref_number'] }}</th>
+                                            </tr>
                                            
                                         </thead>
 	                              </table>

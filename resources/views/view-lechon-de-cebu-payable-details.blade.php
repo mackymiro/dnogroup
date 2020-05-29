@@ -66,8 +66,11 @@
                                                       <th width="20%">Invoice #</th>
                                                       <th>{{ $viewPaymentDetail['invoice_number']}}</th>
                                                   </tr>
-                                              
-                                                 
+                                                  <tr>
+                                                      <th width="30%">Voucher Ref #</th>
+                                                      <th>LPLDC-{{ $viewPaymentDetail['voucher_ref_number']}}</th>
+                                                  </tr>
+
                                               </thead>
                                           </table>
                                       </div>

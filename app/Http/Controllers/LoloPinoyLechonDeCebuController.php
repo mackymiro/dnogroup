@@ -24,6 +24,22 @@ use Session;
 class LoloPinoyLechonDeCebuController extends Controller
 {   
 
+    public function printPettyCash($id){
+        $getPettyCash = LechonDeCebuPettyCash::find($id);
+
+        $getPettyCashSummaries = LechonDeCebuPettyCash::where('pc_id', $id)->get()->toArray();
+
+        //total
+        $totalPettyCash = LechonDeCebuPettyCash::where('id', $id)->where('pc_id', NULL)->sum('amount');
+
+        $pettyCashSummaryTotal = LechonDeCebuPettyCash::where('pc_id', $id)->sum('amount');
+
+        $sum = $totalPettyCash + $pettyCashSummaryTotal;
+
+        $pdf = PDF::loadView('printPettyCashLechonDeCebu', compact('getPettyCash', 'getPettyCashSummaries', 'sum'));
+        return $pdf->download('lechon-de-cebu-petty-cash.pdf');
+    }
+
     public function viewPettyCash($id){
         $getPettyCash = LechonDeCebuPettyCash::find($id);
 
@@ -116,7 +132,6 @@ class LoloPinoyLechonDeCebuController extends Controller
             'petty_cash_no'=>$uProd,
             'petty_cash_name'=>$request->pettyCashName,
             'petty_cash_summary'=>$request->pettyCashSummary,
-            'amount'=>$request->amount,
             'created_by'=>$name,
         ]);
 
@@ -131,7 +146,7 @@ class LoloPinoyLechonDeCebuController extends Controller
     public function pettyCashList(){
        
  
-         $pettyCashLists = LechonDeCebuPettyCash::where('pc_id', NULL)->get()->toArray();
+         $pettyCashLists = LechonDeCebuPettyCash::where('pc_id', NULL)->orderBy('id', 'desc')->get()->toArray();
 
         return view('lechon-de-cebu-petty-cash-list', compact('pettyCashLists'));
     }
@@ -332,6 +347,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $addParticulars = new LechonDeCebuPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
+            'daet'=>$request->get('date'),
             'particulars'=>$request->get('particulars'),
             'amount'=>$request->get('amount'),
             'created_by'=>$name,
@@ -367,6 +383,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'user_id'=>$user->id,
             'pv_id'=>$id,
             'voucher_ref_number'=>$paymentData['voucher_ref_number'],
+            'date'=>$request->get('date'),
             'cheque_number'=>$request->get('chequeNumber'),
             'cheque_amount'=>$request->get('chequeAmount'),
             'created_by'=>$name,
@@ -419,7 +436,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
 
         //
-        $getTransactionLists = LechonDeCebuPaymentVoucher::where('pv_id', NULL)->get()->toArray();
+        $getTransactionLists = LechonDeCebuPaymentVoucher::where('pv_id', NULL)->orderBy('id', 'desc')->get()->toArray();
         
 
         //get total amount due
@@ -1664,7 +1681,6 @@ class LoloPinoyLechonDeCebuController extends Controller
                 'invoice_number'=>$request->get('invoiceNumber'),
                 'voucher_ref_number'=>$uVoucher,
                 'issued_date'=>$request->get('issuedDate'),
-                'delivered_date'=>$request->get('deliveredDate'),
                 'amount'=>$request->get('amount'),
                 'amount_due'=>$request->get('amount'),
                 'particulars'=>$request->get('particulars'),

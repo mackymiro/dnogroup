@@ -37,9 +37,11 @@
 				  								<th>Invoice #</th>
 				  								<th>Voucher Ref #</th>
 				  								<th>Issued Date</th>
+												<th>Paid To</th>
 				  								<th  class="bg-danger" style="color:white;">Amount Due</th>
 				  								<th>Delivered Date</th>
 				  								<th class="bg-success" style="color:white;">Status</th>
+												<th>Created By</th>
 					  						</tr>
 				  						</thead>
 				  						<tfoot>
@@ -48,9 +50,11 @@
 				  								<th>Invoice #</th>
 				  								<th>Voucher Ref #</th>
 				  								<th>Issued Date</th>
+												<th>Paid To</th>
 				  								<th  class="bg-danger" style="color:white;">Amount Due</th>
 				  								<th>Delivered Date</th>
 				  								<th class="bg-success" style="color:white;">Status</th>
+												<th>Created By</th>
 					  						</tr>
 				  						</tfoot>
 				  						<tbody>
@@ -84,12 +88,13 @@
 			  									</td>
 			  									<td>LPLDC-{{ $getTransactionList['voucher_ref_number']}}</td>
 			  									<td>{{ $getTransactionList['issued_date']}}</td>
+												<td>{{ $getTransactionList['paid_to']}}</td>
 			  									<td class="bg-danger" style="color:white;">												  
 												  <?php echo number_format($compute, 2); ?></td>
 			  									<td>{{ $getTransactionList['delivered_date']}}</td>
 			  									
 			  									<td class="bg-success" style="color:white; "><a class="anchor" href="{{ url('lolo-pinoy-lechon-de-cebu/view-payables-details/'.$getTransactionList['id']) }}">{{ $getTransactionList['status'] }}</a></td>
-			  								
+			  									<td>{{ $getTransactionList['created_by']}}</td>
 				  							</tr>
 											
 				  							@endforeach
@@ -99,10 +104,10 @@
     					  		<br>
 							
     					  		<table class="table table-bordered">
-					  				<thead>
+								  <thead>
 					  					<tr>
-					  						<th width="20%" class="bg-info" style="color:white;">TOTAL BALANCE DUE</th>
-					  						<th class="bg-danger" style="color:white;"><?php echo number_format($totalAmoutDue, 2);?></th>
+					  						<th width="30%" class="bg-info" style="color:white; font-size:28px;">TOTAL BALANCE DUE</th>
+					  						<th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?php echo number_format($totalAmoutDue, 2);?></span></th>
 					  					</tr>
 
 					  				</thead>
@@ -127,6 +132,17 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
+	  function doRefresh(){
+            $("#totalDue").fadeOut(500);
+            $("#totalDue").fadeIn(500);     
+            setTimeout(function() {
+             doRefresh();
+            }, 1000);
+        }
+
+        $(document).ready(function () {
+          doRefresh(); 
+        });
 	 function confirmDelete(id){
         var x = confirm("Do you want to delete this?");
         if(x){

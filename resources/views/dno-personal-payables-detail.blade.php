@@ -166,8 +166,8 @@
 										</div>
   										<div class="col-lg-12">
   											<label>Particulars</label>
-											<input type="text" name="particulars" class="form-control" required="required" />
 										
+  											<textarea name="particulars" class="form-control"></textarea>
 										</div>
 										<div class="col-lg-12">
   											<label>Amount</label>

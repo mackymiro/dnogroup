@@ -238,7 +238,7 @@
             <div class="card text-white bg-primary o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                  <img src="{{ asset('images/dong-fang-corporation.png')}}" width="200" height="178" class="img-responsive mx-auto d-block" alt="Dong Fang Corporation">
+                  <img src="{{ asset('images/dong-fang-corporation.png')}}" width="277" height="139" class="img-responsive mx-auto d-block" alt="Dong Fang Corporation">
                 </div>
                 <div class="mr-5">Dong Fang Corporation</div>
               </div>
@@ -254,11 +254,27 @@
             <div class="card text-white bg-warning o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                  <img src="{{ asset('images/wlg-corporation.png') }}" width="200" height="178" class="img-responsive mx-auto d-block" alt="WLG Corporation">
+                  <img src="{{ asset('images/wlg-corporation.png') }}" width="235" height="114" class="img-responsive mx-auto d-block" alt="WLG Corporation">
                 </div>
                 <div class="mr-5">WLG Corporation</div>
               </div>
               <a class="card-footer text-white clearfix small z-1" href="{{ url('wlg-corporation') }}">
+                <span class="float-left">View Details</span>
+                <span class="float-right">
+                  <i class="fas fa-angle-right"></i>
+                </span>
+              </a>
+            </div>
+          </div>
+          <div class="col-xl-3 col-sm-6 mb-3">
+            <div class="card text-white bg-success o-hidden h-100">
+              <div class="card-body">
+                <div class="card-body-icon">
+                  <img src="{{ asset('images/DIC-LOGO.png') }}" width="255" height="172" class="img-responsive mx-auto d-block" alt="WLG Corporation">
+                </div>
+                <div class="mr-5">DINO Industrial Corporation</div>
+              </div>
+              <a class="card-footer text-white clearfix small z-1" href="{{ url('dino-industrial-corporation') }}">
                 <span class="float-left">View Details</span>
                 <span class="float-right">
                   <i class="fas fa-angle-right"></i>

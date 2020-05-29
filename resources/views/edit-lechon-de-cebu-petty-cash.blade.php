@@ -50,7 +50,7 @@
                                     
                                     <div class="col-lg-2">
                                         <label>Petty Cash No</label>
-                                        <input type="text" name="pettyCashNo" class="form-control" value="{{ $pettyCash['petty_cash_no']}}" disabled="disabled"/>
+                                        <input type="text" name="pettyCashNo" class="form-control" value="Ptyldc-{{ $pettyCash['petty_cash_no']}}" disabled="disabled"/>
                                     </div>
                                     <div class="col-lg-2">
                                         <label>Date</label>
@@ -64,11 +64,7 @@
                                         <label>Petty Cash Summary</label>
                                         <input type="text" name="pettyCashSummary" class="form-control" value="{{ $pettyCash['petty_cash_summary']}}"/>
                                     </div>
-                                    <div class="col-lg-2">
-                                        <label>Amount</label>
-                                        <input type="text" name="amount" class="form-control" value="{{ $pettyCash['amount'] }}"/>
-                                    </div>
-                                    
+                                   
                                 </div>
                             </div>
                             <br>
@@ -100,7 +96,7 @@
                                         <input type="text" name="date" class="datepicker form-control" required/>
                                     </div>
                                     <div class="col-lg-12">
-                                        <label>Petty Cash Summary</label>
+                                        <label>Item Description</label>
                                         <input type="text" name="pettyCashSummary" class="form-control" />
                                     </div>
                                     <div class="col-lg-12">
@@ -138,11 +134,11 @@
                                     <div class="form-row">
                                         <div class="col-lg-2">
                                             <label>Date</label>
-                                            <input type="text" name="date" class="datepicker form-control" value="{{ $pettyCashSummary['date']}}"/>
+                                            <input type="text" name="date" class="datepicker form-control" value="{{ $pettyCashSummary['date']}}" autocomplete="off" />
                                         </div>
                                     
                                         <div class="col-lg-4">
-                                            <label>Petty Cash Summary</label>
+                                            <label>Item Description</label>
                                             <input type="text" name="pettyCashSummary" class="form-control" value="{{ $pettyCashSummary['petty_cash_summary'] }}"/>
                                         </div>
                                         <div class="col-lg-2">
@@ -180,7 +176,7 @@
         </div>
       </footer>
 </div>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
 <script type="text/javascript">
      const confirmDelete = (id) => {
         const  x = confirm("Do you want to delete this?");

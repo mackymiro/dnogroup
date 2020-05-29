@@ -148,7 +148,7 @@
                                     </div>
                                     <div class="col-lg-4">
                                         <label>Voucher Ref #</label>
-                                        <input type="text" name="voucherRef" class="form-control" value="DFPC-{{ $transactionList['voucher_ref_number'] }}" disabled="disabled" />
+                                        <input type="text" name="voucherRef" class="form-control" value="WLG-{{ $transactionList['voucher_ref_number'] }}" disabled="disabled" />
                                     </div>
                                     <div class="col-lg-4">
                                         <label>Status</label>

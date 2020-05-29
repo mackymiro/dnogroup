@@ -14,7 +14,7 @@
               <li class="breadcrumb-item ">Petty Cash</li>
               <li class="breadcrumb-item active">View Petty Cash</li>
             </ol>
-            <a href="{{ url('/dno-personal/petty-cash-list') }}">Back to Lists</a>
+            <a href="{{ url('/lolo-pinoy-lechon-de-cebu/petty-cash-list') }}">Back to Lists</a>
             <div class="col-lg-12">
                 <img src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
             	 
@@ -27,26 +27,55 @@
                             <i class="fas fa-money-bill-alt"></i>
                             Petty Cash Summary
                             <div class="float-right">
-                               <a href="{{ action('DnoPersonalController@printPettyCash', $getPettyCash['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                               <a href="{{ action('LoloPinoyLechonDeCebuController@printPettyCash', $getPettyCash['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                              </div>
                            
                         </div>
                         <div class="card-body">
+                             <div class="form-group">
+                                <div class="form-row">
+                                     <div class="col-lg-6">
+                                         <table class="table table-bordered"> 
+                                         <thead>
+                                            <tr>
+                                                <th width="30%">Petty Cash No</th>
+                                                <th>Ptyldc-{{ $getPettyCash['petty_cash_no'] }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>{{ $getPettyCash['date'] }}</th>
+                                            </tr>
+                                           
+                                        </thead>
+                                         </table>
+                                     </div>
+                                     <div class="col-lg-6">
+                                         <table class="table table-bordered"> 
+                                         <thead>
+                                           
+                                            <tr>
+                                                <th>Petty Cash Name</th>
+                                                <th> {{ $getPettyCash['petty_cash_name'] }} </th>
+                                            </tr>
+                                            <tr>
+                                                <th>Petty Cash Summary</th>
+                                                <th>{{ $getPettyCash['petty_cash_summary'] }}</th>
+                                            </tr>
+                                        </thead>
+                                         </table>
+                                     </div>
+                                </div>
+                             </div>
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>DATE</th>
-                                        <th >PETTY CASH SUMMARY</th>
-                                        <th>AMOUNT</th>
+                                        <th class="bg-info" style="color:#fff;">DATE</th>
+                                        <th class="bg-info" style="color:#fff;" >ITEM DESCRIPTION</th>
+                                        <th class="bg-info" style="color:#fff;">AMOUNT</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>    
-                                      
-                                        <td>{{ $getPettyCash['date']}}</td>
-                                        <td>{{ $getPettyCash['petty_cash_summary']}}</td>
-                                        <td><?php echo number_format($getPettyCash['amount'], 2)?></td>
-                                    </tr>
+                                  
                                     @foreach($getPettyCashSummaries as $getPettyCashSummarry)
                                     <tr>
                                        

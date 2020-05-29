@@ -64,10 +64,6 @@
                                     <label>Issued Date </label>
                                     <input type="text" name="issuedDate" class="datepicker form-control" value="{{ old('issuedDate') }}" />
                                 </div>
-                                <div class="col-md-2">
-                                    <label>Delivered Date </label>
-                                    <input type="text" name="deliveredDate" class="form-control" value="{{ old('deliveredDate') }}" />
-                                </div>
                                
                          		 </div>
                          	</div>

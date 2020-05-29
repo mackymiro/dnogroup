@@ -84,7 +84,7 @@
 			  											{{ $getTransactionList['invoice_number']}}
 			  										@endif
 			  									</td>
-			  									<td>DFPC-{{ $getTransactionList['voucher_ref_number']}}</td>
+			  									<td>WLG-{{ $getTransactionList['voucher_ref_number']}}</td>
 			  									<td>{{ $getTransactionList['issued_date']}}</td>
 			  									<td class="bg-danger" style="color:white;"><?php echo number_format($getTransactionList['amount_due'], 2);?></td>
 			  									<td>{{ $getTransactionList['delivered_date']}}</td>

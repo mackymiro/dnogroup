@@ -76,7 +76,7 @@
                                                 @endif
                                                 </td>
                                                 <td>{{ $pettyCashList['date']}}</td>
-                                                <td>{{ $pettyCashList['petty_cash_no']}}</td>
+                                                <td>Ptyldc-{{ $pettyCashList['petty_cash_no']}}</td>
                                                 <td><a href="{{ url('lolo-pinoy-lechon-de-cebu/petty-cash/view/'.$pettyCashList['id']) }}">{{ $pettyCashList['petty_cash_name']}}</a></td>
                                                 <td>{{ $pettyCashList['created_by']}}</td>
                                             </tr>   
@@ -101,11 +101,12 @@
                 </button>
             </div>
             <div class="modal-body">
-                 <div id="validate" class="col-lg-12">
-                    <p class="alert alert-danger">Please Fill up the fields</p>
-                </div>
+               
                 <div id="succAdd"></div>
                 <div class="form-group">
+                      <div id="validate" class="col-lg-12">
+                        <p class="alert alert-danger">Please Fill up the fields</p>
+                    </div>
                     <div class="form-row">
                        
                         <div class="col-lg-4">
@@ -122,14 +123,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="form-row">
-                        <div class="col-lg-4">
-                            <label>Amount</label>
-                            <input type="text" id="amount" name="amount" class="form-control" />
-                        </div>
-                    </div>
-                </div>
+              
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-window-close"></i> Close</button>
@@ -150,6 +144,7 @@
         </div>
       </footer>
 </div>
+
 <script type="text/javascript">
      $("#validate").hide();
 
@@ -157,8 +152,8 @@
         const reqDate = $("#date").val();
         const pettyCashName = $("#pettyCashName").val();
         const pettyCashSummary = $("#pettyCashSummary").val();
-        const amount = $("#amount").val();
-        if(reqDate.length === 0 || pettyCashName.length === 0 || pettyCashSummary.length === 0 || amount.length === 0){
+       
+        if(reqDate.length === 0 || pettyCashName.length === 0 || pettyCashSummary.length === 0 ){
             $("#validate").fadeIn().delay(3000).fadeOut();
         }else{
            //make ajax all
@@ -171,7 +166,6 @@
                     "date":reqDate,
                     "pettyCashName":pettyCashName,
                     "pettyCashSummary":pettyCashSummary,
-                    "amount":amount,
                 },
                 success:function(data){
                     console.log(data);

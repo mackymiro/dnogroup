@@ -81,7 +81,7 @@
   										<div class="col-lg-8">
   											<label>Particulars</label>
 											<input type="text" name="particulars" class="form-control" required="required" />
-										
+											
 										</div>
 										<div class="col-lg-8">
   											<label>Amount</label>

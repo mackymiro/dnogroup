@@ -83,6 +83,11 @@ Route::group(['middleware' =>['user']], function(){
 		'LoloPinoyLechonDeCebuController@viewPettyCash')
 		->name('viewPettCashLechonDeCebu');
 
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/printPettyCash/{id}',
+		'LoloPinoyLechonDeCebuController@printPettyCash')
+		->name('printPettyCashLechonDeCebu');
+
 	//route for payment vouchers
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/payment-voucher-form', 
@@ -2885,6 +2890,17 @@ Route::group(['middleware' => ['auth']], function(){
 		'/wlg-corporation/view-packing-list/{id}',
 		'WlgCorporationController@viewInvoice')
 		->name('viewInvoicePackingList');
+
+	//DINO Industrial Corporation
+	Route::get(
+		'/dino-industrial-corporation',
+		'DinoIndustrialCorporationController@index')
+		->name('indexDino');
+
+	Route::get(
+		'/dino-industrial-corporation/payment-voucher-form',
+		'DinoIndustrialCorporationController@paymentVoucherForm')
+		->name('paymentVoucherFormDinoIndustrial');
 	
 });
 

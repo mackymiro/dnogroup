@@ -24,7 +24,7 @@
 	 <div id="content-wrapper">
  		<div class="container-fluid">
  				<div  style="margin-top:60px;">
-            	 <img style="margin-left: 240px;" src="{{ asset('images/DIC-LOGO.png')}}"  alt="DNO Personal">
+            	 <img style="margin-left: 240px;" src="{{ asset('images/pdf/lolo-pinoys-lechon-de-cebu(6).png')}}"  alt="Lechon de Cebu">
             	 	 <p >
 		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
 						Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
@@ -37,14 +37,49 @@
 	            </div>
 				<div class="row">
 					<div class="col-lg-12">
-						
+                          <div class="card-body">
+                                <div class="form-group">
+                                     <div style="width:980px; margin:0 auto;">
+                                   <div style="float:left; width:40%">
+                                    <table >
+                                        <thead>
+                                           <tr>
+                                                <th width="30%">Petty Cash No</th>
+                                                <th>Ptyldc-{{ $getPettyCash['petty_cash_no'] }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>{{ $getPettyCash['date'] }}</th>
+                                            </tr>
+                                         
+                                      </thead>
+                                      
+                                  </table>   
+                             </div>
+                            <div style="float:right; width: 50%; margin-right: 100px;">
+                                <table >
+                                     <thead>
+                                         <tr>
+                                                <th>Petty Cash Name</th>
+                                                <th> {{ $getPettyCash['petty_cash_name'] }} </th>
+                                            </tr>
+                                            <tr>
+                                                <th>Petty Cash Summary</th>
+                                                <th>{{ $getPettyCash['petty_cash_summary'] }}</th>
+                                            </tr>
+                                       
+                                    </thead>
+                                </table>
+                            </div>
+                                </div>
+
                           <br>
-                          <br>
+                          <br>    
                           <table style="border:1px solid black;">
                           		  <thead>
                                       <tr>
                                         <th style="height: 1%; text-align: center;">DATE</th>
-                                        <th style="height: 1%; text-align: center;">PETTY CASH SUMMARY</th>
+                                        <th style="height: 1%; text-align: center;">ITEM DESCRIPTION</th>
                                         <th style="height: 1%; text-align: center;">AMOUNT</th>
                                        
                                       </tr>
@@ -103,6 +138,8 @@
                            		</table>
                            	
                            </div>
+                          </div>
+                         
 
 						 </div>
 					</div>
