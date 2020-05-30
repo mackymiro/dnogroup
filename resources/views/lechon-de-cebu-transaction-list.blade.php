@@ -103,7 +103,7 @@
 												<td><p style="width:200px;">{{ $getTransactionList['paid_to']}}</p></td>
 												
 												<td><p style="width:200px;">{{ $getTransactionList['account_name']}}</p></td>
-			  										  									<td class="bg-danger" style="color:white;">												  
+												<td class="bg-danger" style="color:white;">												  
 												  <p style="width:170px;"><?php echo number_format($compute, 2); ?></p></td>
 			  									<td><p style="width:160px;">{{ $getTransactionList['delivered_date']}}</p></td>
 			  									<td><p style="width:190px;">{{ $getTransactionList['method_of_payment'] }}</p></td>

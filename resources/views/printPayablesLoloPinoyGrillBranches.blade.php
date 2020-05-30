@@ -49,9 +49,13 @@
                                                 <th>Status</th>
                                                 <th>{{ $payableId['status'] }}</th>
                                             </tr>
-                                            <tr>
+											<tr>
                                                 <th>Date</th>
                                                 <th> {{ $payableId['issued_date'] }} </th>
+                                            </tr>
+											<tr>
+                                                <th width="30%">Account Name</th>
+                                                <th> {{ $payableId['account_name'] }} </th>
                                             </tr>
                                            
                                         </thead>
@@ -65,27 +69,66 @@
                                                 <th width="20%">Amount Due</th>
                                                 <th><?php echo number_format($payableId['amount_due'], 2);?></th>
                                             </tr>
-                                            <tr>
+											<tr>
                                                 <th>Invoice #</th>
                                                 <th> {{ $payableId['invoice_number'] }}</th>
                                             </tr>
+											<tr>
+                                                <th>Voucher Ref #</th>
+                                                <th>LPGC-{{ $payableId['voucher_ref_number'] }}</th>
+                                            </tr>
+											<tr>
+												<th width="30%">Payment Method</th>
+												<th>{{ $payableId['method_of_payment']}}</th>
+											</tr>
+											
                                            
                                         </thead>
 	                              </table>
 	                          </div>
                           </div>
                           </div>
+						  <br>
                           <br>
                           <br>
-                          <br>
+						  <br>
+						  <br>
+						  <table style="border:1px solid black;">
+								<thead>
+									<tr>
+										<th style="height: 1%; text-align: center;">DATE</th>
+										<th style="height: 1%; text-align: center;">PARTICULARS</th>
+										<th style="height: 1%; text-align: center;">AMOUNT</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr style="border: 1px solid black;">
+										<td style="text-align:center; border: 1px solid black;">{{ $payableId['issued_date']}}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $payableId['particulars']}}</td>
+										<td style="text-align:center; border: 1px solid black; font-size:18px;"><?php echo number_format($payableId['amount'], 2); ?></td>
+									</tr>
+									@foreach($getParticulars as $getParticular)
+									<tr style="border:1px solid black;">
+										<td style="text-align:center; border: 1px solid black;">{{ $getParticular['date']}}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $getParticular['particulars']}}</td>
+										<td style="text-align:center; border: 1px solid black; font-size:18px;"><?php echo number_format($getParticular['amount'], 2); ?></td>
+									</tr>
+									@endforeach
+								</tbody>	
+						  </table>
                           <br>
                           <br>
                           <br>
                           <table style="border:1px solid black;">
                           		  <thead>
                                       <tr>
-                                        <th style="height: 1%; text-align: center;">CHEQUE NO ISSUED</th>
+                                       	@if($payableId['method_of_payment'] === "Cash")
+                                        <th style="height: 1%; text-align: center;">CASH NO ISSUED</th>
+                                        <th style="height: 1%; text-align: center;">CASH AMOUNT</th>
+										@else
+										<th style="height: 1%; text-align: center;">CHEQUE NO ISSUED</th>
                                         <th style="height: 1%; text-align: center;">CHEQUE AMOUNT</th>
+										@endif
                                        
                                       </tr>
                                     </thead>

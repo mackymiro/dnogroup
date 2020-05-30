@@ -145,7 +145,8 @@
                          	
                             <div>
                               
-                              <button type="submit" class="btn btn-success float-right"><i class="fa fa-plus" aria-hidden="true"></i> Add Payment Voucher</button>
+                              <button type="submit" class="btn btn-success btn-lg float-right"><i class="fas fa-save"></i> Save Payment Voucher</button>
+                              <br>
                             </div>
                         <br>	
                          	

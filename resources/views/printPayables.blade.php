@@ -53,11 +53,16 @@
                                                 <th>Date</th>
                                                 <th> {{ $payableId['issued_date'] }} </th>
                                             </tr>
+											<tr>
+                                                <th width="30%">Account Name</th>
+                                                <th> {{ $payableId['account_name'] }} </th>
+                                            </tr>
                                            
                                         </thead>
                                       
                                   </table>   
                              </div>
+							
 	                          <div style="float:right; width: 50%">
 	                              <table >
 	                                   <thead>
@@ -73,6 +78,10 @@
                                                 <th>Voucher Ref #</th>
                                                 <th>LPLDC-{{ $payableId['voucher_ref_number'] }}</th>
                                             </tr>
+											<tr>
+												<th width="30%">Payment Method</th>
+												<th>{{ $payableId['method_of_payment']}}</th>
+											</tr>
                                            
                                         </thead>
 	                              </table>
@@ -82,6 +91,8 @@
                           <br>
                           <br>
                           <br>
+						  <br>
+						  <br>
 						  <table style="border:1px solid black;">
 								<thead>
 									<tr>
@@ -111,9 +122,13 @@
                           <table style="border:1px solid black;">
                           		  <thead>
                                       <tr>
-                                        <th style="height: 1%; text-align: center;">CHEQUE NO ISSUED</th>
+									  	@if($payableId['method_of_payment'] === "Cash")
+                                        <th style="height: 1%; text-align: center;">CASH NO ISSUED</th>
+                                        <th style="height: 1%; text-align: center;">CASH AMOUNT</th>
+										@else
+										<th style="height: 1%; text-align: center;">CHEQUE NO ISSUED</th>
                                         <th style="height: 1%; text-align: center;">CHEQUE AMOUNT</th>
-                                       
+										@endif
                                       </tr>
                                     </thead>
                                   <tbody>

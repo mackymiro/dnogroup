@@ -58,6 +58,11 @@ Route::group(['middleware' =>['user']], function(){
 		'LoloPinoyLechonDeCebuController@utilities')
 		->name('utilitiesLechonDeCebu');
 
+	Route::delete(
+		'/lolo-pinoy-lechon-de-cebu/utilities/delete/{id}',
+		'LoloPinoyLechonDeCebuController@destroyUtility')
+		->name('destroyUtilityLechonDeCebu');
+
 	Route::post(
 		'/lolo-pinoy-lechon-de-cebu/petty-cash/add',
 		'LoloPinoyLechonDeCebuController@addPettyCash')
@@ -325,7 +330,10 @@ Route::group(['middleware' =>['user']], function(){
 		->name('dno-resources-development.destroy');
 
 	//payment voucher form
-	Route::get('/lolo-pinoy-grill-commissary/payment-voucher-form', 'LoloPinoyGrillCommissaryController@paymentVoucherForm')->name('lolo-pinoy-grill-commissary.paymentVoucherForm');
+	Route::get(
+		'/lolo-pinoy-grill-commissary/payment-voucher-form', 
+		'LoloPinoyGrillCommissaryController@paymentVoucherForm')
+		->name('paymentVoucherFormLoloPinoyGril');
 
 	//save 
 	Route::post('/lolo-pinoy-grill-commissary/payment-voucher-store', 'LoloPinoyGrillCommissaryController@paymentVoucherStore')->name('lolo-pinoy-grill-commissary.paymentVoucherStore');
@@ -335,6 +343,7 @@ Route::group(['middleware' =>['user']], function(){
 		'LoloPinoyGrillCommissaryController@transactionList')
 		->name('lolo-pinoy-grill-commissary.transactionList');
 
+
 	Route::get(
 		'/lolo-pinoy-grill-commissary/printPayables/{id}',
 		'LoloPinoyGrillCommissaryController@printPayables')
@@ -343,7 +352,7 @@ Route::group(['middleware' =>['user']], function(){
 	Route::get(
 		'/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-payables-detail/{id}',
 		'LoloPinoyGrillCommissaryController@editPayablesDetail')
-		->name('lolo-pinoy-grill-commissary.editPayablesDetail');
+		->name('editPayablesDetailLoloPinoyGrill');
 	
 	Route::post(
 		'/lolo-pinoy-grill-commissary/add-particulars/{id}',
@@ -361,7 +370,7 @@ Route::group(['middleware' =>['user']], function(){
 		->name('lolo-pinoy-grill-commissary.accept');
 
 	Route::get(
-		'/lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-payables-details/{id}',
+		'/lolo-pinoy-grill-commissary/view-payables-details/{id}',
 		'LoloPinoyGrillCommissaryController@viewPayableDetails')
 		->name('lolo-pinoy-grill-commissary.viewPayableDetails');
 
@@ -846,19 +855,27 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::patch('/lolo-pinoy-lechon-de-cebu/update-po/{id}', 'LoloPinoyLechonDeCebuController@updatePo')->name('lolo-pinoy-lechon-de-cebu.updatePo');
 
 	//route for lechon de cebu billing statement form
-	Route::get('/lolo-pinoy-lechon-de-cebu/billing-statement-form', 'LoloPinoyLechonDeCebuController@billingStatementForm')->name('lolo-pinoy-lechon-de-cebu.billingStatementForm');
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/billing-statement-form', 
+		'LoloPinoyLechonDeCebuController@billingStatementForm')
+		->name('billingStatementFormLechonDecebu');
 
 	//
 	Route::post('/lolo-pinoy-lechon-de-cebu/store-billing-statement', 'LoloPinoyLechonDeCebuController@storeBillingStatement')->name('lolo-pinoy-lechon-de-cebu.storeBillingStatement');
 
 	//route for lechon de cebu billing statement form edit
-	Route::get('/lolo-pinoy-lechon-de-cebu/edit-billing-statement/{id}', 'LoloPinoyLechonDeCebuController@editBillingStatement')->name('lolo-pinoy-lechon-de-cebu.editBillingStatement');
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/edit-billing-statement/{id}', 
+		'LoloPinoyLechonDeCebuController@editBillingStatement')
+		->name('editBillingStatementLechonDeCebu');
 
 	//route for add new billing in lechon de cebu
-	Route::get('/lolo-pinoy-lechon-de-cebu/add-new-billing/{id}', 'LoloPinoyLechonDeCebuController@addNewBilling')->name('lolo-pinoy-lechon-de-cebu.addNewBilling');
+	Route::post(
+		'/lolo-pinoy-lechon-de-cebu/add-new-billing/{id}', 
+		'LoloPinoyLechonDeCebuController@addNewBilling')
+		->name('addNewBillingLechonDeCebu');
 
-	Route::post('/lolo-pinoy-lechon-de-cebu/add-new-billing-data/{id}', 'LoloPinoyLechonDeCebuController@addNewBillingData')->name('lolo-pinoy-lechon-de-cebu.addNewBillingData');
-
+	
 	//route for billing statement lists
 	Route::get('/lolo-pinoy-lechon-de-cebu/billing-statement-lists', 'LoloPinoyLechonDeCebuController@billingStatementLists')->name('lolo-pinoy-lechon-de-cebu.billingStatementLists');
 
@@ -1108,7 +1125,10 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('/lolo-pinoy-grill-commissary', 'LoloPinoyGrillCommissaryController@index')->name('lolo-pinoy-grill-commissary.index');
 
 	//delivery receipt
-	Route::get('/lolo-pinoy-grill-commissary/delivery-receipt-form', 'LoloPinoyGrillCommissaryController@deliveryReceiptForm')->name('lolo-pinoy-grill-commissary.deliveryReceiptForm');
+	Route::get(
+		'/lolo-pinoy-grill-commissary/delivery-receipt-form', 
+		'LoloPinoyGrillCommissaryController@deliveryReceiptForm')
+		->name('deliveryReceiptFormLoloPinoyGrill');
 
 	//store deivery receipt
 	Route::post(

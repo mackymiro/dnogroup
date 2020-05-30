@@ -133,7 +133,7 @@
                 	 				</div>
                 	 				 <br>
 		                            <div>
-		                                <input type="submit" class="btn btn-success float-right" value="Add Billing" />
+									<button type="submit" class="btn btn-success btn-lg float-right"><i class="fas fa-save"></i> Save Billing</button>
 		                            </div>
                     	 		</div>
                         	 </div>

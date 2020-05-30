@@ -443,6 +443,10 @@ class LoloPinoyGrillBranchesController extends Controller
     public function printPayables($id){
         $payableId = LoloPinoyGrillBranchesPaymentVoucher::find($id);
 
+        //getParticular details
+        $getParticulars = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+      
+
         $payablesVouchers = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
           //count the total amount 
@@ -455,7 +459,7 @@ class LoloPinoyGrillBranchesController extends Controller
         $sum  = $countTotalAmount + $countAmount;
        
 
-        $pdf = PDF::loadView('printPayablesLoloPinoyGrillBranches', compact('payableId', 'payablesVouchers', 'sum'));
+        $pdf = PDF::loadView('printPayablesLoloPinoyGrillBranches', compact('payableId', 'payablesVouchers', 'getParticulars', 'sum'));
 
         return $pdf->download('lolo-pinoy-grill-branches-payment-voucher.pdf');
     }   
@@ -705,7 +709,10 @@ class LoloPinoyGrillBranchesController extends Controller
        }else if($request->get('category') == "None"){
             $subCat = "NULL";
             $subCatAcctId = "NULL";
-       }
+       }else if($request->get('category') == "Payroll"){
+            $subCat = "NULL";
+            $subCatAcctId = "NULL";
+        }
 
 
         //check if invoice number already exists
@@ -719,6 +726,8 @@ class LoloPinoyGrillBranchesController extends Controller
             $addPaymentVoucher = new LoloPinoyGrillBranchesPaymentVoucher([
                 'user_id'=>$user->id,
                 'paid_to'=>$request->get('paidTo'),
+                'method_of_payment'=>$request->get('paymentMethod'),
+                'account_name'=>$request->get('accountName'),
                 'invoice_number'=>$request->get('invoiceNumber'),
                 'voucher_ref_number'=>$uVoucher,
                 'issued_date'=>$request->get('issuedDate'),

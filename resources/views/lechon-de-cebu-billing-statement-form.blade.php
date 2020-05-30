@@ -2,14 +2,20 @@
 @section('title', 'Billing Statement Form |')
 @section('content')
 <script>
-    $(function() {
-        $( ".datepicker" ).datepicker();
-    });
+     $(function() {
+        $(".datepicker").datepicker();
+      });
 </script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="/resources/demos/style.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css" >
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
 <div id="wrapper">
 	<!-- Sidebar -->
     @include('sidebar.sidebar')
@@ -61,30 +67,18 @@
                                       <strong>{{ $errors->first('periodCovered') }}</strong>
                                     </span>
                                   @endif
-                                 <label>Terms</label>
-                                <input type="text" name="terms" class="form-control" required="required" />
-                                @if ($errors->has('terms'))
-                                    <span class="alert alert-danger">
-                                      <strong>{{ $errors->first('terms') }}</strong>
-                                    </span>
-                                  @endif
+                                
                               </div>
                               <div class="col-lg-6">
                                 <label>Date</label>
-                                <input type="text" name="date" class="datepicker form-control" required="required" />
+                                <input type="text" name="date" class="datepicker form-control" required="required" autocomplete="off" />
                                 @if ($errors->has('date'))
                                     <span class="alert alert-danger">
                                       <strong>{{ $errors->first('date') }}</strong>
                                     </span>
                                   @endif
-                                <label>Reference #</label>
-                                <input type="text" name="refNumber" class="form-control" disabled="disabled" />
-                                <label>PO Number</label>
-                                <select name="poNumber" class="form-control">
-                                    @foreach($getPurchaseOrders as $getPurchaseOrder)
-                                    <option value="{{ $getPurchaseOrder['p_o_number'] }}">{{ $getPurchaseOrder['p_o_number'] }}</option>
-                                    @endforeach
-                                </select>
+                            
+                               
                                 <label>Branch</label>
                                 <div id="app-branch">
                                   <select name="branch" class="form-control">
@@ -94,58 +88,83 @@
                                       </option>
                                   </select>
                                 </div>
+                                <label>Terms</label>
+                                <input type="text" name="terms" class="form-control" required="required" />
+                                @if ($errors->has('terms'))
+                                    <span class="alert alert-danger">
+                                      <strong>{{ $errors->first('terms') }}</strong>
+                                    </span>
+                                  @endif
                               </div>
                             </div>
                           </div>
                           <div class="form-group">
                             <div class="form-row">
-                                  <div class="col-lg-1">
+                                  <div class="col-lg-2">
                                     <label>Date</label>
-                                    <input type="text" name="transactionDate" class="form-control" required="required" />
+                                    <input type="text" name="transactionDate" class="datepicker form-control" required="required" />
                                     @if ($errors->has('transactionDate'))
-                                            <span class="alert alert-danger">
-                                              <strong>{{ $errors->first('transactionDate') }}</strong>
-                                            </span>
-                                          @endif
+                                      <span class="alert alert-danger">
+                                        <strong>{{ $errors->first('transactionDate') }}</strong>
+                                      </span>
+                                    @endif
                                   </div>
-                                  <div class="col-lg-1">
+                                  <div class="col-lg-2">
+                                      <label>Order</label>
+                                        <select name="choose" class="chooseOption form-control" >
+                                        <option value="Ssp">Ssp</option>
+                                          <option value="Private Order">Private Order</option>
+                                          
+                                        </select>
+                                      
+                                  </div>
+                                  
+                                  <div id="invoiceNo" class="col-lg-2">
                                       <label>Invoice #</label>
-                                      <input type="text" name="invoiceNumber" class="form-control" required="required" />
+                                      <input type="text" name="invoiceNumber" class="form-control"  />
                                   </div>
-                                <div class="col-lg-4">
+                                  <div id="drNo" class="col-lg-2">
+                                      <label>DR #</label>
+                                      <select data-live-search="true" name="drNo" class="drSelect form-control selectpicker">
+                                        <option value="0">--Please Select--</option>
+                                        @foreach($drNos as $drNo)
+                                        <option value="{{ $drNo['dr_no']}}">{{ $drNo['dr_no']}}</option>
+                                        @endforeach
+                                      </select>	
+                                  </div>
+                                <div id="wholeLechon" class="col-lg-4">
                                   <label>Whole Lechon 500/KL</label>
-                                  <input type="text" name="wholeLechon" class="form-control"  required="required" />
-                                  @if ($errors->has('wholeLechon'))
-                                        <span class="alert alert-danger">
-                                          <strong>{{ $errors->first('wholeLechon') }}</strong>
-                                        </span>
-                                      @endif
+                                  <input type="text" name="wholeLechon" class="form-control" />
+                               
                                 </div>
-                                <div class="col-lg-4">
+                                <div id="wholeLechon6000" class="col-lg-4">
+                                  <label>Whole Lechon</label>
+                                  <input type="text" name="wholeLechon6000" class="form-control"  disabled />
+                                 
+                                </div>
+                                <div id="description" class="col-lg-4">
                                   <label>Description</label>
-                                  <input type="text" name="description" class="form-control"  required="required" />
-                                  @if ($errors->has('description'))
-                                        <span class="alert alert-danger">
-                                          <strong>{{ $errors->first('description') }}</strong>
-                                        </span>
-                                      @endif
+                                  <input type="text" name="description" class="form-control" />
+                                
                                 </div>
-                                <div class="col-lg-1">
-                                  <label>Amount</label>
-                                  <input type="text" name="amount" class="form-control" disabled="disabled" />
+                                <div id="descriptionDrNo" class="col-lg-4">
+                                  <label>Description</label>
+                                  <input type="text" name="descriptionDrNo" class="form-control"  disabled />
+                                  
                                 </div>
+                                
+                               
                             </div>
                             <br>
                             <div>
-                                <input type="submit" class="btn btn-success float-right" value="Add Billing" />
+                            <button type="submit" class="btn btn-success btn-lg float-right"><i class="fas fa-save"></i> Save Billing</button>
+										        <br>
                             </div>
                           </div>
                           </div>
                     </div>
                 </div>
-            </div>
-            
-           
+            </div>      
     	</div>
      </form>  
     </div>
@@ -161,14 +180,55 @@
         </div>
       </footer>
 </div>
+<script type="text/javascript">
+    $("#drNo").hide();
+    $("#wholeLechon6000").hide();
+    $("#descriptionDrNo").hide();
+    $(".chooseOption").change(function(){
+         const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
+         if(cat === "Ssp"){
+             $("#invoiceNo").show();
+             $("#wholeLechon").show();
+             $("#description").show();
+
+             $("#drNo").hide();
+             $("#wholeLechon6000").hide();
+             $("#descriptionDrNo").hide();
+         }else if(cat === "Private Order"){
+             $("#drNo").show();
+             $("#wholeLechon6000").show();
+             $("#descriptionDrNo").show();
+             $("#invoiceNo").hide();
+             $("#wholeLechon").hide();
+             $("#description").hide();
+         }  
+    });
+
+    $(".drSelect").change(function(){
+         <?php
+          $getDrNos = DB::table(
+                        'lechon_de_cebu_delivery_receipts')
+                        ->where('dr_id', NULL)
+                        ->get();?>
+        var dr = $(this).children("option:selected").val();
+        <?php foreach($getDrNos as $key=>$getDrNo ): ?>
+             if(dr === "<?php echo $getDrNo->dr_no?>"){
+                $("#wholeLechon6000").html('<label>Whole Lechon</label><input type="text" name="wholeLechon6000" value="<?php echo $getDrNo->price; ?>" class="form-control" readonly="readonly" />');
+                $("#descriptionDrNo").html('<label>Description</label><input type="text" name="descriptionDrNo" value="<?php echo $getDrNo->description; ?>" class="form-control" readonly="readonly" />');
+             }
+           
+        <?php endforeach; ?>
+    });
+</script>
 <script>
-  //status data
+  //choose
   new Vue({
-  el: '#app-status',
+  el: '#app-choose',
+
     data: {
       statuses:[
-        { text:'Unpaid', value: 'Unpaid' },
-        { text:'Paid', value: 'Paid'}
+        { text:'Private-orders', value: 'Private-orders' },
+        { text:'Ssp', value: 'Spp'}
       ]
     }
   })  

@@ -33,24 +33,34 @@
     					  			<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 				  						<thead>
 					  						<tr>
-				  								<th>Action</th>
+											  <th>Action</th>
 				  								<th>Invoice #</th>
 				  								<th>Voucher Ref #</th>
+												<th  class="bg-info" style="color:#fff;">Category</th>
 				  								<th>Issued Date</th>
+												<th>Paid To</th>
+												<th>Account Name</th>
 				  								<th  class="bg-danger" style="color:white;">Amount Due</th>
 				  								<th>Delivered Date</th>
+												<th style="width:230px;">Payment Method</th>
 				  								<th class="bg-success" style="color:white;">Status</th>
+												<th>Created By</th>
 					  						</tr>
 				  						</thead>
 				  						<tfoot>
 				  							<tr>
-				  								<th>Action</th>
+											  <th>Action</th>
 				  								<th>Invoice #</th>
 				  								<th>Voucher Ref #</th>
+												<th  class="bg-info" style="color:#fff;">Category</th>
 				  								<th>Issued Date</th>
+												<th>Paid To</th>
+												<th>Account Name</th>
 				  								<th  class="bg-danger" style="color:white;">Amount Due</th>
 				  								<th>Delivered Date</th>
+												<th style="width:230px;">Payment Method</th>
 				  								<th class="bg-success" style="color:white;">Status</th>
+												<th>Created By</th>
 					  						</tr>
 				  						</tfoot>
 				  						<tbody>
@@ -76,22 +86,26 @@
 			  									</td>
 			  									<td>
 			  										@if($getTransactionList['status'] != "FULLY PAID AND RELEASED")
-			  										<a href="{{ url('lolo-pinoy-grill-branches/edit-lolo-pinoy-grill-branches-payables-detail/'.$getTransactionList['id']) }}" title="Edit">{{ $getTransactionList['invoice_number']}}</a>
-			  										@else
+													  <p style="width:250px;">  
+			  												<a href="{{ url('lolo-pinoy-grill-branches/edit-lolo-pinoy-grill-branches-payables-detail/'.$getTransactionList['id']) }}" title="Edit">{{ $getTransactionList['invoice_number']}}</a>
+			  										  </p>
+													@else
 			  											{{ $getTransactionList['invoice_number']}}
 			  										@endif
 			  									</td>
-			  									<td>LPGB-{{ $getTransactionList['voucher_ref_number']}}</td>
-			  									<td>{{ $getTransactionList['issued_date']}}</td>
+			  									<td><p style="width:140px;">LPGB-{{ $getTransactionList['voucher_ref_number']}}</p></td>
+												<td class="bg-info" style="color:#fff;"><p style="width:150px;">{{ $getTransactionList['category']}}</p></td>
+			  									<td><p style="width:130px;">{{ $getTransactionList['issued_date']}}</p></td>
+												<td><p style="width:200px;">{{ $getTransactionList['paid_to']}}</p></td>
+												<td><p style="width:200px;">{{ $getTransactionList['account_name']}}</p></td>
 			  									<td class="bg-danger" style="color:white;">
 												  	<?php echo number_format($compute, 2); ?>
 												</td>
-			  									<td>{{ $getTransactionList['delivered_date']}}</td>
-			  									@if($getTransactionList['status'] == "FULLY PAID AND RELEASED")
-			  									<td class="bg-success" style="color:white; "><a class="anchor" href="{{ url('lolo-pinoy-grill-branches/view-lolo-pinoy-grill-branches-payables-details/'.$getTransactionList['id']) }}">{{ $getTransactionList['status'] }}</a></td>
-			  									@else
-			  									<td class="bg-success" style="color:white; ">{{ $getTransactionList['status'] }}</td>
-			  									@endif
+												<td><p style="width:160px;">{{ $getTransactionList['delivered_date']}}</p></td>
+			  									<td><p style="width:190px;">{{ $getTransactionList['method_of_payment'] }}</p></td>
+			  									
+			  									<td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('lolo-pinoy-grill-branches/view-lolo-pinoy-grill-branches-payables-details/'.$getTransactionList['id']) }}">{{ $getTransactionList['status'] }}</a></p></td>
+			  									<td><p style="width:190px;">{{ $getTransactionList['created_by']}}</p></td>
 				  							</tr>
 				  							@endforeach
 				  						</tbody>

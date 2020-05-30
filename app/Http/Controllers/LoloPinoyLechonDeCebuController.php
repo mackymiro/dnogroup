@@ -337,13 +337,8 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     //
     public function viewPayableDetails($id){    
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        //
         $viewPaymentDetail = LechonDeCebuPaymentVoucher::find($id);
 
-        //
         $getViewPaymentDetails = LechonDeCebuPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
          //getParticular details
@@ -351,7 +346,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         
 
 
-        return view('view-lechon-de-cebu-payable-details', compact('user', 'viewPaymentDetail', 'getViewPaymentDetails', 'getParticulars'));
+        return view('view-lechon-de-cebu-payable-details', compact('viewPaymentDetail', 'getViewPaymentDetails', 'getParticulars'));
     }
 
     //
@@ -2307,6 +2302,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $updateBilling = LechonDeCebuBillingStatement::find($id);
 
         $wholeLechon = $request->get('wholeLechon');
+        
         $add = $wholeLechon * 500; 
 
         $updateBilling->date_of_transaction = $request->get('transactionDate');
@@ -2334,8 +2330,7 @@ class LoloPinoyLechonDeCebuController extends Controller
     }
 
 
-    //add new billing statement form 
-    public function addNewBillingData(Request $request, $id){
+    public function addNewBilling(Request $request, $id){
         $ids = Auth::user()->id;
         $user = User::find($ids);
 
@@ -2346,38 +2341,55 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $name  = $firstName." ".$lastName;
 
-        //get the whole lechon then multiply by 500
-        $wholeLechon = $request->get('wholeLechon');
-        $add = $wholeLechon * 500; 
+          //if user selects an order
+          if($request->get('choose') === "Ssp"){
+            $invoiceNum = $request->get('invoiceNumber');
+            $wholeLechon = $request->get('wholeLechon');
+            $description = $request->get('description');
 
+            $add = $wholeLechon * 500; 
 
+            $drNo = NULL;
+            $descriptionDrNo = NULL;
+
+        }else{
+            $invoiceNum = NULL;
+            $wholeLechon = $request->get('wholeLechon6000');
+            $description = $request->get('descriptionDrNo');
+            $drNo = $request->get('drNo');
+            $add = $wholeLechon; 
+        }
+
+        $poNumber = "NULL";
         $addBillingStatement = new LechonDeCebuBillingStatement([
             'user_id'=>$user->id,
             'billing_statement_id'=>$id,
             'reference_number'=>$billingOrder['reference_number'],
-            'p_o_number'=>$billingOrder['p_o_number'],
+            'p_o_number'=>$poNumber,
             'branch'=>$request->get('branch'),
             'date_of_transaction'=>$request->get('transactionDate'),
-            'invoice_number'=>$request->get('invoiceNumber'),
+            'invoice_number'=>$invoiceNum,
             'whole_lechon'=>$wholeLechon,
-            'description'=>$request->get('description'),
+            'description'=>$description,
+            'order'=>$request->get('choose'),
             'amount'=>$add,
             'created_by'=>$name,
         ]);
 
         $addBillingStatement->save();
 
-        //save to table statement of account
-        $addStatementAccount = new LechonDeCebuStatementOfAccount([
+          //save to table statement of account
+          $addStatementAccount = new LechonDeCebuStatementOfAccount([
             'user_id'=>$user->id,
             'billing_statement_id'=>$id,
             'reference_number'=>$billingOrder['reference_number'],
-            'p_o_number'=>$billingOrder['p_o_number'],
+            'p_o_number'=>$poNumber,
             'branch'=>$request->get('branch'),
             'transaction_date'=>$request->get('transactionDate'),
-            'invoice_number'=>$request->get('invoiceNumber'),
+            'invoice_number'=>$invoiceNum,
             'whole_lechon'=>$wholeLechon,
-            'description'=>$request->get('description'),
+            'description'=>$description,
+            'order'=>$request->get('choose'),
             'amount'=>$add,
             'created_by'=>$name,
 
@@ -2385,19 +2397,10 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $addStatementAccount->save();
 
-        Session::flash('addBillingSuccess', 'Successfully added.');
+        Session::flash('SuccessAdd', 'Successfully added.');
 
-        return redirect('lolo-pinoy-lechon-de-cebu/add-new-billing/'.$id);
-        
-    }
-
-    //add new billing statement
-    public function addNewBilling($id){
-        $ids =  Auth::user()->id;
-        $user = User::find($ids);
-
-        return view('add-new-lechon-de-cebu-billing-statement', compact('user', 'id'));
-    }
+        return redirect()->route('editBillingStatementLechonDeCebu', ['id'=>$id]);    
+     }
 
 
     //edit billing statement 
@@ -2411,8 +2414,11 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         //get the purchase order lists
         $getPurchaseOrders = LechonDeCebuPurchaseOrder::where('po_id', NULL)->get()->toArray();
+
+        $drNos = LechonDeCebuDeliveryReceipt::where('dr_id', NULL)->get()->toArray();
         
-        return view('edit-billing-statement-form', compact('user', 'billingStatement', 'bStatements', 'getPurchaseOrders'));
+        return view('edit-billing-statement-form', compact('user', 'billingStatement', 'bStatements', 
+        'getPurchaseOrders', 'drNos'));
     }
 
     //storeBillingStatement
@@ -2430,19 +2436,32 @@ class LoloPinoyLechonDeCebuController extends Controller
         $this->validate($request, [
             'billTo' =>'required',
             'address'=>'required',
-            'invoiceNumber'=>'required',
             'periodCovered'=>'required',
             'date'=>'required',
             'terms'=>'required',
             'transactionDate'=>'required',
-            'wholeLechon'=>'required',
-            'description'=>'required',
+            
         ]);
 
-        $wholeLechon = $request->get('wholeLechon');
-        $add = $wholeLechon * 500; 
-       
-       
+        //if user selects an order
+        if($request->get('choose') === "Ssp"){
+            $invoiceNum = $request->get('invoiceNumber');
+            $wholeLechon = $request->get('wholeLechon');
+            $description = $request->get('description');
+
+            $add = $wholeLechon * 500; 
+
+            $drNo = NULL;
+            $descriptionDrNo = NULL;
+
+        }else{
+            $invoiceNum = NULL;
+            $wholeLechon = $request->get('wholeLechon6000');
+            $description = $request->get('descriptionDrNo');
+            $drNo = $request->get('drNo');
+            $add = $wholeLechon; 
+        }
+
         //get the latest insert id query in table billing statements ref number
         $dataReferenceNum = DB::select('SELECT id, reference_number FROM lechon_de_cebu_billing_statements ORDER BY id DESC LIMIT 1');
 
@@ -2465,14 +2484,16 @@ class LoloPinoyLechonDeCebuController extends Controller
             'address'=>$request->get('address'),
             'period_cover'=>$request->get('periodCovered'),
             'date'=>$request->get('date'),
-            'invoice_number'=>$request->get('invoiceNumber'),
+            'invoice_number'=>$invoiceNum,
             'reference_number'=>$uRef,
             'p_o_number'=>$request->get('poNumber'),
+            'order'=>$request->get('choose'),
             'branch'=>$request->get('branch'),
             'terms'=>$request->get('terms'),
             'date_of_transaction'=>$request->get('transactionDate'),
             'whole_lechon'=>$wholeLechon,
-            'description'=>$request->get('description'),
+            'description'=>$description,
+            'dr_no'=>$drNo,
             'amount'=>$add,
             'created_by'=>$name,
             'prepared_by'=>$name,
@@ -2490,17 +2511,14 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     //billing statement form
     public function billingStatementForm(){
-        $id =  Auth::user()->id;
-        $user = User::find($id);
-
-        //get the purchase order lists
-        $getPurchaseOrders = LechonDeCebuPurchaseOrder::where('po_id', NULL)->get()->toArray();
+    
 
         //get data from sales invoice invoice #
         $getSalesInvoices = LechonDeCebuSalesInvoice::where('invoice_number', '!=', NULL)->get()->toArray();
        
+        $drNos = LechonDeCebuDeliveryReceipt::where('dr_id', NULL)->get()->toArray();
 
-        return view('lechon-de-cebu-billing-statement-form', compact('user', 'getPurchaseOrders', 'getSalesInvoices'));
+        return view('lechon-de-cebu-billing-statement-form', compact( 'getSalesInvoices', 'drNos'));
     }
 
     //update-po
@@ -2770,6 +2788,11 @@ class LoloPinoyLechonDeCebuController extends Controller
         return redirect('lolo-pinoy-lechon-de-cebu/edit/'.$id);
 
 
+    }
+
+    public function destroyUtility($id){
+        $utility = LechonDeCebuUtility::find($id);
+        $utility->delete();
     }
 
     public function destroyPettyCash($id){

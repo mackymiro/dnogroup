@@ -84,7 +84,28 @@
                                         <td>{{ $vecoDocument['account_name']}}</td>
                                         <td>{{ $vecoDocument['meter_no']}}</td>
                                         <td>{{ $vecoDocument['date']}}</td>
-                                        <td></td>
+                                        <?php
+                                            $viewParticulars  =  DB::table(
+                                                                    'lolo_pinoy_grill_commissary_payment_vouchers')
+                                                                ->where('sub_category_account_id', $vecoDocument['id'])
+                                                                ->get();
+                                        ?>  
+                                          <?php if($viewParticulars === ""): ?>
+                                                    <td class="bg-danger " style="color:#fff;">UNPAID</td>
+                                               <?php else:?>
+                                                @foreach($viewParticulars as $viewParticular)
+                                                <?php if($viewParticular->status == "FOR APPROVAL" ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FOR CONFIRMATION " ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FULLY PAID AND RELEASED" ): ?>
+                                                    <td class="bg-success" style="color:#fff;">PAID</td>
+                                                <?php elseif($viewParticular->status == ""):?>
+                                                    <t class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php endif;?>
+                                                
+                                                @endforeach
+                                                <?php endif;?>
                                         <td>{{ $vecoDocument['created_by']}}</td>
                                     </tr>
                                     @endforeach
@@ -148,7 +169,28 @@
                                                 <td>{{ $mcwdDocument['account_name']}}</td>
                                                 <td>{{ $mcwdDocument['meter_no']}}</td>
                                                 <td>{{ $mcwdDocument['date']}}</td>
-                                                <td></td>
+                                                <?php
+                                            $viewParticulars  =  DB::table(
+                                                                    'lolo_pinoy_grill_commissary_payment_vouchers')
+                                                                ->where('sub_category_account_id', $mcwdDocument['id'])
+                                                                ->get();
+                                        ?>  
+                                          <?php if($viewParticulars === ""): ?>
+                                                    <td class="bg-danger " style="color:#fff;">UNPAID</td>
+                                               <?php else:?>
+                                                @foreach($viewParticulars as $viewParticular)
+                                                <?php if($viewParticular->status == "FOR APPROVAL" ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FOR CONFIRMATION " ): ?>
+                                                    <td class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php elseif($viewParticular->status == "FULLY PAID AND RELEASED" ): ?>
+                                                    <td class="bg-success" style="color:#fff;">PAID</td>
+                                                <?php elseif($viewParticular->status == ""):?>
+                                                    <t class="bg-danger" style="color:#fff;">UNPAID</td>
+                                                <?php endif;?>
+                                                
+                                                @endforeach
+                                                <?php endif;?>
                                                 <td>{{ $mcwdDocument['created_by']}}</td>
                                             </tr>
                                             @endforeach

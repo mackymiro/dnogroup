@@ -60,6 +60,16 @@
             <a class="dropdown-item" href="{{ url('dno-personal/petty-cash-list') }}">Petty Cash List</a>
         </div>
       </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-money-bill-alt"></i>
+
+          <span>Receivables</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+            <a class="dropdown-item" href="{{ url('dno-personal/receivables') }}"> List</a>
+        </div>
+      </li>
       @if(Auth::user()['role_type'] != 3)
        <li class="nav-item dropdown ">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

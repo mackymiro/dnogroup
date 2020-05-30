@@ -21,6 +21,7 @@ use App\LoloPinoyGrillCommissaryUtility;
 class LoloPinoyGrillCommissaryController extends Controller
 {
 
+
     public function listPerBranch(){
         
     }
@@ -168,6 +169,10 @@ class LoloPinoyGrillCommissaryController extends Controller
 
         $payableId = LoloPinoyGrillCommissaryPaymentVoucher::find($id);
 
+        //getParticular details
+        $getParticulars = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+      
+
         $payablesVouchers = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
           //count the total amount 
@@ -180,7 +185,7 @@ class LoloPinoyGrillCommissaryController extends Controller
         $sum  = $countTotalAmount + $countAmount;
        
 
-        $pdf = PDF::loadView('printPayablesLoloPinoyGrillCommissary', compact('payableId', 'user', 'payablesVouchers', 'sum'));
+        $pdf = PDF::loadView('printPayablesLoloPinoyGrillCommissary', compact('payableId', 'user', 'payablesVouchers', 'getParticulars', 'sum'));
 
         return $pdf->download('lolo-pinoy-grill-commissary-payment-voucher.pdf');
     }
@@ -1217,17 +1222,20 @@ class LoloPinoyGrillCommissaryController extends Controller
         } 
 
        //get the category
-       if($request->get('category') == "Petty Cash"){
+       if($request->get('category') === "Petty Cash"){
 
             $subCat = "NULL";
             $subCatAcctId = "NULL";
 
-       }else if($request->get('category') == "Utilities"){
+       }else if($request->get('category') === "Utilities"){
 
             $subCat = $request->get('bills');
             $subCatAcctId = $request->get('selectAccountID');
 
        }else if($request->get('category') == "None"){
+            $subCat = "NULL";
+            $subCatAcctId = "NULL";
+       }else if($request->get('category') == "Payroll"){
             $subCat = "NULL";
             $subCatAcctId = "NULL";
        }
@@ -1243,9 +1251,11 @@ class LoloPinoyGrillCommissaryController extends Controller
             $addPaymentVoucher = new LoloPinoyGrillCommissaryPaymentVoucher([
                 'user_id'=>$user->id,
                 'paid_to'=>$request->get('paidTo'),
+                'method_of_payment'=>$request->get('paymentMethod'),
                 'invoice_number'=>$request->get('invoiceNumber'),
                 'voucher_ref_number'=>$uVoucher,
                 'issued_date'=>$request->get('issuedDate'),
+                'account_name'=>$request->get('accountName'),
                 'amount'=>$request->get('amount'),
                 'amount_due'=>$request->get('amount'),
                 'particulars'=>$request->get('particulars'),
@@ -1260,11 +1270,11 @@ class LoloPinoyGrillCommissaryController extends Controller
             $addPaymentVoucher->save();
 
             $insertedId = $addPaymentVoucher->id;
-            
-            return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-payables-detail/'.$insertedId);
+        
+            return redirect()->route('editPayablesDetailLoloPinoyGrill', ['id'=>$insertedId]);
 
         }else{
-             return redirect('lolo-pinoy-grill-commissary/payment-voucher-form/')->with('error', 'Invoice Number Already Exists. Please See Transaction List For Your Reference');
+            return redirect()->route('paymentVoucherFormLoloPinoyGril')->with('error', 'Invoice Number Already Exists. Please See Transaction List For Your Reference');
         }
 
     }   

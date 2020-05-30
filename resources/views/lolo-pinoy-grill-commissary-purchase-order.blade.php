@@ -118,7 +118,7 @@
                              		</div>
                              		 <br>
 	                                <div>
-										<button type="submit" class="btn btn-success float-right"><i class="fa fa-plus" aria-hidden="true"></i>  Add Purchase Order</button>
+									<button type="submit" class="btn btn-success btn-lg float-right"><i class="fas fa-save"></i> Save Purchase Order</button>
 	                                </div>
 	                            	</form>
 	                             </div>	

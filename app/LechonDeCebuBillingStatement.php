@@ -33,6 +33,8 @@ class LechonDeCebuBillingStatement extends Model
         'collection_date',
         'check_number',
         'check_amount',
-        'or_number',
+		'or_number',
+		'order',
+		'dr_no',
     ];
 }
