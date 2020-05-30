@@ -53,6 +53,11 @@ Route::group(['middleware' =>['user']], function(){
 		'LoloPinoyLechonDeCebuController@pettyCashList')
 		->name('pettyCashListLechonDeCebu');
 
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/utilities',
+		'LoloPinoyLechonDeCebuController@utilities')
+		->name('utilitiesLechonDeCebu');
+
 	Route::post(
 		'/lolo-pinoy-lechon-de-cebu/petty-cash/add',
 		'LoloPinoyLechonDeCebuController@addPettyCash')
@@ -92,7 +97,7 @@ Route::group(['middleware' =>['user']], function(){
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/payment-voucher-form', 
 		'LoloPinoyLechonDeCebuController@paymentVoucherForm')
-		->name('paymentVoucherForm');
+		->name('paymentVoucherFormLechonDeCebu');
 
 	//route for payment vouchers store
 	Route::post(
@@ -123,11 +128,31 @@ Route::group(['middleware' =>['user']], function(){
 			'/lolo-pinoy-lechon-de-cebu/payables/transaction-list',
 			'LoloPinoyLechonDeCebuController@transactionList')
 			->name('lolo-pinoy-lechon-de-cebu.transactionList');
+
+	Route::post(
+		'/lolo-pinoy-lechon-de-cebu/utilities/add-bill',
+		'LoloPinoyLechonDeCebuController@addBills')
+		->name('addBillsLechonDeCebu');
+
+	Route::post(
+		'/lolo-pinoy-lechon-de-cebu/utilities/add-internet',
+		'LoloPinoyLechonDeCebuController@addInternet')
+		->name('addInternetLechonDeCebu');
+
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/utilities/view-veco/{id}',
+		'LoloPinoyLechonDeCebuController@viewBills')
+		->name('viewBillsLechonDeCebu');
+
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/utilities/view-internet/{id}',
+		'LoloPinoyLechonDeCebuController@viewBills')
+		->name('viewBillsLechonDeCebu');
 	
 	Route::get(
 			'/lolo-pinoy-lechon-de-cebu/edit-payables-detail/{id}',
 			'LoloPinoyLechonDeCebuController@editPayablesDetail')
-			->name('editPayablesDetail');
+			->name('editPayablesDetailLechonDeCebu');
 
 	
 	Route::delete(
@@ -2901,7 +2926,36 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dino-industrial-corporation/payment-voucher-form',
 		'DinoIndustrialCorporationController@paymentVoucherForm')
 		->name('paymentVoucherFormDinoIndustrial');
+
+	Route::post(
+		'/dino-industrial-corporation/payment-voucher-store',
+		'DinoIndustrialCorporationController@paymentVoucherStore')
+		->name('paymentVoucherStoreDinoIndustrial');
+
+	Route::get(
+		'/dino-industrial-corporation/edit-dino-industrial-payables-detail/{id}',
+		'DinoIndustrialCorporationController@editPayablesDetail')
+		->name('editPayablesDetailDinoIndustrial');
 	
+	Route::get(
+		'/dino-industrial-corporation/payables/transaction-list',
+		'DinoIndustrialCorporationController@transactionList')
+		->name('transactionListDinoIndustrial');
+	
+	Route::post(
+		'/dino-industrial-corporation/add-particulars/{id}',
+		'DinoIndustrialCorporationController@addParticulars')
+		->name('addParticularsDinoIndustrial');
+
+	Route::post(
+		'/dino-industrial-corporation/add-payment/{id}',
+		'DinoIndustrialCorporationController@addPayment')
+		->name('addPaymentDinoIndustrial');
+
+	Route::patch(
+		'/dino-industrial-corporation/accept/{id}',
+		'DinoIndustrialCorporationController@accept')
+		->name('acceptDinoIndustrial');
 });
 
 

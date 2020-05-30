@@ -77,6 +77,15 @@
             <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/petty-cash-list') }}">Petty Cash List</a>
         </div>
       </li>
+      <li class="nav-item dropdown ">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+         <i class="fas fa-tools"></i>
+          <span>Utility</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/utilities') }}">List</a>
+        </div>
+      </li>
       @if(Auth::user()['role_type'] != 3)
        <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

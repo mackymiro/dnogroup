@@ -159,7 +159,7 @@
                                                 <?php elseif($viewParticular->status == "FULLY PAID AND RELEASED" ): ?>
                                                     <td class="bg-success" style="color:#fff;">PAID</td>
                                                 <?php elseif($viewParticular->status == ""):?>
-                                                    <t class="bg-danger" style="color:#fff;"d>UNPAID</td>
+                                                    <t class="bg-danger" style="color:#fff;">UNPAID</td>
                                                 <?php endif;?>
                                                 
                                                 @endforeach

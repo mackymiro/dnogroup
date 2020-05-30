@@ -18,11 +18,105 @@ use App\LechonDeCebuDeliveryReceiptDuplicateCopy;
 use App\LechonDeCebuSalesInvoice;
 use App\CommissaryRawMaterial;
 use App\LechonDeCebuPettyCash;
+use App\LechonDeCebuUtility;
 use Session;
 
 
 class LoloPinoyLechonDeCebuController extends Controller
 {   
+    public function viewBills($id){
+        //
+        $viewBill = LechonDeCebuUtility::find($id);
+
+        //view particulars
+    
+        $viewParticulars = LechonDeCebuPaymentVoucher::where('sub_category_account_id', $id)->get()->toArray();
+        return view('lolo-pinoy-lechon-de-cebu-view-utility', compact('viewBill', 'viewParticulars'));
+    }
+
+    //ajax call save
+    public function addInternet(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //get the date today
+         $getDate =  date("Y-m-d");
+
+        //check if internet account already exists
+        $target = DB::table(
+            'lechon_de_cebu_utilities')
+            ->where('account_id', $request->accountIdInternet)
+            ->get()->first();
+        
+        if($target ==  NULL){
+             $addInternet = new LechonDeCebuUtility([
+                'user_id'=>$user->id,
+                'account_id'=>$request->accountIdInternet,
+                'account_name'=>$request->accountNameInternet,
+                'date'=>$getDate,
+                'flag'=>$request->flagInternet,
+                'created_by'=>$name,
+            ]);
+
+            $addInternet->save();
+            return response()->json('Success: successfully added an account.');
+        }else{
+            return response()->json('Error: Account ID already exist.');
+        }
+    }
+
+    //ajax call save
+    public function addBills(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //get the date today
+         $getDate =  date("Y-m-d");
+
+
+           //check if veco account  already exists
+        $target = DB::table(
+            'lechon_de_cebu_utilities')
+            ->where('account_id', $request->accountId)
+            ->get()->first();
+
+        if($target ==  NULL){
+            $addBills = new LechonDeCebuUtility([
+                'user_id'=>$user->id,
+                'account_id'=>$request->accountId,
+                'account_name'=>$request->accountName,
+                'meter_no'=>$request->meterNo,
+                'date'=>$getDate,
+                'flag'=>$request->flag,
+                'created_by'=>$name,
+            ]);
+
+            $addBills->save();
+            return response()->json('Success: successfully added an account.');
+        }else{
+            return response()->json('Error: Account ID already exist.');
+        }
+    }
+
+    public function utilities(){
+        $flag = "Veco";
+
+        $flagInternet = "Internet";
+
+        $vecoDocuments = LechonDeCebuUtility::where('flag', $flag)->get()->toArray();
+        $internetDocuments = LechonDeCebuUtility::where('flag', $flagInternet)->get()->toArray();
+        return view('lechon-de-cebu-utilities', compact('vecoDocuments', 'internetDocuments'));
+    }
 
     public function printPettyCash($id){
         $getPettyCash = LechonDeCebuPettyCash::find($id);
@@ -296,13 +390,13 @@ class LoloPinoyLechonDeCebuController extends Controller
 
                      Session::flash('payablesSuccess', 'Status set for approval.');
 
-                     return redirect('lolo-pinoy-lechon-de-cebu/edit-payables-detail/'.$id);
+                     return redirect()->route('editPayablesDetailLechonDeCebu', ['id'=>$id]);
 
                     break;
                 
                 default:
                     # code...
-                    return redirect('lolo-pinoy-lechon-de-cebu/edit-payables-detail/'.$id)->with('errorPaid', 'STATUS IS INVALID.');
+                    return redirect()->route('editPayablesDetailLechonDeCebu', ['id'=>$id])->with('errorPaid', 'STATUS IS INVALID.');
                     break;
             }
         }else{
@@ -347,7 +441,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $addParticulars = new LechonDeCebuPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
-            'daet'=>$request->get('date'),
+            'date'=>$request->get('date'),
             'particulars'=>$request->get('particulars'),
             'amount'=>$request->get('amount'),
             'created_by'=>$name,
@@ -1667,6 +1761,26 @@ class LoloPinoyLechonDeCebuController extends Controller
             $uVoucher = sprintf("%06d",$newVoucherRef);
         } 
 
+        //if user selects category
+        if($request->get('category') === "None"){
+
+            $subCat = NULL;
+            $subCatAccountId = NULL;
+
+        }elseif($request->get('category') === "Petty Cash"){
+
+            $subCat = $request->get('pettyCashNo');
+            $subCatAccountId = NULL;
+
+        }else if($request->get('category') === "Utility"){
+            $subCat = $request->get('utility');
+            $subCatAccountId = $request->get('accountId');
+
+        }else if($request->get('category') === "Payroll"){  
+            $subCat = NULL;
+            $subCatAccountId = NULL;
+        }
+
         //check if invoice number already exists
         $target = DB::table(
                         'lechon_de_cebu_payment_vouchers')
@@ -1678,12 +1792,17 @@ class LoloPinoyLechonDeCebuController extends Controller
              $addPaymentVoucher = new LechonDeCebuPaymentVoucher([
                 'user_id'=>$user->id,
                 'paid_to'=>$request->get('paidTo'),
+                'method_of_payment'=>$request->get('paymentMethod'),
                 'invoice_number'=>$request->get('invoiceNumber'),
+                'account_name'=>$request->get('accountName'),
                 'voucher_ref_number'=>$uVoucher,
                 'issued_date'=>$request->get('issuedDate'),
                 'amount'=>$request->get('amount'),
                 'amount_due'=>$request->get('amount'),
                 'particulars'=>$request->get('particulars'),
+                'category'=>$request->get('category'),
+                'sub_category'=>$subCat,
+                'sub_category_account_id'=>$subCatAccountId,
                 'prepared_by'=>$name,
                 'created_by'=>$name,
 
@@ -1693,10 +1812,10 @@ class LoloPinoyLechonDeCebuController extends Controller
 
              $insertedId = $addPaymentVoucher->id;
             
-             return redirect()->route('editPayablesDetail', ['id'=>$insertedId]);
+             return redirect()->route('editPayablesDetailLechonDeCebu', ['id'=>$insertedId]);
 
         }else{
-            return redirect()->route('paymentVoucherForm')->with('error', 'Invoice Number Already Exists. Please See Transaction List For Your Reference');
+            return redirect()->route('paymentVoucherFormLechonDeCebu')->with('error', 'Invoice Number Already Exists. Please See Transaction List For Your Reference');
         }
 
 
@@ -1709,7 +1828,13 @@ class LoloPinoyLechonDeCebuController extends Controller
         $ids = Auth::user()->id;
         $user = User::find($ids);
 
-        return view('payment-voucher-form',compact('user'));
+
+        $pettyCashes = LechonDeCebuPettyCash::get()->toArray();
+
+        $getAllFlags = LechonDeCebuUtility::get()->toArray();
+       
+
+        return view('payment-voucher-form',compact('user', 'pettyCashes', 'getAllFlags'));
         
     }
 

@@ -89,16 +89,18 @@
 									<div class="form-group">
 										<div class="form-row">
 											<div class="col-lg-4">
-												<input type="submit" class="btn btn-primary" value="Add" />
+											<button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-plus"></i> Add</button>
+					  					
 											</div> 
-										
+						
 										</div>
 									</div>
   									@else
   									<div class="form-group">
 										<div class="form-row">
 											<div class="col-lg-4">
-												<input type="submit" class="btn btn-primary" value="Add" disabled/>
+												<button type="submit" class="btn btn-primary btn-lg" disabled><i class="fas fa-plus"></i> Add</button>
+					  					
 											</div> 
 										
 										</div>
@@ -135,7 +137,8 @@
 	    					  		<div class="form-group">
     					  				<div class="form-row">
 					  						<div class="col-lg-4">
-				  								<input type="submit" class="btn btn-primary" value="Add" />
+											  <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-plus"></i> Add</button>
+					  						
 					  						</div> 
 					  					
     					  				</div>
@@ -171,7 +174,7 @@
 										</div>
 										<div class="col-lg-12">
   											<label>Amount</label>
-											<input type="text" name="amount" class="form-control" required="required" />
+											<input type="text" name="amount" class="form-control" required="required" autocomplete="off" />
 										
 										</div>
 										
@@ -415,11 +418,11 @@
 				  				<div class="form-group">
 				  					<div class="form-row">
 			  							<div class="col-lg-4">
-			  								<input type="submit" class="btn btn-success" name="action" value="PAID AND RELEASE" value="PAID AND RELEASE" />
+			  								<input type="submit" class="btn btn-success btn-lg" name="action" value="PAID AND RELEASE" value="PAID AND RELEASE" />
 			  							</div>
 										<?php if($transactionList['status'] != "FULLY PAID AND RELEASED"):?>
 			  							<div class="col-lg-4">
-			  								<input type="submit" class="btn btn-primary" name="action" value="PAID & HOLD" value="PAID & HOLD" />
+			  								<input type="submit" class="btn btn-primary btn-lg" name="action" value="PAID & HOLD" value="PAID & HOLD" />
 			  							</div>
 										<?php endif; ?>
 				  					</div>

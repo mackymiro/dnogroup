@@ -17,5 +17,83 @@
 <div id="wrapper">
     <!-- Sidebar -->
     @include('sidebar.sidebar-dino-industrial-corporation')
+    <div id="content-wrapper">
+         <div class="container-fluid">
+              <!-- Breadcrumbs-->
+              <ol class="breadcrumb">
+                  <li class="breadcrumb-item">
+                  <a href="#">DINO Industrial Corporation</a>
+                  </li>
+                  <li class="breadcrumb-item active">Payables</li>
+                  <li class="breadcrumb-item ">Payment Voucher Form</li>
+              </ol>
+              <div class="col-lg-12">
+                  <img src="{{ asset('images/DIC-LOGO.png')}}" width="255" height="172" class="img-responsive mx-auto d-block" alt="DNO Personal">
+	            	 
+                <h4 class="text-center"><u>PAYMENT VOUCHER</u></h4>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                          <i class="fas fa-file-invoice" aria-hidden="true"></i>
+                          Payment Voucher
+                        </div>
+                        <div class="card-body">
+                            <form action="{{ action('DinoIndustrialCorporationController@paymentVoucherStore') }}" method="post">
+                            {{ csrf_field() }}
+                            @if(session('error'))
+                                <p class="alert alert-danger">{{ Session::get('error') }}</p>
+                            @endif
+                            <div class="form-group">
+                                  <div class="form-row">
+                                      <div class="col-lg-4">
+                                          <label>Paid To</label>
+                                          <input type="text" name="paidTo" class="form-control" required="required" />
+                                      </div>
+                                      <div class="col-md-2">
+                                          <label>Invoice #</label>
+                                          <input type="text" name="invoiceNumber" class="form-control"  required="required" value="{{ old('invoiceNumber') }}" />
+                                      </div>
+                                      <div class="col-md-2">
+                                          <label>Issued Date </label>
+                                          <input type="text" name="issuedDate" class="datepicker form-control" value="{{ old('issuedDate') }}" />
+                                      </div>
+                                  </div>
+                             </div>
+                             <div  class="form-group">
+                                <div class="form-row">
+                                     <div class="col-lg-4">
+                                        <label>Particulars</label>
+                                        <input type="text" name="particulars" class="form-control" required="required"/>
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label>Amount</label>
+                                        <input type="text" name="amount" class="form-control"  required="required"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-success float-right"><i class="fa fa-plus" aria-hidden="true"></i> Add Payment Voucher</button>
+                                <br>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </di>
+         </div>
+    </div>
+     <!-- Sticky Footer -->
+     <footer class="sticky-footer">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright © Ribos Food Corporation 2019</span>
+            <br>
+            <br>
+            <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
+          </div>
+        </div>
+      </footer>
 </div>
 @endsection

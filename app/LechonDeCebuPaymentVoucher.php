@@ -30,6 +30,9 @@ class LechonDeCebuPaymentVoucher extends Model
         'status',
         'cheque_number',
         'cheque_amount',
-
+		'category',
+		'sub_category',
+		'sub_category_account_id',
+		'account_name',
     ];
 }
