@@ -173,7 +173,7 @@
                                             <div class="form-row">
                                                 <div class="col-lg-2">
                                                     <input type="hidden" name="soaId" value="{{ $getStatementOfAccount['id'] }}" />
-                                                    <input type="submit" class="btn btn-success" value="Paid" />
+                                                    <input type="submit" class="btn btn-success btn-lg" value="Paid" />
                                                 </div>
                                             </div>  
                                         </div>
@@ -249,7 +249,7 @@
                                             <div class="form-row">
                                                 <div class="col-lg-2">
                                                     <input type="hidden" name="soaId" value="{{ $getStatementOfAccount['id'] }}" />
-                                                    <input type="submit" class="btn btn-success" value="Paid" />
+                                                    <input type="submit" class="btn btn-success btn-lg" value="Paid" />
                                                 </div>
                                             </div>  
                                         </div>

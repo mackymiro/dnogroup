@@ -2193,10 +2193,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/dno-personal/credit-card/mod-accounts',
 		'DnoPersonalController@creditCardAccount')
-		->name('db-personal.creditCardAccount');
-
-
-	
+		->name('db-personal.creditCardAccount');	
 
 	Route::patch(
 		'/dno-personal/credit-card/accounts/edit/{id}',
@@ -2492,6 +2489,56 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dno-personal/petty-cash/delete/{id}',
 		'DnoPersonalController@destroyPettyCash')
 		->name('destroyPettyCash');
+
+	Route::get(
+		'/dno-personal/receivables-form',
+		'DnoPersonalController@receivableForm')
+		->name('receivableFormDno');
+
+	Route::post(
+		'/dno-personal/receivables/store-receivables',
+		'DnoPersonalController@storeReceivables')
+		->name('storeReceivablesDnoPersonal');
+
+	Route::get(
+		'/dno-personal/receivables/edit/{id}',
+		'DnoPersonalController@editReceivables')
+		->name('editReceivablesDnoPersonal');
+
+	Route::post(
+		'/dno-personal/receivables/add-receivables/{id}',
+		'DnoPersonalController@addReceivables')
+		->name('addReceivablesDnoPersonal');
+
+	Route::patch(
+		'/dno-personal/receivables/update-r/{id}',
+		'DnoPersonalController@updateR')
+		->name('updateRDnoPersonal');
+
+	Route::delete(
+		'/dno-personal/receivables/delete/{id}',
+		'DnoPersonalController@destroyReceivables')
+		->name('destroyReceivablesDnoPersonal');
+
+	Route::get(
+		'/dno-personal/receivables/list',
+		'DnoPersonalController@receivableList')
+		->name('receivableListDnoPersonal');
+
+	Route::get(
+		'/dno-personal-controller/receivables/payments/{id}',
+		'DnoPersonalController@receivablePayment')
+		->name('receivablePaymentDnoPersonal');
+
+	Route::patch(
+		'/dno-personal/receivables/paid/{id}',
+		'DnoPersonalController@paid')
+		->name('padiDnoPersonal');
+
+	Route::get(
+		'/dno-personal/receivables/view/{id}',
+		'DnoPersonalController@viewReceivable')
+		->name('viewReceivableDnoPersonal');
 
 	//DNO food ventures
 	Route::get(

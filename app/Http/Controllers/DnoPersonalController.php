@@ -14,9 +14,132 @@ use App\DnoPersonalCreditCard;
 use App\DnoPersonalProperty;
 use App\DnoPersonalUtility; 
 use App\DnoPersonalPettyCash;
+use App\DnoPersonalReceivable;
 
 class DnoPersonalController extends Controller
-{
+{   
+
+    public function viewReceivable($id){
+        $receivable = DnoPersonalReceivable::find($id);
+
+        $receivableDatas= DnoPersonalReceivable::where('r_id', $id)->get()->toArray();
+
+        return view('view-dno-personal-receivable', compact('receivable', 'receivableDatas'));
+    }
+
+    public function paid(Request $request, $id){
+        $paid = DnoPersonalReceivable::find($id);
+        $status = "Paid";
+        $paid->remarks = $request->get('remarks');
+        $paid->status = $status;
+        $paid->save();
+        Session::flash('paidSuccess', 'Successfully paid.');
+        return redirect()->route('receivablePaymentDnoPersonal', ['id'=>$request->get('rpId')]);
+    }
+
+    public function receivablePayment($id){
+        $receivable = DnoPersonalReceivable::find($id);
+        $statusPaid = "Paid";
+
+        $receivableDatas = DnoPersonalReceivable::where('r_id', $id)->where('status', NULL)->get()->toArray();
+        
+
+        $receivableDataPaids = DnoPersonalReceivable::where('r_id', $id)->where('status', $statusPaid)->get()->toArray();
+
+        return view('dno-personal-receivable-payment', compact('receivable', 'receivableDatas', 'receivableDataPaids'));
+    }
+
+    public function receivableList(){
+        $receivableLists = DnoPersonalReceivable::where('r_id', NULL)->get()->toArray();
+        return view('dno-personal-receivable-list', compact('receivableLists'));
+    }
+
+    public function updateR(Request $request, $id){  
+        $updateReceivable = DnoPersonalReceivable::find($id);
+        $updateReceivable->period = $request->get('period');
+        $updateReceivable->amount = $request->get('amount');
+
+        $updateReceivable->save();
+
+        Session::flash('updateR', 'Successfully updated.');
+        return redirect()->route('editReceivablesDnoPersonal',['id'=>$request->get('rId')]);
+    }
+
+    public function addReceivables(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //validate
+         $this->validate($request, [
+            'period' =>'required',
+            'amount'=>'required',  
+        ]);
+
+        $addReceivable = new DnoPersonalReceivable([
+            'user_id'=>$user->id,
+            'r_id'=>$id,
+            'period'=>$request->get('period'),
+            'amount'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+            
+        $addReceivable->save();
+        Session::flash('addNewSuccess', 'Successfully added.');
+        return redirect()->route('editReceivablesDnoPersonal', ['id'=>$id]);
+        
+    }
+
+    public function editReceivables($id){
+        $receivable = DnoPersonalReceivable::find($id);
+        $receivableDatas = DnoPersonalReceivable::where('r_id', $id)->get()->toArray();
+
+        return view('edit-dno-personal-receivables', compact('receivable', 'receivableDatas'));
+    }
+
+    public function storeReceivables(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+       
+        //validate
+         $this->validate($request, [
+            'nameOfTenant' =>'required',
+            'contractDate'=>'required',
+            'advanceDep'=>'required',
+            
+        ]);
+
+
+        $storeReceivables = new DnoPersonalReceivable([
+            'user_id'=>$user->id,
+            'name_of_tenant'=>$request->get('nameOfTenant'),
+            'contract_date'=>$request->get('contractDate'),
+            'unit_no'=>$request->get('unitNo'),
+            'monthly_rent'=>$request->get('monthlyRent'),
+            'advance_deposit'=>$request->get('advanceDep'),
+            'advance_deposit_amount'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+        $storeReceivables->save();
+        $insertedId = $storeReceivables->id;
+
+        return redirect()->route('editReceivablesDnoPersonal', ['id'=>$insertedId]);
+
+    }
+
+    public function receivableForm(){
+
+        return view('dno-personal-receivable-form');
+    }
 
     public function updatePC(Request $request, $id){
         
@@ -1541,6 +1664,11 @@ class DnoPersonalController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    public function destroyReceivables($id){
+        $receivable = DnoPersonalReceivable::find($id);
+        $receivable->delete();
     }
 
     public function destroyPettyCash($id){

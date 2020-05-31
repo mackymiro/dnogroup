@@ -73,7 +73,7 @@
                             </div>
                             <br>
                             <div>
-                                <button type="submit" class="btn btn-success"><i class="fas fa-edit"></i> Update</button>
+                                <button type="submit" class="btn btn-success btn-lg float-right"><i class="fas fa-edit"></i> Update</button>
                             </div>
                             </form>
                         </div>
@@ -110,7 +110,7 @@
                                     <div class="col-lg-12">
                                         <br>
                                        
-                                        <button type="submit" class="btn btn-primary"> <i class="fas fa-plus" aria-hidden="true"></i> Add</button>
+                                        <button type="submit" class="btn btn-primary btn-lg "> <i class="fas fa-plus" aria-hidden="true"></i> Add</button>
                                     </div>
                                 </div>
                                 </form>
@@ -180,7 +180,6 @@
         </div>
       </footer>
 </div>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
      const confirmDelete = (id) => {
         const  x = confirm("Do you want to delete this?");

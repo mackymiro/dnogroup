@@ -226,7 +226,9 @@
                                       </div>
                                   </div>
                                   <div>
-                                    <input type="submit" class="btn btn-success float-right" value="Save Payment Voucher" />
+                                      <button type="submit" class="btn btn-success float-right btn-lg"><i class="fas fa-save"></i> Save Payment Voucher</button>
+                                      <br>
+                                      
                                   </div>
                                   <br>
                           	  </div>
