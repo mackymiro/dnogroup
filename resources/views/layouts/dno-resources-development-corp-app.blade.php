@@ -82,7 +82,7 @@
            <a class="dropdown-item" href="{{ url('profile/create-branch') }}"><i class="fa fa-user-plus" aria-hidden="true"></i> Create Branch Account</a>
            @endif
            @if(Auth::user()['role_type'] == 1)
-           <a class="dropdown-item" href=""><i class="fas fa-cogs"></i> Settings</a>
+           <a class="dropdown-item" href="{{ url('settings') }}"><i class="fas fa-cogs"></i> Settings</a>
            @endif
           <a class="dropdown-item" href="{{ url('change-password') }}"><i class="fa fa-key" aria-hidden="true"></i> Change Password</a>
           <div class="dropdown-divider"></div>

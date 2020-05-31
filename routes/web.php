@@ -22,6 +22,11 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' =>['user']], function(){
 	Route::get(
+		'/settings',
+		'SettingsController@index')
+		->name('indexSettings');
+
+	Route::get(
 		'/profile/create-user',
 		'ProfileController@createUser')
 		->name('createUser')

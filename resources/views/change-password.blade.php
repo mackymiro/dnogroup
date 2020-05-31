@@ -40,7 +40,36 @@
           <span>Ribos Bar</span>
         </a>
       </li>
-     
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url('dno-personal') }}">
+          <i class="fas fa-book"></i>
+          <span>DNO Personal</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <i class="fas fa-book"></i>
+          <span>DNO Food Ventures</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <i class="fas fa-book"></i>
+          <span>DNO Resources and Development Corp</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url('dong-fang-corporation')}}">
+          <i class="fas fa-book"></i>
+          <span>Dong Fang Corporation</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url('wlg-corporation') }}">
+          <i class="fas fa-book"></i>
+          <span>WLG Corporation</span>
+        </a>
+      </li>
      
     </ul>
     <div id="content-wrapper">
@@ -90,5 +119,16 @@
 		</div>
 
 	</div>
+    <!-- Sticky Footer -->
+    <footer class="sticky-footer">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright © Ribos Food Corporation 2019</span>
+            <br>
+            <br>
+            <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
+          </div>
+        </div>
+      </footer>
 </div>
 @endsection
