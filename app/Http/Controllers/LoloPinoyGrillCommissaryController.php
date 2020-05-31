@@ -1066,7 +1066,7 @@ class LoloPinoyGrillCommissaryController extends Controller
         return view('cash-vouchers-list-lolo-pinoy-grill', compact('getAllCashVouchers'));
     }  
 
-    //
+    
     public function updatePV(Request $request, $id){
         $updatePV = LoloPinoyGrillCommissaryPaymentVoucher::find($id);
 
@@ -1079,7 +1079,7 @@ class LoloPinoyGrillCommissaryController extends Controller
         return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-payment-voucher/'.$request->get('pvId'));
     }
 
-    //
+
     public function addNewPaymentVoucherData(Request $request, $id){
 
         $ids = Auth::user()->id;
@@ -1109,13 +1109,13 @@ class LoloPinoyGrillCommissaryController extends Controller
     }
 
 
-    //
+
     public function addNewPaymentVoucher($id){
     
         return view('add-new-lolo-pinoy-grill-payment-voucher', compact('id'));
     }   
 
-    //
+    
     public function updatePaymentVoucher(Request $request, $id){
         $updatePaymentVoucher = LoloPinoyGrillCommissaryPaymentVoucher::find($id);
 
@@ -1145,7 +1145,7 @@ class LoloPinoyGrillCommissaryController extends Controller
         return view('edit-payment-voucher-lolo-pinoy-grill', compact('getPaymentVoucher', 'pVouchers'));
     }
 
-    //
+    
     public function addParticulars(Request $request, $id){
         $ids = Auth::user()->id;
         $user = User::find($ids);

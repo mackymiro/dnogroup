@@ -877,10 +877,16 @@ Route::group(['middleware' => ['auth']], function(){
 
 	
 	//route for billing statement lists
-	Route::get('/lolo-pinoy-lechon-de-cebu/billing-statement-lists', 'LoloPinoyLechonDeCebuController@billingStatementLists')->name('lolo-pinoy-lechon-de-cebu.billingStatementLists');
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/billing-statement-lists', 
+		'LoloPinoyLechonDeCebuController@billingStatementLists')
+		->name('billingStatementListsLechonDeCebu');
 
 	//update billing statement 
-	Route::patch('/lolo-pinoy-lechon-de-cebu/update-billing/{id}', 'LoloPinoyLechonDeCebuController@updateBillingStatement')->name('lolo-pinoy-lechon-de-cebu.updateBillingStatement');
+	Route::patch(
+		'/lolo-pinoy-lechon-de-cebu/update-billing/{id}', 
+		'LoloPinoyLechonDeCebuController@updateBillingStatement')
+		->name('updateBillingStatementLechonDeCebu');
 
 	//update billing statement info
 	Route::patch('/lolo-pinoy-lechon-de-cebu/update-billing-info/{id}', 'LoloPinoyLechonDeCebuController@updateBillingInfo')->name('lolo-pinoy-lechon-de-cebu.updateBillingInfo');
