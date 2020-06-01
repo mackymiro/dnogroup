@@ -53,8 +53,25 @@
                                         <p class="alert alert-danger">{{ Session::get('error') }}</p>
                                     @endif 
                           	  		<div class="form-group">
+                                      
                                       <div class="form-row">
-                                          <div class="col-lg-4">
+                                        <div class="col-lg-2">
+                                            <label>Payment Method</label>
+                                            <div id="app-payment-method">
+                                              <select name="paymentMethod" class="payment form-control">
+                                                <option value="0">--Please Select--</option>
+                                                <option v-for="payment in payments" v-bind:value="payment.value">
+                                                  @{{ payment.text }}
+                                                </option>
+                                              </select>
+                                            </div>
+                                        </div>
+                                         
+                                          <div class="col-md-2">
+                                            <label>Invoice #</label>
+                                              <input type="text" name="invoiceNumber" class="form-control"  required="required" value="{{ old('invoiceNumber') }}" />
+                                          </div>
+                                          <div class="col-lg-2">
                                             <label>Paid To</label>
                                             <input type="text" name="paidTo" class="form-control" required="required" />
                                           </div>
@@ -63,9 +80,9 @@
                                               <strong>{{ $errors->first('paidTo') }}</strong>
                                             </span>
                                           @endif
-                                          <div class="col-md-2">
-                                            <label>Invoice #</label>
-                                              <input type="text" name="invoiceNumber" class="form-control"  required="required" value="{{ old('invoiceNumber') }}" />
+                                          <div class="col-md-4">
+                                            <label>Account Name </label>
+                                            <input type="text" name="accountName" class="form-control"  />
                                           </div>
                                           <div class="col-md-2">
                                               <label>Issued Date </label>
@@ -77,6 +94,7 @@
                                                 <option value="None">None</option>
                                                	<option value="Petty Cash">Petty Cash</option>
 											                        	<option value="Utilities">Utilities</option>
+                                                <option value="Payroll">Payroll</option>
                                               </select>
                                            </div>
                                            <div id="bills" class="col-md-2">
@@ -111,9 +129,11 @@
                                     </div>
                                   </div>
                                   <div>
-                                    <input type="submit" class="btn btn-success float-right" value="Add Payment Voucher" />
+                                    <button type="submit" class="btn btn-success btn-lg float-right"><i class="fas fa-save"></i> Save Payment Voucher</button>
+                                    <br>
+                                    <br>
                                   </div>
-                                  <br>
+                                
                           	  </div>
                             </form>
 	            		</div>
@@ -147,6 +167,9 @@
           $("#bills").show();
             $("#selectId").show();
 
+        }else if(cat === "Payroll"){
+            $("#bills").hide();
+            $("#selectId").hide();
         }else if(cat === "0"){
             $("#bills").hide();
             $("#selectId").hide();
@@ -154,7 +177,6 @@
     });	
 </script>
 <script>
-  //branch data
   new Vue({
   el: '#app-payment-method',
     data: {

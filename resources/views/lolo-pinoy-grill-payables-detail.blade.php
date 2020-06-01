@@ -44,6 +44,15 @@
 		                                <p class="alert alert-success">{{ Session::get('paymentAdded') }}</p>
 		                            @endif 
 									@if($transactionList['method_of_payment'] == "Cash")
+									<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-8">
+				  								<label>Date</label>
+				  								<input type="text" name="date" class="form-control"  />
+					  						</div> 
+
+    					  				</div>
+	    					  		</div>
 	    					  		<div class="form-group">
     					  				<div class="form-row">
 					  						<div class="col-lg-8">

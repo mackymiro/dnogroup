@@ -33,24 +33,34 @@
     					  			<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 				  						<thead>
 					  						<tr>
-				  								<th>Action</th>
+											  <th>Action</th>
 				  								<th>Invoice #</th>
 				  								<th>Voucher Ref #</th>
+												<th  class="bg-info" style="color:#fff;">Category</th>
 				  								<th>Issued Date</th>
+												<th>Paid To</th>
+												<th>Account Name</th>
 				  								<th  class="bg-danger" style="color:white;">Amount Due</th>
 				  								<th>Delivered Date</th>
+												<th style="width:230px;">Payment Method</th>
 				  								<th class="bg-success" style="color:white;">Status</th>
+												<th>Created By</th>
 					  						</tr>
 				  						</thead>
 				  						<tfoot>
 				  							<tr>
-				  								<th>Action</th>
+											  <th>Action</th>
 				  								<th>Invoice #</th>
 				  								<th>Voucher Ref #</th>
+												<th  class="bg-info" style="color:#fff;">Category</th>
 				  								<th>Issued Date</th>
+												<th>Paid To</th>
+												<th>Account Name</th>
 				  								<th  class="bg-danger" style="color:white;">Amount Due</th>
 				  								<th>Delivered Date</th>
+												<th style="width:230px;">Payment Method</th>
 				  								<th class="bg-success" style="color:white;">Status</th>
+												<th>Created By</th>
 					  						</tr>
 				  						</tfoot>
 				  						<tbody>
@@ -68,7 +78,7 @@
 															->sum('amount');
 												$compute = $amount1 + $amount2;
 											?>
-				  							<tr id="deletedId{{ $getTransactionList['id'] }}">
+				  						<tr id="deletedId{{ $getTransactionList['id'] }}">
 			  									<td width="2%">
 			  										@if(Auth::user()['role_type'] == 1)
 					  									<a id="delete" onClick="confirmDelete('{{ $getTransactionList['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
@@ -76,22 +86,26 @@
 			  									</td>
 			  									<td>
 			  										@if($getTransactionList['status'] != "FULLY PAID AND RELEASED")
-			  										<a href="{{ url('mr-potato/edit-mr-potato-payables-detail/'.$getTransactionList['id']) }}" title="Edit">{{ $getTransactionList['invoice_number']}}</a>
-			  										@else
-			  											{{ $getTransactionList['invoice_number']}}
+													  <p style="width:250px;">
+													  	<a href="{{ url('mr-potato/edit-mr-potato-payables-detail/'.$getTransactionList['id']) }}" title="Edit">{{ $getTransactionList['invoice_number']}}</a>
+			  										  </p>
+													@else
+													<p style="width:250px;">{{ $getTransactionList['invoice_number']}}</p>
 			  										@endif
 			  									</td>
-			  									<td>MP-{{ $getTransactionList['voucher_ref_number']}}</td>
-			  									<td>{{ $getTransactionList['issued_date']}}</td>
+			  									<td><p style="width:140px;">LPGC-{{ $getTransactionList['voucher_ref_number']}}</p></td>
+			  									<td class="bg-info" style="color:#fff;"><p style="width:150px;">{{ $getTransactionList['category']}}</p></td>
+												<td><p style="width:130px;">{{ $getTransactionList['issued_date']}}</p></td>
+												<td><p style="width:200px;">{{ $getTransactionList['paid_to']}}</p></td>
+												<td><p style="width:200px;">{{ $getTransactionList['account_name']}}</p></td>
 			  									<td class="bg-danger" style="color:white;">
-												  	<?php echo number_format($compute, 2);?>
+												  	<?php echo number_format($compute, 2); ?>
 												</td>
-			  									<td>{{ $getTransactionList['delivered_date']}}</td>
-			  									@if($getTransactionList['status'] == "FULLY PAID AND RELEASED")
-			  									<td class="bg-success" style="color:white; "><a class="anchor" href="{{ url('mr-potato/view-mr-potato-payables-details/'.$getTransactionList['id']) }}">{{ $getTransactionList['status'] }}</a></td>
-			  									@else
-			  									<td class="bg-success" style="color:white; ">{{ $getTransactionList['status'] }}</td>
-			  									@endif
+												<td><p style="width:160px;">{{ $getTransactionList['delivered_date']}}</p></td>
+			  									<td><p style="width:190px;">{{ $getTransactionList['method_of_payment'] }}</p></td>
+			  									
+			  									<td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('mr-potato/view-mr-potato-payables-details/'.$getTransactionList['id']) }}">{{ $getTransactionList['status'] }}</a></p></td>
+			  									<td><p style="width:190px;">{{ $getTransactionList['created_by']}}</p></td>
 				  							</tr>
 				  							@endforeach
 				  						</tbody>
@@ -100,10 +114,11 @@
     					  		<br>
     					  		<table class="table table-bordered">
 					  				<thead>
-					  					<tr>
-					  						<th width="20%" class="bg-info" style="color:white;">TOTAL BALANCE DUE</th>
-					  						<th class="bg-danger" style="color:white;"><?php echo number_format($totalAmoutDue, 2);?></th>
+									  <tr>
+					  						<th width="30%" class="bg-info" style="color:white; font-size:28px;">TOTAL BALANCE DUE</th>
+					  						<th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?php echo number_format($totalAmoutDue, 2);?></span></th>
 					  					</tr>
+
 
 					  				</thead>
     					  		</table>	
@@ -127,6 +142,18 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
+	function doRefresh(){
+            $("#totalDue").fadeOut(500);
+            $("#totalDue").fadeIn(500);     
+            setTimeout(function() {
+             doRefresh();
+            }, 1000);
+        }
+
+        $(document).ready(function () {
+          doRefresh(); 
+        });
+		
 	 function confirmDelete(id){
         var x = confirm("Do you want to delete this?");
         if(x){

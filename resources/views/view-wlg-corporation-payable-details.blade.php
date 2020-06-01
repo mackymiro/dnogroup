@@ -1,23 +1,23 @@
-@extends('layouts.dong-fang-corporation-app')
+@extends('layouts.wlg-corporation-app')
 @section('title', 'Payment Details|')
 @section('content')
 
 <div id="wrapper">
 	<!-- Sidebar -->
-    @include('sidebar.sidebar-dong-fang-corporation')
+    @include('sidebar.sidebar-wlg-corporation')
      <div id="content-wrapper">
  		 <div class="container-fluid">
  			 <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">Dong Fang Corporation</a>
+                <a href="#">Wlg Corporation</a>
               </li>
               <li class="breadcrumb-item active">Payables</li>
               <li class="breadcrumb-item ">Payment Details</li>
             </ol>
              <div class="col-lg-12">
-            	   <img src="{{ asset('images/dong-fang-corporation.png')}}" width="255" height="172" class="img-responsive mx-auto d-block" alt="DNO Personal">
-                 
+                    <img src="{{ asset('images/wlg-corporation.png')}}" width="235" height="114" class="img-responsive mx-auto d-block" alt="WLG Corporation">
+	           
             	 
             	 <h4 class="text-center"><u>PAYMENT DETAILS (PAYMENT VOUCHER)</u></h4>
             </div>
@@ -28,7 +28,7 @@
                               <i class="fas fa-file-invoice" aria-hidden="true"></i>
                             Payment Details
                              <div class="float-right">
-                               <a href="{{ action('DongFangCorporationController@printPayablesDongFang', $viewPaymentDetail['id']) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                               <a href="{{ action('WlgCorporationController@printPayablesWlg', $viewPaymentDetail['id']) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                              </div>
                         </div>
                           
@@ -84,7 +84,7 @@
                                                   </tr>
                                                   <tr>
                                                       <th width="35%">Voucher Ref #</th>
-                                                      <th>DFPC-{{ $viewPaymentDetail['voucher_ref_number']}}</th>
+                                                      <th>WLG-{{ $viewPaymentDetail['voucher_ref_number']}}</th>
                                                   </tr>
                                                  
                                               </thead>

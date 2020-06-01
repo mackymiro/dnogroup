@@ -155,6 +155,10 @@ class MrPotatoController extends Controller
 
         $payablesVouchers = MrPotatoPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
+        //getParticular details
+        $getParticulars = MrPotatoPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+     
+
           //count the total amount 
         $countTotalAmount = MrPotatoPaymentVoucher::where('id', $id)->sum('amount_due');
 
@@ -163,7 +167,7 @@ class MrPotatoController extends Controller
 
         $sum  = $countTotalAmount + $countAmount;
        
-         $pdf = PDF::loadView('printPayablesMrPotato', compact('payableId',  'payablesVouchers', 'sum'));
+         $pdf = PDF::loadView('printPayablesMrPotato', compact('payableId',  'payablesVouchers', 'sum', 'getParticulars'));
 
         return $pdf->download('mr-potato-payment-voucher.pdf');
     }  
@@ -177,7 +181,11 @@ class MrPotatoController extends Controller
         //
         $getViewPaymentDetails = MrPotatoPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
-        return view('view-mr-potato-payable-details', compact('viewPaymentDetail', 'getViewPaymentDetails'));
+         //getParticular details
+         $getParticulars = MrPotatoPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+       
+
+        return view('view-mr-potato-payable-details', compact('viewPaymentDetail', 'getViewPaymentDetails', 'getParticulars'));
     }
 
     //
@@ -356,7 +364,7 @@ class MrPotatoController extends Controller
     public function transactionList(){
     
          //
-        $getTransactionLists = MrPotatoPaymentVoucher::where('pv_id', NULL)->get()->toArray();
+        $getTransactionLists = MrPotatoPaymentVoucher::where('pv_id', NULL)->orderBy('id', 'desc')->get()->toArray();
 
            //get total amount due
         $status = "FULLY PAID AND RELEASED";
@@ -725,18 +733,20 @@ class MrPotatoController extends Controller
 
           //get the category
        if($request->get('category') == "Petty Cash"){
-             $subCat = "NULL";
-             $subCatAcctId = "NULL";
+             $subCat = NULL;
+             $subCatAcctId = NULL;
 
         }else if($request->get('category') == "Utilities"){
             $subCat = $request->get('bills');
             $subCatAcctId = $request->get('selectAccountID');
 
         }else if($request->get('category') == "None"){
-            $subCat = "NULL";
-            $subCatAcctId = "NULL";
+            $subCat = NULL;
+            $subCatAcctId = NULL;
+        }else if($request->get('category') == "Payroll"){
+            $subCat = NULL;
+            $subCatAcctId = NULL;
         }
-
 
          //check if invoice number already exists
         $target = DB::table(
@@ -750,6 +760,8 @@ class MrPotatoController extends Controller
                     'user_id'=>$user->id,
                     'paid_to'=>$request->get('paidTo'),
                     'invoice_number'=>$request->get('invoiceNumber'),
+                    'account_name'=>$request->get('accountName'),
+                    'method_of_payment'=>$request->get('paymentMethod'),
                     'voucher_ref_number'=>$uVoucher,
                     'issued_date'=>$request->get('issuedDate'),
                     'delivered_date'=>$request->get('deliveredDate'),
@@ -767,9 +779,9 @@ class MrPotatoController extends Controller
                
                 $insertedId = $addPaymentVoucher->id;
 
-                 return redirect('mr-potato/edit-mr-potato-payables-detail/'.$insertedId);
+                 return redirect()->route('editPayablesDetailMrPotato', ['id'=>$insertedId]);
         }else{
-             return redirect('mr-potato/payment-voucher-form/')->with('error', 'Invoice Number Already Exists. Please See Transaction List For Your Reference');
+            return redirect()->route('paymentVoucherFormMrPotato')->with('error', 'Invoice Number Already Exists. Please See Transaction List For Your Reference');
         }
 
     

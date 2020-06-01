@@ -315,11 +315,11 @@
 			  							<div class="col-lg-4">
 			  								<input type="submit" class="btn btn-success btn-lg" name="action" value="PAID AND RELEASE" value="PAID AND RELEASE" />
 			  							</div>
-										  <?php if($transactionList['status'] != "FULLY PAID AND RELEASED"):?>
-			  							<div class="col-lg-4">
-										  <input type="submit" class="btn btn-primary btn-lg" name="action" value="PAID & HOLD" value="PAID & HOLD" />
-										  </div>
-										  <?php endif; ?>
+										<?php if($transactionList['status'] != "FULLY PAID AND RELEASED"):?>
+										<div class="col-lg-4">
+											<input type="submit" class="btn btn-primary btn-lg" name="action" value="PAID & HOLD" value="PAID & HOLD" />
+										</div>
+										<?php endif; ?>
 				  					</div>
 				  				</div>
 				  			</form>

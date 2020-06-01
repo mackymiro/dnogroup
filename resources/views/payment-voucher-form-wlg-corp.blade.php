@@ -47,18 +47,46 @@
                             @endif
                             <div class="form-group">
                                 <div class="form-row">
-                                    <div class="col-lg-4">
-                                        <label>Paid To</label>
-                                        <input type="text" name="paidTo" class="form-control" required="required" />
+                                    <div class="col-lg-2">
+                                        <label>Payment Method</label>
+                                        <div id="app-payment-method">
+                                            <select name="paymentMethod" class="payment form-control">
+                                                <option value="0">--Please Select--</option>
+                                                <option v-for="payment in payments" v-bind:value="payment.value">
+                                                    @{{ payment.text }}
+                                                </option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="col-md-2">
                                          <label>Invoice #</label>
                                         <input type="text" name="invoiceNumber" class="form-control"  required="required" value="{{ old('invoiceNumber') }}" />
                                     </div>
+                                    <div class="col-lg-2">
+                                        <label>Paid To</label>
+                                        <input type="text" name="paidTo" class="form-control" required="required" />
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Account Name </label>
+                                        <input type="text" name="accountName" class="form-control"  />
+                                    </div>
                                     <div class="col-md-2">
                                         <label>Issued Date </label>
                                         <input type="text" name="issuedDate" class="datepicker form-control" value="{{ old('issuedDate') }}" />
                                     </div>
+                                </div>
+                            </div>
+                             <div class="form-group">
+                                <div class="form-row">
+                                    <div  class="col-md-2">
+                                        <label>Category</label>
+                                        <select  name="category" class="category selcls form-control" > 
+                                            <option value="None">None</option>
+                                        
+                                            <option value="Payroll">Payroll</option>
+                                        </select>
+                                    </div> 
+                                
                                 </div>
                             </div>
                             <div  class="form-group">
@@ -74,8 +102,9 @@
                                 </div>
                             </div>
                             <div>
-                                <button type="submit" class="btn btn-success float-right"><i class="fa fa-plus" aria-hidden="true"></i> Add Payment Voucher</button>
-                                <br>
+                            <button type="submit" class="btn btn-success btn-lg float-right"><i class="fas fa-save"></i> Save Payment Voucher</button>
+                              <br>
+                              <br>
                             </div>
                         </div>
                         </form>
@@ -96,5 +125,16 @@
         </div>
       </footer>
 </div>
+<script>
+	new Vue({
+	el: '#app-payment-method',
+		data: {
+			payments:[
+				{ text:'Cash', value: 'Cash' },
+				{ text:'Cheque', value: 'Cheque'}
+			]
+		}
+	})	
 
+</script>
 @endsection

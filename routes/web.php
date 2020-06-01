@@ -451,7 +451,7 @@ Route::group(['middleware' =>['user']], function(){
 	Route::get(
 		'/mr-potato/payment-voucher-form',
 		'MrPotatoController@paymentVoucherForm')
-		->name('mr-potato.paymentVoucherForm');
+		->name('paymentVoucherFormMrPotato');
 
 	Route::post(
 		'/mr-potato/store-payment',
@@ -466,7 +466,7 @@ Route::group(['middleware' =>['user']], function(){
 	Route::get(
 		'/mr-potato/edit-mr-potato-payables-detail/{id}',
 		'MrPotatoController@editPayablesDetail')
-		->name('mr-potato.editPayablesDetail');
+		->name('editPayablesDetailMrPotato');
 
 	Route::post(
 		'/mr-potato/add-particulars/{id}',
@@ -1241,6 +1241,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'/lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-billing-statement/{id}', 
 		'LoloPinoyGrillCommissaryController@viewBillingStatement')
 		->name('viewBillingStatementLoloPinoyGrill');
+
+	Route::get(
+		'/lolo-pinoy-grill-commmissary/printBillingStatement/{id}',
+		'LoloPinoyGrillCommissaryController@printBillingStatement')
+		->name('printBillingStatementLoloPinoyGrill');
 
 	
 	//cash vouchers lolo pinoy grill
@@ -2879,6 +2884,16 @@ Route::group(['middleware' => ['auth']], function(){
 		'/wlg-corporation/delete-transaction-list/{id}',
 		'WlgCorporationController@destroyTransaction')
 		->name('destroyTransactionWlg');
+
+	Route::get(
+		'/wlg-corporation/view-wlg-corporation-payables-details/{id}',
+		'WlgCorporationController@viewPayableDetails')
+		->name('viewPayableDetailsWlg');
+
+	Route::get(
+		'/wlg-corporation/printPayables/{id}',
+		'WlgCorporationController@printPayablesWlg')
+		->name('printPayablesWlg');
 
 	Route::get(
 		'/wlg-corporation/purchase-order',

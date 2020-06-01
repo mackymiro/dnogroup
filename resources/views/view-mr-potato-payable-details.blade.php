@@ -18,7 +18,7 @@
              <div class="col-lg-12">
             	  <img src="{{ asset('images/mr-potato.png')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Mr Potato">
             	 
-            	 <h4 class="text-center"><u>PAYMENT DETAILS</u></h4>
+            	 <h4 class="text-center"><u>PAYMENT DETAILS (PAYMENT VOUCHER)</u></h4>
             </div>
             <div class="row">
             	<div class="col-lg-12">
@@ -49,6 +49,10 @@
                                                       <th width="15%">Date</th>
                                                       <th>{{ $viewPaymentDetail['issued_date']}}</th>
                                                   </tr>
+                                                  <tr>
+                                                      <th width="30%">Account Name</th>
+                                                      <th>{{ $viewPaymentDetail['account_name']}}</th>
+                                                  </tr>
                                               </thead>
                                           </table>
                                       </div>
@@ -59,18 +63,58 @@
                                                       <th width="20%">Amount Due</th>
                                                       <th><?php echo number_format($viewPaymentDetail['amount_due'], 2); ?></th>
                                                   </tr>
+                                                  <tr>
+                                                      <th width="20%">Invoice #</th>
+                                                      <th>{{ $viewPaymentDetail['invoice_number']}}</th>
+                                                  </tr>
+                                                  <tr>
+                                                      <th width="30%">Voucher Ref #</th>
+                                                      <th>MP-{{ $viewPaymentDetail['voucher_ref_number']}}</th>
+                                                  </tr>
+                                                  <tr>
+                                                      <th width="30%">Payment Method</th>
+                                                      <th>{{ $viewPaymentDetail['method_of_payment']}}</th>
+                                                  </tr>
                                                  
                                               </thead>
                                           </table>
                                       </div>
                                   </div>
                               </div>
+                              <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>DATE</th>
+                                            <th>PARTICULARS</th>
+                                            <th>AMOUNT</th>
+                                        </tr>
+                                    </thead>  
+                                    <tbody> 
+                                        <tr>
+                                            <td>{{ $viewPaymentDetail['issued_date'] }}</td>
+                                            <td>{{ $viewPaymentDetail['particulars']}}</td>
+                                            <td><?php echo number_format($viewPaymentDetail['amount'], 2); ?></td>
+                                        </tr>
+                                        @foreach($getParticulars as $getParticular)
+										<tr>
+  											<td>{{ $getParticular['date']}}</td>
+  											<td>{{ $getParticular['particulars']}}</td>
+											<td><?php echo number_format($getParticular['amount'], 2); ?></td>
+										</tr>
+										@endforeach
+                                    </tbody>  
+                              </table>  
                              
                               <table class="table table-striped ">
                                     <thead>
                                         <tr>
+                                            @if($viewPaymentDetail['method_of_payment'] === "Cash")
+                                            <th>CASH NO ISSUED</th>
+                                            <th>CASH AMOUNT</th>
+                                            @else
                                             <th>CHEQUE NO ISSUED</th>
                                             <th>CHEQUE AMOUNT</th>
+                                            @endif
                                         </tr>
                                     </thead>
                                     <tbody>

@@ -16,6 +16,41 @@ use App\WlgCorporationInvoice;
 class WlgCorporationController extends Controller
 {
    
+    public function printPayablesWlg($id){
+        $payableId = WlgCorporationPaymentVoucher::find($id);
+
+        //getParticular details
+         $getParticulars = WlgCorporationPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+        
+        $payablesVouchers = WlgCorporationPaymentVoucher::where('pv_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = WlgCorporationPaymentVoucher::where('id', $id)->sum('amount_due');
+
+        $countAmount = WlgCorporationPaymentVoucher::where('pv_id', $id)->sum('amount_due');
+
+        $sum  = $countTotalAmount + $countAmount;
+       
+
+        $pdf = PDF::loadView('printPayablesWlg', compact('payableId', 'user', 'payablesVouchers', 'sum', 'getParticulars'));
+
+        return $pdf->download('wlg-corporation-payment-voucher.pdf');
+
+    }
+
+    public function viewPayableDetails($id){
+        $viewPaymentDetail = WlgCorporationPaymentVoucher::find($id);
+     
+
+        $getViewPaymentDetails = WlgCorporationPaymentVoucher::where('pv_id', $id)->get()->toArray();
+
+         //getParticular details
+         $getParticulars = WlgCorporationPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+        
+
+        return view('view-wlg-corporation-payable-details', compact('user', 'viewPaymentDetail', 'getViewPaymentDetails', 'getParticulars'));
+   
+    }
 
     public function viewInvoice($id){
         $viewInvoice = WlgCorporationInvoice::find($id);
@@ -629,7 +664,7 @@ class WlgCorporationController extends Controller
     }
 
     public function transactionList(){
-        $getTransactionLists = WlgCorporationPaymentVoucher::where('pv_id', NULL)->get()->toArray();
+        $getTransactionLists = WlgCorporationPaymentVoucher::where('pv_id', NULL)->orderBy('id', 'desc')->get()->toArray();
 
         //get total amount due
         $status = "FULLY PAID AND RELEASED";
@@ -655,6 +690,7 @@ class WlgCorporationController extends Controller
             'user_id'=>$user->id,
             'pv_id'=>$id,
             'voucher_ref_number'=>$paymentData['voucher_ref_number'],
+            'date'=>$request->get('date'),
             'cheque_number'=>$request->get('chequeNumber'),
             'cheque_amount'=>$request->get('chequeAmount'),
             'created_by'=>$name,
@@ -754,6 +790,7 @@ class WlgCorporationController extends Controller
         $addParticulars = new WlgCorporationPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
+            'date'=>$request->get('date'),
             'particulars'=>$request->get('particulars'),
             'amount'=>$request->get('amount'),
             'voucher_ref_number'=>$voucherRef,
@@ -831,12 +868,15 @@ class WlgCorporationController extends Controller
                 'user_id'=>$user->id,
                 'paid_to'=>$request->get('paidTo'),
                 'invoice_number'=>$request->get('invoiceNumber'),
+                'method_of_payment'=>$request->get('paymentMethod'),
                 'voucher_ref_number'=>$uVoucher,
+                'account_name'=>$request->get('accountName'),
                 'issued_date'=>$request->get('issuedDate'),
                 'delivered_date'=>$request->get('deliveredDate'),
                 'amount'=>$request->get('amount'),
                 'amount_due'=>$request->get('amount'),
                 'particulars'=>$request->get('particulars'),
+                'category'=>$request->get('category'),
                 'prepared_by'=>$name,
                 'created_by'=>$name,
             ]);

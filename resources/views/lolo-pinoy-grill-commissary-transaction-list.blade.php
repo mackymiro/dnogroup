@@ -33,7 +33,7 @@
     					  			<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
 				  						<thead>
 					  						<tr>
-											  <th>Action</th>
+											   <th>Action</th>
 				  								<th>Invoice #</th>
 				  								<th>Voucher Ref #</th>
 												<th  class="bg-info" style="color:#fff;">Category</th>

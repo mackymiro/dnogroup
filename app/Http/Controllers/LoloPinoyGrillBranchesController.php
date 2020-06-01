@@ -654,7 +654,7 @@ class LoloPinoyGrillBranchesController extends Controller
     //
     public function transactionList(){
          //
-        $getTransactionLists = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', NULL)->get()->toArray();
+        $getTransactionLists = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', NULL)->orderBy('id', 'desc')->get()->toArray();
 
            //get total amount due
         $status = "FULLY PAID AND RELEASED";

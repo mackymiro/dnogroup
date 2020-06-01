@@ -177,7 +177,7 @@ class DongFangCorporationController extends Controller
     }
 
     public function transactionList(){
-        $getTransactionLists = DongFangCorporationPaymentVoucher::where('pv_id', NULL)->get()->toArray();
+        $getTransactionLists = DongFangCorporationPaymentVoucher::where('pv_id', NULL)->orderBy('id', 'desc')->get()->toArray();
 
          //get total amount due
          $status = "FULLY PAID AND RELEASED";
@@ -208,6 +208,7 @@ class DongFangCorporationController extends Controller
         $addParticulars = new DongFangCorporationPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
+            'date'=>$request->get('date'),
             'particulars'=>$request->get('particulars'),
             'amount'=>$request->get('amount'),
             'voucher_ref_number'=>$voucherRef,
@@ -241,6 +242,7 @@ class DongFangCorporationController extends Controller
             'user_id'=>$user->id,
             'pv_id'=>$id,
             'voucher_ref_number'=>$paymentData['voucher_ref_number'],
+            'date'=>$request->get('date'),
             'cheque_number'=>$request->get('chequeNumber'),
             'cheque_amount'=>$request->get('chequeAmount'),
             'created_by'=>$name,
@@ -367,7 +369,7 @@ class DongFangCorporationController extends Controller
             //if code is 0 
             $newVoucherRef = 1;
             $uVoucher = sprintf("%06d",$newVoucherRef);
-        } 
+        }
 
 
         //check if invoice number already exists
@@ -381,12 +383,15 @@ class DongFangCorporationController extends Controller
                 'user_id'=>$user->id,
                 'paid_to'=>$request->get('paidTo'),
                 'invoice_number'=>$request->get('invoiceNumber'),
+                'account_name'=>$request->get('accountName'),
+                'method_of_payment'=>$request->get('paymentMethod'),
                 'voucher_ref_number'=>$uVoucher,
                 'issued_date'=>$request->get('issuedDate'),
                 'delivered_date'=>$request->get('deliveredDate'),
                 'amount'=>$request->get('amount'),
                 'amount_due'=>$request->get('amount'),
                 'particulars'=>$request->get('particulars'),
+                'category'=>$request->get('category'),
                 'prepared_by'=>$name,
                 'created_by'=>$name,
             ]);

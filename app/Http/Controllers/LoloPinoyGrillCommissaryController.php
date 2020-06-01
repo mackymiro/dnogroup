@@ -21,6 +21,25 @@ use App\LoloPinoyGrillCommissaryPettyCash;
 
 class LoloPinoyGrillCommissaryController extends Controller
 {
+
+    public function printBillingStatement($id){
+        $printBillingStatement = LoloPinoyGrillCommissaryBillingStatement::find($id);
+
+        $billingStatements = LoloPinoyGrillCommissaryBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = LoloPinoyGrillCommissaryBillingStatement::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = LoloPinoyGrillCommissaryBillingStatement::where('billing_statement_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        $pdf = PDF::loadView('printBillingStatementLoloPinoyGrill', compact('printBillingStatement', 'billingStatements', 'sum'));
+
+        return $pdf->download('lolo-pinoy-grill-billing-statement.pdf');
+    }
+
     public function printPettyCash($id){
         $getPettyCash = LoloPinoyGrillCommissaryPettyCash::find($id);
 
@@ -399,7 +418,11 @@ class LoloPinoyGrillCommissaryController extends Controller
         //
         $getViewPaymentDetails = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
-        return view('view-lolo-pinoy-grill-payable-details', compact('viewPaymentDetail', 'getViewPaymentDetails'));
+           //getParticular details
+        $getParticulars = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+       
+
+        return view('view-lolo-pinoy-grill-payable-details', compact('viewPaymentDetail', 'getViewPaymentDetails', 'getParticulars'));
     }
 
     //

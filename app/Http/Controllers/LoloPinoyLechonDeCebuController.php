@@ -353,8 +353,6 @@ class LoloPinoyLechonDeCebuController extends Controller
          //getParticular details
          $getParticulars = LechonDeCebuPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
         
-
-
         return view('view-lechon-de-cebu-payable-details', compact('viewPaymentDetail', 'getViewPaymentDetails', 'getParticulars'));
     }
 
@@ -649,9 +647,6 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     //print billing statement
     public function printBillingStatement($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
         $printBillingStatement = LechonDeCebuBillingStatement::find($id);
 
         $billingStatements = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->get()->toArray();
