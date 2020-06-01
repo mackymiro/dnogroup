@@ -53,7 +53,23 @@
                                     @endif
                           	  		<div class="form-group">
                       	  				<div class="form-row">
-                      	  						<div class="col-lg-4">
+                      	  					
+                                      <div class="col-lg-2">
+                                          <label>Payment Method</label>
+                                          <div id="app-payment-method">
+                                              <select name="paymentMethod" class="payment form-control">
+                                                  <option value="0">--Please Select--</option>
+                                                  <option v-for="payment in payments" v-bind:value="payment.value">
+                                                    @{{ payment.text }}
+                                                  </option>
+                                              </select>
+                                          </div>
+                                      </div>
+                    	  						  <div class="col-md-2">
+                                         <label>Invoice #</label>
+                                          <input type="text" name="invoiceNumber" class="form-control"  required="required" value="{{ old('invoiceNumber') }}" />
+                                      </div>
+                                      <div class="col-lg-2">
                       	  							<label>Paid To</label>
                       	  							<input type="text" name="paidTo" class="form-control" required="required" />
                       	  						</div>
@@ -62,42 +78,59 @@
                                           <strong>{{ $errors->first('paidTo') }}</strong>
                                         </span>
                                       @endif
-                    	  						  <div class="col-md-2">
-                                         <label>Invoice #</label>
-                                          <input type="text" name="invoiceNumber" class="form-control"  required="required" value="{{ old('invoiceNumber') }}" />
+                                      <div class="col-md-4">
+                                          <label>Account Name </label>
+                                          <input type="text" name="accountName" class="form-control"  />
                                       </div>
+                               
                       	  						<div class="col-md-2">
                                           <label>Issued Date </label>
                                           <input type="text" name="issuedDate" class="datepicker form-control" value="{{ old('issuedDate') }}" />
                                       </div>
-                                      <div  class="col-md-2">
-                                        <label>Category </label>
+                                     
+                                     
+                      	  				</div>
+                          	  		</div>
+                                  <div class="form-group">
+                                <div class="form-row">
+                                    <div  class="col-md-2">
+                                        <label>Category</label>
                                         <select  name="category" class="category selcls form-control" > 
-                                          <option value="None">None</option>
-                                          <option value="Petty Cash">Petty Cash</option>
-                                          <option value="Utilities">Utilities</option>
+                                            <option value="None">None</option>
+                                            <option value="Petty Cash">Petty Cash</option>
+                                            <option value="Utility">Utility</option>
+                                            <option value="Payroll">Payroll</option>
+                                          </select>
+                                    </div> 
+                                    <div id="pettyCashNo" class="col-md-2">
+                                        <label>Petty Cash No</label>
+                                        <select data-live-search="true" name="pettyCashNo" class="form-control selectpicker">
+                                          @foreach($pettyCashes as $pettyCash)
+                                          <option value="{{ $pettyCash['id']}}">{{ $pettyCash['petty_cash_no']}}</option>
+                                          @endforeach
                                         </select>
-                                      </div>
-                                      <div id="bills" class="col-md-2">
+                                    </div>  
+                                    <div id="utility" class="col-md-2">
                                         <label>Bills </label>
                                         <select  name="bills" class="category selcls form-control" > 
                                           <option value="0">--Pleas Select--</option>
+                                          <option value="Veco">Veco</option>
                                           <option value="PLDT">PLDT</option>
                                           <option value="MCWD">MCWD</option>
                                           <option value="Internet">Internet</option>
                                         </select>
-                                      </div>
-                                      <div id="selectId" class="col-md-2">
-                                        <label>Please Select Account ID </label>
-                                        <select data-live-search="true" name="selectAccountID" class="form-control selectpicker">
+                                    </div>
+                                    <div id="accountId" class="col-md-2">
+                                        <label>Please Select Account Id</label>
+                                        <select data-live-search="true" name="accountId" class="form-control selectpicker">
                                           @foreach($getAllFlags as $getAllFlag)
-                                            <option value="{{ $getAllFlag['id']}}">{{ $getAllFlag['account_id']}}</option>
+                                          <option value="{{ $getAllFlag['id']}}">{{ $getAllFlag['account_id']}}</option>
                                           @endforeach
-                                        </select>	
-                                      </div>
-                                     
-                      	  				</div>
-                          	  		</div>
+                                        </select>
+                                    </div>     
+                                </div>
+                            </div>
+                            
                                   <div class="form-group">
                                       <div class="form-row">
                                           <div class="col-lg-4">
@@ -111,7 +144,8 @@
                                       </div>
                                   </div>
                                   <div>
-                                    <input type="submit" class="btn btn-success float-right" value="Add Payment Voucher" />
+                                     <button type="submit" class="btn btn-success btn-lg float-right"><i class="fas fa-save"></i> Save Payment Voucher</button>
+                                    <br> 
                                   </div>
                                   <br>
                           	  </div>
@@ -135,26 +169,38 @@
 
 </div>
 <script type="text/javascript">
-    $("#bills").hide();
-    $("#selectId").hide();
+    $("#pettyCashNo").hide();
+    $("#utility").hide();
+    $("#accountId").hide();
+
+    const bills = () =>{
+      $("#accountId").show();
+    }
+  
 
     $(".category").change(function(){
-        const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
-        if(cat === "Petty Cash"){
-          $("#bills").hide();
-            $("#selectId").hide();
-        }else if(cat === "Utilities"){
-          $("#bills").show();
-            $("#selectId").show();
-
-        }else if(cat === "0"){
-            $("#bills").hide();
-            $("#selectId").hide();
+        const cat = $(this.options[this.selectedIndex]).closest('option:selected').val();
+        if(cat === "None"){
+            $("#pettyCashNo").hide();
+            $("#utility").hide();
+            $("#accountId").hide();
+        }else if(cat === "Petty Cash"){
+            $("#pettyCashNo").show();
+            $("#utility").hide();
+            $("#accountId").hide();
+        }else if(cat === "Utility"){  
+            $("#pettyCashNo").hide();
+            $("#utility").show();
+            bills();
+        }else if(cat  === "Payroll"){
+            $("#pettyCashNo").hide();
+            $("#utility").hide();
+            $("#accountId").hide();
         }
-    });	
+    });
 </script>
 <script>
-  //branch data
+
   new Vue({
   el: '#app-payment-method',
     data: {

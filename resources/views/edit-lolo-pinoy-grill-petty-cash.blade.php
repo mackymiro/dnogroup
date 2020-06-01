@@ -1,4 +1,4 @@
-@extends('layouts.lolo-pinoy-lechon-de-cebu-app')
+@extends('layouts.lolo-pinoy-grill-commissary-app')
 @section('title', 'Edit Petty Cash |')
 @section('content')
 <script>
@@ -14,20 +14,20 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="wrapper">
-     @include('sidebar.sidebar')
+     @include('sidebar.sidebar-lolo-pinoy-grill')
      <div id="content-wrapper">  
         <div class="container-fluid">
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">Lechon de Cebu</a>
+                <a href="#">Lolo Pinoy Grill Commissary</a>
               </li>
               <li class="breadcrumb-item active">Petty Cash</li>
               <li class="breadcrumb-item active">Edit Petty Cash</li>
             </ol>
-            <a href="{{ url('lolo-pinoy-lechon-de-cebu/petty-cash-list') }}">Back to Lists</a>
+            <a href="{{ url('lolo-pinoy-grill-commissary/petty-cash-list') }}">Back to Lists</a>
             <div class="col-lg-12">
-                 <img src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
+                 <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill Commissary">
             	  
                     <h4 class="text-center"><u>Edit Petty Cash </u></h4>
             </div>
@@ -39,7 +39,7 @@
                           	  Petty Cash
                         </div>
                         <div class="card-body">
-                            <form action="{{ action('LoloPinoyLechonDeCebuController@updatePettyCash', $pettyCash['id'])}}" method="post">
+                            <form action="{{ action('LoloPinoyGrillCommissaryController@updatePettyCash', $pettyCash['id'])}}" method="post">
                             {{csrf_field()}}
                                 <input name="_method" type="hidden" value="PATCH">
                                 @if(session('editSuccess'))
@@ -50,7 +50,7 @@
                                     
                                     <div class="col-lg-2">
                                         <label>Petty Cash No</label>
-                                        <input type="text" name="pettyCashNo" class="form-control" value="Ptyldc-{{ $pettyCash['petty_cash_no']}}" disabled="disabled"/>
+                                        <input type="text" name="pettyCashNo" class="form-control" value="Ptylpgc-{{ $pettyCash['petty_cash_no']}}" disabled="disabled"/>
                                     </div>
                                     <div class="col-lg-2">
                                         <label>Date</label>
@@ -88,7 +88,7 @@
                                 @if(session('addNewSuccess'))
 	                             	<p class="alert alert-success">{{ Session::get('addNewSuccess') }}</p>
 	                            @endif
-                                <form action ="{{ action('LoloPinoyLechonDeCebuController@addNewPettyCash', $pettyCash['id']) }}" method="post">
+                                <form action ="{{ action('LoloPinoyGrillCommissaryController@addNewPettyCash', $pettyCash['id']) }}" method="post">
                                 {{csrf_field()}}
                                 <div class="form-row">
                                      <div class="col-lg-12">
@@ -106,7 +106,7 @@
                                     <div class="col-lg-12">
                                         <br>
                                        
-                                        <button type="submit" class="btn btn-primary btn-lg"> <i class="fas fa-plus" aria-hidden="true"></i> Add</button>
+                                        <button type="submit" class="btn btn-primary btn-lg "> <i class="fas fa-plus" aria-hidden="true"></i> Add</button>
                                     </div>
                                 </div>
                                 </form>
@@ -126,7 +126,7 @@
                                 <p class="alert alert-success">{{ Session::get('updatePC') }}</p>
                             @endif
                              @foreach($pettyCashSummaries as $pettyCashSummary) 
-                             <form action="{{ action('LoloPinoyLechonDeCebuController@updatePC', $pettyCashSummary['id']) }}" method="post">
+                             <form action="{{ action('LoloPinoyGrillCommissaryController@updatePC', $pettyCashSummary['id']) }}" method="post">
                                  {{csrf_field()}}
                                  <input name="_method" type="hidden" value="PATCH">
                                 
@@ -183,7 +183,7 @@
           if(x){
               $.ajax({
                 type: "DELETE",
-                url: '/lolo-pinoy-lechon-de-cebu/petty-cash/delete/' + id,
+                url: '/lolo-pinoy-grill-commissary/petty-cash/delete/' + id,
                 data:{
                   _method: 'delete', 
                   "_token": "{{ csrf_token() }}",

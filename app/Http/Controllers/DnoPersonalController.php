@@ -1151,7 +1151,7 @@ class DnoPersonalController extends Controller
 
         $payableId = DnoPersonalPaymentVoucher::find($id);
 
-         //getParticular details
+        //getParticular details
          $getParticulars = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
         
 

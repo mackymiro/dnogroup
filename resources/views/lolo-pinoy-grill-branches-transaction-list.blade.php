@@ -115,8 +115,8 @@
     					  		<table class="table table-bordered">
 					  				<thead>
 					  					<tr>
-					  						<th width="20%" class="bg-info" style="color:white;">TOTAL BALANCE DUE</th>
-					  						<th class="bg-danger" style="color:white;"><?php echo number_format($totalAmoutDue, 2);?></th>
+					  						<th width="30%" class="bg-info" style="color:white; font-size:28px;">TOTAL BALANCE DUE</th>
+					  						<th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?php echo number_format($totalAmoutDue, 2);?></span></th>
 					  					</tr>
 
 					  				</thead>
@@ -141,6 +141,18 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
+ 	function doRefresh(){
+            $("#totalDue").fadeOut(500);
+            $("#totalDue").fadeIn(500);     
+            setTimeout(function() {
+             doRefresh();
+            }, 1000);
+        }
+
+        $(document).ready(function () {
+          doRefresh(); 
+        });
+
 	const confirmDelete = (id) =>{
 		const x = confirm("Do you want to delete this?");
         if(x){

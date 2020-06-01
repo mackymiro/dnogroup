@@ -202,7 +202,6 @@
     });
 </script>
 <script>
-	//branch data
 	new Vue({
 	el: '#app-payment-method',
 		data: {

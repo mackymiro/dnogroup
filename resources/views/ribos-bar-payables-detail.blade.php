@@ -43,9 +43,69 @@
 				  			 	 	@if(session('paymentAdded'))
 		                                <p class="alert alert-success">{{ Session::get('paymentAdded') }}</p>
 		                            @endif 
+									@if($transactionList['method_of_payment'] == "Cash")
+									<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-12">
+				  								<label>Date</label>
+				  								<input type="text" name="date" class="datepicker form-control" required="required" />
+					  						</div> 
+
+    					  				</div>
+	    					  		</div>
 	    					  		<div class="form-group">
     					  				<div class="form-row">
-					  						<div class="col-lg-8">
+					  						<div class="col-lg-12">
+				  								<label>Payment Cash Number</label>
+				  								<input type="text" name="chequeNumber" class="form-control" />
+					  						</div> 
+
+    					  				</div>
+	    					  		</div>
+	    					  		<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-12">
+				  								<label>Cash Amount</label>
+				  								<input type="text" name="chequeAmount" class="form-control" required="required" autocomplete="off" />
+					  						</div> 
+					  					
+    					  				</div>
+	    					  		</div>
+									@if($transactionList['status'] != "FULLY PAID AND RELEASED")
+	    					  		<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-4">
+				  							
+												<button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-plus"></i> Add</button>
+					  						</div> 
+					  					
+    					  				</div>
+	    					  		</div>
+									@else
+									<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-4">
+				  							
+												<button type="submit" class="btn btn-primary btn-lg" disabled><i class="fas fa-plus"></i> Add</button>
+					  						</div> 
+					  					
+    					  				</div>
+	    					  		</div>
+
+									@endif
+									@elseif($transactionList['method_of_payment'] == "Cheque")
+									<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-12">
+				  								<label>Date</label>
+				  								<input type="text" name="date" class="datepicker form-control" required="required" />
+					  						</div> 
+
+    					  				</div>
+	    					  		</div>
+	    					  		<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-12">
 				  								<label>Payment Cheque Number</label>
 				  								<input type="text" name="chequeNumber" class="form-control" required="required" />
 					  						</div> 
@@ -54,7 +114,7 @@
 	    					  		</div>
 	    					  		<div class="form-group">
     					  				<div class="form-row">
-					  						<div class="col-lg-8">
+					  						<div class="col-lg-12">
 				  								<label>Cheque Amount</label>
 				  								<input type="text" name="chequeAmount" class="form-control" required="required" />
 					  						</div> 
@@ -64,11 +124,14 @@
 	    					  		<div class="form-group">
     					  				<div class="form-row">
 					  						<div class="col-lg-4">
-				  								<input type="submit" class="btn btn-primary" value="Add" />
+											  <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-plus"></i> Add</button>
+					  						
 					  						</div> 
 					  					
     					  				</div>
 	    					  		</div>
+
+									@endif
 	    					  		</form>
 	    					  </div>
        					</div>
@@ -103,14 +166,28 @@
 										
 									</div>
 								</div>
+								@if($transactionList['status'] != "FOR APPROVAL" && $transactionList['status'] != "FOR CONFIRMATION"
+								&& $transactionList['status'] != "FULLY PAID AND RELEASED")
 								<div class="form-group">
 									<div class="form-row">
 										<div class="col-lg-4">
-											<input type="submit" class="btn btn-primary" value="Add" />
+											<button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-plus"></i> Add</button>
+					  						
 										</div> 
 									
 									</div>
 								</div>
+								@else	
+								<div class="form-group">
+									<div class="form-row">
+										<div class="col-lg-4">
+											<button type="submit" class="btn btn-primary btn-lg" disabled><i class="fas fa-plus"></i> Add</button>
+					  						
+										</div> 
+									
+									</div>
+								</div>
+								@endif
 								</form>
 							</div>
 						</div>
@@ -153,6 +230,14 @@
 		  									<label>Voucher Ref #</label>
 		  									<input type="text" name="voucherRef" class="form-control" value="RB-{{ $transactionList['voucher_ref_number'] }}" disabled="disabled" />
 			  							</div>
+										  <div class="col-lg-4">
+		  									<label>Account Name</label>
+		  									<input type="text" name="accountName" class="form-control" value="{{ $transactionList['account_name'] }}" disabled="disabled" />
+			  							</div>
+										  <div class="col-lg-4">
+		  									<label>Payment Method</label>
+		  									<input type="text" name="paymentMethod" class="form-control" value="{{ $transactionList['method_of_payment'] }}" disabled="disabled" />
+			  							</div>
 			  							<div class="col-lg-4">
 		  									<label>Status</label>
 		  									<div id="app-status">
@@ -194,8 +279,16 @@
 				  				<table class="table table-striped">
 				  					<thead>
 				  						<tr>
-				  							<th>PAYMENT CHEQUE NUMBER</th>
-				  							<th>CHEQUE AMOUNT</th>
+				  							@if($transactionList['method_of_payment'] == "Cash")
+											<th>PAYMENT CASH NUMBER</th>
+											@else
+											<th>PAYMENT CHEQUE NUMBER</th>
+											@endif
+											@if($transactionList['method_of_payment'] == "Cash")
+				  								<th>CASH AMOUNT</th>
+											@else
+												<th>CHEQUE AMOUNT</th>
+											@endif
 				  						</tr>
 				  					</thead>
 				  					<tbody>
@@ -217,11 +310,13 @@
 				  				<div class="form-group">
 				  					<div class="form-row">
 			  							<div class="col-lg-4">
-			  								<input type="submit" class="btn btn-success" name="action" value="PAID AND RELEASE" value="PAID AND RELEASE" />
+			  								<input type="submit" class="btn btn-success btn-lg" name="action" value="PAID AND RELEASE" value="PAID AND RELEASE" />
 			  							</div>
+										  <?php if($transactionList['status'] != "FULLY PAID AND RELEASED"):?>
 			  							<div class="col-lg-4">
-			  								<input type="submit" class="btn btn-primary" name="action" value="PAID & HOLD" value="PAID & HOLD" />
-			  							</div>
+										  <input type="submit" class="btn btn-primary btn-lg" name="action" value="PAID & HOLD" value="PAID & HOLD" />
+										  </div>
+										  <?php endif; ?>
 				  					</div>
 				  				</div>
 				  			</form>

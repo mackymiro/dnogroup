@@ -6,12 +6,53 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Auth;
 use Session;
+use PDF;
 use App\User; 
 use App\DongFangCorporationPaymentVoucher;
 use App\DongFangCorporationBillingStatement;
 
 class DongFangCorporationController extends Controller
 {
+
+    public function printPayablesDongFang($id){
+        $payableId = DongFangCorporationPaymentVoucher::find($id);
+
+        //getParticular details
+         $getParticulars = DongFangCorporationPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+        
+
+        $payablesVouchers = DongFangCorporationPaymentVoucher::where('pv_id', $id)->get()->toArray();
+        
+
+          //count the total amount 
+        $countTotalAmount = DongFangCorporationPaymentVoucher::where('id', $id)->sum('amount_due');
+
+
+          //
+        $countAmount = DongFangCorporationPaymentVoucher::where('pv_id', $id)->sum('amount_due');
+
+        $sum  = $countTotalAmount + $countAmount;
+       
+
+        $pdf = PDF::loadView('printPayablesDongFang', compact('payableId', 'user', 'payablesVouchers', 'sum', 'getParticulars'));
+
+        return $pdf->download('dong-fang-payment-voucher.pdf');
+    }
+
+    public function viewPayableDetails($id){
+        $viewPaymentDetail = DongFangCorporationPaymentVoucher::find($id);
+     
+
+        $getViewPaymentDetails = DongFangCorporationPaymentVoucher::where('pv_id', $id)->get()->toArray();
+
+         //getParticular details
+         $getParticulars = DongFangCorporationPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+        
+
+        return view('view-dong-fang-payable-details', compact('user', 'viewPaymentDetail', 'getViewPaymentDetails', 'getParticulars'));
+   
+    }
+
     public function viewBillingStatement($id){
         $viewBillingStatement = DongFangCorporationBillingStatement::find($id);
 

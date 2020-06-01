@@ -88,11 +88,9 @@
 			  									<td>{{ $getTransactionList['issued_date']}}</td>
 			  									<td class="bg-danger" style="color:white;"><?php echo number_format($getTransactionList['amount_due'], 2);?></td>
 			  									<td>{{ $getTransactionList['delivered_date']}}</td>
-			  									@if($getTransactionList['status'] == "FULLY PAID AND RELEASED")
-			  									<td class="bg-success" style="color:white; "><a class="anchor" href="{{ url('ribos-bar/view-ribos-bar-payables-details/'.$getTransactionList['id']) }}">{{ $getTransactionList['status'] }}</a></td>
-			  									@else
-			  									<td class="bg-success" style="color:white; ">{{ $getTransactionList['status'] }}</td>
-			  									@endif
+			  									
+			  									<td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('dong-fang-corporation/view-dong-fang-payables-details/'.$getTransactionList['id']) }}">{{ $getTransactionList['status'] }}</a></p></td>
+			  								
                           <td>{{ $getTransactionList['created_by'] }}</td>
 				  							</tr>
 				  							@endforeach

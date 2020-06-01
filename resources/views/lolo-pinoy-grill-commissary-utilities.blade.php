@@ -251,7 +251,7 @@
                                                 <td><a href="{{ url('/lolo-pinoy-grill-commissary/utilities/view-internet/'.$internetDocument['id']) }}">{{ $internetDocument['account_id']}}</a></td>
                                                 <td>{{ $internetDocument['account_name']}}</td>
                                                 <td>{{ $internetDocument['date']}}</td>
-                                                <td></td>
+                                                
                                                 <td>{{ $internetDocument['created_by']}}</td>
                                             </tr>
                                             @endforeach

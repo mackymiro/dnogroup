@@ -58,6 +58,7 @@ Route::group(['middleware' =>['user']], function(){
 		'LoloPinoyLechonDeCebuController@pettyCashList')
 		->name('pettyCashListLechonDeCebu');
 
+
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/utilities',
 		'LoloPinoyLechonDeCebuController@utilities')
@@ -77,6 +78,11 @@ Route::group(['middleware' =>['user']], function(){
 		'/lolo-pinoy-lechon-de-cebu/edit-petty-cash/{id}',
 		'LoloPinoyLechonDeCebuController@editPettyCash')
 		->name('editPettyCashLechonDeCebu');
+
+	Route::patch(
+		'/lolo-pinoy-lechon-de-cebu/update-petty-cash/{id}',
+		'LoloPinoyLechonDeCebuController@updatePettyCash')
+		->name('updatePettyCashLechonDeCebu');
 	
 	Route::post(
 		'/lolo-pinoy-lechon-de-cebu/add-new-petty-cash/{id}',
@@ -97,6 +103,11 @@ Route::group(['middleware' =>['user']], function(){
 		'/lolo-pinoy-lechon-de-cebu/petty-cash/view/{id}',
 		'LoloPinoyLechonDeCebuController@viewPettyCash')
 		->name('viewPettCashLechonDeCebu');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/printPettyCash/{id}',
+		'LoloPinoyGrillCommissaryController@printPettyCash')
+		->name('printPettyCashLoloPinoyGrill');
 
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/printPettyCash/{id}',
@@ -523,7 +534,7 @@ Route::group(['middleware' =>['user']], function(){
 	Route::get(
 		'/ribos-bar/payables/transaction-list',
 		'RibosBarController@transactionList')
-		->name('ribos-bar.transactionList');
+		->name('transactionListRibosBar');
 
 	Route::get(
 		'/ribos-bar/edit-ribos-bar-payables-detail/{id}',
@@ -546,10 +557,9 @@ Route::group(['middleware' =>['user']], function(){
 		->name('accept');
 
 	Route::get(
-		'/ribos-bar/view-ribos-bar-payables-details/{id}',
+		'/ribos-bar/view-payables-details/{id}',
 		'RibosBarController@viewPayableDetails')
-		->name('ribos-bar.viewPayableDetails');
-
+		->name('viewPayableDetails');
 	
 
 	Route::get(
@@ -1227,7 +1237,10 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get('/lolo-pinoy-grill-commissary/billing-statement-lists', 'LoloPinoyGrillCommissaryController@billingStatementLists')->name('lolo-pinoy-grill-commissary.billingStatementLists');
 
 	//view billing statement
-	Route::get('/lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-billing-statement/{id}', 'LoloPinoyGrillCommissaryController@viewBillingStatement')->name('lolo-pinoy-grill-commissary.viewBillingStatement');
+	Route::get(
+		'/lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-billing-statement/{id}', 
+		'LoloPinoyGrillCommissaryController@viewBillingStatement')
+		->name('viewBillingStatementLoloPinoyGrill');
 
 	
 	//cash vouchers lolo pinoy grill
@@ -1385,6 +1398,36 @@ Route::group(['middleware' => ['auth']], function(){
 		'/lolo-pinoy-grill-commissary/petty-cash-list',
 		'LoloPinoyGrillCommissaryController@pettyCashList')
 		->name('lolo-pinoy-grill-commissary.pettyCashList');
+
+	Route::post(
+		'/lolo-pinoy-grill-commissary/petty-cash/add',
+		'LoloPinoyGrillCommissaryController@addPettyCash')
+		->name('addPettyCashLoloPinoyGrill');
+	
+	Route::get(
+		'/lolo-pinoy-grill-commissary/edit-petty-cash/{id}',
+		'LoloPinoyGrillCommissaryController@editPettyCash')
+		->name('editPettyCashLoloPinoyGrill');
+
+	Route::patch(
+		'/lolo-pinoy-grill-commissary/update-petty-cash/{id}',
+		'LoloPinoyGrillCommissaryController@updatePettyCash')
+		->name('updatePettyCashLoloPinoyGrill');
+
+	Route::post(
+		'/lolo-pinoy-grill-commissary/add-new-petty-cash/{id}',
+		'LoloPinoyGrillCommissaryController@addNewPettyCash')
+		->name('addNewPettyCashLoloPinoyGrill');
+
+	Route::patch(
+		'/lolo-pinoy-grill-commissary/update-pc/{id}',
+		'LoloPinoyGrillCommissaryController@updatePC')
+		->name('updatePCLoloPinoyGrill');
+
+	Route::delete(
+		'/lolo-pinoy-grill-commissary/petty-cash/delete/{id}',
+		'LoloPinoyGrillCommissaryController@destroyPettyCash')
+		->name('destroyPettyCashLoloPinoyGrill');
 
 	Route::get(
 		'/lolo-pinoy-grill-commissary/utilities',
@@ -2076,6 +2119,36 @@ Route::group(['middleware' => ['auth']], function(){
 		'ribos-bar/petty-cash-list',
 		'RibosBarController@pettyCashList')
 		->name('ribos-bar.pettyCashList');
+
+	Route::post(
+		'/ribos-bar/petty-cash/add',
+		'RibosBarController@addPettyCash')
+		->name('addPettyCashRibosBar');
+
+	Route::get(
+		'/ribos-bar/edit-petty-cash/{id}',
+		'RibosBarController@editPettyCash')
+		->name('editPettyCashRibosBar');
+
+	Route::patch(
+		'/ribos-bar/update-petty-cash/{id}',
+		'RibosBarController@updatePettyCash')
+		->name('updatePettyCashRibosBar');
+
+	Route::patch(
+		'/ribos-bar/update-pc/{id}',
+		'RibosBarController@updatePC')
+		->name('updatePCRibosBar');
+
+	Route::post(
+		'/ribos-bar/add-new-petty-cash/{id}',
+		'RibosBarController@addNewPettyCash')
+		->name('addNewPettyCashRibosBar');
+
+	Route::delete(
+		'/ribos-bar/petty-cash/delete/{id}',
+		'RibosBarController@destroyPettyCash')
+		->name('destroyPettyCash');
 	
 	Route::get(
 		'/ribos-bar/utilities',
@@ -2111,6 +2184,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'/ribos-bar/petty-cash/view/{id}',
 		'RibosBarController@viewPettyCash')
 		->name('ribo-bar.viewPettyCash');
+
+	Route::get(
+		'/ribos-bar/printPettyCash/{id}',
+		'RibosBarController@printPettyCash')
+		->name('printPettyCashRibosBar');
 
 	Route::get(
 		'/ribos-bar/store-stock/raw-materials',
@@ -2680,6 +2758,16 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dong-fang-corporation/payables/transaction-list',
 		'DongFangCorporationController@transactionList')
 		->name('transactionList');
+
+	Route::get(
+		'/dong-fang-corporation/view-dong-fang-payables-details/{id}',
+		'DongFangCorporationController@viewPayableDetails')
+		->name('viewPayableDetailsDongFang');
+
+	Route::get(
+		'/dong-fang-corporation/printPayables/{id}',
+		'DongFangCorporationController@printPayablesDongFang')
+		->name('printPayablesDongFang');
 
 	Route::delete(
 		'/dong-fang-corporation/delete-transaction-list/{id}',

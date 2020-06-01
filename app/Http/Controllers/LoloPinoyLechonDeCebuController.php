@@ -24,6 +24,20 @@ use Session;
 
 class LoloPinoyLechonDeCebuController extends Controller
 {   
+
+    public function updatePettyCash(Request $request, $id){
+        $updatePettyCash = LechonDeCebuPettyCash::find($id);
+        $updatePettyCash->date = $request->get('date');
+        $updatePettyCash->petty_cash_name = $request->get('pettyCashName');
+        $updatePettyCash->petty_cash_summary = $request->geT('pettyCashSummary');
+        $updatePettyCash->save();
+
+        Session::flash('editSuccess', 'Successfully updated.');
+
+        return redirect()->route('editPettyCashLechonDeCebu', ['id'=>$id]);
+
+    }
+
     public function viewBills($id){
         //
         $viewBill = LechonDeCebuUtility::find($id);
@@ -238,9 +252,7 @@ class LoloPinoyLechonDeCebuController extends Controller
     }
 
     public function pettyCashList(){
-       
- 
-         $pettyCashLists = LechonDeCebuPettyCash::where('pc_id', NULL)->orderBy('id', 'desc')->get()->toArray();
+       $pettyCashLists = LechonDeCebuPettyCash::where('pc_id', NULL)->orderBy('id', 'desc')->get()->toArray();
 
         return view('lechon-de-cebu-petty-cash-list', compact('pettyCashLists'));
     }
@@ -309,13 +321,10 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     //
     public function printPayables($id){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
-
         $payableId = LechonDeCebuPaymentVoucher::find($id);
 
-          //getParticular details
-          $getParticulars = LechonDeCebuPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+        //getParticular details
+        $getParticulars = LechonDeCebuPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
       
 
         $payablesVouchers = LechonDeCebuPaymentVoucher::where('pv_id', $id)->get()->toArray();
@@ -330,7 +339,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $sum  = $countTotalAmount + $countAmount;
        
 
-        $pdf = PDF::loadView('printPayables', compact('payableId', 'user', 'payablesVouchers', 'sum', 'getParticulars'));
+        $pdf = PDF::loadView('printPayables', compact('payableId',  'payablesVouchers', 'sum', 'getParticulars'));
 
         return $pdf->download('lechon-de-cebu-payment-voucher.pdf');
     }
@@ -1811,25 +1820,19 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         }else{
             return redirect()->route('paymentVoucherFormLechonDeCebu')->with('error', 'Invoice Number Already Exists. Please See Transaction List For Your Reference');
-        }
-
-
-      
+        }      
 
     }
 
     //payment voucher form
     public function paymentVoucherForm(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-
+    
         $pettyCashes = LechonDeCebuPettyCash::get()->toArray();
 
         $getAllFlags = LechonDeCebuUtility::get()->toArray();
        
 
-        return view('payment-voucher-form',compact('user', 'pettyCashes', 'getAllFlags'));
+        return view('payment-voucher-form',compact('pettyCashes', 'getAllFlags'));
         
     }
 
