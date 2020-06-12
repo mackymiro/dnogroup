@@ -53,8 +53,20 @@
                         				<label>Dr No</label>
                         				<input type="text" name="contactPerson" class="form-control"  value="{{ $getDeliveryReceipt['dr_no']}}" disabled="disabled" />
                         			</div>
-                             		</div>
-                             	</div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="form-row">
+                                <div class="col-lg-4">
+                                    <label>Charge To</label>
+                                    <input type="text" name="chargeTo" class="form-control" value="{{ $getDeliveryReceipt['charge_to'] }}" />
+                                </div>
+                                <div class="col-lg-4">
+                                    <label>Address To</label>
+                                    <input type="text" name="chargeTo" class="form-control" value="{{ $getDeliveryReceipt['address_to'] }}" />
+                                </div>
+                            </div>
+                        </div>
                      		<div class="form-group">
                     			<div class="form-row">
                     				<div class="col-md-2">

@@ -1173,8 +1173,6 @@ class DnoPersonalController extends Controller
         return $pdf->download('dno-personal-payment-voucher.pdf');
     }
 
-
-    //
     public function viewPayableDetails($id){
         $ids = Auth::user()->id;
         $user = User::find($ids);

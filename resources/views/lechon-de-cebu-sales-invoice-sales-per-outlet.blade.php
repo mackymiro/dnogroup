@@ -27,6 +27,7 @@
                                             <tr>
                                                <th>Action</th>
                                               <th>Invoice #</th>
+                                              <th>SI NO</th>
                                               <th>Date</th>
                                               <th>Ordered By</th>
                                               <th>Address</th>
@@ -42,6 +43,7 @@
                                             <tr>
                                               <th>Action</th>
                                               <th>Invoice #</th>
+                                              <th>SI NO</th>
                                               <th>Date</th>
                                               <th>Ordered By</th>
                                               <th>Address</th>
@@ -57,19 +59,19 @@
                                             @foreach($statementOfAccountT1s as $statementOfAccountT1) 
                                             <tr>
                                                 <td>
-                                                   <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-statement-account/'.$statementOfAccountT1['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
+                                                   <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-statement-account/'.$statementOfAccountT1->id) }}" title="View"><i class="fas fa-low-vision"></i></a>
                                                 </td>
-                                                <td>{{ $statementOfAccountT1['invoice_number']}}</td>
-                                                <td>{{ $statementOfAccountT1['date']}}</td>
-                                                <td>{{ $statementOfAccountT1['ordered_by']}}</td>
-                                                <td>{{ $statementOfAccountT1['address']}}</td>
-                                                <td>{{ $statementOfAccountT1['qty']}}</td>
-                                                <td>{{ $statementOfAccountT1['total_kls']}}</td>
-                                                <td>{{ $statementOfAccountT1['item_description']}}</td>
-                                                <td>{{ $statementOfAccountT1['unit_price']}}</td>
-                                                <td>{{ $statementOfAccountT1['amount']}}</td>
-
-                                                <td>{{ $statementOfAccountT1['created_by']}}</td>
+                                                <td><p style="width:150px;">{{ $statementOfAccountT1->invoice_number}}</p></td>
+                                                <td><p style="width:130px;">{{ $statementOfAccountT1->module_code}}{{ $statementOfAccountT1->lechon_de_cebu_code}}</p></td>
+                                                <td>{{ $statementOfAccountT1->date}}</td>
+                                                <td><p style="width:230px;">{{ $statementOfAccountT1->ordered_by }}</p></td>
+                                                <td><p style="width:300px;">{{ $statementOfAccountT1->address}}</p></td>
+                                                <td>{{ $statementOfAccountT1->qty}}</td>
+                                                <td><?php echo number_format($statementOfAccountT1->total_kls, 2); ?></td>
+                                                <td><p style="width:190px;">{{ $statementOfAccountT1->item_description}}</p></td>
+                                                <td><?php echo number_format($statementOfAccountT1->unit_price, 2);?></td>
+                                                <td class="bg-danger" style="color:#fff;"><?php echo number_format($statementOfAccountT1->amount, 2); ?></td>
+                                                <td><p style="width:130px;">{{ $statementOfAccountT1->created_by}}</p></td>
                                             </tr>
                                             @endforeach
                                         </tbody>
@@ -105,6 +107,7 @@
                                            <tr>
                                               <th>Action</th>
                                               <th>Invoice #</th>
+                                              <th>SI NO</th>
                                               <th>Date</th>
                                               <th>Ordered By</th>
                                               <th>Address</th>
@@ -112,7 +115,7 @@
                                               <th>Total KlS</th>
                                               <th>Item Description</th>
                                               <th>Unit Price</th>
-                                              <th>Amount</th>
+                                              <th class="bg-danger" style="color:#fff;">Amount</th>
                                               <th>Created By</th>
                                             </tr>
                                         </thead>
@@ -120,6 +123,7 @@
                                              <tr>
                                               <th>Action</th>
                                               <th>Invoice #</th>
+                                              <th>SI NO</th>
                                               <th>Date</th>
                                               <th>Ordered By</th>
                                               <th>Address</th>
@@ -127,7 +131,7 @@
                                               <th>Total KlS</th>
                                               <th>Item Description</th>
                                               <th>Unit Price</th>
-                                              <th>Amount</th>
+                                              <th class="bg-danger" style="color:#fff;">Amount</th>
                                               <th>Created By</th>
                                             </tr>
                                         </tfoot>
@@ -137,17 +141,18 @@
                                                 <td>
                                                    <a href="" title="View"><i class="fas fa-low-vision"></i></a>
                                                 </td>
-                                                 <td>{{ $statementOfAccountT2['invoice_number']}}</td>
-                                                <td>{{ $statementOfAccountT2['date']}}</td>
-                                                <td>{{ $statementOfAccountT2['ordered_by']}}</td>
-                                                <td>{{ $statementOfAccountT2['address']}}</td>
-                                                <td>{{ $statementOfAccountT2['qty']}}</td>
-                                                <td>{{ $statementOfAccountT2['total_kls']}}</td>
-                                                <td>{{ $statementOfAccountT2['item_description']}}</td>
-                                                <td>{{ $statementOfAccountT2['unit_price']}}</td>
-                                                <td>{{ $statementOfAccountT2['amount']}}</td>
-
-                                                <td>{{ $statementOfAccountT2['created_by']}}</td>
+                                                <td><p style="width:150px;">{{ $statementOfAccountT2->invoice_number}}</p></td>
+                                                <td><p style="width:130px;">{{ $statementOfAccountT2->module_code}}{{ $statementOfAccountT2->lechon_de_cebu_code}}</p></td>
+                                                <td>{{ $statementOfAccountT2->date}}</td>
+                                                <td><p style="width:230px;">{{ $statementOfAccountT2->ordered_by }}</p></td>
+                                                <td><p style="width:300px;">{{ $statementOfAccountT2->address}}</p></td>
+                                                <td>{{ $statementOfAccountT2->qty}}</td>
+                                                <td><?php echo number_format($statementOfAccountT2->total_kls, 2); ?></td>
+                                                <td><p style="width:190px;">{{ $statementOfAccountT2->item_description}}</p></td>
+                                                <td><?php echo number_format($statementOfAccountT2->unit_price, 2);?></td>
+                                                <td class="bg-danger" style="color:#fff;"><?php echo number_format($statementOfAccountT2->amount, 2); ?></td>
+                                                <td><p style="width:130px;">{{ $statementOfAccountT2->created_by}}</p></td>
+                                           
                                             </tr>
                                             @endforeach
                                         </tbody>

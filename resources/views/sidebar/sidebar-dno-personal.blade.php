@@ -71,7 +71,7 @@
             <a class="dropdown-item" href="{{ url('dno-personal/receivables/list') }}"> List</a>
         </div>
       </li>
-      @if(Auth::user()['role_type'] != 3)
+     
        <li class="nav-item dropdown ">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fa fa-credit-card" aria-hidden="true"></i>
@@ -85,5 +85,5 @@
          
         </div>
       </li>
-      @endif  
+      
  </ul>

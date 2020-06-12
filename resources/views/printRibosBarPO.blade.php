@@ -119,6 +119,7 @@
                            				<tr>
                        						<th style="width:30%;">Prepared By</th>
                        						<th>Checked By</th>
+											<th>Approved By</th>
                        						<th>Received By</th>
                            				</tr>
                            			</thead>
@@ -130,9 +131,14 @@
 
                            					</td>
                            					<td>
+											   <br>
                            						________________________<br>
-                           						Aprilane Maturan<br>
+                           						Aprilane Q  Maturan<br>
                            						Finance Officer
+                           					</td>
+											<td>
+                           						________________________<br>
+                           					
                            					</td>
                            					<td>
                            						________________________<br>

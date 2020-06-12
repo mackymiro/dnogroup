@@ -25,6 +25,7 @@
                                       <thead>
                                         <th>Action</th>
                                         <th>Invoice #</th>
+                                        <th>SI No</th>
                                         <th>Date</th>
                                         <th>Ordered By</th>
                                         <th>Address</th>
@@ -32,12 +33,13 @@
                                         <th>Total KLS</th>
                                         <th>Item Description</th>
                                         <th>Unit Price</th>
-                                        <th>Amount</th>
+                                        <th class="bg-danger" style="color:#fff;">Amount</th>
                                         <th>Created By</th>
                                     </thead>
                                     <tfoot>
                                          <th>Action</th>
                                         <th>Invoice #</th>
+                                        <th>SI No</th>
                                         <th>Date</th>
                                         <th>Ordered By</th>
                                         <th>Address</th>
@@ -45,32 +47,33 @@
                                         <th>Total KLS</th>
                                         <th>Item Description</th>
                                         <th>Unit Price</th>
-                                        <th>Amount</th>
+                                        <th class="bg-danger" style="color:#fff;">Amount</th>
                                         <th>Created By</th>
                                     </tfoot>
                                     <tbody>
                                           @foreach($getAllSalesInvoices as $getAllSalesInvoice)
-                                          <tr id="deletedId{{ $getAllSalesInvoice['id']}}">
+                                          <tr id="deletedId{{ $getAllSalesInvoice->id}}">
                                           <td>
                                           
-                                            <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-sales-invoice/'.$getAllSalesInvoice['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                            <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-sales-invoice/'.$getAllSalesInvoice->id ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                             
-                                            @if($user->role_type == 1)
-                                            <a id="delete" onClick="confirmDelete('{{ $getAllSalesInvoice['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                                            @if(Auth::user()['role_type'] == 1)
+                                            <a id="delete" onClick="confirmDelete('{{ $getAllSalesInvoice->id}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
                                             @endif
-                                            <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-sales-invoice/'.$getAllSalesInvoice['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
+                                            <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-sales-invoice/'.$getAllSalesInvoice->id) }}" title="View"><i class="fas fa-low-vision"></i></a>
                                            
                                           </td>
-                                          <td>{{ $getAllSalesInvoice['invoice_number']}}</td>
-                                          <td>{{ $getAllSalesInvoice['date'] }}</td>
-                                          <td>{{ $getAllSalesInvoice['ordered_by'] }}</td>
-                                          <td>{{ $getAllSalesInvoice['address']}}</td>
-                                          <td>{{ $getAllSalesInvoice['qty']}}</td>
-                                          <td><?php echo number_format($getAllSalesInvoice['total_kls'], 2); ?></td>
-                                          <td>{{ $getAllSalesInvoice['item_description']}}</td>
-                                          <td><?php echo number_format($getAllSalesInvoice['unit_price'], 2);?></td>
-                                          <td><?php echo number_format($getAllSalesInvoice['amount'], 2); ?></td>
-                                          <td>{{ $getAllSalesInvoice['created_by']}}</td>
+                                          <td><p style="width:130px;">{{ $getAllSalesInvoice->invoice_number}}</p></td>
+                                          <td><p style="width:130px;">{{ $getAllSalesInvoice->module_code}}{{ $getAllSalesInvoice->lechon_de_cebu_code}}</p></td>
+                                          <td>{{ $getAllSalesInvoice->date }}</td>
+                                          <td><p style="width:230px;">{{ $getAllSalesInvoice->ordered_by }}</p></td>
+                                          <td><p style="width:300px;">{{ $getAllSalesInvoice->address}}</p></td>
+                                          <td>{{ $getAllSalesInvoice->qty}}</td>
+                                          <td><?php echo number_format($getAllSalesInvoice->total_kls, 2); ?></td>
+                                          <td><p style="width:190px;">{{ $getAllSalesInvoice->item_description}}</p></td>
+                                          <td><?php echo number_format($getAllSalesInvoice->unit_price, 2);?></td>
+                                          <td class="bg-danger" style="color:#fff;"><?php echo number_format($getAllSalesInvoice->amount, 2); ?></td>
+                                          <td><p style="width:130px;">{{ $getAllSalesInvoice->created_by}}</p></td>
                                           </tr>
                                           @endforeach
 

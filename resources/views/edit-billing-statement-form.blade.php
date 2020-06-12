@@ -16,6 +16,12 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css" >
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+
 <div id="wrapper">
      @include('sidebar.sidebar')
      <div id="content-wrapper"> 
@@ -59,7 +65,7 @@
                                           </div>
                                       <div class="col-lg-6">
                                       <label>Date</label>
-                                        <input type="text" name="date" class="datepicker form-control" value="{{ $billingStatement['date'] }}" />
+                                        <input type="text" name="transactionDate" class="datepicker form-control" value="{{ $billingStatement['date'] }}" />
                                        
                                         <label>Branch</label>
                                          <div id="app-branch">
@@ -80,23 +86,25 @@
                                     <div class="form-row">
                                       <div class="col-lg-2">
                                         <label>Date</label>
-                                        <input type="text" name="transactionDate" class="datepicker form-control" value="{{ $billingStatement['date_of_transaction'] }}" />
+                                        <input type="text" name="transactionDate" class="datepicker form-control" disabled="disabled" value="{{ $billingStatement['date_of_transaction'] }}" />
                                       </div>
                                       @if($billingStatement['order'] == "Private Order")
                                       <div class="col-lg-2">
                                         <label>Order</label>
                                         <input type="text" name="choose" class="form-control" disabled="disabled" value="{{ $billingStatement['order'] }}" />
                                       </div>
-                                      @else
-                                      <div class="col-lg-2">
-                                        <label>Order</label>
-                                        <input type="text" name="choose" class="form-control" value="{{ $billingStatement['order'] }}" />
-                                      </div>
+                                   
                                       @endif
                                       @if($billingStatement['order'] != "Private Order")
                                       <div class="col-lg-2">
                                         <label>Invoice #</label>
-                                          <input type="text" name="invoiceNumber" class="form-control"  value="{{ $billingStatement['invoice_number'] }}" />
+                                          <input type="text" name="invoiceNumber" class="form-control"  disabled="disabled" value="{{ $billingStatement['invoice_number'] }}"  />
+                                      </div>
+                                      @endif
+                                      @if($billingStatement['order'] == "Private Order")
+                                      <div class="col-lg-2">
+                                        <label>DR No</label>
+                                          <input type="text" name="invoiceNumber" class="form-control"  value="{{ $billingStatement['dr_no'] }}" readonly="readonly" />
                                       </div>
                                       @endif
                                       @if($billingStatement['order'] == "Private Order")
@@ -105,24 +113,31 @@
                                         <input type="text" name="wholeLechon" class="form-control"  readonly="readonly" disabled="disabled" value="{{ $billingStatement['whole_lechon'] }}" />
                                       </div>
                                      
-                                      @else
-                                      <div class="col-lg-2">
-                                        <label>Whole Lechon 500/KL</label>
-                                        <input type="text" name="wholeLechon" class="form-control"  value="{{ $billingStatement['whole_lechon'] }}" />
-                                      </div>
                                       @endif 
-                                      @if($billingStatement['order'] != "Private Order")
-                                      <div class="col-lg-4">
-                                        <label>Description</label>
-                                          <input type="text" name="description" class="form-control"  value="{{ $billingStatement['description'] }}" />
+
+                                      <div  class="col-lg-1">
+                                        <label>Qty</label>
+                                        <input type="text" name="qty" class="form-control"  value="{{ $billingStatement['qty']}}" disabled />
+                                      
                                       </div>
-                                      @else
-                                      <div class="col-lg-4">
-                                        <label>Description</label>
-                                          <input type="text" name="descriptionDr" class="form-control"  disabled="disabled" value="{{ $billingStatement['description'] }}" />
+                                      @if($billingStatement['order'] == "Ssp")
+                                      <div  class="col-lg-1">
+                                        <label>Body 400/kls</label>
+                                        <input type="text" name="qty" class="form-control"  value="{{ $billingStatement['body']}}" disabled />
+                                      
+                                      </div>
+                                      <div  class="col-lg-2">
+                                        <label>Head and Feet 200/kls</label>
+                                        <input type="text" name="qty" class="form-control"  value="{{ $billingStatement['head_and_feet']}}" disabled />
+                                      
                                       </div>
                                       @endif
-                                      <div class="col-lg-1">
+                                      <div id="description" class="col-lg-4">
+                                        <label>Description</label>
+                                          <input type="text" name="description" class="form-control"  disabled="disabled" value="{{ $billingStatement['description'] }}" />
+                                      </div>
+                                    
+                                      <div id="amount" class="col-lg-1">
                                         <label>Amount</label>
                                         <input type="text" name="amount" class="form-control" disabled="disabled" value="<?php echo number_format($billingStatement['amount'], 2); ?>" />
                                       </div>
@@ -144,7 +159,7 @@
                 <div class="col-lg-4">
                     <div class="card mb-3">
                           <div class="card-header">
-                              <i class="fas fa-receipt" aria-hidden="true"></i>
+                              <i class="fas fa-plus" aria-hidden="true"></i>
                             Add</div>
                           <div class="card-body">
                                @if(session('SuccessAdd'))
@@ -154,12 +169,10 @@
                                 <form action="{{ action('LoloPinoyLechonDeCebuController@addNewBilling', $billingStatement['id']) }}" method="post">
                                 <div class="form-group">
                                     {{csrf_field()}}
-                                   
-
                                     <div class="form-row">
                                         <div class="col-lg-12">
                                             <label>Date</label>
-                                            <input type="text" name="transactionDate" class="datepicker form-control" required />
+                                            <input type="text" name="transactionDate" class="datepicker form-control" required autocomplete="off" />
                                         </div>
                                         <div class="col-lg-12">
                                           <label>Order</label>
@@ -169,37 +182,64 @@
                                           </select>
                                                 
                                         </div>
-                                        <div  id="invoiceNo" class="col-lg-12">
+                                       
+                                        <div id="invoiceNo" class="col-lg-12">
                                             <label>Invoice #</label>
-                                            <input type="text" name="invoiceNumber" class="form-control" />
+                                            <select data-live-search="true" name="invoiceNumber" class="invoiceSelect form-control selectpicker">
+                                              <option value="0">--Please Select--</option>
+                                              @foreach($getAllSalesInvoices as $getAllSalesInvoice)
+                                              <option value="{{ $getAllSalesInvoice->lechon_de_cebu_code}}">{{ $getAllSalesInvoice->lechon_de_cebu_code}}</option>
+                                              @endforeach
+                                            </select>
+                                        </div>
+                                        <div id="invoiceList" class="col-lg-12">
+                                            <label>Invoice List Id</label>
+                                            <select id="dataInvoice" name="invoiceListId" class="chooseInvoice form-control "> 
+                                            </select>
                                         </div>
                                         <div id="drNo" class="col-lg-12">
                                             <label>DR #</label>
                                             <select data-live-search="true" name="drNo" class="drSelect form-control selectpicker">
                                               <option value="0">--Please Select--</option>
                                               @foreach($drNos as $drNo)
-                                              <option value="{{ $drNo['dr_no']}}">{{ $drNo['dr_no']}}</option>
+                                              <option value="{{ $drNo->lechon_de_cebu_code}}">{{ $drNo->lechon_de_cebu_code}}</option>
                                               @endforeach
                                             </select>	
                                         </div>
-                                        <div id="wholeLechon" class="col-lg-12">
-                                            <label>Whole Lechon 500/KL</label>
-                                            <input type="text" name="wholeLechon" class="form-control"   />
+                                        <div id="drList" class="col-lg-12">
+                                            <label>DR Lists Id</label>
+                                            <select id="dataList" name="drList" class="chooseDr form-control "> 
+                                            </select>
                                         </div>
-                                        <div id="wholeLechon6000" class="col-lg-12">
-                                            <label>Whole Lechon</label>
-                                            <input type="text" name="wholeLechon6000" class="form-control"  disabled />
-                                          
-                                          </div>
-                                        <div id="description"  class="col-lg-12">
+                                        <div id="qty" class="col-lg-12">
+                                          <label>Qty</label>
+                                          <input type="text" name="qty" class="form-control"  readonly="readonly" />
+                                        
+                                        </div>
+                                        <div id="body" class="col-lg-12">
+                                          <label>Body 400/kls</label>
+                                          <input type="text" name="body" class="form-control"  readonly="readonly" />
+                                        
+                                        </div>
+                                        <div id="headFeet" class="col-lg-12">
+                                          <label>Head & Feet 200/KLS</label>
+                                          <input type="text" name="headFeet" class="form-control"  readonly="readonly" />
+                                        
+                                        </div>
+                                        <div id="descriptionAdd"  class="col-lg-12">
                                             <label>Description</label>
-                                            <input type="text" name="description" class="form-control"  />
+                                            <input type="text" name="description" class="form-control"  readonly="readonly" />
                                         </div>
-                                        <div id="descriptionDrNo" class="col-lg-12">
-                                          <label>Description</label>
-                                          <input type="text" name="descriptionDrNo" class="form-control"  disabled />
-                                          
+                                        <div id="price" class="col-lg-12">
+                                            <label>Whole Lechon</label>
+                                            <input type="text" name="wholeLechon" class="form-control"  readonly="readonly" />
                                         </div>
+                                       
+                                        <div id="amountAdd"  class="col-lg-12">
+                                            <label>Amount</label>
+                                            <input type="text" name="amount"  class="form-control" readonly="readonly" />
+                                        </div>
+                                       
                                        
                                     </div>
                                 </div>
@@ -231,59 +271,62 @@
                                     <input name="_method" type="hidden" value="PATCH">
 
                                     <div id="deletedId{{ $bStatement['id'] }}" class="form-row">
-                                        @if($bStatement['order'] == "Private Order")
+                                       
                                         <div class="col-lg-2">
                                             <label>Date</label>
-                                            <input type="text" name="transactionDate" class="form-control" readonly="readonly" value="{{ $bStatement['date_of_transaction'] }}" />
+                                            <input type="text" name="transactionDate" class="form-control" disabled="disabled" value="{{ $bStatement['date_of_transaction'] }}" />
                                         </div>
-                                        @else
-                                        <div class="col-lg-2">
-                                            <label>Date</label>
-                                            <input type="text" name="transactionDate" class="form-control" value="{{ $bStatement['date_of_transaction'] }}" />
-                                        </div>
-                                        @endif
+                                       
                                         @if($bStatement['order'] != "Private Order")
                                         <div class="col-lg-2">
                                             <label>Invoice #</label>
-                                            <input type="text" name="invoiceNumber" class="form-control" value="{{ $bStatement['invoice_number'] }}" />
+                                            <input type="text" name="invoiceNumber" class="form-control" disabled="disbled" value="{{ $bStatement['invoice_number'] }}" />
                                         </div>
-                                       @else  
-                                    
                                        @endif
+                                       @if($bStatement['order'] == "Private Order")
+                                        <div class="col-lg-2">
+                                            <label>DR No</label>
+                                            <input type="text" name="drNo" class="form-control" disabled="disbled" value="{{ $bStatement['dr_no'] }}" />
+                                        </div>
+                                       @endif
+                                       <div class="col-lg-1">
+                                            <label>Qty</label>
+                                            <input type="text" name="qty" class="form-control" value="{{ $bStatement['qty'] }}" disabled="diasabled" />
+                                        </div>
+                                        @if($bStatement['order'] == "Ssp")
+                                        <div class="col-lg-2">
+                                            <label>Body</label>
+                                            <input type="text" name="body" class="form-control" value="{{ $bStatement['body'] }}" disabled="diasabled" />
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <label>Head and Feet 200/kls</label>
+                                            <input type="text" name="body" class="form-control" value="{{ $bStatement['head_and_feet'] }}" disabled="diasabled" />
+                                        </div>
+                                        @endif 
                                         @if($bStatement['order'] == "Private Order")
                                         <div class="col-lg-4">
                                             <label>Whole Lechon</label>
                                             <input type="text" name="wholeLechon" class="form-control" readonly="readonly" value="{{ $bStatement['whole_lechon'] }}" />
                                         </div>
-                                        @else
-                                        <div class="col-lg-4">
-                                            
-                                            <label>Whole Lechon 500/KL</label>
-                                            <input type="text" name="wholeLechon" class="form-control"  value="{{ $bStatement['whole_lechon'] }}" />
-                                        </div>
                                         @endif
-                                        @if($bStatement['order'] == "Private Order")
-                                        <div class="col-lg-4">
+                                       
+                                        <div class="col-lg-6">
                                             <label>Description</label>
-                                            <input type="text" name="description" class="form-control" readonly="readonly"  value="{{ $bStatement['description'] }}" />
+                                            <input type="text" name="description" class="form-control"  disabled="disabled" value="{{ $bStatement['description'] }}" />
                                         </div>
-                                        @else
-                                        <div class="col-lg-4">
-                                            <label>Description</label>
-                                            <input type="text" name="description" class="form-control"  value="{{ $bStatement['description'] }}" />
-                                        </div>
-                                        @endif
+                                       
                                         <div class="col-lg-2">
                                             <label>Amount</label>
                                             <input type="text" name="amount" class="form-control" disabled="disabled" value="<?php echo number_format($bStatement['amount'], 2); ?>" />
                                         </div>
                                         <div class="col-lg-4">
                                           <br>
-                                          <input type="hidden" name="billingStatementId" value="{{ $billingStatement['id'] }}" />
+                                          <input type="hidden" id="billingStatementId" name="billingStatementId" value="{{ $billingStatement['id'] }}" />
                                           @if($bStatement['order'] != "Private Order")
                                           <input type="submit" class="btn btn-success" value="Update" />
                                           @endif
                                           @if(Auth::user()['role_type'] == 1)
+                                         
                                           <a id="delete" onClick="confirmDelete('{{ $bStatement['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
                                           @endif
                                         </div>
@@ -324,59 +367,220 @@
     }
   }) 
 </script>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
    $("#drNo").hide();
-    $("#wholeLechon6000").hide();
+    $("#price").hide();
     $("#descriptionDrNo").hide();
-
+    $("#drList").hide();
+   
     $(".chooseOption").change(function(){
          const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
          if(cat === "Ssp"){
              $("#invoiceNo").show();
              $("#wholeLechon").show();
              $("#description").show();
+             $("#invoiceList").show();
+             $("#qty").show();
+             $("#body").show();
+             $("#headFeet").show();
 
              $("#drNo").hide();
-             $("#wholeLechon6000").hide();
-             $("#descriptionDrNo").hide();
+             $("#price").hide();
+             $("#description").hide();
+             $("#drList").hide();
          }else if(cat === "Private Order"){
              $("#drNo").show();
-             $("#wholeLechon6000").show();
-             $("#descriptionDrNo").show();
+             $("#price").show();
+             $("#description").show();
+             $("#drList").show();
+             $("#qty").show();
+
              $("#invoiceNo").hide();
+             $("#invoiceList").hide();
+
+             $("#body").hide();
+             $("#headFeet").hide();
+             $("#amountAdd").hide();
              $("#wholeLechon").hide();
              $("#description").hide();
          }  
     });
 
+    $(".invoiceSelect").change(function(){
+        <?php
+          $moduleName = "Sales Invoice";
+          $salesInvoices = DB::table(
+                                  'lechon_de_cebu_sales_invoices')
+                                  ->select(
+                                      'lechon_de_cebu_sales_invoices.id',
+                                      'lechon_de_cebu_sales_invoices.user_id',
+                                      'lechon_de_cebu_sales_invoices.si_id',
+                                      'lechon_de_cebu_sales_invoices.invoice_number',
+                                      'lechon_de_cebu_sales_invoices.sales_invoice_number',
+                                      'lechon_de_cebu_sales_invoices.date',
+                                      'lechon_de_cebu_sales_invoices.ordered_by',
+                                      'lechon_de_cebu_sales_invoices.address',
+                                      'lechon_de_cebu_sales_invoices.qty',
+                                      'lechon_de_cebu_sales_invoices.total_kls',
+                                      'lechon_de_cebu_sales_invoices.body',
+                                      'lechon_de_cebu_sales_invoices.head_and_feet',
+                                      'lechon_de_cebu_sales_invoices.item_description',
+                                      'lechon_de_cebu_sales_invoices.unit_price',
+                                      'lechon_de_cebu_sales_invoices.amount',
+                                      'lechon_de_cebu_sales_invoices.created_by',
+                                      'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                      'lechon_de_cebu_codes.module_id',
+                                      'lechon_de_cebu_codes.module_code',
+                                      'lechon_de_cebu_codes.module_name')
+                                  ->join('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+                                  ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
+                                  ->orderBy('lechon_de_cebu_sales_invoices.id', 'desc')
+                                  ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                                  ->get()->toArray();
+        
+        ?>
+        const invoice = $(this).children("option:selected").val();
+        <?php foreach($salesInvoices as $salesInvoice): ?>
+          if(invoice === "<?php echo $salesInvoice->lechon_de_cebu_code?>"){
+               <?php 
+                  $getSIInsides = DB::table(
+                                    'lechon_de_cebu_sales_invoices')
+                                    ->where('sales_invoice_number', $salesInvoice->sales_invoice_number)
+                                    ->get(); ?>
+              <?php foreach($getSIInsides as $getSIInside): ?>
+                 $("#dataInvoice").append(  
+                          `<option value="<?php echo $getSIInside->id?>"><?php echo $getSIInside->id?></option>
+                          `);
+                  $(".chooseInvoice").change(function(){
+                      const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
+                      <?php 
+                              $datas  = DB::table(
+                                      'lechon_de_cebu_sales_invoices')
+                                      ->where('id', $getSIInside->id)
+                                      ->get(); ?>
+
+                      <?php foreach($datas as $data): ?>
+                            if(cat === "<?php echo $data->id?>"){
+                              $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $data->qty; ?>" class="form-control" readonly="readonly" />');
+                              $("#body").html('<label> Body 400/kls</label><input type="text" name="body" value="<?php echo $data->body; ?>" class="form-control" readonly="readonly" />');
+                              $("#headFeet").html('<label> Head & Feet 200/KLS</label><input type="text" name="headFeet" value="<?php echo $data->head_and_feet; ?>" class="form-control" readonly="readonly" />');
+                              
+                              $("#descriptionAdd").html('<label>Description</label><input type="text" name="description" value="<?php echo $data->item_description; ?>" class="form-control" readonly="readonly" />');
+                              $("#amountAdd").html('<label>Amount</label><input type="text" name="amount" value="<?php echo $data->amount; ?>" class="form-control" readonly="readonly" />');
+         
+                            }
+                      <?php endforeach;?>
+                  });
+              <?php endforeach; ?>
+
+            $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $salesInvoice->qty; ?>" class="form-control" readonly="readonly" />');
+            $("#body").html('<label> Body 400/kls</label><input type="text" name="body" value="<?php echo $salesInvoice->body; ?>" class="form-control" readonly="readonly" />');
+            $("#headFeet").html('<label> Head & Feet 200/KLS</label><input type="text" name="headFeet" value="<?php echo $salesInvoice->head_and_feet; ?>" class="form-control" readonly="readonly" />');
+            
+            $("#descriptionAdd").html('<label>Description</label><input type="text" name="description" value="<?php echo $salesInvoice->item_description; ?>" class="form-control" readonly="readonly" />');
+            $("#amountAdd").html('<label>Amount</label><input type="text" name="amount" value="<?php echo $salesInvoice->amount; ?>" class="form-control" readonly="readonly" />');
+         
+          }
+        <?php endforeach; ?>
+        
+    });
+
     $(".drSelect").change(function(){
-         <?php
-          $getDrNos = DB::table(
-                        'lechon_de_cebu_delivery_receipts')
-                        ->where('dr_id', NULL)
-                        ->get();?>
+      <?php
+             $moduleName = "Delivery Receipt"; 
+             $getDrNos = DB::table(
+                             'lechon_de_cebu_delivery_receipts')
+                             ->select( 
+                             'lechon_de_cebu_delivery_receipts.id',
+                             'lechon_de_cebu_delivery_receipts.user_id',
+                             'lechon_de_cebu_delivery_receipts.dr_id',
+                             'lechon_de_cebu_delivery_receipts.dr_no',
+                             'lechon_de_cebu_delivery_receipts.sold_to',
+                             'lechon_de_cebu_delivery_receipts.delivered_to',
+                             'lechon_de_cebu_delivery_receipts.time',
+                             'lechon_de_cebu_delivery_receipts.date',
+                             'lechon_de_cebu_delivery_receipts.date_to_be_delivered',
+                             'lechon_de_cebu_delivery_receipts.contact_person',
+                             'lechon_de_cebu_delivery_receipts.mobile_num',
+                             'lechon_de_cebu_delivery_receipts.qty',
+                             'lechon_de_cebu_delivery_receipts.description',
+                             'lechon_de_cebu_delivery_receipts.price',
+                             'lechon_de_cebu_delivery_receipts.total',
+                             'lechon_de_cebu_delivery_receipts.special_instruction',
+                             'lechon_de_cebu_delivery_receipts.consignee_name',
+                             'lechon_de_cebu_delivery_receipts.consignee_contact_num',
+                             'lechon_de_cebu_delivery_receipts.prepared_by',
+                             'lechon_de_cebu_delivery_receipts.checked_by',
+                             'lechon_de_cebu_delivery_receipts.received_by',
+                             'lechon_de_cebu_delivery_receipts.duplicate_status',
+                             'lechon_de_cebu_delivery_receipts.created_by',
+                             'lechon_de_cebu_codes.lechon_de_cebu_code',
+                             'lechon_de_cebu_codes.module_id',
+                             'lechon_de_cebu_codes.module_code',
+                             'lechon_de_cebu_codes.module_name')
+                             ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
+                             ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
+                             ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                             ->get();
+     
+          ?>
 
         var dr = $(this).children("option:selected").val();
         <?php foreach($getDrNos as $key=>$getDrNo ): ?>
-             if(dr === "<?php echo $getDrNo->dr_no?>"){
-                $("#wholeLechon6000").html('<label>Whole Lechon</label><input type="text" name="wholeLechon6000" value="<?php echo $getDrNo->price; ?>" class="form-control" readonly="readonly" />');
-                $("#descriptionDrNo").html('<label>Description</label><input type="text" name="descriptionDrNo" value="<?php echo $getDrNo->description; ?>" class="form-control" readonly="readonly" />');
+             if(dr === "<?php echo $getDrNo->lechon_de_cebu_code?>"){
+              <?php 
+                    $getDrNosInsides = DB::table(
+                                    'lechon_de_cebu_delivery_receipts')
+                                    ->where('dr_no', $getDrNo->dr_no)
+                                    
+                                    ->get(); ?>
+                
+                <?php foreach($getDrNosInsides as $getDrNosInside):?>
+                      $("#dataList").append(  
+                          `<option value="<?php echo $getDrNosInside->id?>"><?php echo $getDrNosInside->id?></option>
+                          `);
+                        
+                        $(".chooseDr").change(function(){
+                            const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
+                            <?php 
+                              $datas  = DB::table(
+                                      'lechon_de_cebu_delivery_receipts')
+                                      ->where('id', $getDrNosInside->id)
+                                      ->get(); ?>
+
+                               <?php foreach($datas as $data): ?>
+                                     if(cat === "<?php echo $data->id?>"){
+                                          $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $data->qty; ?>" class="form-control" readonly="readonly" />');
+                                          $("#price").html('<label>Whole Lechon</label><input type="text" name="price" value="<?php echo $data->price; ?>" class="form-control" readonly="readonly" />');
+                                          $("#descriptionAdd").html('<label>Description</label><input type="text" name="description" value="<?php echo $data->description; ?>" class="form-control" readonly="readonly" />');
+            
+                                     }
+                               <?php endforeach;?>
+                        });       
+
+                  <?php endforeach; ?>  
+                  $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $data->qty; ?>" class="form-control" readonly="readonly" />');
+                
+                $("#price").html('<label>Whole Lechon</label><input type="text" name="price" value="<?php echo $getDrNo->price; ?>" class="form-control" readonly="readonly" />');
+                $("#descriptionAdd").html('<label>Description</label><input type="text" name="description" value="<?php echo $getDrNo->description; ?>" class="form-control" readonly="readonly" />');
              }
            
         <?php endforeach; ?>
     });
 
    const confirmDelete = (id) =>{
+     const billingStatementId =  $("#billingStatementId").val();
       var x = confirm("Do you want to delete this?");
         if(x){
             $.ajax({
               type: "DELETE",
-              url: '/lolo-pinoy-lechon-de-cebu/delete-billing-statement/' + id,
+              url: '/lolo-pinoy-lechon-de-cebu/delete-data-billing-statement/' + id,
               data:{
                 _method: 'delete', 
                 "_token": "{{ csrf_token() }}",
-                "id": id
+                "id": id,
+                "billingStatementId":billingStatementId
+                
               },
               success: function(data){
                 console.log(data);

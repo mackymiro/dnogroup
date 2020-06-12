@@ -153,8 +153,10 @@
                               <table  >
                                 <thead>
                                   <tr>
-                                  <th style="width:30%;">Prepared By</th>
-                                  <th>Approved By</th>
+                                      <th style="width:30%;">Prepared By</th>
+                                      <th>Checked By</th></th>
+                                      <th>Approved By</th>
+                                      <th>Date</th>
                                   </tr>
                                 </thead>
                                 <tbody>
@@ -166,14 +168,44 @@
                                     </td>
                                     <td>
                                       ________________________<br>
-                                      Aprilane Maturan<br>
+                                      Aprilane Q Maturan<br>
                                       Finance Officer
                                     </td>
+                                    <td>
+                           						________________________<br>
+                           						
+                           					</td>
+                                    <td>
+                           						________________________<br>
+                           						
+                           					</td>
                                     
                                   </tr>
                                 </tbody>
                               </table>
                             
+                           </div>
+                           <div style="margin-top:100px;">
+                           		<table  >
+                           			<thead>
+                           				<tr>
+                       						<th style="width:30%;">Received By</th>
+										
+                           				</tr>
+                           			</thead>
+                           			<tbody>
+                           				<tr>
+                           					<td>
+                           						________________________<br>
+                           						
+
+                           					</td>
+                           				
+                           					
+                           				</tr>
+                           			</tbody>
+                           		</table>
+                           	
                            </div>
 
              </div>

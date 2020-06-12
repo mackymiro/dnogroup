@@ -13,6 +13,15 @@
     -webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px; 
 	} 
 </style> 
+<script>
+    $(function() {
+        $( ".datepicker" ).datepicker();
+    });
+</script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="wrapper">
 	<!-- Sidebar -->
      @include('sidebar.sidebar')
@@ -44,7 +53,7 @@
                                     <div class="col-md-2">
                                         
                                         <label>Date</label>
-                                        <input type="text" name="date" class="selcls form-control" required="required" />
+                                        <input type="text" name="date" class="datepicker selcls form-control" required="required" />
 										@if($errors->has('date'))
 		                                  <span class="alert alert-danger">
 		                                    <strong>{{ $errors->first('date') }}</strong>
@@ -102,8 +111,10 @@
                          		</div>
                          	</div>
                          	<div>
-	  	 				      <input type="submit" class="btn btn-success float-right" value="Add Sales Invoice" />
-		  	 			    </div>
+	  	 				     
+							   <button type="submit" class="btn btn-success float-right btn-lg"><i class="fas fa-save"></i> Save Sales Invoice</button>
+		  	 			    	<br>
+							</div>
 		  	 				</form>
                          </div>
             		</div>

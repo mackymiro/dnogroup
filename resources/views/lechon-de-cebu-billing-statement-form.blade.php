@@ -113,32 +113,56 @@
                                       <label>Order</label>
                                         <select name="choose" class="chooseOption form-control" >
                                         <option value="Ssp">Ssp</option>
-                                          <option value="Private Order">Private Order</option>
-                                          
+                                        <option value="Private Order">Private Order</option> 
                                         </select>
                                       
                                   </div>
-                                  
                                   <div id="invoiceNo" class="col-lg-2">
                                       <label>Invoice #</label>
-                                      <input type="text" name="invoiceNumber" class="form-control"  />
+                                      <select data-live-search="true" name="invoiceNumber" class="invoiceSelect form-control selectpicker">
+                                        <option value="0">--Please Select--</option>
+                                        @foreach($getAllSalesInvoices as $getAllSalesInvoice)
+                                        <option value="{{ $getAllSalesInvoice->lechon_de_cebu_code}}">{{ $getAllSalesInvoice->lechon_de_cebu_code}}</option>
+                                        @endforeach
+                                      </select>
                                   </div>
                                   <div id="drNo" class="col-lg-2">
                                       <label>DR #</label>
                                       <select data-live-search="true" name="drNo" class="drSelect form-control selectpicker">
                                         <option value="0">--Please Select--</option>
                                         @foreach($drNos as $drNo)
-                                        <option value="{{ $drNo['dr_no']}}">{{ $drNo['dr_no']}}</option>
+                                        <option value="{{ $drNo->lechon_de_cebu_code}}">{{ $drNo->lechon_de_cebu_code}}</option>
                                         @endforeach
                                       </select>	
                                   </div>
-                                <div id="wholeLechon" class="col-lg-4">
-                                  <label>Whole Lechon 500/KL</label>
-                                  <input type="text" name="wholeLechon" class="form-control" />
-                               
+                                <div id="drList" class="col-lg-2">
+                                    <label>DR Lists Id</label>
+                                    <select id="dataList" name="drList" class="chooseDr form-control "> 
+                                    </select>
+                                </div>
+                                <div id="invoiceList" class="col-lg-2">
+                                    <label>Invoice List Id</label>
+                                    <select id="dataInvoice" name="drList" class="chooseInvoice form-control "> 
+                                    </select>
+                                </div>
+                      
+                                <div id="qty" class="col-lg-1">
+                                  <label>Qty</label>
+                                  <input type="text" name="qty" class="form-control"  disabled />
+                                 
+                                </div>
+                                <div id="body" class="col-lg-1">
+                                  <label>Body 400/kls</label>
+                                  <input type="text" name="body" class="form-control"  disabled />
+                                 
+                                </div>
+                                <div id="headFeet" class="col-lg-2">
+                                  <label>Head & Feet 200/KLS</label>
+                                  <input type="text" name="headFeet" class="form-control"  disabled />
+                                 
                                 </div>
                                 <div id="wholeLechon6000" class="col-lg-4">
-                                  <label>Whole Lechon</label>
+                                  <label>Whole Lechon </label>
                                   <input type="text" name="wholeLechon6000" class="form-control"  disabled />
                                  
                                 </div>
@@ -152,7 +176,11 @@
                                   <input type="text" name="descriptionDrNo" class="form-control"  disabled />
                                   
                                 </div>
-                                
+                                <div id="amount" class="col-lg-1">
+                                  <label>Amount</label>
+                                  <input type="text" name="amount" class="form-control"  disabled />
+                                 
+                                </div>
                                
                             </div>
                             <br>
@@ -184,40 +212,203 @@
     $("#drNo").hide();
     $("#wholeLechon6000").hide();
     $("#descriptionDrNo").hide();
+    $("#drList").hide();
+   
+    $("#wholeLechon").hide();
     $(".chooseOption").change(function(){
          const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
          if(cat === "Ssp"){
              $("#invoiceNo").show();
              $("#wholeLechon").show();
              $("#description").show();
-
+             $("#body").show();
+             $("#headFeet").show();
+             $("#qty").show();
+             $("#invoiceList").show();
+             $("#amount").show();
+             
              $("#drNo").hide();
              $("#wholeLechon6000").hide();
+             $("#wholeLechon").hide();
              $("#descriptionDrNo").hide();
+             $("#drList").hide();
          }else if(cat === "Private Order"){
              $("#drNo").show();
              $("#wholeLechon6000").show();
              $("#descriptionDrNo").show();
+             $("#drList").show();
+             $("#qty").show();
              $("#invoiceNo").hide();
+             $("#body").hide();
+             $("#headFeet").hide();
+             $("#amount").hide();
              $("#wholeLechon").hide();
              $("#description").hide();
+             $("#invoiceList").hide();
          }  
     });
 
+    $(".invoiceSelect").change(function(){
+        <?php
+          $moduleName = "Sales Invoice";
+          $salesInvoices = DB::table(
+                                  'lechon_de_cebu_sales_invoices')
+                                  ->select(
+                                      'lechon_de_cebu_sales_invoices.id',
+                                      'lechon_de_cebu_sales_invoices.user_id',
+                                      'lechon_de_cebu_sales_invoices.si_id',
+                                      'lechon_de_cebu_sales_invoices.invoice_number',
+                                      'lechon_de_cebu_sales_invoices.sales_invoice_number',
+                                      'lechon_de_cebu_sales_invoices.date',
+                                      'lechon_de_cebu_sales_invoices.ordered_by',
+                                      'lechon_de_cebu_sales_invoices.address',
+                                      'lechon_de_cebu_sales_invoices.qty',
+                                      'lechon_de_cebu_sales_invoices.total_kls',
+                                      'lechon_de_cebu_sales_invoices.body',
+                                      'lechon_de_cebu_sales_invoices.head_and_feet',
+                                      'lechon_de_cebu_sales_invoices.item_description',
+                                      'lechon_de_cebu_sales_invoices.unit_price',
+                                      'lechon_de_cebu_sales_invoices.amount',
+                                      'lechon_de_cebu_sales_invoices.created_by',
+                                      'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                      'lechon_de_cebu_codes.module_id',
+                                      'lechon_de_cebu_codes.module_code',
+                                      'lechon_de_cebu_codes.module_name')
+                                  ->join('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+                                  ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
+                                  ->orderBy('lechon_de_cebu_sales_invoices.id', 'desc')
+                                  ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                                  ->get()->toArray();
+        
+        ?>
+        const invoice = $(this).children("option:selected").val();
+        <?php foreach($salesInvoices as $salesInvoice): ?>
+          if(invoice === "<?php echo $salesInvoice->lechon_de_cebu_code?>"){
+               <?php 
+                  $getSIInsides = DB::table(
+                                    'lechon_de_cebu_sales_invoices')
+                                    ->where('sales_invoice_number', $salesInvoice->sales_invoice_number)
+                                    ->get(); ?>
+              <?php foreach($getSIInsides as $getSIInside): ?>
+                 $("#dataInvoice").append(  
+                          `<option value="<?php echo $getSIInside->id?>"><?php echo $getSIInside->id?></option>
+                          `);
+                  $(".chooseInvoice").change(function(){
+                      const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
+                      <?php 
+                              $datas  = DB::table(
+                                      'lechon_de_cebu_sales_invoices')
+                                      ->where('id', $getSIInside->id)
+                                      ->get(); ?>
+
+                      <?php foreach($datas as $data): ?>
+                            if(cat === "<?php echo $data->id?>"){
+                              $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $data->qty; ?>" class="form-control" readonly="readonly" />');
+                              $("#body").html('<label> Body 400/kls</label><input type="text" name="body" value="<?php echo $data->body; ?>" class="form-control" readonly="readonly" />');
+                              $("#headFeet").html('<label> Head & Feet 200/KLS</label><input type="text" name="headFeet" value="<?php echo $data->head_and_feet; ?>" class="form-control" readonly="readonly" />');
+                              
+                              $("#description").html('<label>Description</label><input type="text" name="description" value="<?php echo $data->item_description; ?>" class="form-control" readonly="readonly" />');
+                              $("#amount").html('<label>Amount</label><input type="text" name="amount" value="<?php echo $data->amount; ?>" class="form-control" readonly="readonly" />');
+         
+                            }
+                      <?php endforeach;?>
+                  });
+              <?php endforeach; ?>
+
+            $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $salesInvoice->qty; ?>" class="form-control" readonly="readonly" />');
+            $("#body").html('<label> Body 400/kls</label><input type="text" name="body" value="<?php echo $salesInvoice->body; ?>" class="form-control" readonly="readonly" />');
+            $("#headFeet").html('<label> Head & Feet 200/KLS</label><input type="text" name="headFeet" value="<?php echo $salesInvoice->head_and_feet; ?>" class="form-control" readonly="readonly" />');
+            
+            $("#description").html('<label>Description</label><input type="text" name="description" value="<?php echo $salesInvoice->item_description; ?>" class="form-control" readonly="readonly" />');
+            $("#amount").html('<label>Amount</label><input type="text" name="amount" value="<?php echo $salesInvoice->amount; ?>" class="form-control" readonly="readonly" />');
+         
+          }
+        <?php endforeach; ?>
+        
+    });
+
     $(".drSelect").change(function(){
-         <?php
-          $getDrNos = DB::table(
-                        'lechon_de_cebu_delivery_receipts')
-                        ->where('dr_id', NULL)
-                        ->get();?>
-        var dr = $(this).children("option:selected").val();
-        <?php foreach($getDrNos as $key=>$getDrNo ): ?>
-             if(dr === "<?php echo $getDrNo->dr_no?>"){
+        <?php
+             $moduleName = "Delivery Receipt"; 
+             $getDrNos = DB::table(
+                             'lechon_de_cebu_delivery_receipts')
+                             ->select( 
+                             'lechon_de_cebu_delivery_receipts.id',
+                             'lechon_de_cebu_delivery_receipts.user_id',
+                             'lechon_de_cebu_delivery_receipts.dr_id',
+                             'lechon_de_cebu_delivery_receipts.dr_no',
+                             'lechon_de_cebu_delivery_receipts.sold_to',
+                             'lechon_de_cebu_delivery_receipts.delivered_to',
+                             'lechon_de_cebu_delivery_receipts.time',
+                             'lechon_de_cebu_delivery_receipts.date',
+                             'lechon_de_cebu_delivery_receipts.date_to_be_delivered',
+                             'lechon_de_cebu_delivery_receipts.contact_person',
+                             'lechon_de_cebu_delivery_receipts.mobile_num',
+                             'lechon_de_cebu_delivery_receipts.qty',
+                             'lechon_de_cebu_delivery_receipts.description',
+                             'lechon_de_cebu_delivery_receipts.price',
+                             'lechon_de_cebu_delivery_receipts.total',
+                             'lechon_de_cebu_delivery_receipts.special_instruction',
+                             'lechon_de_cebu_delivery_receipts.consignee_name',
+                             'lechon_de_cebu_delivery_receipts.consignee_contact_num',
+                             'lechon_de_cebu_delivery_receipts.prepared_by',
+                             'lechon_de_cebu_delivery_receipts.checked_by',
+                             'lechon_de_cebu_delivery_receipts.received_by',
+                             'lechon_de_cebu_delivery_receipts.duplicate_status',
+                             'lechon_de_cebu_delivery_receipts.created_by',
+                             'lechon_de_cebu_codes.lechon_de_cebu_code',
+                             'lechon_de_cebu_codes.module_id',
+                             'lechon_de_cebu_codes.module_code',
+                             'lechon_de_cebu_codes.module_name')
+                             ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
+                             ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
+                             ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                             ->get();
+     
+          ?>
+        const dr = $(this).children("option:selected").val();
+        <?php foreach($getDrNos as $getDrNo ): ?>
+             if(dr === "<?php echo $getDrNo->lechon_de_cebu_code?>"){
+                <?php 
+                    $getDrNosInsides = DB::table(
+                                    'lechon_de_cebu_delivery_receipts')
+                                    ->where('dr_no', $getDrNo->dr_no)
+                                    ->get(); ?>
+
+                 
+                  <?php foreach($getDrNosInsides as $getDrNosInside):?>
+                      $("#dataList").append(  
+                          `<option value="<?php echo $getDrNosInside->id?>"><?php echo $getDrNosInside->id?></option>
+                          `);
+                        
+                        $(".chooseDr").change(function(){
+                            const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
+                            <?php 
+                              $datas  = DB::table(
+                                      'lechon_de_cebu_delivery_receipts')
+                                      ->where('id', $getDrNosInside->id)
+                                      ->get(); ?>
+
+                               <?php foreach($datas as $data): ?>
+                                     if(cat === "<?php echo $data->id?>"){
+                                          $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $data->qty; ?>" class="form-control" readonly="readonly" />');
+                                          $("#wholeLechon6000").html('<label>Whole Lechon</label><input type="text" name="wholeLechon6000" value="<?php echo $data->price; ?>" class="form-control" readonly="readonly" />');
+                                          $("#descriptionDrNo").html('<label>Description</label><input type="text" name="descriptionDrNo" value="<?php echo $data->description; ?>" class="form-control" readonly="readonly" />');
+            
+                                     }
+                               <?php endforeach;?>
+                        });       
+
+                    <?php endforeach; ?>    
+                $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $getDrNo->qty; ?>" class="form-control" readonly="readonly" />');
                 $("#wholeLechon6000").html('<label>Whole Lechon</label><input type="text" name="wholeLechon6000" value="<?php echo $getDrNo->price; ?>" class="form-control" readonly="readonly" />');
                 $("#descriptionDrNo").html('<label>Description</label><input type="text" name="descriptionDrNo" value="<?php echo $getDrNo->description; ?>" class="form-control" readonly="readonly" />');
              }
            
         <?php endforeach; ?>
+        
+    
+    
     });
 </script>
 <script>

@@ -49,7 +49,7 @@ class DongFangCorporationController extends Controller
          $getParticulars = DongFangCorporationPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
         
 
-        return view('view-dong-fang-payable-details', compact('user', 'viewPaymentDetail', 'getViewPaymentDetails', 'getParticulars'));
+        return view('view-dong-fang-payable-details', compact('viewPaymentDetail', 'getViewPaymentDetails', 'getParticulars'));
    
     }
 

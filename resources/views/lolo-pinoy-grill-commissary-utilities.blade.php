@@ -300,7 +300,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" onclick="closeInternet()" class="btn btn-danger" data-dismiss="modal">Close</button>
-                <button type="button" onclick="saveInternet()" class="btn btn-success">Add MCWD </button>
+                <button type="button" onclick="saveInternet()" class="btn btn-success">Add Internet </button>
             </div>
         </div>
     </div>

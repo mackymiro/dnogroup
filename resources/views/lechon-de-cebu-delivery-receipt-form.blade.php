@@ -50,6 +50,11 @@
                         		{{ csrf_field() }}
                         	<div class="form-group">
                         		<div class="form-row">
+                                    <div class="col-md-2">
+                    					<label>Date</label>
+                    					<input type="text" name="date" class="datepicker selcls form-control" autocomplete="off" />
+                    					
+                    				</div>
                     				<div class="col-md-4">
                     					<label>Sold To</label>
                     					<input type="text" name="soldTo" class="selcls form-control" required="required" />
@@ -78,18 +83,20 @@
                     					<label>Delivered To</label>
                     					<input type="text" name="deliveredTo" class="selcls form-control" />
                     				</div>
+                                    <div class="col-md-4">
+                        				<label>Contact Person</label>
+                        				<input type="text" name="contactPerson" class="selcls form-control" />
+                        			</div>
+                                    <div class="col-md-2">
+                        				<label>Mobile #</label>
+                        				<input type="" name="mobile" class="selcls form-control" />
+                        			</div>
                         		</div>
                         	</div>
                         	<div class="form-group">
                         		<div class="form-row">
-                        			<div class="col-md-4">
-                        				<label>Contact Person</label>
-                        				<input type="text" name="contactPerson" class="selcls form-control" />
-                        			</div>
-                        			<div class="col-md-2">
-                        				<label>Mobile #</label>
-                        				<input type="" name="mobile" class="selcls form-control" />
-                        			</div>
+                        			
+                        			
                         			<div class="col-md-4">
                         				<label>Special Instruction/Request</label>
                         				<input type="text" name="specialInstruction" class="selcls form-control" />
@@ -113,6 +120,10 @@
                     				<div class="col-md-1">
                 						<label>QTY</label>
                 						<input type="text" name="qty" class="selcls form-control" required="required" />
+                    				</div>
+                                    <div class="col-md-1">
+                						<label>Unit</label>
+                						<input type="text" name="unit" class="selcls form-control" required="required" />
                     				</div>
                     				<div class="col-md-4">
                     					<label>Description</label>

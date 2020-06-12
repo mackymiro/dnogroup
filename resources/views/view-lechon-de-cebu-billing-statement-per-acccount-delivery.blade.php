@@ -29,7 +29,7 @@
                                   View Billing Statement Delivery
                              <div class="float-right">
                                
-                                 <a href="{{ action('LoloPinoyLechonDeCebuController@printBillingDelivery', $viewDeliveryReceipt['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                                 <a href="{{ action('LoloPinoyLechonDeCebuController@printBillingDelivery', $viewDeliveryReceipt[0]->id) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                                
                               </div>
                         </div>
@@ -41,19 +41,19 @@
                                       <thead>
                                           <tr>
                                               <th width="30%">Bill To</th>
-                                              <th>{{ $viewDeliveryReceipt['sold_to'] }}</th>
+                                              <th>{{ $viewDeliveryReceipt[0]->sold_to }}</th>
                                           </tr>
                                           <tr>
                                               <th>Delivered To</th>
-                                              <th>{{ $viewDeliveryReceipt['delivered_to']}}</th>
+                                              <th>{{ $viewDeliveryReceipt[0]->delivered_to }}</th>
                                           </tr>
                                           <tr> 
                                               <th>Contact Person</th>
-                                              <th>{{ $viewDeliveryReceipt['contact_person'] }}</th>
+                                              <th>{{ $viewDeliveryReceipt[0]->contact_person }}</th>
                                           </tr>
                                           <tr>
                                               <th>Time</th>
-                                              <th>{{ $viewDeliveryReceipt['time'] }}</th>
+                                              <th>{{ $viewDeliveryReceipt[0]->time }}</th>
                                           </tr>
                                          
                                       </thead>
@@ -65,19 +65,19 @@
                                   <thead>
                                       <tr>
                                           <th width="30%">Mobile #</th>
-                                          <th>{{ $viewDeliveryReceipt['mobile_num']}}</th>
+                                          <th>{{ $viewDeliveryReceipt[0]->mobile_num}}</th>
                                       </tr>
                                       <tr> 
                                           <th>DR No</th>
-                                          <th>{{ $viewDeliveryReceipt['dr_no'] }}</th>
+                                          <th>{{ $viewDeliveryReceipt[0]->lechon_de_cebu_code }}</th>
                                       </tr> 
                                        <tr>
                                           <th>Date</th>
-                                          <th>{{ $viewDeliveryReceipt['date'] }}</th>
+                                          <th>{{ $viewDeliveryReceipt[0]->date }}</th>
                                        </tr>
                                         <tr>
                                           <th>Date To Be Delivered</th>
-                                          <th>{{ $viewDeliveryReceipt['date_to_be_delivered'] }}</th>
+                                          <th>{{ $viewDeliveryReceipt[0]->date_to_be_delivered }}</th>
                                        </tr>
                                   </thead>
                               </table>
@@ -95,9 +95,9 @@
                                   </thead>
                                   <tbody>
                                      <tr>
-                                      <td>{{ $viewDeliveryReceipt['qty']}}</td>
-                                      <td>{{ $viewDeliveryReceipt['description']}}</td>
-                                      <td><?php echo number_format($viewDeliveryReceipt['price'], 2); ?></td>
+                                      <td>{{ $viewDeliveryReceipt[0]->qty}}</td>
+                                      <td>{{ $viewDeliveryReceipt[0]->description}}</td>
+                                      <td><?php echo number_format($viewDeliveryReceipt[0]->price, 2); ?></td>
                                      </tr>
 
                                      @foreach($deliveryReceipts as $deliveryReceipt)
@@ -130,7 +130,7 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>{{ $viewDeliveryReceipt['created_by']}}</td>
+                                        <td>{{ $viewDeliveryReceipt[0]->created_by}}</td>
                                         <td></td>
                                         <td></td>
                                     </tr>

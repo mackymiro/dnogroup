@@ -43,12 +43,12 @@
                                             @foreach($getAllDeliveryReceipts as  $getAllDeliveryReceipt)
                                             <tr>
                                                 <td width="5%">
-                                                  <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-delivery-receipt/'.$getAllDeliveryReceipt['id'])}}" title="View"><i class="fas fa-low-vision"></i></a>
+                                                  <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-delivery-receipt/'.$getAllDeliveryReceipt->id)}}" title="View"><i class="fas fa-low-vision"></i></a>
 
                                                 </td>
-                                                <td>{{ $getAllDeliveryReceipt['dr_no']}}</td>
-                                                <td>{{ $getAllDeliveryReceipt['sold_to']}}</td>
-                                                <td>{{ $getAllDeliveryReceipt['created_by']}}</td>
+                                                <td>{{ $getAllDeliveryReceipt->module_code}}{{ $getAllDeliveryReceipt->lechon_de_cebu_code}}</td>
+                                                <td>{{ $getAllDeliveryReceipt->sold_to }}</td>
+                                                <td>{{ $getAllDeliveryReceipt->created_by }}</td>
                                             </tr>
                                             @endforeach
                                         </tbody>

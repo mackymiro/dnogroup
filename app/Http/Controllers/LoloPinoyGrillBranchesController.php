@@ -14,10 +14,126 @@ use App\LoloPinoyGrillBranchesRequisitionSlip;
 use App\LoloPinoyGrillBranchesUtility;
 use App\LoloPinoyGrillCommissaryRawMaterial;
 use App\LoloPinoyGrillBranchesSalesForm;
+use App\LoloPinoyGrillBranchesPettyCash;
 use Hash;
 
 class LoloPinoyGrillBranchesController extends Controller
 {
+
+    public function printPettyCash($id){
+        $getPettyCash = LoloPinoyGrillBranchesPettyCash::find($id);
+
+        $getPettyCashSummaries = LoloPinoyGrillBranchesPettyCash::where('pc_id', $id)->get()->toArray();
+
+        //total
+        $totalPettyCash = LoloPinoyGrillBranchesPettyCash::where('id', $id)->where('pc_id', NULL)->sum('amount');
+
+        $pettyCashSummaryTotal = LoloPinoyGrillBranchesPettyCash::where('pc_id', $id)->sum('amount');
+
+        $sum = $totalPettyCash + $pettyCashSummaryTotal;
+
+        $pdf = PDF::loadView('printPettyCashLoloPinoyGrillBranches', compact('getPettyCash', 'getPettyCashSummaries', 'sum'));
+        return $pdf->download('lolo-pinoy-grill-branches-petty-cash.pdf');
+
+    }
+
+    public function updatePC(Request $request, $id){
+        $updatePC = LoloPinoyGrillBranchesPettyCash::find($id);
+
+        $updatePC->date = $request->get('date');
+        $updatePC->petty_cash_summary = $request->get('pettyCashSummary');
+        $updatePC->amount = $request->get('amount');
+        $updatePC->save();
+
+        Session::flash('updatePC', 'Successfully updated.');
+        return redirect()->route('editPettyCashLoloPinoyGrillBranches', ['id'=>$request->get('pcId')]);
+    }
+
+    public function addNewPettyCash(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $pettyCash = LoloPinoyGrillBranchesPettyCash::find($id);
+
+        $addNew = new LoloPinoyGrillBranchesPettyCash([
+            'user_id'=>$user->id,
+            'pc_id'=>$id,
+            'petty_cash_no'=>$pettyCash->petty_cash_no,
+            'date'=>$request->get('date'),
+            'petty_cash_summary'=>$request->get('pettyCashSummary'),
+            'amount'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+        $addNew->save();
+        Session::flash('addNewSuccess', 'Successfully added.');
+
+        return redirect()->route('editPettyCashLoloPinoyGrillBranches', ['id'=>$id]);
+    }
+
+    public function updatePettyCash(Request $request, $id){
+        $updatePettyCash = LoloPinoyGrillBranchesPettyCash::find($id);
+        $updatePettyCash->date = $request->get('date');
+        $updatePettyCash->petty_cash_name = $request->get('pettyCashName');
+        $updatePettyCash->petty_cash_summary = $request->get('pettyCashSummary');
+        $updatePettyCash->save();
+
+        Session::flash('editSuccess', 'Successfully updated.');
+
+        return redirect()->route('editPettyCashLoloPinoyGrillBranches', ['id'=>$id]);
+    }
+
+    public function editPettyCash($id){
+        $pettyCash = LoloPinoyGrillBranchesPettyCash::find($id);
+
+        $pettyCashSummaries = LoloPinoyGrillBranchesPettyCash::where('pc_id', $id)->get()->toArray();
+        return view('edit-lolo-pinoy-grill-branches-petty-cash', compact('pettyCash', 'pettyCashSummaries'));
+    }
+
+    public function  addPettyCash(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //get the latest insert id query in table petty cash petty cash no
+        $dataCashNo = DB::select('SELECT id, petty_cash_no FROM lolo_pinoy_grill_branches_petty_cashes ORDER BY id DESC LIMIT 1');
+
+         //if code is not zero add plus 1 petty cash no
+        if(isset($dataCashNo[0]->petty_cash_no) != 0){
+            //if code is not 0
+            $newProd = $dataCashNo[0]->petty_cash_no +1;
+            $uProd = sprintf("%06d",$newProd);   
+
+        }else{
+            //if code is 0 
+            $newProd = 1;
+            $uProd = sprintf("%06d",$newProd);
+        } 
+
+        $addPettyCash = new LoloPinoyGrillBranchesPettyCash([
+            'user_id'=>$user->id,
+            'date'=>$request->date,
+            'petty_cash_no'=>$uProd,
+            'petty_cash_name'=>$request->pettyCashName,
+            'petty_cash_summary'=>$request->pettyCashSummary,
+            'created_by'=>$name,
+        ]);
+
+        $addPettyCash->save();
+        $insertId = $addPettyCash->id;
+      
+        return response()->json($insertId);
+    }
+
+
     //logout session in branches
     public function logOutBranch(Request $request){
         $request->session()->forget('sessionBranch');
@@ -313,16 +429,14 @@ class LoloPinoyGrillBranchesController extends Controller
 
     //
     public function viewPettyCash($id){
-        //
-        $getPettyCash = LoloPinoyGrillBranchesPaymentVoucher::find($id);
+        $getPettyCash = LoloPinoyGrillBranchesPettyCash::find($id);
 
-        //
-        $getPettyCashSummaries = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->get()->toArray();
+        $getPettyCashSummaries = LoloPinoyGrillBranchesPettyCash::where('pc_id', $id)->get()->toArray();
 
         //total
-        $totalPettyCash = LoloPinoyGrillBranchesPaymentVoucher::where('id', $id)->where('pv_id', NULL)->sum('amount');
+        $totalPettyCash = LoloPinoyGrillBranchesPettyCash::where('id', $id)->where('pc_id', NULL)->sum('amount');
 
-        $pettyCashSummaryTotal = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->sum('amount');
+        $pettyCashSummaryTotal = LoloPinoyGrillBranchesPettyCash::where('pc_id', $id)->sum('amount');
 
         $sum = $totalPettyCash + $pettyCashSummaryTotal;
 
@@ -331,10 +445,8 @@ class LoloPinoyGrillBranchesController extends Controller
 
     //
     public function pettyCashList(){
-        $cat = "Petty Cash";
-        $getPettyCashLists = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', NULL)->where('category',$cat)->get()->toArray();
-
-        return view('lolo-pinoy-grill-branches-petty-cash-list', compact('getPettyCashLists'));
+        $pettyCashLists = LoloPinoyGrillBranchesPettyCash::where('pc_id', NULL)->orderBy('id', 'desc')->get()->toArray();
+        return view('lolo-pinoy-grill-branches-petty-cash-list', compact('pettyCashLists'));
     }
 
     //
@@ -942,6 +1054,15 @@ class LoloPinoyGrillBranchesController extends Controller
 
     }
 
+    public function destroyUtility($id){
+        $utility = LoloPinoyGrillBranchesUtility::find($id);
+        $utility->delete();
+    }
+
+    public function destroyPettyCash($id){
+        $pettyCash = LoloPinoyGrillBranchesPettyCash::find($id);
+        $pettyCash->delete();
+    }
 
     public function destroyTransactionList($id){
         $transactionList = LoloPinoyGrillBranchesPaymentVoucher::find($id);

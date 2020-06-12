@@ -59,10 +59,9 @@
                                       @endif
                                     </div>
                                     <div class="col-lg-6">
-                                      <label>P.O Number</label>
-                                      <input type="text" name="poNum" class="form-control" disabled="disabled" />
+                                     
                                       <label>Date</label>
-                                      <input type="text" name="date"  class="datepicker form-control" required="required" />
+                                      <input type="text" name="date"  class="datepicker form-control" required="required" autocomplete="off"/>
                                       @if ($errors->has('date'))
                                         <span class="alert alert-danger">
                                           <strong>{{ $errors->first('date') }}</strong>
@@ -113,7 +112,8 @@
                                 </div>
                                 <br>
                                 <div>
-                                    <input type="submit" class="btn btn-success float-right" value="Add Purchase Order" />
+                                <button type="submit" class="btn btn-success btn-lg float-right"><i class="fas fa-save"></i> Save Purchase Order</button>
+                              <br>
                                 </div>
                               </div>
                               </form>

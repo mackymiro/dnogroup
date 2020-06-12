@@ -42,12 +42,12 @@
                                     <table >
                                          <thead>
                                             <tr>
-                                                <th width="20%">Paid To</th>
-                                                <th>{{ $purchaseOrder['paid_to'] }}</th>
+                                                <th width="20%">Paid To: </th>
+                                                <th>{{ $purchaseOrder[0]->paid_to }}</th>
                                             </tr>
                                             <tr>
-                                                <th>Address</th>
-                                                <th>{{ $purchaseOrder['address']}}</th>
+                                                <th>Address: </th>
+                                                <th>{{ $purchaseOrder[0]->address}}</th>
                                             </tr>
                                         </thead>
                                       
@@ -57,12 +57,12 @@
 	                              <table >
 	                                   <thead>
                                             <tr>
-                                                <th width="20%">P.O Number</th>
-                                                <th><a href="#">P.O-{{ $purchaseOrder['p_o_number'] }}</a></th>
+                                                <th width="20%">PO No: </th>
+                                                <th>{{ $purchaseOrder[0]->lechon_de_cebu_code }}</th>
                                             </tr>
                                             <tr>
                                                 <th>Date</th>
-                                                <th> {{ $purchaseOrder['date'] }}</th>
+                                                <th> {{ $purchaseOrder[0]->date }}</th>
                                             </tr>
                                         </thead>
 	                              </table>
@@ -87,10 +87,10 @@
                                   </thead>
                                   <tbody>
                                   		<tr style="border:1px solid black;">
-	                                  	 	<td style="text-align:center; border: 1px solid black;">{{ $purchaseOrder['quantity']}}</td>
-	                                  	 	<td style="text-align:center; border: 1px solid black;">{{ $purchaseOrder['description']}}</td>
-                                          <td style="text-align:center; border: 1px solid black;">{{ $purchaseOrder['unit_price']}}</td>
-	                                  	 	<td style="text-align:center; border: 1px solid black;"><?php echo number_format($purchaseOrder['amount'], 2); ?></td>
+	                                  	 	<td style="text-align:center; border: 1px solid black;">{{ $purchaseOrder[0]->quantity}}</td>
+	                                  	 	<td style="text-align:center; border: 1px solid black;">{{ $purchaseOrder[0]->description }}</td>
+                                          <td style="text-align:center; border: 1px solid black;">{{ $purchaseOrder[0]->unit_price}}</td>
+	                                  	 	<td style="text-align:center; border: 1px solid black;"><?php echo number_format($purchaseOrder[0]->amount, 2); ?></td>
                                   	 	</tr>
                                   	 	 @foreach($pOrders as $pOrder)
                                         <tr style="border:1px solid black;">
@@ -116,19 +116,20 @@
                            				<tr>
                        						<th style="width:30%;">Prepared By</th>
                        						<th>Checked By</th>
-                       						<th>Received By</th>
+                       						<th>Approved By</th>
+											<th>Received By</th>
                            				</tr>
                            			</thead>
                            			<tbody>
                            				<tr>
                            					<td>
                            						________________________<br>
-                           						{{ $purchaseOrder['created_by']}}
+                           						{{ $purchaseOrder[0]->created_by}}
 
                            					</td>
                            					<td>
                            						________________________<br>
-                           						Aprilane Maturan<br>
+                           						Aprilane Q Maturan<br>
                            						Finance Officer
                            					</td>
                            					<td>

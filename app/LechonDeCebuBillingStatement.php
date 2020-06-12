@@ -23,7 +23,8 @@ class LechonDeCebuBillingStatement extends Model
     	'invoice_number',
     	'whole_lechon',
     	'description',
-    	'amount',
+		'amount',
+		'total_amount',
     	'prepared_by',
     	'approved_by',
     	'created_by',
@@ -36,5 +37,9 @@ class LechonDeCebuBillingStatement extends Model
 		'or_number',
 		'order',
 		'dr_no',
+		'qty',
+		'body',
+		'head_and_feet',
+		'price',
     ];
 }

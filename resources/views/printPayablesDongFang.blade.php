@@ -47,8 +47,8 @@
                                             </tr>
 											@if($payableId['method_of_payment']  == "Cheque")
 											<tr>
-                                                <th width="30%">Account No</th>
-                                                <th> {{ $payableId['account_no'] }}</th>
+                                                <th width="30%">Invoice No</th>
+                                                <th> {{ $payableId['invoice_no'] }}</th>
                                             </tr>
 											@endif
 											@if($payableId['method_of_payment'] == "Cash")
@@ -205,7 +205,7 @@
                            					</td>
 											<td>
                            						________________________<br>
-                           						Aprilane Maturan<br>
+                           						Aprilane Q Maturan<br>
                            						Finance Officer
                            					</td>
                            					<td>
@@ -221,7 +221,28 @@
                            		</table>
                            	
                            </div>
+						   <div style="margin-top:100px;">
+                           		<table  >
+                           			<thead>
+                           				<tr>
+                       						<th style="width:30%;">Received By</th>
+										
+                           				</tr>
+                           			</thead>
+                           			<tbody>
+                           				<tr>
+                           					<td>
+                           						________________________<br>
+                           						
 
+                           					</td>
+                           				
+                           					
+                           				</tr>
+                           			</tbody>
+                           		</table>
+                           	
+                           </div>
 						 </div>
 					</div>
 				</div>

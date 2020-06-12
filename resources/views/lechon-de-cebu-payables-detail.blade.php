@@ -38,12 +38,12 @@
 	    					  Payable Form</div>
 
 	    					  <div class="card-body">
-	    					  		<form action="{{ action('LoloPinoyLechonDeCebuController@addPayment', $transactionList['id']) }}" method="post">
+	    					  		<form action="{{ action('LoloPinoyLechonDeCebuController@addPayment', $transactionList[0]->id) }}" method="post">
 	    					  			{{ csrf_field() }}
 				  			 	 	@if(session('paymentAdded'))
 		                                <p class="alert alert-success">{{ Session::get('paymentAdded') }}</p>
 		                            @endif 
-									@if($transactionList['method_of_payment'] == "Cash")
+									@if($transactionList[0]->method_of_payment == "CASH")
 									<div class="form-group">
     					  				<div class="form-row">
 					  						<div class="col-lg-12">
@@ -71,7 +71,7 @@
 					  					
     					  				</div>
 	    					  		</div>
-									@if($transactionList['status'] != "FULLY PAID AND RELEASED")
+									@if($transactionList[0]->status != "FULLY PAID AND RELEASED")
 	    					  		<div class="form-group">
     					  				<div class="form-row">
 					  						<div class="col-lg-4">
@@ -93,7 +93,7 @@
 	    					  		</div>
 
 									@endif
-									@elseif($transactionList['method_of_payment'] == "Cheque")
+									@elseif($transactionList[0]->method_of_payment == "CHECK")
 									<div class="form-group">
     					  				<div class="form-row">
 					  						<div class="col-lg-12">
@@ -106,7 +106,7 @@
 	    					  		<div class="form-group">
     					  				<div class="form-row">
 					  						<div class="col-lg-12">
-				  								<label>Payment Cheque Number</label>
+				  								<label>Payment Check Number</label>
 				  								<input type="text" name="chequeNumber" class="form-control" required="required" />
 					  						</div> 
 
@@ -115,7 +115,7 @@
 	    					  		<div class="form-group">
     					  				<div class="form-row">
 					  						<div class="col-lg-12">
-				  								<label>Cheque Amount</label>
+				  								<label>Check Amount</label>
 				  								<input type="text" name="chequeAmount" class="form-control" required="required" />
 					  						</div> 
 					  					
@@ -142,7 +142,7 @@
 								Particulars
 							</div>
 							<div class="card-body">
-  								<form action="{{ action('LoloPinoyLechonDeCebuController@addParticulars', $transactionList['id']) }}" method="post">
+  								<form action="{{ action('LoloPinoyLechonDeCebuController@addParticulars', $transactionList[0]->id) }}" method="post">
 								  {{ csrf_field() }}
 								  @if(session('particularsAdded'))
 		                                <p class="alert alert-success">{{ Session::get('particularsAdded') }}</p>
@@ -167,8 +167,8 @@
 										
 									</div>
 								</div>
-								@if($transactionList['status'] != "FOR APPROVAL" && $transactionList['status'] != "FOR CONFIRMATION"
-								&& $transactionList['status'] != "FULLY PAID AND RELEASED")
+								@if($transactionList[0]->status != "FOR APPROVAL" && $transactionList[0]->status != "FOR CONFIRMATION"
+								&& $transactionList[0]->status != "FULLY PAID AND RELEASED")
 								<div class="form-group">
 									<div class="form-row">
 										<div class="col-lg-4">
@@ -207,14 +207,14 @@
 		                         @if(session('errorPaid'))
 		                                <p class="alert alert-danger">{{ Session::get('errorPaid') }}</p>
 		                         @endif
-    					  		<form action="{{ action('LoloPinoyLechonDeCebuController@accept', $transactionList['id'])}}" method="post">
+    					  		<form action="{{ action('LoloPinoyLechonDeCebuController@accept', $transactionList[0]->id)}}" method="post">
     					  			{{ csrf_field() }}
     					  			 <input name="_method" type="hidden" value="PATCH">
 					  			 <table class="table table-bordered">
 				  			 		<thead>
 				  			 			<tr>
 				  			 				<th width="15%">Paid To</th>
-				  			 				<th>{{ $transactionList['paid_to']}}</th>
+				  			 				<th>{{ $transactionList[0]->paid_to}}</th>
 				  			 			</tr>
 
 				  			 		</thead>
@@ -223,23 +223,23 @@
 			  						<div class="form-row">
 			  							<div class="col-lg-2">
 		  									<label>Invoice #</label>
-		  									<input type="text" name="invoiceNumber" class="form-control" value="{{ $transactionList['invoice_number']}}" disabled="disabled" />
+		  									<input type="text" name="invoiceNumber" class="form-control" value="{{ $transactionList[0]->invoice_number}}" disabled="disabled" />
 			  							</div>
 			  							<div class="col-lg-2">
 		  									<label>Amount Due</label>
 		  									<input type="text" name="amountDue" style="color:white;" class="bg-danger form-control" value="<?php echo number_format($sum, 2)?>" />
 			  							</div>
 			  							<div class="col-lg-4">
-		  									<label>Voucher Ref #</label>
-		  									<input type="text" name="voucherRef" class="form-control" value="LPLDC-{{ $transactionList['voucher_ref_number'] }}" disabled="disabled" />
+		  									<label>PV #</label>
+		  									<input type="text" name="voucherRef" class="form-control" value="{{ $transactionList[0]->module_code }}{{ $transactionList[0]->lechon_de_cebu_code }}" disabled="disabled" />
 			  							</div>
 										<div class="col-lg-4">
 		  									<label>Account Name</label>
-		  									<input type="text" name="accountName" class="form-control" value="{{ $transactionList['account_name'] }}" disabled="disabled" />
+		  									<input type="text" name="accountName" class="form-control" value="{{ $transactionList[0]->account_name }}" disabled="disabled" />
 			  							</div>
 										<div class="col-lg-4">
 		  									<label>Payment Method</label>
-		  									<input type="text" name="paymentMethod" class="form-control" value="{{ $transactionList['method_of_payment'] }}" disabled="disabled" />
+		  									<input type="text" name="paymentMethod" class="form-control" value="{{ $transactionList[0]->method_of_payment }}" disabled="disabled" />
 			  							</div>
 			  							<div class="col-lg-4">
 		  									<label>Status</label>
@@ -247,7 +247,7 @@
 	  											<select name="status" class="form-control">
 	  												<option value="0">--Please Select--</option>
 													<option v-for="status in statuses" v-bind:value="status.value"
-													:selected="status.value=={{json_encode($transactionList['status'])}}?true : false">
+													:selected="status.value=={{json_encode($transactionList[0]->status)}}?true : false">
 													@{{ status.text }}
 												</option>
 	  											</select>
@@ -266,15 +266,15 @@
 									<tbody>
   										
 										<tr>	
-											<td>{{ $transactionList['date'] }}</td>
-  											<td>{{ $transactionList['particulars']}}</td>
-											<td><?php echo number_format($transactionList['amount'], 2); ?></td>
+											<td>{{ $transactionList[0]->date }}</td>
+  											<td>{{ $transactionList[0]->particulars}}</td>
+											<td><?php echo number_format($transactionList[0]->amount, 2); ?></td>
 										</tr>
 										@foreach($getParticulars as $getParticular)
 										<tr>
   											<td>{{ $getParticular['date'] }}</td>
   											<td>{{ $getParticular['particulars']}}</td>
-											<td><?php echo number_format($getParticular['amount'], 2); ?></td>
+											<td><?php echo number_format($getParticular->amount, 2); ?></td>
 										</tr>
 										@endforeach
 									</tbody>
@@ -282,15 +282,15 @@
 				  				<table class="table table-striped">
 				  					<thead>
 				  						<tr>
-										  	@if($transactionList['method_of_payment'] == "Cash")
+										  	@if($transactionList[0]->method_of_payment == "CASH")
 											<th>PAYMENT CASH NUMBER</th>
 											@else
-											<th>PAYMENT CHEQUE NUMBER</th>
+											<th>PAYMENT CHECK NUMBER</th>
 											@endif
-											@if($transactionList['method_of_payment'] == "Cash")
+											@if($transactionList[0]->method_of_payment == "CASH")
 				  								<th>CASH AMOUNT</th>
 											@else
-												<th>CHEQUE AMOUNT</th>
+												<th>CHECK AMOUNT</th>
 											@endif
 				  						</tr>
 				  					</thead>
@@ -315,7 +315,7 @@
 			  							<div class="col-lg-4">
 			  								<input type="submit" class="btn btn-success btn-lg" name="action" value="PAID AND RELEASE" value="PAID AND RELEASE" />
 			  							</div>
-										<?php if($transactionList['status'] != "FULLY PAID AND RELEASED"):?>
+										<?php if($transactionList[0]->status != "FULLY PAID AND RELEASED"):?>
 										<div class="col-lg-4">
 											<input type="submit" class="btn btn-primary btn-lg" name="action" value="PAID & HOLD" value="PAID & HOLD" />
 										</div>

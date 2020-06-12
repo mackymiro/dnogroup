@@ -169,7 +169,7 @@
                            					</td>
                            					<td>
                            						________________________<br>
-                           						Aprilane Maturan<br>
+                           						Aprilane Q Maturan<br>
                            						Finance Officer
                            					</td>
 											<td>
@@ -180,6 +180,28 @@
                            						________________________<br>
                            						
                            					</td>
+                           					
+                           				</tr>
+                           			</tbody>
+                           		</table>
+                           	
+                           </div>
+						   <div style="margin-top:100px;">
+                           		<table  >
+                           			<thead>
+                           				<tr>
+                       						<th style="width:30%;">Received By</th>
+										
+                           				</tr>
+                           			</thead>
+                           			<tbody>
+                           				<tr>
+                           					<td>
+                           						________________________<br>
+                           						
+
+                           					</td>
+                           				
                            					
                            				</tr>
                            			</tbody>

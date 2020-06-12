@@ -11,6 +11,7 @@ class LechonDeCebuSalesInvoice extends Model
 		'user_id',
 		'si_id',
 		'invoice_number',
+		'sales_invoice_number',
 		'date',
 		'ordered_by',
 		'address',
@@ -21,6 +22,7 @@ class LechonDeCebuSalesInvoice extends Model
 		'item_description',
 		'unit_price',
 		'amount',
+		'total_amount',
 		'created_by',
     ];
 }

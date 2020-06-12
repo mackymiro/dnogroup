@@ -103,8 +103,8 @@
                                 <div id="pettyCashNo" class="col-md-2">
                                     <label>Petty Cash No</label>
                                     <select data-live-search="true" name="pettyCashNo" class="form-control selectpicker">
-                                      @foreach($pettyCashes as $pettyCash)
-                                      <option value="{{ $pettyCash['id']}}">{{ $pettyCash['petty_cash_no']}}</option>
+                                      @foreach($pettyCashes as $key=>$pettyCash)
+                                      <option value="{{ $pettyCash->module_code}}">{{ $pettyCash->lechon_de_cebu_code  }}</option>
                                       @endforeach
                                     </select>
                                 </div>  
@@ -206,8 +206,8 @@
 	el: '#app-payment-method',
 		data: {
 			payments:[
-				{ text:'Cash', value: 'Cash' },
-				{ text:'Cheque', value: 'Cheque'}
+				{ text:'CASH', value: 'CASH' },
+				{ text:'CHECK', value: 'CHECK'}
 			]
 		}
 	})	

@@ -36,51 +36,47 @@
 				<div class="row">
 					<div class="col-lg-12">
 						 <div class="card-body">
-				 			<div class="form-group">
                               <div style="width:980px; margin:0 auto;">
                                    <div style="float:left; width:50%">
-                                    <table >
+                                    <table style="border:1px solid black;">
                                           <thead>
-                                            <tr>
-                                                <th width="30%">Bill To</th>
-                                                <th> {{ $printBillingStatement['bill_to'] }}</th>
+                                            <tr style="border:1px solid black;">
+                                                <th style="border:1px solid black" width="25%">Bill To:</th>
+                                                <th style="border:1px solid black"> {{ $printBillingStatement[0]->bill_to }}</th>
                                             </tr>
-                                            <tr>
-                                                <th>Address</th>
-                                                <th>{{ $printBillingStatement['address'] }}</th>
+                                            <tr style="border:1px solid black;">
+                                                <th  style="border:1px solid black" width="15%">Address:</th>
+                                                <th  style="border:1px solid black">{{ $printBillingStatement[0]->address }}</th>
                                             </tr>
-                                            <tr>
-                                                <th>Period Covered</th>
-                                                <th> {{ $printBillingStatement['period_cover'] }} </th>
+                                            <tr style="border:1px solid black;">
+                                                <th  style="border:1px solid black" width="15%">Period Covered:</th>
+                                                <th  style="border:1px solid black"> {{ $printBillingStatement[0]->period_cover }} </th>
                                             </tr>
-                                            <tr>
-                                                <th>Date</th>
-                                                <th>{{ $printBillingStatement['date'] }}</th>
+                                            <tr style="border:1px solid black;">
+                                                <th style="border:1px solid black;" width="15%">Date:</th>
+                                                <th style="border:1px solid black">{{ $printBillingStatement[0]->date }}</th>
                                             </tr>
                                         </thead>
                                       
                                   </table>   
                              </div>
-	                          <div style="float:right; width: 50%">
+	                          <div style="float:left; width:200px; margin-left:30px; border:1px solid black;">
 	                              <table >
 	                                   <thead>
-                                            <tr>
-                                                <th width="20%">Reference #</th>
-                                                <th>{{ $printBillingStatement['reference_number'] }}</th>
+                                            <tr >
+                                                <th  width="35%">{{ $printBillingStatement[0]->module_code }} No:</th>
+                                                <th >{{ $printBillingStatement[0]->lechon_de_cebu_code}}</th>
                                             </tr>
+                                           
                                             <tr>
-                                                <th>PO Number</th>
-                                                <th> {{ $printBillingStatement['p_o_number'] }}</th>
-                                            </tr>
-                                            <tr>
-                                                <th>Terms</th>
-                                                <th>{{ $printBillingStatement['terms'] }}</th>
+                                                <th>Terms:</th>
+                                                <th>{{ $printBillingStatement[0]->terms }}</th>
                                             </tr>
                                         </thead>
 	                              </table>
 	                          </div>
                           </div>
-                          </div>
+                       
                           <br>
                           <br>
                           <br>
@@ -91,26 +87,53 @@
                           		  <thead>
                                       <tr>
                                         <th style="height: 1%; text-align: center;">DATE</th>
-                                        <th style="height: 1%; text-align: center;">INVOICE #</th>
-                                        <th style="height: 1%; text-align: center;">WHOLE LECHON 500/KL</th>
+										@if($printBillingStatement[0]->order === "Private Order")
+										<th style="height: 1%; text-align: center;">DR No</th>
+										@else
+                                        <th style="height: 1%; text-align: center;">ORDER SLIP #</th>
+										@endif
+										@if($printBillingStatement[0]->order === "Private Order")
+										<th style="height: 1%; text-align: center;">QTY</th>
+										@else
+                                        <th style="height: 1%; text-align: center;">WEIGHT AT 500/kl</th>
+										@endif
                                         <th style="height: 1%; text-align: center;">DESCRIPTION</th>
                                         <th style="height: 1%; text-align: center;">AMOUNT</th>
                                       </tr>
                                     </thead>
                                   <tbody>
                                   		<tr style="border:1px solid black;">
-                                      <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement['date_of_transaction'] }}</td>
-                                      <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement['invoice_number'] }}</td>
-                                      <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement['whole_lechon'] }}</td>
-                                      <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement['description'] }}</td>
-                                      <td style="text-align:center; border: 1px solid black;"><?php echo number_format($printBillingStatement['amount'], 2); ?></td>
+                                      <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->date_of_transaction }}</td>
+									  @if($printBillingStatement[0]->order === "Private Order")
+									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->dr_no }}</td>
+                                    
+									  @else
+									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->invoice_number }}</td>
+                                      @endif
+									  @if($printBillingStatement[0]->order === "Private Order")
+									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->qty }}</td>
+                                     
+									  @else
+									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->whole_lechon }}</td>
+                                      @endif
+									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->description }}</td>
+                                      <td style="text-align:center; border: 1px solid black;"><?php echo number_format($printBillingStatement[0]->amount, 2); ?></td>
                                   	 	</tr>
                                   	 	 @foreach($billingStatements as $billingStatement)
                                         <tr style="border:1px solid black;">
                                           <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['date_of_transaction'] }}</td>
-                                          <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['invoice_number'] }}</td>
-                                          <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['whole_lechon'] }}</td>
-                                          <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['description'] }}</td>
+                                          @if($billingStatement['order']  === "Private Order")
+										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['dr_no'] }}</td>
+                                         
+										  @else
+										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['invoice_number'] }}</td>
+                                          @endif
+										  @if($printBillingStatement[0]->order === "Private Order")
+										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['qty'] }}</td>
+										  @else
+										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['whole_lechon'] }}</td>
+                                          @endif
+										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['description'] }}</td>
                                           <td style="text-align:center; border: 1px solid black;"><?php echo number_format($billingStatement['amount'], 2);?></td>
                                         </tr> 
                                         @endforeach
@@ -130,26 +153,45 @@
                            			<thead>
                            				<tr>
                        						<th style="width:30%;">Prepared By</th>
-                       						<th>Approved By</th>
+                       						<th>Checked By</th>
+											<th>Conforme By</th>
                            				</tr>
                            			</thead>
                            			<tbody>
                            				<tr>
                            					<td>
                            						________________________<br>
-                           						{{ $printBillingStatement['created_by']}}
+                           						{{ $printBillingStatement[0]->created_by}}
 
                            					</td>
                            					<td>
                            						________________________<br>
-                           						AprilAn Maturan<br>
+                           						Aprilane Q Maturan<br>
                            						Finance Officer
                            					</td>
+											<td>
+                           						________________________<br>
+                           						
+                           					</td>
+
                            					
                            				</tr>
                            			</tbody>
                            		</table>
-                           	
+								<table style="margin-top:50px;" >
+									<thead>
+                           				<tr>
+                       						<th style="width:30%;">Received By</th>
+                       						
+                           			</thead>
+									<tbody>  
+										<tr>
+                           					<td>
+                           						________________________<br>
+                           					</td>
+										</tr>
+									</tbody>
+								</table>
                            </div>
 
 						 </div>

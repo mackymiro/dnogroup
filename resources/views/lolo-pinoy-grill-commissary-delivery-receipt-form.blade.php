@@ -29,23 +29,34 @@
                        	 		{{ csrf_field() }}
                     		<div class="form-group">
                         		<div class="form-row">
-                    				<div class="col-md-4">
-                    					<label>Delivered To</label>
-                    					<input type="text" name="deliveredTo" class="form-control" required="required" />
-                    					@if ($errors->has('deliveredTo'))
-		                                  <span class="alert alert-danger">
-		                                    <strong>{{ $errors->first('deliveredTo') }}</strong>
-		                                  </span>
-		                                @endif
-                    				</div>
-                    				<div class="col-md-4">
-                    					<label>Address</label>
-                    					<input type="text" name="address" class="form-control" />
-                    				</div>
-                    			
-                        			
-                        		</div>
+                              <div class="col-md-4">
+                                <label>Delivered To</label>
+                                <input type="text" name="deliveredTo" class="form-control" required="required" />
+                                @if ($errors->has('deliveredTo'))
+                                        <span class="alert alert-danger">
+                                          <strong>{{ $errors->first('deliveredTo') }}</strong>
+                                        </span>
+                                      @endif
+                              </div>
+                              <div class="col-md-4">
+                                <label>Address</label>
+                                <input type="text" name="address" class="form-control" />
+                              </div>
+                              <div class="col-md-4">
+                                <label>Charge to</label>
+                                <input type="text" name="chargeTo" class="form-control" />
+                              </div>
+                                
+                              </div>
                         	</div>
+                          <div class="form-group">
+                              <div class="form-row">
+                                  <div class="col-lg-4">
+                                      <label>Address To</label>
+                                      <input type="text" name="addressTo" class="form-control" />
+                                  </div>
+                              </div> 
+                          </div>
                         	<div class="form-group">
                     			<div class="form-row">
                       				<div class="col-md-2">

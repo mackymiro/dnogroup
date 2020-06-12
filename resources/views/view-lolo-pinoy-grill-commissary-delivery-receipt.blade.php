@@ -45,6 +45,10 @@
 	                    				 				<th>Address</th>
 	                    				 				<th>{{ $viewDeliveryReceipt['address']}}</th>
 	                    				 			</tr>
+													 <tr>
+	                    				 				<th>Charget To</th>
+	                    				 				<th>{{ $viewDeliveryReceipt['charge_to']}}</th>
+	                    				 			</tr>
 	                    				 		</thead>	
 	                    				 	</table>
 	                    				 </div>
@@ -58,6 +62,10 @@
                     				 				<tr>
                     				 					<th>Date</th>
                     				 					<th>{{ $viewDeliveryReceipt['date']}}</th>
+                    				 				</tr>
+													 <tr>
+                    				 					<th>Address To</th>
+                    				 					<th>{{ $viewDeliveryReceipt['address_to']}}</th>
                     				 				</tr>
                     				 			</thead>
                     				 		</table>

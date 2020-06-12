@@ -42,19 +42,13 @@
                                                       <th class="bg-info" style="color:white;">Paid To</th>
                                                       <th class="bg-info" style="color:white;">{{ $viewPaymentDetail['paid_to']}}</th>
                                                   </tr>
-                                                  @if($viewPaymentDetail['method_of_payment'] == "Cheque")
-                                                  <tr>
-                                                      <th class="bg-info" style="color:white;">Account No</th>
-                                                      <th class="bg-info" style="color:white;">{{ $viewPaymentDetail['account_no']}}</th>
-                                                  </tr>
-                                                  @endif
-                                                  @if($viewPaymentDetail['method_of_payment'] == "Cash")
+                                               
                                                   <tr>
                                                        <th width="30%" class="bg-info" style="color:white;">Account Name</th>
                                                       <th class="bg-info" style="color:white;">{{ $viewPaymentDetail['account_name']}}</th>
                                                   
                                                   </tr>
-                                                  @endif
+                        
                                                   <tr>
                                                       <th class="bg-success" style="color:white;" width="15%">Status</th>
                                                       <th class="bg-success" style="color:white;">{{ $viewPaymentDetail['status']}}</th>

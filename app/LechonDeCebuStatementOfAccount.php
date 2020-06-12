@@ -34,5 +34,7 @@ class LechonDeCebuStatementOfAccount extends Model
 		'created_by',
 		'amount',
 		'amount_statement_account',
+		'body',
+		'head_and_feet',
     ];
 }

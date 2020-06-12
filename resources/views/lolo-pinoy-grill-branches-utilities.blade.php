@@ -439,7 +439,29 @@
     $("#validateInternet").hide();
 
     const confirmDelete = (id) => {
-        
+        const x = confirm("Do you want to delete this?");
+        if(x){
+            $.ajax({
+              type: "DELETE",
+              url: '/lolo-pinoy-grill-branches/delete-utility/' + id,
+              data:{
+                _method: 'delete', 
+                "_token": "{{ csrf_token() }}",
+                "id": id
+              },
+              success: function(data){
+                $("#deletedId"+id).fadeOut('slow');
+               
+              },
+              error: function(data){
+                console.log('Error:', data);
+              }
+
+            });
+
+        }else{
+            return false;
+        }
     }
 
     const saveInternet = () =>{

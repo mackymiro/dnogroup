@@ -43,16 +43,16 @@
                                           <thead>
                                             <tr>
                                                 <th width="30%">Oredered By</th>
-                                                <th> {{ $printSales['ordered_by'] }}</th>
+                                                <th> {{ $printSales[0]->ordered_by }}</th>
                                             </tr>
                                             <tr>
                                                 <th>Address</th>
-                                                <th>{{ $printSales['address'] }}</th>
+                                                <th>{{ $printSales[0]->address }}</th>
                                             </tr>
                                           
                                             <tr>
                                                 <th>Date</th>
-                                                <th>{{ $printSales['date'] }}</th>
+                                                <th>{{ $printSales[0]->date }}</th>
                                             </tr>
                                         </thead>
                                       
@@ -63,7 +63,11 @@
 	                                   <thead>
                                             <tr>
                                                 <th width="20%">Invoice #</th>
-                                                <th>{{ $printSales['invoice_number'] }}</th>
+                                                <th>{{ $printSales[0]->invoice_number }}</th>
+                                            </tr>
+											<tr>
+                                                <th width="20%">SI No</th>
+                                                <th>{{ $printSales[0]->module_code }}{{ $printSales[0]->lechon_de_cebu_code }}</th>
                                             </tr>
                                            
                                         </thead>
@@ -90,11 +94,11 @@
                                     </thead>
                                   <tbody>
                                   		<tr style="border:1px solid black;">
-                                      <td style="text-align:center; border: 1px solid black;">{{ $printSales['qty'] }}</td>
-                                      <td style="text-align:center; border: 1px solid black;">{{ $printSales['total_kls'] }}</td>
-                                      <td style="text-align:center; border: 1px solid black;">{{ $printSales['item_description'] }}</td>
-                                      <td style="text-align:center; border: 1px solid black;">{{ $printSales['unit_price'] }}</td>
-                                      <td style="text-align:center; border: 1px solid black;"><?php echo number_format($printSales['amount'], 2); ?></td>
+                                      <td style="text-align:center; border: 1px solid black;">{{ $printSales[0]->qty }}</td>
+                                      <td style="text-align:center; border: 1px solid black;">{{ $printSales[0]->total_kls }}</td>
+                                      <td style="text-align:center; border: 1px solid black;">{{ $printSales[0]->item_description }}</td>
+                                      <td style="text-align:center; border: 1px solid black;">{{ $printSales[0]->unit_price }}</td>
+                                      <td style="text-align:center; border: 1px solid black;"><?php echo number_format($printSales[0]->amount, 2); ?></td>
                                   	 	</tr>
                                   	 	 @foreach($salesInvoices as $salesInvoice)
                                         <tr style="border:1px solid black;">
@@ -128,12 +132,12 @@
                            				<tr>
                            					<td>
                            						________________________<br>
-                           						{{ $printSales['created_by']}}
+                           						{{ $printSales[0]->created_by }}
 
                            					</td>
                            					<td>
                            						________________________<br>
-                           						AprilAn Maturan<br>
+                           						Aprilane Q Maturan<br>
                            						Finance Officer
                            					</td>
                            					

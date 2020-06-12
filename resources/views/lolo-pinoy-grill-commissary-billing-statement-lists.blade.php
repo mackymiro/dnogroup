@@ -71,4 +71,33 @@
 		</div>
 	</div>
 </div>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script type="text/javascript">
+	function confirmDelete(id){
+        var x = confirm("Do you want to delete this?");
+        if(x){
+            $.ajax({
+              type: "DELETE",
+              url: '/lolo-pinoy-grill-commissary/delete-billing-statement/' + id,
+              data:{
+                _method: 'delete', 
+                "_token": "{{ csrf_token() }}",
+                "id": id
+              },
+              success: function(data){
+                console.log(data);
+                $("#deletedId"+id).fadeOut('slow');
+               
+              },
+              error: function(data){
+                console.log('Error:', data);
+              }
+
+            });
+
+        }else{
+            return false;
+        }
+    }
+</script>
 @endsection

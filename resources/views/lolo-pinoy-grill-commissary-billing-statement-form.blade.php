@@ -56,6 +56,7 @@
 			                                    </span>
 		                                  	@endif
             	 						</div>
+										
             	 						<div class="col-lg-4">
         	 								<label>Address</label>
         	 								<input type="text" name="address" class="form-control" required="required" />
@@ -79,14 +80,6 @@
                     	 		<div class="form-group">
                 	 				<div class="form-row">
             	 						<div class="col-lg-2">
-            	 							<label>PO Number</label>
-            	 							<select name="poNumber" class="form-control">
-    	 									  	@foreach($getPurchaseOrders as $getPurchaseOrder)
-			                                    	<option value="{{ $getPurchaseOrder['p_o_number'] }}">{{ $getPurchaseOrder['p_o_number'] }}</option>
-			                                    @endforeach
-            	 							</select>
-            	 						</div>
-            	 						<div class="col-lg-2">
             	 							<label>Terms</label>
             	 							<input type="text" name="terms" class="form-control" required="required" />
             	 							 @if ($errors->has('terms'))
@@ -101,35 +94,58 @@
                 	 				<div class="form-row">
             	 						<div class="col-lg-2">
         	 								<label>Date</label>
-        	 								<input type="text" name="transactionDate" class="form-control" required="required" />
+        	 								<input type="text" name="transactionDate" class="datepicker form-control" required="required" />
         	 								@if ($errors->has('transactionDate'))
 	                                            <span class="alert alert-danger">
 	                                              <strong>{{ $errors->first('transactionDate') }}</strong>
 	                                            </span>
 	                                          @endif
             	 						</div>
-            	 						<div class="col-lg-2">
+										 <div class="col-lg-2">
+											<label>Order</label>
+												<select name="choose" class="chooseOption form-control" >
+												<option value="Ssp">Ssp</option>
+												<option value="Private Order">Private Order</option>
+												</select>		
+										</div>
+            	 						<div  id="invoiceNo" class="col-lg-2">
         	 								<label>Invoice #</label>
         	 								<input type="text" name="invoiceNumber" class="form-control" required="required" />
             	 						</div>
-            	 						<div class="col-lg-4">
+										<div id="drNo" class="col-lg-2">
+											<label>DR #</label>
+											<select data-live-search="true" name="drNo" class="drSelect form-control selectpicker">
+												<option value="0">--Please Select--</option>
+												@foreach($drNos as $drNo)
+												<option value="{{ $drNo['dr_no']}}">{{ $drNo['dr_no']}}</option>
+												@endforeach
+											</select>	
+										</div>
+										<div id="drList" class="col-lg-2">
+											<label>DR Lists Id</label>
+											<select id="dataList" name="drList" class="chooseDr form-control "> 
+											</select>
+										</div>
+            	 						<div id="wholeLechon" class="col-lg-4">
             	 							<label>Whole Lechon 500/KL</label>
-            	 							<input type="text" name="wholeLechon" class="form-control" required="required" />
-            	 							 @if ($errors->has('wholeLechon'))
-		                                        <span class="alert alert-danger">
-		                                          <strong>{{ $errors->first('wholeLechon') }}</strong>
-		                                        </span>
-		                                      @endif
+            	 							<input type="text" name="wholeLechon" class="form-control"  />
+            	 							
             	 						</div>
-            	 						<div class="col-lg-4">
+										<div id="wholeLechon6000" class="col-lg-4">
+											<label>Whole Lechon</label>
+											<input type="text" name="wholeLechon6000" class="form-control"  disabled />
+											
+										</div>
+            	 						<div id="description" class="col-lg-4">
         	 								<label>Description</label>
-        	 								<input type="text" name="description" class="form-control" required="required" />
-        	 								@if ($errors->has('description'))
-		                                        <span class="alert alert-danger">
-		                                          <strong>{{ $errors->first('description') }}</strong>
-		                                        </span>
-		                                      @endif
+        	 								<input type="text" name="description" class="form-control"  />
+        	 							
             	 						</div>
+										<div id="descriptionDrNo" class="col-lg-4">
+											<label>Description</label>
+											<input type="text" name="descriptionDrNo" class="form-control"  disabled />
+											
+										</div>
                 	 				</div>
                 	 				 <br>
 		                            <div>
@@ -155,4 +171,35 @@
         </div>
       </footer>
 </div>
+<script type="text/javascript">
+	$("#drNo").hide();
+    $("#wholeLechon6000").hide();
+    $("#descriptionDrNo").hide();
+    $("#drList").hide();
+	$(".chooseOption").change(function(){
+         const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
+         if(cat === "Ssp"){
+             $("#invoiceNo").show();
+             $("#wholeLechon").show();
+             $("#description").show();
+
+             $("#drNo").hide();
+             $("#wholeLechon6000").hide();
+             $("#descriptionDrNo").hide();
+             $("#drList").hide();
+         }else if(cat === "Private Order"){
+             $("#drNo").show();
+             $("#wholeLechon6000").show();
+             $("#descriptionDrNo").show();
+             $("#drList").show();
+             $("#invoiceNo").hide();
+             $("#wholeLechon").hide();
+             $("#description").hide();
+         }  
+    });
+
+	$(".drSelect").change(function(){
+
+	});
+</script>
 @endsection

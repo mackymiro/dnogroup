@@ -27,7 +27,7 @@
 	                              <i class="fas fa-cash-register" aria-hidden="true"></i>
 	                            View Sales Invoice
                                 <div class="float-right">
-                                      <a href="{{ action('LoloPinoyLechonDeCebuController@printSalesInvoice', $viewSalesInvoice['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                                      <a href="{{ action('LoloPinoyLechonDeCebuController@printSalesInvoice', $viewSalesInvoice[0]->id)}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -35,19 +35,23 @@
                                     <thead>
                                         <tr>
                                             <th width="20%">Invoice #</th>
-                                            <th>{{ $viewSalesInvoice['invoice_number'] }}</th>
+                                            <th>{{ $viewSalesInvoice[0]->invoice_number }}</th>
+                                        </tr>
+										<tr>
+                                            <th width="20%">SI No</th>
+                                            <th>{{ $viewSalesInvoice[0]->module_code}}{{ $viewSalesInvoice[0]->lechon_de_cebu_code }}</th>
                                         </tr>
                                           <tr>
                                             <th>Date</th>
-                                            <th>{{ $viewSalesInvoice['date'] }}</th>
+                                            <th>{{ $viewSalesInvoice[0]->date }}</th>
                                         </tr>
                                         <tr>
                                             <th>Ordered By</th>
-                                            <th>{{ $viewSalesInvoice['ordered_by'] }}</th>
+                                            <th>{{ $viewSalesInvoice[0]->ordered_by }}</th>
                                         </tr>
                                         <tr>
                                             <th>Address</th>
-                                            <th>{{ $viewSalesInvoice['address'] }}</th>
+                                            <th>{{ $viewSalesInvoice[0]->address }}</th>
                                         </tr>
                                     </thead>
                                    
@@ -65,11 +69,11 @@
                         	 		</thead>
                         	 		<tbody>
                     	 				<tr>
-                	 						<td>{{ $viewSalesInvoice['qty'] }}</td>
-                	 						<td>{{ $viewSalesInvoice['total_kls'] }}</td>
-                	 						<td>{{ $viewSalesInvoice['item_description'] }}</td>
-                	 						<td><?php echo number_format($viewSalesInvoice['unit_price'], 2)?></td>
-                	 						<td><?php echo number_format($viewSalesInvoice['amount'], 2)?></td>
+                	 						<td>{{ $viewSalesInvoice[0]->qty }}</td>
+                	 						<td>{{ $viewSalesInvoice[0]->total_kls }}</td>
+                	 						<td>{{ $viewSalesInvoice[0]->item_description }}</td>
+                	 						<td><?php echo number_format($viewSalesInvoice[0]->unit_price, 2)?></td>
+                	 						<td><?php echo number_format($viewSalesInvoice[0]->amount, 2)?></td>
                     	 				</tr>
                     	 				@foreach($salesInvoices as $salesInvoice)
                     	 				<tr>

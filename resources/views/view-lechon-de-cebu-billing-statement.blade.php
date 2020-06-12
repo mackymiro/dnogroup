@@ -31,7 +31,7 @@
                               <i class="fas fa-receipt" aria-hidden="true"></i>
                             View Billing Statment
                             <div class="float-right">
-                               <a href="{{ action('LoloPinoyLechonDeCebuController@printBillingStatement', $viewBillingStatement['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                               <a href="{{ action('LoloPinoyLechonDeCebuController@printBillingStatement', $viewBillingStatement[0]->id)}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                              </div>
                         </div>
                         <div class="card-body">
@@ -42,19 +42,19 @@
                                         <thead>
                                             <tr>
                                                 <th width="30%">Bill To</th>
-                                                <th> {{ $viewBillingStatement['bill_to'] }}</th>
+                                                <th> {{ $viewBillingStatement[0]->bill_to }}</th>
                                             </tr>
                                             <tr>
                                                 <th>Address</th>
-                                                <th>{{ $viewBillingStatement['address'] }}</th>
+                                                <th>{{ $viewBillingStatement[0]->address }}</th>
                                             </tr>
                                             <tr>
                                                 <th>Period Covered</th>
-                                                <th> {{ $viewBillingStatement['period_cover'] }} </th>
+                                                <th> {{ $viewBillingStatement[0]->period_cover }} </th>
                                             </tr>
                                             <tr>
                                                 <th>Date</th>
-                                                <th>{{ $viewBillingStatement['date'] }}</th>
+                                                <th>{{ $viewBillingStatement[0]->date }}</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -64,16 +64,13 @@
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th width="20%">Reference #</th>
-                                                <th>{{ $viewBillingStatement['reference_number'] }}</th>
+                                                <th width="20%">BS #</th>
+                                                <th>{{ $viewBillingStatement[0]->lechon_de_cebu_code }}</th>
                                             </tr>
-                                            <tr>
-                                                <th>PO Number</th>
-                                                <th> {{ $viewBillingStatement['p_o_number'] }}</th>
-                                            </tr>
+                                           
                                             <tr>
                                                 <th>Terms</th>
-                                                <th>{{ $viewBillingStatement['terms'] }}</th>
+                                                <th>{{ $viewBillingStatement[0]->terms }}</th>
                                             </tr>
                                         </thead>
 
@@ -86,19 +83,28 @@
                                     <thead>
                                       <tr>
                                         <th class="bg-info" style="color:white;">DATE</th>
+                                        @if($viewBillingStatement[0]->order === "Private Order")
+                                        <th class="bg-info" style="color:white;">DR No</th>
+                                        <th class="bg-info" style="color:white;">QTY</th>
+                                        @else
                                         <th class="bg-info" style="color:white;">INVOICE #</th>
-                                        <th class="bg-info" style="color:white;">WHOLE LECHON 500/KL</th>
+                                        @endif
                                         <th class="bg-info" style="color:white;">DESCRIPTION</th>
                                         <th class="bg-info" style="color:white;">AMOUNT</th>
                                       </tr>
                                     </thead>
                                     <tbody>
                                       <tr>
-                                      <td>{{ $viewBillingStatement['date_of_transaction'] }}</td>
-                                      <td>{{ $viewBillingStatement['invoice_number'] }}</td>
-                                      <td>{{ $viewBillingStatement['whole_lechon'] }}</td>
-                                      <td>{{ $viewBillingStatement['description'] }}</td>
-                                      <td><?php echo number_format($viewBillingStatement['amount'], 2); ?></td>
+                                      <td>{{ $viewBillingStatement[0]->date_of_transaction }}</td>
+                                      @if($viewBillingStatement[0]->order == "Private Order")
+                                      <td>{{ $viewBillingStatement[0]->dr_no }}</td>
+                                      <td>{{ $viewBillingStatement[0]->qty }}</td>
+                                      @else
+                                      <td>{{ $viewBillingStatement[0]->invoice_number }}</td>
+                                      @endif
+                                     
+                                      <td>{{ $viewBillingStatement[0]->description }}</td>
+                                      <td><?php echo number_format($viewBillingStatement[0]->amount, 2); ?></td>
                                       </tr>
                                       @foreach($billingStatements as $billingStatement)
                                       <tr>
@@ -130,7 +136,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td>{{ $viewBillingStatement['created_by'] }}</td>
+                                                        <td>{{ $viewBillingStatement[0]->created_by }}</td>
                                                         <td></td>
                                                     </tr>
                                                 </tbody>

@@ -335,4 +335,16 @@
         </div>
       </footer>
 </div><!-- end of wrapper -->
+<script>
+	new Vue({
+	el: '#app-status',
+		data: {
+			statuses:[
+				{ text:'FULLY PAID AND RELEASED', value: 'FULLY PAID AND RELEASED' },
+				{ text:'FOR APPROVAL', value: 'FOR APPROVAL'},
+				{ text: 'FOR CONFIRMATION', value: 'FOR CONFIRMATION'}
+			]
+		}
+	})
+</script>
 @endsection

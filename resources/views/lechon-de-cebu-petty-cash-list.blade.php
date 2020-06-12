@@ -66,19 +66,19 @@
                                     </tfoot>
                                     <tbody>
                                             @foreach($pettyCashLists as $pettyCashList)
-                                            <tr id="deletedId{{ $pettyCashList['id']}}">    
+                                            <tr id="deletedId{{ $pettyCashList->id}}">    
                                                 <td>
                                                 @if(Auth::user()['role_type'] != 3)
-                                                    <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-petty-cash/'.$pettyCashList['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                                    <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-petty-cash/'.$pettyCashList->id) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                                     @endif
                                                 @if(Auth::user()['role_type'] == 1)
-                                                    <a id="delete" onClick="confirmDelete('{{ $pettyCashList['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                                                    <a id="delete" onClick="confirmDelete('{{ $pettyCashList->id}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
                                                 @endif
                                                 </td>
-                                                <td>{{ $pettyCashList['date']}}</td>
-                                                <td>Ptyldc-{{ $pettyCashList['petty_cash_no']}}</td>
-                                                <td><a href="{{ url('lolo-pinoy-lechon-de-cebu/petty-cash/view/'.$pettyCashList['id']) }}">{{ $pettyCashList['petty_cash_name']}}</a></td>
-                                                <td>{{ $pettyCashList['created_by']}}</td>
+                                                <td>{{ $pettyCashList->date}}</td>
+                                                <td>{{ $pettyCashList->module_code}}{{ $pettyCashList->lechon_de_cebu_code}}</td>
+                                                <td><a href="{{ url('lolo-pinoy-lechon-de-cebu/petty-cash/view/'.$pettyCashList->id) }}">{{ $pettyCashList->petty_cash_name}}</a></td>
+                                                <td>{{ $pettyCashList->created_by}}</td>
                                             </tr>   
                                             @endforeach
                                         </tbody>
@@ -147,6 +147,33 @@
 
 <script type="text/javascript">
      $("#validate").hide();
+
+     const confirmDelete = (id) => {
+        var x = confirm("Do you want to delete this?");
+        if(x){
+            $.ajax({
+              type: "DELETE",
+              url: '/lolo-pinoy-lechon-de-cebu/petty-cash/delete/' + id,
+              data:{
+                _method: 'delete', 
+                "_token": "{{ csrf_token() }}",
+                "id": id
+              },
+              success: function(data){
+                console.log(data);
+                $("#deletedId"+id).fadeOut('slow');
+               
+              },
+              error: function(data){
+                console.log('Error:', data);
+              }
+
+            });
+
+        }else{
+            return false;
+        }
+     }  
 
      const addPettyCash = () =>{
         const reqDate = $("#date").val();

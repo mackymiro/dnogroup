@@ -23,15 +23,15 @@
 <div id="wrapper">
 	 <div id="content-wrapper">
  		<div class="container-fluid">
- 				<div  style="margin-top:60px;">
+ 				<div  style="margin-top:40px;">
             	 <img style="margin-left: 170px;" src="{{ asset('images/ribos.jpg')}}"   width="392" height="257"  alt="Ribo's Bar">
-            	 	 <p >
+            	 	 <p style="margin-top:-40px" >
 		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
 						Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
 
 						Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
             	 	 </p>
-	            	 <h4 ><u>PAYMENT DETAILS (PAYMENT VOUCHER)</u></h4>
+	            	 <h4 ><u>PAYMENT VOUCHER</u></h4>
 	            </div>
 				<div class="row">
 					<div class="col-lg-12">
@@ -149,7 +149,9 @@
                            			<thead>
                            				<tr>
                        						<th style="width:30%;">Prepared By</th>
-                       						<th>Approved By</th>
+                       						<th>Checked By</th>
+											<th>Approved By</th>  
+											<th>Date</th>  
                            				</tr>
                            			</thead>
                            			<tbody>
@@ -161,8 +163,16 @@
                            					</td>
                            					<td>
                            						________________________<br>
-                           						Aprilane Maturan<br>
+                           						Aprilane Q Maturan<br>
                            						Finance Officer
+                           					</td>
+											<td>
+                           						________________________<br>
+                           						
+                           					</td>
+											   <td>
+                           						________________________<br>
+                           						
                            					</td>
                            					
                            				</tr>
@@ -170,7 +180,28 @@
                            		</table>
                            	
                            </div>
+						   <div style="margin-top:50px;">
+                           		<table  >
+                           			<thead>
+                           				<tr>
+                       						<th style="width:30%;">Received By</th>
+										
+                           				</tr>
+                           			</thead>
+                           			<tbody>
+                           				<tr>
+                           					<td>
+                           						________________________<br>
+                           						
 
+                           					</td>
+                           				
+                           					
+                           				</tr>
+                           			</tbody>
+                           		</table>
+                           	
+                           </div>
 						 </div>
 					</div>
 				</div>

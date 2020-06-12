@@ -22,6 +22,26 @@ use App\LoloPinoyGrillCommissaryPettyCash;
 class LoloPinoyGrillCommissaryController extends Controller
 {
 
+    public function printPO($id){   
+        $purchaseOrder = LoloPinoyGrillCommissaryPurchaseOrder::find($id);
+
+        //
+      $pOrders = LoloPinoyGrillCommissaryPurchaseOrder::where('po_id', $id)->get()->toArray();
+
+        //count the total amount 
+      $countTotalAmount = LoloPinoyGrillCommissaryPurchaseOrder::where('id', $id)->sum('amount');
+
+      //
+      $countAmount = LoloPinoyGrillCommissaryPurchaseOrder::where('po_id', $id)->sum('amount');
+
+      $sum  = $countTotalAmount + $countAmount;
+
+
+      $pdf = PDF::loadView('printPOLoloPinoyGrill', compact('purchaseOrder', 'pOrders', 'sum'));
+
+      return $pdf->download('lolo-pinoy-grill-commissary-purchase-order.pdf');
+    }
+
     public function printBillingStatement($id){
         $printBillingStatement = LoloPinoyGrillCommissaryBillingStatement::find($id);
 
@@ -1628,10 +1648,9 @@ class LoloPinoyGrillCommissaryController extends Controller
 
     //billing statement form
     public function billingStatementForm(){
-         //get the purchase order lists
-        $getPurchaseOrders = LoloPinoyGrillCommissaryPurchaseOrder::where('po_id', NULL)->get()->toArray();
 
-        return view('lolo-pinoy-grill-commissary-billing-statement-form', compact('getPurchaseOrders'));
+        $drNos = LoloPinoyGrillCommissaryDeliveryReceipt::where('dr_id', NULL)->get()->toArray();
+        return view('lolo-pinoy-grill-commissary-billing-statement-form', compact('drNos'));
     }
 
     
@@ -1942,6 +1961,8 @@ class LoloPinoyGrillCommissaryController extends Controller
             'address'=>$request->get('address'),
             'unit_price'=>$unitPrice,
             'amount'=>$sum,
+            'charge_to'=>$request->get('chargeTo'),
+            'address_to'=>$request->get('addressTo'),
             'prepared_by'=>$name,
             'created_by'=>$name,
 
@@ -2061,7 +2082,20 @@ class LoloPinoyGrillCommissaryController extends Controller
      */
     public function show($id)
     {
+        
+        $purchaseOrder = LoloPinoyGrillCommissaryPurchaseOrder::find($id);
         //
+        $pOrders = LoloPinoyGrillCommissaryPurchaseOrder::where('po_id', $id)->get()->toArray();
+
+          //count the total amount 
+        $countTotalAmount = LoloPinoyGrillCommissaryPurchaseOrder::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = LoloPinoyGrillCommissaryPurchaseOrder::where('po_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        return view('view-lolo-pinoy-grill-commissary-purchase-order', compact('purchaseOrder', 'pOrders', 'sum'));
     }
 
     /**

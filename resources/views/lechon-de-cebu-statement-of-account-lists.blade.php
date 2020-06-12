@@ -24,41 +24,43 @@
       				  					<thead>
       			  							<th>Action</th>
       			  							<th>Date</th>
+                            <th>SOA No</th>
+      			  							<th>Invoice#</th>
                             <th>Bill To</th>
       			  							<th>Branch</th>
-                            <th>Reference #</th>
-      			  							<th>Invoice#</th>
-      			  						  <th  class="bg-info" style="color:white;">Period Covered</th>
+                            <th  class="bg-info" style="color:white;">Period Covered</th>
       			  							<th>Created By</th>
       				  					</thead>
       				  					<tfoot>
       			  							<th>Action</th>
                             <th>Date</th>
+                            <th>SOA No</th>
+                            <th>Invoice#</th>
                             <th>Bill To</th>
                             <th>Branch</th>
-                            <th>Reference #</th>
-                            <th>Invoice#</th>
+                            
                             <th  class="bg-info" style="color:white;">Period Covered</th>
                             <th>Created By</th>
       				  					</tfoot>
       				  					<tbody>
                             @foreach($statementOfAccounts as $statementOfAccount)
-      				  						<tr id="deletedId{{ $statementOfAccount['id']}}">
+      				  						<tr id="deletedId{{ $statementOfAccount->id}}">
                               <td>
-                                 @if($user->role_type !== 3)
-                                  <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-statement-of-account/'.$statementOfAccount['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                 @if(Auth::user()['role_type'] !== 3)
+                                  <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-statement-of-account/'.$statementOfAccount->id ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                   @endif
                                 
-                                  <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-statement-account/'.$statementOfAccount['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
+                                  <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-statement-account/'.$statementOfAccount->id) }}" title="View"><i class="fas fa-low-vision"></i></a>
 
                               </td>
-                              <td>{{ $statementOfAccount['date'] }}</td>
-                              <td>{{ $statementOfAccount['bill_to' ]}}</td>
-                              <td>{{ $statementOfAccount['branch' ]}}</td>
-                              <td>{{ $statementOfAccount['reference_number' ]}}</td>
-                              <td>{{ $statementOfAccount['invoice_number' ]}}</td>
-                              <td class="bg-info" style="color:white;">{{ $statementOfAccount['period_cover']}}</td>
-                              <td>{{ $statementOfAccount['created_by' ]}}</td>
+                              <td>{{ $statementOfAccount->date }}</td>
+                              <td>SOA-{{ $statementOfAccount->lechon_de_cebu_code}}</td>
+                              <td>{{ $statementOfAccount->invoice_number}}</td>
+                              <td>{{ $statementOfAccount->bill_to}}</td>
+                              <td>{{ $statementOfAccount->branch}}</td>
+                             
+                              <td class="bg-info" style="color:white;">{{ $statementOfAccount->period_cover}}</td>
+                              <td>{{ $statementOfAccount->created_by}}</td>
                             </tr>
                             @endforeach
       				  					</tbody>

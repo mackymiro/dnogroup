@@ -45,11 +45,11 @@
                                         <thead>
                                            <tr>
                                                 <th width="30%">Petty Cash No</th>
-                                                <th>Ptyldc-{{ $getPettyCash['petty_cash_no'] }}</th>
+                                                <th>{{ $getPettyCash[0]->module_code}}{{ $getPettyCash[0]->lechon_de_cebu_code }}</th>
                                             </tr>
                                             <tr>
                                                 <th>Date</th>
-                                                <th>{{ $getPettyCash['date'] }}</th>
+                                                <th>{{ $getPettyCash[0]->date }}</th>
                                             </tr>
                                          
                                       </thead>
@@ -60,12 +60,12 @@
                                 <table >
                                      <thead>
                                          <tr>
-                                                <th>Petty Cash Name</th>
-                                                <th> {{ $getPettyCash['petty_cash_name'] }} </th>
+                                                <th width="30%">Petty Cash Name</th>
+                                                <th> {{ $getPettyCash[0]->petty_cash_name }} </th>
                                             </tr>
                                             <tr>
                                                 <th>Petty Cash Summary</th>
-                                                <th>{{ $getPettyCash['petty_cash_summary'] }}</th>
+                                                <th>{{ $getPettyCash[0]->petty_cash_summary }}</th>
                                             </tr>
                                        
                                     </thead>
@@ -86,13 +86,7 @@
                                     </thead>
                                   <tbody>
                                   	
-                                         <tr style="border:1px solid black;">
-                                         <td style="text-align:center; border: 1px solid black;">{{ $getPettyCash['date'] }}</td>
-                                         
-                                          <td style="text-align:center; border: 1px solid black;">{{ $getPettyCash['petty_cash_summary'] }}</td>
-                                         
-                                          <td style="text-align:center; border: 1px solid black;"><?php echo number_format($getPettyCash['amount'], 2);?></td>
-                                        </tr> 
+              
                                   	 	 @foreach($getPettyCashSummaries as $getPettyCashSummary)
                                         <tr style="border:1px solid black;">
                                          <td style="text-align:center; border: 1px solid black;">{{ $getPettyCashSummary['date'] }}</td>
@@ -124,12 +118,12 @@
                            				<tr>
                            					<td>
                            						________________________<br>
-                           						{{ $getPettyCash['created_by']}}
+                           						{{ $getPettyCash[0]->created_by }}
 
                            					</td>
                            					<td>
                            						________________________<br>
-                           						Aprilane Maturan<br>
+                           						Aprilane Q Maturan<br>
                            						Finance Officer
                            					</td>
                            					

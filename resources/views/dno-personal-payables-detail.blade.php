@@ -62,7 +62,7 @@
     					  				<div class="form-row">
 					  						<div class="col-lg-12">
 				  								<label>Date</label>
-				  								<input type="text" name="date" class="datepicker form-control" required="required" />
+				  								<input type="text" name="date" class="datepicker form-control" />
 					  						</div> 
 
     					  				</div>
@@ -164,7 +164,7 @@
   									<div class="form-row">
 										<div class="col-lg-12">
 											<label>Date</label>
-											<input type="text"  name="date" class="datepicker form-control" required="required" />
+											<input type="text"  name="date" class="datepicker form-control"  />
 										
 										</div>
   										<div class="col-lg-12">

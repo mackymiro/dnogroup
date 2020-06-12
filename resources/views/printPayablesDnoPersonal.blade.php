@@ -45,13 +45,19 @@
                                                 <th width="30%">Paid To</th>
                                                 <th> {{ $payableId['paid_to'] }}</th>
                                             </tr>
-											@if($payableId['method_of_payment']  == "Cheque")
+											@if($payableId['method_of_payment']  === "Cheque")
+											<tr>
+                                                <th width="30%">Account Name</th>
+                                                <th> {{ $payableId['account_name'] }}</th>
+                                            </tr>
+											@endif
+											@if($payableId['method_of_payment']  === "Cheque")
 											<tr>
                                                 <th width="30%">Account No</th>
                                                 <th> {{ $payableId['account_no'] }}</th>
                                             </tr>
 											@endif
-											@if($payableId['method_of_payment'] == "Cash")
+											@if($payableId['method_of_payment'] === "Cash")
 											<tr>
                                                 <th width="30%">Account Name</th>
                                                 <th> {{ $payableId['account_name'] }}</th>
@@ -66,10 +72,7 @@
                                                 <th>Status</th>
                                                 <th>{{ $payableId['status'] }}</th>
                                             </tr>
-                                            <tr>
-                                                <th>Date</th>
-                                                <th> {{ $payableId['issued_date'] }} </th>
-                                            </tr>                           
+                                                                    
                                         </thead>
                                       
                                   </table>   
@@ -90,7 +93,10 @@
 												<th>Payment Method</th>
 												<th>{{ $payableId['method_of_payment']}}</th>
 											</tr>
-                                           
+                                            <tr>
+                                                <th>Date</th>
+                                                <th> {{ $payableId['issued_date'] }} </th>
+                                            </tr>  
                                         </thead>
 	                              </table>
 	                          </div>
@@ -101,8 +107,7 @@
                           <br>
 						  <br>
 						  <br>
-						  <br>
-					
+
 						  <table style="border:1px solid black;">
 								<thead>
 									<tr>
@@ -128,8 +133,7 @@
 								</tbody>
 						  </table>
                           <br>
-                          <br>
-                          <br>
+                        
 						  @if($payableId['method_of_payment'] === "Cheque")
                           <table style="border:1px solid black;">
                           		  <thead>
@@ -186,7 +190,7 @@
                           </table>
 
 						  @endif
-                           <div style="margin-top:100px;">
+                           <div style="margin-top:70px;">
                            		<table  >
                            			<thead>
                            				<tr>
@@ -205,7 +209,7 @@
                            					</td>
 											<td>
                            						________________________<br>
-                           						Aprilane Maturan<br>
+                           						Aprilane Q Maturan<br>
                            						Finance Officer
                            					</td>
                            					<td>
@@ -221,7 +225,28 @@
                            		</table>
                            	
                            </div>
+						   <div style="margin-top:100px;">
+                           		<table  >
+                           			<thead>
+                           				<tr>
+                       						<th style="width:30%;">Received By</th>
+										
+                           				</tr>
+                           			</thead>
+                           			<tbody>
+                           				<tr>
+                           					<td>
+                           						________________________<br>
+                           						
 
+                           					</td>
+                           				
+                           					
+                           				</tr>
+                           			</tbody>
+                           		</table>
+                           	
+                           </div>
 						 </div>
 					</div>
 				</div>
