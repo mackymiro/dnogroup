@@ -35,7 +35,7 @@
 					  						<tr>
 											   <th>Action</th>
 				  								<th>Invoice #</th>
-				  								<th>Voucher Ref #</th>
+				  								<th>PV No</th>
 												<th  class="bg-info" style="color:#fff;">Category</th>
 				  								<th>Issued Date</th>
 												<th>Paid To</th>
@@ -51,7 +51,7 @@
 				  							<tr>
 											  <th>Action</th>
 				  								<th>Invoice #</th>
-				  								<th>Voucher Ref #</th>
+				  								<th>PV No</th>
 												<th  class="bg-info" style="color:#fff;">Category</th>
 				  								<th>Issued Date</th>
 												<th>Paid To</th>
@@ -65,7 +65,7 @@
 				  						</tfoot>
 				  						<tbody>
 				  							@foreach($getTransactionLists as $getTransactionList)
-											<?php $id = $getTransactionList['id']; ?>
+											<?php $id = $getTransactionList->id; ?>
 											<?php
 												$amount1 = DB::table('lolo_pinoy_grill_commissary_payment_vouchers')
 															->select('*')
@@ -78,34 +78,34 @@
 															->sum('amount');
 												$compute = $amount1 + $amount2;
 											?>
-				  							<tr id="deletedId{{ $getTransactionList['id'] }}">
+				  							<tr id="deletedId{{ $getTransactionList->id }}">
 			  									<td width="2%">
 			  										@if(Auth::user()['role_type'] == 1)
-					  									<a id="delete" onClick="confirmDelete('{{ $getTransactionList['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+					  									<a id="delete" onClick="confirmDelete('{{ $getTransactionList->id}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
 				              						@endif
 			  									</td>
 			  									<td>
-			  										@if($getTransactionList['status'] != "FULLY PAID AND RELEASED")
+			  										@if($getTransactionList->status != "FULLY PAID AND RELEASED")
 													  <p style="width:250px;">
-													  	<a href="{{ url('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-payables-detail/'.$getTransactionList['id']) }}" title="Edit">{{ $getTransactionList['invoice_number']}}</a>
+													  	<a href="{{ url('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-payables-detail/'.$getTransactionList->id) }}" title="Edit">{{ $getTransactionList->invoice_number}}</a>
 			  										  </p>
 													@else
-													<p style="width:250px;">{{ $getTransactionList['invoice_number']}}</p>
+													<p style="width:250px;">{{ $getTransactionList->invoice_number}}</p>
 			  										@endif
 			  									</td>
-			  									<td><p style="width:140px;">LPGC-{{ $getTransactionList['voucher_ref_number']}}</p></td>
-			  									<td class="bg-info" style="color:#fff;"><p style="width:150px;">{{ $getTransactionList['category']}}</p></td>
-												<td><p style="width:130px;">{{ $getTransactionList['issued_date']}}</p></td>
-												<td><p style="width:200px;">{{ $getTransactionList['paid_to']}}</p></td>
-												<td><p style="width:200px;">{{ $getTransactionList['account_name']}}</p></td>
+			  									<td><p style="width:140px;">{{ $getTransactionList->module_code}}{{ $getTransactionList->lolo_pinoy_grill_code}}</p></td>
+			  									<td class="bg-info" style="color:#fff;"><p style="width:150px;">{{ $getTransactionList->category}}</p></td>
+												<td><p style="width:130px;">{{ $getTransactionList->issued_date}}</p></td>
+												<td><p style="width:200px;">{{ $getTransactionList->paid_to}}</p></td>
+												<td><p style="width:200px;">{{ $getTransactionList->account_name}}</p></td>
 			  									<td class="bg-danger" style="color:white;">
 												  	<?php echo number_format($compute, 2); ?>
 												</td>
-												<td><p style="width:160px;">{{ $getTransactionList['delivered_date']}}</p></td>
-			  									<td><p style="width:190px;">{{ $getTransactionList['method_of_payment'] }}</p></td>
+												<td><p style="width:160px;">{{ $getTransactionList->delivered_date}}</p></td>
+			  									<td><p style="width:190px;">{{ $getTransactionList->method_of_payment }}</p></td>
 			  									
-			  									<td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('lolo-pinoy-grill-commissary/view-payables-details/'.$getTransactionList['id']) }}">{{ $getTransactionList['status'] }}</a></p></td>
-			  									<td><p style="width:190px;">{{ $getTransactionList['created_by']}}</p></td>
+			  									<td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('lolo-pinoy-grill-commissary/view-payables-details/'.$getTransactionList->id) }}">{{ $getTransactionList->status }}</a></p></td>
+			  									<td><p style="width:190px;">{{ $getTransactionList->created_by}}</p></td>
 				  							</tr>
 				  							@endforeach
 				  						</tbody>

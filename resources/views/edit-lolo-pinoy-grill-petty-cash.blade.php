@@ -39,7 +39,7 @@
                           	  Petty Cash
                         </div>
                         <div class="card-body">
-                            <form action="{{ action('LoloPinoyGrillCommissaryController@updatePettyCash', $pettyCash['id'])}}" method="post">
+                            <form action="{{ action('LoloPinoyGrillCommissaryController@updatePettyCash', $pettyCash[0]->id)}}" method="post">
                             {{csrf_field()}}
                                 <input name="_method" type="hidden" value="PATCH">
                                 @if(session('editSuccess'))
@@ -50,19 +50,19 @@
                                     
                                     <div class="col-lg-2">
                                         <label>Petty Cash No</label>
-                                        <input type="text" name="pettyCashNo" class="form-control" value="Ptylpgc-{{ $pettyCash['petty_cash_no']}}" disabled="disabled"/>
+                                        <input type="text" name="pettyCashNo" class="form-control" value="{{ $pettyCash[0]->module_code}}{{ $pettyCash[0]->lolo_pinoy_grill_code}}" disabled="disabled"/>
                                     </div>
                                     <div class="col-lg-2">
                                         <label>Date</label>
-                                        <input type="text" name="date" class="datepicker form-control" value="{{ $pettyCash['date']}}"/>
+                                        <input type="text" name="date" class="datepicker form-control" value="{{ $pettyCash[0]->date}}"/>
                                     </div>
                                     <div class="col-lg-2">
                                         <label>Petty Cash Name</label>
-                                        <input type="text" name="pettyCashName" class="form-control" value="{{ $pettyCash['petty_cash_name']}}"/>
+                                        <input type="text" name="pettyCashName" class="form-control" value="{{ $pettyCash[0]->petty_cash_name}}"/>
                                     </div>
                                     <div class="col-lg-4">
                                         <label>Petty Cash Summary</label>
-                                        <input type="text" name="pettyCashSummary" class="form-control" value="{{ $pettyCash['petty_cash_summary']}}"/>
+                                        <input type="text" name="pettyCashSummary" class="form-control" value="{{ $pettyCash[0]->petty_cash_summary}}"/>
                                     </div>
                                    
                                 </div>
@@ -88,7 +88,7 @@
                                 @if(session('addNewSuccess'))
 	                             	<p class="alert alert-success">{{ Session::get('addNewSuccess') }}</p>
 	                            @endif
-                                <form action ="{{ action('LoloPinoyGrillCommissaryController@addNewPettyCash', $pettyCash['id']) }}" method="post">
+                                <form action ="{{ action('LoloPinoyGrillCommissaryController@addNewPettyCash', $pettyCash[0]->id) }}" method="post">
                                 {{csrf_field()}}
                                 <div class="form-row">
                                      <div class="col-lg-12">
@@ -147,7 +147,7 @@
                                         </div>
                                         <div class="col-lg-4">
                                             <br>
-                                            <input type="hidden" name="pcId" value="{{ $pettyCash['id'] }}" />
+                                            <input type="hidden" name="pcId" value="{{ $pettyCash[0]->id }}" />
                                             <button type="submit" class="btn btn-success"><i class="fas fa-edit"></i></button>
                                             <a id="delete" onclick="confirmDelete('{{ $pettyCashSummary['id'] }}')" href="javascript:void" class="btn btn-danger"><i class="fas fa-window-close" aria-hidden="true"></i> </a>
                                         </div>

@@ -123,6 +123,7 @@
                <thead>
                   <tr>
                     <th style="height: 1%; text-align: center;" >QTY</th>
+                    <th style="height: 1%; text-align: center;" >UNIT</th>
                     <th style="height: 1%; text-align: center;">DESCRIPTION</th>
                     <th style="height: 1%; text-align: center;">PRICE</th>
                   
@@ -131,12 +132,14 @@
                 <tbody >
                    <tr style="border:1px solid black;">
                       <td style="text-align:center; font-size:16px; ">{{ $deliveryId[0]->qty}}</td>
+                      <td style="text-align:center; font-size:16px; ">{{ $deliveryId[0]->unit}}</td>
                       <td style="text-align:center; font-size:16px; ">{{ $deliveryId[0]->description}}</td>
                       <td style="text-align:center; font-size:16px; "><?php echo number_format($deliveryId[0]->price, 2); ?></td>
                     </tr>
                      @foreach($deliveryReceipts as $deliveryReceipt)
                      <tr style="border:1px solid black;">
                         <td style="text-align:center; font-size:16px; ">{{ $deliveryReceipt['qty']}}</td>
+                        <td style="text-align:center; font-size:16px; ">{{ $deliveryReceipt['unit']}}</td>
                         <td style=" text-align:center; font-size:16px; ">{{ $deliveryReceipt['description']}}</td>
                         <td style=" text-align:center; font-size:16px;"><?php echo number_format($deliveryReceipt['price'], 2)?></td>
                      </tr>

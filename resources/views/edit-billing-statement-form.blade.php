@@ -120,6 +120,13 @@
                                         <input type="text" name="qty" class="form-control"  value="{{ $billingStatement['qty']}}" disabled />
                                       
                                       </div>
+                                      @if($billingStatement['order'] == "Private Order")
+                                      <div  class="col-lg-1">
+                                        <label>Unit</label>
+                                        <input type="text" name="unit" class="form-control"  value="{{ $billingStatement['unit']}}" disabled />
+                                      
+                                      </div>
+                                      @endif
                                       @if($billingStatement['order'] == "Ssp")
                                       <div  class="col-lg-1">
                                         <label>Body 400/kls</label>
@@ -216,6 +223,11 @@
                                           <input type="text" name="qty" class="form-control"  readonly="readonly" />
                                         
                                         </div>
+                                        <div id="unit" class="col-lg-12">
+                                          <label>Unit</label>
+                                          <input type="text" name="unit" class="form-control"  readonly="readonly" />
+                                        
+                                        </div>
                                         <div id="body" class="col-lg-12">
                                           <label>Body 400/kls</label>
                                           <input type="text" name="body" class="form-control"  readonly="readonly" />
@@ -289,10 +301,16 @@
                                             <input type="text" name="drNo" class="form-control" disabled="disbled" value="{{ $bStatement['dr_no'] }}" />
                                         </div>
                                        @endif
-                                       <div class="col-lg-1">
+                                       <div class="col-lg-2">
                                             <label>Qty</label>
                                             <input type="text" name="qty" class="form-control" value="{{ $bStatement['qty'] }}" disabled="diasabled" />
                                         </div>
+                                        @if($bStatement['order'] == "Private Order")
+                                        <div class="col-lg-2">
+                                            <label>Unit</label>
+                                            <input type="text" name="Unit" class="form-control" value="{{ $bStatement['unit'] }}" disabled="diasabled" />
+                                        </div>
+                                        @endif
                                         @if($bStatement['order'] == "Ssp")
                                         <div class="col-lg-2">
                                             <label>Body</label>
@@ -372,7 +390,8 @@
     $("#price").hide();
     $("#descriptionDrNo").hide();
     $("#drList").hide();
-   
+    $("#unit").hide();
+
     $(".chooseOption").change(function(){
          const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
          if(cat === "Ssp"){
@@ -388,12 +407,14 @@
              $("#price").hide();
              $("#description").hide();
              $("#drList").hide();
+             $("#unit").hide();
          }else if(cat === "Private Order"){
              $("#drNo").show();
              $("#price").show();
              $("#description").show();
              $("#drList").show();
              $("#qty").show();
+             $("#unit").show();
 
              $("#invoiceNo").hide();
              $("#invoiceList").hide();
@@ -503,6 +524,7 @@
                              'lechon_de_cebu_delivery_receipts.contact_person',
                              'lechon_de_cebu_delivery_receipts.mobile_num',
                              'lechon_de_cebu_delivery_receipts.qty',
+                             'lechon_de_cebu_delivery_receipts.unit',
                              'lechon_de_cebu_delivery_receipts.description',
                              'lechon_de_cebu_delivery_receipts.price',
                              'lechon_de_cebu_delivery_receipts.total',
@@ -551,6 +573,8 @@
                                <?php foreach($datas as $data): ?>
                                      if(cat === "<?php echo $data->id?>"){
                                           $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $data->qty; ?>" class="form-control" readonly="readonly" />');
+                                          $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?php echo $data->unit; ?>" class="form-control" readonly="readonly" />');
+                                         
                                           $("#price").html('<label>Whole Lechon</label><input type="text" name="price" value="<?php echo $data->price; ?>" class="form-control" readonly="readonly" />');
                                           $("#descriptionAdd").html('<label>Description</label><input type="text" name="description" value="<?php echo $data->description; ?>" class="form-control" readonly="readonly" />');
             
@@ -559,8 +583,9 @@
                         });       
 
                   <?php endforeach; ?>  
-                  $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $data->qty; ?>" class="form-control" readonly="readonly" />');
-                
+                $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $data->qty; ?>" class="form-control" readonly="readonly" />');
+                $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?php echo $data->unit; ?>" class="form-control" readonly="readonly" />');
+                                         
                 $("#price").html('<label>Whole Lechon</label><input type="text" name="price" value="<?php echo $getDrNo->price; ?>" class="form-control" readonly="readonly" />');
                 $("#descriptionAdd").html('<label>Description</label><input type="text" name="description" value="<?php echo $getDrNo->description; ?>" class="form-control" readonly="readonly" />');
              }

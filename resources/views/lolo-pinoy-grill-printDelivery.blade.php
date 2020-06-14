@@ -26,6 +26,8 @@
  				 <div style="width:50%; float:left;">
              <div style="float:left;">
                <img  src="{{ asset('images/pdf/lolo-pinoy-grill.jpg')}}"   alt="Lolo Pinoy Grill">    
+               <br> 
+               <span style="width: 200px;">A Subsidiary of Ribo's Food <br> Corporation</span>  
             </div>
             <div style="float:right; width:500px; margin-right:230px; margin-top:20px;">
                <p style="font-size:16px; text-align: left;">
@@ -45,6 +47,7 @@
         </div>-->
         <div style="clear:both;"></div>
         <hr>
+        <h1 style="text-align:center; margin-top:-140px;">DELIVERY RECEIPT</h1>
         <div style="border-style: groove; height: 80px; width:350px; height: 160px;">
         <div style="float:left; width:50%;">
              <table style="position: absolute; width: 360px;">
@@ -69,7 +72,7 @@
            <table style="position: absolute; width: 480px;  margin-left:-170px;">
                   <thead>
                      <tr >
-                          <th style="font-size:16px; height: 1%; width: 25%;">Delivery Receipt No: </th>
+                          <th style="font-size:16px; height: 1%; width: 25%;">DR No: </th>
                           <th style="font-size:16px; height: 1%; ">{{ $deliveryId->dr_no }}</th>
                        </tr>
                      
@@ -154,12 +157,12 @@
           <br>
         <br>
         <div style="float:left; width:50%; margin-top:10px; ">
-            <p style="font-size: 16px;">ALL PAYMENTS SHOULD BE MADE IN FAVOR OF <u>RIBO'S FOOD CORPORATION</u></p>
+            <p style="font-size: 16px;">MAKE CHECK PAYMENTS PAYABLE TO  <u>RIBO'S FOOD CORPORATION</u></p>
         </div>
         <div style="float:right; width:50%;">
             <p style="font-size: 16px;">Received the above merchandise in good order and condition<br>
             ___________________________<br>
-            Printed Name and Signature/Date</p>
+            Print Name and Signature/Date</p>
         </div>
  		</div>
 	 </div>

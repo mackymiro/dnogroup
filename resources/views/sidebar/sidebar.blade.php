@@ -10,10 +10,10 @@
        <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-flag"></i>
-          <span>Summary Report <br>(Per Day)</span>
+          <span>Summary Report(s)</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-            <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/summary-report/per-day') }}">Summary Reports</a>
+            <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/summary-report') }}">Summary Report(s)</a>
             <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/summary-report/search-number-code') }}">Search Number Code</a>
       
         </div>

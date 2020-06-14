@@ -135,7 +135,7 @@
                                   <br>
                                   <input type="hidden" name="siId" value="{{ $getSalesInvoice['id'] }}" />
                                   <input type="submit" class="btn btn-success" value="Update" />
-                                  @if($user->role_type == 1)
+                                  @if(Auth::user()['role_type'] == 1)
                                   <a id="delete" onClick="confirmDelete('{{ $sInvoice['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
                                   @endif
                               </div>
@@ -144,7 +144,7 @@
                         	</form>
                         	 @endforeach
                     		 <div>
-                              @if($user->role_type == 1)
+                              @if(Auth::user()['role_type'] == 1)
                               <a href="{{ url('lolo-pinoy-grill-commissary/add-new-lolo-pinoy-grill-sales-invoice/'.$getSalesInvoice['id'] ) }}" class="btn btn-primary">Add New</a>
                               @endif
                             </div>

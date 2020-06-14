@@ -94,7 +94,7 @@
                                                 </tfoot>
                                                 <tbody>
                                                 @foreach($getAllSalesInvoices as $getAllSalesInvoice)
-                                                    <tr >
+                                                    <tr id="deletedId{{ $getAllSalesInvoice->id}}">
                                                     <td>
                                                     
                                                         <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-sales-invoice/'.$getAllSalesInvoice->id ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
@@ -155,7 +155,7 @@
                                                 </tfoot>
                                                 <tbody>
                                                 @foreach($getAllDeliveryReceipts as $getAllDeliveryReceipt)
-                                                    <tr>
+                                                    <tr id="deletedId{{ $getAllDeliveryReceipt->id }}">
                                                     <td>
                                     
                                                     <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-delivery-receipt/'.$getAllDeliveryReceipt->id ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
@@ -227,7 +227,6 @@
                                             </table>
                                         </div>
                                     </div>
-                                    
                                     <div class="tab-pane fade" id="SOA" role="tabpanel" aria-labelledby="SOA-tab">
                                         <br>
                                         <div class="table-responsive">
@@ -464,7 +463,7 @@
                                          <br>
                                         
                                         <div class="float-right">
-                                             <a href="{{ action('LoloPinoyLechonDeCebuController@printSummary') }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                             <a href="{{ action('LoloPinoyLechonDeCebuController@printGetSummary', $getDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
                                         </div>
                                         <div class="form-group">
                                             <div class="form-row">
@@ -722,7 +721,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th width="15%" class="bg-info" style="color:white;">Total:</th>
-                                                            <th class="bg-success" style="color:white"><?php echo number_format($totalAmountCashes, 2);?></th>
+                                                            <th class="bg-success" style="color:white"><?php echo number_format($totalPaymentVoucher, 2);?></th>
                                                         </tr>
                                                     </thead>
                                                  </table>
@@ -800,7 +799,7 @@
                                                     <thead>
                                                         <tr>
                                                             <th width="15%" class="bg-info" style="color:white;">Total:</th>
-                                                            <th class="bg-success" style="color:white"><?php echo number_format($totalAmountCheck, 2);?></th>
+                                                            <th class="bg-success" style="color:white"><?php echo number_format($totalPaymentVoucher, 2);?></th>
                                                         </tr>
                                                     </thead>
                                                  </table>

@@ -25,37 +25,38 @@
 				  					<thead>
 				  						<tr>
 				  							<th>Action</th>
-			  								<th>PO #</th>
-			  								<th>Paid to</th>
 			  								<th>Date</th>
+											<th>PO No</th>
+			  								<th>Paid to</th>			  								
 			  								<th>Created by</th>
 				  						</tr>
 				  					</thead>
 				  					<tfoot>
 				  						<tr>
 				  							<th>Action</th>
-			  								<th>PO #</th>
-			  								<th>Paid to</th>
 			  								<th>Date</th>
+											<th>PO No</th>
+			  								<th>Paid to</th>  								
 			  								<th>Created by</th>
 				  						</tr>
 				  					</tfoot>
 				  					<tbody>
 				  						@foreach($purchaseOrders as $purchaseOrder)
-				  						<tr>
+				  						<tr id="deletedId{{ $purchaseOrder->id}}">
 				  							<td>
 			  								  @if(Auth::user()['role_type'] != 3)
-					                          <a href="{{ url('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-purchase-order/'.$purchaseOrder['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+					                          <a href="{{ url('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-purchase-order/'.$purchaseOrder->id) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
 					                          @endif
 					                          @if(Auth::user()['role_type'] == 1)
-										  		<a id="delete" onClick="confirmDelete('{{ $purchaseOrder['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+										  		<a id="delete" onClick="confirmDelete('{{ $purchaseOrder->id }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
 						                       @endif
-				  								<a href="{{ url('lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-commissary-purchase-order/'.$purchaseOrder['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
+				  								<a href="{{ url('lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-commissary-purchase-order/'.$purchaseOrder->id) }}" title="View"><i class="fas fa-low-vision"></i></a>
 				  							</td>
-				  							 <td><a href="#">P.O-{{ $purchaseOrder['p_o_number'] }}</a></td>
-					                        <td>{{ $purchaseOrder['paid_to'] }}</td>
-					                        <td>{{ $purchaseOrder['date'] }}</td>
-					                        <td>{{ $purchaseOrder['created_by'] }}</td>
+											<td>{{ $purchaseOrder->date}}</td>
+				  							 <td>{{ $purchaseOrder->module_code}}{{ $purchaseOrder->lolo_pinoy_grill_code}}</td>
+					                        <td>{{ $purchaseOrder->paid_to }}</td>
+					                        
+					                        <td>{{ $purchaseOrder->created_by }}</td>
 				  						</tr>
 				  						@endforeach
 				  					</tbody>
@@ -79,4 +80,32 @@
         </div>
       </footer>
 </div>
+<script type="text/javascript">
+	const confirmDelete = (id) =>{
+		const x = confirm("Do you want to delete this?");
+		if(x){
+			$.ajax({
+					type: "DELETE",
+					url: '/lolo-pinoy-grill-commissary/delete-purchase-order/' + id,
+					data:{
+					_method: 'delete', 
+					"_token": "{{ csrf_token() }}",
+					"id": id
+					},
+					success: function(data){
+					console.log(data);
+					$("#deletedId"+id).fadeOut('slow');
+					
+					},
+					error: function(data){
+					console.log('Error:', data);
+					}
+
+				});
+			}else{
+				return false;
+			}
+	}
+	
+</script>
 @endsection

@@ -38,6 +38,7 @@ class LechonDeCebuBillingStatement extends Model
 		'order',
 		'dr_no',
 		'qty',
+		'unit',
 		'body',
 		'head_and_feet',
 		'price',

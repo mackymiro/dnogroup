@@ -31,7 +31,7 @@
 
             Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
                  </p>
-                 <h4 ><u>PAYMENT DETAILS (PAYMENT VOUCHER )</u></h4>
+                 <h4 ><u>PAYMENT VOUCHER</u></h4>
               </div>
         <div class="row">
           <div class="col-lg-12">

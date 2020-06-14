@@ -87,6 +87,7 @@
                         	 	     <thead>
 	                                  <tr>
 	                                    <th class="bg-info" style="color:white;">QTY</th>
+                                      <th class="bg-info" style="color:white;">UNIT</th>
 	                                    <th class="bg-info" style="color:white;">DESCRIPTION</th>
 	                                    <th class="bg-info" style="color:white;">PRICE</th>
 	                                  
@@ -95,6 +96,7 @@
                                   <tbody>
                                   	 <tr>
                                   	 	<td>{{ $viewDeliveryReceipt[0]->qty}}</td>
+                                       <td>{{ $viewDeliveryReceipt[0]->unit}}</td>
                                   	 	<td>{{ $viewDeliveryReceipt[0]->description}}</td>
                                   	 	<td><?php echo number_format($viewDeliveryReceipt[0]->price, 2); ?></td>
                                   	 </tr>
@@ -102,6 +104,7 @@
                                   	 @foreach($deliveryReceipts as $deliveryReceipt)
                                      <tr>
                                         <td>{{ $deliveryReceipt['qty']}}</td>
+                                        <td>{{ $deliveryReceipt['unit']}}</td>
                                         <td>{{ $deliveryReceipt['description']}}</td>
                                         <td><?php echo number_format($deliveryReceipt['price'], 2)?></td>
                                      </tr>
@@ -110,7 +113,7 @@
                                        @endforeach
                                        <tr>
                                         <td></td>
-                                       
+                                        <td></td>
                                         <td><strong>Total</strong></td>
                                         <td>₱ <?php echo number_format($sum, 2)?></td>
                                       </tr>

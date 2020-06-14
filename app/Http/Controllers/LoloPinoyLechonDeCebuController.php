@@ -26,10 +26,988 @@ use Session;
 class LoloPinoyLechonDeCebuController extends Controller
 {   
 
+    public function getSummaryReport(Request $request){
+        $getDate = $request->get('selectDate');
+        $moduleName = "Sales Invoice";
+        $getAllSalesInvoices = DB::table(
+                        'lechon_de_cebu_sales_invoices')
+                        ->select(
+                            'lechon_de_cebu_sales_invoices.id',
+                            'lechon_de_cebu_sales_invoices.user_id',
+                            'lechon_de_cebu_sales_invoices.si_id',
+                            'lechon_de_cebu_sales_invoices.invoice_number',
+                            'lechon_de_cebu_sales_invoices.date',
+                            'lechon_de_cebu_sales_invoices.ordered_by',
+                            'lechon_de_cebu_sales_invoices.address',
+                            'lechon_de_cebu_sales_invoices.qty',
+                            'lechon_de_cebu_sales_invoices.total_kls',
+                            'lechon_de_cebu_sales_invoices.body',
+                            'lechon_de_cebu_sales_invoices.head_and_feet',
+                            'lechon_de_cebu_sales_invoices.item_description',
+                            'lechon_de_cebu_sales_invoices.unit_price',
+                            'lechon_de_cebu_sales_invoices.amount',
+                            'lechon_de_cebu_sales_invoices.total_amount',
+                            'lechon_de_cebu_sales_invoices.created_by',
+                            'lechon_de_cebu_sales_invoices.created_at',
+                            'lechon_de_cebu_sales_invoices.updated_at',                            
+                            'lechon_de_cebu_codes.lechon_de_cebu_code',
+                            'lechon_de_cebu_codes.module_id',
+                            'lechon_de_cebu_codes.module_code',
+                            'lechon_de_cebu_codes.module_name')
+                        ->join('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+                        ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
+                        ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                        ->whereDate('lechon_de_cebu_sales_invoices.created_at', '=', date($getDate))
+                        ->orderBy('lechon_de_cebu_sales_invoices.id', 'desc')
+                        ->get()->toArray();
+
+            $totalSalesInvoice = DB::table(
+                            'lechon_de_cebu_sales_invoices')
+                            ->select(
+                                'lechon_de_cebu_sales_invoices.id',
+                                'lechon_de_cebu_sales_invoices.user_id',
+                                'lechon_de_cebu_sales_invoices.si_id',
+                                'lechon_de_cebu_sales_invoices.invoice_number',
+                                'lechon_de_cebu_sales_invoices.date',
+                                'lechon_de_cebu_sales_invoices.ordered_by',
+                                'lechon_de_cebu_sales_invoices.address',
+                                'lechon_de_cebu_sales_invoices.qty',
+                                'lechon_de_cebu_sales_invoices.total_kls',
+                                'lechon_de_cebu_sales_invoices.body',
+                                'lechon_de_cebu_sales_invoices.head_and_feet',
+                                'lechon_de_cebu_sales_invoices.item_description',
+                                'lechon_de_cebu_sales_invoices.unit_price',
+                                'lechon_de_cebu_sales_invoices.amount',
+                                'lechon_de_cebu_sales_invoices.total_amount',
+                                'lechon_de_cebu_sales_invoices.created_by',
+                                'lechon_de_cebu_sales_invoices.created_at',
+                                'lechon_de_cebu_sales_invoices.updated_at',                            
+                                'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                'lechon_de_cebu_codes.module_id',
+                                'lechon_de_cebu_codes.module_code',
+                                'lechon_de_cebu_codes.module_name')
+                            ->join('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+                            ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
+                            ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                            ->whereDate('lechon_de_cebu_sales_invoices.created_at', '=', date($getDate))
+                            ->sum('lechon_de_cebu_sales_invoices.total_amount');
+
+
+        //Delivery Receipt
+        $moduleNameDelivery = "Delivery Receipt";
+        $getAllDeliveryReceipts = DB::table(
+                                'lechon_de_cebu_delivery_receipts')
+                                ->select( 
+                                'lechon_de_cebu_delivery_receipts.id',
+                                'lechon_de_cebu_delivery_receipts.user_id',
+                                'lechon_de_cebu_delivery_receipts.dr_id',
+                                'lechon_de_cebu_delivery_receipts.sold_to',
+                                'lechon_de_cebu_delivery_receipts.delivered_to',
+                                'lechon_de_cebu_delivery_receipts.time',
+                                'lechon_de_cebu_delivery_receipts.date',
+                                'lechon_de_cebu_delivery_receipts.date_to_be_delivered',
+                                'lechon_de_cebu_delivery_receipts.contact_person',
+                                'lechon_de_cebu_delivery_receipts.mobile_num',
+                                'lechon_de_cebu_delivery_receipts.qty',
+                                'lechon_de_cebu_delivery_receipts.description',
+                                'lechon_de_cebu_delivery_receipts.price',
+                                'lechon_de_cebu_delivery_receipts.total',
+                                'lechon_de_cebu_delivery_receipts.special_instruction',
+                                'lechon_de_cebu_delivery_receipts.consignee_name',
+                                'lechon_de_cebu_delivery_receipts.consignee_contact_num',
+                                'lechon_de_cebu_delivery_receipts.prepared_by',
+                                'lechon_de_cebu_delivery_receipts.checked_by',
+                                'lechon_de_cebu_delivery_receipts.received_by',
+                                'lechon_de_cebu_delivery_receipts.duplicate_status',
+                                'lechon_de_cebu_delivery_receipts.created_by',
+                                'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                'lechon_de_cebu_codes.module_id',
+                                'lechon_de_cebu_codes.module_code',
+                                'lechon_de_cebu_codes.module_name')
+                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
+                                ->where('lechon_de_cebu_codes.module_name', $moduleNameDelivery)
+                                ->whereDate('lechon_de_cebu_delivery_receipts.created_at', '=', date($getDate))
+                                ->orderBy('lechon_de_cebu_delivery_receipts.id', 'desc')
+                                ->get()->toArray();
+
+        //total for delivery receipt
+        $moduleNameDelivery = "Delivery Receipt";
+        $totalDeliveryReceipt = DB::table(
+                                'lechon_de_cebu_delivery_receipts')
+                                ->select( 
+                                'lechon_de_cebu_delivery_receipts.id',
+                                'lechon_de_cebu_delivery_receipts.user_id',
+                                'lechon_de_cebu_delivery_receipts.dr_id',
+                                'lechon_de_cebu_delivery_receipts.sold_to',
+                                'lechon_de_cebu_delivery_receipts.delivered_to',
+                                'lechon_de_cebu_delivery_receipts.time',
+                                'lechon_de_cebu_delivery_receipts.date',
+                                'lechon_de_cebu_delivery_receipts.date_to_be_delivered',
+                                'lechon_de_cebu_delivery_receipts.contact_person',
+                                'lechon_de_cebu_delivery_receipts.mobile_num',
+                                'lechon_de_cebu_delivery_receipts.qty',
+                                'lechon_de_cebu_delivery_receipts.description',
+                                'lechon_de_cebu_delivery_receipts.price',
+                                'lechon_de_cebu_delivery_receipts.total',
+                                'lechon_de_cebu_delivery_receipts.special_instruction',
+                                'lechon_de_cebu_delivery_receipts.consignee_name',
+                                'lechon_de_cebu_delivery_receipts.consignee_contact_num',
+                                'lechon_de_cebu_delivery_receipts.prepared_by',
+                                'lechon_de_cebu_delivery_receipts.checked_by',
+                                'lechon_de_cebu_delivery_receipts.received_by',
+                                'lechon_de_cebu_delivery_receipts.duplicate_status',
+                                'lechon_de_cebu_delivery_receipts.created_by',
+                                'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                'lechon_de_cebu_codes.module_id',
+                                'lechon_de_cebu_codes.module_code',
+                                'lechon_de_cebu_codes.module_name')
+                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
+                                ->where('lechon_de_cebu_codes.module_name', $moduleNameDelivery)
+                                ->whereDate('lechon_de_cebu_delivery_receipts.created_at', '=', date($getDate))
+                                ->sum('lechon_de_cebu_delivery_receipts.total');
+        
+
+        //purchase order
+        $moduleNamePurchaseOrder = "Purchase Order";
+        $purchaseOrders = DB::table(
+                        'lechon_de_cebu_purchase_orders')
+                        ->select(
+                            'lechon_de_cebu_purchase_orders.id',
+                            'lechon_de_cebu_purchase_orders.user_id',
+                            'lechon_de_cebu_purchase_orders.po_id',
+                            'lechon_de_cebu_purchase_orders.paid_to',
+                            'lechon_de_cebu_purchase_orders.address',
+                            'lechon_de_cebu_purchase_orders.date',
+                            'lechon_de_cebu_purchase_orders.quantity',
+                            'lechon_de_cebu_purchase_orders.total_kls',
+                            'lechon_de_cebu_purchase_orders.description',
+                            'lechon_de_cebu_purchase_orders.unit_price',
+                            'lechon_de_cebu_purchase_orders.amount',
+                            'lechon_de_cebu_purchase_orders.total_price',
+                            'lechon_de_cebu_purchase_orders.requested_by',
+                            'lechon_de_cebu_purchase_orders.prepared_by',
+                            'lechon_de_cebu_purchase_orders.checked_by',
+                            'lechon_de_cebu_purchase_orders.created_by',
+                            'lechon_de_cebu_codes.lechon_de_cebu_code',
+                            'lechon_de_cebu_codes.module_id',
+                            'lechon_de_cebu_codes.module_code',
+                            'lechon_de_cebu_codes.module_name')
+                        ->join('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                        ->where('lechon_de_cebu_purchase_orders.po_id', NULL)
+                        ->where('lechon_de_cebu_codes.module_name', $moduleNamePurchaseOrder)
+                        ->whereDate('lechon_de_cebu_purchase_orders.created_at', '=', date($getDate))
+                        ->orderBy('lechon_de_cebu_purchase_orders.id', 'desc')
+                        ->get()->toArray();
+
+            $totalPOrder = DB::table(
+                            'lechon_de_cebu_purchase_orders')
+                            ->select(
+                                'lechon_de_cebu_purchase_orders.id',
+                                'lechon_de_cebu_purchase_orders.user_id',
+                                'lechon_de_cebu_purchase_orders.po_id',
+                                'lechon_de_cebu_purchase_orders.paid_to',
+                                'lechon_de_cebu_purchase_orders.address',
+                                'lechon_de_cebu_purchase_orders.date',
+                                'lechon_de_cebu_purchase_orders.quantity',
+                                'lechon_de_cebu_purchase_orders.total_kls',
+                                'lechon_de_cebu_purchase_orders.description',
+                                'lechon_de_cebu_purchase_orders.unit_price',
+                                'lechon_de_cebu_purchase_orders.amount',
+                                'lechon_de_cebu_purchase_orders.total_price',
+                                'lechon_de_cebu_purchase_orders.requested_by',
+                                'lechon_de_cebu_purchase_orders.prepared_by',
+                                'lechon_de_cebu_purchase_orders.checked_by',
+                                'lechon_de_cebu_purchase_orders.created_by',
+                                'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                'lechon_de_cebu_codes.module_id',
+                                'lechon_de_cebu_codes.module_code',
+                                'lechon_de_cebu_codes.module_name')
+                            ->join('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                            ->where('lechon_de_cebu_purchase_orders.po_id', NULL)
+                            ->where('lechon_de_cebu_codes.module_name', $moduleNamePurchaseOrder)
+                            ->whereDate('lechon_de_cebu_purchase_orders.created_at', '=', date($getDate))
+                            ->sum('lechon_de_cebu_purchase_orders.total_price');
+
+        //statement of account
+        $moduleNameSOA = "Statement Of Account";
+        $statementOfAccounts = DB::table(
+                                'lechon_de_cebu_statement_of_accounts')
+                                ->select(
+                                    'lechon_de_cebu_statement_of_accounts.id',
+                                    'lechon_de_cebu_statement_of_accounts.user_id',
+                                    'lechon_de_cebu_statement_of_accounts.billing_statement_id',
+                                    'lechon_de_cebu_statement_of_accounts.bill_to',
+                                    'lechon_de_cebu_statement_of_accounts.address',
+                                    'lechon_de_cebu_statement_of_accounts.date',
+                                    'lechon_de_cebu_statement_of_accounts.branch',
+                                    'lechon_de_cebu_statement_of_accounts.period_cover',
+                                    'lechon_de_cebu_statement_of_accounts.terms',
+                                    'lechon_de_cebu_statement_of_accounts.transaction_date',
+                                    'lechon_de_cebu_statement_of_accounts.invoice_number',
+                                    'lechon_de_cebu_statement_of_accounts.order',
+                                    'lechon_de_cebu_statement_of_accounts.whole_lechon',
+                                    'lechon_de_cebu_statement_of_accounts.description',
+                                    'lechon_de_cebu_statement_of_accounts.amount',
+                                    'lechon_de_cebu_statement_of_accounts.paid_amount',
+                                    'lechon_de_cebu_statement_of_accounts.created_by',
+                                    'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                    'lechon_de_cebu_codes.module_id',
+                                    'lechon_de_cebu_codes.module_code',
+                                    'lechon_de_cebu_codes.module_name')
+                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_statement_of_accounts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->where('lechon_de_cebu_statement_of_accounts.bill_to', '!=', NULL)
+                                ->where('lechon_de_cebu_codes.module_name', $moduleNameSOA)
+                                ->whereDate('lechon_de_cebu_statement_of_accounts.created_at', '=', date($getDate))
+                                ->orderBy('lechon_de_cebu_statement_of_accounts.id', 'desc')
+                                ->get()->toArray();
+           
+        
+        //billing statement
+        $moduleNameBillingStatement = "Billing Statement";
+        $billingStatements = DB::table(
+                                'lechon_de_cebu_billing_statements')
+                                ->select(
+                                    'lechon_de_cebu_billing_statements.id',
+                                    'lechon_de_cebu_billing_statements.user_id',
+                                    'lechon_de_cebu_billing_statements.billing_statement_id',
+                                    'lechon_de_cebu_billing_statements.bill_to',
+                                    'lechon_de_cebu_billing_statements.address',
+                                    'lechon_de_cebu_billing_statements.date',
+                                    'lechon_de_cebu_billing_statements.branch',
+                                    'lechon_de_cebu_billing_statements.period_cover',
+                                    'lechon_de_cebu_billing_statements.terms',
+                                    'lechon_de_cebu_billing_statements.date_of_transaction',
+                                    'lechon_de_cebu_billing_statements.invoice_number',
+                                    'lechon_de_cebu_billing_statements.order',
+                                    'lechon_de_cebu_billing_statements.whole_lechon',
+                                    'lechon_de_cebu_billing_statements.description',
+                                    'lechon_de_cebu_billing_statements.amount',
+                                    'lechon_de_cebu_billing_statements.total_amount',
+                                    'lechon_de_cebu_billing_statements.paid_amount',
+                                    'lechon_de_cebu_billing_statements.created_by',
+                                    'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                    'lechon_de_cebu_codes.module_id',
+                                    'lechon_de_cebu_codes.module_code',
+                                    'lechon_de_cebu_codes.module_name')
+                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->where('lechon_de_cebu_billing_statements.billing_statement_id', NULL)
+                                ->where('lechon_de_cebu_codes.module_name', $moduleNameBillingStatement)
+                                ->whereDate('lechon_de_cebu_billing_statements.created_at', '=', date($getDate))
+                                ->orderBy('lechon_de_cebu_billing_statements.id', 'desc')
+                                ->get()->toArray();
+        
+                $totalBStatement = DB::table(
+                                    'lechon_de_cebu_billing_statements')
+                                    ->select(
+                                        'lechon_de_cebu_billing_statements.id',
+                                        'lechon_de_cebu_billing_statements.user_id',
+                                        'lechon_de_cebu_billing_statements.billing_statement_id',
+                                        'lechon_de_cebu_billing_statements.bill_to',
+                                        'lechon_de_cebu_billing_statements.address',
+                                        'lechon_de_cebu_billing_statements.date',
+                                        'lechon_de_cebu_billing_statements.branch',
+                                        'lechon_de_cebu_billing_statements.period_cover',
+                                        'lechon_de_cebu_billing_statements.terms',
+                                        'lechon_de_cebu_billing_statements.date_of_transaction',
+                                        'lechon_de_cebu_billing_statements.invoice_number',
+                                        'lechon_de_cebu_billing_statements.order',
+                                        'lechon_de_cebu_billing_statements.whole_lechon',
+                                        'lechon_de_cebu_billing_statements.description',
+                                        'lechon_de_cebu_billing_statements.amount',
+                                        'lechon_de_cebu_billing_statements.total_amount',
+                                        'lechon_de_cebu_billing_statements.paid_amount',
+                                        'lechon_de_cebu_billing_statements.created_by',
+                                        'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                        'lechon_de_cebu_codes.module_id',
+                                        'lechon_de_cebu_codes.module_code',
+                                        'lechon_de_cebu_codes.module_name')
+                                    ->join('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                    ->where('lechon_de_cebu_billing_statements.billing_statement_id', NULL)
+                                    ->where('lechon_de_cebu_codes.module_name', $moduleNameBillingStatement)
+                                    ->whereDate('lechon_de_cebu_billing_statements.created_at', '=', date($getDate))
+                                    ->sum('lechon_de_cebu_billing_statements.total_amount');
+        
+            
+        //petty cash
+        $moduleNamePettyCash = "Petty Cash";
+        $pettyCashLists = DB::table(
+                                'lechon_de_cebu_petty_cashes')
+                                ->select( 
+                                'lechon_de_cebu_petty_cashes.id',
+                                'lechon_de_cebu_petty_cashes.user_id',
+                                'lechon_de_cebu_petty_cashes.pc_id',
+                                'lechon_de_cebu_petty_cashes.date',
+                                'lechon_de_cebu_petty_cashes.petty_cash_name',
+                                'lechon_de_cebu_petty_cashes.petty_cash_summary',
+                                'lechon_de_cebu_petty_cashes.amount',
+                                'lechon_de_cebu_petty_cashes.created_by',
+                                'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                'lechon_de_cebu_codes.module_id',
+                                'lechon_de_cebu_codes.module_code',
+                                'lechon_de_cebu_codes.module_name')
+                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_petty_cashes.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->where('lechon_de_cebu_petty_cashes.pc_id', NULL)
+                                ->where('lechon_de_cebu_codes.module_name', $moduleNamePettyCash)
+                                ->whereDate('lechon_de_cebu_petty_cashes.created_at', '=', date($getDate))
+                                ->orderBy('lechon_de_cebu_petty_cashes.id', 'desc')
+                                ->get()->toArray();
+
+        //payment voucher
+        $moduleNameVoucher = "Payment Voucher";
+        $getTransactionLists = DB::table(
+                                'lechon_de_cebu_payment_vouchers')
+                                ->select( 
+                                'lechon_de_cebu_payment_vouchers.id',
+                                'lechon_de_cebu_payment_vouchers.user_id',
+                                'lechon_de_cebu_payment_vouchers.pv_id',
+                                'lechon_de_cebu_payment_vouchers.date',
+                                'lechon_de_cebu_payment_vouchers.paid_to',
+                                'lechon_de_cebu_payment_vouchers.account_no',
+                                'lechon_de_cebu_payment_vouchers.account_name',
+                                'lechon_de_cebu_payment_vouchers.particulars',
+                                'lechon_de_cebu_payment_vouchers.amount',
+                                'lechon_de_cebu_payment_vouchers.method_of_payment',
+                                'lechon_de_cebu_payment_vouchers.prepared_by',
+                                'lechon_de_cebu_payment_vouchers.approved_by',
+                                'lechon_de_cebu_payment_vouchers.date_apprroved',
+                                'lechon_de_cebu_payment_vouchers.received_by_date',
+                                'lechon_de_cebu_payment_vouchers.created_by',
+                                'lechon_de_cebu_payment_vouchers.invoice_number',
+                                'lechon_de_cebu_payment_vouchers.voucher_ref_number',
+                                'lechon_de_cebu_payment_vouchers.issued_date',
+                                'lechon_de_cebu_payment_vouchers.category',
+                                'lechon_de_cebu_payment_vouchers.amount_due',
+                                'lechon_de_cebu_payment_vouchers.delivered_date',
+                                'lechon_de_cebu_payment_vouchers.status',
+                                'lechon_de_cebu_payment_vouchers.cheque_number',
+                                'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                'lechon_de_cebu_payment_vouchers.sub_category',
+                                'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                'lechon_de_cebu_codes.module_id',
+                                'lechon_de_cebu_codes.module_code',
+                                'lechon_de_cebu_codes.module_name')
+                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
+                                ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDate))
+                                
+                                ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
+                                ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
+                                ->get()->toArray();
+      
+            $cash = "CASH";
+            $getTransactionListCashes = DB::table(
+                                    'lechon_de_cebu_payment_vouchers')
+                                    ->select( 
+                                    'lechon_de_cebu_payment_vouchers.id',
+                                    'lechon_de_cebu_payment_vouchers.user_id',
+                                    'lechon_de_cebu_payment_vouchers.pv_id',
+                                    'lechon_de_cebu_payment_vouchers.date',
+                                    'lechon_de_cebu_payment_vouchers.paid_to',
+                                    'lechon_de_cebu_payment_vouchers.account_no',
+                                    'lechon_de_cebu_payment_vouchers.account_name',
+                                    'lechon_de_cebu_payment_vouchers.particulars',
+                                    'lechon_de_cebu_payment_vouchers.amount',
+                                    'lechon_de_cebu_payment_vouchers.method_of_payment',
+                                    'lechon_de_cebu_payment_vouchers.prepared_by',
+                                    'lechon_de_cebu_payment_vouchers.approved_by',
+                                    'lechon_de_cebu_payment_vouchers.date_apprroved',
+                                    'lechon_de_cebu_payment_vouchers.received_by_date',
+                                    'lechon_de_cebu_payment_vouchers.created_by',
+                                    'lechon_de_cebu_payment_vouchers.invoice_number',
+                                    'lechon_de_cebu_payment_vouchers.voucher_ref_number',
+                                    'lechon_de_cebu_payment_vouchers.issued_date',
+                                    'lechon_de_cebu_payment_vouchers.category',
+                                    'lechon_de_cebu_payment_vouchers.amount_due',
+                                    'lechon_de_cebu_payment_vouchers.delivered_date',
+                                    'lechon_de_cebu_payment_vouchers.status',
+                                    'lechon_de_cebu_payment_vouchers.cheque_number',
+                                    'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                    'lechon_de_cebu_payment_vouchers.sub_category',
+                                    'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                    'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                    'lechon_de_cebu_codes.module_id',
+                                    'lechon_de_cebu_codes.module_code',
+                                    'lechon_de_cebu_codes.module_name')
+                                    ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                    ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
+                                    ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDate))
+                                    
+                                    ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
+                                    ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $cash)
+                                    ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
+                                    ->get()->toArray();
+          
+            $check = "CHECK";
+            $getTransactionListChecks = DB::table(
+                                            'lechon_de_cebu_payment_vouchers')
+                                            ->select( 
+                                            'lechon_de_cebu_payment_vouchers.id',
+                                            'lechon_de_cebu_payment_vouchers.user_id',
+                                            'lechon_de_cebu_payment_vouchers.pv_id',
+                                            'lechon_de_cebu_payment_vouchers.date',
+                                            'lechon_de_cebu_payment_vouchers.paid_to',
+                                            'lechon_de_cebu_payment_vouchers.account_no',
+                                            'lechon_de_cebu_payment_vouchers.account_name',
+                                            'lechon_de_cebu_payment_vouchers.particulars',
+                                            'lechon_de_cebu_payment_vouchers.amount',
+                                            'lechon_de_cebu_payment_vouchers.method_of_payment',
+                                            'lechon_de_cebu_payment_vouchers.prepared_by',
+                                            'lechon_de_cebu_payment_vouchers.approved_by',
+                                            'lechon_de_cebu_payment_vouchers.date_apprroved',
+                                            'lechon_de_cebu_payment_vouchers.received_by_date',
+                                            'lechon_de_cebu_payment_vouchers.created_by',
+                                            'lechon_de_cebu_payment_vouchers.invoice_number',
+                                            'lechon_de_cebu_payment_vouchers.voucher_ref_number',
+                                            'lechon_de_cebu_payment_vouchers.issued_date',
+                                            'lechon_de_cebu_payment_vouchers.category',
+                                            'lechon_de_cebu_payment_vouchers.amount_due',
+                                            'lechon_de_cebu_payment_vouchers.delivered_date',
+                                            'lechon_de_cebu_payment_vouchers.status',
+                                            'lechon_de_cebu_payment_vouchers.cheque_number',
+                                            'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                            'lechon_de_cebu_payment_vouchers.sub_category',
+                                            'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                            'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                            'lechon_de_cebu_codes.module_id',
+                                            'lechon_de_cebu_codes.module_code',
+                                            'lechon_de_cebu_codes.module_name')
+                                            ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                            ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
+                                            ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDate))
+                                            
+                                            ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
+                                            ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $check)
+                                            ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
+                                            ->get()->toArray();
+                                  
+        //
+        $totalPaymentVoucher = DB::table(
+                            'lechon_de_cebu_payment_vouchers')
+                            ->select( 
+                            'lechon_de_cebu_payment_vouchers.id',
+                            'lechon_de_cebu_payment_vouchers.user_id',
+                            'lechon_de_cebu_payment_vouchers.pv_id',
+                            'lechon_de_cebu_payment_vouchers.date',
+                            'lechon_de_cebu_payment_vouchers.paid_to',
+                            'lechon_de_cebu_payment_vouchers.account_no',
+                            'lechon_de_cebu_payment_vouchers.account_name',
+                            'lechon_de_cebu_payment_vouchers.particulars',
+                            'lechon_de_cebu_payment_vouchers.amount',
+                            'lechon_de_cebu_payment_vouchers.method_of_payment',
+                            'lechon_de_cebu_payment_vouchers.prepared_by',
+                            'lechon_de_cebu_payment_vouchers.approved_by',
+                            'lechon_de_cebu_payment_vouchers.date_apprroved',
+                            'lechon_de_cebu_payment_vouchers.received_by_date',
+                            'lechon_de_cebu_payment_vouchers.created_by',
+                            'lechon_de_cebu_payment_vouchers.invoice_number',
+                            'lechon_de_cebu_payment_vouchers.voucher_ref_number',
+                            'lechon_de_cebu_payment_vouchers.issued_date',
+                            'lechon_de_cebu_payment_vouchers.category',
+                            'lechon_de_cebu_payment_vouchers.amount_due',
+                            'lechon_de_cebu_payment_vouchers.delivered_date',
+                            'lechon_de_cebu_payment_vouchers.status',
+                            'lechon_de_cebu_payment_vouchers.cheque_number',
+                            'lechon_de_cebu_payment_vouchers.cheque_amount',
+                            'lechon_de_cebu_payment_vouchers.sub_category',
+                            'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                            'lechon_de_cebu_codes.lechon_de_cebu_code',
+                            'lechon_de_cebu_codes.module_id',
+                            'lechon_de_cebu_codes.module_code',
+                            'lechon_de_cebu_codes.module_name')
+                            ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                            ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
+                            ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDate))
+                            ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
+                            ->sum('lechon_de_cebu_payment_vouchers.amount_due');
+
+        return view('lechon-de-cebu-get-summary-report', compact('getDate', 'getAllSalesInvoices', 
+        'getAllDeliveryReceipts', 'purchaseOrders', 'statementOfAccounts', 'billingStatements', 
+        'pettyCashLists',  'getTransactionLists', 'getTransactionListCashes', 'getTransactionListChecks', 'totalSalesInvoice', 'totalDeliveryReceipt', 'totalPOrder', 'totalBStatement', 'totalPaymentVoucher'));
+    
+
+        
+    }
+
+    public function printGetSummary($date){
+        $moduleName = "Sales Invoice";
+         $getAllSalesInvoices = DB::table(
+                         'lechon_de_cebu_sales_invoices')
+                         ->select(
+                             'lechon_de_cebu_sales_invoices.id',
+                             'lechon_de_cebu_sales_invoices.user_id',
+                             'lechon_de_cebu_sales_invoices.si_id',
+                             'lechon_de_cebu_sales_invoices.invoice_number',
+                             'lechon_de_cebu_sales_invoices.date',
+                             'lechon_de_cebu_sales_invoices.ordered_by',
+                             'lechon_de_cebu_sales_invoices.address',
+                             'lechon_de_cebu_sales_invoices.qty',
+                             'lechon_de_cebu_sales_invoices.total_kls',
+                             'lechon_de_cebu_sales_invoices.body',
+                             'lechon_de_cebu_sales_invoices.head_and_feet',
+                             'lechon_de_cebu_sales_invoices.item_description',
+                             'lechon_de_cebu_sales_invoices.unit_price',
+                             'lechon_de_cebu_sales_invoices.amount',
+                             'lechon_de_cebu_sales_invoices.total_amount',
+                             'lechon_de_cebu_sales_invoices.created_by',
+                             'lechon_de_cebu_sales_invoices.created_at',
+                             'lechon_de_cebu_sales_invoices.updated_at',                            
+                             'lechon_de_cebu_codes.lechon_de_cebu_code',
+                             'lechon_de_cebu_codes.module_id',
+                             'lechon_de_cebu_codes.module_code',
+                             'lechon_de_cebu_codes.module_name')
+                         ->join('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+                         ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
+                         ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                         ->whereDate('lechon_de_cebu_sales_invoices.created_at', '=', date($date))
+                         ->orderBy('lechon_de_cebu_sales_invoices.id', 'desc')
+                         ->get()->toArray();
+        
+        $totalSalesInvoice = DB::table(
+                            'lechon_de_cebu_sales_invoices')
+                            ->select(
+                                'lechon_de_cebu_sales_invoices.id',
+                                'lechon_de_cebu_sales_invoices.user_id',
+                                'lechon_de_cebu_sales_invoices.si_id',
+                                'lechon_de_cebu_sales_invoices.invoice_number',
+                                'lechon_de_cebu_sales_invoices.date',
+                                'lechon_de_cebu_sales_invoices.ordered_by',
+                                'lechon_de_cebu_sales_invoices.address',
+                                'lechon_de_cebu_sales_invoices.qty',
+                                'lechon_de_cebu_sales_invoices.total_kls',
+                                'lechon_de_cebu_sales_invoices.body',
+                                'lechon_de_cebu_sales_invoices.head_and_feet',
+                                'lechon_de_cebu_sales_invoices.item_description',
+                                'lechon_de_cebu_sales_invoices.unit_price',
+                                'lechon_de_cebu_sales_invoices.amount',
+                                'lechon_de_cebu_sales_invoices.total_amount',
+                                'lechon_de_cebu_sales_invoices.created_by',
+                                'lechon_de_cebu_sales_invoices.created_at',
+                                'lechon_de_cebu_sales_invoices.updated_at',                            
+                                'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                'lechon_de_cebu_codes.module_id',
+                                'lechon_de_cebu_codes.module_code',
+                                'lechon_de_cebu_codes.module_name')
+                            ->join('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+                            ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
+                            ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                            ->whereDate('lechon_de_cebu_sales_invoices.created_at', '=', date($date))
+                            ->sum('lechon_de_cebu_sales_invoices.total_amount');
+
+        
+ 
+         //Delivery Receipt
+         $moduleNameDelivery = "Delivery Receipt";
+         $getAllDeliveryReceipts = DB::table(
+                                 'lechon_de_cebu_delivery_receipts')
+                                 ->select( 
+                                 'lechon_de_cebu_delivery_receipts.id',
+                                 'lechon_de_cebu_delivery_receipts.user_id',
+                                 'lechon_de_cebu_delivery_receipts.dr_id',
+                                 'lechon_de_cebu_delivery_receipts.sold_to',
+                                 'lechon_de_cebu_delivery_receipts.delivered_to',
+                                 'lechon_de_cebu_delivery_receipts.time',
+                                 'lechon_de_cebu_delivery_receipts.date',
+                                 'lechon_de_cebu_delivery_receipts.date_to_be_delivered',
+                                 'lechon_de_cebu_delivery_receipts.contact_person',
+                                 'lechon_de_cebu_delivery_receipts.mobile_num',
+                                 'lechon_de_cebu_delivery_receipts.qty',
+                                 'lechon_de_cebu_delivery_receipts.description',
+                                 'lechon_de_cebu_delivery_receipts.price',
+                                 'lechon_de_cebu_delivery_receipts.total',
+                                 'lechon_de_cebu_delivery_receipts.special_instruction',
+                                 'lechon_de_cebu_delivery_receipts.consignee_name',
+                                 'lechon_de_cebu_delivery_receipts.consignee_contact_num',
+                                 'lechon_de_cebu_delivery_receipts.prepared_by',
+                                 'lechon_de_cebu_delivery_receipts.checked_by',
+                                 'lechon_de_cebu_delivery_receipts.received_by',
+                                 'lechon_de_cebu_delivery_receipts.duplicate_status',
+                                 'lechon_de_cebu_delivery_receipts.created_by',
+                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                 'lechon_de_cebu_codes.module_id',
+                                 'lechon_de_cebu_codes.module_code',
+                                 'lechon_de_cebu_codes.module_name')
+                                 ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                 ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
+                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameDelivery)
+                                 ->whereDate('lechon_de_cebu_delivery_receipts.created_at', '=', date($date))
+                                 ->orderBy('lechon_de_cebu_delivery_receipts.id', 'desc')
+                                 ->get()->toArray();
+ 
+         //total for delivery receipt
+         $moduleNameDelivery = "Delivery Receipt";
+         $totalDeliveryReceipt = DB::table(
+                                 'lechon_de_cebu_delivery_receipts')
+                                 ->select( 
+                                 'lechon_de_cebu_delivery_receipts.id',
+                                 'lechon_de_cebu_delivery_receipts.user_id',
+                                 'lechon_de_cebu_delivery_receipts.dr_id',
+                                 'lechon_de_cebu_delivery_receipts.sold_to',
+                                 'lechon_de_cebu_delivery_receipts.delivered_to',
+                                 'lechon_de_cebu_delivery_receipts.time',
+                                 'lechon_de_cebu_delivery_receipts.date',
+                                 'lechon_de_cebu_delivery_receipts.date_to_be_delivered',
+                                 'lechon_de_cebu_delivery_receipts.contact_person',
+                                 'lechon_de_cebu_delivery_receipts.mobile_num',
+                                 'lechon_de_cebu_delivery_receipts.qty',
+                                 'lechon_de_cebu_delivery_receipts.description',
+                                 'lechon_de_cebu_delivery_receipts.price',
+                                 'lechon_de_cebu_delivery_receipts.total',
+                                 'lechon_de_cebu_delivery_receipts.special_instruction',
+                                 'lechon_de_cebu_delivery_receipts.consignee_name',
+                                 'lechon_de_cebu_delivery_receipts.consignee_contact_num',
+                                 'lechon_de_cebu_delivery_receipts.prepared_by',
+                                 'lechon_de_cebu_delivery_receipts.checked_by',
+                                 'lechon_de_cebu_delivery_receipts.received_by',
+                                 'lechon_de_cebu_delivery_receipts.duplicate_status',
+                                 'lechon_de_cebu_delivery_receipts.created_by',
+                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                 'lechon_de_cebu_codes.module_id',
+                                 'lechon_de_cebu_codes.module_code',
+                                 'lechon_de_cebu_codes.module_name')
+                                 ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                 ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
+                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameDelivery)
+                                 ->whereDate('lechon_de_cebu_delivery_receipts.created_at', '=', date($date))
+                                 ->sum('lechon_de_cebu_delivery_receipts.total');
+         
+ 
+         //purchase order
+         $moduleNamePurchaseOrder = "Purchase Order";
+         $purchaseOrders = DB::table(
+                         'lechon_de_cebu_purchase_orders')
+                         ->select(
+                             'lechon_de_cebu_purchase_orders.id',
+                             'lechon_de_cebu_purchase_orders.user_id',
+                             'lechon_de_cebu_purchase_orders.po_id',
+                             'lechon_de_cebu_purchase_orders.paid_to',
+                             'lechon_de_cebu_purchase_orders.address',
+                             'lechon_de_cebu_purchase_orders.date',
+                             'lechon_de_cebu_purchase_orders.quantity',
+                             'lechon_de_cebu_purchase_orders.total_kls',
+                             'lechon_de_cebu_purchase_orders.description',
+                             'lechon_de_cebu_purchase_orders.unit_price',
+                             'lechon_de_cebu_purchase_orders.amount',
+                             'lechon_de_cebu_purchase_orders.total_price',
+                             'lechon_de_cebu_purchase_orders.requested_by',
+                             'lechon_de_cebu_purchase_orders.prepared_by',
+                             'lechon_de_cebu_purchase_orders.checked_by',
+                             'lechon_de_cebu_purchase_orders.created_by',
+                             'lechon_de_cebu_codes.lechon_de_cebu_code',
+                             'lechon_de_cebu_codes.module_id',
+                             'lechon_de_cebu_codes.module_code',
+                             'lechon_de_cebu_codes.module_name')
+                         ->join('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                         ->where('lechon_de_cebu_purchase_orders.po_id', NULL)
+                         ->where('lechon_de_cebu_codes.module_name', $moduleNamePurchaseOrder)
+                         ->whereDate('lechon_de_cebu_purchase_orders.created_at', '=', date($date))
+                         ->orderBy('lechon_de_cebu_purchase_orders.id', 'desc')
+                         ->get()->toArray();
+ 
+             $totalPOrder = DB::table(
+                             'lechon_de_cebu_purchase_orders')
+                             ->select(
+                                 'lechon_de_cebu_purchase_orders.id',
+                                 'lechon_de_cebu_purchase_orders.user_id',
+                                 'lechon_de_cebu_purchase_orders.po_id',
+                                 'lechon_de_cebu_purchase_orders.paid_to',
+                                 'lechon_de_cebu_purchase_orders.address',
+                                 'lechon_de_cebu_purchase_orders.date',
+                                 'lechon_de_cebu_purchase_orders.quantity',
+                                 'lechon_de_cebu_purchase_orders.total_kls',
+                                 'lechon_de_cebu_purchase_orders.description',
+                                 'lechon_de_cebu_purchase_orders.unit_price',
+                                 'lechon_de_cebu_purchase_orders.amount',
+                                 'lechon_de_cebu_purchase_orders.total_price',
+                                 'lechon_de_cebu_purchase_orders.requested_by',
+                                 'lechon_de_cebu_purchase_orders.prepared_by',
+                                 'lechon_de_cebu_purchase_orders.checked_by',
+                                 'lechon_de_cebu_purchase_orders.created_by',
+                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                 'lechon_de_cebu_codes.module_id',
+                                 'lechon_de_cebu_codes.module_code',
+                                 'lechon_de_cebu_codes.module_name')
+                             ->join('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                             ->where('lechon_de_cebu_purchase_orders.po_id', NULL)
+                             ->where('lechon_de_cebu_codes.module_name', $moduleNamePurchaseOrder)
+                             ->whereDate('lechon_de_cebu_purchase_orders.created_at', '=', date($date))
+                             ->sum('lechon_de_cebu_purchase_orders.total_price');
+
+         
+         //billing statement
+         $moduleNameBillingStatement = "Billing Statement";
+         $billingStatements = DB::table(
+                                 'lechon_de_cebu_billing_statements')
+                                 ->select(
+                                     'lechon_de_cebu_billing_statements.id',
+                                     'lechon_de_cebu_billing_statements.user_id',
+                                     'lechon_de_cebu_billing_statements.billing_statement_id',
+                                     'lechon_de_cebu_billing_statements.bill_to',
+                                     'lechon_de_cebu_billing_statements.address',
+                                     'lechon_de_cebu_billing_statements.date',
+                                     'lechon_de_cebu_billing_statements.branch',
+                                     'lechon_de_cebu_billing_statements.period_cover',
+                                     'lechon_de_cebu_billing_statements.terms',
+                                     'lechon_de_cebu_billing_statements.date_of_transaction',
+                                     'lechon_de_cebu_billing_statements.invoice_number',
+                                     'lechon_de_cebu_billing_statements.order',
+                                     'lechon_de_cebu_billing_statements.whole_lechon',
+                                     'lechon_de_cebu_billing_statements.description',
+                                     'lechon_de_cebu_billing_statements.amount',
+                                     'lechon_de_cebu_billing_statements.total_amount',
+                                     'lechon_de_cebu_billing_statements.paid_amount',
+                                     'lechon_de_cebu_billing_statements.created_by',
+                                     'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                     'lechon_de_cebu_codes.module_id',
+                                     'lechon_de_cebu_codes.module_code',
+                                     'lechon_de_cebu_codes.module_name')
+                                 ->join('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                 ->where('lechon_de_cebu_billing_statements.billing_statement_id', NULL)
+                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameBillingStatement)
+                                 ->whereDate('lechon_de_cebu_billing_statements.created_at', '=', date($date))
+                                 ->orderBy('lechon_de_cebu_billing_statements.id', 'desc')
+                                 ->get()->toArray();
+         
+                 $totalBStatement = DB::table(
+                                     'lechon_de_cebu_billing_statements')
+                                     ->select(
+                                         'lechon_de_cebu_billing_statements.id',
+                                         'lechon_de_cebu_billing_statements.user_id',
+                                         'lechon_de_cebu_billing_statements.billing_statement_id',
+                                         'lechon_de_cebu_billing_statements.bill_to',
+                                         'lechon_de_cebu_billing_statements.address',
+                                         'lechon_de_cebu_billing_statements.date',
+                                         'lechon_de_cebu_billing_statements.branch',
+                                         'lechon_de_cebu_billing_statements.period_cover',
+                                         'lechon_de_cebu_billing_statements.terms',
+                                         'lechon_de_cebu_billing_statements.date_of_transaction',
+                                         'lechon_de_cebu_billing_statements.invoice_number',
+                                         'lechon_de_cebu_billing_statements.order',
+                                         'lechon_de_cebu_billing_statements.whole_lechon',
+                                         'lechon_de_cebu_billing_statements.description',
+                                         'lechon_de_cebu_billing_statements.amount',
+                                         'lechon_de_cebu_billing_statements.total_amount',
+                                         'lechon_de_cebu_billing_statements.paid_amount',
+                                         'lechon_de_cebu_billing_statements.created_by',
+                                         'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                         'lechon_de_cebu_codes.module_id',
+                                         'lechon_de_cebu_codes.module_code',
+                                         'lechon_de_cebu_codes.module_name')
+                                     ->join('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                     ->where('lechon_de_cebu_billing_statements.billing_statement_id', NULL)
+                                     ->where('lechon_de_cebu_codes.module_name', $moduleNameBillingStatement)
+                                     ->whereDate('lechon_de_cebu_billing_statements.created_at', '=', date($date))
+                                     ->sum('lechon_de_cebu_billing_statements.total_amount');
+         
+             
+         //petty cash
+         $moduleNamePettyCash = "Petty Cash";
+         $pettyCashLists = DB::table(
+                                 'lechon_de_cebu_petty_cashes')
+                                 ->select( 
+                                 'lechon_de_cebu_petty_cashes.id',
+                                 'lechon_de_cebu_petty_cashes.user_id',
+                                 'lechon_de_cebu_petty_cashes.pc_id',
+                                 'lechon_de_cebu_petty_cashes.date',
+                                 'lechon_de_cebu_petty_cashes.petty_cash_name',
+                                 'lechon_de_cebu_petty_cashes.petty_cash_summary',
+                                 'lechon_de_cebu_petty_cashes.amount',
+                                 'lechon_de_cebu_petty_cashes.created_by',
+                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                 'lechon_de_cebu_codes.module_id',
+                                 'lechon_de_cebu_codes.module_code',
+                                 'lechon_de_cebu_codes.module_name')
+                                 ->join('lechon_de_cebu_codes', 'lechon_de_cebu_petty_cashes.id', '=', 'lechon_de_cebu_codes.module_id')
+                                 ->where('lechon_de_cebu_petty_cashes.pc_id', NULL)
+                                 ->where('lechon_de_cebu_codes.module_name', $moduleNamePettyCash)
+                                 ->whereDate('lechon_de_cebu_petty_cashes.created_at', '=', date($date))
+                                 ->orderBy('lechon_de_cebu_petty_cashes.id', 'desc')
+                                 ->get()->toArray();
+ 
+         //payment voucher
+         $moduleNameVoucher = "Payment Voucher";
+         $cash = "CASH";
+         $getTransactionListCashes = DB::table(
+                                 'lechon_de_cebu_payment_vouchers')
+                                 ->select( 
+                                 'lechon_de_cebu_payment_vouchers.id',
+                                 'lechon_de_cebu_payment_vouchers.user_id',
+                                 'lechon_de_cebu_payment_vouchers.pv_id',
+                                 'lechon_de_cebu_payment_vouchers.date',
+                                 'lechon_de_cebu_payment_vouchers.paid_to',
+                                 'lechon_de_cebu_payment_vouchers.account_no',
+                                 'lechon_de_cebu_payment_vouchers.account_name',
+                                 'lechon_de_cebu_payment_vouchers.particulars',
+                                 'lechon_de_cebu_payment_vouchers.amount',
+                                 'lechon_de_cebu_payment_vouchers.method_of_payment',
+                                 'lechon_de_cebu_payment_vouchers.prepared_by',
+                                 'lechon_de_cebu_payment_vouchers.approved_by',
+                                 'lechon_de_cebu_payment_vouchers.date_apprroved',
+                                 'lechon_de_cebu_payment_vouchers.received_by_date',
+                                 'lechon_de_cebu_payment_vouchers.created_by',
+                                 'lechon_de_cebu_payment_vouchers.invoice_number',
+                                 'lechon_de_cebu_payment_vouchers.voucher_ref_number',
+                                 'lechon_de_cebu_payment_vouchers.issued_date',
+                                 'lechon_de_cebu_payment_vouchers.category',
+                                 'lechon_de_cebu_payment_vouchers.amount_due',
+                                 'lechon_de_cebu_payment_vouchers.delivered_date',
+                                 'lechon_de_cebu_payment_vouchers.status',
+                                 'lechon_de_cebu_payment_vouchers.cheque_number',
+                                 'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                 'lechon_de_cebu_payment_vouchers.sub_category',
+                                 'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                 'lechon_de_cebu_codes.module_id',
+                                 'lechon_de_cebu_codes.module_code',
+                                 'lechon_de_cebu_codes.module_name')
+                                 ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                 ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
+                                 ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($date))
+                                 
+                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
+                                 ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $cash)
+                                 ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
+                                 ->get()->toArray();
+            $check = "CHECK";
+            $getTransactionListChecks = DB::table(
+                                        'lechon_de_cebu_payment_vouchers')
+                                        ->select( 
+                                        'lechon_de_cebu_payment_vouchers.id',
+                                        'lechon_de_cebu_payment_vouchers.user_id',
+                                        'lechon_de_cebu_payment_vouchers.pv_id',
+                                        'lechon_de_cebu_payment_vouchers.date',
+                                        'lechon_de_cebu_payment_vouchers.paid_to',
+                                        'lechon_de_cebu_payment_vouchers.account_no',
+                                        'lechon_de_cebu_payment_vouchers.account_name',
+                                        'lechon_de_cebu_payment_vouchers.particulars',
+                                        'lechon_de_cebu_payment_vouchers.amount',
+                                        'lechon_de_cebu_payment_vouchers.method_of_payment',
+                                        'lechon_de_cebu_payment_vouchers.prepared_by',
+                                        'lechon_de_cebu_payment_vouchers.approved_by',
+                                        'lechon_de_cebu_payment_vouchers.date_apprroved',
+                                        'lechon_de_cebu_payment_vouchers.received_by_date',
+                                        'lechon_de_cebu_payment_vouchers.created_by',
+                                        'lechon_de_cebu_payment_vouchers.invoice_number',
+                                        'lechon_de_cebu_payment_vouchers.voucher_ref_number',
+                                        'lechon_de_cebu_payment_vouchers.issued_date',
+                                        'lechon_de_cebu_payment_vouchers.category',
+                                        'lechon_de_cebu_payment_vouchers.amount_due',
+                                        'lechon_de_cebu_payment_vouchers.delivered_date',
+                                        'lechon_de_cebu_payment_vouchers.status',
+                                        'lechon_de_cebu_payment_vouchers.cheque_number',
+                                        'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                        'lechon_de_cebu_payment_vouchers.sub_category',
+                                        'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                        'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                        'lechon_de_cebu_codes.module_id',
+                                        'lechon_de_cebu_codes.module_code',
+                                        'lechon_de_cebu_codes.module_name')
+                                        ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                        ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
+                                        ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($date))
+                                        
+                                        ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
+                                        ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $check)
+                                        ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
+                                        ->get()->toArray();
+       
+         //
+         $totalPaymentVoucherCash = DB::table(
+                             'lechon_de_cebu_payment_vouchers')
+                             ->select( 
+                             'lechon_de_cebu_payment_vouchers.id',
+                             'lechon_de_cebu_payment_vouchers.user_id',
+                             'lechon_de_cebu_payment_vouchers.pv_id',
+                             'lechon_de_cebu_payment_vouchers.date',
+                             'lechon_de_cebu_payment_vouchers.paid_to',
+                             'lechon_de_cebu_payment_vouchers.account_no',
+                             'lechon_de_cebu_payment_vouchers.account_name',
+                             'lechon_de_cebu_payment_vouchers.particulars',
+                             'lechon_de_cebu_payment_vouchers.amount',
+                             'lechon_de_cebu_payment_vouchers.method_of_payment',
+                             'lechon_de_cebu_payment_vouchers.prepared_by',
+                             'lechon_de_cebu_payment_vouchers.approved_by',
+                             'lechon_de_cebu_payment_vouchers.date_apprroved',
+                             'lechon_de_cebu_payment_vouchers.received_by_date',
+                             'lechon_de_cebu_payment_vouchers.created_by',
+                             'lechon_de_cebu_payment_vouchers.invoice_number',
+                             'lechon_de_cebu_payment_vouchers.voucher_ref_number',
+                             'lechon_de_cebu_payment_vouchers.issued_date',
+                             'lechon_de_cebu_payment_vouchers.category',
+                             'lechon_de_cebu_payment_vouchers.amount_due',
+                             'lechon_de_cebu_payment_vouchers.delivered_date',
+                             'lechon_de_cebu_payment_vouchers.status',
+                             'lechon_de_cebu_payment_vouchers.cheque_number',
+                             'lechon_de_cebu_payment_vouchers.cheque_amount',
+                             'lechon_de_cebu_payment_vouchers.sub_category',
+                             'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                             'lechon_de_cebu_codes.lechon_de_cebu_code',
+                             'lechon_de_cebu_codes.module_id',
+                             'lechon_de_cebu_codes.module_code',
+                             'lechon_de_cebu_codes.module_name')
+                             ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                             ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
+                             ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($date))
+                             ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
+                             ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $cash)
+                             ->sum('lechon_de_cebu_payment_vouchers.amount_due');
+
+        $totalPaymentVoucherCheck = DB::table(
+                                'lechon_de_cebu_payment_vouchers')
+                                ->select( 
+                                'lechon_de_cebu_payment_vouchers.id',
+                                'lechon_de_cebu_payment_vouchers.user_id',
+                                'lechon_de_cebu_payment_vouchers.pv_id',
+                                'lechon_de_cebu_payment_vouchers.date',
+                                'lechon_de_cebu_payment_vouchers.paid_to',
+                                'lechon_de_cebu_payment_vouchers.account_no',
+                                'lechon_de_cebu_payment_vouchers.account_name',
+                                'lechon_de_cebu_payment_vouchers.particulars',
+                                'lechon_de_cebu_payment_vouchers.amount',
+                                'lechon_de_cebu_payment_vouchers.method_of_payment',
+                                'lechon_de_cebu_payment_vouchers.prepared_by',
+                                'lechon_de_cebu_payment_vouchers.approved_by',
+                                'lechon_de_cebu_payment_vouchers.date_apprroved',
+                                'lechon_de_cebu_payment_vouchers.received_by_date',
+                                'lechon_de_cebu_payment_vouchers.created_by',
+                                'lechon_de_cebu_payment_vouchers.invoice_number',
+                                'lechon_de_cebu_payment_vouchers.voucher_ref_number',
+                                'lechon_de_cebu_payment_vouchers.issued_date',
+                                'lechon_de_cebu_payment_vouchers.category',
+                                'lechon_de_cebu_payment_vouchers.amount_due',
+                                'lechon_de_cebu_payment_vouchers.delivered_date',
+                                'lechon_de_cebu_payment_vouchers.status',
+                                'lechon_de_cebu_payment_vouchers.cheque_number',
+                                'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                'lechon_de_cebu_payment_vouchers.sub_category',
+                                'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                'lechon_de_cebu_codes.module_id',
+                                'lechon_de_cebu_codes.module_code',
+                                'lechon_de_cebu_codes.module_name')
+                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
+                                ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($date))
+                                ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
+                                ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $check)
+                                ->sum('lechon_de_cebu_payment_vouchers.amount_due');
+         
+        $getDateToday = "";
+         $pdf = PDF::loadView('printSummary',  compact('date', 'getDateToday', 'getAllSalesInvoices', 
+        'getAllDeliveryReceipts', 'purchaseOrders', 'statementOfAccounts', 'billingStatements', 
+        'pettyCashLists',  'getTransactionLists', 'getTransactionListCashes', 'getTransactionListChecks', 'totalSalesInvoice', 'totalDeliveryReceipt', 'totalPOrder', 'totalBStatement', 
+        'totalPaymentVoucherCash','totalPaymentVoucherCheck'));
+        
+        return $pdf->download('lechon-de-cebu-summary-report.pdf');
+        
+
+    }
     public function printSummary(){
          //sales invoice
          $getDateToday = date("Y-m-d");
-        
+         
          $moduleName = "Sales Invoice";
          $getAllSalesInvoices = DB::table(
                          'lechon_de_cebu_sales_invoices')
@@ -492,7 +1470,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $check)
                                 ->sum('lechon_de_cebu_payment_vouchers.amount_due');
          
-         $pdf = PDF::loadView('printSummary',  compact('getDateToday', 'getAllSalesInvoices', 
+         $pdf = PDF::loadView('printSummary',  compact('date', 'getDateToday', 'getAllSalesInvoices', 
         'getAllDeliveryReceipts', 'purchaseOrders', 'statementOfAccounts', 'billingStatements', 
         'pettyCashLists',  'getTransactionLists', 'getTransactionListCashes', 'getTransactionListChecks', 'totalSalesInvoice', 'totalDeliveryReceipt', 'totalPOrder', 'totalBStatement', 
         'totalPaymentVoucherCash','totalPaymentVoucherCheck'));
@@ -874,7 +1852,6 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 ->get()->toArray();
 
         //total for delivery receipt
-        $moduleNameDelivery = "Delivery Receipt";
         $totalDeliveryReceipt = DB::table(
                                 'lechon_de_cebu_delivery_receipts')
                                 ->select( 
@@ -1182,6 +2159,49 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
                                     ->get()->toArray();
           
+            $totalAmountCashes = DB::table(
+                                        'lechon_de_cebu_payment_vouchers')
+                                        ->select( 
+                                        'lechon_de_cebu_payment_vouchers.id',
+                                        'lechon_de_cebu_payment_vouchers.user_id',
+                                        'lechon_de_cebu_payment_vouchers.pv_id',
+                                        'lechon_de_cebu_payment_vouchers.date',
+                                        'lechon_de_cebu_payment_vouchers.paid_to',
+                                        'lechon_de_cebu_payment_vouchers.account_no',
+                                        'lechon_de_cebu_payment_vouchers.account_name',
+                                        'lechon_de_cebu_payment_vouchers.particulars',
+                                        'lechon_de_cebu_payment_vouchers.amount',
+                                        'lechon_de_cebu_payment_vouchers.method_of_payment',
+                                        'lechon_de_cebu_payment_vouchers.prepared_by',
+                                        'lechon_de_cebu_payment_vouchers.approved_by',
+                                        'lechon_de_cebu_payment_vouchers.date_apprroved',
+                                        'lechon_de_cebu_payment_vouchers.received_by_date',
+                                        'lechon_de_cebu_payment_vouchers.created_by',
+                                        'lechon_de_cebu_payment_vouchers.invoice_number',
+                                        'lechon_de_cebu_payment_vouchers.voucher_ref_number',
+                                        'lechon_de_cebu_payment_vouchers.issued_date',
+                                        'lechon_de_cebu_payment_vouchers.category',
+                                        'lechon_de_cebu_payment_vouchers.amount_due',
+                                        'lechon_de_cebu_payment_vouchers.delivered_date',
+                                        'lechon_de_cebu_payment_vouchers.status',
+                                        'lechon_de_cebu_payment_vouchers.cheque_number',
+                                        'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                        'lechon_de_cebu_payment_vouchers.sub_category',
+                                        'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                        'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                        'lechon_de_cebu_codes.module_id',
+                                        'lechon_de_cebu_codes.module_code',
+                                        'lechon_de_cebu_codes.module_name')
+                                        ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                        ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
+                                        ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDateToday))
+                                        
+                                        ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
+                                        ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $cash)
+                                        ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
+                                        ->sum('lechon_de_cebu_payment_vouchers.amount_due');
+
+
             $check = "CHECK";
             $getTransactionListChecks = DB::table(
                                             'lechon_de_cebu_payment_vouchers')
@@ -1224,7 +2244,50 @@ class LoloPinoyLechonDeCebuController extends Controller
                                             ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $check)
                                             ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
                                             ->get()->toArray();
-                                  
+            
+                $totalAmountCheck = DB::table(
+                                    'lechon_de_cebu_payment_vouchers')
+                                    ->select( 
+                                    'lechon_de_cebu_payment_vouchers.id',
+                                    'lechon_de_cebu_payment_vouchers.user_id',
+                                    'lechon_de_cebu_payment_vouchers.pv_id',
+                                    'lechon_de_cebu_payment_vouchers.date',
+                                    'lechon_de_cebu_payment_vouchers.paid_to',
+                                    'lechon_de_cebu_payment_vouchers.account_no',
+                                    'lechon_de_cebu_payment_vouchers.account_name',
+                                    'lechon_de_cebu_payment_vouchers.particulars',
+                                    'lechon_de_cebu_payment_vouchers.amount',
+                                    'lechon_de_cebu_payment_vouchers.method_of_payment',
+                                    'lechon_de_cebu_payment_vouchers.prepared_by',
+                                    'lechon_de_cebu_payment_vouchers.approved_by',
+                                    'lechon_de_cebu_payment_vouchers.date_apprroved',
+                                    'lechon_de_cebu_payment_vouchers.received_by_date',
+                                    'lechon_de_cebu_payment_vouchers.created_by',
+                                    'lechon_de_cebu_payment_vouchers.invoice_number',
+                                    'lechon_de_cebu_payment_vouchers.voucher_ref_number',
+                                    'lechon_de_cebu_payment_vouchers.issued_date',
+                                    'lechon_de_cebu_payment_vouchers.category',
+                                    'lechon_de_cebu_payment_vouchers.amount_due',
+                                    'lechon_de_cebu_payment_vouchers.delivered_date',
+                                    'lechon_de_cebu_payment_vouchers.status',
+                                    'lechon_de_cebu_payment_vouchers.cheque_number',
+                                    'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                    'lechon_de_cebu_payment_vouchers.sub_category',
+                                    'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                    'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                    'lechon_de_cebu_codes.module_id',
+                                    'lechon_de_cebu_codes.module_code',
+                                    'lechon_de_cebu_codes.module_name')
+                                    ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                    ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
+                                    ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDateToday))
+                                    
+                                    ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
+                                    ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $check)
+                                    ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
+                                    ->sum('lechon_de_cebu_payment_vouchers.amount_due');
+
+
         //
         $totalPaymentVoucher = DB::table(
                             'lechon_de_cebu_payment_vouchers')
@@ -1268,7 +2331,9 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         return view('lechon-de-cebu-summary-report', compact('getAllSalesInvoices', 
         'getAllDeliveryReceipts', 'purchaseOrders', 'statementOfAccounts', 'billingStatements', 
-        'pettyCashLists',  'getTransactionLists', 'getTransactionListCashes', 'getTransactionListChecks', 'totalSalesInvoice', 'totalDeliveryReceipt', 'totalPOrder', 'totalBStatement', 'totalPaymentVoucher'));
+        'pettyCashLists',  'getTransactionLists', 'getTransactionListCashes', 
+        'getTransactionListChecks', 'totalSalesInvoice', 'totalDeliveryReceipt', 
+        'totalPOrder', 'totalBStatement', 'totalPaymentVoucher', 'totalAmountCashes', 'totalAmountCheck'));
     }
 
     public function updatePettyCash(Request $request, $id){
@@ -2035,10 +3100,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                             ->where('lechon_de_cebu_payment_vouchers.id', $id)
                             ->where('lechon_de_cebu_codes.module_name', $moduleName)
                             ->get();
-          
-
-
-        //
+        
         $getChequeNumbers = LechonDeCebuPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
         //getParticular details
@@ -2398,6 +3460,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_billing_statements.address',
                                     'lechon_de_cebu_billing_statements.dr_no',
                                     'lechon_de_cebu_billing_statements.qty',
+                                    'lechon_de_cebu_billing_statements.unit',
                                     'lechon_de_cebu_billing_statements.date',
                                     'lechon_de_cebu_billing_statements.branch',
                                     'lechon_de_cebu_billing_statements.period_cover',
@@ -2418,7 +3481,6 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 ->where('lechon_de_cebu_billing_statements.id', $id)
                                 ->where('lechon_de_cebu_codes.module_name', $moduleName)
                                 ->get();
-     
     
         $billingStatements = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->get()->toArray();
 
@@ -2528,6 +3590,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_delivery_receipts.contact_person',
                                 'lechon_de_cebu_delivery_receipts.mobile_num',
                                 'lechon_de_cebu_delivery_receipts.qty',
+                                'lechon_de_cebu_delivery_receipts.unit',
                                 'lechon_de_cebu_delivery_receipts.description',
                                 'lechon_de_cebu_delivery_receipts.price',
                                 'lechon_de_cebu_delivery_receipts.total',
@@ -3297,6 +4360,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_delivery_receipts.contact_person',
                                 'lechon_de_cebu_delivery_receipts.mobile_num',
                                 'lechon_de_cebu_delivery_receipts.qty',
+                                'lechon_de_cebu_delivery_receipts.unit',
                                 'lechon_de_cebu_delivery_receipts.description',
                                 'lechon_de_cebu_delivery_receipts.price',
                                 'lechon_de_cebu_delivery_receipts.total',
@@ -3339,6 +4403,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         
         $delivery = LechonDeCebuDeliveryReceipt::find($id);
         $delivery->qty = $request->get('qty');
+        $delivery->unit = $request->get('unit');
         $delivery->description = $request->get('description');
         $delivery->price = $request->get('price');
 
@@ -3417,6 +4482,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'dr_id'=>$id,
             'dr_no'=>$deliveryReceipt['dr_no'],
             'qty'=>$request->get('qty'),
+            'unit'=>$request->get('unit'),
             'description'=>$request->get('description'),
             'price'=>$request->get('price'),
             'prepared_by'=>$name,
@@ -3459,6 +4525,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $updateDeliveryReceipt->consignee_name = $request->get('consigneeName');
         $updateDeliveryReceipt->consignee_contact_num = $request->get('consigneeContact');
         $updateDeliveryReceipt->qty = $request->get('qty');
+        $updateDeliveryReceipt->unit = $request->get('unit');
         $updateDeliveryReceipt->description = $request->get('description');
         $updateDeliveryReceipt->price = $request->get('price');
 
@@ -3530,6 +4597,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'consignee_name'=>$request->get('consigneeName'),
             'consignee_contact_num'=>$request->get('consigneeContact'),
             'qty'=>$request->get('qty'),
+            'unit'=>$request->get('unit'),
             'description'=>$request->get('description'),
             'price'=>$request->get('price'),
             'total'=>$request->get('price'),
@@ -4469,6 +5537,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_billing_statements.date_of_transaction',
                                     'lechon_de_cebu_billing_statements.invoice_number',
                                     'lechon_de_cebu_billing_statements.qty',
+                                    'lechon_de_cebu_billing_statements.unit',
                                     'lechon_de_cebu_billing_statements.order',
                                     'lechon_de_cebu_billing_statements.whole_lechon',
                                     'lechon_de_cebu_billing_statements.description',
@@ -4600,6 +5669,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             $invoiceNum = $request->get('invoiceNumber');
             $wholeLechon = 0;
             $description = $request->get('description');
+            $unit = 0;
 
             $drNo = NULL;
             $descriptionDrNo = NULL;
@@ -4618,6 +5688,7 @@ class LoloPinoyLechonDeCebuController extends Controller
            
             $qty = $request->get('qty');
             $amount = $request->get('price');
+            $unit = $request->get('unit');
 
             $tot = $billingOrder->total_amount + $amount;
             $body = 0;
@@ -4634,6 +5705,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'description'=>$description,
             'order'=>$request->get('choose'),
             'qty'=>$qty,
+            'unit'=>$unit,
             'dr_no'=>$drNo,
             'body'=>$body,
             'head_and_feet'=>$headFeet,
@@ -4655,6 +5727,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'order'=>$request->get('choose'),
             'qty'=>$request->get('qty'),
             'qty'=>$qty,
+            'unit'=>$unit,
             'dr_no'=>$drNo,
             'body'=>$body,
             'head_and_feet'=>$headFeet,
@@ -4783,6 +5856,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             $invoiceNum = $request->get('invoiceNumber');
             $amount = $request->get('amount');
             $description = $request->get('description');
+            $unit = 0;
 
             $add = $amount;
 
@@ -4800,6 +5874,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             $description = $request->get('descriptionDrNo');
             $drNo = $request->get('drNo');
             $qty = $request->get('qty');
+            $unit = $request->get('unit');
 
             $add = $wholeLechon; 
             $body = NULL;
@@ -4837,6 +5912,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'description'=>$description,
             'dr_no'=>$drNo,
             'qty'=>$qty,
+            'unit'=>$unit,
             'body'=>$body,
             'head_and_feet'=>$headFeet,
             'amount'=>$add,
@@ -4864,6 +5940,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'description'=>$description,
             'dr_no'=>$drNo,
             'qty'=>$qty,
+            'unit'=>$unit,
             'body'=>$body,
             'head_and_feet'=>$headFeet,
             'amount'=>$add,

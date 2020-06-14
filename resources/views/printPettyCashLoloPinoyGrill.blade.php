@@ -44,12 +44,12 @@
                                     <table >
                                         <thead>
                                            <tr>
-                                                <th width="30%">Petty Cash No</th>
-                                                <th>Ptylpgc-{{ $getPettyCash['petty_cash_no'] }}</th>
+                                                <th width="30%">Petty Cash No:</th>
+                                                <th>{{ $getPettyCash[0]->module_code}}{{ $getPettyCash[0]->lolo_pinoy_grill_code}}</th>
                                             </tr>
                                             <tr>
-                                                <th>Date</th>
-                                                <th>{{ $getPettyCash['date'] }}</th>
+                                                <th>Date:</th>
+                                                <th>{{ $getPettyCash[0]->date }}</th>
                                             </tr>
                                          
                                       </thead>
@@ -60,12 +60,12 @@
                                 <table >
                                      <thead>
                                          <tr>
-                                                <th>Petty Cash Name</th>
-                                                <th> {{ $getPettyCash['petty_cash_name'] }} </th>
+                                                <th width="30%">Petty Cash Name:</th>
+                                                <th> {{ $getPettyCash[0]->petty_cash_name }} </th>
                                             </tr>
                                             <tr>
-                                                <th>Petty Cash Summary</th>
-                                                <th>{{ $getPettyCash['petty_cash_summary'] }}</th>
+                                                <th>Petty Cash Summary:</th>
+                                                <th>{{ $getPettyCash[0]->petty_cash_summary }}</th>
                                             </tr>
                                        
                                     </thead>
@@ -117,7 +117,7 @@
                            				<tr>
                            					<td>
                            						________________________<br>
-                           						{{ $getPettyCash['created_by']}}
+                           						{{ $getPettyCash[0]->created_by}}
 
                            					</td>
                            					<td>

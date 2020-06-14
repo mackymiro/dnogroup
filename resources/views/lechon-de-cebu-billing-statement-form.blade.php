@@ -151,6 +151,11 @@
                                   <input type="text" name="qty" class="form-control"  disabled />
                                  
                                 </div>
+                                <div id="unit" class="col-lg-1">
+                                  <label>Unit</label>
+                                  <input type="text" name="unit" class="form-control"  disabled />
+                                 
+                                </div>
                                 <div id="body" class="col-lg-1">
                                   <label>Body 400/kls</label>
                                   <input type="text" name="body" class="form-control"  disabled />
@@ -213,7 +218,7 @@
     $("#wholeLechon6000").hide();
     $("#descriptionDrNo").hide();
     $("#drList").hide();
-   
+    $("#unit").hide();
     $("#wholeLechon").hide();
     $(".chooseOption").change(function(){
          const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
@@ -232,12 +237,15 @@
              $("#wholeLechon").hide();
              $("#descriptionDrNo").hide();
              $("#drList").hide();
+             $("#unit").hide();
          }else if(cat === "Private Order"){
              $("#drNo").show();
              $("#wholeLechon6000").show();
              $("#descriptionDrNo").show();
              $("#drList").show();
              $("#qty").show();
+             $("#unit").show();
+
              $("#invoiceNo").hide();
              $("#body").hide();
              $("#headFeet").hide();
@@ -345,6 +353,7 @@
                              'lechon_de_cebu_delivery_receipts.contact_person',
                              'lechon_de_cebu_delivery_receipts.mobile_num',
                              'lechon_de_cebu_delivery_receipts.qty',
+                             'lechon_de_cebu_delivery_receipts.unit',
                              'lechon_de_cebu_delivery_receipts.description',
                              'lechon_de_cebu_delivery_receipts.price',
                              'lechon_de_cebu_delivery_receipts.total',
@@ -377,7 +386,7 @@
 
                  
                   <?php foreach($getDrNosInsides as $getDrNosInside):?>
-                      $("#dataList").append(  
+                       $("#dataList").append(  
                           `<option value="<?php echo $getDrNosInside->id?>"><?php echo $getDrNosInside->id?></option>
                           `);
                         
@@ -392,6 +401,8 @@
                                <?php foreach($datas as $data): ?>
                                      if(cat === "<?php echo $data->id?>"){
                                           $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $data->qty; ?>" class="form-control" readonly="readonly" />');
+                                          $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?php echo $data->unit; ?>" class="form-control" readonly="readonly" />');
+                                         
                                           $("#wholeLechon6000").html('<label>Whole Lechon</label><input type="text" name="wholeLechon6000" value="<?php echo $data->price; ?>" class="form-control" readonly="readonly" />');
                                           $("#descriptionDrNo").html('<label>Description</label><input type="text" name="descriptionDrNo" value="<?php echo $data->description; ?>" class="form-control" readonly="readonly" />');
             
@@ -401,6 +412,8 @@
 
                     <?php endforeach; ?>    
                 $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $getDrNo->qty; ?>" class="form-control" readonly="readonly" />');
+                $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?php echo $getDrNo->unit; ?>" class="form-control" readonly="readonly" />');
+                                        
                 $("#wholeLechon6000").html('<label>Whole Lechon</label><input type="text" name="wholeLechon6000" value="<?php echo $getDrNo->price; ?>" class="form-control" readonly="readonly" />');
                 $("#descriptionDrNo").html('<label>Description</label><input type="text" name="descriptionDrNo" value="<?php echo $getDrNo->description; ?>" class="form-control" readonly="readonly" />');
              }

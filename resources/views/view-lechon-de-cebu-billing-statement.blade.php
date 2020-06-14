@@ -86,6 +86,7 @@
                                         @if($viewBillingStatement[0]->order === "Private Order")
                                         <th class="bg-info" style="color:white;">DR No</th>
                                         <th class="bg-info" style="color:white;">QTY</th>
+                                        <th class="bg-info" style="color:white;">UNIT</th>
                                         @else
                                         <th class="bg-info" style="color:white;">INVOICE #</th>
                                         @endif
@@ -99,6 +100,7 @@
                                       @if($viewBillingStatement[0]->order == "Private Order")
                                       <td>{{ $viewBillingStatement[0]->dr_no }}</td>
                                       <td>{{ $viewBillingStatement[0]->qty }}</td>
+                                      <td>{{ $viewBillingStatement[0]->unit }}</td>
                                       @else
                                       <td>{{ $viewBillingStatement[0]->invoice_number }}</td>
                                       @endif
@@ -109,13 +111,20 @@
                                       @foreach($billingStatements as $billingStatement)
                                       <tr>
                                         <td>{{ $billingStatement['date_of_transaction'] }}</td>
+                                        @if($billingStatement['order'] == "Private Order")
+                                        <td>{{ $billingStatement['dr_no']}}</td>
+                                        <td>{{ $billingStatement['qty'] }}</td>
+                                        <td>{{ $billingStatement['unit'] }}</td>
+                                        @else
                                         <td>{{ $billingStatement['invoice_number'] }}</td>
-                                        <td>{{ $billingStatement['whole_lechon'] }}</td>
+                                        @endif
+                                       
                                         <td>{{ $billingStatement['description'] }}</td>
                                         <td><?php echo number_format($billingStatement['amount'], 2);?></td>
                                       </tr>
                                       @endforeach
                                       <tr>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>

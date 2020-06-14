@@ -15,8 +15,8 @@
 
             </ol>
             <div class="col-lg-12">
-                    <img src="{{ asset('images/DIC-LOGO.png')}}" width="255" height="172" class="img-responsive mx-auto d-block" alt="DNO Personal">
-                    
+                    <img src="{{ asset('images/digitized-logos/dno-personal.png')}}" width="255" height="255" class="img-responsive mx-auto d-block" alt="DNO Personal">
+
                     <h4 class="text-center"><u>RECEIVABLES FORM</u></h4>
             </div>
             <div class="row">

@@ -36,6 +36,10 @@
               						<label>QTY</label>
               						<input type="text" name="qty" class="form-control" required="required" />
                 					</div>
+								<div class="col-md-1">
+								<label>Unit</label>
+								<input type="text" name="unit" class="form-control" required="required" />
+								</div>
                   				<div class="col-md-4">
                   					<label>Description</label>
                   					<input type="text" name="description" class="form-control" required="required" />

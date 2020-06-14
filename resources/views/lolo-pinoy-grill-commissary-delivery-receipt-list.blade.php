@@ -25,8 +25,8 @@
 					  					<thead>
 					  						
 				  							<th>Action</th>
+											<th>Date</th>
 				  							<th>DR No</th>
-				  							<th>Date</th>
 				  							<th>Delivered To</th>
 				  							<th>Address</th>
 				  							<th>Product Id</th>
@@ -39,8 +39,8 @@
 					  					</thead>
 					  					<tfoot>
 					  						<th>Action</th>
+											<th>Date</th>
 				  							<th>DR No</th>
-				  							<th>Date</th>
 				  							<th>Delivered To</th>
 				  							<th>Address</th>
 				  							<th>Product Id</th>
@@ -53,36 +53,37 @@
 					  					</tfoot>
 					  					<tbody>
 				  							@foreach($getAllDeliveryReceipts as $getAllDeliveryReceipt)
-					  						<tr id="deletedId{{ $getAllDeliveryReceipt['id'] }}">
+					  						<tr id="deletedId{{ $getAllDeliveryReceipt->id }}">
 					  							<td>
 			               						 @if(Auth::user()['role_type'] !== 3)
-			  										<a href="{{ url('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-delivery-receipt/'.$getAllDeliveryReceipt['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+			  										<a href="{{ url('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-delivery-receipt/'.$getAllDeliveryReceipt->id ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
 			               						 @endif
 			              						@if(Auth::user()['role_type'] == 1)
-					  								<a id="delete" onClick="confirmDelete('{{ $getAllDeliveryReceipt['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+					  								<a id="delete" onClick="confirmDelete('{{ $getAllDeliveryReceipt->id}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
 			              						@endif
-									  				<a href="{{ url('lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-commissary-delivery-receipt/'.$getAllDeliveryReceipt['id'])}}" title="View"><i class="fas fa-low-vision"></i></a>
+									  				<a href="{{ url('lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-commissary-delivery-receipt/'.$getAllDeliveryReceipt->id)}}" title="View"><i class="fas fa-low-vision"></i></a>
 						                         
 			  									</td>
-					  							<td>{{ $getAllDeliveryReceipt['dr_no']}}</td>
-					  							<td>{{ $getAllDeliveryReceipt['date']}}</td>
-					  							<td>{{ $getAllDeliveryReceipt['delivered_to']}}</td>
-					  							<td>{{ $getAllDeliveryReceipt['address']}}</td>
+					  						
+					  							<td>{{ $getAllDeliveryReceipt->date}}</td>
+												<td>{{ $getAllDeliveryReceipt->module_code}}{{ $getAllDeliveryReceipt->lolo_pinoy_grill_code}}</td>
+					  							<td><p style="width:180px;">{{ $getAllDeliveryReceipt->delivered_to}}</p></td>
+					  							<td>{{ $getAllDeliveryReceipt->address}}</td>
 					  							<td>
 					  								<?php
-                                                        $prodArr = $getAllDeliveryReceipt['product_id'];
+                                                        $prodArr = $getAllDeliveryReceipt->product_id;
                                                         $prodExp = explode("-", $prodArr);
                                                         
                                                     ?>
-					  								{{ $prodExp[1] }}
+					  								<p style="width:180px;">{{ $prodExp[1] }}</p>
 				  									
 				  								</td>
-					  							<td>{{ $getAllDeliveryReceipt['qty']}}</td>
-					  							<td>{{ $getAllDeliveryReceipt['unit']}}</td>
-					  							<td>{{ $getAllDeliveryReceipt['item_description']}}</td>
-					  							<td><?php echo number_format($getAllDeliveryReceipt['unit_price'], 2)?></td>
-					  							<td><?php echo number_format($getAllDeliveryReceipt['amount'], 2)?></td>
-					  							<td>{{ $getAllDeliveryReceipt['created_by']}}</td>
+					  							<td>{{ $getAllDeliveryReceipt->qty}}</td>
+					  							<td>{{ $getAllDeliveryReceipt->unit}}</td>
+					  							<td>{{ $getAllDeliveryReceipt->item_description}}</td>
+					  							<td><?php echo number_format($getAllDeliveryReceipt->unit_price, 2)?></td>
+					  							<td><?php echo number_format($getAllDeliveryReceipt->amount, 2)?></td>
+					  							<td>{{ $getAllDeliveryReceipt->created_by}}</td>
 					  						</tr>
 					  						@endforeach
 					  					</tbody>

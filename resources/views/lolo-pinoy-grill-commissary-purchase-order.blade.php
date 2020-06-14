@@ -56,26 +56,15 @@
 		                                      @endif
 		                                    </div>
 		                                    <div class="col-lg-6">
-	                                    		  <label>P.O Number</label>
-			                                      <input type="text" name="poNum" class="form-control" disabled="disabled" />
-			                                      <label>Date</label>
-			                                      <input type="text" name="date" class="datepicker form-control" required="required" />
-			                                      @if ($errors->has('date'))
-			                                        <span class="alert alert-danger">
-			                                          <strong>{{ $errors->first('date') }}</strong>
-			                                        </span>
-			                                      @endif
-		                                    </div>
-                         				</div>
-                             		</div>
-                             		<div class="form-group">
-                         				<div class="form-row">
-                     						<div class="col-lg-4">
-                     							<label>Requesting Branch</label>
+												<label>Date</label>
+												<input type="text" name="date" class="datepicker form-control" required="required" autocomplete="off" />
+												<label>Requesting Branch</label>
                      							<input type="text" name="requestingBranch" class="form-control" />
-                     						</div>
+		                                    </div>
+										
                          				</div>
                              		</div>
+                             		
                              		<div class="form-group">
                              			<div class="form-row">
                      						<div class="col-lg-1">

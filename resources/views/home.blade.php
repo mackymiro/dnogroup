@@ -173,7 +173,7 @@
             <div class="card text-white bg-secondary o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                  <img src="{{ asset('images/ribos.jpg')}}" width="200" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
+                  <img src="{{ asset('images/digitized-logos/ribos-food-corp.png')}}" width="200" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
                 </div>
                 <div class="mr-5">Ribo's Bar</div>
               </div>
@@ -189,7 +189,7 @@
             <div class="card text-white bg-info o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                     <img src="{{ asset('images/dno-logo.png')}}" width="250" height="160" class="img-responsive mx-auto d-block" alt="DIC ">
+                     <img src="{{ asset('images/digitized-logos/dno-personal1.png')}}" width="250" height="160" class="img-responsive mx-auto d-block" alt="DNO Personal ">
                 </div>
                 <div class="mr-5">DNO Personal</div>
               </div>

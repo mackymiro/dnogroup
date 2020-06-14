@@ -94,6 +94,7 @@
 										@endif
 										@if($printBillingStatement[0]->order === "Private Order")
 										<th style="height: 1%; text-align: center;">QTY</th>
+										<th style="height: 1%; text-align: center;">UNIT</th>
 										@else
                                         <th style="height: 1%; text-align: center;">WEIGHT AT 500/kl</th>
 										@endif
@@ -112,7 +113,7 @@
                                       @endif
 									  @if($printBillingStatement[0]->order === "Private Order")
 									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->qty }}</td>
-                                     
+									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->unit }}</td>
 									  @else
 									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->whole_lechon }}</td>
                                       @endif
@@ -130,6 +131,7 @@
                                           @endif
 										  @if($printBillingStatement[0]->order === "Private Order")
 										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['qty'] }}</td>
+										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['unit'] }}</td>
 										  @else
 										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['whole_lechon'] }}</td>
                                           @endif
@@ -142,7 +144,8 @@
 	                                       <tr style="border:1px solid black;">
 	                                        <td style=" border: 1px solid black;"></td>
 	                                        <td style=" border: 1px solid black;"></td>
-                                          <td style=" border: 1px solid black;"></td>
+                                          	<td style=" border: 1px solid black;"></td>
+											<td style=" border: 1px solid black;"></td>
 	                                        <td style=" border: 1px solid black;"><strong>Total</strong></td>
 	                                        <td style=" text-align:center; border: 1px solid black;"> <?php echo number_format($sum, 2)?></td>
 	                                      </tr>

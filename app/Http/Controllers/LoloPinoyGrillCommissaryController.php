@@ -18,28 +18,1824 @@ use App\LoloPinoyGrillCommissaryStatementOfAccount;
 use App\LoloPinoyGrillCommissaryRawMaterial;
 use App\LoloPinoyGrillCommissaryUtility;
 use App\LoloPinoyGrillCommissaryPettyCash;
+use App\LoloPinoyGrillCommissaryCode;
 
 class LoloPinoyGrillCommissaryController extends Controller
 {
 
-    public function printPO($id){   
-        $purchaseOrder = LoloPinoyGrillCommissaryPurchaseOrder::find($id);
-
+    public function printGetSummary($date){
+        $moduleName = "Sales Invoice";
+        $getAllSalesInvoices  = DB::table(
+                                'lolo_pinoy_grill_commissary_sales_invoices')
+                                ->select(
+                                    'lolo_pinoy_grill_commissary_sales_invoices.id',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.user_id',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.si_id',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.invoice_number',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.date',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.ordered_by',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.address',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.qty',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.total_kls',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.item_description',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.unit_price',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.amount',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.created_by',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.created_at',
+                                    'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_id',
+                                    'lolo_pinoy_grill_commissary_codes.module_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_sales_invoices.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_sales_invoices.si_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                                ->whereDate('lolo_pinoy_grill_commissary_sales_invoices.created_at', '=', date($date))
+                                ->orderBy('lolo_pinoy_grill_commissary_sales_invoices.id', 'desc')
+                                ->get()->toArray();
+            
+            $totalSalesInvoice  = DB::table(
+                                    'lolo_pinoy_grill_commissary_sales_invoices')
+                                    ->select(
+                                        'lolo_pinoy_grill_commissary_sales_invoices.id',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.user_id',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.si_id',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.invoice_number',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.date',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.ordered_by',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.address',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.qty',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.total_kls',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.item_description',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.unit_price',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.amount',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.created_by',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.created_at',
+                                        'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                        'lolo_pinoy_grill_commissary_codes.module_id',
+                                        'lolo_pinoy_grill_commissary_codes.module_code',
+                                        'lolo_pinoy_grill_commissary_codes.module_name')
+                                    ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_sales_invoices.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                    ->where('lolo_pinoy_grill_commissary_sales_invoices.si_id', NULL)
+                                    ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                                    ->whereDate('lolo_pinoy_grill_commissary_sales_invoices.created_at', '=', date($date))
+                                    ->sum('lolo_pinoy_grill_commissary_sales_invoices.amount');
+        
+        //Delivery Receipt
+        $moduleNameDelivery = "Delivery Receipt";
+        $getAllDeliveryReceipts = DB::table(
+                                'lolo_pinoy_grill_commissary_delivery_receipts')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_delivery_receipts.id',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.user_id',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.dr_id',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.delivered_to',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.address',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.dr_no',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.date',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.product_id',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.qty',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.unit',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.item_description',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.unit_price',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.amount',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.charge_to',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.address_to',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.prepared_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.approved_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.checked_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.received_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.created_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.created_at',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_delivery_receipts.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_delivery_receipts.dr_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNameDelivery)
+                                ->whereDate('lolo_pinoy_grill_commissary_delivery_receipts.created_at', '=', date($date))
+                                ->orderBy('lolo_pinoy_grill_commissary_delivery_receipts.id', 'desc')
+                                ->get()->toArray();
+    
+            $totalDeliveryReceipt = DB::table(
+                                    'lolo_pinoy_grill_commissary_delivery_receipts')
+                                    ->select( 
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.id',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.user_id',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.dr_id',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.delivered_to',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.address',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.dr_no',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.date',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.product_id',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.qty',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.unit',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.item_description',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.unit_price',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.amount',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.charge_to',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.address_to',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.prepared_by',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.approved_by',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.checked_by',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.received_by',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.created_by',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.created_at',
+                                    'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_id',
+                                    'lolo_pinoy_grill_commissary_codes.module_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_name')
+                                    ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_delivery_receipts.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                    ->where('lolo_pinoy_grill_commissary_delivery_receipts.dr_id', NULL)
+                                    ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNameDelivery)
+                                    ->whereDate('lolo_pinoy_grill_commissary_delivery_receipts.created_at', '=', date($date))
+                                    ->sum('lolo_pinoy_grill_commissary_delivery_receipts.amount');
+        
+        //purchase order
+        $moduleNamePurchase = "Purchase Order";
+        $purchaseOrders = DB::table(
+                        'lolo_pinoy_grill_commissary_purchase_orders')
+                        ->select(
+                            'lolo_pinoy_grill_commissary_purchase_orders.id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.user_id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.po_id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.paid_to',
+                            'lolo_pinoy_grill_commissary_purchase_orders.address',
+                            'lolo_pinoy_grill_commissary_purchase_orders.date',
+                            'lolo_pinoy_grill_commissary_purchase_orders.quantity',
+                            'lolo_pinoy_grill_commissary_purchase_orders.description',
+                            'lolo_pinoy_grill_commissary_purchase_orders.unit_price',
+                            'lolo_pinoy_grill_commissary_purchase_orders.amount',
+                            'lolo_pinoy_grill_commissary_purchase_orders.total_price',
+                            'lolo_pinoy_grill_commissary_purchase_orders.requested_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.prepared_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.checked_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.created_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.created_at',
+                            'lolo_pinoy_grill_commissary_purchase_orders.requesting_branch',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                            ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_purchase_orders.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                            ->where('lolo_pinoy_grill_commissary_purchase_orders.po_id', NULL)
+                            ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePurchase)
+                            ->whereDate('lolo_pinoy_grill_commissary_purchase_orders.created_at', '=', date($date))                                   
+                            ->orderBy('lolo_pinoy_grill_commissary_purchase_orders.id', 'desc')
+                            ->get()->toArray();
+        
+        $totalPOrder = DB::table(
+                                'lolo_pinoy_grill_commissary_purchase_orders')
+                                ->select(
+                                    'lolo_pinoy_grill_commissary_purchase_orders.id',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.user_id',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.po_id',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.paid_to',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.address',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.date',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.quantity',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.description',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.unit_price',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.amount',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.total_price',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.requested_by',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.prepared_by',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.checked_by',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.created_by',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.created_at',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.requesting_branch',
+                                    'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_id',
+                                    'lolo_pinoy_grill_commissary_codes.module_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_name')
+                                    ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_purchase_orders.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                    ->where('lolo_pinoy_grill_commissary_purchase_orders.po_id', NULL)
+                                    ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePurchase)
+                                    ->whereDate('lolo_pinoy_grill_commissary_purchase_orders.created_at', '=', date($date))                                   
+                                    ->sum('lolo_pinoy_grill_commissary_purchase_orders.total_price');
+    
         //
-      $pOrders = LoloPinoyGrillCommissaryPurchaseOrder::where('po_id', $id)->get()->toArray();
-
-        //count the total amount 
-      $countTotalAmount = LoloPinoyGrillCommissaryPurchaseOrder::where('id', $id)->sum('amount');
-
-      //
-      $countAmount = LoloPinoyGrillCommissaryPurchaseOrder::where('po_id', $id)->sum('amount');
-
-      $sum  = $countTotalAmount + $countAmount;
 
 
-      $pdf = PDF::loadView('printPOLoloPinoyGrill', compact('purchaseOrder', 'pOrders', 'sum'));
+        $moduleNamePettyCash = "Petty Cash";
+        $pettyCashLists = DB::table(
+                                'lolo_pinoy_grill_commissary_petty_cashes')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_petty_cashes.id',
+                                'lolo_pinoy_grill_commissary_petty_cashes.user_id',
+                                'lolo_pinoy_grill_commissary_petty_cashes.pc_id',   
+                                'lolo_pinoy_grill_commissary_petty_cashes.date',
+                                'lolo_pinoy_grill_commissary_petty_cashes.petty_cash_name',
+                                'lolo_pinoy_grill_commissary_petty_cashes.petty_cash_summary',
+                                'lolo_pinoy_grill_commissary_petty_cashes.amount',
+                                'lolo_pinoy_grill_commissary_petty_cashes.created_by',
+                                'lolo_pinoy_grill_commissary_petty_cashes.created_at',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_petty_cashes.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_petty_cashes.pc_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePettyCash)
+                                ->whereDate('lolo_pinoy_grill_commissary_petty_cashes.created_at', '=', date($date))                                   
+                                ->orderBy('lolo_pinoy_grill_commissary_codes.id', 'desc')
+                                ->get()->toArray();
 
-      return $pdf->download('lolo-pinoy-grill-commissary-purchase-order.pdf');
+        $moduleNamePaymentVoucher = "Payment Voucher";
+        $getTransactionLists = DB::table(
+                                'lolo_pinoy_grill_commissary_payment_vouchers')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.created_at',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePaymentVoucher)
+                                ->whereDate('lolo_pinoy_grill_commissary_payment_vouchers.created_at', '=', date($date))                                   
+                                ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                                ->get()->toArray();
+                        
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                                    'lolo_pinoy_grill_commissary_payment_vouchers')
+                                    ->select( 
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.created_at',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                                    'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_id',
+                                    'lolo_pinoy_grill_commissary_codes.module_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_name')
+                                    ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                    ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                                    ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePaymentVoucher)
+                                    ->whereDate('lolo_pinoy_grill_commissary_payment_vouchers.created_at', '=', date($date))                                   
+                                    ->where('lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment', $cash)
+                                    ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                                    ->get()->toArray();                            
+    
+        $totalAmountCash = DB::table(
+                                'lolo_pinoy_grill_commissary_payment_vouchers')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.created_at',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePaymentVoucher)
+                                ->whereDate('lolo_pinoy_grill_commissary_payment_vouchers.created_at', '=', date($date))                                   
+                                ->where('lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment', $cash)
+                                ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                                ->sum('lolo_pinoy_grill_commissary_payment_vouchers.amount_due');
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                            'lolo_pinoy_grill_commissary_payment_vouchers')
+                            ->select( 
+                            'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.created_at',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                            ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                            ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                            ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePaymentVoucher)
+                            ->whereDate('lolo_pinoy_grill_commissary_payment_vouchers.created_at', '=', date($date))                                   
+                            ->where('lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment', $check)
+                            ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                            ->get()->toArray();  
+
+
+        $totalAmountCheck = DB::table(
+                        'lolo_pinoy_grill_commissary_payment_vouchers')
+                        ->select( 
+                        'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.created_at',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                        'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                        'lolo_pinoy_grill_commissary_codes.module_id',
+                        'lolo_pinoy_grill_commissary_codes.module_code',
+                        'lolo_pinoy_grill_commissary_codes.module_name')
+                        ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                        ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                        ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePaymentVoucher)
+                        ->whereDate('lolo_pinoy_grill_commissary_payment_vouchers.created_at', '=', date($date))                                   
+                        ->where('lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment', $check)
+                        ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                        ->sum('lolo_pinoy_grill_commissary_payment_vouchers.amount_due');
+        
+        $getDateToday = "";
+        $pdf = PDF::loadView('printSummaryLoloPinoyGrill',  compact('date', 'getDateToday', 'getAllSalesInvoices', 
+        'getAllDeliveryReceipts', 'purchaseOrders', 'statementOfAccounts', 'billingStatements', 
+        'pettyCashLists',  'getTransactionLists', 'getTransactionListCashes', 'getTransactionListChecks', 'totalSalesInvoice', 'totalDeliveryReceipt', 'totalPOrder', 'totalBStatement', 
+        'totalAmountCash','totalAmountCheck'));
+        
+        return $pdf->download('lolo-pinoy-grill-commissary-summary-report.pdf');
+
+
+    }
+
+    public function getSummaryReport(Request $request){
+        $getDate = $request->get('selectDate');
+
+        $moduleName = "Sales Invoice";
+        $getAllSalesInvoices  = DB::table(
+                                'lolo_pinoy_grill_commissary_sales_invoices')
+                                ->select(
+                                    'lolo_pinoy_grill_commissary_sales_invoices.id',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.user_id',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.si_id',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.invoice_number',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.date',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.ordered_by',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.address',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.qty',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.total_kls',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.item_description',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.unit_price',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.amount',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.created_by',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.created_at',
+                                    'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_id',
+                                    'lolo_pinoy_grill_commissary_codes.module_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_sales_invoices.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_sales_invoices.si_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                                ->whereDate('lolo_pinoy_grill_commissary_sales_invoices.created_at', '=', date($getDate))
+                                ->orderBy('lolo_pinoy_grill_commissary_sales_invoices.id', 'desc')
+                                ->get()->toArray();
+            
+            $totalSalesInvoice  = DB::table(
+                                    'lolo_pinoy_grill_commissary_sales_invoices')
+                                    ->select(
+                                        'lolo_pinoy_grill_commissary_sales_invoices.id',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.user_id',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.si_id',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.invoice_number',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.date',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.ordered_by',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.address',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.qty',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.total_kls',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.item_description',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.unit_price',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.amount',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.created_by',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.created_at',
+                                        'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                        'lolo_pinoy_grill_commissary_codes.module_id',
+                                        'lolo_pinoy_grill_commissary_codes.module_code',
+                                        'lolo_pinoy_grill_commissary_codes.module_name')
+                                    ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_sales_invoices.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                    ->where('lolo_pinoy_grill_commissary_sales_invoices.si_id', NULL)
+                                    ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                                    ->whereDate('lolo_pinoy_grill_commissary_sales_invoices.created_at', '=', date($getDate))
+                                    ->sum('lolo_pinoy_grill_commissary_sales_invoices.amount');
+        
+        //Delivery Receipt
+        $moduleNameDelivery = "Delivery Receipt";
+        $getAllDeliveryReceipts = DB::table(
+                                'lolo_pinoy_grill_commissary_delivery_receipts')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_delivery_receipts.id',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.user_id',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.dr_id',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.delivered_to',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.address',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.dr_no',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.date',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.product_id',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.qty',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.unit',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.item_description',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.unit_price',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.amount',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.charge_to',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.address_to',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.prepared_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.approved_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.checked_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.received_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.created_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.created_at',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_delivery_receipts.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_delivery_receipts.dr_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNameDelivery)
+                                ->whereDate('lolo_pinoy_grill_commissary_delivery_receipts.created_at', '=', date($getDate))
+                                ->orderBy('lolo_pinoy_grill_commissary_delivery_receipts.id', 'desc')
+                                ->get()->toArray();
+    
+            $totalDeliveryReceipt = DB::table(
+                                    'lolo_pinoy_grill_commissary_delivery_receipts')
+                                    ->select( 
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.id',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.user_id',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.dr_id',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.delivered_to',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.address',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.dr_no',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.date',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.product_id',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.qty',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.unit',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.item_description',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.unit_price',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.amount',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.charge_to',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.address_to',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.prepared_by',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.approved_by',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.checked_by',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.received_by',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.created_by',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.created_at',
+                                    'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_id',
+                                    'lolo_pinoy_grill_commissary_codes.module_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_name')
+                                    ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_delivery_receipts.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                    ->where('lolo_pinoy_grill_commissary_delivery_receipts.dr_id', NULL)
+                                    ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNameDelivery)
+                                    ->whereDate('lolo_pinoy_grill_commissary_delivery_receipts.created_at', '=', date($getDate))
+                                    ->sum('lolo_pinoy_grill_commissary_delivery_receipts.amount');
+        
+        //purchase order
+        $moduleNamePurchase = "Purchase Order";
+        $purchaseOrders = DB::table(
+                        'lolo_pinoy_grill_commissary_purchase_orders')
+                        ->select(
+                            'lolo_pinoy_grill_commissary_purchase_orders.id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.user_id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.po_id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.paid_to',
+                            'lolo_pinoy_grill_commissary_purchase_orders.address',
+                            'lolo_pinoy_grill_commissary_purchase_orders.date',
+                            'lolo_pinoy_grill_commissary_purchase_orders.quantity',
+                            'lolo_pinoy_grill_commissary_purchase_orders.description',
+                            'lolo_pinoy_grill_commissary_purchase_orders.unit_price',
+                            'lolo_pinoy_grill_commissary_purchase_orders.amount',
+                            'lolo_pinoy_grill_commissary_purchase_orders.total_price',
+                            'lolo_pinoy_grill_commissary_purchase_orders.requested_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.prepared_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.checked_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.created_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.created_at',
+                            'lolo_pinoy_grill_commissary_purchase_orders.requesting_branch',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                            ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_purchase_orders.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                            ->where('lolo_pinoy_grill_commissary_purchase_orders.po_id', NULL)
+                            ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePurchase)
+                            ->whereDate('lolo_pinoy_grill_commissary_purchase_orders.created_at', '=', date($getDate))                                   
+                            ->orderBy('lolo_pinoy_grill_commissary_purchase_orders.id', 'desc')
+                            ->get()->toArray();
+        
+        $totalPOrder = DB::table(
+                                'lolo_pinoy_grill_commissary_purchase_orders')
+                                ->select(
+                                    'lolo_pinoy_grill_commissary_purchase_orders.id',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.user_id',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.po_id',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.paid_to',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.address',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.date',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.quantity',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.description',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.unit_price',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.amount',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.total_price',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.requested_by',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.prepared_by',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.checked_by',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.created_by',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.created_at',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.requesting_branch',
+                                    'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_id',
+                                    'lolo_pinoy_grill_commissary_codes.module_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_name')
+                                    ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_purchase_orders.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                    ->where('lolo_pinoy_grill_commissary_purchase_orders.po_id', NULL)
+                                    ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePurchase)
+                                    ->whereDate('lolo_pinoy_grill_commissary_purchase_orders.created_at', '=', date($getDate))                                   
+                                    ->sum('lolo_pinoy_grill_commissary_purchase_orders.total_price');
+    
+        //
+
+
+        $moduleNamePettyCash = "Petty Cash";
+        $pettyCashLists = DB::table(
+                                'lolo_pinoy_grill_commissary_petty_cashes')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_petty_cashes.id',
+                                'lolo_pinoy_grill_commissary_petty_cashes.user_id',
+                                'lolo_pinoy_grill_commissary_petty_cashes.pc_id',   
+                                'lolo_pinoy_grill_commissary_petty_cashes.date',
+                                'lolo_pinoy_grill_commissary_petty_cashes.petty_cash_name',
+                                'lolo_pinoy_grill_commissary_petty_cashes.petty_cash_summary',
+                                'lolo_pinoy_grill_commissary_petty_cashes.amount',
+                                'lolo_pinoy_grill_commissary_petty_cashes.created_by',
+                                'lolo_pinoy_grill_commissary_petty_cashes.created_at',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_petty_cashes.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_petty_cashes.pc_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePettyCash)
+                                ->whereDate('lolo_pinoy_grill_commissary_petty_cashes.created_at', '=', date($getDate))                                   
+                                ->orderBy('lolo_pinoy_grill_commissary_codes.id', 'desc')
+                                ->get()->toArray();
+
+        $moduleNamePaymentVoucher = "Payment Voucher";
+        $getTransactionLists = DB::table(
+                                'lolo_pinoy_grill_commissary_payment_vouchers')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.created_at',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePaymentVoucher)
+                                ->whereDate('lolo_pinoy_grill_commissary_payment_vouchers.created_at', '=', date($getDate))                                   
+                                ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                                ->get()->toArray();
+                        
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                                    'lolo_pinoy_grill_commissary_payment_vouchers')
+                                    ->select( 
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.created_at',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                                    'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_id',
+                                    'lolo_pinoy_grill_commissary_codes.module_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_name')
+                                    ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                    ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                                    ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePaymentVoucher)
+                                    ->whereDate('lolo_pinoy_grill_commissary_payment_vouchers.created_at', '=', date($getDate))                                   
+                                    ->where('lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment', $cash)
+                                    ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                                    ->get()->toArray();                            
+    
+        $totalAmountCash = DB::table(
+                                'lolo_pinoy_grill_commissary_payment_vouchers')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.created_at',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePaymentVoucher)
+                                ->whereDate('lolo_pinoy_grill_commissary_payment_vouchers.created_at', '=', date($getDate))                                   
+                                ->where('lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment', $cash)
+                                ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                                ->sum('lolo_pinoy_grill_commissary_payment_vouchers.amount_due');
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                            'lolo_pinoy_grill_commissary_payment_vouchers')
+                            ->select( 
+                            'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.created_at',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                            ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                            ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                            ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePaymentVoucher)
+                            ->whereDate('lolo_pinoy_grill_commissary_payment_vouchers.created_at', '=', date($getDate))                                   
+                            ->where('lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment', $check)
+                            ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                            ->get()->toArray();  
+
+
+        $totalAmountCheck = DB::table(
+                        'lolo_pinoy_grill_commissary_payment_vouchers')
+                        ->select( 
+                        'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.created_at',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                        'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                        'lolo_pinoy_grill_commissary_codes.module_id',
+                        'lolo_pinoy_grill_commissary_codes.module_code',
+                        'lolo_pinoy_grill_commissary_codes.module_name')
+                        ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                        ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                        ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePaymentVoucher)
+                        ->whereDate('lolo_pinoy_grill_commissary_payment_vouchers.created_at', '=', date($getDate))                                   
+                        ->where('lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment', $check)
+                        ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                        ->sum('lolo_pinoy_grill_commissary_payment_vouchers.amount_due');
+
+        return view('lolo-pinoy-grill-get-summary-report', compact('getDate', 'getAllSalesInvoices', 
+        'totalSalesInvoice', 'getAllDeliveryReceipts', 'totalDeliveryReceipt', 'purchaseOrders', 'totalPOrder',
+        'pettyCashLists', 'getTransactionLists', 'getTransactionListCashes', 'totalAmountCash' , 
+        'getTransactionListChecks', 'totalAmountCheck'));
+
+    }
+
+    public function printSummary(){
+         //sales invoice
+         $getDateToday = date("Y-m-d");
+
+         $moduleName = "Sales Invoice";
+        $getAllSalesInvoices  = DB::table(
+                                'lolo_pinoy_grill_commissary_sales_invoices')
+                                ->select(
+                                    'lolo_pinoy_grill_commissary_sales_invoices.id',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.user_id',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.si_id',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.invoice_number',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.date',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.ordered_by',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.address',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.qty',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.total_kls',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.item_description',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.unit_price',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.amount',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.created_by',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.created_at',
+                                    'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_id',
+                                    'lolo_pinoy_grill_commissary_codes.module_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_sales_invoices.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_sales_invoices.si_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                                ->whereDate('lolo_pinoy_grill_commissary_sales_invoices.created_at', '=', date($getDateToday))
+                                ->orderBy('lolo_pinoy_grill_commissary_sales_invoices.id', 'desc')
+                                ->get()->toArray();
+            
+            $totalSalesInvoice  = DB::table(
+                                    'lolo_pinoy_grill_commissary_sales_invoices')
+                                    ->select(
+                                        'lolo_pinoy_grill_commissary_sales_invoices.id',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.user_id',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.si_id',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.invoice_number',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.date',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.ordered_by',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.address',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.qty',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.total_kls',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.item_description',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.unit_price',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.amount',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.created_by',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.created_at',
+                                        'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                        'lolo_pinoy_grill_commissary_codes.module_id',
+                                        'lolo_pinoy_grill_commissary_codes.module_code',
+                                        'lolo_pinoy_grill_commissary_codes.module_name')
+                                    ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_sales_invoices.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                    ->where('lolo_pinoy_grill_commissary_sales_invoices.si_id', NULL)
+                                    ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                                    ->whereDate('lolo_pinoy_grill_commissary_sales_invoices.created_at', '=', date($getDateToday))
+                                    ->sum('lolo_pinoy_grill_commissary_sales_invoices.amount');
+        
+        //Delivery Receipt
+        $moduleNameDelivery = "Delivery Receipt";
+        $getAllDeliveryReceipts = DB::table(
+                                'lolo_pinoy_grill_commissary_delivery_receipts')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_delivery_receipts.id',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.user_id',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.dr_id',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.delivered_to',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.address',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.dr_no',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.date',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.product_id',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.qty',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.unit',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.item_description',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.unit_price',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.amount',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.charge_to',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.address_to',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.prepared_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.approved_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.checked_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.received_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.created_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.created_at',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_delivery_receipts.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_delivery_receipts.dr_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNameDelivery)
+                                ->whereDate('lolo_pinoy_grill_commissary_delivery_receipts.created_at', '=', date($getDateToday))
+                                ->orderBy('lolo_pinoy_grill_commissary_delivery_receipts.id', 'desc')
+                                ->get()->toArray();
+    
+            $totalDeliveryReceipt = DB::table(
+                                    'lolo_pinoy_grill_commissary_delivery_receipts')
+                                    ->select( 
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.id',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.user_id',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.dr_id',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.delivered_to',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.address',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.dr_no',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.date',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.product_id',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.qty',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.unit',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.item_description',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.unit_price',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.amount',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.charge_to',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.address_to',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.prepared_by',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.approved_by',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.checked_by',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.received_by',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.created_by',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.created_at',
+                                    'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_id',
+                                    'lolo_pinoy_grill_commissary_codes.module_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_name')
+                                    ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_delivery_receipts.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                    ->where('lolo_pinoy_grill_commissary_delivery_receipts.dr_id', NULL)
+                                    ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNameDelivery)
+                                    ->whereDate('lolo_pinoy_grill_commissary_delivery_receipts.created_at', '=', date($getDateToday))
+                                    ->sum('lolo_pinoy_grill_commissary_delivery_receipts.amount');
+        
+        //purchase order
+        $moduleNamePurchase = "Purchase Order";
+        $purchaseOrders = DB::table(
+                        'lolo_pinoy_grill_commissary_purchase_orders')
+                        ->select(
+                            'lolo_pinoy_grill_commissary_purchase_orders.id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.user_id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.po_id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.paid_to',
+                            'lolo_pinoy_grill_commissary_purchase_orders.address',
+                            'lolo_pinoy_grill_commissary_purchase_orders.date',
+                            'lolo_pinoy_grill_commissary_purchase_orders.quantity',
+                            'lolo_pinoy_grill_commissary_purchase_orders.description',
+                            'lolo_pinoy_grill_commissary_purchase_orders.unit_price',
+                            'lolo_pinoy_grill_commissary_purchase_orders.amount',
+                            'lolo_pinoy_grill_commissary_purchase_orders.total_price',
+                            'lolo_pinoy_grill_commissary_purchase_orders.requested_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.prepared_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.checked_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.created_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.created_at',
+                            'lolo_pinoy_grill_commissary_purchase_orders.requesting_branch',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                            ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_purchase_orders.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                            ->where('lolo_pinoy_grill_commissary_purchase_orders.po_id', NULL)
+                            ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePurchase)
+                            ->whereDate('lolo_pinoy_grill_commissary_purchase_orders.created_at', '=', date($getDateToday))                                   
+                            ->orderBy('lolo_pinoy_grill_commissary_purchase_orders.id', 'desc')
+                            ->get()->toArray();
+        
+        $totalPOrder = DB::table(
+                                'lolo_pinoy_grill_commissary_purchase_orders')
+                                ->select(
+                                    'lolo_pinoy_grill_commissary_purchase_orders.id',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.user_id',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.po_id',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.paid_to',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.address',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.date',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.quantity',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.description',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.unit_price',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.amount',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.total_price',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.requested_by',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.prepared_by',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.checked_by',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.created_by',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.created_at',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.requesting_branch',
+                                    'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_id',
+                                    'lolo_pinoy_grill_commissary_codes.module_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_name')
+                                    ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_purchase_orders.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                    ->where('lolo_pinoy_grill_commissary_purchase_orders.po_id', NULL)
+                                    ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePurchase)
+                                    ->whereDate('lolo_pinoy_grill_commissary_purchase_orders.created_at', '=', date($getDateToday))                                   
+                                    ->sum('lolo_pinoy_grill_commissary_purchase_orders.total_price');
+    
+        //
+
+
+        $moduleNamePettyCash = "Petty Cash";
+        $pettyCashLists = DB::table(
+                                'lolo_pinoy_grill_commissary_petty_cashes')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_petty_cashes.id',
+                                'lolo_pinoy_grill_commissary_petty_cashes.user_id',
+                                'lolo_pinoy_grill_commissary_petty_cashes.pc_id',   
+                                'lolo_pinoy_grill_commissary_petty_cashes.date',
+                                'lolo_pinoy_grill_commissary_petty_cashes.petty_cash_name',
+                                'lolo_pinoy_grill_commissary_petty_cashes.petty_cash_summary',
+                                'lolo_pinoy_grill_commissary_petty_cashes.amount',
+                                'lolo_pinoy_grill_commissary_petty_cashes.created_by',
+                                'lolo_pinoy_grill_commissary_petty_cashes.created_at',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_petty_cashes.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_petty_cashes.pc_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePettyCash)
+                                ->whereDate('lolo_pinoy_grill_commissary_petty_cashes.created_at', '=', date($getDateToday))                                   
+                                ->orderBy('lolo_pinoy_grill_commissary_codes.id', 'desc')
+                                ->get()->toArray();
+
+        $moduleNamePaymentVoucher = "Payment Voucher";
+        $getTransactionLists = DB::table(
+                                'lolo_pinoy_grill_commissary_payment_vouchers')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.created_at',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePaymentVoucher)
+                                ->whereDate('lolo_pinoy_grill_commissary_payment_vouchers.created_at', '=', date($getDateToday))                                   
+                                ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                                ->get()->toArray();
+                        
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                                    'lolo_pinoy_grill_commissary_payment_vouchers')
+                                    ->select( 
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.created_at',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                                    'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_id',
+                                    'lolo_pinoy_grill_commissary_codes.module_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_name')
+                                    ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                    ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                                    ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePaymentVoucher)
+                                    ->whereDate('lolo_pinoy_grill_commissary_payment_vouchers.created_at', '=', date($getDateToday))                                   
+                                    ->where('lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment', $cash)
+                                    ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                                    ->get()->toArray();                            
+    
+        $totalAmountCash = DB::table(
+                                'lolo_pinoy_grill_commissary_payment_vouchers')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.created_at',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePaymentVoucher)
+                                ->whereDate('lolo_pinoy_grill_commissary_payment_vouchers.created_at', '=', date($getDateToday))                                   
+                                ->where('lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment', $cash)
+                                ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                                ->sum('lolo_pinoy_grill_commissary_payment_vouchers.amount_due');
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                            'lolo_pinoy_grill_commissary_payment_vouchers')
+                            ->select( 
+                            'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.created_at',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                            ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                            ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                            ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePaymentVoucher)
+                            ->whereDate('lolo_pinoy_grill_commissary_payment_vouchers.created_at', '=', date($getDateToday))                                   
+                            ->where('lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment', $check)
+                            ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                            ->get()->toArray();  
+
+
+        $totalAmountCheck = DB::table(
+                        'lolo_pinoy_grill_commissary_payment_vouchers')
+                        ->select( 
+                        'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.created_at',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                        'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                        'lolo_pinoy_grill_commissary_codes.module_id',
+                        'lolo_pinoy_grill_commissary_codes.module_code',
+                        'lolo_pinoy_grill_commissary_codes.module_name')
+                        ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                        ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                        ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePaymentVoucher)
+                        ->whereDate('lolo_pinoy_grill_commissary_payment_vouchers.created_at', '=', date($getDateToday))                                   
+                        ->where('lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment', $check)
+                        ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                        ->sum('lolo_pinoy_grill_commissary_payment_vouchers.amount_due');
+        
+        $pdf = PDF::loadView('printSummaryLoloPinoyGrill',  compact('date', 'getDateToday', 'getAllSalesInvoices', 
+        'getAllDeliveryReceipts', 'purchaseOrders', 'statementOfAccounts', 'billingStatements', 
+        'pettyCashLists',  'getTransactionLists', 'getTransactionListCashes', 'getTransactionListChecks', 'totalSalesInvoice', 'totalDeliveryReceipt', 'totalPOrder', 'totalBStatement', 
+        'totalAmountCash','totalAmountCheck'));
+        
+        return $pdf->download('lolo-pinoy-grill-commissary-summary-report.pdf');
+
+    }
+
+    public function summaryReport(){
+         //sales invoice
+        $getDateToday = date("Y-m-d");
+        $moduleName = "Sales Invoice";
+        $getAllSalesInvoices  = DB::table(
+                                'lolo_pinoy_grill_commissary_sales_invoices')
+                                ->select(
+                                    'lolo_pinoy_grill_commissary_sales_invoices.id',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.user_id',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.si_id',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.invoice_number',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.date',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.ordered_by',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.address',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.qty',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.total_kls',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.item_description',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.unit_price',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.amount',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.created_by',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.created_at',
+                                    'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_id',
+                                    'lolo_pinoy_grill_commissary_codes.module_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_sales_invoices.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_sales_invoices.si_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                                ->whereDate('lolo_pinoy_grill_commissary_sales_invoices.created_at', '=', date($getDateToday))
+                                ->orderBy('lolo_pinoy_grill_commissary_sales_invoices.id', 'desc')
+                                ->get()->toArray();
+            
+            $totalSalesInvoice  = DB::table(
+                                    'lolo_pinoy_grill_commissary_sales_invoices')
+                                    ->select(
+                                        'lolo_pinoy_grill_commissary_sales_invoices.id',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.user_id',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.si_id',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.invoice_number',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.date',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.ordered_by',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.address',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.qty',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.total_kls',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.item_description',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.unit_price',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.amount',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.created_by',
+                                        'lolo_pinoy_grill_commissary_sales_invoices.created_at',
+                                        'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                        'lolo_pinoy_grill_commissary_codes.module_id',
+                                        'lolo_pinoy_grill_commissary_codes.module_code',
+                                        'lolo_pinoy_grill_commissary_codes.module_name')
+                                    ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_sales_invoices.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                    ->where('lolo_pinoy_grill_commissary_sales_invoices.si_id', NULL)
+                                    ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                                    ->whereDate('lolo_pinoy_grill_commissary_sales_invoices.created_at', '=', date($getDateToday))
+                                    ->sum('lolo_pinoy_grill_commissary_sales_invoices.amount');
+        
+        //Delivery Receipt
+        $moduleNameDelivery = "Delivery Receipt";
+        $getAllDeliveryReceipts = DB::table(
+                                'lolo_pinoy_grill_commissary_delivery_receipts')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_delivery_receipts.id',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.user_id',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.dr_id',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.delivered_to',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.address',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.dr_no',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.date',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.product_id',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.qty',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.unit',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.item_description',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.unit_price',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.amount',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.charge_to',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.address_to',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.prepared_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.approved_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.checked_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.received_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.created_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.created_at',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_delivery_receipts.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_delivery_receipts.dr_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNameDelivery)
+                                ->whereDate('lolo_pinoy_grill_commissary_delivery_receipts.created_at', '=', date($getDateToday))
+                                ->orderBy('lolo_pinoy_grill_commissary_delivery_receipts.id', 'desc')
+                                ->get()->toArray();
+    
+            $totalDeliveryReceipt = DB::table(
+                                    'lolo_pinoy_grill_commissary_delivery_receipts')
+                                    ->select( 
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.id',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.user_id',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.dr_id',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.delivered_to',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.address',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.dr_no',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.date',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.product_id',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.qty',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.unit',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.item_description',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.unit_price',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.amount',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.charge_to',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.address_to',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.prepared_by',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.approved_by',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.checked_by',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.received_by',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.created_by',
+                                    'lolo_pinoy_grill_commissary_delivery_receipts.created_at',
+                                    'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_id',
+                                    'lolo_pinoy_grill_commissary_codes.module_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_name')
+                                    ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_delivery_receipts.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                    ->where('lolo_pinoy_grill_commissary_delivery_receipts.dr_id', NULL)
+                                    ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNameDelivery)
+                                    ->whereDate('lolo_pinoy_grill_commissary_delivery_receipts.created_at', '=', date($getDateToday))
+                                    ->sum('lolo_pinoy_grill_commissary_delivery_receipts.amount');
+        
+        //purchase order
+        $moduleNamePurchase = "Purchase Order";
+        $purchaseOrders = DB::table(
+                        'lolo_pinoy_grill_commissary_purchase_orders')
+                        ->select(
+                            'lolo_pinoy_grill_commissary_purchase_orders.id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.user_id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.po_id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.paid_to',
+                            'lolo_pinoy_grill_commissary_purchase_orders.address',
+                            'lolo_pinoy_grill_commissary_purchase_orders.date',
+                            'lolo_pinoy_grill_commissary_purchase_orders.quantity',
+                            'lolo_pinoy_grill_commissary_purchase_orders.description',
+                            'lolo_pinoy_grill_commissary_purchase_orders.unit_price',
+                            'lolo_pinoy_grill_commissary_purchase_orders.amount',
+                            'lolo_pinoy_grill_commissary_purchase_orders.total_price',
+                            'lolo_pinoy_grill_commissary_purchase_orders.requested_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.prepared_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.checked_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.created_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.created_at',
+                            'lolo_pinoy_grill_commissary_purchase_orders.requesting_branch',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                            ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_purchase_orders.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                            ->where('lolo_pinoy_grill_commissary_purchase_orders.po_id', NULL)
+                            ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePurchase)
+                            ->whereDate('lolo_pinoy_grill_commissary_purchase_orders.created_at', '=', date($getDateToday))                                   
+                            ->orderBy('lolo_pinoy_grill_commissary_purchase_orders.id', 'desc')
+                            ->get()->toArray();
+        
+        $totalPOrder = DB::table(
+                                'lolo_pinoy_grill_commissary_purchase_orders')
+                                ->select(
+                                    'lolo_pinoy_grill_commissary_purchase_orders.id',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.user_id',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.po_id',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.paid_to',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.address',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.date',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.quantity',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.description',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.unit_price',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.amount',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.total_price',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.requested_by',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.prepared_by',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.checked_by',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.created_by',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.created_at',
+                                    'lolo_pinoy_grill_commissary_purchase_orders.requesting_branch',
+                                    'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_id',
+                                    'lolo_pinoy_grill_commissary_codes.module_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_name')
+                                    ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_purchase_orders.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                    ->where('lolo_pinoy_grill_commissary_purchase_orders.po_id', NULL)
+                                    ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePurchase)
+                                    ->whereDate('lolo_pinoy_grill_commissary_purchase_orders.created_at', '=', date($getDateToday))                                   
+                                    ->sum('lolo_pinoy_grill_commissary_purchase_orders.total_price');
+    
+        //
+
+
+        $moduleNamePettyCash = "Petty Cash";
+        $pettyCashLists = DB::table(
+                                'lolo_pinoy_grill_commissary_petty_cashes')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_petty_cashes.id',
+                                'lolo_pinoy_grill_commissary_petty_cashes.user_id',
+                                'lolo_pinoy_grill_commissary_petty_cashes.pc_id',   
+                                'lolo_pinoy_grill_commissary_petty_cashes.date',
+                                'lolo_pinoy_grill_commissary_petty_cashes.petty_cash_name',
+                                'lolo_pinoy_grill_commissary_petty_cashes.petty_cash_summary',
+                                'lolo_pinoy_grill_commissary_petty_cashes.amount',
+                                'lolo_pinoy_grill_commissary_petty_cashes.created_by',
+                                'lolo_pinoy_grill_commissary_petty_cashes.created_at',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_petty_cashes.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_petty_cashes.pc_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePettyCash)
+                                ->whereDate('lolo_pinoy_grill_commissary_petty_cashes.created_at', '=', date($getDateToday))                                   
+                                ->orderBy('lolo_pinoy_grill_commissary_codes.id', 'desc')
+                                ->get()->toArray();
+
+        $moduleNamePaymentVoucher = "Payment Voucher";
+        $getTransactionLists = DB::table(
+                                'lolo_pinoy_grill_commissary_payment_vouchers')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.created_at',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePaymentVoucher)
+                                ->whereDate('lolo_pinoy_grill_commissary_payment_vouchers.created_at', '=', date($getDateToday))                                   
+                                ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                                ->get()->toArray();
+                        
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                                    'lolo_pinoy_grill_commissary_payment_vouchers')
+                                    ->select( 
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.created_at',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                                    'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                                    'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_id',
+                                    'lolo_pinoy_grill_commissary_codes.module_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_name')
+                                    ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                    ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                                    ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePaymentVoucher)
+                                    ->whereDate('lolo_pinoy_grill_commissary_payment_vouchers.created_at', '=', date($getDateToday))                                   
+                                    ->where('lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment', $cash)
+                                    ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                                    ->get()->toArray();                            
+    
+        $totalAmountCash = DB::table(
+                                'lolo_pinoy_grill_commissary_payment_vouchers')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.created_at',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                                'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePaymentVoucher)
+                                ->whereDate('lolo_pinoy_grill_commissary_payment_vouchers.created_at', '=', date($getDateToday))                                   
+                                ->where('lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment', $cash)
+                                ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                                ->sum('lolo_pinoy_grill_commissary_payment_vouchers.amount_due');
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                            'lolo_pinoy_grill_commissary_payment_vouchers')
+                            ->select( 
+                            'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.created_at',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                            ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                            ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                            ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePaymentVoucher)
+                            ->whereDate('lolo_pinoy_grill_commissary_payment_vouchers.created_at', '=', date($getDateToday))                                   
+                            ->where('lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment', $check)
+                            ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                            ->get()->toArray();  
+
+
+        $totalAmountCheck = DB::table(
+                        'lolo_pinoy_grill_commissary_payment_vouchers')
+                        ->select( 
+                        'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.created_at',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                        'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                        'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                        'lolo_pinoy_grill_commissary_codes.module_id',
+                        'lolo_pinoy_grill_commissary_codes.module_code',
+                        'lolo_pinoy_grill_commissary_codes.module_name')
+                        ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                        ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                        ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNamePaymentVoucher)
+                        ->whereDate('lolo_pinoy_grill_commissary_payment_vouchers.created_at', '=', date($getDateToday))                                   
+                        ->where('lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment', $check)
+                        ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                        ->sum('lolo_pinoy_grill_commissary_payment_vouchers.amount_due');
+
+        return view('lolo-pinoy-grill-commissary-summary-report', compact('getAllSalesInvoices', 
+        'totalSalesInvoice', 'getAllDeliveryReceipts', 'totalDeliveryReceipt', 'purchaseOrders', 'totalPOrder',
+        'pettyCashLists', 'getTransactionLists', 'getTransactionListCashes', 'totalAmountCash' , 
+        'getTransactionListChecks', 'totalAmountCheck'));
+    }
+
+    
+    public function printPO($id){   
+    
+        $moduleName = "Purchase Order";
+        $purchaseOrder = DB::table(
+                        'lolo_pinoy_grill_commissary_purchase_orders')
+                        ->select(
+                            'lolo_pinoy_grill_commissary_purchase_orders.id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.user_id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.po_id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.paid_to',
+                            'lolo_pinoy_grill_commissary_purchase_orders.address',
+                            'lolo_pinoy_grill_commissary_purchase_orders.date',
+                            'lolo_pinoy_grill_commissary_purchase_orders.quantity',
+                            'lolo_pinoy_grill_commissary_purchase_orders.description',
+                            'lolo_pinoy_grill_commissary_purchase_orders.unit_price',
+                            'lolo_pinoy_grill_commissary_purchase_orders.amount',
+                            'lolo_pinoy_grill_commissary_purchase_orders.total_price',
+                            'lolo_pinoy_grill_commissary_purchase_orders.requested_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.prepared_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.checked_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.created_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.requesting_branch',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                        ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_purchase_orders.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                        ->where('lolo_pinoy_grill_commissary_purchase_orders.id', $id)
+                        ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                        ->orderBy('lolo_pinoy_grill_commissary_purchase_orders.id', 'desc')
+                        ->get()->toArray();
+   
+
+                //
+            $pOrders = LoloPinoyGrillCommissaryPurchaseOrder::where('po_id', $id)->get()->toArray();
+
+                //count the total amount 
+            $countTotalAmount = LoloPinoyGrillCommissaryPurchaseOrder::where('id', $id)->sum('amount');
+
+            //
+            $countAmount = LoloPinoyGrillCommissaryPurchaseOrder::where('po_id', $id)->sum('amount');
+
+            $sum  = $countTotalAmount + $countAmount;
+
+
+            $pdf = PDF::loadView('printPOLoloPinoyGrill', compact('purchaseOrder', 'pOrders', 'sum'));
+
+            return $pdf->download('lolo-pinoy-grill-commissary-purchase-order.pdf');
     }
 
     public function printBillingStatement($id){
@@ -61,7 +1857,27 @@ class LoloPinoyGrillCommissaryController extends Controller
     }
 
     public function printPettyCash($id){
-        $getPettyCash = LoloPinoyGrillCommissaryPettyCash::find($id);
+       $moduleName = "Petty Cash";
+        $getPettyCash = DB::table(
+                                'lolo_pinoy_grill_commissary_petty_cashes')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_petty_cashes.id',
+                                'lolo_pinoy_grill_commissary_petty_cashes.user_id',
+                                'lolo_pinoy_grill_commissary_petty_cashes.pc_id',
+                                'lolo_pinoy_grill_commissary_petty_cashes.date',
+                                'lolo_pinoy_grill_commissary_petty_cashes.petty_cash_name',
+                                'lolo_pinoy_grill_commissary_petty_cashes.petty_cash_summary',
+                                'lolo_pinoy_grill_commissary_petty_cashes.amount',
+                                'lolo_pinoy_grill_commissary_petty_cashes.created_by',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_petty_cashes.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_petty_cashes.id', $id)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                                ->orderBy('lolo_pinoy_grill_commissary_codes.id', 'desc')
+                                ->get();
 
         $getPettyCashSummaries = LoloPinoyGrillCommissaryPettyCash::where('pc_id', $id)->get()->toArray();
 
@@ -131,6 +1947,27 @@ class LoloPinoyGrillCommissaryController extends Controller
     public function editPettyCash($id){
         $pettyCash = LoloPinoyGrillCommissaryPettyCash::find($id);
 
+        $moduleName = "Petty Cash";
+        $pettyCash = DB::table(
+                                'lolo_pinoy_grill_commissary_petty_cashes')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_petty_cashes.id',
+                                'lolo_pinoy_grill_commissary_petty_cashes.user_id',
+                                'lolo_pinoy_grill_commissary_petty_cashes.pc_id',
+                                'lolo_pinoy_grill_commissary_petty_cashes.date',
+                                'lolo_pinoy_grill_commissary_petty_cashes.petty_cash_name',
+                                'lolo_pinoy_grill_commissary_petty_cashes.petty_cash_summary',
+                                'lolo_pinoy_grill_commissary_petty_cashes.amount',
+                                'lolo_pinoy_grill_commissary_petty_cashes.created_by',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_petty_cashes.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_petty_cashes.id', $id)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                                ->get();
+      
         $pettyCashSummaries = LoloPinoyGrillCommissaryPettyCash::where('pc_id', $id)->get()->toArray();
         return view('edit-lolo-pinoy-grill-petty-cash', compact('pettyCash', 'pettyCashSummaries'));
     }
@@ -145,25 +1982,24 @@ class LoloPinoyGrillCommissaryController extends Controller
 
         $name  = $firstName." ".$lastName;
 
-         //get the latest insert id query in table petty cash petty cash no
-        $dataCashNo = DB::select('SELECT id, petty_cash_no FROM lolo_pinoy_grill_commissary_petty_cashes ORDER BY id DESC LIMIT 1');
+        //get the latest insert id query in table lolo_pinoy_grill_commissary_codes
+        $dataCashNo = DB::select('SELECT id, lolo_pinoy_grill_code  FROM lolo_pinoy_grill_commissary_codes ORDER BY id DESC LIMIT 1');
 
          //if code is not zero add plus 1 petty cash no
-        if(isset($dataCashNo[0]->petty_cash_no) != 0){
+        if(isset($dataCashNo[0]->lolo_pinoy_grill_code) != 0){
             //if code is not 0
-            $newProd = $dataCashNo[0]->petty_cash_no +1;
-            $uProd = sprintf("%06d",$newProd);   
+            $newProd = $dataCashNo[0]->lolo_pinoy_grill_code +1;
+            $uPetty = sprintf("%06d",$newProd);   
 
         }else{
             //if code is 0 
             $newProd = 1;
-            $uProd = sprintf("%06d",$newProd);
+            $uPetty = sprintf("%06d",$newProd);
         } 
 
         $addPettyCash = new LoloPinoyGrillCommissaryPettyCash([
             'user_id'=>$user->id,
             'date'=>$request->date,
-            'petty_cash_no'=>$uProd,
             'petty_cash_name'=>$request->pettyCashName,
             'petty_cash_summary'=>$request->pettyCashSummary,
             'created_by'=>$name,
@@ -171,6 +2007,19 @@ class LoloPinoyGrillCommissaryController extends Controller
 
         $addPettyCash->save();
         $insertId = $addPettyCash->id;
+
+        $moduleCode = "PC-";
+        $moduleName = "Petty Cash";
+
+         //save to lolo_pinoy_grill_commissary_codes table
+        $lpGrill = new LoloPinoyGrillCommissaryCode([
+            'user_id'=>$user->id,
+            'lolo_pinoy_grill_code'=>$uPetty,
+            'module_id'=>$insertId,
+            'module_code'=>$moduleCode,
+            'module_name'=>$moduleName,
+        ]);
+        $lpGrill->save();
       
         return response()->json($insertId);
     }
@@ -181,7 +2030,29 @@ class LoloPinoyGrillCommissaryController extends Controller
     }
 
     public function viewPettyCash($id){
-        $getPettyCash = LoloPinoyGrillCommissaryPettyCash::find($id);
+  
+        $moduleName = "Petty Cash";
+        $getPettyCash = DB::table(
+                                'lolo_pinoy_grill_commissary_petty_cashes')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_petty_cashes.id',
+                                'lolo_pinoy_grill_commissary_petty_cashes.user_id',
+                                'lolo_pinoy_grill_commissary_petty_cashes.pc_id',
+                                'lolo_pinoy_grill_commissary_petty_cashes.date',
+                                'lolo_pinoy_grill_commissary_petty_cashes.petty_cash_name',
+                                'lolo_pinoy_grill_commissary_petty_cashes.petty_cash_summary',
+                                'lolo_pinoy_grill_commissary_petty_cashes.amount',
+                                'lolo_pinoy_grill_commissary_petty_cashes.created_by',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_petty_cashes.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_petty_cashes.id', $id)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                                ->orderBy('lolo_pinoy_grill_commissary_codes.id', 'desc')
+                                ->get();
+      
 
         $getPettyCashSummaries = LoloPinoyGrillCommissaryPettyCash::where('pc_id', $id)->get()->toArray();
 
@@ -301,9 +2172,30 @@ class LoloPinoyGrillCommissaryController extends Controller
         'mcwdDocuments','internetDocuments'));
     }
 
-    //
+
     public function pettyCashList(){
-        $pettyCashLists = LoloPinoyGrillCommissaryPettyCash::where('pc_id', NULL)->orderBy('id', 'desc')->get()->toArray();
+        $moduleName = "Petty Cash";
+        $pettyCashLists = DB::table(
+                                'lolo_pinoy_grill_commissary_petty_cashes')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_petty_cashes.id',
+                                'lolo_pinoy_grill_commissary_petty_cashes.user_id',
+                                'lolo_pinoy_grill_commissary_petty_cashes.pc_id',
+                                'lolo_pinoy_grill_commissary_petty_cashes.date',
+                                'lolo_pinoy_grill_commissary_petty_cashes.petty_cash_name',
+                                'lolo_pinoy_grill_commissary_petty_cashes.petty_cash_summary',
+                                'lolo_pinoy_grill_commissary_petty_cashes.amount',
+                                'lolo_pinoy_grill_commissary_petty_cashes.created_by',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_petty_cashes.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_petty_cashes.pc_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                                ->orderBy('lolo_pinoy_grill_commissary_codes.id', 'desc')
+                                ->get()->toArray();
+    
         return view('lolo-pinoy-grill-commissary-petty-cash-list', compact('pettyCashLists'));
     }
 
@@ -314,10 +2206,45 @@ class LoloPinoyGrillCommissaryController extends Controller
 
     //
     public function printPayables($id){
-          $ids = Auth::user()->id;
-        $user = User::find($ids);
+        $moduleName = "Payment Voucher";
+        $payableId = DB::table(
+                            'lolo_pinoy_grill_commissary_payment_vouchers')
+                            ->select( 
+                            'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                            ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                            ->where('lolo_pinoy_grill_commissary_payment_vouchers.id', $id)
+                            ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                            ->get();
 
-        $payableId = LoloPinoyGrillCommissaryPaymentVoucher::find($id);
 
         //getParticular details
         $getParticulars = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
@@ -429,11 +2356,47 @@ class LoloPinoyGrillCommissaryController extends Controller
         return view('commissary-inventory-of-stocks-lolo-pinoy-grill', compact('getRawMaterials', 'countStockAmount', 'countTotalAmount'));
     }
 
-    //
     public function viewPayableDetails($id){
-     
-        //
-        $viewPaymentDetail = LoloPinoyGrillCommissaryPaymentVoucher::find($id);
+
+        $moduleName = "Payment Voucher";
+        $viewPaymentDetail = DB::table(
+                            'lolo_pinoy_grill_commissary_payment_vouchers')
+                            ->select( 
+                            'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                            ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                            ->where('lolo_pinoy_grill_commissary_payment_vouchers.id', $id)
+                            ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                            ->get();
+
 
         //
         $getViewPaymentDetails = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->get()->toArray();
@@ -546,8 +2509,45 @@ class LoloPinoyGrillCommissaryController extends Controller
 
     //
     public function editPayablesDetail(Request $request, $id){   
-        //
         $transactionList = LoloPinoyGrillCommissaryPaymentVoucher::find($id);
+        $moduleName = "Payment Voucher";
+        $transactionList = DB::table(
+                            'lolo_pinoy_grill_commissary_payment_vouchers')
+                            ->select( 
+                            'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                            ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                            ->where('lolo_pinoy_grill_commissary_payment_vouchers.id', $id)
+                            ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                            ->get();
 
         //
         $getChequeNumbers = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
@@ -573,8 +2573,45 @@ class LoloPinoyGrillCommissaryController extends Controller
 
     //
     public function transactionList(){
-         //
-        $getTransactionLists = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', NULL)->orderBy('id', 'desc')->get()->toArray();
+        $moduleName = "Payment Voucher";
+        $getTransactionLists = DB::table(
+                            'lolo_pinoy_grill_commissary_payment_vouchers')
+                            ->select( 
+                            'lolo_pinoy_grill_commissary_payment_vouchers.id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.user_id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.pv_id',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.paid_to',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.account_no',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.account_name',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.particulars',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.amount',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.method_of_payment',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.prepared_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.approved_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.date_apprroved',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.received_by_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.created_by',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.invoice_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.voucher_ref_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.issued_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.category',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.amount_due',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.delivered_date',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.status',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.cheque_number',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.cheque_amount',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.sub_category',
+                            'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                            ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                            ->where('lolo_pinoy_grill_commissary_payment_vouchers.pv_id', NULL)
+                            ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                            ->orderBy('lolo_pinoy_grill_commissary_payment_vouchers.id',  'desc')
+                            ->get()->toArray();
 
         //get total amount due
         $status = "FULLY PAID AND RELEASED";
@@ -993,7 +3030,33 @@ class LoloPinoyGrillCommissaryController extends Controller
     //
     public function viewSalesInvoice($id){
 
-        $viewSalesInvoice = LoloPinoyGrillCommissarySalesInvoice::find($id);
+        $moduleName = "Sales Invoice";
+        $viewSalesInvoice = DB::table(
+                                'lolo_pinoy_grill_commissary_sales_invoices')
+                                ->select(
+                                    'lolo_pinoy_grill_commissary_sales_invoices.id',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.user_id',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.si_id',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.invoice_number',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.date',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.ordered_by',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.address',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.qty',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.total_kls',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.item_description',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.unit_price',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.amount',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.created_by',
+                                    'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_id',
+                                    'lolo_pinoy_grill_commissary_codes.module_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_sales_invoices.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_sales_invoices.id', $id)
+                                ->orderBy('lolo_pinoy_grill_commissary_sales_invoices.id', 'desc')
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                                ->get()->toArray();
+    
 
         $salesInvoices = LoloPinoyGrillCommissarySalesInvoice::where('si_id', $id)->get()->toArray();
 
@@ -1133,12 +3196,28 @@ class LoloPinoyGrillCommissaryController extends Controller
 
         $name  = $firstName." ".$lastName;
 
+    
          //validate
         $this->validate($request, [
             'invoiceNum' =>'required',
             'orderedBy'=>'required',
            
         ]);
+
+        //get the latest insert id query in table lolo_pinoy_grill_commissary
+        $dataSalesNo = DB::select('SELECT id, lolo_pinoy_grill_code FROM lolo_pinoy_grill_commissary_codes ORDER BY id DESC LIMIT 1');
+
+        //if code is not zero add plus 1 dr_no
+        if(isset($dataSalesNo[0]->lolo_pinoy_grill_code) != 0){
+            //if code is not 0
+            $newSI = $dataSalesNo[0]->lolo_pinoy_grill_code +1;
+            $uSI = sprintf("%06d",$newSI);   
+
+        }else{
+            //if code is 0 
+            $newSI = 1;
+            $uSI = sprintf("%06d",$newSI);
+        } 
 
          //get date today
         $getDateToday =  date('Y-m-d');
@@ -1156,7 +3235,7 @@ class LoloPinoyGrillCommissaryController extends Controller
             'invoice_number'=>$request->get('invoiceNum'),
             'ordered_by'=>$request->get('orderedBy'),
             'address'=>$request->get('address'),
-            'date'=>$getDateToday,
+            'date'=>$request->get('date'),
             'qty'=>$request->get('qty'),
             'total_kls'=>$kls,
             'item_description'=>$request->get('itemDescription'),
@@ -1169,15 +3248,29 @@ class LoloPinoyGrillCommissaryController extends Controller
 
         $insertedId = $addSalesInvoice->id;
 
-        return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-sales-invoice/'.$insertedId);
+        $moduleCode = "SI-";
+        $moduleName = "Sales Invoice";
+
+        //save to lolo_pinoy_grill_commissary_codes table
+        $lpGrill = new LoloPinoyGrillCommissaryCode([
+            'user_id'=>$user->id,
+            'lolo_pinoy_grill_code'=>$uSI,
+            'module_id'=>$insertedId,
+            'module_code'=>$moduleCode,
+            'module_name'=>$moduleName,
+
+        ]);
+
+        $lpGrill->save();
+
+        return redirect()->route('editSalesInvoiceLpGrillCommissary', ['id'=>$insertedId]);
+        
     }
 
     //sales invoice
     public function salesInvoiceForm(){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        return view('lolo-pinoy-grill-sales-invoice-form', compact('user'));
+        
+        return view('lolo-pinoy-grill-sales-invoice-form');
     }
 
     //view payment voucher
@@ -1360,20 +3453,21 @@ class LoloPinoyGrillCommissaryController extends Controller
 
         $name  = $firstName." ".$lastName;
 
-         //get the latest insert id query in table payment voucher ref number
-        $dataVoucherRef = DB::select('SELECT id, voucher_ref_number FROM lolo_pinoy_grill_commissary_payment_vouchers ORDER BY id DESC LIMIT 1');
+         //get the latest insert id query in table lolo pinoy grill commissary code
+         $dataCode = DB::select('SELECT id, lolo_pinoy_grill_code FROM lolo_pinoy_grill_commissary_codes ORDER BY id DESC LIMIT 1');
 
          //if code is not zero add plus 1 reference number
-        if(isset($dataVoucherRef[0]->voucher_ref_number) != 0){
-            //if code is not 0
-            $newVoucherRef = $dataVoucherRef[0]->voucher_ref_number +1;
-            $uVoucher = sprintf("%06d",$newVoucherRef);   
-
-        }else{
-            //if code is 0 
-            $newVoucherRef = 1;
-            $uVoucher = sprintf("%06d",$newVoucherRef);
-        } 
+         if(isset($dataCode[0]->lolo_pinoy_grill_code) != 0){
+             //if code is not 0
+             $newCode= $dataCode[0]->lolo_pinoy_grill_code +1;
+             $uCode = sprintf("%06d",$newCode);   
+ 
+         }else{
+             //if code is 0 
+             $newCode = 1;
+             $uCode = sprintf("%06d",$newCode);
+         } 
+ 
 
        //get the category
        if($request->get('category') === "Petty Cash"){
@@ -1407,7 +3501,6 @@ class LoloPinoyGrillCommissaryController extends Controller
                 'paid_to'=>$request->get('paidTo'),
                 'method_of_payment'=>$request->get('paymentMethod'),
                 'invoice_number'=>$request->get('invoiceNumber'),
-                'voucher_ref_number'=>$uVoucher,
                 'issued_date'=>$request->get('issuedDate'),
                 'account_name'=>$request->get('accountName'),
                 'amount'=>$request->get('amount'),
@@ -1424,7 +3517,19 @@ class LoloPinoyGrillCommissaryController extends Controller
             $addPaymentVoucher->save();
 
             $insertedId = $addPaymentVoucher->id;
-        
+
+            $moduleCode = "PV-";
+            $moduleName = "Payment Voucher";
+
+            $lpGrill =  new LoloPinoyGrillCommissaryCode([
+                'user_id'=>$user->id,
+                'lolo_pinoy_grill_code'=>$uCode,
+                'module_id'=>$insertedId,
+                'module_code'=>$moduleCode,
+                'module_name'=>$moduleName,
+            ]);
+            $lpGrill->save();
+
             return redirect()->route('editPayablesDetailLoloPinoyGrill', ['id'=>$insertedId]);
 
         }else{
@@ -1656,7 +3761,36 @@ class LoloPinoyGrillCommissaryController extends Controller
     
     //purchase order lists
     public function purchaseOrderAllLists(){
-        $purchaseOrders = LoloPinoyGrillCommissaryPurchaseOrder::where('po_id', NULL)->get()->toArray();
+        $moduleName = "Purchase Order";
+        $purchaseOrders = DB::table(
+                        'lolo_pinoy_grill_commissary_purchase_orders')
+                        ->select(
+                            'lolo_pinoy_grill_commissary_purchase_orders.id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.user_id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.po_id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.paid_to',
+                            'lolo_pinoy_grill_commissary_purchase_orders.address',
+                            'lolo_pinoy_grill_commissary_purchase_orders.date',
+                            'lolo_pinoy_grill_commissary_purchase_orders.quantity',
+                            'lolo_pinoy_grill_commissary_purchase_orders.description',
+                            'lolo_pinoy_grill_commissary_purchase_orders.unit_price',
+                            'lolo_pinoy_grill_commissary_purchase_orders.amount',
+                            'lolo_pinoy_grill_commissary_purchase_orders.total_price',
+                            'lolo_pinoy_grill_commissary_purchase_orders.requested_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.prepared_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.checked_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.created_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.requesting_branch',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                        ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_purchase_orders.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                        ->where('lolo_pinoy_grill_commissary_purchase_orders.po_id', NULL)
+                        ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                        ->orderBy('lolo_pinoy_grill_commissary_purchase_orders.id', 'desc')
+                        ->get()->toArray();
+   
 
         return view('lolo-pinoy-grill-commissary-purchase-order-lists', compact('purchaseOrders'));
     }
@@ -1780,10 +3914,40 @@ class LoloPinoyGrillCommissaryController extends Controller
 
     //delivery lists
     public function deliveryReceiptList(){
-    
-         //getAllDeliveryReceipt
-        $getAllDeliveryReceipts = LoloPinoyGrillCommissaryDeliveryReceipt::where('dr_id', NULL)->get()->toArray();
-
+        $moduleName = "Delivery Receipt";
+        $getAllDeliveryReceipts = DB::table(
+                                'lolo_pinoy_grill_commissary_delivery_receipts')
+                                ->select( 
+                                'lolo_pinoy_grill_commissary_delivery_receipts.id',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.user_id',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.dr_id',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.delivered_to',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.address',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.dr_no',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.date',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.product_id',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.qty',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.unit',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.item_description',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.unit_price',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.amount',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.charge_to',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.address_to',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.prepared_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.approved_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.checked_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.received_by',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.created_by',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_delivery_receipts.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_delivery_receipts.dr_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                                ->orderBy('lolo_pinoy_grill_commissary_delivery_receipts.id', 'desc')
+                                ->get()->toArray();
+                                    
 
         return view('lolo-pinoy-grill-commissary-delivery-receipt-list', compact('getAllDeliveryReceipts'));
     }
@@ -1899,6 +4063,8 @@ class LoloPinoyGrillCommissaryController extends Controller
        
          //getDeliveryReceipt
         $getDeliveryReceipt = LoloPinoyGrillCommissaryDeliveryReceipt::find($id);
+        
+
 
           //get Raw material
         $getRawMaterials = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', NULL)->get()->toArray();
@@ -1925,13 +4091,13 @@ class LoloPinoyGrillCommissaryController extends Controller
 
         $name  = $firstName.$lastName;
 
-         //get the latest insert id query in table delivery receipt dr_no
-        $dataDrNo = DB::select('SELECT id, dr_no FROM lolo_pinoy_grill_commissary_delivery_receipts ORDER BY id DESC LIMIT 1');
+         //get the latest insert id query in table lolo_pinoy_grill_code
+         $dataDrNo = DB::select('SELECT id, lolo_pinoy_grill_code FROM lolo_pinoy_grill_commissary_codes ORDER BY id DESC LIMIT 1');
 
-         //if code is not zero add plus 1 dr_no
-        if(isset($dataDrNo[0]->dr_no) != 0){
+        //if code is not zero add plus 1 dr_no
+        if(isset($dataDrNo[0]->lolo_pinoy_grill_code) != 0){
             //if code is not 0
-            $newDr = $dataDrNo[0]->dr_no +1;
+            $newDr = $dataDrNo[0]->lolo_pinoy_grill_code +1;
             $uDr = sprintf("%06d",$newDr);   
 
         }else{
@@ -1940,8 +4106,7 @@ class LoloPinoyGrillCommissaryController extends Controller
             $uDr = sprintf("%06d",$newDr);
         } 
 
-        //get date today
-        $getDateToday =  date('Y-m-d');
+
 
         $qty = $request->get('qty');
         $unitPrice = $request->get('unitPrice');
@@ -1952,7 +4117,7 @@ class LoloPinoyGrillCommissaryController extends Controller
         $storeDeliveryReceipt = new LoloPinoyGrillCommissaryDeliveryReceipt([
             'user_id'=>$user->id,            
             'dr_no'=>$uDr,
-            'date'=>$getDateToday,
+            'date'=>$request->get('date'),
             'delivered_to'=>$request->get('deliveredTo'),
             'product_id'=>$request->get('productId'),
             'qty'=>$qty,
@@ -1971,9 +4136,23 @@ class LoloPinoyGrillCommissaryController extends Controller
         $storeDeliveryReceipt->save();
         $insertedId  = $storeDeliveryReceipt->id;
 
-         return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-delivery-receipt/'.$insertedId);
+        $moduleCode = "DR-";
+        $moduleName = "Delivery Receipt";
 
+        //save to lolo_pinoy_grill_commissary_codes table
+        $lpGrill = new LoloPinoyGrillCommissaryCode([
+            'user_id'=>$user->id,
+            'lolo_pinoy_grill_code'=>$uDr,
+            'module_id'=>$insertedId,
+            'module_code'=>$moduleCode,
+            'module_name'=>$moduleName,
 
+        ]);
+
+        $lpGrill->save();
+
+        return redirect()->route('editDeliveryReceiptLoloPinoyGrillCommissary', ['id'=>$insertedId]);
+       
     }
 
     //delivery receipt
@@ -1992,9 +4171,33 @@ class LoloPinoyGrillCommissaryController extends Controller
      */
     public function index()
     {
-        //
-     
-        $getAllSalesInvoices = LoloPinoyGrillCommissarySalesInvoice::where('si_id', NULL)->get()->toArray();
+        $moduleName = "Sales Invoice";
+        $getAllSalesInvoices = DB::table(
+                                'lolo_pinoy_grill_commissary_sales_invoices')
+                                ->select(
+                                    'lolo_pinoy_grill_commissary_sales_invoices.id',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.user_id',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.si_id',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.invoice_number',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.date',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.ordered_by',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.address',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.qty',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.total_kls',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.item_description',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.unit_price',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.amount',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.created_by',
+                                    'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_id',
+                                    'lolo_pinoy_grill_commissary_codes.module_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_sales_invoices.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_sales_invoices.si_id', NULL)
+                                ->orderBy('lolo_pinoy_grill_commissary_sales_invoices.id', 'desc')
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                                ->get()->toArray();
+       
 
         return view('lolo-pinoy-grill', compact('getAllSalesInvoices'));
     }
@@ -2036,25 +4239,25 @@ class LoloPinoyGrillCommissaryController extends Controller
             'amount'=>'required',
         ]);
 
-          //get the latest insert id query in table purchase order
-        $data = DB::select('SELECT id, p_o_number FROM lolo_pinoy_grill_commissary_purchase_orders ORDER BY id DESC LIMIT 1');
+          //get the latest insert id query in table lolo_pinoy_grill_commissary_codes
+          $data = DB::select('SELECT id, lolo_pinoy_grill_code  FROM lolo_pinoy_grill_commissary_codes ORDER BY id DESC LIMIT 1');
         
-        //if code is not zero add plus 1
-         if(isset($data[0]->p_o_number) != 0){
-            //if code is not 0
-            $newNum = $data[0]->p_o_number +1;
-            $uNum = sprintf("%06d",$newNum);    
-        }else{
-            //if code is 0 
-            $newNum = 1;
-            $uNum = sprintf("%06d",$newNum);
-        }
+          //if code is not zero add plus 1
+           if(isset($data[0]->lolo_pinoy_grill_code) != 0){
+              //if code is not 0
+              $newNum = $data[0]->lolo_pinoy_grill_code +1;
+              $uNum = sprintf("%06d",$newNum);    
+          }else{
+              //if code is 0 
+              $newNum = 1;
+              $uNum = sprintf("%06d",$newNum);
+          }
+         
 
         $purchaseOrder = new LoloPinoyGrillCommissaryPurchaseOrder([
             'user_id' =>$user->id,
             'paid_to'=>$request->get('paidTo'),
             'address'=>$request->get('address'),
-            'p_o_number'=>$uNum,
             'date'=>$request->get('date'),
             'quantity'=>$request->get('quantity'),
             'description'=>$request->get('description'),
@@ -2070,6 +4273,19 @@ class LoloPinoyGrillCommissaryController extends Controller
         $purchaseOrder->save();
 
          $insertedId = $purchaseOrder->id;
+
+         $moduleCode = "PO-";
+         $moduleName = "Purchase Order";
+
+        //save to lolo_pinoy_grill_commissary_codes table
+        $lpGrill = new LoloPinoyGrillCommissaryCode([
+            'user_id'=>$user->id,
+            'lolo_pinoy_grill_code'=>$uNum,
+            'module_id'=>$insertedId,
+            'module_code'=>$moduleCode,
+            'module_name'=>$moduleName,
+        ]); 
+        $lpGrill->save();
          
         return redirect()->route('editLoloPinoyGrill', ['id'=>$insertedId]);
     }
@@ -2083,8 +4299,35 @@ class LoloPinoyGrillCommissaryController extends Controller
     public function show($id)
     {
         
-        $purchaseOrder = LoloPinoyGrillCommissaryPurchaseOrder::find($id);
-        //
+        $moduleName = "Purchase Order";
+        $purchaseOrder = DB::table(
+                        'lolo_pinoy_grill_commissary_purchase_orders')
+                        ->select(
+                            'lolo_pinoy_grill_commissary_purchase_orders.id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.user_id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.po_id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.paid_to',
+                            'lolo_pinoy_grill_commissary_purchase_orders.address',
+                            'lolo_pinoy_grill_commissary_purchase_orders.date',
+                            'lolo_pinoy_grill_commissary_purchase_orders.quantity',
+                            'lolo_pinoy_grill_commissary_purchase_orders.description',
+                            'lolo_pinoy_grill_commissary_purchase_orders.unit_price',
+                            'lolo_pinoy_grill_commissary_purchase_orders.amount',
+                            'lolo_pinoy_grill_commissary_purchase_orders.total_price',
+                            'lolo_pinoy_grill_commissary_purchase_orders.requested_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.prepared_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.checked_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.created_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.requesting_branch',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                        ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_purchase_orders.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                        ->where('lolo_pinoy_grill_commissary_purchase_orders.id', $id)
+                        ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                        ->get();
+   
         $pOrders = LoloPinoyGrillCommissaryPurchaseOrder::where('po_id', $id)->get()->toArray();
 
           //count the total amount 
@@ -2106,10 +4349,37 @@ class LoloPinoyGrillCommissaryController extends Controller
      */
     public function edit($id)
     {
-        //
-      
-
          $purchaseOrder = LoloPinoyGrillCommissaryPurchaseOrder::find($id);
+
+         $moduleName = "Purchase Order";
+        $purchaseOrder = DB::table(
+                        'lolo_pinoy_grill_commissary_purchase_orders')
+                        ->select(
+                            'lolo_pinoy_grill_commissary_purchase_orders.id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.user_id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.po_id',
+                            'lolo_pinoy_grill_commissary_purchase_orders.paid_to',
+                            'lolo_pinoy_grill_commissary_purchase_orders.address',
+                            'lolo_pinoy_grill_commissary_purchase_orders.date',
+                            'lolo_pinoy_grill_commissary_purchase_orders.quantity',
+                            'lolo_pinoy_grill_commissary_purchase_orders.description',
+                            'lolo_pinoy_grill_commissary_purchase_orders.unit_price',
+                            'lolo_pinoy_grill_commissary_purchase_orders.amount',
+                            'lolo_pinoy_grill_commissary_purchase_orders.total_price',
+                            'lolo_pinoy_grill_commissary_purchase_orders.requested_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.prepared_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.checked_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.created_by',
+                            'lolo_pinoy_grill_commissary_purchase_orders.requesting_branch',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                        ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_purchase_orders.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                        ->where('lolo_pinoy_grill_commissary_purchase_orders.id', $id)
+                        ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                        ->get();
+   
 
          $pOrders = LoloPinoyGrillCommissaryPurchaseOrder::where('po_id', $id)->get()->toArray();
 
