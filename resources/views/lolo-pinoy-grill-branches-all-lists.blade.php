@@ -27,7 +27,7 @@
 				  					<thead>
 				  						<tr>
 				  							<th>Action</th>
-			  								<th>RS #</th>
+			  								<th>RS No</th>
 			  								<th>Requesting Department</th>
 			  								<th>Request Date</th>
                         <th>Date Released</th>
@@ -37,7 +37,7 @@
 				  					<tfoot>
 				  						<tr>
 				  							<th>Action</th>
-                        <th>RS #</th>
+                        <th>RS No</th>
                         <th>Requesting Department</th>
                         <th>Request Date</th>
                         <th>Date Released</th>
@@ -46,21 +46,21 @@
 				  					</tfoot>
 				  					<tbody>
                       @foreach($requisitionLists as $requisitionList)
-				  						<tr id="deletedId{{ $requisitionList['id'] }}">
+				  						<tr id="deletedId{{ $requisitionList->id }}">
 				  							<td>
                           @if(Auth::user()['role_type'] != 3)
-                          <a href="{{ url('lolo-pinoy-grill-branches/edit/'.$requisitionList['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                          <a href="{{ url('lolo-pinoy-grill-branches/edit/'.$requisitionList->id) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                           @endif
                           @if(Auth::user()['role_type'] == 1)
-				  								<a id="delete" onClick="confirmDelete('{{ $requisitionList['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+				  								<a id="delete" onClick="confirmDelete('{{ $requisitionList->id }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
                           @endif
-				  								<a href="{{ url('lolo-pinoy-grill-branches/view/'.$requisitionList['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
+				  								<a href="{{ url('lolo-pinoy-grill-branches/view/'.$requisitionList->id) }}" title="View"><i class="fas fa-low-vision"></i></a>
 				  							</td>
-                        <td><a href="#">R.S-{{ $requisitionList['rs_number'] }}</a></td>
-                        <td>{{ $requisitionList['requesting_department'] }}</td>
-                        <td>{{ $requisitionList['request_date'] }}</td>
-                        <td>{{ $requisitionList['date_released'] }}</td>
-                        <td>{{ $requisitionList['created_by']}}</td>
+                        <td>{{ $requisitionList->module_code}}{{ $requisitionList->lolo_pinoy_branches_code}}</td>
+                        <td>{{ $requisitionList->requesting_department }}</td>
+                        <td>{{ $requisitionList->request_date }}</td>
+                        <td>{{ $requisitionList->date_released }}</td>
+                        <td>{{ $requisitionList->created_by}}</td>
 				  						</tr>
                       @endforeach
 				  					</tbody>

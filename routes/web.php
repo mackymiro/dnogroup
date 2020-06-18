@@ -304,6 +304,13 @@ Route::group(['middleware' =>['user']], function(){
 			'/mr-potato/delete-delivery-receipt/{id}',
 			'MrPotatoController@destroyDeliveryReceipt')
 			->name('mr-potato.destroyDeliveryReceipt');
+
+	Route::delete(
+			'/mr-potato/delete/dr/{id}',
+			'MrPotatoController@destroyDR')
+			->name('destroyDR');
+
+	
 	
 	Route::delete(
 		'/mr-potato/delete-transaction-list/{id}',
@@ -318,7 +325,12 @@ Route::group(['middleware' =>['user']], function(){
 	Route::delete(
 		'/mr-potato/delete-sales-invoice/{id}',
 		'MrPotatoController@destroySalesInvoice')
-		->name('mr-potato.destroySalesInvoice');	
+		->name('mr-potato.destroySalesInvoice');
+		
+	Route::delete(
+		'/mr-potato/delete/si/{id}',
+		'MrPotatoController@destroySI')
+		->name('mr-potato.destroySI');
 	
 	Route::delete(
 			'/ribos-bar/delete-delivery-receipt/{id}',
@@ -456,7 +468,7 @@ Route::group(['middleware' =>['user']], function(){
 	Route::get(
 		'/lolo-pinoy-grill-branches/payment-voucher-form',
 		'LoloPinoyGrillBranchesController@paymentVoucherForm')
-		->name('lolo-pinoy-grill-branches.paymentVoucherForm');
+		->name('paymentVoucherFormLpBranches');
 
 	Route::post(
 		'/lolo-pinoy-grill-branches/payment-voucher-store',
@@ -471,7 +483,7 @@ Route::group(['middleware' =>['user']], function(){
 	Route::get(
 		'/lolo-pinoy-grill-branches/edit-lolo-pinoy-grill-branches-payables-detail/{id}',
 		'LoloPinoyGrillBranchesController@editPayablesDetail')
-		->name('lolo-pinoy-grill-branches.editPayablesDetail');
+		->name('editPayablesDetailLpBranches');
 
 	Route::post(
 		'/lolo-pinoy-grill-branches/add-particulars/{id}',
@@ -544,7 +556,25 @@ Route::group(['middleware' =>['user']], function(){
 		'MrPotatoController@viewPayableDetails')
 		->name('mr-potato.viewPayableDetails');
 
+	Route::get(
+		'/mr-potato/summary-report',
+		'MrPotatoController@summaryReport')
+		->name('summaryReport');
 
+	Route::get(
+		'/mr-potato/printSummary',
+		'MrPotatoController@printSummary')
+		->name('printSummaryMrPotato');
+
+	Route::get(
+		'/mr-potato/search-date',
+		'MrPotatoController@getSummaryReport')
+		->name('getSummaryReport');
+
+	Route::get(
+		'/mr-potato/printGetSummary/{date}',
+		'MrPotatoController@printGetSummary')
+		->name('printGetSummary');
 
 	Route::get(
 		'/mr-potato/edit-mr-potato-payment-voucher/{id}',
@@ -868,6 +898,11 @@ Route::group(['middleware' =>['sales']], function(){
 		'/mr-potato/delete-sales-invoice/{id}',
 		'MrPotatoController@destroySalesInvoice')
 		->name('mr-potato.destroySalesInvoice');	
+
+	Route::delete(
+			'/mr-potato/delete/si/{id}',
+			'MrPotatoController@destroySI')
+			->name('mr-potato.destroySI');
 	
 	Route::delete(
 			'/ribos-bar/delete-delivery-receipt/{id}',
@@ -1658,7 +1693,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/lolo-pinoy-grill-branches/edit/{id}',
 		'LoloPinoyGrillBranchesController@edit')
-		->name('lolo-pinoy-grill-branches.edit');
+		->name('editLpBranches');
 
 	Route::patch(
 		'/lolo-pinoy-grill-branches/update/{id}',
@@ -1700,6 +1735,27 @@ Route::group(['middleware' => ['auth']], function(){
 		'/lolo-pinoy-grill-branches/requistion/transaction-list',
 		'LoloPinoyGrillBranchesController@reqTransactionList')
 		->name('lolo-pinoy-grill-branches.reqTransactionList');
+
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/summary-report',
+		'LoloPinoyGrillBranchesController@summaryReport')
+		->name('summaryReport');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/printSummary',
+		'LoloPinoyGrillBranchesController@printSummary')
+		->name('printSummary');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/printGetSummary/{date}',
+		'LoloPinoyGrillBranchesController@printGetSummary')
+		->name('printGetSummary');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/search-date',
+		'LoloPinoyGrillBranchesController@getSummaryReport')
+		->name('getSummaryReport');
 
 	Route::post(
 		'/lolo-pinoy-grill-branches/sales-form/login-branch',
@@ -1911,7 +1967,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/mr-potato/edit-mr-potato-delivery-receipt/{id}',
 		'MrPotatoController@editDeliveryReceipt')
-		->name('mr-potato.editDeliveryReceipt');
+		->name('editDeliveryReceiptMrPotato');
 
 	Route::patch(
 		'/mr-potato/update-delivery-receipt/{id}',
@@ -1946,6 +2002,20 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('mr-potato.viewDeliveryReceipt');
 
 
+	Route::get(
+		'/mr-potato/billing-statement-form',
+		'MrPotatoController@billingStatementForm')
+		->name('billingStatementFormMrPotato');
+
+	Route::get(
+		'/mr-potato/billing-statement-lists',
+		'MrPotatoController@billingStatementList')
+		->name('billingStatementList');
+
+	Route::post(
+		'/mr-potato/store-billing-statement',
+		'MrPotatoController@storeBillingStatement')
+		->name('storeBillingStatement');
 
 	Route::get(
 		'/mr-potato/cash-vouchers',
@@ -1971,7 +2041,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/mr-potato/edit-mr-potato-sales-invoice/{id}',
 		'MrPotatoController@editSalesInvoice')
-		->name('mr-potato.editSalesInvoice');
+		->name('editSalesInvoiceMrPotato');
 
 	Route::patch(
 		'/mr-potato/update-sales-invoice/{id}',
@@ -2009,6 +2079,41 @@ Route::group(['middleware' => ['auth']], function(){
 		'/mr-potato/petty-cash-list',
 		'MrPotatoController@pettyCashList')
 		->name('mr-potato.pettyCashList');
+
+	Route::post(
+		'/mr-potato/petty-cash/add',
+		'MrPotatoController@addPettyCash')
+		->name('addPettyCash');
+	
+	Route::get(
+		'/mr-potato/edit-petty-cash/{id}',
+		'MrPotatoController@editPettyCash')
+		->name('editPettyCashMrPotato');
+
+	Route::patch(
+			'/mr-potato/update-petty-cash/{id}',
+			'MrPotatoController@updatePettyCash')
+			->name('updatePettyCash');
+
+	Route::post(
+		'/mr-potato/add-new-petty-cash/{id}',
+		'MrPotatoController@addNewPettyCash')
+		->name('addNewPettyCash');
+
+	Route::patch(
+		'/mr-potato/update-pc/{id}',
+		'MrPotatoController@updatePC')
+		->name('updatePC');
+
+	Route::delete(
+		'/mr-potato/petty-cash/delete/{id}',
+		'MrPotatoController@destroyPettyCash')
+		->name('destroyPettyCash');
+
+	Route::get(
+		'/mr-potato/petty-cash/view/{id}',
+		'MrPotatoController@viewPettyCash')
+		->name('viewPettyCashMrPotato');
 
 	Route::get(
 		'/mr-potato/utilities',

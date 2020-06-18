@@ -6,6 +6,19 @@
           <span>Ribo's Food Corporation</span>
         </a>
       </li>
+      @if(Auth::user()['role_type'] != 3)
+       <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-flag"></i>
+          <span>Summary Report(s)</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+            <a class="dropdown-item" href="{{ url('mr-potato/summary-report') }}">Summary Report(s)</a>
+            <a class="dropdown-item" href="{{ url('mr-potato/summary-report/search-number-code') }}">Search Number Code</a>
+      
+        </div>
+      </li>
+      @endif
        <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fas fa-cash-register"></i>
@@ -47,7 +60,6 @@
           <span>Statement Of Account</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="{{ url('mr-potato/statement-of-account-form')}}">Statement Of Account <br>Form</a>
           <a class="dropdown-item" href="{{ url('mr-potato/statement-of-account-lists') }}">Lists</a>
          
         </div>

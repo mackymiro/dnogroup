@@ -16,10 +16,10 @@
             <a href="{{ url('mr-potato/purchase-order-lists') }}">Back to Lists</a>
              <div class="col-lg-12">
 				<div style="float:left; margin-left:140px">
-					<img src="{{ asset('images/ribos.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Mr Potato">
+					<img src="{{ asset('images/digitized-logos/ribos-food-corp.png')}}" width="360" height="250" class="img-responsive mx-auto d-block" alt="Mr Potato">
 				</div>
 				<div style="flaot:left; margin-right:50px;">
-						<img src="{{ asset('images/mr-potato.png')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Mr Potato">
+					<img src="{{ asset('images/digitized-logos/mr-potato.png')}}" width="330" height="250" class="img-responsive mx-auto d-block" alt="Mr Potato">
 				</div>
             	 <h4 class="text-center"><u>VIEW PURCHASE ORDER</u></h4>
             </div>
@@ -31,7 +31,7 @@
                             View Purchase Order
                              <div class="float-right">
                                
-                                 <a href="{{ action('MrPotatoController@printPO', $purchaseOrder['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                                 <a href="{{ action('MrPotatoController@printPO', $purchaseOrder[0]->id)}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                                
                               </div>
                         </div>
@@ -43,12 +43,12 @@
 		                                        <thead>
 		                                            <tr>
 		                                                <th width="25%">Branch Location</th>
-		                                                <th>{{ $purchaseOrder['branch_location'] }}</th>
+		                                                <th>{{ $purchaseOrder[0]->branch_location }}</th>
 		                                            </tr>
 		                                            
 													<tr>
 		                                                <th>Ordered By</th>
-		                                                <th>{{ $purchaseOrder['ordered_by']}}</th>
+		                                                <th>{{ $purchaseOrder[0]->ordered_by }}</th>
 		                                            </tr>
 		                                        </thead>
 
@@ -59,12 +59,12 @@
 	                                    <table class="table table-bordered">
 	                                        <thead>
 	                                            <tr>
-	                                                <th width="20%">P.O Number</th>
-	                                                <th><a href="#">P.O-{{ $purchaseOrder['p_o_number'] }}</a></th>
+	                                                <th width="20%">PO No</th>
+	                                                <th>{{ $purchaseOrder[0]->module_code}}{{ $purchaseOrder[0]->mr_potato_code}}</th>
 	                                            </tr>
 	                                            <tr>
 	                                                <th>Date</th>
-	                                                <th> {{ $purchaseOrder['date'] }}</th>
+	                                                <th> {{ $purchaseOrder[0]->date }}</th>
 	                                            </tr>
 	                                        </thead>
 	                                    </table>
@@ -82,11 +82,11 @@
 		                                  </thead>
 		                                   <tbody> 
 		                                   		<tr>
-			                                      <td>{{ $purchaseOrder['particulars']}}</td>
-			                                      <td>{{ $purchaseOrder['qty']}}</td>
-			                                      <td>{{ $purchaseOrder['unit']}}</td>
-			                                      <td><?php echo number_format($purchaseOrder['price'], 2); ?></td>
-												  <td><?php echo number_format($purchaseOrder['subtotal'], 2); ?></td>
+			                                      <td>{{ $purchaseOrder[0]->particulars}}</td>
+			                                      <td>{{ $purchaseOrder[0]->qty}}</td>
+			                                      <td>{{ $purchaseOrder[0]->unit}}</td>
+			                                      <td><?php echo number_format($purchaseOrder[0]->price, 2); ?></td>
+												  <td><?php echo number_format($purchaseOrder[0]->subtotal, 2); ?></td>
 			                                    </tr>
 			                                    @foreach($pOrders as $pOrder)
 			                                    <tr>
@@ -132,7 +132,7 @@
 	                                        <thead>
 	                                            <tr>
 	                                                <th width="20%">Prepared By</th>
-	                                                <th>{{ $purchaseOrder['created_by'] }}</th>
+	                                                <th>{{ $purchaseOrder[0]->created_by }}</th>
 	                                            </tr>
 	                                        </thead>
 	                                    </table>

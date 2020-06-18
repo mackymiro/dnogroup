@@ -2050,7 +2050,6 @@ class LoloPinoyGrillCommissaryController extends Controller
                                 ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_petty_cashes.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
                                 ->where('lolo_pinoy_grill_commissary_petty_cashes.id', $id)
                                 ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
-                                ->orderBy('lolo_pinoy_grill_commissary_codes.id', 'desc')
                                 ->get();
       
 

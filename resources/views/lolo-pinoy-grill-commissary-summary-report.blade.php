@@ -635,7 +635,7 @@
                                                     </tr>
                                                 </tfoot>
                                                 <tbody>
-                                                <?php $sum = 0; ?>
+                                               
                                                     @foreach($getTransactionListCashes as $getTransactionListCash)
                                                     <?php $id = $getTransactionListCash->id; ?>
                                                     <?php
@@ -713,7 +713,7 @@
                                                     </tr>
                                                 </tfoot>
                                                 <tbody>
-                                                <?php $sum = 0; ?>
+                                              
                                                     @foreach($getTransactionListChecks as $getTransactionListCheck)
                                                     <?php $id = $getTransactionListCheck->id; ?>
                                                     <?php
@@ -755,13 +755,13 @@
 
                                             </table>
                                             <table class="table table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th width="15%" class="bg-info" style="color:white;">Total:</th>
-                                                            <th class="bg-success" style="color:white"><?php echo number_format($totalAmountCheck, 2);?></th>
-                                                        </tr>
-                                                    </thead>
-                                                 </table>
+                                                <thead>
+                                                    <tr>
+                                                        <th width="15%" class="bg-info" style="color:white;">Total:</th>
+                                                        <th class="bg-success" style="color:white"><?php echo number_format($totalAmountCheck, 2);?></th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
                                         </div>
                                     </div>
                                    

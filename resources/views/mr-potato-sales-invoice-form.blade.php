@@ -1,6 +1,15 @@
 @extends('layouts.mr-potato-app')
 @section('title', 'Sales Invoice Form| ')
 @section('content')
+<script>
+    $(function() {
+        $( ".datepicker" ).datepicker();
+    });
+</script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="wrapper">
 	<!-- Sidebar -->
      @include('sidebar.sidebar-mr-potato')
@@ -29,6 +38,11 @@
                         		{{ csrf_field() }}
                         	<div class="form-group">
                     			<div class="form-row">
+									<div class="col-md-2">
+                     					<label>Date</label>
+                     					<input type="text" name="date" class="datepicker form-control"  />
+
+                         			</div>
                     				<div class="col-md-2">
                      					<label>Invoice #</label>
                      					<input type="text" name="invoiceNum" class="form-control" required="required" />
@@ -84,5 +98,16 @@
             </div>
  		</div>
      </div>	
+	   <!-- Sticky Footer -->
+	   <footer class="sticky-footer">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright © Ribos Food Corporation 2019</span>
+            <br>
+            <br>
+            <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
+          </div>
+        </div>
+      </footer>
 </div>
 @endsection

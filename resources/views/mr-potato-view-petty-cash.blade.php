@@ -1,23 +1,23 @@
-@extends('layouts.lolo-pinoy-grill-branches-app')
+@extends('layouts.mr-potato-app')
 @section('title', 'View Petty Cash |')
 @section('content')
 <div id="wrapper">
     <!-- Sidebar -->
-    @include('sidebar.sidebar-lolo-pinoy-grill-branches')
+    @include('sidebar.sidebar-mr-potato')
     <div id="content-wrapper">
         <div class="container-fluid">
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">Lolo Pinoy Branches</a>
+                <a href="#">Mr Potato</a>
               </li>
               <li class="breadcrumb-item ">Petty Cash</li>
               <li class="breadcrumb-item active">View Petty Cash</li>
             </ol>
-            <a href="{{ url('/lolo-pinoy-grill-branches/petty-cash-list') }}">Back to Lists</a>
+            <a href="{{ url('/mr-potato/petty-cash-list') }}">Back to Lists</a>
             <div class="col-lg-12">
-                  <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill Commissary">
-            	 
+             <img src="{{ asset('images/mr-potato.png')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Mr Potato">
+            	
                 <h4 class="text-center"><u>PETTY CASH SUMMARY</u></h4>
             </div>
             <div class="row">
@@ -39,7 +39,7 @@
                                          <thead>
                                             <tr>
                                                 <th width="30%">Petty Cash No</th>
-                                                <th>{{ $getPettyCash[0]->module_code}}{{ $getPettyCash[0]->lolo_pinoy_branches_code}}</th>
+                                                <th>{{ $getPettyCash[0]->module_code}}{{ $getPettyCash[0]->mr_potato_code}}</th>
                                             </tr>
                                             <tr>
                                                 <th>Date</th>

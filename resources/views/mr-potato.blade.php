@@ -24,6 +24,7 @@
                             			<thead>
 		                                        <th>Action</th>
 		                                        <th>Invoice #</th>
+												<th>SI No</th>
 		                                        <th>Date</th>
 		                                        <th>Ordered By</th>
 		                                        <th>Address</th>
@@ -37,6 +38,7 @@
 		                                    <tfoot>
 		                                         <th>Action</th>
 		                                        <th>Invoice #</th>
+												<th>SI No</th>
 		                                        <th>Date</th>
 		                                        <th>Ordered By</th>
 		                                        <th>Address</th>
@@ -49,27 +51,28 @@
 		                                    </tfoot>
 		                                    <tbody>
 	                                          @foreach($getAllSalesInvoices as $getAllSalesInvoice)
-		                                          <tr id="deletedId{{ $getAllSalesInvoice['id']}}">
+		                                          <tr id="deletedId{{ $getAllSalesInvoice->id}}">
 		                                          <td>
 		                                             @if(Auth::user()['role_type'] !== 3)
-		                                            <a href="{{ url('mr-potato/edit-mr-potato-sales-invoice/'.$getAllSalesInvoice['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+		                                            <a href="{{ url('mr-potato/edit-mr-potato-sales-invoice/'.$getAllSalesInvoice->id ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
 		                                             @endif
 		                                            @if(Auth::user()['role_type'] == 1)
-		                                            <a id="delete" onClick="confirmDelete('{{ $getAllSalesInvoice['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+		                                            <a id="delete" onClick="confirmDelete('{{ $getAllSalesInvoice->id}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
 		                                            @endif
-		                                            <a href="{{ url('mr-potato/view-mr-potato-sales-invoice/'.$getAllSalesInvoice['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
+		                                            <a href="{{ url('mr-potato/view-mr-potato-sales-invoice/'.$getAllSalesInvoice->id) }}" title="View"><i class="fas fa-low-vision"></i></a>
 		                                           
 		                                          </td>
-		                                          <td>{{ $getAllSalesInvoice['invoice_number']}}</td>
-		                                          <td>{{ $getAllSalesInvoice['date'] }}</td>
-		                                          <td>{{ $getAllSalesInvoice['ordered_by'] }}</td>
-		                                          <td>{{ $getAllSalesInvoice['address']}}</td>
-		                                          <td>{{ $getAllSalesInvoice['qty']}}</td>
-		                                          <td><?php echo number_format($getAllSalesInvoice['total_kls'], 2); ?></td>
-		                                          <td>{{ $getAllSalesInvoice['item_description']}}</td>
-		                                          <td><?php echo number_format($getAllSalesInvoice['unit_price'], 2);?></td>
-		                                          <td><?php echo number_format($getAllSalesInvoice['amount'], 2); ?></td>
-		                                          <td>{{ $getAllSalesInvoice['created_by']}}</td>
+		                                          <td>{{ $getAllSalesInvoice->invoice_number}}</td>
+												  <td>{{ $getAllSalesInvoice->module_code}}{{ $getAllSalesInvoice->mr_potato_code}}</td>
+		                                          <td>{{ $getAllSalesInvoice->date }}</td>
+		                                          <td>{{ $getAllSalesInvoice->ordered_by }}</td>
+		                                          <td>{{ $getAllSalesInvoice->address}}</td>
+		                                          <td>{{ $getAllSalesInvoice->qty}}</td>
+		                                          <td><?php echo number_format($getAllSalesInvoice->total_kls, 2); ?></td>
+		                                          <td>{{ $getAllSalesInvoice->item_description}}</td>
+		                                          <td><?php echo number_format($getAllSalesInvoice->unit_price, 2);?></td>
+		                                          <td><?php echo number_format($getAllSalesInvoice->amount, 2); ?></td>
+		                                          <td>{{ $getAllSalesInvoice->created_by}}</td>
 		                                          </tr>
 	                                          @endforeach
 
@@ -102,7 +105,7 @@
 		if(x){
         $.ajax({
                 type: "DELETE",
-                url: '/mr-potato/delete-sales-invoice/' + id,
+                url: '/mr-potato/delete/si/' + id,
                 data:{
                   _method: 'delete', 
                   "_token": "{{ csrf_token() }}",

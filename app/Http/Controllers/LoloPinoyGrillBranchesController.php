@@ -16,9 +16,962 @@ use App\LoloPinoyGrillCommissaryRawMaterial;
 use App\LoloPinoyGrillBranchesSalesForm;
 use App\LoloPinoyGrillBranchesPettyCash;
 use Hash;
+use App\LoloPinoyGrillBranchesCode;
 
 class LoloPinoyGrillBranchesController extends Controller
 {
+
+    public function printGetSummary($date){
+        $moduleNameVoucher = "Payment Voucher";
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                            'lolo_pinoy_grill_branches_payment_vouchers')
+                            ->select( 
+                            'lolo_pinoy_grill_branches_payment_vouchers.id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                            'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                            'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                            'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                            'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                            'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                            'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                            'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.created_at',
+                            'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                            'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.category',
+                            'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                            'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.status',
+                            'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                            'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                            'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                            'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                            'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                            'lolo_pinoy_grill_branches_codes.module_id',
+                            'lolo_pinoy_grill_branches_codes.module_code',
+                            'lolo_pinoy_grill_branches_codes.module_name')
+                            ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                            ->where('lolo_pinoy_grill_branches_payment_vouchers.pv_id', NULL)
+                            ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleNameVoucher)
+                            ->whereDate('lolo_pinoy_grill_branches_payment_vouchers.created_at', '=', date($date))
+                            ->where('lolo_pinoy_grill_branches_payment_vouchers.method_of_payment', $cash)
+                            ->orderBy('lolo_pinoy_grill_branches_payment_vouchers.id', 'desc')
+                            ->get()->toArray(); 
+            
+        $totalAmountCash = DB::table(
+                        'lolo_pinoy_grill_branches_payment_vouchers')
+                        ->select( 
+                        'lolo_pinoy_grill_branches_payment_vouchers.id',
+                        'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                        'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                        'lolo_pinoy_grill_branches_payment_vouchers.date',
+                        'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                        'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                        'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                        'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                        'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                        'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                        'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                        'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                        'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                        'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                        'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                        'lolo_pinoy_grill_branches_payment_vouchers.created_at',
+                        'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                        'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                        'lolo_pinoy_grill_branches_payment_vouchers.category',
+                        'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                        'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                        'lolo_pinoy_grill_branches_payment_vouchers.status',
+                        'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                        'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                        'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                        'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                        'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                        'lolo_pinoy_grill_branches_codes.module_id',
+                        'lolo_pinoy_grill_branches_codes.module_code',
+                        'lolo_pinoy_grill_branches_codes.module_name')
+                        ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                        ->where('lolo_pinoy_grill_branches_payment_vouchers.pv_id', NULL)
+                        ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleNameVoucher)
+                        ->whereDate('lolo_pinoy_grill_branches_payment_vouchers.created_at', '=', date($date))
+                        ->where('lolo_pinoy_grill_branches_payment_vouchers.method_of_payment', $cash)
+                        ->orderBy('lolo_pinoy_grill_branches_payment_vouchers.id', 'desc')
+                        ->sum('lolo_pinoy_grill_branches_payment_vouchers.amount_due');
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                            'lolo_pinoy_grill_branches_payment_vouchers')
+                            ->select( 
+                            'lolo_pinoy_grill_branches_payment_vouchers.id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                            'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                            'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                            'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                            'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                            'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                            'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                            'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.created_at',
+                            'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                            'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.category',
+                            'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                            'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.status',
+                            'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                            'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                            'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                            'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                            'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                            'lolo_pinoy_grill_branches_codes.module_id',
+                            'lolo_pinoy_grill_branches_codes.module_code',
+                            'lolo_pinoy_grill_branches_codes.module_name')
+                            ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                            ->where('lolo_pinoy_grill_branches_payment_vouchers.pv_id', NULL)
+                            ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleNameVoucher)
+                            ->whereDate('lolo_pinoy_grill_branches_payment_vouchers.created_at', '=', date($date))
+                            ->where('lolo_pinoy_grill_branches_payment_vouchers.method_of_payment', $check)
+                            ->orderBy('lolo_pinoy_grill_branches_payment_vouchers.id', 'desc')
+                            ->get()->toArray(); 
+            
+        $totalAmountCheck = DB::table(
+                                'lolo_pinoy_grill_branches_payment_vouchers')
+                                ->select( 
+                                'lolo_pinoy_grill_branches_payment_vouchers.id',
+                                'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                                'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                                'lolo_pinoy_grill_branches_payment_vouchers.date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                                'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                                'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                                'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                                'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                                'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                                'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                                'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                                'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                                'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                                'lolo_pinoy_grill_branches_payment_vouchers.created_at',
+                                'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                                'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.category',
+                                'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                                'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.status',
+                                'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                                'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                                'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                                'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                                'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                                'lolo_pinoy_grill_branches_codes.module_id',
+                                'lolo_pinoy_grill_branches_codes.module_code',
+                                'lolo_pinoy_grill_branches_codes.module_name')
+                                ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                                ->where('lolo_pinoy_grill_branches_payment_vouchers.pv_id', NULL)
+                                ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleNameVoucher)
+                                ->whereDate('lolo_pinoy_grill_branches_payment_vouchers.created_at', '=', date($date))
+                                ->where('lolo_pinoy_grill_branches_payment_vouchers.method_of_payment', $check)
+                                ->orderBy('lolo_pinoy_grill_branches_payment_vouchers.id', 'desc')
+                                ->sum('lolo_pinoy_grill_branches_payment_vouchers.amount_due');
+        $getDateToday = "";
+        $pdf = PDF::loadView('printSummaryLoloPinoyGrillBranches',  compact('date', 'getDateToday', 'getTransactionListCashes', 
+        'totalAmountCash', 'getTransactionListChecks', 'totalAmountCheck'));
+        
+        return $pdf->download('lolo-pinoy-grill-branches-summary-report.pdf');
+    }
+
+    public function getSummaryReport(Request $request){ 
+        $getDate = $request->get('selectDate');
+        $moduleName = "Requisition Slip";
+        $requisitionLists = DB::table(
+                        'lolo_pinoy_grill_branches_requisition_slips')
+                        ->select(
+                            'lolo_pinoy_grill_branches_requisition_slips.id',
+                            'lolo_pinoy_grill_branches_requisition_slips.user_id',
+                            'lolo_pinoy_grill_branches_requisition_slips.rs_id',
+                            'lolo_pinoy_grill_branches_requisition_slips.rs_number',
+                            'lolo_pinoy_grill_branches_requisition_slips.requesting_department',
+                            'lolo_pinoy_grill_branches_requisition_slips.request_date',
+                            'lolo_pinoy_grill_branches_requisition_slips.date_released',
+                            'lolo_pinoy_grill_branches_requisition_slips.quantity_requested',
+                            'lolo_pinoy_grill_branches_requisition_slips.unit',
+                            'lolo_pinoy_grill_branches_requisition_slips.item',
+                            'lolo_pinoy_grill_branches_requisition_slips.quantity_given',
+                            'lolo_pinoy_grill_branches_requisition_slips.released_by',
+                            'lolo_pinoy_grill_branches_requisition_slips.received_by',
+                            'lolo_pinoy_grill_branches_requisition_slips.created_by',
+                            'lolo_pinoy_grill_branches_requisition_slips.created_at',
+                            'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                            'lolo_pinoy_grill_branches_codes.module_id',
+                            'lolo_pinoy_grill_branches_codes.module_code',
+                            'lolo_pinoy_grill_branches_codes.module_name')
+                        ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_requisition_slips.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                        ->where('lolo_pinoy_grill_branches_requisition_slips.rs_id', NULL)
+                        ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleName)
+                        ->whereDate('lolo_pinoy_grill_branches_requisition_slips.created_at', '=', date($getDate))
+                        ->orderBy('lolo_pinoy_grill_branches_requisition_slips.id', 'desc')
+                        ->get()->toArray();
+
+        $transactionLists = DB::table(
+                            'lolo_pinoy_grill_branches_requisition_slips')
+                            ->select(
+                                'lolo_pinoy_grill_branches_requisition_slips.id',
+                                'lolo_pinoy_grill_branches_requisition_slips.user_id',
+                                'lolo_pinoy_grill_branches_requisition_slips.rs_id',
+                                'lolo_pinoy_grill_branches_requisition_slips.rs_number',
+                                'lolo_pinoy_grill_branches_requisition_slips.requesting_department',
+                                'lolo_pinoy_grill_branches_requisition_slips.request_date',
+                                'lolo_pinoy_grill_branches_requisition_slips.date_released',
+                                'lolo_pinoy_grill_branches_requisition_slips.quantity_requested',
+                                'lolo_pinoy_grill_branches_requisition_slips.unit',
+                                'lolo_pinoy_grill_branches_requisition_slips.item',
+                                'lolo_pinoy_grill_branches_requisition_slips.quantity_given',
+                                'lolo_pinoy_grill_branches_requisition_slips.released_by',
+                                'lolo_pinoy_grill_branches_requisition_slips.received_by',
+                                'lolo_pinoy_grill_branches_requisition_slips.created_by',
+                                'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                                'lolo_pinoy_grill_branches_codes.module_id',
+                                'lolo_pinoy_grill_branches_codes.module_code',
+                                'lolo_pinoy_grill_branches_codes.module_name')
+                            ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_requisition_slips.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                            ->where('lolo_pinoy_grill_branches_requisition_slips.rs_id', NULL)
+                            ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleName)
+                            ->whereDate('lolo_pinoy_grill_branches_requisition_slips.created_at', '=', date($getDate))
+                            ->orderBy('lolo_pinoy_grill_branches_requisition_slips.id', 'desc')
+                            ->get()->toArray();
+
+        $moduleNamePetty = "Petty Cash";
+        $pettyCashLists = DB::table(
+                                'lolo_pinoy_grill_branches_petty_cashes')
+                                ->select( 
+                                'lolo_pinoy_grill_branches_petty_cashes.id',
+                                'lolo_pinoy_grill_branches_petty_cashes.user_id',
+                                'lolo_pinoy_grill_branches_petty_cashes.pc_id',
+                                'lolo_pinoy_grill_branches_petty_cashes.date',
+                                'lolo_pinoy_grill_branches_petty_cashes.petty_cash_name',
+                                'lolo_pinoy_grill_branches_petty_cashes.petty_cash_summary',
+                                'lolo_pinoy_grill_branches_petty_cashes.amount',
+                                'lolo_pinoy_grill_branches_petty_cashes.created_by',
+                                'lolo_pinoy_grill_branches_petty_cashes.created_at',
+                                'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                                'lolo_pinoy_grill_branches_codes.module_id',
+                                'lolo_pinoy_grill_branches_codes.module_code',
+                                'lolo_pinoy_grill_branches_codes.module_name')
+                                ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_petty_cashes.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                                ->where('lolo_pinoy_grill_branches_petty_cashes.pc_id', NULL)
+                                ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleNamePetty)
+                                ->whereDate('lolo_pinoy_grill_branches_petty_cashes.created_at', '=', date($getDate))
+                                ->orderBy('lolo_pinoy_grill_branches_petty_cashes.id', 'desc')
+                                ->get()->toArray();
+                    
+
+
+        $moduleNameVoucher = "Payment Voucher";
+
+        $getTransactionLists = DB::table(
+                    'lolo_pinoy_grill_branches_payment_vouchers')
+                    ->select( 
+                    'lolo_pinoy_grill_branches_payment_vouchers.id',
+                    'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                    'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                    'lolo_pinoy_grill_branches_payment_vouchers.date',
+                    'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                    'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                    'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                    'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                    'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                    'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                    'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                    'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                    'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                    'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                    'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                    'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                    'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                    'lolo_pinoy_grill_branches_payment_vouchers.category',
+                    'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                    'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                    'lolo_pinoy_grill_branches_payment_vouchers.status',
+                    'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                    'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                    'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                    'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                    'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                    'lolo_pinoy_grill_branches_codes.module_id',
+                    'lolo_pinoy_grill_branches_codes.module_code',
+                    'lolo_pinoy_grill_branches_codes.module_name')
+                    ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                    ->where('lolo_pinoy_grill_branches_payment_vouchers.pv_id', NULL)
+                    ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleNameVoucher)
+                    ->orderBy('lolo_pinoy_grill_branches_payment_vouchers.id', 'desc')
+                    ->get()->toArray();
+
+
+
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                            'lolo_pinoy_grill_branches_payment_vouchers')
+                            ->select( 
+                            'lolo_pinoy_grill_branches_payment_vouchers.id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                            'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                            'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                            'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                            'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                            'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                            'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                            'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.created_at',
+                            'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                            'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.category',
+                            'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                            'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.status',
+                            'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                            'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                            'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                            'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                            'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                            'lolo_pinoy_grill_branches_codes.module_id',
+                            'lolo_pinoy_grill_branches_codes.module_code',
+                            'lolo_pinoy_grill_branches_codes.module_name')
+                            ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                            ->where('lolo_pinoy_grill_branches_payment_vouchers.pv_id', NULL)
+                            ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleNameVoucher)
+                            ->whereDate('lolo_pinoy_grill_branches_payment_vouchers.created_at', '=', date($getDate))
+                            ->where('lolo_pinoy_grill_branches_payment_vouchers.method_of_payment', $cash)
+                            ->orderBy('lolo_pinoy_grill_branches_payment_vouchers.id', 'desc')
+                            ->get()->toArray(); 
+            
+        $totalAmountCash = DB::table(
+                        'lolo_pinoy_grill_branches_payment_vouchers')
+                        ->select( 
+                        'lolo_pinoy_grill_branches_payment_vouchers.id',
+                        'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                        'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                        'lolo_pinoy_grill_branches_payment_vouchers.date',
+                        'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                        'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                        'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                        'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                        'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                        'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                        'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                        'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                        'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                        'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                        'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                        'lolo_pinoy_grill_branches_payment_vouchers.created_at',
+                        'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                        'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                        'lolo_pinoy_grill_branches_payment_vouchers.category',
+                        'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                        'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                        'lolo_pinoy_grill_branches_payment_vouchers.status',
+                        'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                        'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                        'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                        'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                        'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                        'lolo_pinoy_grill_branches_codes.module_id',
+                        'lolo_pinoy_grill_branches_codes.module_code',
+                        'lolo_pinoy_grill_branches_codes.module_name')
+                        ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                        ->where('lolo_pinoy_grill_branches_payment_vouchers.pv_id', NULL)
+                        ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleNameVoucher)
+                        ->whereDate('lolo_pinoy_grill_branches_payment_vouchers.created_at', '=', date($getDate))
+                        ->where('lolo_pinoy_grill_branches_payment_vouchers.method_of_payment', $cash)
+                        ->orderBy('lolo_pinoy_grill_branches_payment_vouchers.id', 'desc')
+                        ->sum('lolo_pinoy_grill_branches_payment_vouchers.amount_due');
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                            'lolo_pinoy_grill_branches_payment_vouchers')
+                            ->select( 
+                            'lolo_pinoy_grill_branches_payment_vouchers.id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                            'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                            'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                            'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                            'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                            'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                            'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                            'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.created_at',
+                            'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                            'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.category',
+                            'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                            'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.status',
+                            'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                            'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                            'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                            'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                            'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                            'lolo_pinoy_grill_branches_codes.module_id',
+                            'lolo_pinoy_grill_branches_codes.module_code',
+                            'lolo_pinoy_grill_branches_codes.module_name')
+                            ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                            ->where('lolo_pinoy_grill_branches_payment_vouchers.pv_id', NULL)
+                            ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleNameVoucher)
+                            ->whereDate('lolo_pinoy_grill_branches_payment_vouchers.created_at', '=', date($getDate))
+                            ->where('lolo_pinoy_grill_branches_payment_vouchers.method_of_payment', $check)
+                            ->orderBy('lolo_pinoy_grill_branches_payment_vouchers.id', 'desc')
+                            ->get()->toArray(); 
+            
+        $totalAmountCheck = DB::table(
+                                'lolo_pinoy_grill_branches_payment_vouchers')
+                                ->select( 
+                                'lolo_pinoy_grill_branches_payment_vouchers.id',
+                                'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                                'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                                'lolo_pinoy_grill_branches_payment_vouchers.date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                                'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                                'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                                'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                                'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                                'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                                'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                                'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                                'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                                'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                                'lolo_pinoy_grill_branches_payment_vouchers.created_at',
+                                'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                                'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.category',
+                                'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                                'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.status',
+                                'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                                'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                                'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                                'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                                'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                                'lolo_pinoy_grill_branches_codes.module_id',
+                                'lolo_pinoy_grill_branches_codes.module_code',
+                                'lolo_pinoy_grill_branches_codes.module_name')
+                                ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                                ->where('lolo_pinoy_grill_branches_payment_vouchers.pv_id', NULL)
+                                ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleNameVoucher)
+                                ->whereDate('lolo_pinoy_grill_branches_payment_vouchers.created_at', '=', date($getDate))
+                                ->where('lolo_pinoy_grill_branches_payment_vouchers.method_of_payment', $check)
+                                ->orderBy('lolo_pinoy_grill_branches_payment_vouchers.id', 'desc')
+                                ->sum('lolo_pinoy_grill_branches_payment_vouchers.amount_due');
+        
+        return view('lolo-pinoy-grill-branches-get-summary-report', compact('getDate', 
+        'requisitionLists', 'transactionLists', 'getTransactionListCashes', 'pettyCashLists', 'getTransactionLists',
+        'totalAmountCash', 'getTransactionListChecks', 'totalAmountCheck'));
+
+
+    }
+
+    public function printSummary(){
+        $getDateToday = date("Y-m-d");
+
+        $moduleNameVoucher = "Payment Voucher";
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                            'lolo_pinoy_grill_branches_payment_vouchers')
+                            ->select( 
+                            'lolo_pinoy_grill_branches_payment_vouchers.id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                            'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                            'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                            'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                            'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                            'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                            'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                            'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.created_at',
+                            'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                            'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.category',
+                            'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                            'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.status',
+                            'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                            'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                            'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                            'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                            'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                            'lolo_pinoy_grill_branches_codes.module_id',
+                            'lolo_pinoy_grill_branches_codes.module_code',
+                            'lolo_pinoy_grill_branches_codes.module_name')
+                            ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                            ->where('lolo_pinoy_grill_branches_payment_vouchers.pv_id', NULL)
+                            ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleNameVoucher)
+                            ->whereDate('lolo_pinoy_grill_branches_payment_vouchers.created_at', '=', date($getDateToday))
+                            ->where('lolo_pinoy_grill_branches_payment_vouchers.method_of_payment', $cash)
+                            ->orderBy('lolo_pinoy_grill_branches_payment_vouchers.id', 'desc')
+                            ->get()->toArray(); 
+            
+        $totalAmountCash = DB::table(
+                        'lolo_pinoy_grill_branches_payment_vouchers')
+                        ->select( 
+                        'lolo_pinoy_grill_branches_payment_vouchers.id',
+                        'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                        'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                        'lolo_pinoy_grill_branches_payment_vouchers.date',
+                        'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                        'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                        'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                        'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                        'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                        'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                        'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                        'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                        'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                        'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                        'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                        'lolo_pinoy_grill_branches_payment_vouchers.created_at',
+                        'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                        'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                        'lolo_pinoy_grill_branches_payment_vouchers.category',
+                        'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                        'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                        'lolo_pinoy_grill_branches_payment_vouchers.status',
+                        'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                        'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                        'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                        'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                        'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                        'lolo_pinoy_grill_branches_codes.module_id',
+                        'lolo_pinoy_grill_branches_codes.module_code',
+                        'lolo_pinoy_grill_branches_codes.module_name')
+                        ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                        ->where('lolo_pinoy_grill_branches_payment_vouchers.pv_id', NULL)
+                        ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleNameVoucher)
+                        ->whereDate('lolo_pinoy_grill_branches_payment_vouchers.created_at', '=', date($getDateToday))
+                        ->where('lolo_pinoy_grill_branches_payment_vouchers.method_of_payment', $cash)
+                        ->orderBy('lolo_pinoy_grill_branches_payment_vouchers.id', 'desc')
+                        ->sum('lolo_pinoy_grill_branches_payment_vouchers.amount_due');
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                            'lolo_pinoy_grill_branches_payment_vouchers')
+                            ->select( 
+                            'lolo_pinoy_grill_branches_payment_vouchers.id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                            'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                            'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                            'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                            'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                            'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                            'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                            'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.created_at',
+                            'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                            'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.category',
+                            'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                            'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.status',
+                            'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                            'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                            'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                            'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                            'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                            'lolo_pinoy_grill_branches_codes.module_id',
+                            'lolo_pinoy_grill_branches_codes.module_code',
+                            'lolo_pinoy_grill_branches_codes.module_name')
+                            ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                            ->where('lolo_pinoy_grill_branches_payment_vouchers.pv_id', NULL)
+                            ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleNameVoucher)
+                            ->whereDate('lolo_pinoy_grill_branches_payment_vouchers.created_at', '=', date($getDateToday))
+                            ->where('lolo_pinoy_grill_branches_payment_vouchers.method_of_payment', $check)
+                            ->orderBy('lolo_pinoy_grill_branches_payment_vouchers.id', 'desc')
+                            ->get()->toArray(); 
+            
+        $totalAmountCheck = DB::table(
+                                'lolo_pinoy_grill_branches_payment_vouchers')
+                                ->select( 
+                                'lolo_pinoy_grill_branches_payment_vouchers.id',
+                                'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                                'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                                'lolo_pinoy_grill_branches_payment_vouchers.date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                                'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                                'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                                'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                                'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                                'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                                'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                                'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                                'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                                'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                                'lolo_pinoy_grill_branches_payment_vouchers.created_at',
+                                'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                                'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.category',
+                                'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                                'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.status',
+                                'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                                'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                                'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                                'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                                'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                                'lolo_pinoy_grill_branches_codes.module_id',
+                                'lolo_pinoy_grill_branches_codes.module_code',
+                                'lolo_pinoy_grill_branches_codes.module_name')
+                                ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                                ->where('lolo_pinoy_grill_branches_payment_vouchers.pv_id', NULL)
+                                ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleNameVoucher)
+                                ->whereDate('lolo_pinoy_grill_branches_payment_vouchers.created_at', '=', date($getDateToday))
+                                ->where('lolo_pinoy_grill_branches_payment_vouchers.method_of_payment', $check)
+                                ->orderBy('lolo_pinoy_grill_branches_payment_vouchers.id', 'desc')
+                                ->sum('lolo_pinoy_grill_branches_payment_vouchers.amount_due');
+        
+        $pdf = PDF::loadView('printSummaryLoloPinoyGrillBranches',  compact('getDateToday', 'getTransactionListCashes', 
+        'totalAmountCash', 'getTransactionListChecks', 'totalAmountCheck'));
+        
+        return $pdf->download('lolo-pinoy-grill-branches-summary-report.pdf');
+
+    }
+
+    public function summaryReport(){
+         
+        $getDateToday = date("Y-m-d");
+
+        $moduleName = "Requisition Slip";
+        $requisitionLists = DB::table(
+                        'lolo_pinoy_grill_branches_requisition_slips')
+                        ->select(
+                            'lolo_pinoy_grill_branches_requisition_slips.id',
+                            'lolo_pinoy_grill_branches_requisition_slips.user_id',
+                            'lolo_pinoy_grill_branches_requisition_slips.rs_id',
+                            'lolo_pinoy_grill_branches_requisition_slips.rs_number',
+                            'lolo_pinoy_grill_branches_requisition_slips.requesting_department',
+                            'lolo_pinoy_grill_branches_requisition_slips.request_date',
+                            'lolo_pinoy_grill_branches_requisition_slips.date_released',
+                            'lolo_pinoy_grill_branches_requisition_slips.quantity_requested',
+                            'lolo_pinoy_grill_branches_requisition_slips.unit',
+                            'lolo_pinoy_grill_branches_requisition_slips.item',
+                            'lolo_pinoy_grill_branches_requisition_slips.quantity_given',
+                            'lolo_pinoy_grill_branches_requisition_slips.released_by',
+                            'lolo_pinoy_grill_branches_requisition_slips.received_by',
+                            'lolo_pinoy_grill_branches_requisition_slips.created_by',
+                            'lolo_pinoy_grill_branches_requisition_slips.created_at',
+                            'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                            'lolo_pinoy_grill_branches_codes.module_id',
+                            'lolo_pinoy_grill_branches_codes.module_code',
+                            'lolo_pinoy_grill_branches_codes.module_name')
+                        ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_requisition_slips.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                        ->where('lolo_pinoy_grill_branches_requisition_slips.rs_id', NULL)
+                        ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleName)
+                        ->whereDate('lolo_pinoy_grill_branches_requisition_slips.created_at', '=', date($getDateToday))
+                        ->orderBy('lolo_pinoy_grill_branches_requisition_slips.id', 'desc')
+                        ->get()->toArray();
+
+        $transactionLists = DB::table(
+                            'lolo_pinoy_grill_branches_requisition_slips')
+                            ->select(
+                                'lolo_pinoy_grill_branches_requisition_slips.id',
+                                'lolo_pinoy_grill_branches_requisition_slips.user_id',
+                                'lolo_pinoy_grill_branches_requisition_slips.rs_id',
+                                'lolo_pinoy_grill_branches_requisition_slips.rs_number',
+                                'lolo_pinoy_grill_branches_requisition_slips.requesting_department',
+                                'lolo_pinoy_grill_branches_requisition_slips.request_date',
+                                'lolo_pinoy_grill_branches_requisition_slips.date_released',
+                                'lolo_pinoy_grill_branches_requisition_slips.quantity_requested',
+                                'lolo_pinoy_grill_branches_requisition_slips.unit',
+                                'lolo_pinoy_grill_branches_requisition_slips.item',
+                                'lolo_pinoy_grill_branches_requisition_slips.quantity_given',
+                                'lolo_pinoy_grill_branches_requisition_slips.released_by',
+                                'lolo_pinoy_grill_branches_requisition_slips.received_by',
+                                'lolo_pinoy_grill_branches_requisition_slips.created_by',
+                                'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                                'lolo_pinoy_grill_branches_codes.module_id',
+                                'lolo_pinoy_grill_branches_codes.module_code',
+                                'lolo_pinoy_grill_branches_codes.module_name')
+                            ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_requisition_slips.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                            ->where('lolo_pinoy_grill_branches_requisition_slips.rs_id', NULL)
+                            ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleName)
+                            ->whereDate('lolo_pinoy_grill_branches_requisition_slips.created_at', '=', date($getDateToday))
+                            ->orderBy('lolo_pinoy_grill_branches_requisition_slips.id', 'desc')
+                            ->get()->toArray();
+
+        $moduleNamePetty = "Petty Cash";
+        $pettyCashLists = DB::table(
+                                'lolo_pinoy_grill_branches_petty_cashes')
+                                ->select( 
+                                'lolo_pinoy_grill_branches_petty_cashes.id',
+                                'lolo_pinoy_grill_branches_petty_cashes.user_id',
+                                'lolo_pinoy_grill_branches_petty_cashes.pc_id',
+                                'lolo_pinoy_grill_branches_petty_cashes.date',
+                                'lolo_pinoy_grill_branches_petty_cashes.petty_cash_name',
+                                'lolo_pinoy_grill_branches_petty_cashes.petty_cash_summary',
+                                'lolo_pinoy_grill_branches_petty_cashes.amount',
+                                'lolo_pinoy_grill_branches_petty_cashes.created_by',
+                                'lolo_pinoy_grill_branches_petty_cashes.created_at',
+                                'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                                'lolo_pinoy_grill_branches_codes.module_id',
+                                'lolo_pinoy_grill_branches_codes.module_code',
+                                'lolo_pinoy_grill_branches_codes.module_name')
+                                ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_petty_cashes.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                                ->where('lolo_pinoy_grill_branches_petty_cashes.pc_id', NULL)
+                                ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleNamePetty)
+                                ->whereDate('lolo_pinoy_grill_branches_petty_cashes.created_at', '=', date($getDateToday))
+                                ->orderBy('lolo_pinoy_grill_branches_petty_cashes.id', 'desc')
+                                ->get()->toArray();
+                    
+            $moduleNameVoucher = "Payment Voucher";
+            $getTransactionLists = DB::table(
+                                'lolo_pinoy_grill_branches_payment_vouchers')
+                                ->select( 
+                                'lolo_pinoy_grill_branches_payment_vouchers.id',
+                                'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                                'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                                'lolo_pinoy_grill_branches_payment_vouchers.date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                                'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                                'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                                'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                                'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                                'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                                'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                                'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                                'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                                'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                                'lolo_pinoy_grill_branches_payment_vouchers.created_at',
+                                'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                                'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.category',
+                                'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                                'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.status',
+                                'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                                'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                                'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                                'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                                'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                                'lolo_pinoy_grill_branches_codes.module_id',
+                                'lolo_pinoy_grill_branches_codes.module_code',
+                                'lolo_pinoy_grill_branches_codes.module_name')
+                                ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                                ->where('lolo_pinoy_grill_branches_payment_vouchers.pv_id', NULL)
+                                ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleNameVoucher)
+                                ->whereDate('lolo_pinoy_grill_branches_payment_vouchers.created_at', '=', date($getDateToday))
+                               
+                                ->orderBy('lolo_pinoy_grill_branches_payment_vouchers.id', 'desc')
+                                ->get()->toArray();
+        
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                            'lolo_pinoy_grill_branches_payment_vouchers')
+                            ->select( 
+                            'lolo_pinoy_grill_branches_payment_vouchers.id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                            'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                            'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                            'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                            'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                            'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                            'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                            'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.created_at',
+                            'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                            'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.category',
+                            'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                            'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.status',
+                            'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                            'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                            'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                            'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                            'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                            'lolo_pinoy_grill_branches_codes.module_id',
+                            'lolo_pinoy_grill_branches_codes.module_code',
+                            'lolo_pinoy_grill_branches_codes.module_name')
+                            ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                            ->where('lolo_pinoy_grill_branches_payment_vouchers.pv_id', NULL)
+                            ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleNameVoucher)
+                            ->whereDate('lolo_pinoy_grill_branches_payment_vouchers.created_at', '=', date($getDateToday))
+                            ->where('lolo_pinoy_grill_branches_payment_vouchers.method_of_payment', $cash)
+                            ->orderBy('lolo_pinoy_grill_branches_payment_vouchers.id', 'desc')
+                            ->get()->toArray(); 
+            
+        $totalAmountCash = DB::table(
+                        'lolo_pinoy_grill_branches_payment_vouchers')
+                        ->select( 
+                        'lolo_pinoy_grill_branches_payment_vouchers.id',
+                        'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                        'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                        'lolo_pinoy_grill_branches_payment_vouchers.date',
+                        'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                        'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                        'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                        'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                        'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                        'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                        'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                        'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                        'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                        'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                        'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                        'lolo_pinoy_grill_branches_payment_vouchers.created_at',
+                        'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                        'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                        'lolo_pinoy_grill_branches_payment_vouchers.category',
+                        'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                        'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                        'lolo_pinoy_grill_branches_payment_vouchers.status',
+                        'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                        'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                        'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                        'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                        'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                        'lolo_pinoy_grill_branches_codes.module_id',
+                        'lolo_pinoy_grill_branches_codes.module_code',
+                        'lolo_pinoy_grill_branches_codes.module_name')
+                        ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                        ->where('lolo_pinoy_grill_branches_payment_vouchers.pv_id', NULL)
+                        ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleNameVoucher)
+                        ->whereDate('lolo_pinoy_grill_branches_payment_vouchers.created_at', '=', date($getDateToday))
+                        ->where('lolo_pinoy_grill_branches_payment_vouchers.method_of_payment', $cash)
+                        ->orderBy('lolo_pinoy_grill_branches_payment_vouchers.id', 'desc')
+                        ->sum('lolo_pinoy_grill_branches_payment_vouchers.amount_due');
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                            'lolo_pinoy_grill_branches_payment_vouchers')
+                            ->select( 
+                            'lolo_pinoy_grill_branches_payment_vouchers.id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                            'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                            'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                            'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                            'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                            'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                            'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                            'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.created_at',
+                            'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                            'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.category',
+                            'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                            'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.status',
+                            'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                            'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                            'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                            'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                            'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                            'lolo_pinoy_grill_branches_codes.module_id',
+                            'lolo_pinoy_grill_branches_codes.module_code',
+                            'lolo_pinoy_grill_branches_codes.module_name')
+                            ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                            ->where('lolo_pinoy_grill_branches_payment_vouchers.pv_id', NULL)
+                            ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleNameVoucher)
+                            ->whereDate('lolo_pinoy_grill_branches_payment_vouchers.created_at', '=', date($getDateToday))
+                            ->where('lolo_pinoy_grill_branches_payment_vouchers.method_of_payment', $check)
+                            ->orderBy('lolo_pinoy_grill_branches_payment_vouchers.id', 'desc')
+                            ->get()->toArray(); 
+            
+        $totalAmountCheck = DB::table(
+                                'lolo_pinoy_grill_branches_payment_vouchers')
+                                ->select( 
+                                'lolo_pinoy_grill_branches_payment_vouchers.id',
+                                'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                                'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                                'lolo_pinoy_grill_branches_payment_vouchers.date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                                'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                                'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                                'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                                'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                                'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                                'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                                'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                                'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                                'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                                'lolo_pinoy_grill_branches_payment_vouchers.created_at',
+                                'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                                'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.category',
+                                'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                                'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.status',
+                                'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                                'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                                'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                                'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                                'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                                'lolo_pinoy_grill_branches_codes.module_id',
+                                'lolo_pinoy_grill_branches_codes.module_code',
+                                'lolo_pinoy_grill_branches_codes.module_name')
+                                ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                                ->where('lolo_pinoy_grill_branches_payment_vouchers.pv_id', NULL)
+                                ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleNameVoucher)
+                                ->whereDate('lolo_pinoy_grill_branches_payment_vouchers.created_at', '=', date($getDateToday))
+                                ->where('lolo_pinoy_grill_branches_payment_vouchers.method_of_payment', $check)
+                                ->orderBy('lolo_pinoy_grill_branches_payment_vouchers.id', 'desc')
+                                ->sum('lolo_pinoy_grill_branches_payment_vouchers.amount_due');
+
+                
+        return view('lolo-pinoy-grill-branches-summary-report', compact('requisitionLists', 
+        'transactionLists', 'pettyCashLists', 'getTransactionLists', 'getTransactionListCashes', 
+        'totalAmountCash', 'getTransactionListChecks', 'totalAmountCheck'));
+    }
 
     public function printPettyCash($id){
         $getPettyCash = LoloPinoyGrillBranchesPettyCash::find($id);
@@ -58,12 +1011,10 @@ class LoloPinoyGrillBranchesController extends Controller
 
         $name  = $firstName." ".$lastName;
 
-        $pettyCash = LoloPinoyGrillBranchesPettyCash::find($id);
 
         $addNew = new LoloPinoyGrillBranchesPettyCash([
             'user_id'=>$user->id,
             'pc_id'=>$id,
-            'petty_cash_no'=>$pettyCash->petty_cash_no,
             'date'=>$request->get('date'),
             'petty_cash_summary'=>$request->get('pettyCashSummary'),
             'amount'=>$request->get('amount'),
@@ -88,7 +1039,26 @@ class LoloPinoyGrillBranchesController extends Controller
     }
 
     public function editPettyCash($id){
-        $pettyCash = LoloPinoyGrillBranchesPettyCash::find($id);
+        $moduleName = "Petty Cash";
+        $pettyCash = DB::table(
+                                'lolo_pinoy_grill_branches_petty_cashes')
+                                ->select( 
+                                'lolo_pinoy_grill_branches_petty_cashes.id',
+                                'lolo_pinoy_grill_branches_petty_cashes.user_id',
+                                'lolo_pinoy_grill_branches_petty_cashes.pc_id',
+                                'lolo_pinoy_grill_branches_petty_cashes.date',
+                                'lolo_pinoy_grill_branches_petty_cashes.petty_cash_name',
+                                'lolo_pinoy_grill_branches_petty_cashes.petty_cash_summary',
+                                'lolo_pinoy_grill_branches_petty_cashes.amount',
+                                'lolo_pinoy_grill_branches_petty_cashes.created_by',
+                                'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                                'lolo_pinoy_grill_branches_codes.module_id',
+                                'lolo_pinoy_grill_branches_codes.module_code',
+                                'lolo_pinoy_grill_branches_codes.module_name')
+                                ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_petty_cashes.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                                ->where('lolo_pinoy_grill_branches_petty_cashes.id', $id)
+                                ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleName)
+                                ->get();
 
         $pettyCashSummaries = LoloPinoyGrillBranchesPettyCash::where('pc_id', $id)->get()->toArray();
         return view('edit-lolo-pinoy-grill-branches-petty-cash', compact('pettyCash', 'pettyCashSummaries'));
@@ -103,25 +1073,24 @@ class LoloPinoyGrillBranchesController extends Controller
 
         $name  = $firstName." ".$lastName;
 
-         //get the latest insert id query in table petty cash petty cash no
-        $dataCashNo = DB::select('SELECT id, petty_cash_no FROM lolo_pinoy_grill_branches_petty_cashes ORDER BY id DESC LIMIT 1');
+         //get the latest insert id query in table lolo_pinoy_grill_branches_codes
+        $dataCashNo = DB::select('SELECT id, lolo_pinoy_branches_code  FROM lolo_pinoy_grill_branches_codes ORDER BY id DESC LIMIT 1');
 
          //if code is not zero add plus 1 petty cash no
-        if(isset($dataCashNo[0]->petty_cash_no) != 0){
+        if(isset($dataCashNo[0]->lolo_pinoy_branches_code ) != 0){
             //if code is not 0
-            $newProd = $dataCashNo[0]->petty_cash_no +1;
-            $uProd = sprintf("%06d",$newProd);   
+            $newProd = $dataCashNo[0]->lolo_pinoy_branches_code  +1;
+            $uPetty = sprintf("%06d",$newProd);   
 
         }else{
             //if code is 0 
             $newProd = 1;
-            $uProd = sprintf("%06d",$newProd);
+            $uPetty = sprintf("%06d",$newProd);
         } 
 
         $addPettyCash = new LoloPinoyGrillBranchesPettyCash([
             'user_id'=>$user->id,
             'date'=>$request->date,
-            'petty_cash_no'=>$uProd,
             'petty_cash_name'=>$request->pettyCashName,
             'petty_cash_summary'=>$request->pettyCashSummary,
             'created_by'=>$name,
@@ -129,8 +1098,22 @@ class LoloPinoyGrillBranchesController extends Controller
 
         $addPettyCash->save();
         $insertId = $addPettyCash->id;
+
+        $moduleCode = "PC-";
+        $moduleName = "Petty Cash";
+
+        $lpBranches = new LoloPinoyGrillBranchesCode([
+            'user_id'=>$user->id,
+            'lolo_pinoy_branches_code'=>$uPetty,
+            'module_id'=>$insertId,
+            'module_code'=>$moduleCode,
+            'module_name'=>$moduleName,
+        ]);
+        $lpBranches->save();
       
         return response()->json($insertId);
+
+
     }
 
 
@@ -429,7 +1412,26 @@ class LoloPinoyGrillBranchesController extends Controller
 
     //
     public function viewPettyCash($id){
-        $getPettyCash = LoloPinoyGrillBranchesPettyCash::find($id);
+        $moduleName = "Petty Cash";
+        $getPettyCash = DB::table(
+                                'lolo_pinoy_grill_branches_petty_cashes')
+                                ->select( 
+                                'lolo_pinoy_grill_branches_petty_cashes.id',
+                                'lolo_pinoy_grill_branches_petty_cashes.user_id',
+                                'lolo_pinoy_grill_branches_petty_cashes.pc_id',
+                                'lolo_pinoy_grill_branches_petty_cashes.date',
+                                'lolo_pinoy_grill_branches_petty_cashes.petty_cash_name',
+                                'lolo_pinoy_grill_branches_petty_cashes.petty_cash_summary',
+                                'lolo_pinoy_grill_branches_petty_cashes.amount',
+                                'lolo_pinoy_grill_branches_petty_cashes.created_by',
+                                'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                                'lolo_pinoy_grill_branches_codes.module_id',
+                                'lolo_pinoy_grill_branches_codes.module_code',
+                                'lolo_pinoy_grill_branches_codes.module_name')
+                                ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_petty_cashes.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                                ->where('lolo_pinoy_grill_branches_petty_cashes.id', $id)
+                                ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleName)
+                                ->get();
 
         $getPettyCashSummaries = LoloPinoyGrillBranchesPettyCash::where('pc_id', $id)->get()->toArray();
 
@@ -445,7 +1447,28 @@ class LoloPinoyGrillBranchesController extends Controller
 
     //
     public function pettyCashList(){
-        $pettyCashLists = LoloPinoyGrillBranchesPettyCash::where('pc_id', NULL)->orderBy('id', 'desc')->get()->toArray();
+        $moduleName = "Petty Cash";
+        $pettyCashLists = DB::table(
+                                'lolo_pinoy_grill_branches_petty_cashes')
+                                ->select( 
+                                'lolo_pinoy_grill_branches_petty_cashes.id',
+                                'lolo_pinoy_grill_branches_petty_cashes.user_id',
+                                'lolo_pinoy_grill_branches_petty_cashes.pc_id',
+                                'lolo_pinoy_grill_branches_petty_cashes.date',
+                                'lolo_pinoy_grill_branches_petty_cashes.petty_cash_name',
+                                'lolo_pinoy_grill_branches_petty_cashes.petty_cash_summary',
+                                'lolo_pinoy_grill_branches_petty_cashes.amount',
+                                'lolo_pinoy_grill_branches_petty_cashes.created_by',
+                                'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                                'lolo_pinoy_grill_branches_codes.module_id',
+                                'lolo_pinoy_grill_branches_codes.module_code',
+                                'lolo_pinoy_grill_branches_codes.module_name')
+                                ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_petty_cashes.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                                ->where('lolo_pinoy_grill_branches_petty_cashes.pc_id', NULL)
+                                ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleName)
+                                ->orderBy('lolo_pinoy_grill_branches_petty_cashes.id', 'desc')
+                                ->get()->toArray();
+
         return view('lolo-pinoy-grill-branches-petty-cash-list', compact('pettyCashLists'));
     }
 
@@ -464,8 +1487,33 @@ class LoloPinoyGrillBranchesController extends Controller
 
     //
     public function reqTransactionList(){
-    
-        $requisitionLists = LoloPinoyGrillBranchesRequisitionSlip::where('rs_id', NULL)->get()->toArray();
+        $moduleName = "Requisition Slip";
+        $requisitionLists = DB::table(
+                        'lolo_pinoy_grill_branches_requisition_slips')
+                        ->select(
+                            'lolo_pinoy_grill_branches_requisition_slips.id',
+                            'lolo_pinoy_grill_branches_requisition_slips.user_id',
+                            'lolo_pinoy_grill_branches_requisition_slips.rs_id',
+                            'lolo_pinoy_grill_branches_requisition_slips.rs_number',
+                            'lolo_pinoy_grill_branches_requisition_slips.requesting_department',
+                            'lolo_pinoy_grill_branches_requisition_slips.request_date',
+                            'lolo_pinoy_grill_branches_requisition_slips.date_released',
+                            'lolo_pinoy_grill_branches_requisition_slips.quantity_requested',
+                            'lolo_pinoy_grill_branches_requisition_slips.unit',
+                            'lolo_pinoy_grill_branches_requisition_slips.item',
+                            'lolo_pinoy_grill_branches_requisition_slips.quantity_given',
+                            'lolo_pinoy_grill_branches_requisition_slips.released_by',
+                            'lolo_pinoy_grill_branches_requisition_slips.received_by',
+                            'lolo_pinoy_grill_branches_requisition_slips.created_by',
+                            'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                            'lolo_pinoy_grill_branches_codes.module_id',
+                            'lolo_pinoy_grill_branches_codes.module_code',
+                            'lolo_pinoy_grill_branches_codes.module_name')
+                        ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_requisition_slips.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                        ->where('lolo_pinoy_grill_branches_requisition_slips.rs_id', NULL)
+                        ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleName)
+                        ->orderBy('lolo_pinoy_grill_branches_requisition_slips.id', 'desc')
+                        ->get()->toArray();
 
         return view('lolo-pinoy-grill-branches-requisition-slip-transaction-list', compact('requisitionLists'));
     }
@@ -487,7 +1535,33 @@ class LoloPinoyGrillBranchesController extends Controller
 
     //
     public function requisitionSlipList(){
-        $requisitionLists = LoloPinoyGrillBranchesRequisitionSlip::where('rs_id', NULL)->get()->toArray();
+        $moduleName = "Requisition Slip";
+        $requisitionLists = DB::table(
+                        'lolo_pinoy_grill_branches_requisition_slips')
+                        ->select(
+                            'lolo_pinoy_grill_branches_requisition_slips.id',
+                            'lolo_pinoy_grill_branches_requisition_slips.user_id',
+                            'lolo_pinoy_grill_branches_requisition_slips.rs_id',
+                            'lolo_pinoy_grill_branches_requisition_slips.rs_number',
+                            'lolo_pinoy_grill_branches_requisition_slips.requesting_department',
+                            'lolo_pinoy_grill_branches_requisition_slips.request_date',
+                            'lolo_pinoy_grill_branches_requisition_slips.date_released',
+                            'lolo_pinoy_grill_branches_requisition_slips.quantity_requested',
+                            'lolo_pinoy_grill_branches_requisition_slips.unit',
+                            'lolo_pinoy_grill_branches_requisition_slips.item',
+                            'lolo_pinoy_grill_branches_requisition_slips.quantity_given',
+                            'lolo_pinoy_grill_branches_requisition_slips.released_by',
+                            'lolo_pinoy_grill_branches_requisition_slips.received_by',
+                            'lolo_pinoy_grill_branches_requisition_slips.created_by',
+                            'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                            'lolo_pinoy_grill_branches_codes.module_id',
+                            'lolo_pinoy_grill_branches_codes.module_code',
+                            'lolo_pinoy_grill_branches_codes.module_name')
+                        ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_requisition_slips.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                        ->where('lolo_pinoy_grill_branches_requisition_slips.rs_id', NULL)
+                        ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleName)
+                        ->orderBy('lolo_pinoy_grill_branches_requisition_slips.id', 'desc')
+                        ->get()->toArray();
 
         return view('lolo-pinoy-grill-branches-all-lists', compact('requisitionLists'));
     }
@@ -553,7 +1627,45 @@ class LoloPinoyGrillBranchesController extends Controller
 
     //
     public function printPayables($id){
-        $payableId = LoloPinoyGrillBranchesPaymentVoucher::find($id);
+        $moduleName = "Payment Voucher";
+        $payableId = DB::table(
+                            'lolo_pinoy_grill_branches_payment_vouchers')
+                            ->select( 
+                            'lolo_pinoy_grill_branches_payment_vouchers.id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                            'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                            'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                            'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                            'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                            'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                            'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                            'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                            'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.category',
+                            'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                            'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.status',
+                            'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                            'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                            'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                            'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                            'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                            'lolo_pinoy_grill_branches_codes.module_id',
+                            'lolo_pinoy_grill_branches_codes.module_code',
+                            'lolo_pinoy_grill_branches_codes.module_name')
+                            ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                            ->where('lolo_pinoy_grill_branches_payment_vouchers.id', $id)
+                            ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleName)
+                            ->get();
+
+       //
 
         //getParticular details
         $getParticulars = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
@@ -578,14 +1690,52 @@ class LoloPinoyGrillBranchesController extends Controller
 
     //
     public function viewPayableDetails($id){
-    
-        //
-        $viewPaymentDetail = LoloPinoyGrillBranchesPaymentVoucher::find($id);
+         $moduleName = "Payment Voucher";
+         $viewPaymentDetail = DB::table(
+                             'lolo_pinoy_grill_branches_payment_vouchers')
+                             ->select( 
+                             'lolo_pinoy_grill_branches_payment_vouchers.id',
+                             'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                             'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                             'lolo_pinoy_grill_branches_payment_vouchers.date',
+                             'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                             'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                             'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                             'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                             'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                             'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                             'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                             'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                             'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                             'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                             'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                             'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                             'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                             'lolo_pinoy_grill_branches_payment_vouchers.category',
+                             'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                             'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                             'lolo_pinoy_grill_branches_payment_vouchers.status',
+                             'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                             'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                             'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                             'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                             'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                             'lolo_pinoy_grill_branches_codes.module_id',
+                             'lolo_pinoy_grill_branches_codes.module_code',
+                             'lolo_pinoy_grill_branches_codes.module_name')
+                             ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                             ->where('lolo_pinoy_grill_branches_payment_vouchers.id', $id)
+                             ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleName)
+                             ->get();
 
         //
         $getViewPaymentDetails = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
-        return view('view-lolo-pinoy-grill-branches-payable-details', compact('viewPaymentDetail', 'getViewPaymentDetails'));
+           //getParticular details
+           $getParticulars = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+       
+
+        return view('view-lolo-pinoy-grill-branches-payable-details', compact('viewPaymentDetail', 'getViewPaymentDetails', 'getParticulars'));
     }
 
     //
@@ -736,9 +1886,44 @@ class LoloPinoyGrillBranchesController extends Controller
 
     //
     public function editPayablesDetail(Request $request, $id){
+            $moduleName = "Payment Voucher";
+            $transactionList = DB::table(
+                                'lolo_pinoy_grill_branches_payment_vouchers')
+                                ->select( 
+                                'lolo_pinoy_grill_branches_payment_vouchers.id',
+                                'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                                'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                                'lolo_pinoy_grill_branches_payment_vouchers.date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                                'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                                'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                                'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                                'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                                'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                                'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                                'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                                'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                                'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                                'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                                'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.category',
+                                'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                                'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                                'lolo_pinoy_grill_branches_payment_vouchers.status',
+                                'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                                'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                                'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                                'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                                'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                                'lolo_pinoy_grill_branches_codes.module_id',
+                                'lolo_pinoy_grill_branches_codes.module_code',
+                                'lolo_pinoy_grill_branches_codes.module_name')
+                                ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                                ->where('lolo_pinoy_grill_branches_payment_vouchers.id', $id)
+                                ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleName)
+                                ->get();
 
-        //
-        $transactionList = LoloPinoyGrillBranchesPaymentVoucher::find($id);
 
           //
         $getChequeNumbers = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
@@ -765,10 +1950,48 @@ class LoloPinoyGrillBranchesController extends Controller
 
     //
     public function transactionList(){
-         //
-        $getTransactionLists = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', NULL)->orderBy('id', 'desc')->get()->toArray();
+        $moduleName = "Payment Voucher";
+        $getTransactionLists = DB::table(
+                            'lolo_pinoy_grill_branches_payment_vouchers')
+                            ->select( 
+                            'lolo_pinoy_grill_branches_payment_vouchers.id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.user_id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.pv_id',
+                            'lolo_pinoy_grill_branches_payment_vouchers.date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.paid_to',
+                            'lolo_pinoy_grill_branches_payment_vouchers.account_no',
+                            'lolo_pinoy_grill_branches_payment_vouchers.account_name',
+                            'lolo_pinoy_grill_branches_payment_vouchers.particulars',
+                            'lolo_pinoy_grill_branches_payment_vouchers.amount',
+                            'lolo_pinoy_grill_branches_payment_vouchers.method_of_payment',
+                            'lolo_pinoy_grill_branches_payment_vouchers.prepared_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.approved_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.date_apprroved',
+                            'lolo_pinoy_grill_branches_payment_vouchers.received_by_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.created_by',
+                            'lolo_pinoy_grill_branches_payment_vouchers.invoice_number',
+                            'lolo_pinoy_grill_branches_payment_vouchers.issued_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.category',
+                            'lolo_pinoy_grill_branches_payment_vouchers.amount_due',
+                            'lolo_pinoy_grill_branches_payment_vouchers.delivered_date',
+                            'lolo_pinoy_grill_branches_payment_vouchers.status',
+                            'lolo_pinoy_grill_branches_payment_vouchers.cheque_number',
+                            'lolo_pinoy_grill_branches_payment_vouchers.cheque_amount',
+                            'lolo_pinoy_grill_branches_payment_vouchers.sub_category',
+                            'lolo_pinoy_grill_branches_payment_vouchers.sub_category_account_id',
+                            'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                            'lolo_pinoy_grill_branches_codes.module_id',
+                            'lolo_pinoy_grill_branches_codes.module_code',
+                            'lolo_pinoy_grill_branches_codes.module_name')
+                            ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                            ->where('lolo_pinoy_grill_branches_payment_vouchers.pv_id', NULL)
+                            ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleName)
+                            ->orderBy('lolo_pinoy_grill_branches_payment_vouchers.id', 'desc')
+                            ->get()->toArray();
 
-           //get total amount due
+        
+        
+        //get total amount due
         $status = "FULLY PAID AND RELEASED";
 
         $totalAmoutDue = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', NULL)->where('status' ,'!=', $status)->sum('amount_due');
@@ -792,13 +2015,13 @@ class LoloPinoyGrillBranchesController extends Controller
 
         $name  = $firstName." ".$lastName;
 
-            //get the latest insert id query in table payment voucher ref number
-        $dataVoucherRef = DB::select('SELECT id, voucher_ref_number FROM lolo_pinoy_grill_branches_payment_vouchers ORDER BY id DESC LIMIT 1');
+        //get the latest insert id query in table lolo_pinoy_grill_branches_codes
+        $dataVoucherRef = DB::select('SELECT id, lolo_pinoy_branches_code  FROM lolo_pinoy_grill_branches_codes ORDER BY id DESC LIMIT 1');
 
           //if code is not zero add plus 1 reference number
-        if(isset($dataVoucherRef[0]->voucher_ref_number) != 0){
+        if(isset($dataVoucherRef[0]->lolo_pinoy_branches_code) != 0){
             //if code is not 0
-            $newVoucherRef = $dataVoucherRef[0]->voucher_ref_number +1;
+            $newVoucherRef = $dataVoucherRef[0]->lolo_pinoy_branches_code +1;
             $uVoucher = sprintf("%06d",$newVoucherRef);   
 
         }else{
@@ -841,7 +2064,6 @@ class LoloPinoyGrillBranchesController extends Controller
                 'method_of_payment'=>$request->get('paymentMethod'),
                 'account_name'=>$request->get('accountName'),
                 'invoice_number'=>$request->get('invoiceNumber'),
-                'voucher_ref_number'=>$uVoucher,
                 'issued_date'=>$request->get('issuedDate'),
                 'delivered_date'=>$request->get('deliveredDate'),
                 'amount'=>$request->get('amount'),
@@ -859,10 +2081,21 @@ class LoloPinoyGrillBranchesController extends Controller
              
              $insertedId = $addPaymentVoucher->id;
 
+             $moduleCode = "PV-";
+             $moduleName = "Payment Voucher";
+             
+             $lpBranches = new LoloPinoyGrillBranchesCode([
+                'user_id'=>$user->id,
+                'lolo_pinoy_branches_code'=>$uVoucher,
+                'module_id'=>$insertedId,
+                'module_code'=>$moduleCode,
+                'module_name'=>$moduleName,
+             ]);
+             $lpBranches->save();
 
-            return redirect('lolo-pinoy-grill-branches/edit-lolo-pinoy-grill-branches-payables-detail/'.$insertedId);
+            return redirect()->route('editPayablesDetailLpBranches', ['id'=>$insertedId]);
         }else{
-             return redirect('lolo-pinoy-grill-branches/payment-voucher-form/')->with('error', 'Invoice Number Already Exists. Please See Transaction List For Your Reference');
+            return redirect()->route('paymentVoucherFormLpBranches')->with('error', 'Invoice Number Already Exists. Please See Transaction List For Your Reference');
         }
 
     }
@@ -930,26 +2163,24 @@ class LoloPinoyGrillBranchesController extends Controller
             'quantityGiven'=>'required',
         ]);
 
-         //get the latest insert id query in table purchase order
-        $data = DB::select('SELECT id, rs_number FROM lolo_pinoy_grill_branches_requisition_slips ORDER BY id DESC LIMIT 1');
-
-         //if code is not zero add plus 1
-         if(isset($data[0]->rs_number) != 0){
-            //if code is not 0
-            $newNum = $data[0]->rs_number +1;
-            $uNum = sprintf("%06d",$newNum);    
-        }else{
-            //if code is 0 
-            $newNum = 1;
-            $uNum = sprintf("%06d",$newNum);
-        }
+          //get the latest insert id query in table lolo_pinoy_grill_branches_codes
+          $data = DB::select('SELECT id, lolo_pinoy_branches_code FROM lolo_pinoy_grill_branches_codes ORDER BY id DESC LIMIT 1');
+        
+          //if code is not zero add plus 1
+           if(isset($data[0]->lolo_pinoy_branches_code) != 0){
+              //if code is not 0
+              $newNum = $data[0]->lolo_pinoy_branches_code +1;
+              $uNum = sprintf("%06d",$newNum);    
+          }else{
+              //if code is 0 
+              $newNum = 1;
+              $uNum = sprintf("%06d",$newNum);
+          }
        
         $requisitionSlip = new LoloPinoyGrillBranchesRequisitionSlip([
             'user_id' =>$user->id,
-
             'requesting_department'=>$request->get('requestingDept'),
             'request_date'=>$request->get('requestDate'),
-            'rs_number'=>$uNum,
             'date_released'=>$request->get('dateReleased'),
             'quantity_requested'=>$request->get('quantityRequested'),
             'unit'=>$request->get('unit'),
@@ -962,10 +2193,21 @@ class LoloPinoyGrillBranchesController extends Controller
         $requisitionSlip->save();
 
         $insertedId = $requisitionSlip->id;
+
+        $moduleCode = "RS-";
+        $moduleName = "Requisition Slip";
+
+        $lpBranches = new LoloPinoyGrillBranchesCode([
+            'user_id'=>$user->id,
+            'lolo_pinoy_branches_code'=>$uNum,
+            'module_id'=>$insertedId,
+            'module_code'=>$moduleCode,
+            'module_name'=>$moduleName,
+        ]);
+        $lpBranches->save();
+
+        return redirect()->route('editLpBranches', ['id'=>$insertedId]);
          
-        return redirect('lolo-pinoy-grill-branches/edit/'.$insertedId);
-
-
     }
 
     /**

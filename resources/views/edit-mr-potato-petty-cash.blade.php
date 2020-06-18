@@ -1,4 +1,4 @@
-@extends('layouts.lolo-pinoy-grill-branches-app')
+@extends('layouts.mr-potato-app')
 @section('title', 'Edit Petty Cash |')
 @section('content')
 <script>
@@ -14,20 +14,20 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="wrapper">
-     @include('sidebar.sidebar-lolo-pinoy-grill-branches')
+     @include('sidebar.sidebar-mr-potato')
      <div id="content-wrapper">  
         <div class="container-fluid">
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">Lolo Pinoy Grill Branches</a>
+                <a href="#">Mr Potato</a>
               </li>
               <li class="breadcrumb-item active">Petty Cash</li>
               <li class="breadcrumb-item active">Edit Petty Cash</li>
             </ol>
-            <a href="{{ url('lolo-pinoy-grill-branches/petty-cash-list') }}">Back to Lists</a>
+            <a href="{{ url('mr-potato/petty-cash-list') }}">Back to Lists</a>
             <div class="col-lg-12">
-                 <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill Commissary">
+                 <img src="{{ asset('images/mr-potato.png')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Mr Potato">
             	  
                     <h4 class="text-center"><u>Edit Petty Cash </u></h4>
             </div>
@@ -39,7 +39,7 @@
                           	  Petty Cash
                         </div>
                         <div class="card-body">
-                            <form action="{{ action('LoloPinoyGrillBranchesController@updatePettyCash', $pettyCash[0]->id) }}" method="post">
+                            <form action="{{ action('MrPotatoController@updatePettyCash', $pettyCash[0]->id) }}" method="post">
                             {{csrf_field()}}
                                 <input name="_method" type="hidden" value="PATCH">
                                 @if(session('editSuccess'))
@@ -50,7 +50,7 @@
                                     
                                     <div class="col-lg-2">
                                         <label>Petty Cash No</label>
-                                        <input type="text" name="pettyCashNo" class="form-control" value="{{ $pettyCash[0]->module_code}}{{ $pettyCash[0]->lolo_pinoy_branches_code}}" disabled="disabled"/>
+                                        <input type="text" name="pettyCashNo" class="form-control" value="{{ $pettyCash[0]->module_code}}{{ $pettyCash[0]->mr_potato_code}}" disabled="disabled"/>
                                     </div>
                                     <div class="col-lg-2">
                                         <label>Date</label>
@@ -88,7 +88,7 @@
                                 @if(session('addNewSuccess'))
 	                             	<p class="alert alert-success">{{ Session::get('addNewSuccess') }}</p>
 	                            @endif
-                                <form action ="{{ action('LoloPinoyGrillBranchesController@addNewPettyCash', $pettyCash[0]->id) }}" method="post">
+                                <form action ="{{ action('MrPotatoController@addNewPettyCash', $pettyCash[0]->id) }}" method="post">
                                 {{csrf_field()}}
                                 <div class="form-row">
                                      <div class="col-lg-12">
@@ -126,7 +126,7 @@
                                 <p class="alert alert-success">{{ Session::get('updatePC') }}</p>
                             @endif
                              @foreach($pettyCashSummaries as $pettyCashSummary) 
-                             <form action="{{ action('LoloPinoyGrillBranchesController@updatePC', $pettyCashSummary['id']) }}" method="post">
+                             <form action="{{ action('MrPotatoController@updatePC', $pettyCashSummary['id']) }}" method="post">
                                  {{csrf_field()}}
                                  <input name="_method" type="hidden" value="PATCH">
                                 
@@ -183,7 +183,7 @@
           if(x){
               $.ajax({
                 type: "DELETE",
-                url: '/lolo-pinoy-grill-branches/petty-cash/delete/' + id,
+                url: '/mr-potato/petty-cash/delete/' + id,
                 data:{
                   _method: 'delete', 
                   "_token": "{{ csrf_token() }}",

@@ -24,10 +24,10 @@
 		            </ol>
 		             <div class="col-lg-12">
 					 	<div style="float:left; margin-left:140px">
-							<img src="{{ asset('images/ribos.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Mr Potato">
+							<img src="{{ asset('images/digitized-logos/ribos-food-corp.png')}}" width="360" height="250" class="img-responsive mx-auto d-block" alt="Mr Potato">
 						</div>
 						<div style="flaot:left; margin-right:50px;">
-							 <img src="{{ asset('images/mr-potato.png')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Mr Potato">
+							 <img src="{{ asset('images/digitized-logos/mr-potato.png')}}" width="330" height="250" class="img-responsive mx-auto d-block" alt="Mr Potato">
 						</div>
 		            	 <h4 class="text-center"><u>PURCHASE ORDER</u></h4>
 		            </div>
@@ -144,7 +144,8 @@
 	                            	</div>
 	                            	<br>
 	                                <div>
-	                                    <input type="submit" class="btn btn-success float-right" value="Add Purchase Order" />
+									<button type="submit" class="btn btn-success btn-lg float-right"><i class="fas fa-save"></i> Save Purchase Order</button>
+	                    
 	                                </div>
 	                           	  </form>
 	                            </div>
@@ -153,6 +154,17 @@
 		            </div>
     		</div>
     	</div>
+		<!-- Sticky Footer -->
+	<footer class="sticky-footer">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright © Ribos Food Corporation 2019</span>
+            <br>
+            <br>
+            <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
+          </div>
+        </div>
+      </footer>
 </div>
 <script>
 	//unit

@@ -25,7 +25,7 @@
                   <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                       <tr>
-                        <th>RS #</th>
+                        <th>RS No</th>
                         <th>Requesting Department</th>
                         <th>Request Date</th>
                         <th>Date Released</th>
@@ -34,7 +34,7 @@
                     </thead>
                     <tfoot>
                       <tr>
-                        <th>RS #</th>
+                        <th>RS No</th>
                         <th>Requesting Department</th>
                         <th>Request Date</th>
                         <th>Date Released</th>
@@ -45,11 +45,11 @@
                       @foreach($requisitionLists as $requisitionList)
                       <tr>
                        
-                        <td><a href="#">R.S-{{ $requisitionList['rs_number'] }}</a></td>
-                        <td>{{ $requisitionList['requesting_department'] }}</td>
-                        <td>{{ $requisitionList['request_date'] }}</td>
-                        <td>{{ $requisitionList['date_released'] }}</td>
-                        <td>{{ $requisitionList['created_by']}}</td>
+                        <td>{{ $requisitionList->module_code}}{{ $requisitionList->lolo_pinoy_branches_code }}</td>
+                        <td>{{ $requisitionList->requesting_department }}</td>
+                        <td>{{ $requisitionList->request_date }}</td>
+                        <td>{{ $requisitionList->date_released }}</td>
+                        <td>{{ $requisitionList->created_by }}</td>
                       </tr>
                       @endforeach
                     </tbody>

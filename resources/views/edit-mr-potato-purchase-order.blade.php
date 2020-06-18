@@ -19,12 +19,12 @@
             </ol>
             <a href="{{ url('mr-potato/purchase-order-lists') }}">Back to Lists</a>
              <div class="col-lg-12">
-                <div style="float:left; margin-left:140px">
-                  <img src="{{ asset('images/ribos.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Mr Potato">
-                </div>
-                <div style="flaot:left; margin-right:50px;">
-                  <img src="{{ asset('images/mr-potato.png')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Mr Potato">
-                </div>
+              <div style="float:left; margin-left:140px">
+                <img src="{{ asset('images/digitized-logos/ribos-food-corp.png')}}" width="360" height="250" class="img-responsive mx-auto d-block" alt="Mr Potato">
+              </div>
+              <div style="flaot:left; margin-right:50px;">
+                <img src="{{ asset('images/digitized-logos/mr-potato.png')}}" width="330" height="250" class="img-responsive mx-auto d-block" alt="Mr Potato">
+              </div>
             	 <h4 class="text-center"><u>PURCHASE ORDER</u></h4>
             </div>
             <div class="row">
@@ -150,7 +150,7 @@
 	                            @endif
                               <div class="form-group">  
                                   <div class="form-row">
-                                      <div class="col-lg-8">
+                                      <div class="col-lg-12">
                                           <label>Particulars</label>
                                           <select class="form-control" name="particulars">
                                           <option value="0">--Please Select--</option>
@@ -184,7 +184,7 @@
                                   </div>
                                   <div class="form-group">
                                       <div class="form-row">
-                                          <div class="col-lg-8">
+                                          <div class="col-lg-12">
                                               <label>QTY</label>
                                               <input type="text" name="qty" class="form-control"  />
                                             
@@ -193,7 +193,7 @@
                                   </div>
                                   <div class="form-group">
                                       <div class="form-row">
-                                        <div class="col-lg-8">
+                                        <div class="col-lg-12">
                                             <label>Unit</label>
                                             <div id="app-unit1">
                                               <select class="form-control" name="unit">
@@ -213,7 +213,7 @@
 											            @endif
                                   <div class="form-group">
                                       <div class="form-row">
-                                          <div class="col-lg-8">
+                                          <div class="col-lg-12">
                                               <label>Price</label>
                                               <input type="text" name="price" class="form-control" required="required" />
                                             
@@ -222,7 +222,7 @@
                                   </div>
                                   <div class="form-group">
                                       <div class="form-row">
-                                          <div class="col-lg-8">
+                                          <div class="col-lg-12">
                                             <label>Subtotal</label>
                                             <input type="text" name="subtotal" class="form-control"  value="{{ $purchaseOrder['subtotal']}}" />
                                             
@@ -230,7 +230,7 @@
                                       </div>
                                   </div>
                                   <div>
-                                    @if($user->role_type == 1)
+                                    @if(Auth::user()['role_type'] == 1)
                                        <input type="submit" class="btn btn-primary" value="Add" />
                                     @endif
                                    </div>
@@ -323,7 +323,7 @@
 
                                             <input type="hidden" name="poId" value="{{ $purchaseOrder['id'] }}" />
                                             <input type="submit" class="btn btn-success" value="Update" />
-                                            @if($user->role_type == 1)
+                                            @if(Auth::user()['role_type'] == 1)
                                             <a id="delete" onClick="confirmDelete('{{ $pOrder['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
                                             @endif
                                         </div> 

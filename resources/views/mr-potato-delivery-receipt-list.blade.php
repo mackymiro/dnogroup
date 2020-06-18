@@ -1,4 +1,4 @@
-@extends('layouts.lolo-pinoy-grill-commissary-app')
+@extends('layouts.mr-potato-app')
 @section('title', 'Delivery Receipt Lists| ')
 @section('content')
 <script>
@@ -62,28 +62,28 @@
 						  					</tfoot>
 						  					<tbody>
 				  							@foreach($getAllDeliveryReceipts as $getAllDeliveryReceipt)
-					  						<tr id="deletedId{{ $getAllDeliveryReceipt['id'] }}">
+					  						<tr id="deletedId{{ $getAllDeliveryReceipt->id }}">
 					  							<td>
 			               						 @if(Auth::user()['role_type'] !== 3)
-			  										<a href="{{ url('mr-potato/edit-mr-potato-delivery-receipt/'.$getAllDeliveryReceipt['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+			  										<a href="{{ url('mr-potato/edit-mr-potato-delivery-receipt/'.$getAllDeliveryReceipt->id ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
 			               						 @endif
 			              						@if(Auth::user()['role_type'] == 1)
-					  								<a id="delete" onClick="confirmDelete('{{ $getAllDeliveryReceipt['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+					  								<a id="delete" onClick="confirmDelete('{{ $getAllDeliveryReceipt->id}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
 			              						@endif
-									  				<a href="{{ url('mr-potato/view-mr-potato-delivery-receipt/'.$getAllDeliveryReceipt['id'])}}" title="View"><i class="fas fa-low-vision"></i></a>
+									  				<a href="{{ url('mr-potato/view-mr-potato-delivery-receipt/'.$getAllDeliveryReceipt->id)}}" title="View"><i class="fas fa-low-vision"></i></a>
 						                         
 			  									</td>
-					  							<td>{{ $getAllDeliveryReceipt['dr_no']}}</td>
-					  							<td>{{ $getAllDeliveryReceipt['date']}}</td>
-					  							<td>{{ $getAllDeliveryReceipt['delivered_to']}}</td>
-					  							<td>{{ $getAllDeliveryReceipt['address']}}</td>
-					  							<td>{{ $getAllDeliveryReceipt['product_id']}}</td>
-					  							<td>{{ $getAllDeliveryReceipt['qty']}}</td>
-					  							<td>{{ $getAllDeliveryReceipt['unit']}}</td>
-					  							<td>{{ $getAllDeliveryReceipt['item_description']}}</td>
-					  							<td><?php echo number_format($getAllDeliveryReceipt['unit_price'], 2)?></td>
-					  							<td><?php echo number_format($getAllDeliveryReceipt['amount'], 2)?></td>
-					  							<td>{{ $getAllDeliveryReceipt['created_by'] }}</td>
+					  							<td><p style="width:160px;">{{ $getAllDeliveryReceipt->module_code}}{{ $getAllDeliveryReceipt->mr_potato_code}}</p></td>
+					  							<td>{{ $getAllDeliveryReceipt->date}}</td>
+												<td>{{ $getAllDeliveryReceipt->delivered_to}}</td>
+												<td>{{ $getAllDeliveryReceipt->address}}</td>
+												<td>{{ $getAllDeliveryReceipt->product_id }}</td>  
+												<td>{{ $getAllDeliveryReceipt->qty}}</td>
+												<td>{{ $getAllDeliveryReceipt->unit}}</td>
+												<td>{{ $getAllDeliveryReceipt->item_description}}</td>
+												<td><?php echo number_format($getAllDeliveryReceipt->unit_price, 2)?></td>
+												<td><?php echo number_format($getAllDeliveryReceipt->amount, 2)?></td>
+												<td>{{ $getAllDeliveryReceipt->created_by }}</td>
 					  						</tr>
 					  						@endforeach
 					  					</tbody>
@@ -114,7 +114,7 @@
         if(x){
             $.ajax({
               type: "DELETE",
-              url: '/mr-potato/delete-delivery-receipt/' + id,
+              url: '/mr-potato/delete/dr/' + id,
               data:{
                 _method: 'delete', 
                 "_token": "{{ csrf_token() }}",

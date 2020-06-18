@@ -1,6 +1,15 @@
 @extends('layouts.mr-potato-app')
 @section('title', 'Delivery Receipt Form |')
 @section('content')
+<script>
+    $(function() {
+        $( ".datepicker" ).datepicker();
+    });
+</script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="wrapper">
 	<!-- Sidebar -->
     	@include('sidebar.sidebar-mr-potato')
@@ -29,7 +38,10 @@
                         		{{ csrf_field() }}
                         	<div class="form-group">
                         		<div class="form-row">
-                    				
+                    				<div class="col-md-2">
+                    					<label>Date</label>
+                    					<input type="text" name="date" class="datepicker form-control" />
+                    				</div>
                     				<div class="col-md-4">
                     					<label>Delivered To</label>
                     					<input type="text" name="deliveredTo" class="form-control" required="required" />

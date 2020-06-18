@@ -27,7 +27,7 @@
 		                              View Delivery Receipt
 		                         <div class="float-right">
                                
-                                 	<a href="{{ action('MrPotatoController@printDelivery', $viewDeliveryReceipt['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                                 	<a href="{{ action('MrPotatoController@printDelivery', $viewDeliveryReceipt[0]->id)}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                                
                              	 </div>
 		                    </div>
@@ -39,11 +39,11 @@
 	                    				 		<thead>
 	                    				 			<tr>
 		                    				 			<th width="30%">Delivered To</th>
-		                    				 			<th>{{ $viewDeliveryReceipt['delivered_to']}}</th>
+		                    				 			<th>{{ $viewDeliveryReceipt[0]->delivered_to}}</th>
 	                    				 			</tr>
 	                    				 			<tr>
 	                    				 				<th>Address</th>
-	                    				 				<th>{{ $viewDeliveryReceipt['address']}}</th>
+	                    				 				<th>{{ $viewDeliveryReceipt[0]->address}}</th>
 	                    				 			</tr>
 	                    				 		</thead>	
 	                    				 	</table>
@@ -53,11 +53,11 @@
                     				 			<thead>
                     				 				<tr>
                     				 					<th width="30%">DR No</th>
-                    				 					<th>{{ $viewDeliveryReceipt['dr_no']}}</th>
+                    				 					<th>{{ $viewDeliveryReceipt[0]->module_code}}{{ $viewDeliveryReceipt[0]->mr_potato_code}}</th>
                     				 				</tr>
                     				 				<tr>
                     				 					<th>Date</th>
-                    				 					<th>{{ $viewDeliveryReceipt['date']}}</th>
+                    				 					<th>{{ $viewDeliveryReceipt[0]->date}}</th>
                     				 				</tr>
                     				 			</thead>
                     				 		</table>
@@ -77,12 +77,12 @@
 	                    			</thead>
 	                    			<tbody>
 	                    				<tr>
-	                    					<td>{{ $viewDeliveryReceipt['product_id']}}</td>
-	                    					<td>{{ $viewDeliveryReceipt['qty']}}</td>
-	                    					<td>{{ $viewDeliveryReceipt['unit']}}</td>
-	                    					<td>{{ $viewDeliveryReceipt['item_description']}}</td>
-	                    					<td><?php echo number_format($viewDeliveryReceipt['unit_price'], 2)?></td>
-	                    					<td><?php echo number_format($viewDeliveryReceipt['amount'], 2)?></td>
+	                    					<td>{{ $viewDeliveryReceipt[0]->product_id}}</td>
+	                    					<td>{{ $viewDeliveryReceipt[0]->qty}}</td>
+	                    					<td>{{ $viewDeliveryReceipt[0]->unit}}</td>
+	                    					<td>{{ $viewDeliveryReceipt[0]->item_description}}</td>
+	                    					<td><?php echo number_format($viewDeliveryReceipt[0]->unit_price, 2)?></td>
+	                    					<td><?php echo number_format($viewDeliveryReceipt[0]->amount, 2)?></td>
 	                    				</tr>
 
 	                    				@foreach($deliveryReceipts as $deliveryReceipt)
@@ -117,7 +117,7 @@
                        			 	</thead>
                        			 	<tbody>
                        			 		<tr>
-                       			 			<td>{{ $viewDeliveryReceipt['created_by']}}</td>
+                       			 			<td>{{ $viewDeliveryReceipt[0]->created_by}}</td>
                        			 			<td></td>
                        			 			<td></td>
                        			 		</tr>

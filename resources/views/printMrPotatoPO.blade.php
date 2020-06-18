@@ -24,9 +24,7 @@
 	 <div id="content-wrapper">
  		<div class="container-fluid">
  				<div  style="margin-top:60px;">
-				 	<div style="float:left; margin-left:140px">
-						<img src="{{ asset('images/ribos(1).jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Mr Potato">
-					</div>
+				 	
 					<div style="flaot:left; margin-right:50px;">
 						<img style="margin-left:250px;" src="{{ asset('images/pdf/mr-potato.png')}}"   alt="Mr Potato">
 					</div>
@@ -49,11 +47,11 @@
                                          <thead>
                                             <tr>
                                                 <th width="20%">Branch Location</th>
-                                                <th>{{ $purchaseOrder['branch_location'] }}</th>
+                                                <th>{{ $purchaseOrder[0]->branch_location }}</th>
                                             </tr>
                                             <tr>
                                                 <th>Ordered By</th>
-                                                <th>{{ $purchaseOrder['ordered_by']}}</th>
+                                                <th>{{ $purchaseOrder[0]->ordered_by}}</th>
                                             </tr>
                                         </thead>
                                       
@@ -63,12 +61,12 @@
 	                              <table >
 	                                   <thead>
                                             <tr>
-                                                <th width="20%">P.O Number</th>
-                                                <th><a href="#">P.O-{{ $purchaseOrder['p_o_number'] }}</a></th>
+                                                <th width="20%">PO No</th>
+                                                <th>{{ $purchaseOrder[0]->module_code}}{{ $purchaseOrder[0]->mr_potato_code}}</th>
                                             </tr>
                                             <tr>
                                                 <th>Date</th>
-                                                <th> {{ $purchaseOrder['date'] }}</th>
+                                                <th> {{ $purchaseOrder[0]->date }}</th>
                                             </tr>
                                         </thead>
 	                              </table>
@@ -93,12 +91,12 @@
                                   </thead>
                                   <tbody>
                                   		<tr style="border:1px solid black;">
-	                                  	 	<td style="text-align:center; border: 1px solid black;">{{ $purchaseOrder['particulars']}}</td>
-	                                  	 	<td style="text-align:center; border: 1px solid black;">{{ $purchaseOrder['qty']}}</td>
-                                            <td style="text-align:center; border: 1px solid black;">{{ $purchaseOrder['unit']}}</td>
-                                            <td style="text-align:center; border: 1px solid black;"><?php echo number_format($purchaseOrder['price'], 2); ?></td>
+	                                  	 	<td style="text-align:center; border: 1px solid black;">{{ $purchaseOrder[0]->particulars}}</td>
+	                                  	 	<td style="text-align:center; border: 1px solid black;">{{ $purchaseOrder[0]->qty}}</td>
+                                            <td style="text-align:center; border: 1px solid black;">{{ $purchaseOrder[0]->unit}}</td>
+                                            <td style="text-align:center; border: 1px solid black;"><?php echo number_format($purchaseOrder[0]->price, 2); ?></td>
                                   	 	
-	                                  	 	<td style="text-align:center; border: 1px solid black;"><?php echo number_format($purchaseOrder['subtotal'], 2); ?></td>
+	                                  	 	<td style="text-align:center; border: 1px solid black;"><?php echo number_format($purchaseOrder[0]->subtotal, 2); ?></td>
                                   	 	</tr>
                                   	 	 @foreach($pOrders as $pOrder)
                                         <tr style="border:1px solid black;">
@@ -134,7 +132,7 @@
                            				<tr>
                            					<td>
                            						________________________<br>
-                           						{{ $purchaseOrder['created_by']}}
+                           						{{ $purchaseOrder[0]->created_by}}
 
                            					</td>
                            					<td>
