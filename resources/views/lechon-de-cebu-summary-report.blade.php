@@ -718,14 +718,15 @@
                                                     
                                                         @endforeach
                                                 </tbody>
-                                                <table class="table table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th width="15%" class="bg-info" style="color:white;">Total:</th>
-                                                            <th class="bg-success" style="color:white"><?php echo number_format($totalAmountCashes, 2);?></th>
-                                                        </tr>
-                                                    </thead>
-                                                 </table>
+                                               
+                                            </table>
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="15%" class="bg-info" style="color:white;">Total:</th>
+                                                        <th class="bg-success" style="color:white"><?php echo number_format($totalAmountCashes, 2);?></th>
+                                                    </tr>
+                                                </thead>
                                             </table>
                                         </div>
                                         <br>

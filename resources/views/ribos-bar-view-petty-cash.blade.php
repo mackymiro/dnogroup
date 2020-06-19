@@ -16,9 +16,9 @@
             </ol>
             <a href="{{ url('/ribos-bar/petty-cash-list') }}">Back to Lists</a>
             <div class="col-lg-12">
-                <img src="{{ asset('images/ribos.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
-	            	 
-	             
+                   <img src="{{ asset('images/digitized-logos/ribos-food-corp.png')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
+            		  
+                 
                 <h4 class="text-center"><u>PETTY CASH SUMMARY</u></h4>
             </div>
             <div class="row">
@@ -28,7 +28,7 @@
                             <i class="fas fa-money-bill-alt"></i>
                             Petty Cash Summary
                             <div class="float-right">
-                               <a href="{{ action('RibosBarController@printPettyCash', $getPettyCash['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                               <a href="{{ action('RibosBarController@printPettyCash', $getPettyCash[0]->id)}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                              </div>
                            
                         </div>
@@ -40,11 +40,11 @@
                                          <thead>
                                             <tr>
                                                 <th width="30%">Petty Cash No</th>
-                                                <th>Ptyrb-{{ $getPettyCash['petty_cash_no'] }}</th>
+                                                <th>{{ $getPettyCash[0]->module_code}}{{ $getPettyCash[0]->ribos_bar_code}}</th>
                                             </tr>
                                             <tr>
                                                 <th>Date</th>
-                                                <th>{{ $getPettyCash['date'] }}</th>
+                                                <th>{{ $getPettyCash[0]->date }}</th>
                                             </tr>
                                            
                                         </thead>
@@ -56,11 +56,11 @@
                                            
                                             <tr>
                                                 <th>Petty Cash Name</th>
-                                                <th> {{ $getPettyCash['petty_cash_name'] }} </th>
+                                                <th> {{ $getPettyCash[0]->petty_cash_name }} </th>
                                             </tr>
                                             <tr>
                                                 <th>Petty Cash Summary</th>
-                                                <th>{{ $getPettyCash['petty_cash_summary'] }}</th>
+                                                <th>{{ $getPettyCash[0]->petty_cash_summary }}</th>
                                             </tr>
                                         </thead>
                                          </table>

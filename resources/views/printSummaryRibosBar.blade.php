@@ -24,7 +24,7 @@
 	 <div id="content-wrapper">
  		<div class="container-fluid">
  				<div  style="margin-top:60px;">
-            	 <img style="margin-left: 250px;" src="{{ asset('images/pdf/mr-potato.png')}}"   alt="Mr Potato">
+            	 <img style="margin-left: 170px;" src="{{ asset('images/ribos.jpg')}}"   alt="Ribo's Bar">
             	 	 <p >
 		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
 						Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
@@ -59,7 +59,7 @@
 									@foreach($getAllSalesInvoices as $getAllSalesInvoice)
 									<tr style="border:1px solid black;">
                                         <td style="text-align:center; border: 1px solid black;">{{ $getAllSalesInvoice->invoice_number}}</td>
-										<td style="text-align:center; border: 1px solid black;">{{ $getAllSalesInvoice->module_code}}{{ $getAllSalesInvoice->mr_potato_code}}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $getAllSalesInvoice->module_code}}{{ $getAllSalesInvoice->ribos_bar_code}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $getAllSalesInvoice->date}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getAllSalesInvoice->ordered_by}}</td>
                                         <td style="text-align:center; border: 1px solid black;"><?php echo number_format($getAllSalesInvoice->amount, 2); ?></td>
@@ -91,14 +91,7 @@
 									</tr>
 								</thead>
 								<tbody>
-									 @foreach($getAllDeliveryReceipts as $getAllDeliveryReceipt)
-									<tr style="border:1px solid black;">
-										<td style="text-align:center; border: 1px solid black;">{{ $getAllDeliveryReceipt->module_code}}{{ $getAllDeliveryReceipt->mr_potato_code}}</td>
-										<td style="text-align:center; border: 1px solid black;">{{ $getAllDeliveryReceipt->date}}</td>
-                                        <td style="text-align:center; border: 1px solid black;"><?php echo number_format($getAllDeliveryReceipt->total, 2);?></td>
-                                        <td style="text-align:center; border: 1px solid black;">{{ $getAllDeliveryReceipt->created_by }}</td>
-									</tr>
-									@endforeach
+									
 								</tbody>	
 						    </table>
                             <br>
@@ -106,7 +99,7 @@
                                 <thead>
                                     <tr  style="border:1px solid black;">
                                         <th width="15%" style="text-align:center; border: 1px solid black;">Total:</th>
-                                        <th  style="text-align:center; border: 1px solid black;"><?php echo number_format($totalDeliveryReceipt, 2);?></th>
+                                        <th  style="text-align:center; border: 1px solid black;"><?php //echo number_format($totalDeliveryReceipt, 2);?></th>
                                     </tr>
                                 </thead>
                             </table>
@@ -127,7 +120,7 @@
 								<tbody>
 									@foreach($purchaseOrders as $purchaseOrder)
 									<tr style="border:1px solid black;">
-										<td style="text-align:center; border: 1px solid black;">{{ $purchaseOrder->module_code}}{{ $purchaseOrder->mr_potato_code}}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $purchaseOrder->module_code}}{{ $purchaseOrder->ribos_bar_code}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $purchaseOrder->date}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $purchaseOrder->paid_to}}</td>
                                         <td style="text-align:center; border: 1px solid black;"><?php echo number_format($purchaseOrder->total_price, 2);?></td>
@@ -141,7 +134,7 @@
                                 <thead>
                                     <tr>
                                         <th width="15%" style="text-align:center; border: 1px solid black;">Total:</th>
-                                        <th style="text-align:center; border: 1px solid black;"><?php //echo number_format($totalPOrder, 2);?></th>
+                                        <th style="text-align:center; border: 1px solid black;"><?php echo number_format($totalPOrder, 2);?></th>
                                     </tr>
                                 </thead>
                             </table>
@@ -193,12 +186,12 @@
                                 @foreach($getTransactionListCashes as $getTransactionListCash)
                                 <?php $id = $getTransactionListCash->id; ?>
                                 <?php
-                                    $amount1 = DB::table('mr_potato_payment_vouchers')
+                                    $amount1 = DB::table('ribos_bar_payment_vouchers')
                                                 ->select('*')
                                                 ->where('id', $id)
                                                 ->sum('amount');
                                     
-                                    $amount2 = DB::table('mr_potato_payment_vouchers')
+                                    $amount2 = DB::table('ribos_bar_payment_vouchers')
                                                 ->select('*')
                                                 ->where('pv_id', $id)
                                                 ->sum('amount');
@@ -208,7 +201,7 @@
 									<tr style="border:1px solid black;">
                                         <td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCash->invoice_number }}</td>
 										
-										<td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCash->module_code}}{{ $getTransactionListCash->mr_potato_code}}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCash->module_code}}{{ $getTransactionListCash->ribos_bar_code}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCash->issued_date}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCash->paid_to}}</td>
                                         <td style="text-align:center; border: 1px solid black;"><?php echo number_format($compute, 2); ?></td>
@@ -223,7 +216,7 @@
                                 <thead>
                                     <tr>
                                         <th width="15%"  style="text-align:center; border: 1px solid black;">Total:</th>
-                                        <th  style="text-align:center; border: 1px solid black;"><?php echo number_format($totalAmountCash, 2);?></th>
+                                        <th  style="text-align:center; border: 1px solid black;"><?php echo number_format($totalAmountCashes, 2);?></th>
                                     </tr>
                                 </thead>
                             </table>
@@ -247,12 +240,12 @@
                                 @foreach($getTransactionListChecks as $getTransactionListCheck)
                                 <?php $id = $getTransactionListCheck->id; ?>
                                 <?php
-                                    $amount1 = DB::table('mr_potato_payment_vouchers')
+                                    $amount1 = DB::table('ribos_bar_payment_vouchers')
                                                 ->select('*')
                                                 ->where('id', $id)
                                                 ->sum('amount');
                                     
-                                    $amount2 = DB::table('mr_potato_payment_vouchers')
+                                    $amount2 = DB::table('ribos_bar_payment_vouchers')
                                                 ->select('*')
                                                 ->where('pv_id', $id)
                                                 ->sum('amount');
@@ -262,7 +255,7 @@
 									<tr style="border:1px solid black;">
                                         <td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->invoice_number }}</td>
 										
-										<td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->module_code}}{{ $getTransactionListCheck->mr_potato_code}}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->module_code}}{{ $getTransactionListCheck->ribos_bar_code}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->issued_date}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->paid_to}}</td>
                                         <td style="text-align:center; border: 1px solid black;"><?php echo number_format($compute, 2); ?></td>

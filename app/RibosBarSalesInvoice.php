@@ -19,6 +19,7 @@ class RibosBarSalesInvoice extends Model
 		'item_description',
 		'unit_price',
 		'amount',
+		'total_amount',
 		'created_by',
     ];
 }

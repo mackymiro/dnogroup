@@ -16,8 +16,8 @@
               <li class="breadcrumb-item ">Payment Details</li>
             </ol>
              <div class="col-lg-12">
-            	   <img src="{{ asset('images/ribos.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
-                 
+             <img src="{{ asset('images/digitized-logos/ribos-food-corp.png')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
+             
             	 
             	 <h4 class="text-center"><u>PAYMENT DETAILS (PAYMENT VOUCHER)</u></h4>
             </div>
@@ -28,7 +28,7 @@
                               <i class="fas fa-file-invoice" aria-hidden="true"></i>
                             Payment Details
                              <div class="float-right">
-                               <a href="{{ action('RibosBarController@printPayablesRibosBar', $viewPaymentDetail['id']) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                               <a href="{{ action('RibosBarController@printPayablesRibosBar', $viewPaymentDetail[0]->id) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                              </div>
                         </div>
                           
@@ -41,19 +41,19 @@
                                               <thead>
                                                   <tr>
                                                       <th class="bg-info" style="color:white;">Paid To</th>
-                                                      <th class="bg-info" style="color:white;">{{ $viewPaymentDetail['paid_to']}}</th>
+                                                      <th class="bg-info" style="color:white;">{{ $viewPaymentDetail[0]->paid_to}}</th>
                                                   </tr>
                                                   <tr>
                                                       <th class="bg-success" style="color:white;" width="15%">Status</th>
-                                                      <th class="bg-success" style="color:white;">{{ $viewPaymentDetail['status']}}</th>
+                                                      <th class="bg-success" style="color:white;">{{ $viewPaymentDetail[0]->status}}</th>
                                                   </tr>
                                                   <tr>
                                                       <th width="15%">Date</th>
-                                                      <th>{{ $viewPaymentDetail['issued_date']}}</th>
+                                                      <th>{{ $viewPaymentDetail[0]->issued_date}}</th>
                                                   </tr>
                                                   <tr>
                                                       <th width="30%">Account Name</th>
-                                                      <th>{{ $viewPaymentDetail['account_name']}}</th>
+                                                      <th>{{ $viewPaymentDetail[0]->account_name}}</th>
                                                   </tr>
                                               </thead>
                                           </table>
@@ -62,20 +62,20 @@
                                           <table class="table table-bordered">
                                               <thead>
                                                   <tr>
-                                                      <th width="20%">Amount Due</th>
-                                                      <th><?php echo number_format($viewPaymentDetail['amount_due'], 2); ?></th>
+                                                      <th width="20%" class="bg-danger" style="color:#fff">Amount Due</th>
+                                                      <th class="bg-danger" style="color:#fff"><?php echo number_format($viewPaymentDetail[0]->amount_due, 2); ?></th>
                                                   </tr>
                                                   <tr>
                                                       <th width="20%">Invoice #</th>
-                                                      <th>{{ $viewPaymentDetail['invoice_number']}}</th>
+                                                      <th>{{ $viewPaymentDetail[0]->invoice_number}}</th>
                                                   </tr>
                                                   <tr>
-                                                      <th width="30%">Voucher Ref #</th>
-                                                      <th>RB-{{ $viewPaymentDetail['voucher_ref_number']}}</th>
+                                                      <th width="30%">PV No</th>
+                                                      <th>{{ $viewPaymentDetail[0]->module_code}}{{ $viewPaymentDetail[0]->ribos_bar_code}}</th>
                                                   </tr>
                                                   <tr>
                                                       <th width="30%">Payment Method</th>
-                                                      <th>{{ $viewPaymentDetail['method_of_payment']}}</th>
+                                                      <th>{{ $viewPaymentDetail[0]->method_of_payment}}</th>
                                                   </tr>
                                               </thead>
                                           </table>
@@ -92,9 +92,9 @@
                                     </thead>  
                                     <tbody> 
                                         <tr>
-                                            <td>{{ $viewPaymentDetail['issued_date'] }}</td>
-                                            <td>{{ $viewPaymentDetail['particulars']}}</td>
-                                            <td><?php echo number_format($viewPaymentDetail['amount'], 2); ?></td>
+                                            <td>{{ $viewPaymentDetail[0]->issued_date }}</td>
+                                            <td>{{ $viewPaymentDetail[0]->particulars}}</td>
+                                            <td><?php echo number_format($viewPaymentDetail[0]->amount, 2); ?></td>
                                         </tr>
                                         @foreach($getParticulars as $getParticular)
 										<tr>
@@ -108,12 +108,12 @@
                               <table class="table table-striped ">
                                     <thead>
                                         <tr>
-                                            @if($viewPaymentDetail['method_of_payment'] === "Cash")
+                                            @if($viewPaymentDetail[0]->method_of_payment === "CASH")
                                             <th>CASH NO ISSUED</th>
                                             <th>CASH AMOUNT</th>
                                             @else
-                                            <th>CHEQUE NO ISSUED</th>
-                                            <th>CHEQUE AMOUNT</th>
+                                            <th>CHECK NO ISSUED</th>
+                                            <th>CHECK AMOUNT</th>
                                             @endif
                                         </tr>
                                     </thead>
@@ -133,7 +133,7 @@
                                     <thead>
                                         <tr>
                                             <th width="15%">Prepared By</th>
-                                            <th>{{ $viewPaymentDetail['created_by']}}</th>
+                                            <th>{{ $viewPaymentDetail[0]->created_by}}</th>
                                         </tr>
                                     </thead>
                                   

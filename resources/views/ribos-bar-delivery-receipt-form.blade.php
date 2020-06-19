@@ -14,8 +14,8 @@
 		              <li class="breadcrumb-item active">Delivery Receipt Form</li>
 		            </ol>
 		            <div class="col-lg-12">
-		            	 <img src="{{ asset('images/ribos.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
-		            	 
+		            	<img src="{{ asset('images/digitized-logos/ribos-food-corp.png')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
+            	 
 		            	 <h4 class="text-center"><u>DELIVERY RECEIPT</u></h4>
 		            </div>
 		            <div class="row">
@@ -29,6 +29,10 @@
 	                            		{{ csrf_field() }}
                             		<div class="form-group">
                             			<div class="form-row">
+											<div class="col-md-2">
+		                    					<label>Date</label>
+		                    					<input type="text" name="date" class="datepicker form-control" required="required" />
+		                    				</div>
                         					<div class="col-md-4">
 		                    					<label>Delivered To</label>
 		                    					<input type="text" name="deliveredTo" class="form-control" required="required" />

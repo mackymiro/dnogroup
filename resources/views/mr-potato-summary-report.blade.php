@@ -636,7 +636,7 @@
                                                         <td>
                                                             @if($getTransactionListCheck->status != "FULLY PAID AND RELEASED")
                                                             <p style="width:250px;">
-                                                                <a href="{{ url('mr-potato/edit-mr-potato-payables-detail/'.$getTransactionListCheck->id) }}" title="Edit">{{ $getTransactionList->invoice_number}}</a>
+                                                                <a href="{{ url('mr-potato/edit-mr-potato-payables-detail/'.$getTransactionListCheck->id) }}" title="Edit">{{ $getTransactionListCheck->invoice_number}}</a>
                                                             </p>
                                                             @else
                                                             <p style="width:250px;">{{ $getTransactionListCheck->invoice_number}}</p>
@@ -653,7 +653,7 @@
                                                             <?php echo number_format($compute, 2); ?>
                                                         </td>
                                                         
-                                                        <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('mr-potato/view-mr-potato-payables-details/'.$getTransactionListCash->id) }}">{{ $getTransactionListCash->status }}</a></p></td>
+                                                        <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('mr-potato/view-mr-potato-payables-details/'.$getTransactionListCheck->id) }}">{{ $getTransactionListCheck->status }}</a></p></td>
                                                         <td><p style="width:190px;">{{ $getTransactionListCheck->created_by}}</p></td>
                                                     </tr>
                                                 

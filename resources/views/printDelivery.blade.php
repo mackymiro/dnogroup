@@ -83,7 +83,7 @@
                   <thead>
                      <tr >
                           <th style="font-size:16px; height: 1%; width: 25%;">DR No: </th>
-                          <th style="font-size:16px; height: 1%; ">{{ $deliveryId[0]->lechon_de_cebu_code }}</th>
+                          <th style="font-size:30px; height: 1%; "><span style="color:black;">{{ $deliveryId[0]->lechon_de_cebu_code }}</span></th>
                        </tr>
                      
                       <tr >
@@ -146,6 +146,11 @@
                      @endforeach
                 </tbody>
           </table>
+          <br>
+          <br>
+          <br>
+          <p style="font-size:16px; float:left; margin-left:10px; margin-top:120px;"><strong>Total Kilos: {{ $sumQty }}</strong></p>
+          <div style="clear:both; "></div>
           </div>
           
           <div style="border-style: groove; margin-top:-1px;  width:700px; height: 90px;">
@@ -162,9 +167,12 @@
                     </tr>
                     <tr >
                         <th style="font-size:16px; height: 1%; ">Checked By:</th>
-                        <th style="font-size:16px;"></th>
+                        <th style="font-size:16px; height: 1%; ">_____________________</th>
                     </tr>
-                   
+                    <tr  >
+                        <th style="font-size:16px; height: 1%; ">&nbsp;</th>
+                        <th style="font-size:16px;">Aprilane Q Maturan</th>
+                    </tr>
                    
                 </thead>
                 

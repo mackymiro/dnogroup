@@ -1,6 +1,15 @@
 @extends('layouts.ribos-bar-app')
 @section('title', 'Purchase Order Form |')
 @section('content')
+<script>
+ $(function() {
+    $( ".datepicker" ).datepicker();
+  });
+</script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <div id="wrapper">
 	<!-- Sidebar -->
@@ -16,7 +25,7 @@
             </ol>
 
             <div class="col-lg-12">
-            	 <img src="{{ asset('images/ribos.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
+            	<img src="{{ asset('images/digitized-logos/ribos-food-corp.png')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
             	 
             	 <h4 class="text-center"><u>PURCHASE ORDER</u></h4>
             </div>
@@ -48,7 +57,7 @@
                             				</div>
                                     <div class="col-lg-2">
                                        <label>Date</label> 
-                                       <input type="text" name="date" class="form-control"  required="required"/>
+                                       <input type="text" name="date" class="datepicker form-control"  required="required" autocomplete="off"/>
                                     </div>
 	                            		</div>
 	                            	</div>
@@ -79,7 +88,8 @@
 	                            	</div>
 	                            	<br>
 	                                <div>
-	                                    <input type="submit" class="btn btn-success float-right" value="Add Purchase Order" />
+                                    <button type="submit" class="btn btn-success btn-lg float-right"><i class="fas fa-save"></i> Save Purchase Order</button>
+                                    <br>
 	                                </div>
 	                           	  </form>
                           </div>

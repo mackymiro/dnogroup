@@ -45,11 +45,11 @@
                         <div class="table-responsive">
                                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                           <thead>
-					  					                        	<tr>
-                                                <th>Action</th>
-                                                <th>Date</th>
-                                                <th>Petty Cash No</th>
-				  							                      	<th>Name</th>
+                                            <tr>
+                                            <th>Action</th>
+                                            <th>Date</th>
+                                            <th>Petty Cash No</th>
+                                            <th>Name</th>
 				  									
                                             <th>Created By</th>
                                             </tr>
@@ -66,19 +66,19 @@
                                         </tfoot>
                                         <tbody>
                                             @foreach($pettyCashLists as $pettyCashList)
-                                            <tr id="deletedId{{ $pettyCashList['id']}}">    
+                                            <tr id="deletedId{{ $pettyCashList->id}}">    
                                                 <td>
                                                 @if(Auth::user()['role_type'] != 3)
-                                                    <a href="{{ url('ribos-bar/edit-petty-cash/'.$pettyCashList['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                                    <a href="{{ url('ribos-bar/edit-petty-cash/'.$pettyCashList->id) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                                     @endif
                                                 @if(Auth::user()['role_type'] == 1)
-                                                    <a id="delete" onClick="confirmDelete('{{ $pettyCashList['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                                                    <a id="delete" onClick="confirmDelete('{{ $pettyCashList->id}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
                                                 @endif
                                                 </td>
-                                                <td>{{ $pettyCashList['date']}}</td>
-                                                <td>Ptyrb-{{ $pettyCashList['petty_cash_no']}}</td>
-                                                <td><a href="{{ url('ribos-bar/petty-cash/view/'.$pettyCashList['id']) }}">{{ $pettyCashList['petty_cash_name']}}</a></td>
-                                                <td>{{ $pettyCashList['created_by']}}</td>
+                                                <td>{{ $pettyCashList->date}}</td>
+                                                <td>{{ $pettyCashList->module_code}}{{ $pettyCashList->ribos_bar_code}}</td>
+                                                <td><a href="{{ url('ribos-bar/petty-cash/view/'.$pettyCashList->id) }}">{{ $pettyCashList->petty_cash_name}}</a></td>
+                                                <td>{{ $pettyCashList->created_by}}</td>
                                             </tr> 
                                             @endforeach
                                         </tbody>

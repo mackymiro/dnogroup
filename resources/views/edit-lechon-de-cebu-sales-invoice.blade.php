@@ -31,8 +31,8 @@
 	          </ol>
 	          <a href="{{ url('lolo-pinoy-lechon-de-cebu/') }}">Back to Lists</a>
 	          <div class="col-lg-12">
-	        	 <img src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
-        	 	
+  					<img src="{{ asset('images/digitized-logos/lolo-pinoy-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
+
         	 		<h4 class="text-center"><u>SALES INVOICE</u></h4>
     		  </div>
     		  <div class="row">
@@ -156,7 +156,7 @@
 		                         			</div>
 	                         				 <div class="col-lg-2">
 	                                          <br>
-	                                          <input type="hidden" name="siId" value="{{ $getSalesInvoice['id'] }}" />
+	                                          <input type="hidden" id="siId" name="siId" value="{{ $getSalesInvoice['id'] }}" />
 	                                          <input type="submit" class="btn btn-success" value="Update" />
 	                                          @if($user->role_type == 1)
 	                                          <a id="delete" onClick="confirmDelete('{{ $sInvoice['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
@@ -195,7 +195,7 @@
 <script type="text/javascript">
 	const confirmDelete = (id) => {
 		const x = confirm("Do you want to delete this?");
-
+		const siId = $("#siId").val();
 			if(x){
 				$.ajax({
 				type: "DELETE",
@@ -203,7 +203,8 @@
 				data:{
 					_method: 'delete', 
 					"_token": "{{ csrf_token() }}",
-					"id": id
+					"id": id,
+					"siId":siId,
 				},
 				success: function(data){
 				

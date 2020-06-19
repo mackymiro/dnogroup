@@ -178,7 +178,7 @@
         if(x){
             $.ajax({
               type: "DELETE",
-              url: '/lolo-pinoy-lechon-de-cebu/delete-delivery-receipt/' + id,
+              url: '/lolo-pinoy-lechon-de-cebu/delete/dr/' + id,
               data:{
                 _method: 'delete', 
                 "_token": "{{ csrf_token() }}",

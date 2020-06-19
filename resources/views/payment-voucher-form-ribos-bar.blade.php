@@ -35,8 +35,8 @@
 	              <li class="breadcrumb-item ">Payment Voucher Form</li>
 	            </ol>
 	            <div class="col-lg-12">
-	            	  <img src="{{ asset('images/ribos.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
-	            	 
+	            		<img src="{{ asset('images/digitized-logos/ribos-food-corp.png')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
+            	 
 	            	 <h4 class="text-center"><u>PAYMENT VOUCHER</u></h4>
 	            </div>
 	            <div class="row">
@@ -205,8 +205,8 @@
   el: '#app-payment-method',
     data: {
       payments:[
-        { text:'Cash', value: 'Cash' },
-        { text:'Cheque', value: 'Cheque'}
+        { text:'CASH', value: 'CASH' },
+        { text:'CHECK', value: 'CHECK'}
       ]
     }
   })  

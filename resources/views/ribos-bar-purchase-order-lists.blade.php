@@ -26,7 +26,7 @@
 				  					<thead>
 				  						<tr>
 				  							<th>Action</th>
-			  								<th>PO #</th>
+			  								<th>PO No</th>
 			  								<th>Paid To</th>
 			  								<th>Date</th>
 			  								<th>Created by</th>
@@ -35,7 +35,7 @@
 				  					<tfoot>
 				  						<tr>
 				  							<th>Action</th>
-			  								<th>PO #</th>
+			  								<th>PO No</th>
 			  								<th>Paid To</th>
 			  								<th>Date</th>
 			  								<th>Created by</th>
@@ -43,20 +43,20 @@
 				  					</tfoot>
 				  					<tbody>
                       @foreach($purchaseOrders as $purchaseOrder)
-				  						<tr id="deletedId{{ $purchaseOrder['id'] }}">
+				  						<tr id="deletedId{{ $purchaseOrder->id }}">
 				  							<td>
                           @if(Auth::user()['role_type'] != 3)
-                          <a href="{{ url('ribos-bar/edit-ribos-bar-purchase-order/'.$purchaseOrder['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                          <a href="{{ url('ribos-bar/edit-ribos-bar-purchase-order/'.$purchaseOrder->id) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                           @endif
                           @if(Auth::user()['role_type'] == 1)
-				  								<a id="delete" onClick="confirmDelete('{{ $purchaseOrder['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+				  								<a id="delete" onClick="confirmDelete('{{ $purchaseOrder->id }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
                           @endif
-				  								<a href="{{ url('ribos-bar/view-ribos-bar-purchase-order/'.$purchaseOrder['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
+				  								<a href="{{ url('ribos-bar/view-ribos-bar-purchase-order/'.$purchaseOrder->id) }}" title="View"><i class="fas fa-low-vision"></i></a>
 				  							</td>
-                        <td><a href="#">P.O-{{ $purchaseOrder['p_o_number'] }}</a></td>
-                        <td>{{ $purchaseOrder['paid_to'] }}</td>
-                        <td>{{ $purchaseOrder['date'] }}</td>
-                        <td>{{ $purchaseOrder['created_by'] }}</td>
+                        <td>{{ $purchaseOrder->module_code}}{{ $purchaseOrder->ribos_bar_code }}</td>
+                        <td>{{ $purchaseOrder->paid_to }}</td>
+                        <td>{{ $purchaseOrder->date }}</td>
+                        <td>{{ $purchaseOrder->created_by }}</td>
 				  						</tr>
                       @endforeach
 				  					</tbody>
@@ -87,7 +87,7 @@
           if(x){
               $.ajax({
                 type: "DELETE",
-                url: '/ribos-bar/delete/' + id,
+                url: '/ribos-bar/delete/PO/' + id,
                 data:{
                   _method: 'delete', 
                   "_token": "{{ csrf_token() }}",

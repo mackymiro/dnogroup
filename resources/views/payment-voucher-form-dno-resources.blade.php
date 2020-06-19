@@ -22,7 +22,7 @@
 	              <li class="breadcrumb-item ">Payment Voucher Form</li>
 	            </ol>
 	            <div class="col-lg-12">
-	            	  <img src="{{ asset('images/dno-resources.jpg')}}" width="420" height="250" class="img-responsive mx-auto d-block" alt="DNO Resources and Development Corp">
+	            	  <img src="{{ asset('images/digitized-logos/dno-resources.png')}}" width="300" height="130" class="img-responsive mx-auto d-block" alt="DNO Resources and Development Corp">
 	            	 
 	            	 <h4 class="text-center"><u>PAYMENT VOUCHER</u></h4>
 	            </div>
@@ -41,7 +41,22 @@
                                     @endif
                           	  		<div class="form-group">
                       	  				<div class="form-row">
-                      	  						<div class="col-lg-4">
+                                      <div class="col-lg-2">
+                                          <label>Payment Method</label>
+                                          <div id="app-payment-method">
+                                              <select name="paymentMethod" class="payment form-control">
+                                                  <option value="0">--Please Select--</option>
+                                                  <option v-for="payment in payments" v-bind:value="payment.value">
+                                                    @{{ payment.text }}
+                                                  </option>
+                                              </select>
+                                          </div>
+                                      </div>
+                                      <div class="col-md-2">
+                                        <label>Invoice #</label>
+                                          <input type="text" name="invoiceNumber" class="form-control"  required="required" value="{{ old('invoiceNumber') }}" />
+                                      </div>
+                      	  						<div class="col-lg-2">
                       	  							<label>Paid To</label>
                       	  							<input type="text" name="paidTo" class="form-control" required="required" />
                       	  						</div>
@@ -50,21 +65,30 @@
                                           <strong>{{ $errors->first('paidTo') }}</strong>
                                         </span>
                                       @endif
-                    	  						  <div class="col-md-2">
-                                         <label>Invoice #</label>
-                                          <input type="text" name="invoiceNumber" class="form-control"  required="required" value="{{ old('invoiceNumber') }}" />
+                                      <div class="col-md-4">
+                                          <label>Account Name </label>
+                                          <input type="text" name="accountName" class="form-control"  />
                                       </div>
                       	  						<div class="col-md-2">
                                           <label>Issued Date </label>
                                           <input type="text" name="issuedDate" class="form-control" value="{{ old('issuedDate') }}" />
                                       </div>
-                                       <div class="col-md-2">
-                                          <label>Delivered Date </label>
-                                          <input type="text" name="deliveredDate" class="form-control" value="{{ old('deliveredDate') }}" />
-                                      </div>
-                                      
+                                     
                       	  				</div>
                           	  		</div>
+                                  <div class="form-group">
+                                    <div class="form-row">
+                                        <div  class="col-md-2">
+                                          <label>Category</label>
+                                          <select  name="category" class="category selcls form-control" > 
+                                              <option value="None">None</option>
+                                              <option value="Petty Cash">Petty Cash</option>
+                                              <option value="Utility">Utility</option>
+                                              <option value="Payroll">Payroll</option>
+                                            </select>
+                                      </div> 
+                                    </div>
+                                  </div>
                                   <div class="form-group">
                                       <div class="form-row">
                                           <div class="col-lg-4">
@@ -108,8 +132,8 @@
   el: '#app-payment-method',
     data: {
       payments:[
-        { text:'Cash', value: 'Cash' },
-        { text:'Cheque', value: 'Cheque'}
+        { text:'CASH', value: 'CASH' },
+        { text:'CHECK', value: 'CHECK'}
       ]
     }
   })  

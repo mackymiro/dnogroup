@@ -22,8 +22,8 @@
             </ol>
             <a href="{{ url('ribos-bar/purchase-order-lists') }}">Back to Lists</a>
             <div class="col-lg-12">
-            	 <img src="{{ asset('images/ribos.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
-            	 
+            	 	<img src="{{ asset('images/digitized-logos/ribos-food-corp.png')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
+             
             	 <h4 class="text-center"><u>PURCHASE ORDER</u></h4>
             </div>
             <div class="row">
@@ -87,6 +87,7 @@
                                   <br>
 	                                <div>
 	                                    <input type="submit" class="btn btn-success float-right" value="Update" />
+                                      
 	                                </div>
                               
                               </form>
@@ -109,7 +110,7 @@
 	                            @endif
                               <div class="form-group">  
                                   <div class="form-row">
-                                      <div class="col-lg-8">
+                                      <div class="col-lg-12">
                                           <label>Quantity</label>
                                           <input type="text" name="quantity" class="form-control" />
                                       </div>
@@ -117,7 +118,7 @@
                                   </div>
                                   <div class="form-group">
                                       <div class="form-row">
-                                          <div class="col-lg-8">
+                                          <div class="col-lg-12">
                                               <label>Description</label>
                                               <input type="text" name="description" class="form-control" />
                                             
@@ -126,7 +127,7 @@
                                   </div>
                                   <div class="form-group">
                                       <div class="form-row">
-                                        <div class="col-lg-8">
+                                        <div class="col-lg-12">
                                             <label>Unit Price</label>
                                             <input type="text" name="unitPrice" class="form-control" />
                                         </div>
@@ -139,7 +140,7 @@
 											            @endif
                                   <div class="form-group">
                                       <div class="form-row">
-                                          <div class="col-lg-8">
+                                          <div class="col-lg-12">
                                               <label>Amount</label>
                                               <input type="text" name="amount" class="form-control" required="required" />
                                             
@@ -202,7 +203,7 @@
                                     <div class="form-row">
                                         <div class="col-lg-4">
                                           
-                                            <input type="hidden" name="poId" value="{{ $purchaseOrder['id'] }}" />
+                                            <input type="hidden" id="poId" name="poId" value="{{ $purchaseOrder['id'] }}" />
                                             <input type="submit" class="btn btn-success" value="Update" />
                                             @if(Auth::user()['role_type'] == 1)
                                             <a id="delete" onClick="confirmDelete('{{ $pOrder['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
@@ -240,6 +241,7 @@
 <script type="text/javascript">
    const confirmDelete = (id) => {
       const  x = confirm("Do you want to delete this?");
+      const poId = $("#poId").val();
           if(x){
               $.ajax({
                 type: "DELETE",
@@ -247,7 +249,8 @@
                 data:{
                   _method: 'delete', 
                   "_token": "{{ csrf_token() }}",
-                  "id": id
+                  "id": id,
+                  "poId":poId,
                 },
                 success: function(data){
                   console.log(data);

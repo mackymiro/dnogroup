@@ -1920,7 +1920,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                         ->orderBy('lechon_de_cebu_purchase_orders.id', 'desc')
                         ->get()->toArray();
 
-            $totalPOrder = DB::table(
+        $totalPOrder = DB::table(
                             'lechon_de_cebu_purchase_orders')
                             ->select(
                                 'lechon_de_cebu_purchase_orders.id',
@@ -2932,9 +2932,23 @@ class LoloPinoyLechonDeCebuController extends Controller
             switch ($request->get('action')) {
                 case 'PAID AND RELEASE':
                     # code...
+
+                    $ids = Auth::user()->id;
+                    $user = User::find($ids);
+            
+                    $firstName = $user->first_name;
+                    $lastName = $user->last_name;
+            
+                    $name  = $firstName." ".$lastName;
+
+                    //get the date today
+                    $getDate =  date("Y-m-d");
+
                     $payables = LechonDeCebuPaymentVoucher::find($id);
 
                     $payables->status = $status;
+                    $payables->delivered_date = $getDate;
+                    $payables->created_by = $name; 
                     $payables->save();
 
                     Session::flash('payablesSuccess', 'FULLY PAID AND RELEASED.');
@@ -3621,9 +3635,14 @@ class LoloPinoyLechonDeCebuController extends Controller
         $countAmount = LechonDeCebuDeliveryReceipt::where('dr_id', $id)->sum('price');
 
         $sum  = $countTotalAmount + $countAmount;
-       
 
-        $pdf = PDF::loadView('printDelivery', compact('deliveryId', 'user', 'deliveryReceipts', 'sum'));
+        //count the kilos 
+        $countKls = LechonDeCebuDeliveryReceipt::where('id', $id)->sum('qty');
+        $countAmountKls = LechonDeCebuDeliveryReceipt::where('dr_id', $id)->sum('qty');
+       
+        $sumQty = $countKls + $countAmountKls;
+
+        $pdf = PDF::loadView('printDelivery', compact('deliveryId', 'user', 'deliveryReceipts', 'sum', 'sumQty'));
 
         return $pdf->download('lechon-de-cebu-delivery-receipt.pdf');
     }
@@ -4476,7 +4495,9 @@ class LoloPinoyLechonDeCebuController extends Controller
         $deliveryReceipt = LechonDeCebuDeliveryReceipt::find($id);
 
         $tot = $deliveryReceipt->total + $request->get('price');
-    
+        
+
+
         $addNewDeliveryReceipt = new LechonDeCebuDeliveryReceipt([
             'user_id'=>$user->id,
             'dr_id'=>$id,
@@ -6447,17 +6468,47 @@ class LoloPinoyLechonDeCebuController extends Controller
         $rawMaterial->delete();
     }
 
-    //delete sales invoice 
-    public function destroySalesInvoice($id){
+
+
+    public function destroySI($id){
         $salesInvoice = LechonDeCebuSalesInvoice::find($id);
         $salesInvoice->delete();
     }
 
-    //delete delivery receipt
-    public function destroyDeliveryReceipt($id){
+    //delete sales invoice 
+    public function destroySalesInvoice(Request $request, $id){
+        $siId = LechonDeCebuSalesInvoice::find($request->siId);
+
+        $salesInvoice = LechonDeCebuSalesInvoice::find($id);
+        $getAmount = $siId->total_amount - $salesInvoice->amount;
+
+        $siId->total_amount = $getAmount;
+        $siId->save();
+
+        $salesInvoice->delete();
+    }
+
+    public function destroyDR($id){
         $deliveryReceipt = LechonDeCebuDeliveryReceipt::find($id);
         $deliveryReceipt->delete();
     }
+
+    //delete delivery receipt
+    public function destroyDeliveryReceipt(Request $request, $id){
+        $drId = LechonDeCebuDeliveryReceipt::find($request->drId);
+ 
+        $deliveryReceipt = LechonDeCebuDeliveryReceipt::find($id);
+        $getAmount = $drId->total - $deliveryReceipt->price;
+
+        $drId->total = $getAmount; 
+        $drId->save();
+
+        $deliveryReceipt->delete();
+    }
+
+
+
+
 
     //delete payment voucher 
     public function destroyPaymentVoucher($id){
@@ -6485,14 +6536,15 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     //delete billing statement
     public function destroyBillingStatement($id){
-        //
-    
-
         $billingStatement = LechonDeCebuBillingStatement::find($id);
         $billingStatement->delete();
-
-
     }
+
+    public function destroyPO($id){
+        $purchaseOrder = LechonDeCebuPurchaseOrder::find($id);
+        $purchaseOrder->delete();
+    }
+
 
     /**
      * Remove the specified resource from storage.
@@ -6500,10 +6552,16 @@ class LoloPinoyLechonDeCebuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $poId = LechonDeCebuPurchaseOrder::find($request->poId);
+
         $purchaseOrder = LechonDeCebuPurchaseOrder::find($id);
+        $getAmount = $poId->total_price - $purchaseOrder->amount;
+
+        $poId->total_price = $getAmount;
+        $poId->save();
+
         $purchaseOrder->delete();
     }
 }

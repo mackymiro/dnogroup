@@ -182,6 +182,10 @@ class DnoResourcesDevelopmentController extends Controller
 
         $payablesVouchers = DnoResourcesDevelopmentCorpPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
+        //getParticular details
+        $getParticulars = DnoResourcesDevelopmentCorpPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+    
+
           //count the total amount 
         $countTotalAmount = DnoResourcesDevelopmentCorpPaymentVoucher::where('id', $id)->sum('amount_due');
 
@@ -192,7 +196,7 @@ class DnoResourcesDevelopmentController extends Controller
         $sum  = $countTotalAmount + $countAmount;
        
 
-        $pdf = PDF::loadView('printPayablesDnoResources', compact('payableId', 'payablesVouchers', 'sum'));
+        $pdf = PDF::loadView('printPayablesDnoResources', compact('payableId', 'payablesVouchers', 'sum', 'getParticulars'));
 
         return $pdf->download('dno-resources-payment-voucher.pdf');
     }
@@ -205,7 +209,11 @@ class DnoResourcesDevelopmentController extends Controller
         //
         $getViewPaymentDetails = DnoResourcesDevelopmentCorpPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
-        return view('view-dno-resources-payable-details', compact('viewPaymentDetail', 'getViewPaymentDetails'));
+          //getParticular details
+          $getParticulars = DnoResourcesDevelopmentCorpPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+       
+
+        return view('view-dno-resources-payable-details', compact('viewPaymentDetail', 'getViewPaymentDetails', 'getParticulars'));
     }
 
     //

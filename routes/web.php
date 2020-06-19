@@ -84,6 +84,12 @@ Route::group(['middleware' =>['user']], function(){
 		'LoloPinoyLechonDeCebuController@destroyDeliveryReceipt')
 		->name('destroyDeliveryReceipt');
 
+
+	Route::delete('/lolo-pinoy-lechon-de-cebu/delete/dr/{id}', 
+		'LoloPinoyLechonDeCebuController@destroyDR')
+		->name('destroyDR');
+
+
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/petty-cash-list',
 		'LoloPinoyLechonDeCebuController@pettyCashList')
@@ -225,6 +231,11 @@ Route::group(['middleware' =>['user']], function(){
 	//delete for lechon de cebu purchase order
 	Route::delete('/lolo-pinoy-lechon-de-cebu/delete/{id}', 'LoloPinoyLechonDeCebuController@destroy')->name('lolo-pinoy-lechon-de-cebu.destroy');
 
+	Route::delete(
+		'/lolo-pinoy-lechon-de-cebu/delete/PO/{id}',
+		'LoloPinoyLechonDeCebuController@destroyPO')
+		->name('destroyPO');
+
 	//delete for lechon de cebu billint statement
 	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-billing-statement/{id}', 'LoloPinoyLechonDeCebuController@destroyBillingStatement')->name('lolo-pinoy-lechon-de-cebu.destroyBillingStatement');
 	
@@ -236,7 +247,15 @@ Route::group(['middleware' =>['user']], function(){
 	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-payment-voucher/{id}', 'LoloPinoyLechonDeCebuController@destroyPaymentVoucher')->name('lolo-pinoy-lechon-de-cebu.destroyPaymentVoucher');
 	
 	//route for delete sales invoice 
-	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-sales-invoice/{id}', 'LoloPinoyLechonDeCebuController@destroySalesInvoice')->name('lolo-pinoy-lechon-de-cebu.destroySalesInvoice');
+	Route::delete(
+		'/lolo-pinoy-lechon-de-cebu/delete-sales-invoice/{id}', 
+		'LoloPinoyLechonDeCebuController@destroySalesInvoice')
+		->name('lolo-pinoy-lechon-de-cebu.destroySalesInvoice');
+
+	Route::delete(
+		'/lolo-pinoy-lechon-de-cebu/delete/SI/',
+		'LoloPinoyLechonDeCebuController@destroySI')
+		->name('destroySI');
 	
 	//delete comissary RAW materials
 	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-raw-materials/{id}', 'LoloPinoyLechonDeCebuController@destroyRawMaterial')->name('lolo-pinoy-lechon-de-cebu.destroyRawMaterial');
@@ -340,7 +359,12 @@ Route::group(['middleware' =>['user']], function(){
 	Route::delete(
 		'/ribos-bar/delete/{id}',
 		'RibosBarController@destroy')
-		->name('ribos-bar.destroy');
+		->name('destroy');
+	
+	Route::delete(
+		'/ribos-bar/delete/PO/{id}',
+		'RibosBarController@destroyPO')
+		->name('destroyPO');
 
 	Route::delete(
 		'/ribos-bar/delete-transaction-list/{id}',
@@ -356,7 +380,12 @@ Route::group(['middleware' =>['user']], function(){
 	Route::delete(
 		'/ribos-bar/delete-sales-invoice/{id}',
 		'RibosBarController@destroySalesInvoice')
-		->name('ribos-bar.destroySalesInvoice');
+		->name('destroySalesInvoice');
+	
+	Route::delete(
+		'/ribos-bar/delete/SI/{id}',
+		'RibosBarController@destroySI')
+		->name('destroySI');
 
 	Route::delete(
 		'/ribos-bar/cashiers-report-form/delete-item/{id}',
@@ -828,6 +857,11 @@ Route::group(['middleware' =>['sales']], function(){
 	//route for delete sales invoice 
 	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-sales-invoice/{id}', 'LoloPinoyLechonDeCebuController@destroySalesInvoice')->name('lolo-pinoy-lechon-de-cebu.destroySalesInvoice');
 	
+	Route::delete(
+		'/lolo-pinoy-lechon-de-cebu/delete/SI/',
+		'LoloPinoyLechonDeCebuController@destroySI')
+		->name('destroySI');
+
 	//delete comissary RAW materials
 	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-raw-materials/{id}', 'LoloPinoyLechonDeCebuController@destroyRawMaterial')->name('lolo-pinoy-lechon-de-cebu.destroyRawMaterial');
 	
@@ -2215,7 +2249,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/ribos-bar/edit-ribos-bar-purchase-order/{id}',
 		'RibosBarController@edit')
-		->name('ribos-bar.edit');
+		->name('editRB');
 
 	Route::patch(
 		'/ribos-bar/update/{id}',
@@ -2268,6 +2302,26 @@ Route::group(['middleware' => ['auth']], function(){
 		'RibosBarController@viewPaymentVoucher')
 		->name('ribos-bar.viewPaymentVoucher');
 
+	Route::get(
+		'/ribos-bar/summary-report',
+		'RibosBarController@summaryReport')
+		->name('summaryReportRB');
+
+	Route::get(
+		'/ribos-bar/printSummary',
+		'RibosBarController@printSummary')
+		->name('printSummary');
+
+	Route::get(
+		'/ribos-bar/search-date',
+		'RibosBarController@getSummaryReport')
+		->name('getSummaryReport');
+
+	Route::get(
+		'/ribos-bar/printGetSummary/{date}',
+		'RibosBarController@printGetSummary')
+		->name('printGetSummary');
+
 	//sales invoice 
 	Route::get(
 		'/ribos-bar/sales-invoice-form',
@@ -2282,7 +2336,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/ribos-bar/edit-ribos-bar-sales-invoice/{id}',
 		'RibosBarController@editSalesInvoice')
-		->name('ribos-bar.editSalesInvoice');
+		->name('editSalesInvoiceRB');
 
 	Route::patch(
 		'/ribos-bar/update-sales-invoice/{id}',

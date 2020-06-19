@@ -89,7 +89,7 @@
         if(x){
             $.ajax({
               type: "DELETE",
-              url: '/lolo-pinoy-lechon-de-cebu/delete/' + id,
+              url: '/lolo-pinoy-lechon-de-cebu/delete/PO/' + id,
               data:{
                 _method: 'delete', 
                 "_token": "{{ csrf_token() }}",

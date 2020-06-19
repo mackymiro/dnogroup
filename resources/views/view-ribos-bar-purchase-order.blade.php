@@ -15,8 +15,8 @@
             </ol>
             <a href="{{ url('ribos-bar/purchase-order-lists') }}">Back to Lists</a>
              <div class="col-lg-12">
-            	 <img src="{{ asset('images/ribos.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
-            	 
+              <img src="{{ asset('images/digitized-logos/ribos-food-corp.png')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
+              
             	 <h4 class="text-center"><u>VIEW PURCHASE ORDER</u></h4>
             </div>
             <div class="row">
@@ -27,7 +27,7 @@
                             View Purchase Order
                              <div class="float-right">
                                
-                                 <a href="{{ action('RibosBarController@printPO', $purchaseOrder['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                                 <a href="{{ action('RibosBarController@printPO', $purchaseOrder[0]->id )}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                                
                               </div>
                         </div>
@@ -39,12 +39,12 @@
                                         <thead>
                                             <tr>
                                                 <th width="25%">Paid To</th>
-                                                <th>{{ $purchaseOrder['paid_to'] }}</th>
+                                                <th>{{ $purchaseOrder[0]->paid_to }}</th>
                                             </tr>
 		                                            
                                             <tr>
                                                 <th>Address</th>
-                                                <th>{{ $purchaseOrder['address']}}</th>
+                                                <th>{{ $purchaseOrder[0]->address }}</th>
                                             </tr>
                                         </thead>
 
@@ -55,17 +55,17 @@
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th width="20%">P.O Number</th>
-                                                <th><a href="#">P.O-{{ $purchaseOrder['p_o_number'] }}</a></th>
+                                                <th width="20%">PO No</th>
+                                                <th>{{ $purchaseOrder[0]->module_code}}{{ $purchaseOrder[0]->ribos_bar_code}}</th>
                                             </tr>
                                             <tr>
                                                 <th>Date</th>
-                                                <th> {{ $purchaseOrder['date'] }}</th>
+                                                <th> {{ $purchaseOrder[0]->date }}</th>
                                             </tr>
                                         </thead>
                                     </table>
                                    
-                                  </div
+                                  </div>
                                 </div>
                                </div>
                                <table class="table table-striped">
@@ -81,10 +81,10 @@
                                   <tbody>
 
                                     <tr>
-                                        <td>{{ $purchaseOrder['quantity']}}</td>
-                                        <td>{{ $purchaseOrder['description']}}</td>
-                                        <td>{{ $purchaseOrder['unit_price']}}</td>
-                                        <td><?php echo number_format($purchaseOrder['amount'], 2); ?></td>
+                                        <td>{{ $purchaseOrder[0]->quantity}}</td>
+                                        <td>{{ $purchaseOrder[0]->description}}</td>
+                                        <td>{{ $purchaseOrder[0]->unit_price}}</td>
+                                        <td><?php echo number_format($purchaseOrder[0]->amount, 2); ?></td>
 												                 
                                     </tr>
                                     @foreach($pOrders as $pOrder)
@@ -127,7 +127,7 @@
                                             <thead>
                                                 <tr>
                                                     <th width="20%">Prepared By</th>
-                                                    <th>{{ $purchaseOrder['created_by'] }}</th>
+                                                    <th>{{ $purchaseOrder[0]->created_by }}</th>
                                                 </tr>
                                             </thead>
                                         </table>

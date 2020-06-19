@@ -167,7 +167,7 @@
                                     </div>
                                      <div class="col-lg-2">
                                       <br>
-                                      <input type="hidden" name="poId" value="{{ $purchaseOrder['id'] }}" />
+                                      <input type="hidden" id="poId" name="poId" value="{{ $purchaseOrder['id'] }}" />
                                       <input type="submit" class="btn btn-success" value="Update" />
                                       @if($user->role_type == 1)
                                       <a id="delete" onClick="confirmDelete('{{ $pOrder['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
@@ -211,6 +211,7 @@
 <script type="text/javascript">
     const confirmDelete = (id) => {
         const x = confirm("Do you want to delete this?");
+        const poId = $("#poId").val();
           if(x){
               $.ajax({
                 type: "DELETE",
@@ -218,7 +219,8 @@
                 data:{
                   _method: 'delete', 
                   "_token": "{{ csrf_token() }}",
-                  "id": id
+                  "id": id,
+                  "poId":poId,
                 },
                 success: function(data){
                   $("#deletedId"+id).fadeOut('slow');

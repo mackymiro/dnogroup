@@ -50,10 +50,10 @@
                                         @foreach($getAllCashiersReports as $getAllCashiersReport)
                                         <tr id="deletedId{{ $getAllCashiersReport['id'] }}">
                                             <td>
-                                            @if($user->role_type !== 3)
+                                            @if(Auth::user()['role_type'] !== 3)
                                                 <a href="{{ url('ribos-bar/edit-cashiers-report-inventory-list/'.$getAllCashiersReport['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                             @endif
-                                            @if($user->role_type == 1)
+                                            @if(Auth::user()['role_type'] == 1)
                                                 <a id="delete" onClick="confirmDelete('{{ $getAllCashiersReport['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
                                             @endif
                                                 <a href="{{ url('ribos-bar/cashiers-report/view-inventory-list/'.$getAllCashiersReport['id'])}}" title="View"><i class="fas fa-low-vision"></i></a>

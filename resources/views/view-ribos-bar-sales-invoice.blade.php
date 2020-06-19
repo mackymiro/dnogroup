@@ -13,10 +13,10 @@
 	              </li>
 	              <li class="breadcrumb-item active">View Sales Invoice</li>
 	            </ol>
-	             <a href="{{ url('mr-potato/') }}">Back to Lists</a>
+	             <a href="{{ url('ribos-bar/') }}">Back to Lists</a>
 	            <div class="col-lg-12">
-	            	   <img src="{{ asset('images/ribos.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
-	            	 
+					<img src="{{ asset('images/digitized-logos/ribos-food-corp.png')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
+             
 	            	 <h4 class="text-center"><u>VIEW SALES INVOICE</u></h4>
 	            </div>
 	            <div class="row">
@@ -35,19 +35,23 @@
                             	 	<thead>
                                         <tr>
                                             <th width="20%">Invoice #</th>
-                                            <th>{{ $viewSalesInvoice['invoice_number'] }}</th>
+                                            <th>{{ $viewSalesInvoice[0]->invoice_number }}</th>
+                                        </tr>
+										<tr>
+                                            <th width="20%">SI No</th>
+                                            <th>{{ $viewSalesInvoice[0]->module_code }}{{ $viewSalesInvoice[0]->ribos_bar_code}}</th>
                                         </tr>
                                           <tr>
                                             <th>Date</th>
-                                            <th>{{ $viewSalesInvoice['date'] }}</th>
+                                            <th>{{ $viewSalesInvoice[0]->date }}</th>
                                         </tr>
                                         <tr>
                                             <th>Ordered By</th>
-                                            <th>{{ $viewSalesInvoice['ordered_by'] }}</th>
+                                            <th>{{ $viewSalesInvoice[0]->ordered_by }}</th>
                                         </tr>
                                         <tr>
                                             <th>Address</th>
-                                            <th>{{ $viewSalesInvoice['address'] }}</th>
+                                            <th>{{ $viewSalesInvoice[0]->address  }}</th>
                                         </tr>
                                     </thead>
                             	 </table>
@@ -63,11 +67,11 @@
                             	 		</thead>
                             	 		<tbody>
                         	 				<tr>
-                        	 						<td>{{ $viewSalesInvoice['qty'] }}</td>
-                        	 						<td>{{ $viewSalesInvoice['total_kls'] }}</td>
-                        	 						<td>{{ $viewSalesInvoice['item_description'] }}</td>
-                        	 						<td><?php echo number_format($viewSalesInvoice['unit_price'], 2)?></td>
-                        	 						<td><?php echo number_format($viewSalesInvoice['amount'], 2)?></td>
+                        	 						<td>{{ $viewSalesInvoice[0]->qty }}</td>
+                        	 						<td>{{ $viewSalesInvoice[0]->total_kls }}</td>
+                        	 						<td>{{ $viewSalesInvoice[0]->item_description }}</td>
+                        	 						<td><?php echo number_format($viewSalesInvoice[0]->unit_price, 2)?></td>
+                        	 						<td><?php echo number_format($viewSalesInvoice[0]->amount, 2)?></td>
                         	 				</tr>
                         	 				@foreach($salesInvoices as $salesInvoice)
                         	 				<tr>

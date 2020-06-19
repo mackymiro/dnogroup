@@ -43,19 +43,19 @@
                                           <thead>
                                             <tr>
                                                 <th width="30%">Paid To</th>
-                                                <th> {{ $payableId['paid_to'] }}</th>
+                                                <th> {{ $payableId[0]->paid_to }}</th>
                                             </tr>
                                             <tr>
                                                 <th>Status</th>
-                                                <th>{{ $payableId['status'] }}</th>
+                                                <th>{{ $payableId[0]->status }}</th>
                                             </tr>
                                             <tr>
                                                 <th>Date</th>
-                                                <th> {{ $payableId['issued_date'] }} </th>
+                                                <th> {{ $payableId[0]->issued_date }} </th>
                                             </tr>
 											<tr>
                                                 <th width="30%">Account Name</th>
-                                                <th> {{ $payableId['account_name'] }} </th>
+                                                <th> {{ $payableId[0]->account_name }} </th>
                                             </tr>
                                            
                                         </thead>
@@ -67,19 +67,19 @@
 	                                   <thead>
                                             <tr>
                                                 <th width="20%">Amount Due</th>
-                                                <th><?php echo number_format($payableId['amount_due'], 2);?></th>
+                                                <th><?php echo number_format($payableId[0]->amount_due, 2);?></th>
                                             </tr>
                                             <tr>
                                                 <th>Invoice #</th>
-                                                <th> {{ $payableId['invoice_number'] }}</th>
+                                                <th> {{ $payableId[0]->invoice_number }}</th>
                                             </tr>
 											<tr>
-                                                <th>Voucher Ref #</th>
-                                                <th>RB-{{ $payableId['voucher_ref_number'] }}</th>
+                                                <th>PV No</th>
+                                                <th>{{ $payableId[0]->module_code}}{{ $payableId[0]->ribos_bar_code}}</th>
                                             </tr>
 											<tr>
 												<th width="30%">Payment Method</th>
-												<th>{{ $payableId['method_of_payment']}}</th>
+												<th>{{ $payableId[0]->method_of_payment}}</th>
 											</tr>
                                            
                                         </thead>
@@ -101,9 +101,9 @@
 								</thead>
 								<tbody>
 									<tr style="border: 1px solid black;">
-										<td style="text-align:center; border: 1px solid black;">{{ $payableId['issued_date']}}</td>
-										<td style="text-align:center; border: 1px solid black;">{{ $payableId['particulars']}}</td>
-										<td style="text-align:center; border: 1px solid black; font-size:18px;"><?php echo number_format($payableId['amount'], 2); ?></td>
+										<td style="text-align:center; border: 1px solid black;">{{ $payableId[0]->issued_date}}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $payableId[0]->particulars}}</td>
+										<td style="text-align:center; border: 1px solid black; font-size:18px;"><?php echo number_format($payableId[0]->amount, 2); ?></td>
 									</tr>
 									@foreach($getParticulars as $getParticular)
 									<tr style="border:1px solid black;">
@@ -120,10 +120,14 @@
                           <br>
                           <table style="border:1px solid black;">
                           		  <thead>
-                                      <tr>
-                                        <th style="height: 1%; text-align: center;">CHEQUE NO ISSUED</th>
-                                        <th style="height: 1%; text-align: center;">CHEQUE AMOUNT</th>
-                                       
+                                       <tr>
+									  	@if($payableId[0]->method_of_payment === "CASH")
+                                        <th style="height: 1%; text-align: center;">CASH NO ISSUED</th>
+                                        <th style="height: 1%; text-align: center;">CASH AMOUNT</th>
+										@else
+										<th style="height: 1%; text-align: center;">CHECK NO ISSUED</th>
+                                        <th style="height: 1%; text-align: center;">CHECK AMOUNT</th>
+										@endif
                                       </tr>
                                     </thead>
                                   <tbody>
@@ -158,7 +162,7 @@
                            				<tr>
                            					<td>
                            						________________________<br>
-                           						{{ $payableId['created_by']}}
+                           						{{ $payableId[0]->created_by}}
 
                            					</td>
                            					<td>

@@ -22,6 +22,7 @@ class MrPotatoController extends Controller
 {     
 
     public function printGetSummary($date){
+        
         $moduleName = "Sales Invoice";
         $getAllSalesInvoices = DB::table(
                                 'mr_potato_sales_invoices')
@@ -2110,9 +2111,23 @@ class MrPotatoController extends Controller
             switch ($request->get('action')) {
                 case 'PAID AND RELEASE':
                     # code...
+
+                    $ids = Auth::user()->id;
+                    $user = User::find($ids);
+            
+                    $firstName = $user->first_name;
+                    $lastName = $user->last_name;
+            
+                    $name  = $firstName." ".$lastName;
+
+                    //get the date today
+                    $getDate =  date("Y-m-d");
+
                     $payables = MrPotatoPaymentVoucher::find($id);
 
                     $payables->status = $status;
+                    $payables->delivered_date = $getDate;
+                    $payables->created_by = $name; 
                     $payables->save();
 
                     Session::flash('payablesSuccess', 'FULLY PAID AND RELEASED.');

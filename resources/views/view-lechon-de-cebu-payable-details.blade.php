@@ -110,7 +110,7 @@
                               <table class="table table-striped ">
                                     <thead>
                                         <tr>
-                                            @if($viewPaymentDetail[0]->method_of_payment === "Cash")
+                                            @if($viewPaymentDetail[0]->method_of_payment === "CASH")
                                             <th>CASH NO ISSUED</th>
                                             <th>CASH AMOUNT</th>
                                             @else

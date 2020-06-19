@@ -19,8 +19,8 @@
 	          </ol>
 	          <a href="{{ url('ribos-bar/') }}">Back to Lists</a>
 	          <div class="col-lg-12">
-	        		<img src="{{ asset('images/ribos.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
-        	 	
+			 		<img src="{{ asset('images/digitized-logos/ribos-food-corp.png')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
+            	
         	 		<h4 class="text-center"><u>SALES INVOICE</u></h4>
     		  </div>
     		  <div class="row">
@@ -137,9 +137,9 @@
 		                         			</div>
 	                         				 <div class="col-lg-2">
 	                                          <br>
-	                                          <input type="hidden" name="siId" value="{{ $getSalesInvoice['id'] }}" />
+	                                          <input type="hidden" id="siId" name="siId" value="{{ $getSalesInvoice['id'] }}" />
 	                                          <input type="submit" class="btn btn-success" value="Update" />
-	                                          @if($user->role_type == 1)
+	                                          @if(Auth::user()['role_type'] == 1)
 	                                          <a id="delete" onClick="confirmDelete('{{ $sInvoice['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
 	                                          @endif
 	                                        </div>
@@ -148,7 +148,7 @@
                              	</form>
                              	@endforeach
                              	 <div>
-	                              @if($user->role_type == 1)
+	                              @if(Auth::user()['role_type'] == 1)
 	                              <a href="{{ url('ribos-bar/add-new-ribos-bar-sales-invoice/'.$getSalesInvoice['id'] ) }}" class="btn btn-primary">Add New</a>
 	                              @endif
 	                            </div>
@@ -174,9 +174,9 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
-	function confirmDelete(id){
+	const confirmDelete = (id) =>{
 		var x = confirm("Do you want to delete this?");
-
+		const siId = $("#siId").val();
 		if(x){
 			 $.ajax({
               type: "DELETE",
@@ -184,7 +184,8 @@
               data:{
                 _method: 'delete', 
                 "_token": "{{ csrf_token() }}",
-                "id": id
+                "id": id,
+				"siId":siId,
               },
               success: function(data){
                 console.log(data);
@@ -200,5 +201,6 @@
 			return false;
 		}
 	}
+
 </script>
 @endsection
