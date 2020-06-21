@@ -28,7 +28,7 @@
 	    					  Search Number Code
                         </div>
                         <div class="card-body">
-                            <form action="{{ action('LoloPinoyLechonDeCebuController@search') }}" method="post">
+                            <form action="{{ action('LoloPinoyLechonDeCebuController@search') }}" method="get">
                             {{ csrf_field() }}
                             <div class="form-group">
                                 <div class="form-row">

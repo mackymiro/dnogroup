@@ -28,7 +28,7 @@
                               <i class="fas fa-file-invoice" aria-hidden="true"></i>
                             Payment Details
                              <div class="float-right">
-                               <a href="{{ action('DnoPersonalController@printPayablesDnoPersonal', $viewPaymentDetail['id']) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                               <a href="{{ action('DnoPersonalController@printPayablesDnoPersonal', $viewPaymentDetail[0]->id) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                              </div>
                         </div>
                           
@@ -40,44 +40,34 @@
                                               <thead>
                                                   <tr>
                                                       <th class="bg-info" style="color:white;">Paid To</th>
-                                                      <th class="bg-info" style="color:white;">{{ $viewPaymentDetail['paid_to']}}</th>
+                                                      <th class="bg-info" style="color:white;">{{ $viewPaymentDetail[0]->paid_to}}</th>
                                                   </tr>
                                                  
-                                                  <?php if($viewPaymentDetail['method_of_payment'] === "Cheque"): ?>
+                                                  <?php if($viewPaymentDetail[0]->method_of_payment === "CHECK"): ?>
+                                                  @if($viewPaymentDetail[0]->account_no != NULL)
                                                   <tr>
-                                                    
-                                                      <th class="bg-info" style="color:white;">Account No</th>
-                                                      <th class="bg-info" style="color:white;">{{ $viewPaymentDetail['account_no']}}</th>
+                                                     
+                                                      <th  width="30%" class="bg-info" style="color:white;">Account No</th>
+                                                      <th class="bg-info" style="color:white;">{{ $viewPaymentDetail[0]->account_no}}</th>
                                                            
                                                   </tr>
-                                                  <?php else: ?>
-                                                  <tr>
-                                                         <th width="30%" class="bg-info" style="color:white;">Account Name</th>
-                                                        <th class="bg-info" style="color:white;">{{ $viewPaymentDetail['account_name']}}</th>
-                                                
-                                                  </tr>
+                                                  @endif
+                                               
                                                  <?php endif; ?>
-                                                 <?php if($viewPaymentDetail['method_of_payment'] === "Cheque"): ?>
-                                                 <tr>
-                                                      <th class="bg-info" style="color:white;">Account Name</th>
-                                                      <th class="bg-info" style="color:white;">{{ $viewPaymentDetail['account_name']}}</th>
-                                                   
-                                                 </tr>
-                                                 <?php else: ?>
+                                                
                                                 <tr>
                                                     <th width="30%" class="bg-info" style="color:white;">Account Name</th>
-                                                    <th class="bg-info" style="color:white;">{{ $viewPaymentDetail['account_name']}}</th>
+                                                    <th class="bg-info" style="color:white;">{{ $viewPaymentDetail[0]->account_name}}</th>
                                                     
                                                 </tr>
 
-                                                 <?php endif;  ?>
                                                   <tr>
                                                       <th class="bg-success" style="color:white;" width="15%">Status</th>
-                                                      <th class="bg-success" style="color:white;">{{ $viewPaymentDetail['status']}}</th>
+                                                      <th class="bg-success" style="color:white;">{{ $viewPaymentDetail[0]->status}}</th>
                                                   </tr>
                                                   <tr>
                                                       <th width="15%">Date</th>
-                                                      <th>{{ $viewPaymentDetail['issued_date']}}</th>
+                                                      <th>{{ $viewPaymentDetail[0]->issued_date}}</th>
                                                   </tr>
                                                  
                                               </thead>
@@ -88,19 +78,19 @@
                                               <thead>
                                                   <tr>
                                                       <th width="20%" class="bg-danger" style="color:#fff;">Amount Due</th>
-                                                      <th class="bg-danger" style="color:#fff;"><?php echo number_format($viewPaymentDetail['amount_due'], 2); ?></th>
+                                                      <th class="bg-danger" style="color:#fff;"><?php echo number_format($viewPaymentDetail[0]->amount_due, 2); ?></th>
                                                   </tr>
                                                   <tr>  
                                                      <th width="35%" class="bg-danger" style="color:#fff;">Payment Method</th> 
-                                                     <th class="bg-danger" style="color:#fff;">{{ $viewPaymentDetail['method_of_payment']}}</th>
+                                                     <th class="bg-danger" style="color:#fff;">{{ $viewPaymentDetail[0]->method_of_payment}}</th>
                                                   </tr>
                                                   <tr>
                                                       <th width="35%">Invoice #</th>
-                                                      <th>{{ $viewPaymentDetail['invoice_number']}}</th>
+                                                      <th>{{ $viewPaymentDetail[0]->invoice_number}}</th>
                                                   </tr>
                                                   <tr>
-                                                      <th width="35%">Voucher Ref #</th>
-                                                      <th>DP-{{ $viewPaymentDetail['voucher_ref_number']}}</th>
+                                                      <th width="35%">PV No</th>
+                                                      <th>{{ $viewPaymentDetail[0]->module_code}}{{ $viewPaymentDetail[0]->dno_personal_code}}</th>
                                                   </tr>
                                                  
                                               </thead>
@@ -119,9 +109,9 @@
                                     </thead>
                                     <tbody>
                                          <tr>	
-  											<td>{{ $viewPaymentDetail['issued_date']}}</td>
-  											<td>{{ $viewPaymentDetail['particulars']}}</td>
-											<td><?php echo number_format($viewPaymentDetail['amount'], 2); ?></td>
+  											<td>{{ $viewPaymentDetail[0]->issued_date}}</td>
+  											<td>{{ $viewPaymentDetail[0]->particulars}}</td>
+											<td><?php echo number_format($viewPaymentDetail[0]->amount, 2); ?></td>
 										</tr>
                                         @foreach($getParticulars as $getParticular)
                                         <tr>
@@ -133,12 +123,12 @@
                                     </tbody>
                               </table>
                               
-                              @if($viewPaymentDetail['method_of_payment'] === "Cheque")
+                              @if($viewPaymentDetail[0]->method_of_payment === "CHECK")
                               <table class="table table-striped ">
                                     <thead>
                                         <tr>
-                                            <th>CHEQUE NO ISSUED</th>
-                                            <th>CHEQUE AMOUNT</th>
+                                            <th>CHECK NO ISSUED</th>
+                                            <th>CHECK AMOUNT</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -176,7 +166,7 @@
                                     <thead>
                                         <tr>
                                             <th width="15%">Prepared By</th>
-                                            <th>{{ $viewPaymentDetail['created_by']}}</th>
+                                            <th>{{ $viewPaymentDetail[0]->created_by}}</th>
                                         </tr>
                                     </thead>
                                   

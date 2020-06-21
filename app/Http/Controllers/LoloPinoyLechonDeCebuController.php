@@ -1505,13 +1505,14 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
                                 'lechon_de_cebu_codes.module_name')
-                            ->join('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+                            ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
                             ->where('lechon_de_cebu_sales_invoices.id', $getSearchResults[0]->module_id)
                             ->where('lechon_de_cebu_codes.module_name', $getSearchResults[0]->module_name)
                             ->get()->toArray();
             
             $getAllCodes = LechonDeCebuCode::get()->toArray();  
             $module = $getSearchResults[0]->module_name;
+           
             return view('lechon-de-cebu-search-results', compact('module', 'getAllCodes', 'getSearchSalesInvoices'));
 
         }else if($getSearchResults[0]->module_name === "Delivery Receipt"){
@@ -1544,7 +1545,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_codes.module_id',
                                     'lechon_de_cebu_codes.module_code',
                                     'lechon_de_cebu_codes.module_name')
-                                    ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                    ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
                                     ->where('lechon_de_cebu_delivery_receipts.id', $getSearchResults[0]->module_id)
                                     ->where('lechon_de_cebu_codes.module_name', $getSearchResults[0]->module_name)
                                     ->get()->toArray();
@@ -1577,7 +1578,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                         'lechon_de_cebu_codes.module_id',
                                         'lechon_de_cebu_codes.module_code',
                                         'lechon_de_cebu_codes.module_name')
-                                    ->join('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                                    ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
                                     ->where('lechon_de_cebu_purchase_orders.id', $getSearchResults[0]->module_id)
                                     ->where('lechon_de_cebu_codes.module_name', $getSearchResults[0]->module_name)
                                     ->get()->toArray();
@@ -1618,7 +1619,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
                                 'lechon_de_cebu_codes.module_name')
-                            ->join('lechon_de_cebu_codes', 'lechon_de_cebu_statement_of_accounts.id', '=', 'lechon_de_cebu_codes.module_id')
+                            ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_statement_of_accounts.id', '=', 'lechon_de_cebu_codes.module_id')
                             ->where('lechon_de_cebu_statement_of_accounts.id', $getSearchResults[0]->module_id)
                             ->where('lechon_de_cebu_codes.module_name', $getSearchResults[0]->module_name)
                             ->get()->toArray(); 
@@ -1653,7 +1654,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_codes.module_id',
                                     'lechon_de_cebu_codes.module_code',
                                     'lechon_de_cebu_codes.module_name')
-                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_billing_statements.id', $getSearchResults[0]->module_id)
                                 ->where('lechon_de_cebu_codes.module_name', $getSearchResults[0]->module_name)
                                 ->get()->toArray();
@@ -1679,7 +1680,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
                                 'lechon_de_cebu_codes.module_name')
-                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_petty_cashes.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_petty_cashes.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_petty_cashes.id', $getSearchResults[0]->module_id)
                                 ->where('lechon_de_cebu_codes.module_name', $getSearchResults[0]->module_name)
                                 ->get()->toArray();
@@ -1722,7 +1723,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                             'lechon_de_cebu_codes.module_id',
                             'lechon_de_cebu_codes.module_code',
                             'lechon_de_cebu_codes.module_name')
-                            ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                            ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                             ->where('lechon_de_cebu_payment_vouchers.id', $getSearchResults[0]->module_id)
                             ->where('lechon_de_cebu_codes.module_name', $getSearchResults[0]->module_name)
                             ->get()->toArray();
@@ -1732,9 +1733,6 @@ class LoloPinoyLechonDeCebuController extends Controller
             return view('lechon-de-cebu-search-results', compact('module', 'getAllCodes', 'getSearchPaymentVouchers'));
 
         }
-
-      
-
 
     }
 

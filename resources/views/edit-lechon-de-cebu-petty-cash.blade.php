@@ -56,7 +56,7 @@
                                         <label>Date</label>
                                         <input type="text" name="date" class="datepicker form-control" value="{{ $pettyCash[0]->date}}"/>
                                     </div>
-                                    <div class="col-lg-2">
+                                    <div class="col-lg-4">
                                         <label>Petty Cash Name</label>
                                         <input type="text" name="pettyCashName" class="form-control" value="{{ $pettyCash[0]->petty_cash_name}}"/>
                                     </div>

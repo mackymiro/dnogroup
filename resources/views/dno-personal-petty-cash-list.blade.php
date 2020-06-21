@@ -68,19 +68,19 @@
 				  						</tfoot>
                                         <tbody>
                                             @foreach($pettyCashLists as $pettyCashList)
-                                            <tr id="deletedId{{ $pettyCashList['id']}}">    
+                                            <tr id="deletedId{{ $pettyCashList->id}}">    
                                                 <td>
                                                 @if(Auth::user()['role_type'] != 3)
-                                                    <a href="{{ url('dno-personal/edit-petty-cash/'.$pettyCashList['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                                    <a href="{{ url('dno-personal/edit-petty-cash/'.$pettyCashList->id) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                                     @endif
                                                 @if(Auth::user()['role_type'] == 1 || Auth::user()['role_type'] == 2        )
-                                                    <a id="delete" onClick="confirmDelete('{{ $pettyCashList['id']}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                                                    <a id="delete" onClick="confirmDelete('{{ $pettyCashList->id}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
                                                 @endif
                                                 </td>
-                                                <td>{{ $pettyCashList['date']}}</td>
-                                                <td>{{ $pettyCashList['petty_cash_no']}}</td>
-                                                <td><a href="{{ url('dno-personal/petty-cash/view/'.$pettyCashList['id']) }}">{{ $pettyCashList['petty_cash_name']}}</a></td>
-                                                <td>{{ $pettyCashList['created_by']}}</td>
+                                                <td>{{ $pettyCashList->date}}</td>
+                                                <td>{{ $pettyCashList->module_code}}{{ $pettyCashList->dno_personal_code}}</td>
+                                                <td><a href="{{ url('dno-personal/petty-cash/view/'.$pettyCashList->id) }}">{{ $pettyCashList->petty_cash_name}}</a></td>
+                                                <td>{{ $pettyCashList->created_by}}</td>
                                             </tr>   
                                             @endforeach
                                         </tbody>
@@ -124,14 +124,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <div class="form-row">
-                        <div class="col-lg-4">
-                            <label>Amount</label>
-                            <input type="text" id="amount" name="amount" class="form-control" />
-                        </div>
-                    </div>
-                </div>
+              
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fas fa-window-close"></i> Close</button>
@@ -158,8 +151,8 @@
         const reqDate = $("#date").val();
         const pettyCashName = $("#pettyCashName").val();
         const pettyCashSummary = $("#pettyCashSummary").val();
-        const amount = $("#amount").val();
-        if(reqDate.length === 0 || pettyCashName.length === 0 || pettyCashSummary.length === 0 || amount.length === 0){
+       
+        if(reqDate.length === 0 || pettyCashName.length === 0 || pettyCashSummary.length === 0 ){
             $("#validate").fadeIn().delay(3000).fadeOut();
         }else{
             //make ajax call
@@ -172,7 +165,7 @@
                     "date":reqDate,
                     "pettyCashName":pettyCashName,
                     "pettyCashSummary":pettyCashSummary,
-                    "amount":amount,
+                   
                 },
                 success: function(data){
                     console.log(data);

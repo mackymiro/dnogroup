@@ -39,6 +39,33 @@
                     
                 </ol>
                 <div class="row">
+                   <div class="col-lg-12">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                            <i class="fas fa-search"></i>
+	    					  Search Date
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <div class="form-row">
+                                        
+                                        <div class="col-lg-4">
+                                            <form action="{{ action('LoloPinoyGrillBranchesController@getSummaryReport') }}" method="get">
+                                            {{ csrf_field() }}
+                                                <h1>Search Date</h1>
+                                                <input type="text" name="selectDate" class="datepicker form-control"  required/>
+                                                <br>
+                                                <button type="submit" class="btn btn-success btn-lg"><i class="fa fa-search" aria-hidden="true"></i> Search Date</button>
+                                            </form>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                   </div>
+              </div>
+                <div class="row">
                      <div class="col-lg-12">
                          <div class="card mb-3">
                             <div class="card-header">
@@ -269,20 +296,7 @@
                                          <div class="float-right">
                                              <a href="{{ action('LoloPinoyGrillBranchesController@printSummary') }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="form-row">
-                                               
-                                                <div class="col-lg-4">
-                                                    <form action="{{ action('LoloPinoyGrillBranchesController@getSummaryReport') }}" method="get">
-                                                        <h1>Search Date</h1>
-                                                        <input type="text" name="selectDate" class="datepicker form-control"  required/>
-                                                        <br>
-                                                        <button type="submit" class="btn btn-success btn-lg"><i class="fa fa-search" aria-hidden="true"></i> Search Date</button>
-                                                    </form>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
+                                       
                                         <br>
                                         <div class="table-responsive">
                                              <h1>Payment Cash Voucher</h1>

@@ -721,7 +721,7 @@ Route::group(['middleware' =>['user']], function(){
 	Route::get(
 		'/dno-personal/edit-dno-personal-payables-detail/{id}',
 		'DnoPersonalController@editPayablesDetail')
-		->name('editPayablesDetail');
+		->name('editPayablesDetailDnoPersonal');
 
 	Route::post(
 		'/dno-personal/add-particulars/{id}',
@@ -844,7 +844,7 @@ Route::group(['middleware' =>['sales']], function(){
 			'LoloPinoyLechonDeCebuController@searchNumberCode')
 			->name('searchNumberCode');
 	
-		Route::post(
+		Route::get(
 			'/lolo-pinoy-lechon-de-cebu/search',
 			'LoloPinoyLechonDeCebuController@search')
 			->name('search');
@@ -2622,6 +2622,36 @@ Route::group(['middleware' => ['auth']], function(){
 	//DNO Personal
 	Route::get('/dno-personal', 'DnoPersonalController@index')->name('dno-personal');
 
+	Route::get(
+		'/dno-personal/summary-report',
+		'DnoPersonalController@summaryReport')
+		->name('summaryReport');
+
+	Route::get(
+		'/dno-personal/printSummary',
+		'DnoPersonalController@printSummary')
+		->name('printSummary');
+
+	Route::get(
+		'/dno-personal/search-date',
+		'DnoPersonalController@getSummaryReport')
+		->name('getSummaryReport');
+
+	Route::get(
+		'/dno-personal/printGetSummary/{date}',
+		'DnoPersonalController@printGetSummary')
+		->name('printGetSummary');
+
+	Route::get(
+		'/dno-personal/summary-report/search-number-code',
+		'DnoPersonalController@searchNumberCode')
+		->name('searchNumberCode');
+
+	Route::get(
+		'/dno-personal/search',
+		'DnoPersonalController@search')
+		->name('search');
+	
 	Route::delete(
 		'/dno-personal/delete-transaction-list/{id}',
 		'DnoPersonalController@destroyTransactionList')

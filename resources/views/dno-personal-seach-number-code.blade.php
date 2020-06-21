@@ -1,42 +1,40 @@
-@extends('layouts.lolo-pinoy-lechon-de-cebu-app')
+@extends('layouts.dno-personal-app')
 @section('title', 'Search Number Code |')
 @section('content')
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css" >
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
-
 <div id="wrapper">
-     @include('sidebar.sidebar')
-     <div id="content-wrapper">
+      @include('sidebar.sidebar-dno-personal')
+      <div id="content-wrapper">
         <div class="container-fluid">
-             <!-- Breadcrumbs-->
-             <h1 class="mt-4">Search Number Code</h1>
+              <!-- Breadcrumbs-->
+              <h1 class="mt-4">Search Number Code</h1>
              <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                  <a href="#">Lechon de Cebu </a>
+                  <a href="#">DNO Personal </a>
                 </li>
                 <li class="breadcrumb-item active">Search Number Code</li>
                 
               </ol>
-              <div class="row">
-                 <div class="col-lg-12">
+              <div class="row"> 
+                <div class="col-lg-12">
                      <div class="card mb-3">
-                        <div class="card-header">
-                        <i class="fa fa-search" aria-hidden="true"></i>
-
-	    					  Search Number Code
+                         <div class="card-header">
+                            <i class="fa fa-search" aria-hidden="true"></i>
+                            Search Number Code
                         </div>
                         <div class="card-body">
-                            <form action="{{ action('LoloPinoyLechonDeCebuController@search') }}" method="get">
+                            <form action="{{ action('DnoPersonalController@search') }}" method="get">
                             {{ csrf_field() }}
-                            <div class="form-group">
+                             <div class="form-group">
                                 <div class="form-row">
                                      <div class="col-lg-4">
                                         <label>Search </label>
                                         <select data-live-search="true" name="searchCode" class="form-control selectpicker">
                                             @foreach($getAllCodes as $getAllCode)
-                                            <option value="{{ $getAllCode['lechon_de_cebu_code']}}">{{ $getAllCode['lechon_de_cebu_code']  }}</option>
+                                            <option value="{{ $getAllCode['dno_personal_code']}}">{{ $getAllCode['dno_personal_code']  }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -51,13 +49,12 @@
                             </form>
                         </div>
                      </div>
-                 </div>
+                </div>
               </div>
-             
         </div>
-     </div>
-       <!-- Sticky Footer -->
-       <footer class="sticky-footer">
+      </div>
+          <!-- Sticky Footer -->
+          <footer class="sticky-footer">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
             <span>Copyright © Ribos Food Corporation 2019</span>
@@ -66,6 +63,6 @@
             <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
           </div>
         </div>
-      </footer> 
+      </footer>
 </div>
 @endsection

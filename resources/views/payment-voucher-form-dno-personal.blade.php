@@ -157,7 +157,7 @@
                                                 <option value="Payroll">Payroll</option>
                                               </select>
                                           </div>
-                                          <div id="cebuProp" class="col-lg-2">
+                                          <div id="cebuProp" class="col-lg-4">
                                               <label>Sub Category</label>
                                               <select id="cebuPropId" name="subCatCebu" class="selcls form-control" >
                                                   <option value="0">--Please Select--</option>
@@ -166,7 +166,7 @@
                                                   @endforeach
                                               </select>
                                           </div>
-                                          <div id="manilaProp" class="col-lg-2">
+                                          <div id="manilaProp" class="col-lg-4">
                                               <label>Sub Category</label>
                                               <select name="subCatManila" class="selcls form-control">
                                                   <option value="0">--Please Select--</option>
@@ -180,6 +180,7 @@
                                               <select  name="otherBills" class="otherBills selcls form-control">
                                                   <option value="0">--Please Select --</option>
                                                   <option value="Veco">Veco</option>
+                                                  <option value="Meralco">Meralco</option>
                                                   <option value="MCWD">MCWD</option>
                                                   <option value="PLDT">PLDT</option>
                                                   <option value="SKYCABLE">SKYCABLE</option>
@@ -295,6 +296,8 @@
          const bills = $(this).children("option:selected").val();
          if(bills == "Veco"){
              $("#selectAccountID").show();
+         }else if(bills == "Meralco"){
+             $("#selectAccountID").show();
          }else if(bills == "MCWD"){
              $("#selectAccountID").show();
          }else if(bills == "PLDT"){
@@ -387,6 +390,7 @@
              $("#paidTo").hide();
              $("#acctName").hide();
              $("#typeOfCC").hide();
+             $("#acctNum").hide();
 
              $("#acctNameCash").show();
 
@@ -399,7 +403,7 @@
              $("#paidTo").show();
              $("#acctName").show();
              $("#typeOfCC").show();
-
+             $("#acctNum").show();
              $("#acctNameCash").hide();
           }
       });
@@ -501,8 +505,8 @@
   el: '#app-payment-method',
     data: {
       payments:[
-        { text:'Cash', value:'Cash' },
-        { text:'Cheque', value:'Cheque'}
+        { text:'CASH', value:'CASH' },
+        { text:'CHECK', value:'CHECK'}
       ]
     }
   })  

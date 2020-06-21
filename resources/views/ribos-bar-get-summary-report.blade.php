@@ -38,6 +38,36 @@
                     <li class="breadcrumb-item active">Summary Report(s)</li>
                 </ol>
                 <div class="row">
+                   <div class="col-lg-12">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                            <i class="fas fa-search"></i>
+	    					  Search Date
+                            </div>
+                            <div class="card-body">
+                                 <div class="form-group">
+                                    <div class="form-group">
+                                        <div class="form-row">
+                                            
+                                            <div class="col-lg-4">
+                                                <form action="{{ action('RibosBarController@getSummaryReport') }}" method="get">
+                                                {{ csrf_field() }}  
+                                                <h1>Search Date</h1>
+                                                <input type="text" name="selectDate" class="datepicker form-control"  required/>
+                                                <br>
+                                                <button type="submit" class="btn btn-success btn-lg"><i class="fa fa-search" aria-hidden="true"></i> Search Date</button>
+                                                </form>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                                       
+                            </div>
+                        </div>
+                   </div>
+                </div>
+                <div class="row">
                     <div class="col-lg-12">
                         <div class="card mb-3">
                             <div class="card-header">
@@ -45,6 +75,11 @@
 	    					    Summary Reports
                             </div>
                             <div class="card-body">
+                                <div>
+                                    <h1>Search Result For: {{ $getDate }}</h1>
+                                </div>
+                                <br>
+                                <br>
                                  <nav>
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                         <a class="nav-item nav-link active" id="nav-salesInvoice" data-toggle="tab" href="#salesInvoice" role="tab" aria-controls="salesInvoice" aria-selected="true">Sales Invoice</a>
@@ -393,20 +428,7 @@
                                          <div class="float-right">
                                              <a href="{{ action('RibosBarController@printGetSummary', $getDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
                                         </div>
-                                        <div class="form-group">
-                                            <div class="form-row">
-                                               
-                                                <div class="col-lg-4">
-                                                     <form action="{{ action('RibosBarController@getSummaryReport') }}" method="get">
-                                                    <h1>Search Date</h1>
-                                                    <input type="text" name="selectDate" class="datepicker form-control"  required/>
-                                                    <br>
-                                                    <button type="submit" class="btn btn-success btn-lg"><i class="fa fa-search" aria-hidden="true"></i> Search Date</button>
-                                                    </form>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
+                                       
                                        
                                         <br>
                                         <div class="table-responsive">
