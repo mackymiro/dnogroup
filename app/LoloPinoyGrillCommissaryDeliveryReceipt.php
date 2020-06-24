@@ -21,6 +21,7 @@ class LoloPinoyGrillCommissaryDeliveryReceipt extends Model
 		'unit_price',
 		'address',
 		'amount',
+		'total_amount',
 		'charge_to',
 		'address_to',
     	'prepared_by',

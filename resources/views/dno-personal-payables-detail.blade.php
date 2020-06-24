@@ -28,6 +28,7 @@
 <link rel="stylesheet" href="/resources/demos/style.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 <div id="wrapper">
 	 @include('sidebar.sidebar-dno-personal')
      <div id="content-wrapper">
@@ -248,7 +249,7 @@
 								@if($transactionList[0]->method_of_payment === "CASH")
 								<div class="form-group">
 			  						<div class="form-row">
-			  							<div class="col-lg-2">
+			  							<div class="col-lg-4">
 		  									<label>Invoice #</label>
 		  									<input type="text" name="invoiceNumber" class="selcls form-control" value="{{ $transactionList[0]->invoice_number}}" disabled="disabled" />
 			  							</div>
@@ -256,17 +257,18 @@
 		  									<label>Amount Due</label>
 		  									<input type="text" name="amountDue" style="color:white;" class="bg-danger form-control" value="<?php echo number_format($sum, 2); ?>" />
 			  							</div>
-			  							<div class="col-lg-4">
+			  							<div class="col-lg-2">
 		  									<label>PV No</label>
 		  									<input type="text" name="voucherRef" class="selcls form-control" value="{{ $transactionList[0]->module_code}}{{ $transactionList[0]->dno_personal_code}}" disabled="disabled" />
 			  							</div>
-										<div class="col-lg-4">
+										
+									
+										<div class="col-lg-6">
 											<label>Account Name</label>
 											<input type="text" name="accountName" class="selcls form-control" value="{{ $transactionList[0]->account_name }}" disabled="disabled" />
 										</div>
 										
-									
-										<div class="col-lg-4">
+										<div class="col-lg-2">
 		  									<label>Payment Method</label>
 		  									<input type="text" name="paymentMethod" class="selcls form-control" value="{{ $transactionList[0]->method_of_payment}}" disabled="disabled" />
 			  							</div>
@@ -304,7 +306,7 @@
 								@elseif($transactionList[0]->method_of_payment === "CHECK")
 								<div class="form-group">
 			  						<div class="form-row">
-			  							<div class="col-lg-2">
+			  							<div class="col-lg-4">
 		  									<label>Invoice #</label>
 		  									<input type="text" name="invoiceNumber" class="selcls form-control" value="{{ $transactionList[0]->invoice_number}}" disabled="disabled" />
 			  							</div>
@@ -312,11 +314,12 @@
 		  									<label>Amount Due</label>
 		  									<input type="text" name="amountDue" style="color:white;" class="bg-danger form-control" value="<?php echo number_format($sum, 2); ?>" />
 			  							</div>
-			  							<div class="col-lg-4">
+			  							<div class="col-lg-2">
 		  									<label>PV No</label>
 		  									<input type="text" name="voucherRef" class="selcls form-control" value="{{ $transactionList[0]->module_code}}{{ $transactionList[0]->dno_personal_code}}" disabled="disabled" />
 			  							</div>
   										@if($transactionList[0]->use_credit_card == "No")
+										  
 										<div class="col-lg-4">
 											<label>Bank Name</label>
 											<?php
@@ -342,7 +345,7 @@
 		  									<input type="text" name="accountNum" class="selcls form-control" value="{{ $transactionList[0]->account_no }}" disabled="disabled" />
 			  							</div>
 										@endif
-										<div class="col-lg-4">
+										<div class="col-lg-6">
 		  									<label>Account Name</label>
 		  									<input type="text" name="accountName" class="selcls form-control" value="{{ $transactionList[0]->account_name }}" disabled="disabled" />
 			  							</div>
@@ -352,9 +355,13 @@
 		  									<input type="text" name="typeOfCard" class="selcls form-control" value="{{ $transactionList[0]->type_of_card }}" disabled="disabled" />
 			  							</div>
 										@endif
-										<div class="col-lg-4">
+										<div class="col-lg-2">
 		  									<label>Payment Method</label>
 		  									<input type="text" name="paymentMethod" class="selcls form-control" value="{{ $transactionList[0]->method_of_payment }}" disabled="disabled" />
+			  							</div>
+										<div class="col-lg-4">
+		  									<label>Category</label>
+		  									<input type="text" name="category" class="selcls form-control" value="{{ $transactionList[0]->category }}" disabled="disabled" />
 			  							</div>
 			  							<div class="col-lg-4">
 		  									<label>Status</label>

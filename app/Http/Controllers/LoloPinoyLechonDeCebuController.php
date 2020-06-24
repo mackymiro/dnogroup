@@ -3037,7 +3037,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         
         Session::flash('particularsAdded', 'Particulars added.');
 
-        return redirect('lolo-pinoy-lechon-de-cebu/edit-payables-detail/'.$id);
+        return redirect()->route('editPayablesDetailLechonDeCebu', ['id'=>$id]);
 
     }
 
@@ -3051,13 +3051,10 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $name  = $firstName." ".$lastName;
         
-        $paymentData = LechonDeCebuPaymentVoucher::find($id);
-
         //save payment cheque num and cheque amount
         $addPayment = new LechonDeCebuPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
-            'voucher_ref_number'=>$paymentData['voucher_ref_number'],
             'date'=>$request->get('date'),
             'cheque_number'=>$request->get('chequeNumber'),
             'cheque_amount'=>$request->get('chequeAmount'),
@@ -3066,13 +3063,13 @@ class LoloPinoyLechonDeCebuController extends Controller
         ]);
 
         $addPayment->save();
-
         Session::flash('paymentAdded', 'Payment added.');
 
-        return redirect('lolo-pinoy-lechon-de-cebu/edit-payables-detail/'.$id);
+        return redirect()->route('editPayablesDetailLechonDeCebu', ['id'=>$id]);
+
     }
 
-    //
+
     public function editPayablesDetail(Request $request, $id){
         $moduleName = "Payment Voucher";
         $transactionList = DB::table(
@@ -3108,7 +3105,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                             'lechon_de_cebu_codes.module_id',
                             'lechon_de_cebu_codes.module_code',
                             'lechon_de_cebu_codes.module_name')
-                            ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                            ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                             ->where('lechon_de_cebu_payment_vouchers.id', $id)
                             ->where('lechon_de_cebu_codes.module_name', $moduleName)
                             ->get();
@@ -3183,7 +3180,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $status = "FULLY PAID AND RELEASED";
         $totalAmoutDue = LechonDeCebuPaymentVoucher::where('pv_id', NULL)->where('status' ,'!=', $status)->sum('amount_due');
         
-        return view('lechon-de-cebu-transaction-list', compact('user', 'getTransactionLists', 'totalAmoutDue'));
+        return view('lechon-de-cebu-transaction-list', compact('getTransactionLists', 'totalAmoutDue'));
 
     }
 
@@ -4494,7 +4491,6 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $tot = $deliveryReceipt->total + $request->get('price');
         
-
 
         $addNewDeliveryReceipt = new LechonDeCebuDeliveryReceipt([
             'user_id'=>$user->id,
@@ -6114,6 +6110,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $pO = LechonDeCebuPurchaseOrder::find($id);
     
         $tot = $pO->total_price + $request->get('amount');
+      
     
         $addPurchaseOrder = new LechonDeCebuPurchaseOrder([
             'user_id'=>$user->id,

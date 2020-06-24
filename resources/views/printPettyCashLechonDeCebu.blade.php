@@ -39,7 +39,7 @@
 					<div class="col-lg-12">
                           <div class="card-body">
                                 <div class="form-group">
-                                     <div style="width:980px; margin:0 auto;">
+								<div style="width:980px; margin:0 auto;">
                                    <div style="float:left; width:40%">
                                     <table >
                                         <thead>
@@ -71,7 +71,7 @@
                                     </thead>
                                 </table>
                             </div>
-                                </div>
+						</div>
 
                           <br>
                           <br>    

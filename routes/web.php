@@ -263,6 +263,11 @@ Route::group(['middleware' =>['user']], function(){
 	//destroy delivery receipt
 	Route::delete('/lolo-pinoy-grill-commissary/delete-delivery-receipt/{id}', 'LoloPinoyGrillCommissaryController@destroyDeliveryReceipt')->name('lolo-pinoy-grill-commissary.destroyDeliveryReceipt');
 	
+	Route::delete(
+		'/lolo-pinoy-grill-commissary/delete/DR/{id}',
+		'LoloPinoyGrillCommissaryController@destroyDR')
+		->name('destroyDR');
+
 	//delete 
 	Route::delete('/lolo-pinoy-grill-commissary/delete/{id}', 'LoloPinoyGrillCommissaryController@destroy')->name('lolo-pinoy-grill-commissary.delete');
 	
@@ -849,6 +854,32 @@ Route::group(['middleware' =>['sales']], function(){
 			'LoloPinoyLechonDeCebuController@search')
 			->name('search');
 
+	Route::post(
+		'/dno-personal/payment-voucher-store/',
+		'DnoPersonalController@paymentVoucherStore')
+		->name('dno-personal.paymentVoucherStore');
+
+	Route::get(
+			'/dno-personal/payment-voucher-form',
+			'DnoPersonalController@paymentVoucherForm')
+		->name('paymentVoucherFormDNOPersonal');
+
+	Route::get(
+		'/dno-personal/payables/transaction-list',
+		'DnoPersonalController@transactionList')
+		->name('dno-personal.transactionList');
+
+	Route::get(
+		'/dno-personal/edit-dno-personal-payables-detail/{id}',
+		'DnoPersonalController@editPayablesDetail')
+		->name('editPayablesDetailDnoPersonal');
+
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/payables/transaction-list',
+		'LoloPinoyLechonDeCebuController@transactionList')
+		->name('lolo-pinoy-lechon-de-cebu.transactionList');
+
+
 	//delete for lechon de cebu billint statement
 	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-billing-statement/{id}', 'LoloPinoyLechonDeCebuController@destroyBillingStatement')->name('lolo-pinoy-lechon-de-cebu.destroyBillingStatement');
 	
@@ -868,6 +899,10 @@ Route::group(['middleware' =>['sales']], function(){
 	//destroy delivery receipt
 	Route::delete('/lolo-pinoy-grill-commissary/delete-delivery-receipt/{id}', 'LoloPinoyGrillCommissaryController@destroyDeliveryReceipt')->name('lolo-pinoy-grill-commissary.destroyDeliveryReceipt');
 	
+	Route::delete(
+		'/lolo-pinoy-grill-commissary/delete/DR/{id}',
+		'LoloPinoyGrillCommissaryController@destroyDR')
+		->name('destroyDR');
 	//delete 
 	Route::delete('/lolo-pinoy-grill-commissary/delete/{id}', 'LoloPinoyGrillCommissaryController@destroy')->name('lolo-pinoy-grill-commissary.delete');
 	
@@ -1132,6 +1167,11 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('lolo-pinoy-lechon-de-cebu.printBillingDelivery');
 
 	Route::get(
+			'/lolo-pinoy-lechon-de-cebu/payables/transaction-list',
+			'LoloPinoyLechonDeCebuController@transactionList')
+			->name('lolo-pinoy-lechon-de-cebu.transactionList');
+
+	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/billing-statement/view-per-account-delivery-receipt/{id}',
 		'LoloPinoyLechonDeCebuController@viewPerAccountDeliveryReceipt')
 		->name('lolo-pinoy-lechon-de-cebu.viewPerAccountDeliveryReceipt');
@@ -1392,8 +1432,8 @@ Route::group(['middleware' => ['auth']], function(){
 
 	Route::delete(
 		'/lolo-pinoy-grill-commissary/delete-purchase-order/{id}',
-		'LoloPinoyGrillCommissaryController@destroy')
-		->name('destroy');
+		'LoloPinoyGrillCommissaryController@destroyPO')
+		->name('destroyPO');
 
 	Route::get(
 		'/lolo-pinoy-grill-commissary/pintPO/{id}',
@@ -2651,6 +2691,27 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dno-personal/search',
 		'DnoPersonalController@search')
 		->name('search');
+
+	Route::post(
+		'/dno-personal/payment-voucher-store/',
+		'DnoPersonalController@paymentVoucherStore')
+		->name('dno-personal.paymentVoucherStore');
+
+	Route::get(
+			'/dno-personal/payment-voucher-form',
+			'DnoPersonalController@paymentVoucherForm')
+		->name('paymentVoucherFormDNOPersonal');
+
+	Route::get(
+		'/dno-personal/payables/transaction-list',
+		'DnoPersonalController@transactionList')
+		->name('dno-personal.transactionList');
+
+	Route::get(
+		'/dno-personal/edit-dno-personal-payables-detail/{id}',
+		'DnoPersonalController@editPayablesDetail')
+		->name('editPayablesDetailDnoPersonal');
+	
 	
 	Route::delete(
 		'/dno-personal/delete-transaction-list/{id}',
@@ -3033,6 +3094,52 @@ Route::group(['middleware' => ['auth']], function(){
 		'DnoFoodVenturesController@index')
 		->name('dno-food-ventures');
 
+	Route::get(
+		'/dno-food-ventures/payment-voucher-form',
+		'DnoFoodVenturesController@paymentVoucherForm')
+		->name('paymentVoucherFormDNOfoodventures');
+
+	Route::post(
+		'/dno-food-ventures/store-payment-voucher',
+		'DnoFoodVenturesController@paymentVoucherStore')
+		->name('paymentVoucherStore');
+
+	Route::get(
+		'/dno-food-ventures/edit-payables-detail/{id}',
+		'DnoFoodVenturesController@editPayablesDetail')
+		->name('editPayablesDetailDNOFoodVentures');
+
+	Route::post(
+		'/dno-food-ventures/add-payment/{id}',
+		'DnoFoodVenturesController@addPayment')
+		->name('addPayment');
+
+	Route::get(
+		'/dno-food-ventures/payables/transaction-list',
+		'DnoFoodVenturesController@transactionList')
+		->name('transactionList');
+
+	Route::get(
+		'/dno-food-ventures/view-payables-details/{id}',
+		'DnoFoodVenturesController@viewPayableDetails')
+		->name('viewPayableDetails');
+
+	Route::get(
+		'/dno-food-ventures/printPayables/{id}',
+		'DnoFoodVenturesController@printPayables')
+		->name('printPayables');
+
+	Route::post(
+		'/dno-food-ventures/add-particular/{id}',
+		'DnoFoodVenturesController@addParticulars')
+		->name('addParticularsDNOFoodVentures');
+
+	Route::patch(
+			'/dno-food-ventures/accept/{id}',
+			'DnoFoodVenturesController@accept')
+			->name('accept');
+	
+
 	//DNO resources and devlopment corp
 	Route::get(
 		'/dno-resources-development',
@@ -3173,6 +3280,26 @@ Route::group(['middleware' => ['auth']], function(){
 		'DongFangCorporationController@printPayablesDongFang')
 		->name('printPayablesDongFang');
 
+	Route::get(
+		'/dong-fang-corporation/summary-report',
+		'DongFangCorporationController@summaryReport')
+		->name('summaryReport');
+
+	Route::get(
+		'/dong-fang-corporation/printSummary',
+		'DongFangCorporationController@printSummary')
+		->name('printSummary');
+
+	Route::get(
+		'/dong-fang-corporation/search-date',
+		'DongFangCorporationController@getSummaryReport')
+		->name('getSummaryReport');
+
+	Route::get(
+		'/dong-fang-corporation/printGetSummary/{date}',
+		'DongFangCorporationController@printGetSummary')
+		->name('printGetSummary');
+
 	Route::delete(
 		'/dong-fang-corporation/delete-transaction-list/{id}',
 		'DongFangCorporationController@destroyTransaction')
@@ -3217,6 +3344,51 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dong-fang-corporation/view-billing-statement/{id}',
 		'DongFangCorporationController@viewBillingStatement')
 		->name('viewBillingStatementDongFang');
+
+	Route::get(
+		'/dong-fang-corporation/petty-cash-list',
+		'DongFangCorporationController@pettyCashList')
+		->name('pettyCashListDongFang');
+
+	Route::post(
+		'/dong-fang-corporation/petty-cash/add',
+		'DongFangCorporationController@addPettyCash')
+		->name('addPettyCash');
+
+	Route::get(
+		'/dong-fang-corporation/edit-petty-cash/{id}',
+		'DongFangCorporationController@editPettyCash')
+		->name('editPettyCashDongFang');
+
+	Route::patch(
+		'/dong-fang-corporation/update/{id}',
+		'DongFangCorporationController@updatePC')
+		->name('updatePCDongFang');
+
+	Route::post(
+		'/dong-fang-corporation/add-new-petty-cash/{id}',
+		'DongFangCorporationController@addNewPettyCash')
+		->name('addNewPettyCashDongFang');
+
+	Route::patch(
+		'/dong-fang-corporation/update-petty-cash/{id}',
+		'DongFangCorporationController@updatePettyCash')
+		->name('updatePettycashDongFang');
+
+	Route::delete(
+		'/dong-fang-corporation/petty-cash/delete/{id}',
+		'DongFangCorporationController@destroyPettyCash')
+		->name('destroyPettyCash');
+
+	Route::get(
+		'/dong-fang-corporation/petty-cash/view/{id}',
+		'DongFangCorporationController@viewPettyCash')
+		->name('viewPettyCash');
+
+	Route::get(
+		'/dong-fang-corporation/printPettyCash/{id}',
+		'DongFangCorporationController@printPettyCash')
+		->name('printPettyCash');
 
 	//WLG Corporation
 	Route::get(

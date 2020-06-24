@@ -31,8 +31,7 @@
                              </div>
                           </div>
                            
-                         <form action="{{ action('LoloPinoyLechonDeCebuController@paymentVoucherStore') }}" method="post">
-                         	{{ csrf_field() }}
+                       
                          <div class="card-body">
                               <div class="form-group">  
                                   <div class="form-row">
@@ -142,7 +141,7 @@
                                   
                               </table>
                          </div>	
-                     	</form>
+                     	
             		 </div>
             	</div>
             </div>

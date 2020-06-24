@@ -1,37 +1,36 @@
-@extends('layouts.dong-fang-corporation-app')
+@extends('layouts.dno-food-ventures-app')
 @section('title', 'Payment Details|')
 @section('content')
-
 <div id="wrapper">
 	<!-- Sidebar -->
-    @include('sidebar.sidebar-dong-fang-corporation')
+    @include('sidebar.sidebar-dno-food-ventures')
      <div id="content-wrapper">
  		 <div class="container-fluid">
  			 <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">Dong Fang Corporation</a>
+                <a href="#">DNO Food Ventures</a>
               </li>
               <li class="breadcrumb-item active">Payables</li>
               <li class="breadcrumb-item ">Payment Details</li>
             </ol>
              <div class="col-lg-12">
-            	   <img src="{{ asset('images/dong-fang-corporation.png')}}" width="255" height="172" class="img-responsive mx-auto d-block" alt="DNO Personal">
-                 
+            	 <img src="{{ asset('images/digitized-logos/dno-food-venture.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="DNO Food Ventures">
             	 
             	 <h4 class="text-center"><u>PAYMENT DETAILS (PAYMENT VOUCHER)</u></h4>
             </div>
             <div class="row">
             	<div class="col-lg-12">
             		 <div class="card mb-3">
-            		 	 <div class="card-header">
+                  		 	 <div class="card-header">
                               <i class="fas fa-file-invoice" aria-hidden="true"></i>
                             Payment Details
-                             <div class="float-right">
-                               <a href="{{ action('DongFangCorporationController@printPayablesDongFang', $viewPaymentDetail[0]->id) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                              <div class="float-right">
+                               <a href="{{ action('DnoFoodVenturesController@printPayables', $viewPaymentDetail[0]->id) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                              </div>
-                        </div>
-                          
+                          </div>
+                           
+                       
                          <div class="card-body">
                               <div class="form-group">  
                                   <div class="form-row">
@@ -40,24 +39,21 @@
                                               <thead>
                                                   <tr>
                                                       <th class="bg-info" style="color:white;">Paid To</th>
-                                                      <th class="bg-info" style="color:white;">{{ $viewPaymentDetail[0]->paid_to}}</th>
+                                                      <th class="bg-info" style="color:white;">{{ $viewPaymentDetail[0]->paid_to }}</th>
                                                   </tr>
-                                               
                                                   <tr>
-                                                       <th width="30%" class="bg-info" style="color:white;">Account Name</th>
-                                                      <th class="bg-info" style="color:white;">{{ $viewPaymentDetail[0]->account_name}}</th>
-                                                  
-                                                  </tr>
-                        
-                                                  <tr>
+
                                                       <th class="bg-success" style="color:white;" width="15%">Status</th>
-                                                      <th class="bg-success" style="color:white;">{{ $viewPaymentDetail[0]->status}}</th>
+                                                      <th class="bg-success" style="color:white;">{{ $viewPaymentDetail[0]->status }}</th>
                                                   </tr>
                                                   <tr>
                                                       <th width="15%">Date</th>
                                                       <th>{{ $viewPaymentDetail[0]->issued_date}}</th>
                                                   </tr>
-                                                 
+                                                  <tr>
+                                                      <th width="30%">Account Name</th>
+                                                      <th>{{ $viewPaymentDetail[0]->account_name }}</th>
+                                                  </tr>
                                               </thead>
                                           </table>
                                       </div>
@@ -65,22 +61,22 @@
                                           <table class="table table-bordered">
                                               <thead>
                                                   <tr>
-                                                      <th width="20%" class="bg-danger" style="color:#fff;">Amount Due</th>
-                                                      <th class="bg-danger" style="color:#fff;"><?php echo number_format($viewPaymentDetail[0]->amount_due, 2); ?></th>
+                                                      <th class="bg-danger" style="color:#fff;" width="20%">Amount Due</th>
+                                                      <th class="bg-danger" style="color:#fff;" ><?php echo number_format($viewPaymentDetail[0]->amount_due, 2); ?></th>
                                                   </tr>
-                                                  <tr>  
-                                                     <th width="35%" class="bg-danger" style="color:#fff;">Payment Method</th> 
-                                                     <th class="bg-danger" style="color:#fff;">{{ $viewPaymentDetail[0]->method_of_payment}}</th>
-                                                  </tr>
-                                                  <tr>
-                                                      <th width="35%">Invoice #</th>
+                                                   <tr>
+                                                      <th width="20%">Invoice #</th>
                                                       <th>{{ $viewPaymentDetail[0]->invoice_number}}</th>
                                                   </tr>
                                                   <tr>
-                                                      <th width="35%">PV No</th>
-                                                      <th>{{ $viewPaymentDetail[0]->module_code}}{{ $viewPaymentDetail[0]->dong_fang_code}}</th>
+                                                      <th width="30%">PV No</th>
+                                                      <th>{{ $viewPaymentDetail[0]->dno_food_venture_code}}</th>
                                                   </tr>
-                                                 
+                                                  <tr>
+                                                      <th width="30%">Payment Method</th>
+                                                      <th>{{ $viewPaymentDetail[0]->method_of_payment}}</th>
+                                                  </tr>
+
                                               </thead>
                                           </table>
                                       </div>
@@ -93,47 +89,33 @@
                                             <th>PARTICULARS</th>
                                             <th>AMOUNT</th>
                                         </tr>
-
-                                    </thead>
-                                    <tbody>
-                                         <tr>	
-  											<td>{{ $viewPaymentDetail[0]->issued_date}}</td>
-  											<td>{{ $viewPaymentDetail[0]->particulars}}</td>
-											<td><?php echo number_format($viewPaymentDetail[0]->amount, 2); ?></td>
-										</tr>
+                                    </thead>  
+                                    <tbody> 
+                                        <tr>
+                                            <td>{{ $viewPaymentDetail[0]->issued_date }}</td>
+                                            <td>{{ $viewPaymentDetail[0]->particulars}}</td>
+                                            <td><?php echo number_format($viewPaymentDetail[0]->amount, 2); ?></td>
+                                        </tr>
                                         @foreach($getParticulars as $getParticular)
-                                        <tr>
-                                            <td>{{ $getParticular['date']}}</td>
-                                            <td>{{ $getParticular['particulars']}}</td>
-                                            <td><?php echo number_format($getParticular['amount'], 2) ?></td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
+										<tr>
+  											<td>{{ $getParticular['date']}}</td>
+  											<td>{{ $getParticular['particulars']}}</td>
+											<td><?php echo number_format($getParticular['amount'], 2); ?></td>
+										</tr>
+										@endforeach
+                                    </tbody>  
                               </table>
-                              
-                              @if($viewPaymentDetail[0]->method_of_payment === "CHECK")
                               <table class="table table-striped ">
                                     <thead>
                                         <tr>
-                                            <th>CHECK NO ISSUED</th>
-                                            <th>CHECK AMOUNT</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($getViewPaymentDetails as $getViewPaymentDetail)
-                                        <tr>
-                                           <td>{{ $getViewPaymentDetail['cheque_number']}}</td>
-                                           <td><?php echo number_format($getViewPaymentDetail['cheque_amount'], 2)?></td>
-                                        </tr>
-                                        @endforeach
-                                    </tbody>
-                              </table>
-                              @else
-                              <table class="table table-striped ">
-                                    <thead>
-                                        <tr>
+                                            @if($viewPaymentDetail[0]->method_of_payment === "CASH")
                                             <th>CASH NO ISSUED</th>
                                             <th>CASH AMOUNT</th>
+                                            @else
+                                            <th>CHECK NO ISSUED</th>
+                                            <th>CHECK AMOUNT</th>
+                                            @endif
+                                           
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -145,22 +127,20 @@
                                         @endforeach
                                     </tbody>
                               </table>
-
-                              @endif
                               <br>
                               <br>
 
                                <table class="table table-striped ">
                                     <thead>
                                         <tr>
-                                            <th width="15%">Prepared By</th>
+                                            <th width="15%%">PREAPARED BY</th>
                                             <th>{{ $viewPaymentDetail[0]->created_by}}</th>
                                         </tr>
                                     </thead>
                                   
                               </table>
                          </div>	
-                     
+                     	
             		 </div>
             	</div>
             </div>

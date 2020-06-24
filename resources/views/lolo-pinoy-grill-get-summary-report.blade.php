@@ -547,7 +547,7 @@
                                                     <tr>
                                                         <td>{{ $getAllDeliveryReceipt->date}}</td>
                                                         <td>{{ $getAllDeliveryReceipt->module_code}}{{ $getAllDeliveryReceipt->lolo_pinoy_grill_code}}</td>
-                                                        <td><?php echo number_format($getAllDeliveryReceipt->amount, 2)?></td>
+                                                        <td><?php echo number_format($getAllDeliveryReceipt->total_amount, 2)?></td>
                                                         <td>{{ $getAllDeliveryReceipt->created_by}}</td>
                                                     </tr>
                                                     @endforeach
@@ -589,7 +589,7 @@
                                                         <td>{{ $purchaseOrder->date}}</td>
                                                         <td>{{ $purchaseOrder->module_code}}{{ $purchaseOrder->lolo_pinoy_grill_code}}</td>
                                                         <td>{{ $purchaseOrder->paid_to }}</td>
-                                                        <td><?php echo number_format($purchaseOrder->amount, 2)?></td>
+                                                        <td><?php echo number_format($purchaseOrder->total_price, 2)?></td>
                                                         <td>{{ $purchaseOrder->created_by }}</td>
                                                     </tr>
 				  						        @endforeach

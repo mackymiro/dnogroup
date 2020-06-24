@@ -51,22 +51,53 @@
                                                       <th class="bg-info" style="color:white;">{{ $viewPaymentDetail[0]->account_no}}</th>
                                                            
                                                   </tr>
+                                                 
                                                   @endif
-                                               
-                                                 <?php endif; ?>
                                                 
-                                                <tr>
+                                                  <?php else: ?>
+                                                    @if($viewPaymentDetail[0]->account_no != NULL)
+                                                  <tr>
+                                                     
+                                                      <th  width="30%" class="bg-info" style="color:white;">Account No</th>
+                                                      <th class="bg-info" style="color:white;">{{ $viewPaymentDetail[0]->account_no}}</th>
+                                                           
+                                                  </tr>
+                                                 
+                                                  @endif
+
+                                                  <?php endif; ?>
+                                                  <tr>
                                                     <th width="30%" class="bg-info" style="color:white;">Account Name</th>
                                                     <th class="bg-info" style="color:white;">{{ $viewPaymentDetail[0]->account_name}}</th>
                                                     
                                                 </tr>
+                                                 @if($viewPaymentDetail[0]->bank_card != 0)
+                                                 <tr>
+                                                     <?php
+                                                        $bankName = $viewPaymentDetail[0]->bank_card;
+                                                        $bankNameArr = explode("-", $bankName);
+                                            
+                                                     ?>
+                                                     <th  width="30%" class="bg-info" style="color:white;">Bank Name</th>
+                                                     <th class="bg-info" style="color:white;">{{ $bankNameArr[1]}}</th>
+                                                          
+                                                 </tr>
+                                                @endif
+                                                @if($viewPaymentDetail[0]->type_of_card != NULL)
+                                                <tr>
+                                                    <th width="30%" class="bg-info" style="color:white;">Type Of Card</th>
+                                                    <th class="bg-info" style="color:white;">{{ $viewPaymentDetail[0]->type_of_card}}</th>
+                                                    
+                                                </tr>
+                                                @endif
+                                               
 
                                                   <tr>
                                                       <th class="bg-success" style="color:white;" width="15%">Status</th>
                                                       <th class="bg-success" style="color:white;">{{ $viewPaymentDetail[0]->status}}</th>
                                                   </tr>
                                                   <tr>
-                                                      <th width="15%">Date</th>
+                                                      <th width="15%">Check issued</th>
                                                       <th>{{ $viewPaymentDetail[0]->issued_date}}</th>
                                                   </tr>
                                                  

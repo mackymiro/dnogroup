@@ -106,7 +106,7 @@
                                         <label>Petty Cash No</label>
                                         <select data-live-search="true" name="pettyCashNo" class="form-control selectpicker">
                                           @foreach($pettyCashes as $pettyCash)
-                                          <option value="{{ $pettyCash['id']}}">{{ $pettyCash['petty_cash_no']}}</option>
+                                          <option value="{{ $pettyCash->ribos_bar_code}}">{{ $pettyCash->ribos_bar_code}}</option>
                                           @endforeach
                                         </select>
                                     </div>  

@@ -1,4 +1,4 @@
-@extends('layouts.lolo-pinoy-lechon-de-cebu-app')
+@extends('layouts.dno-food-ventures-app')
 @section('title', 'Payables Form|')
 @section('content')
 <script>
@@ -15,18 +15,18 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="wrapper">
-	 @include('sidebar.sidebar')
+	 @include('sidebar.sidebar-dno-food-ventures')
      <div id="content-wrapper">
 		<div class="container-fluid">
 			 <!-- Breadcrumbs-->
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                  <a href="#">Lechon de Cebu</a>
+                  <a href="#">DNO Food Ventures</a>
                 </li>
                 <li class="breadcrumb-item active">Payables</li>
                 <li class="breadcrumb-item ">Payable Form</li>
               </ol>
-               <a href="{{ url('lolo-pinoy-lechon-de-cebu/payables/transaction-list')}}">Back to Transaction Lists</a>
+               <a href="{{ url('dno-food-ventures/payables/transaction-list')}}">Back to Transaction Lists</a>
                <br>
                <br>
                <div class="row">
@@ -38,7 +38,7 @@
 	    					  Payable Form</div>
 
 	    					  <div class="card-body">
-	    					  		<form action="{{ action('LoloPinoyLechonDeCebuController@addPayment', $transactionList[0]->id) }}" method="post">
+	    					  		<form action="{{ action('DnoFoodVenturesController@addPayment', $transactionList[0]->id) }}" method="post">
 	    					  			{{ csrf_field() }}
 				  			 	 	@if(session('paymentAdded'))
 		                                <p class="alert alert-success">{{ Session::get('paymentAdded') }}</p>
@@ -142,7 +142,7 @@
 								Particulars
 							</div>
 							<div class="card-body">
-  								<form action="{{ action('LoloPinoyLechonDeCebuController@addParticulars', $transactionList[0]->id) }}" method="post">
+  								<form action="{{ action('DnoFoodVenturesController@addParticulars', $transactionList[0]->id) }}" method="post">
 								  {{ csrf_field() }}
 								  @if(session('particularsAdded'))
 		                                <p class="alert alert-success">{{ Session::get('particularsAdded') }}</p>
@@ -207,7 +207,7 @@
 		                         @if(session('errorPaid'))
 		                                <p class="alert alert-danger">{{ Session::get('errorPaid') }}</p>
 		                         @endif
-    					  		<form action="{{ action('LoloPinoyLechonDeCebuController@accept', $transactionList[0]->id)}}" method="post">
+    					  		<form action="{{ action('DnoFoodVenturesController@accept', $transactionList[0]->id)}}" method="post">
     					  			{{ csrf_field() }}
     					  			 <input name="_method" type="hidden" value="PATCH">
 					  			 <table class="table table-bordered">
@@ -231,7 +231,7 @@
 			  							</div>
 			  							<div class="col-lg-4">
 		  									<label>PV #</label>
-		  									<input type="text" name="voucherRef" class="form-control" value="{{ $transactionList[0]->module_code }}{{ $transactionList[0]->lechon_de_cebu_code }}" disabled="disabled" />
+		  									<input type="text" name="voucherRef" class="form-control" value="{{ $transactionList[0]->module_code }}{{ $transactionList[0]->dno_food_venture_code }}" disabled="disabled" />
 			  							</div>
 										<div class="col-lg-4">
 		  									<label>Account Name</label>
@@ -264,9 +264,8 @@
 										</tr>
 									</thead>
 									<tbody>
-  										
-										<tr>	
-											<td>{{ $transactionList[0]->date }}</td>
+  										<tr>	
+											<td>{{ $transactionList[0]->issued_date }}</td>
   											<td>{{ $transactionList[0]->particulars}}</td>
 											<td><?php echo number_format($transactionList[0]->amount, 2); ?></td>
 										</tr>

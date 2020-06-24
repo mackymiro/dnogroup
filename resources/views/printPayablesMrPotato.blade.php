@@ -31,7 +31,11 @@
 
             Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
                  </p>
-                 <h4 ><u>PAYMENT VOUCHER</u></h4>
+                 @if($payableId[0]->method_of_payment === "CASH")
+	            	 <h4 ><u>PAYMENT CASH VOUCHER</u></h4>
+                @else
+                <h4 ><u>PAYMENT CHECK VOUCHER</u></h4>
+                @endif
               </div>
         <div class="row">
           <div class="col-lg-12">

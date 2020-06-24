@@ -974,7 +974,27 @@ class LoloPinoyGrillBranchesController extends Controller
     }
 
     public function printPettyCash($id){
-        $getPettyCash = LoloPinoyGrillBranchesPettyCash::find($id);
+        $moduleName = "Petty Cash";
+        $getPettyCash = DB::table(
+                                'lolo_pinoy_grill_branches_petty_cashes')
+                                ->select( 
+                                'lolo_pinoy_grill_branches_petty_cashes.id',
+                                'lolo_pinoy_grill_branches_petty_cashes.user_id',
+                                'lolo_pinoy_grill_branches_petty_cashes.pc_id',
+                                'lolo_pinoy_grill_branches_petty_cashes.date',
+                                'lolo_pinoy_grill_branches_petty_cashes.petty_cash_name',
+                                'lolo_pinoy_grill_branches_petty_cashes.petty_cash_summary',
+                                'lolo_pinoy_grill_branches_petty_cashes.amount',
+                                'lolo_pinoy_grill_branches_petty_cashes.created_by',
+                                'lolo_pinoy_grill_branches_codes.lolo_pinoy_branches_code',
+                                'lolo_pinoy_grill_branches_codes.module_id',
+                                'lolo_pinoy_grill_branches_codes.module_code',
+                                'lolo_pinoy_grill_branches_codes.module_name')
+                                ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_petty_cashes.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                                ->where('lolo_pinoy_grill_branches_petty_cashes.id', $id)
+                                ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleName)
+                                ->get();
+        
 
         $getPettyCashSummaries = LoloPinoyGrillBranchesPettyCash::where('pc_id', $id)->get()->toArray();
 

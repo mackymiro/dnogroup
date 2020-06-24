@@ -201,7 +201,7 @@
                                         <div class="form-row">
                                              <div class="col-lg-2">
                                               <br>
-                                              <input type="hidden" name="drId" value="{{ $getDeliveryReceipt['id'] }}" />
+                                              <input type="hidden" id="drId" name="drId" value="{{ $getDeliveryReceipt['id'] }}" />
                                               <input type="submit" class="btn btn-success" value="Update" />
                                               @if(Auth::user()['role_type'] == 1)
                                               <a id="delete" onClick="confirmDelete('{{ $dReceipt['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
@@ -239,6 +239,8 @@
 <script type="text/javascript">
      function confirmDelete(id){
         var x = confirm("Do you want to delete this?");
+        const drId = $("#drId").val();
+        
         if(x){
             $.ajax({
               type: "DELETE",
@@ -246,7 +248,8 @@
               data:{
                 _method: 'delete', 
                 "_token": "{{ csrf_token() }}",
-                "id": id
+                "id": id,
+                "drId":drId,
               },
               success: function(data){
                 console.log(data);

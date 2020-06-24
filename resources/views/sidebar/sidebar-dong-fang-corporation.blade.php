@@ -6,6 +6,19 @@
           <span>Ribo's Food Corporation</span>
         </a>
       </li>
+      @if(Auth::user()['role_type'] != 3)
+       <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-flag"></i>
+          <span>Summary Report(s)</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+            <a class="dropdown-item" href="{{ url('dong-fang-corporation/summary-report') }}">Summary Report(s)</a>
+            <a class="dropdown-item" href="{{ url('dong-fang-corporation/summary-report/search-number-code') }}">Search Number Code</a>
+      
+        </div>
+      </li>
+      @endif
       <li class="nav-item dropdown ">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-receipt" aria-hidden="true"></i>
@@ -17,6 +30,16 @@
            <a class="dropdown-item" href="{{ url('dong-fang-corporation/billing-statement/list') }}">List</a>
         
          
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-money-bill-alt"></i>
+
+          <span>Petty Cash</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+            <a class="dropdown-item" href="{{ url('dong-fang-corporation/petty-cash-list') }}">Petty Cash List</a>
         </div>
       </li>
       @if(Auth::user()['role_type'] != 3)

@@ -114,7 +114,7 @@
         if(x){
             $.ajax({
               type: "DELETE",
-              url: '/lolo-pinoy-grill-commissary/delete-delivery-receipt/' + id,
+              url: '/lolo-pinoy-grill-commissary/delete/DR/' + id,
               data:{
                 _method: 'delete', 
                 "_token": "{{ csrf_token() }}",

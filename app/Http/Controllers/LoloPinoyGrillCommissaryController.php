@@ -98,6 +98,7 @@ class LoloPinoyGrillCommissaryController extends Controller
                                 'lolo_pinoy_grill_commissary_delivery_receipts.item_description',
                                 'lolo_pinoy_grill_commissary_delivery_receipts.unit_price',
                                 'lolo_pinoy_grill_commissary_delivery_receipts.amount',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.total_amount',
                                 'lolo_pinoy_grill_commissary_delivery_receipts.charge_to',
                                 'lolo_pinoy_grill_commissary_delivery_receipts.address_to',
                                 'lolo_pinoy_grill_commissary_delivery_receipts.prepared_by',
@@ -542,6 +543,7 @@ class LoloPinoyGrillCommissaryController extends Controller
                                 'lolo_pinoy_grill_commissary_delivery_receipts.item_description',
                                 'lolo_pinoy_grill_commissary_delivery_receipts.unit_price',
                                 'lolo_pinoy_grill_commissary_delivery_receipts.amount',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.total_amount',
                                 'lolo_pinoy_grill_commissary_delivery_receipts.charge_to',
                                 'lolo_pinoy_grill_commissary_delivery_receipts.address_to',
                                 'lolo_pinoy_grill_commissary_delivery_receipts.prepared_by',
@@ -1367,6 +1369,7 @@ class LoloPinoyGrillCommissaryController extends Controller
                                     'lolo_pinoy_grill_commissary_sales_invoices.item_description',
                                     'lolo_pinoy_grill_commissary_sales_invoices.unit_price',
                                     'lolo_pinoy_grill_commissary_sales_invoices.amount',
+                                    'lolo_pinoy_grill_commissary_sales_invoices.total_amount',
                                     'lolo_pinoy_grill_commissary_sales_invoices.created_by',
                                     'lolo_pinoy_grill_commissary_sales_invoices.created_at',
                                     'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
@@ -1425,6 +1428,7 @@ class LoloPinoyGrillCommissaryController extends Controller
                                 'lolo_pinoy_grill_commissary_delivery_receipts.item_description',
                                 'lolo_pinoy_grill_commissary_delivery_receipts.unit_price',
                                 'lolo_pinoy_grill_commissary_delivery_receipts.amount',
+                                'lolo_pinoy_grill_commissary_delivery_receipts.total_amount',
                                 'lolo_pinoy_grill_commissary_delivery_receipts.charge_to',
                                 'lolo_pinoy_grill_commissary_delivery_receipts.address_to',
                                 'lolo_pinoy_grill_commissary_delivery_receipts.prepared_by',
@@ -1476,7 +1480,7 @@ class LoloPinoyGrillCommissaryController extends Controller
                                     ->where('lolo_pinoy_grill_commissary_delivery_receipts.dr_id', NULL)
                                     ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNameDelivery)
                                     ->whereDate('lolo_pinoy_grill_commissary_delivery_receipts.created_at', '=', date($getDateToday))
-                                    ->sum('lolo_pinoy_grill_commissary_delivery_receipts.amount');
+                                    ->sum('lolo_pinoy_grill_commissary_delivery_receipts.total_amount');
         
         //purchase order
         $moduleNamePurchase = "Purchase Order";
@@ -3833,6 +3837,9 @@ class LoloPinoyGrillCommissaryController extends Controller
         $name  = $firstName.$lastName;
 
         $pO = LoloPinoyGrillCommissaryPurchaseOrder::find($id);
+       
+        $amount = $request->get('amount') + $pO->total_price; 
+     
 
         $addNewPurchaseOrder = new LoloPinoyGrillCommissaryPurchaseOrder([
             'user_id'=>$user->id,
@@ -3842,13 +3849,15 @@ class LoloPinoyGrillCommissaryController extends Controller
             'description'=>$request->get('description'),
             'unit_price'=>$request->get('unitPrice'),
             'amount'=>$request->get('amount'),
-            'total_price'=>$request->get('amount'),
             'prepared_by'=>$name,
             'created_by'=>$name,
 
         ]);
 
         $addNewPurchaseOrder->save();
+
+        $pO->total_price = $amount; 
+        $pO->save();
 
         Session::flash('purchaseOrderSuccess', 'Successfully added purchase order');
 
@@ -4006,6 +4015,9 @@ class LoloPinoyGrillCommissaryController extends Controller
         $compute = $qty * $unitPrice;
         $sum = $compute;
 
+        $getAmount = $deliveryReceipt->total_amount + $sum;
+
+
          //get date today
         $getDateToday =  date('Y-m-d');
 
@@ -4027,6 +4039,9 @@ class LoloPinoyGrillCommissaryController extends Controller
         ]);
 
         $addNewDeliveryReceipt->save();
+
+        $deliveryReceipt->total_amount  = $getAmount; 
+        $deliveryReceipt->save();
 
         Session::flash('addDeliveryReceiptSuccess', 'Successfully added.');
 
@@ -4138,6 +4153,7 @@ class LoloPinoyGrillCommissaryController extends Controller
             'address'=>$request->get('address'),
             'unit_price'=>$unitPrice,
             'amount'=>$sum,
+            'total_amount'=>$sum,
             'charge_to'=>$request->get('chargeTo'),
             'address_to'=>$request->get('addressTo'),
             'prepared_by'=>$name,
@@ -4445,16 +4461,28 @@ class LoloPinoyGrillCommissaryController extends Controller
 
     }
 
+    public function destroyPO($id){
+        $purchaseOrder = LoloPinoyGrillCommissaryPurchaseOrder::find($id);
+        $purchaseOrder->delete();
+    }
+
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        
+        $poId = LoloPinoyGrillCommissaryPurchaseOrder::find($request->poId);
+
         $purchaseOrder = LoloPinoyGrillCommissaryPurchaseOrder::find($id);
+        $getAmount = $poId->total_price - $purchaseOrder->amount;
+
+        $poId->total_price = $getAmount;
+        $poId->save();
+
         $purchaseOrder->delete();
 
     }
@@ -4480,9 +4508,22 @@ class LoloPinoyGrillCommissaryController extends Controller
         $billingStatement->delete();
     }
 
-    //destroy delivery receipt
-    public function destroyDeliveryReceipt($id){
+    public function destroyDR($id){
         $deliveryReceipt = LoloPinoyGrillCommissaryDeliveryReceipt::find($id);
+
+        $deliveryReceipt->delete();
+    }
+
+    //destroy delivery receipt
+    public function destroyDeliveryReceipt(Request $request, $id){
+        $drId = LoloPinoyGrillCommissaryDeliveryReceipt::find($request->drId);
+      
+        $deliveryReceipt = LoloPinoyGrillCommissaryDeliveryReceipt::find($id);
+        $getAmount = $drId->total_amount - $deliveryReceipt->amount; 
+
+        $drId->total_amount = $getAmount; 
+        $drId->save();
+
         $deliveryReceipt->delete();
     }
 

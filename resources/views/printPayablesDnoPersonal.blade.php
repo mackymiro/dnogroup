@@ -31,7 +31,11 @@
 
 						Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
             	 	 </p>
-	            	 <h4 ><u>PAYMENT VOUCHER</u></h4>
+	            	@if($payableId[0]->method_of_payment === "CASH")
+	            	 <h4 ><u>PAYMENT CASH VOUCHER</u></h4>
+					 @else
+					 <h4 ><u>PAYMENT CHECK VOUCHER</u></h4>
+					 @endif
 	            </div>
 				<div class="row">
 					<div class="col-lg-12">
@@ -46,30 +50,56 @@
                                                 <th> {{ $payableId[0]->paid_to }}</th>
                                             </tr>
 											@if($payableId[0]->method_of_payment  === "CHECK")
+											@if($payableId[0]->account_no != NULL)
+											<tr>
+												<th width="30%">Account No:</th>
+												<th> {{ $payableId[0]->account_no }}</th>
+											</tr>
+											@endif
 											<tr>
                                                 <th width="25%">Account Name:</th>
                                                 <th> {{ $payableId[0]->account_name }}</th>
                                             </tr>
-											@endif
-											@if($payableId[0]->method_of_payment  === "CHECK")
-											@if($payableId[0]->account_no != NULL)
+											@if($payableId[0]->bank_card != 0)
 											<tr>
-                                                <th width="30%">Account No:</th>
-                                                <th> {{ $payableId[0]->account_no }}</th>
+
+												 <?php
+                                                        $bankName = $payableId[0]->bank_card;
+                                                        $bankNameArr = explode("-", $bankName);
+                                            
+                                                     ?>
+                                                <th width="25%">Bank Name:</th>
+                                                <th> <?php echo $bankNameArr[1]	;?></th>
                                             </tr>
 											@endif
 											@endif
+										
 											@if($payableId[0]->method_of_payment === "CASH")
+											@if($payableId[0]->account_no != NULL)
+												<tr>
+													<th width="30%">Account No:</th>
+													<th> {{ $payableId[0]->account_no }}</th>
+												</tr>
+											@endif
+										
 											<tr>
                                                 <th width="23%">Account Name:</th>
                                                 <th> {{ $payableId[0]->account_name }}</th>
                                             </tr>
+											@if($payableId[0]->bank_card != 0)
+											<tr>
+												 <?php
+                                                        $bankName = $payableId[0]->bank_card;
+                                                        $bankNameArr = explode("-", $bankName);
+                                            
+                                                     ?>
+                                                <th width="25%">Bank Name:</th>
+                                                <th> <?php echo $bankNameArr[1];?></th>
+                                            </tr>
+											@endif
 											@endif 
 											
-											<tr>
-                                                <th>PV No:</th>
-                                                <th>{{ $payableId[0]->module_code}}{{ $payableId[0]->dno_personal_code}} </th>
-                                            </tr>
+										
                                             <tr>
                                                 <th>Status:</th>
                                                 <th>{{ $payableId[0]->status }}</th>
@@ -92,11 +122,15 @@
                                                 <th> {{ $payableId[0]->invoice_number }}</th>
                                             </tr>
 											<tr>
+                                                <th>PV No:</th>
+                                                <th>{{ $payableId[0]->module_code}}{{ $payableId[0]->dno_personal_code}} </th>
+                                            </tr>
+											<tr>
 												<th>Payment Method:</th>
 												<th>{{ $payableId[0]->method_of_payment}}</th>
 											</tr>
                                             <tr>
-                                                <th>Date:</th>
+                                                <th>Check Issued:</th>
                                                 <th> {{ $payableId[0]->issued_date }} </th>
                                             </tr>  
                                         </thead>

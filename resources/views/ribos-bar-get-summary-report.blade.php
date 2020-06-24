@@ -716,7 +716,7 @@
                                                           <td class="bg-danger" style="color:white;"> <p style="width:170px;"><?php echo number_format($compute, 2);?></p></td>
                                                           
                                                           
-                                                          <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('ribos-bar/view-payables-details/'.$getTransactionListCheck->id) }}">{{ $getTransactionListCash->status }}</a></p></td>
+                                                          <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('ribos-bar/view-payables-details/'.$getTransactionListCheck->id) }}">{{ $getTransactionListCheck->status }}</a></p></td>
                                                           <td><p style="width:190px;">{{ $getTransactionListCheck->created_by}}</p></td>
                                                           
                                                       </tr>

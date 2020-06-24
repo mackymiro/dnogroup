@@ -255,7 +255,7 @@
                                                             
                                                             $amount2 = DB::table('dno_personal_payment_vouchers')
                                                                         ->select('*')
-                                                                        ->where('id', $id)
+                                                                        ->where('pv_id', $id)
                                                                         ->sum('amount');
                                                             $compute = $amount1 + $amount2;
                                                         ?>
@@ -334,7 +334,7 @@
                                                             
                                                             $amount2 = DB::table('dno_personal_payment_vouchers')
                                                                         ->select('*')
-                                                                        ->where('id', $id)
+                                                                        ->where('pv_id', $id)
                                                                         ->sum('amount');
                                                             $compute = $amount1 + $amount2;
                                                         ?>

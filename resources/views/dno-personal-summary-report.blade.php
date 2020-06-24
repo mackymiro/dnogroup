@@ -71,7 +71,7 @@
 	    					               Summary Reports
                             </div>
                             <div class="card-body">
-                                  <nav>
+                                <nav>
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                         <a class="nav-item nav-link active" id="nav-pettyCash" data-toggle="tab" href="#pettyCash" role="tab" aria-controls="pettyCash" aria-selected="false">Petty Cash</a>
                                         <a class="nav-item nav-link" id="nav-payables" data-toggle="tab" href="#payables" role="tab" aria-controls="payables" aria-selected="false">Payables</a>
@@ -165,16 +165,12 @@
                                                             
                                                             $amount2 = DB::table('dno_personal_payment_vouchers')
                                                                   ->select('*')
-                                                                  ->where('pv_id', $id)
+                                                                  ->where('id', $id)
                                                                   ->sum('amount');
                                                             $compute = $amount1 + $amount2;
                                                           ?>
                                                             <tr id="deletedId{{ $getTransactionList->id }}">
-                                                              <td width="2%">
-                                                                @if(Auth::user()['role_type'] == 1 || Auth::user()['role_type'] == 2)
-                                                                  <a id="delete" onClick="confirmDelete('{{ $getTransactionList->id}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
-                                                                      @endif
-                                                              </td>
+                                                             
                                                               <td>
                                                                 @if($getTransactionList->status != "FULLY PAID AND RELEASED")
                                                                   <p style="width:250px;">
@@ -244,12 +240,12 @@
                                                 @foreach($getTransactionListCashes as $getTransactionListCash)
                                                         <?php $id = $getTransactionListCash->id; ?>
                                                         <?php
-                                                            $amount1 = DB::table('dno_personal_petty_cashes')
+                                                            $amount1 = DB::table('dno_personal_payment_vouchers')
                                                                         ->select('*')
                                                                         ->where('id', $id)
                                                                         ->sum('amount');
                                                             
-                                                            $amount2 = DB::table('dno_personal_petty_cashes')
+                                                            $amount2 = DB::table('dno_personal_payment_vouchers')
                                                                         ->select('*')
                                                                         ->where('pv_id', $id)
                                                                         ->sum('amount');
@@ -260,7 +256,7 @@
                                                             <td>
                                                                 @if($getTransactionListCash->status != "FULLY PAID AND RELEASED")
                                                                 <p style="width:250px;">
-                                                                    <a href="{{ url('ribos-bar/edit-dno-personal-payables-detail/'.$getTransactionListCash->id) }}" title="Edit">{{ $getTransactionListCash->invoice_number}}</a>
+                                                                    <a href="{{ url('dno-personal/edit-dno-personal-payables-detail/'.$getTransactionListCash->id) }}" title="Edit">{{ $getTransactionListCash->invoice_number}}</a>
                                                                 </p>
                                                                 @else
                                                                 <p style="width:250px;">{{ $getTransactionListCash->invoice_number}}</p>
@@ -274,7 +270,7 @@
                                                             <td class="bg-danger" style="color:white;"> <p style="width:170px;"><?php echo number_format($compute, 2);?></p></td>
                                                             
                                                             
-                                                            <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('dno-personalr/view-dno-personal-payables-details/'.$getTransactionListCash->id) }}">{{ $getTransactionListCash->status }}</a></p></td>
+                                                            <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('dno-personal/view-dno-personal-payables-details/'.$getTransactionListCash->id) }}">{{ $getTransactionListCash->status }}</a></p></td>
                                                             <td><p style="width:190px;">{{ $getTransactionListCash->created_by}}</p></td>
                                                             
                                                         </tr>
@@ -323,12 +319,12 @@
                                                 @foreach($getTransactionListChecks as $getTransactionListCheck)
                                                         <?php $id = $getTransactionListCheck->id; ?>
                                                         <?php
-                                                            $amount1 = DB::table('dno_personal_petty_cashes')
+                                                            $amount1 = DB::table('dno_personal_payment_vouchers')
                                                                         ->select('*')
                                                                         ->where('id', $id)
                                                                         ->sum('amount');
                                                             
-                                                            $amount2 = DB::table('dno_personal_petty_cashes')
+                                                            $amount2 = DB::table('dno_personal_payment_vouchers')
                                                                         ->select('*')
                                                                         ->where('pv_id', $id)
                                                                         ->sum('amount');
@@ -339,7 +335,7 @@
                                                             <td>
                                                                 @if($getTransactionListCheck->status != "FULLY PAID AND RELEASED")
                                                                 <p style="width:250px;">
-                                                                    <a href="{{ url('ribos-bar/edit-dno-personal-payables-detail/'.$getTransactionListCheck->id) }}" title="Edit">{{ $getTransactionListCheck->invoice_number}}</a>
+                                                                    <a href="{{ url('dno-personal/edit-dno-personal-payables-detail/'.$getTransactionListCheck->id) }}" title="Edit">{{ $getTransactionListCheck->invoice_number}}</a>
                                                                 </p>
                                                                 @else
                                                                 <p style="width:250px;">{{ $getTransactionListCheck->invoice_number}}</p>
@@ -353,7 +349,7 @@
                                                             <td class="bg-danger" style="color:white;"> <p style="width:170px;"><?php echo number_format($compute, 2);?></p></td>
                                                             
                                                             
-                                                            <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('dno-personalr/view-dno-personal-payables-details/'.$getTransactionListCheck->id) }}">{{ $getTransactionListCheck->status }}</a></p></td>
+                                                            <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('dno-personal/view-dno-personal-payables-details/'.$getTransactionListCheck->id) }}">{{ $getTransactionListCheck->status }}</a></p></td>
                                                             <td><p style="width:190px;">{{ $getTransactionListCheck->created_by}}</p></td>
                                                             
                                                         </tr>

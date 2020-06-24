@@ -24,14 +24,14 @@
 	 <div id="content-wrapper">
  		<div class="container-fluid">
  				<div  style="margin-top:60px;">
-            	 <img style="margin-left: 240px;" src="{{ asset('images/dong-fang-corporation.png')}}"  alt="Dong Fang Corporaton">
+            	 <img style="margin-left: 270px;" src="{{ asset('images/dno-food-venture.png')}}"   alt="DNO Food Ventures">
             	 	 <p >
 		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
 						Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
 
 						Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
             	 	 </p>
-	            	  @if($payableId[0]->method_of_payment === "CASH")
+					 @if($payableId[0]->method_of_payment === "CASH")
 	            	 <h4 ><u>PAYMENT CASH VOUCHER</u></h4>
 					 @else
 					 <h4 ><u>PAYMENT CHECK VOUCHER</u></h4>
@@ -49,19 +49,6 @@
                                                 <th width="30%">Paid To</th>
                                                 <th> {{ $payableId[0]->paid_to }}</th>
                                             </tr>
-											@if($payableId[0]->method_of_payment  === "CHECK")
-											<tr>
-                                                <th width="30%">Invoice No</th>
-                                                <th> {{ $payableId[0]->invoice_number }}</th>
-                                            </tr>
-											@endif
-											@if($payableId[0]->method_of_payment === "CASH")
-											<tr>
-                                                <th width="30%">Account Name</th>
-                                                <th> {{ $payableId[0]->account_name }}</th>
-                                            </tr>
-											@endif 
-										
                                             <tr>
                                                 <th>Status</th>
                                                 <th>{{ $payableId[0]->status }}</th>
@@ -69,12 +56,17 @@
                                             <tr>
                                                 <th>Date</th>
                                                 <th> {{ $payableId[0]->issued_date }} </th>
-                                            </tr>                           
+                                            </tr>
+											<tr>
+                                                <th width="30%">Account Name</th>
+                                                <th> {{ $payableId[0]->account_name }} </th>
+                                            </tr>
+                                           
                                         </thead>
                                       
                                   </table>   
                              </div>
-							 
+							
 	                          <div style="float:right; width: 50%">
 	                              <table >
 	                                   <thead>
@@ -86,14 +78,13 @@
                                                 <th>Invoice #</th>
                                                 <th> {{ $payableId[0]->invoice_number }}</th>
                                             </tr>
-												
 											<tr>
-                                                <th>Pv No</th>
-                                                <th>{{ $payableId[0]->module_code}}{{ $payableId[0]->dong_fang_code}} </th>
+                                                <th>PV No</th>
+                                                <th>{{ $payableId[0]->module_code}}{{ $payableId[0]->dno_food_venture_code }}</th>
                                             </tr>
 											<tr>
-												<th>Payment Method</th>
-												<th>{{ $payableId[0]->method_of_payment }}</th>
+												<th width="30%">Payment Method</th>
+												<th>{{ $payableId[0]->method_of_payment}}</th>
 											</tr>
                                            
                                         </thead>
@@ -106,8 +97,6 @@
                           <br>
 						  <br>
 						  <br>
-						  <br>
-					
 						  <table style="border:1px solid black;">
 								<thead>
 									<tr>
@@ -122,7 +111,6 @@
 										<td style="text-align:center; border: 1px solid black;">{{ $payableId[0]->particulars}}</td>
 										<td style="text-align:center; border: 1px solid black; font-size:18px;"><?php echo number_format($payableId[0]->amount, 2); ?></td>
 									</tr>
-
 									@foreach($getParticulars as $getParticular)
 									<tr style="border:1px solid black;">
 										<td style="text-align:center; border: 1px solid black;">{{ $getParticular['date']}}</td>
@@ -130,45 +118,21 @@
 										<td style="text-align:center; border: 1px solid black; font-size:18px;"><?php echo number_format($getParticular['amount'], 2); ?></td>
 									</tr>
 									@endforeach
-								</tbody>
+								</tbody>	
 						  </table>
                           <br>
                           <br>
                           <br>
-						  @if($payableId[0]->method_of_payment === "CHECK")
                           <table style="border:1px solid black;">
                           		  <thead>
                                       <tr>
-                                        <th style="height: 1%; text-align: center;">CHECK NO ISSUED</th>
-                                        <th style="height: 1%; text-align: center;">CHECK AMOUNT</th>
-                                       
-                                      </tr>
-                                    </thead>
-                                  <tbody>
-                                  	
-                                  	 	 @foreach($payablesVouchers as $payablesVoucher)
-                                        <tr style="border:1px solid black;">
-                                          <td style="text-align:center; border: 1px solid black;">{{ $payablesVoucher['cheque_number'] }}</td>
-                                         
-                                          <td style="text-align:center; border: 1px solid black; font-size:18px;"><?php echo number_format($payablesVoucher['cheque_amount'], 2);?></td>
-                                        </tr> 
-                                        @endforeach
-                                      
-	                                      
-	                                       <tr style="border:1px solid black;">
-	                                       
-	                                        <td style=" text-align:center; border: 1px solid black;"><strong>Total</strong></td>
-	                                        <td style=" text-align:center; border: 1px solid black; font-size:18px;"> <?php echo number_format($sum, 2)?></td>
-	                                      </tr>
-                                  </tbody>
-                          </table>
-						  @else
-						  <table style="border:1px solid black;">
-                          		  <thead>
-                                      <tr>
+									  	@if($payableId[0]->method_of_payment === "CASH")
                                         <th style="height: 1%; text-align: center;">CASH NO ISSUED</th>
                                         <th style="height: 1%; text-align: center;">CASH AMOUNT</th>
-                                       
+										@else
+										<th style="height: 1%; text-align: center;">CHECK NO ISSUED</th>
+                                        <th style="height: 1%; text-align: center;">CHECK AMOUNT</th>
+										@endif
                                       </tr>
                                     </thead>
                                   <tbody>
@@ -177,7 +141,7 @@
                                         <tr style="border:1px solid black;">
                                           <td style="text-align:center; border: 1px solid black;">{{ $payablesVoucher['cheque_number'] }}</td>
                                          
-                                          <td style="text-align:center; border: 1px solid black; font-size:18px;" ><?php echo number_format($payablesVoucher['cheque_amount'], 2);?></td>
+                                          <td style="text-align:center; border: 1px solid black;"><?php echo number_format($payablesVoucher['cheque_amount'], 2);?></td>
                                         </tr> 
                                         @endforeach
                                       
@@ -185,20 +149,19 @@
 	                                       <tr style="border:1px solid black;">
 	                                       
 	                                        <td style=" text-align:center; border: 1px solid black;"><strong>Total</strong></td>
-	                                        <td style=" text-align:center; border: 1px solid black; font-size:18px;"> <?php echo number_format($sum, 2)?></td>
+	                                        <td style=" text-align:center; border: 1px solid black;"> <?php echo number_format($sum, 2)?></td>
 	                                      </tr>
                                   </tbody>
                           </table>
-
-						  @endif
                            <div style="margin-top:100px;">
                            		<table  >
                            			<thead>
                            				<tr>
                        						<th style="width:30%;">Prepared By</th>
-											<th>Checked By</th>
+											<th>Checked By</th></th>
                        						<th>Approved By</th>
 											<th>Date</th>
+											
                            				</tr>
                            			</thead>
                            			<tbody>
@@ -208,18 +171,19 @@
                            						{{ $payableId[0]->created_by}}
 
                            					</td>
-											<td>
+                           					<td>
                            						________________________<br>
                            						Aprilane Q Maturan<br>
                            						Finance Officer
                            					</td>
-                           					<td>
+											<td>
                            						________________________<br>
                            						
                            					</td>
 											<td>
-												________________________
-											</td>
+                           						________________________<br>
+                           						
+                           					</td>
                            					
                            				</tr>
                            			</tbody>

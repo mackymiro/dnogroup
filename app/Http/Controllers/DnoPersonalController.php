@@ -199,7 +199,8 @@ class DnoPersonalController extends Controller
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $check)
                                 ->orderBy('dno_personal_payment_vouchers.id', 'desc')
                                 ->sum('dno_personal_payment_vouchers.amount_due');
-            
+                                
+
         $getDateToday = "";     
         $pdf = PDF::loadView('printSummaryDnoPersonal',  compact('date', 'getDateToday', 
          'getTransactionListCashes', 'getTransactionListChecks', 'totalAmountCashes','totalAmountCheck'));
@@ -293,7 +294,7 @@ class DnoPersonalController extends Controller
 
     public function getSummaryReport(Request $request){
         $getDate = $request->get('selectDate');
-
+      
         $moduleName = "Petty Cash";
         $pettyCashLists = DB::table(
                                 'dno_personal_petty_cashes')
@@ -407,6 +408,8 @@ class DnoPersonalController extends Controller
                             ->where('dno_personal_payment_vouchers.method_of_payment', $cash)
                             ->orderBy('dno_personal_payment_vouchers.id', 'desc')
                             ->get()->toArray();
+
+      
     
         $totalAmountCashes = DB::table(
                                 'dno_personal_payment_vouchers')
@@ -494,7 +497,7 @@ class DnoPersonalController extends Controller
                                 ->where('dno_personal_codes.module_name', $moduleNamePV)
                                 ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($getDate))
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $check)
-                                ->orderBy('dno_personal_payment_vouchers.id', 'desc')
+                                ->orderBy('dno_personal_payment_vouchers.issued_date', 'desc')
                                 ->get()->toArray();
 
              
@@ -1144,7 +1147,27 @@ class DnoPersonalController extends Controller
     }
 
     public function printPettyCash($id){
-        $getPettyCash = DnoPersonalPettyCash::find($id);
+        $moduleName = "Petty Cash";
+        $getPettyCash = DB::table(
+                                'dno_personal_petty_cashes')
+                                ->select( 
+                                'dno_personal_petty_cashes.id',
+                                'dno_personal_petty_cashes.user_id',
+                                'dno_personal_petty_cashes.pc_id',
+                                'dno_personal_petty_cashes.date',
+                                'dno_personal_petty_cashes.petty_cash_name',
+                                'dno_personal_petty_cashes.petty_cash_summary',
+                                'dno_personal_petty_cashes.amount',
+                                'dno_personal_petty_cashes.created_by',
+                                'dno_personal_codes.dno_personal_code',
+                                'dno_personal_codes.module_id',
+                                'dno_personal_codes.module_code',
+                                'dno_personal_codes.module_name')
+                                ->leftJoin('dno_personal_codes', 'dno_personal_petty_cashes.id', '=', 'dno_personal_codes.module_id')
+                                ->where('dno_personal_petty_cashes.id', $id)
+                                ->where('dno_personal_codes.module_name', $moduleName)
+                                ->get();
+
 
         $getPettyCashSummaries = DnoPersonalPettyCash::where('pc_id', $id)->get()->toArray();
 
@@ -1168,14 +1191,10 @@ class DnoPersonalController extends Controller
         $lastName = $user->last_name;
 
         $name  = $firstName." ".$lastName;
-
-        $pettyCash = DnoPersonalPettyCash::find($id);
-      
-
+    
         $addNew = new DnoPersonalPettyCash([
             'user_id'=>$user->id,
             'pc_id'=>$id,
-            'petty_cash_no'=>$pettyCash->petty_cash_no,
             'date'=>$request->get('date'),
             'petty_cash_summary'=>$request->get('pettyCashSummary'),
             'amount'=>$request->get('amount'),
@@ -1189,8 +1208,6 @@ class DnoPersonalController extends Controller
     }
 
     public function editPettyCash($id){
-        $pettyCash = DnoPersonalPettyCash::find($id);
-
         $moduleName = "Petty Cash";
         $pettyCash = DB::table(
                                 'dno_personal_petty_cashes')
