@@ -106,6 +106,7 @@
 										<th style="height: 1%; text-align: center;">PV NO</th>
                                         <th style="height: 1%; text-align: center;">ISSUED DATE</th>
                                         <th style="height: 1%; text-align: center;">PAID TO</th>
+                                        <th style="height: 1%; text-align: center;">BANK NAME/CHECK NO</th>
                                         <th style="height: 1%; text-align: center;">AMOUNT</th>
                                         <th style="height: 1%; text-align: center;">STATUS</th>
                                         <th style="height: 1%; text-align: center;">CREATED BY</th>
@@ -125,6 +126,11 @@
                                                 ->where('pv_id', $id)
                                                 ->sum('amount');
                                     $compute = $amount1 + $amount2;
+                                      //get the check account no
+                                    $getChecks = DB::table('dno_personal_payment_vouchers')
+                                                ->select('*')
+                                                ->where('pv_id', $id)
+                                                ->get()->toArray();
                                 ?>
                         
 									<tr style="border:1px solid black;">
@@ -133,6 +139,12 @@
 										<td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->module_code}}{{ $getTransactionListCheck->dno_personal_code}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->issued_date}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->paid_to}}</td>
+                                        <td style="text-align:center; border: 1px solid black;">
+                                            <?php foreach($getChecks as $getCheck): ?>
+                                                <?php echo $getCheck->cheque_number; ?>
+                                            <?php endforeach; ?>
+                                        </td>
+                                        
                                         <td style="text-align:center; border: 1px solid black;"><?php echo number_format($compute, 2); ?></td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->status }}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->created_by }}</td>

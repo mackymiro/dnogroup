@@ -756,7 +756,7 @@ Route::group(['middleware' =>['user']], function(){
 	Route::get(
 		'/dno-resources-development/payment-voucher-form',
 		'DnoResourcesDevelopmentController@paymentVoucherForm')
-		->name('dno-resources-development.paymentVoucherForm');
+		->name('paymentVoucherFormDnoResources');
 
 	Route::post(
 		'/dno-resources-development/payment-voucher-store',
@@ -771,7 +771,7 @@ Route::group(['middleware' =>['user']], function(){
 	Route::get(
 		'/dno-resources-development/edit-dno-resources-payables-detail/{id}',
 		'DnoResourcesDevelopmentController@editPayablesDetail')
-		->name('dno-resources-development.editPayablesDetail');
+		->name('editPayablesDetailDnoResources');
 	
 	Route::post(
 		'/dno-resources-developemtn/add-particulars/{id}',
@@ -3465,6 +3465,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'/wlg-corporation/printPayables/{id}',
 		'WlgCorporationController@printPayablesWlg')
 		->name('printPayablesWlg');
+
+	Route::get(
+		'/wlg-corporation/summary-report',
+		'WlgCorporationController@summaryReport')
+		->name('summaryReport');
 
 	Route::get(
 		'/wlg-corporation/purchase-order',

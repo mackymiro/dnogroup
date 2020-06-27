@@ -7,7 +7,17 @@
       $('.alert-success').fadeIn().delay(3000).fadeOut();
       
   });
+
+  $(function() {
+    $( ".datepicker" ).datepicker();
+  });
 </script>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 <div id="wrapper">
 	<!-- Sidebar -->
     @include('sidebar.sidebar-dno-resources-development-corp')
@@ -71,7 +81,7 @@
                                       </div>
                       	  						<div class="col-md-2">
                                           <label>Issued Date </label>
-                                          <input type="text" name="issuedDate" class="form-control" value="{{ old('issuedDate') }}" />
+                                          <input type="text" name="issuedDate" class="datepicker form-control" value="{{ old('issuedDate') }}" />
                                       </div>
                                      
                       	  				</div>
@@ -103,7 +113,8 @@
                                   </div>
                          	
                                   <div>
-                                    <input type="submit" class="btn btn-success float-right" value="Add Payment Voucher" />
+                                      <button type="submit" class="btn btn-success float-right btn-lg"><i class="fas fa-save"></i> Save Payment Voucher</button>
+                                      <br> 
                                   </div>
                                   <br>
                           	  </div>

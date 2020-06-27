@@ -6,7 +6,14 @@
       $('.alert-success').fadeIn().delay(3000).fadeOut();
       
   });
+  $(function() {
+    $( ".datepicker" ).datepicker();
+  });
 </script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="wrapper">
 	 @include('sidebar.sidebar-dno-resources-development-corp')
      <div id="content-wrapper">
@@ -31,15 +38,75 @@
 	    					  Payable Form</div>
 
 	    					  <div class="card-body">
-	    					  		<form action="{{ action('DnoResourcesDevelopmentController@addPayment', $transactionList['id']) }}" method="post">
+	    					  		<form action="{{ action('DnoResourcesDevelopmentController@addPayment', $transactionList[0]->id) }}" method="post">
 	    					  			{{ csrf_field() }}
 				  			 	 	@if(session('paymentAdded'))
 		                                <p class="alert alert-success">{{ Session::get('paymentAdded') }}</p>
 		                            @endif 
+									@if($transactionList[0]->method_of_payment == "CASH")
+									<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-12">
+				  								<label>Date</label>
+				  								<input type="text" name="date" class="datepicker form-control" required="required" />
+					  						</div> 
+
+    					  				</div>
+	    					  		</div>
 	    					  		<div class="form-group">
     					  				<div class="form-row">
-					  						<div class="col-lg-8">
-				  								<label>Payment Cheque Number</label>
+					  						<div class="col-lg-12">
+				  								<label>Payment Cash Number</label>
+				  								<input type="text" name="chequeNumber" class="form-control" />
+					  						</div> 
+
+    					  				</div>
+	    					  		</div>
+	    					  		<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-12">
+				  								<label>Cash Amount</label>
+				  								<input type="text" name="chequeAmount" class="form-control" required="required" autocomplete="off" />
+					  						</div> 
+					  					
+    					  				</div>
+	    					  		</div>
+									@if($transactionList[0]->status != "FULLY PAID AND RELEASED")
+	    					  		<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-4">
+				  							
+												<button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-plus"></i> Add</button>
+					  						</div> 
+					  					
+    					  				</div>
+	    					  		</div>
+									@else
+									<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-4">
+				  							
+												<button type="submit" class="btn btn-primary btn-lg" disabled><i class="fas fa-plus"></i> Add</button>
+					  						</div> 
+					  					
+    					  				</div>
+	    					  		</div>
+
+									@endif
+									@elseif($transactionList[0]->method_of_payment == "CHECK")
+									<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-12">
+				  								<label>Date</label>
+				  								<input type="text" name="date" class="datepicker form-control" required="required" />
+					  						</div> 
+
+    					  				</div>
+	    					  		</div>
+	    					  		<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-12">
+				  								<label>Payment Check Number</label>
 				  								<input type="text" name="chequeNumber" class="form-control" required="required" />
 					  						</div> 
 
@@ -47,8 +114,8 @@
 	    					  		</div>
 	    					  		<div class="form-group">
     					  				<div class="form-row">
-					  						<div class="col-lg-8">
-				  								<label>Cheque Amount</label>
+					  						<div class="col-lg-12">
+				  								<label>Check Amount</label>
 				  								<input type="text" name="chequeAmount" class="form-control" required="required" />
 					  						</div> 
 					  					
@@ -57,33 +124,42 @@
 	    					  		<div class="form-group">
     					  				<div class="form-row">
 					  						<div class="col-lg-4">
-				  								<input type="submit" class="btn btn-primary" value="Add" />
+											  <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-plus"></i> Add</button>
+					  						
 					  						</div> 
 					  					
     					  				</div>
 	    					  		</div>
-	    					  		</form>
+
+									@endif
+								</form>
 	    					  </div>
        					</div>
-						   <div class="card mb-3">
+						
+						<div class="card mb-3">
 							<div class="card-header">
 								<i class="fas fa-tasks"></i>
 								Particulars
 							</div>
 							<div class="card-body">
-  								<form action="{{ action('DnoResourcesDevelopmentController@addParticulars', $transactionList['id']) }}" method="post">
+  								<form action="{{ action('DnoResourcesDevelopmentController@addParticulars', $transactionList[0]->id) }}" method="post">
 								  {{ csrf_field() }}
 								  @if(session('particularsAdded'))
 		                                <p class="alert alert-success">{{ Session::get('particularsAdded') }}</p>
 		                            @endif 
+  								
   								<div class="form-group">
   									<div class="form-row">
-  										<div class="col-lg-8">
-  											<label>Particulars</label>
-											<input type="text" name="particulars" class="form-control" required="required" />
-											
+									  <div class="col-lg-12">
+  											<label>Date</label>
+											<input type="text" name="date" class="datepicker form-control" required="required" />
+										
 										</div>
-										<div class="col-lg-8">
+  										<div class="col-lg-12">
+  											<label>Particulars</label>
+											<textarea name="particulars" class="form-control"></textarea>
+										</div>
+										<div class="col-lg-12">
   											<label>Amount</label>
 											<input type="text" name="amount" class="form-control" required="required" />
 										
@@ -91,18 +167,34 @@
 										
 									</div>
 								</div>
+								@if($transactionList[0]->status != "FOR APPROVAL" && $transactionList[0]->status != "FOR CONFIRMATION"
+								&& $transactionList[0]->status != "FULLY PAID AND RELEASED")
 								<div class="form-group">
 									<div class="form-row">
 										<div class="col-lg-4">
-											<input type="submit" class="btn btn-primary" value="Add" />
+											<button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-plus"></i> Add</button>
+					  						
 										</div> 
 									
 									</div>
 								</div>
+								@else	
+								<div class="form-group">
+									<div class="form-row">
+										<div class="col-lg-4">
+											<button type="submit" class="btn btn-primary btn-lg" disabled><i class="fas fa-plus"></i> Add</button>
+					  						
+										</div> 
+									
+									</div>
+								</div>
+								@endif
 								</form>
 							</div>
 						</div>
+						
                		</div>
+				
                		<div class="col-lg-8">
                			<div class="card mb-3">
                				<div class="card-header">
@@ -115,14 +207,14 @@
 		                         @if(session('errorPaid'))
 		                                <p class="alert alert-danger">{{ Session::get('errorPaid') }}</p>
 		                         @endif
-    					  		<form action="{{ action('DnoResourcesDevelopmentController@accept', $transactionList['id'])}}" method="post">
+    					  		<form action="{{ action('DnoResourcesDevelopmentController@accept', $transactionList[0]->id)}}" method="post">
     					  			{{ csrf_field() }}
     					  			 <input name="_method" type="hidden" value="PATCH">
 					  			 <table class="table table-bordered">
 				  			 		<thead>
 				  			 			<tr>
 				  			 				<th width="15%">Paid To</th>
-				  			 				<th>{{ $transactionList['paid_to']}}</th>
+				  			 				<th>{{ $transactionList[0]->paid_to}}</th>
 				  			 			</tr>
 
 				  			 		</thead>
@@ -131,15 +223,23 @@
 			  						<div class="form-row">
 			  							<div class="col-lg-2">
 		  									<label>Invoice #</label>
-		  									<input type="text" name="invoiceNumber" class="form-control" value="{{ $transactionList['invoice_number']}}" disabled="disabled" />
+		  									<input type="text" name="invoiceNumber" class="form-control" value="{{ $transactionList[0]->invoice_number}}" disabled="disabled" />
 			  							</div>
 			  							<div class="col-lg-2">
 		  									<label>Amount Due</label>
 		  									<input type="text" name="amountDue" style="color:white;" class="bg-danger form-control" value="<?php echo number_format($sum, 2)?>" />
 			  							</div>
 			  							<div class="col-lg-4">
-		  									<label>Voucher Ref #</label>
-		  									<input type="text" name="voucherRef" class="form-control" value="DRDC-{{ $transactionList['voucher_ref_number'] }}" disabled="disabled" />
+		  									<label>PV #</label>
+		  									<input type="text" name="voucherRef" class="form-control" value="{{ $transactionList[0]->module_code }}{{ $transactionList[0]->dno_resources_code}}" disabled="disabled" />
+			  							</div>
+										<div class="col-lg-4">
+		  									<label>Account Name</label>
+		  									<input type="text" name="accountName" class="form-control" value="{{ $transactionList[0]->account_name }}" disabled="disabled" />
+			  							</div>
+										<div class="col-lg-4">
+		  									<label>Payment Method</label>
+		  									<input type="text" name="paymentMethod" class="form-control" value="{{ $transactionList[0]->method_of_payment }}" disabled="disabled" />
 			  							</div>
 			  							<div class="col-lg-4">
 		  									<label>Status</label>
@@ -147,7 +247,7 @@
 	  											<select name="status" class="form-control">
 	  												<option value="0">--Please Select--</option>
 													<option v-for="status in statuses" v-bind:value="status.value"
-													:selected="status.value=={{json_encode($transactionList['status'])}}?true : false">
+													:selected="status.value=={{json_encode($transactionList[0]->status)}}?true : false">
 													@{{ status.text }}
 												</option>
 	  											</select>
@@ -155,9 +255,10 @@
 			  							</div>
 			  						</div>
 				  				</div>
-								  <table class="table table-striped">
+								<table class="table table-striped">
   									<thead>
   										<tr>
+  											<th>DATE</th>
   											<th>PARTICULARS</th>
 											<th>AMOUNT</th>
 										</tr>
@@ -165,11 +266,13 @@
 									<tbody>
   										
 										<tr>	
-  											<td>{{ $transactionList['particulars']}}</td>
-											<td><?php echo number_format($transactionList['amount'], 2); ?></td>
+											<td>{{ $transactionList[0]->date }}</td>
+  											<td>{{ $transactionList[0]->particulars}}</td>
+											<td><?php echo number_format($transactionList[0]->amount, 2); ?></td>
 										</tr>
 										@foreach($getParticulars as $getParticular)
 										<tr>
+  											<td>{{ $getParticular['date'] }}</td>
   											<td>{{ $getParticular['particulars']}}</td>
 											<td><?php echo number_format($getParticular['amount'], 2); ?></td>
 										</tr>
@@ -179,8 +282,16 @@
 				  				<table class="table table-striped">
 				  					<thead>
 				  						<tr>
-				  							<th>PAYMENT CHEQUE NUMBER</th>
-				  							<th>CHEQUE AMOUNT</th>
+										  	@if($transactionList[0]->method_of_payment == "CASH")
+											<th>PAYMENT CASH NUMBER</th>
+											@else
+											<th>PAYMENT CHECK NUMBER</th>
+											@endif
+											@if($transactionList[0]->method_of_payment == "CASH")
+				  								<th>CASH AMOUNT</th>
+											@else
+												<th>CHECK AMOUNT</th>
+											@endif
 				  						</tr>
 				  					</thead>
 				  					<tbody>
@@ -202,11 +313,13 @@
 				  				<div class="form-group">
 				  					<div class="form-row">
 			  							<div class="col-lg-4">
-			  								<input type="submit" class="btn btn-success" name="action" value="PAID AND RELEASE" value="PAID AND RELEASE" />
+			  								<input type="submit" class="btn btn-success btn-lg" name="action" value="PAID AND RELEASE" value="PAID AND RELEASE" />
 			  							</div>
-			  							<div class="col-lg-4">
-			  								<input type="submit" class="btn btn-primary" name="action" value="PAID & HOLD" value="PAID & HOLD" />
-			  							</div>
+										<?php if($transactionList[0]->status != "FULLY PAID AND RELEASED"):?>
+										<div class="col-lg-4">
+											<input type="submit" class="btn btn-primary btn-lg" name="action" value="PAID & HOLD" value="PAID & HOLD" />
+										</div>
+										<?php endif; ?>
 				  					</div>
 				  				</div>
 				  			</form>

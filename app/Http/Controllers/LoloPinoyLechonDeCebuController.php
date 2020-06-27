@@ -6171,7 +6171,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                             'lechon_de_cebu_codes.module_id',
                             'lechon_de_cebu_codes.module_code',
                             'lechon_de_cebu_codes.module_name')
-                        ->join('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                        ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
                         ->where('lechon_de_cebu_purchase_orders.po_id', NULL)
                         ->where('lechon_de_cebu_codes.module_name', $moduleName)
                         ->orderBy('lechon_de_cebu_purchase_orders.id', 'desc')

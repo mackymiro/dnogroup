@@ -26,7 +26,7 @@
                             View Purchase Order
                              <div class="float-right">
                                
-                                 <a href="{{ action('WlgCorporationController@printPO', $purchaseOrder['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                                 <a href="{{ action('WlgCorporationController@printPO', $purchaseOrder[0]->id)}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                                
                               </div>
                         </div>
@@ -38,11 +38,11 @@
                                         <thead>
                                             <tr>
                                                 <th width="20%">Paid To</th>
-                                                <th>{{ $purchaseOrder['paid_to'] }}</th>
+                                                <th>{{ $purchaseOrder[0]->paid_to }}</th>
                                             </tr>
                                             <tr>
                                                 <th>Address</th>
-                                                <th>{{ $purchaseOrder['address']}}</th>
+                                                <th>{{ $purchaseOrder[0]->address}}</th>
                                             </tr>
                                         </thead>
 
@@ -54,11 +54,11 @@
                                         <thead>
                                             <tr>
                                                 <th width="20%">P.O Number</th>
-                                                <th><a href="#">P.O-{{ $purchaseOrder['p_o_number'] }}</a></th>
+                                                <th>{{ $purchaseOrder[0]->module_code}}{{ $purchaseOrder[0]->wlg_code}}</th>
                                             </tr>
                                             <tr>
                                                 <th>Date</th>
-                                                <th> {{ $purchaseOrder['date'] }}</th>
+                                                <th> {{ $purchaseOrder[0]->date }}</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -79,11 +79,11 @@
                                   <tbody>
 
                                     <tr>
-                                      <td>{{ $purchaseOrder['model']}}</td>
-                                      <td>{{ $purchaseOrder['particulars']}}</td>
-                                      <td>{{ $purchaseOrder['quantity']}}</td>
-                                      <td>{{ $purchaseOrder['unit_price']}}</td>
-                                      <td><?php echo number_format($purchaseOrder['amount'], 2); ?></td>
+                                      <td>{{ $purchaseOrder[0]->model}}</td>
+                                      <td>{{ $purchaseOrder[0]->particulars}}</td>
+                                      <td>{{ $purchaseOrder[0]->quantity}}</td>
+                                      <td>{{ $purchaseOrder[0]->unit_price}}</td>
+                                      <td><?php echo number_format($purchaseOrder[0]->amount, 2); ?></td>
                                     </tr>
                                     @foreach($pOrders as $pOrder)
                                     <tr>
@@ -126,7 +126,7 @@
                                             <thead>
                                                 <tr>
                                                     <th width="20%">Prepared By</th>
-                                                    <th>{{ $purchaseOrder['created_by'] }}</th>
+                                                    <th>{{ $purchaseOrder[0]->created_by }}</th>
                                                 </tr>
                                             </thead>
                                         </table>

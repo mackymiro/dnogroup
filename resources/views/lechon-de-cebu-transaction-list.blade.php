@@ -64,7 +64,6 @@
 					  						</tr>
 				  						</tfoot>
 				  						<tbody>
-										  	<?php $sum = 0; ?>
 				  							@foreach($getTransactionLists as $getTransactionList)
 											<?php $id = $getTransactionList->id; ?>
 											<?php

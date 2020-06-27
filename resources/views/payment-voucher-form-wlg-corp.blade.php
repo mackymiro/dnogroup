@@ -130,8 +130,8 @@
 	el: '#app-payment-method',
 		data: {
 			payments:[
-				{ text:'Cash', value: 'Cash' },
-				{ text:'Cheque', value: 'Cheque'}
+				{ text:'CASH', value: 'CASH' },
+				{ text:'CHECK', value: 'CHECK'}
 			]
 		}
 	})	

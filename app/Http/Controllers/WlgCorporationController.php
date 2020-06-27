@@ -11,10 +11,48 @@ use App\User;
 use App\WlgCorporationPaymentVoucher;
 use App\WlgCorporationPurchaseOrder;
 use App\WlgCorporationInvoice;
+use App\WlgCorporationCode;
 
 
 class WlgCorporationController extends Controller
 {
+
+    public function summaryReport(){
+        $getDateToday = date("Y-m-d");
+
+        $moduleName = "Purchase Order";
+        $purchaseOrders = DB::table(
+                        'wlg_corporation_purchase_orders')
+                        ->select(
+                            'wlg_corporation_purchase_orders.id',
+                            'wlg_corporation_purchase_orders.user_id',
+                            'wlg_corporation_purchase_orders.po_id',
+                            'wlg_corporation_purchase_orders.paid_to',
+                            'wlg_corporation_purchase_orders.address',
+                            'wlg_corporation_purchase_orders.date',
+                            'wlg_corporation_purchase_orders.model',
+                            'wlg_corporation_purchase_orders.particulars',
+                            'wlg_corporation_purchase_orders.quantity',
+                            'wlg_corporation_purchase_orders.unit_price',
+                            'wlg_corporation_purchase_orders.amount',
+                            'wlg_corporation_purchase_orders.requested_by',
+                            'wlg_corporation_purchase_orders.prepared_by',
+                            'wlg_corporation_purchase_orders.checked_by',
+                            'wlg_corporation_purchase_orders.created_by',
+                            'wlg_corporation_purchase_orders.created_at',
+                            'wlg_corporation_codes.wlg_code',
+                            'wlg_corporation_codes.module_id',
+                            'wlg_corporation_codes.module_code',
+                            'wlg_corporation_codes.module_name')
+                        ->leftJoin('wlg_corporation_codes', 'wlg_corporation_purchase_orders.id', '=', 'wlg_corporation_codes.module_id')
+                        ->where('wlg_corporation_purchase_orders.po_id', NULL)
+                        ->where('wlg_corporation_codes.module_name', $moduleName)
+                        ->whereDate('wlg_corporation_purchase_orders.created_at', '=', date($getDateToday))
+                        ->orderBy('wlg_corporation_purchase_orders.id', 'desc')
+                        ->get()->toArray();
+
+        return view('wlg-corporation-summary-report', compact('purchaseOrders'));
+    }
    
     public function printPayablesWlg($id){
         $payableId = WlgCorporationPaymentVoucher::find($id);
@@ -39,8 +77,44 @@ class WlgCorporationController extends Controller
     }
 
     public function viewPayableDetails($id){
-        $viewPaymentDetail = WlgCorporationPaymentVoucher::find($id);
-     
+        $moduleName = "Payment Voucher";
+        $viewPaymentDetail = DB::table(
+                            'wlg_corporation_payment_vouchers')
+                            ->select( 
+                            'wlg_corporation_payment_vouchers.id',
+                            'wlg_corporation_payment_vouchers.user_id',
+                            'wlg_corporation_payment_vouchers.pv_id',
+                            'wlg_corporation_payment_vouchers.date',
+                            'wlg_corporation_payment_vouchers.paid_to',
+                            'wlg_corporation_payment_vouchers.account_no',
+                            'wlg_corporation_payment_vouchers.account_name',
+                            'wlg_corporation_payment_vouchers.particulars',
+                            'wlg_corporation_payment_vouchers.amount',
+                            'wlg_corporation_payment_vouchers.method_of_payment',
+                            'wlg_corporation_payment_vouchers.prepared_by',
+                            'wlg_corporation_payment_vouchers.approved_by',
+                            'wlg_corporation_payment_vouchers.date_approved',
+                            'wlg_corporation_payment_vouchers.received_by_date',
+                            'wlg_corporation_payment_vouchers.created_by',
+                            'wlg_corporation_payment_vouchers.invoice_number',
+                            'wlg_corporation_payment_vouchers.voucher_ref_number',
+                            'wlg_corporation_payment_vouchers.issued_date',
+                            'wlg_corporation_payment_vouchers.category',
+                            'wlg_corporation_payment_vouchers.amount_due',
+                            'wlg_corporation_payment_vouchers.delivered_date',
+                            'wlg_corporation_payment_vouchers.status',
+                            'wlg_corporation_payment_vouchers.cheque_number',
+                            'wlg_corporation_payment_vouchers.cheque_amount',
+                            'wlg_corporation_payment_vouchers.sub_category',
+                            'wlg_corporation_payment_vouchers.sub_category_account_id',
+                            'wlg_corporation_codes.wlg_code',
+                            'wlg_corporation_codes.module_id',
+                            'wlg_corporation_codes.module_code',
+                            'wlg_corporation_codes.module_name')
+                            ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
+                            ->where('wlg_corporation_payment_vouchers.id', $id)
+                            ->where('wlg_corporation_codes.module_name', $moduleName)
+                            ->get();
 
         $getViewPaymentDetails = WlgCorporationPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
@@ -610,7 +684,35 @@ class WlgCorporationController extends Controller
     }
 
     public function purchaseOrderAllLists(){
-        $purchaseOrders = WlgCorporationPurchaseOrder::where('po_id', NULL)->get()->toArray();
+        $moduleName = "Purchase Order";
+        $purchaseOrders = DB::table(
+                        'wlg_corporation_purchase_orders')
+                        ->select(
+                            'wlg_corporation_purchase_orders.id',
+                            'wlg_corporation_purchase_orders.user_id',
+                            'wlg_corporation_purchase_orders.po_id',
+                            'wlg_corporation_purchase_orders.paid_to',
+                            'wlg_corporation_purchase_orders.address',
+                            'wlg_corporation_purchase_orders.date',
+                            'wlg_corporation_purchase_orders.model',
+                            'wlg_corporation_purchase_orders.particulars',
+                            'wlg_corporation_purchase_orders.quantity',
+                            'wlg_corporation_purchase_orders.unit_price',
+                            'wlg_corporation_purchase_orders.amount',
+                            'wlg_corporation_purchase_orders.requested_by',
+                            'wlg_corporation_purchase_orders.prepared_by',
+                            'wlg_corporation_purchase_orders.checked_by',
+                            'wlg_corporation_purchase_orders.created_by',
+                            'wlg_corporation_codes.wlg_code',
+                            'wlg_corporation_codes.module_id',
+                            'wlg_corporation_codes.module_code',
+                            'wlg_corporation_codes.module_name')
+                        ->leftJoin('wlg_corporation_codes', 'wlg_corporation_purchase_orders.id', '=', 'wlg_corporation_codes.module_id')
+                        ->where('wlg_corporation_purchase_orders.po_id', NULL)
+                        ->where('wlg_corporation_codes.module_name', $moduleName)
+                        ->orderBy('wlg_corporation_purchase_orders.id', 'desc')
+                        ->get()->toArray();
+
         return view('wlg-corporation-purchase-order-lists', compact('purchaseOrders'));
     }
 
@@ -664,7 +766,47 @@ class WlgCorporationController extends Controller
     }
 
     public function transactionList(){
-        $getTransactionLists = WlgCorporationPaymentVoucher::where('pv_id', NULL)->orderBy('id', 'desc')->get()->toArray();
+      
+        $moduleName = "Payment Voucher";
+        $getTransactionLists = DB::table(
+                            'wlg_corporation_payment_vouchers')
+                            ->select( 
+                            'wlg_corporation_payment_vouchers.id',
+                            'wlg_corporation_payment_vouchers.user_id',
+                            'wlg_corporation_payment_vouchers.pv_id',
+                            'wlg_corporation_payment_vouchers.date',
+                            'wlg_corporation_payment_vouchers.paid_to',
+                            'wlg_corporation_payment_vouchers.account_no',
+                            'wlg_corporation_payment_vouchers.account_name',
+                            'wlg_corporation_payment_vouchers.particulars',
+                            'wlg_corporation_payment_vouchers.amount',
+                            'wlg_corporation_payment_vouchers.method_of_payment',
+                            'wlg_corporation_payment_vouchers.prepared_by',
+                            'wlg_corporation_payment_vouchers.approved_by',
+                            'wlg_corporation_payment_vouchers.date_approved',
+                            'wlg_corporation_payment_vouchers.received_by_date',
+                            'wlg_corporation_payment_vouchers.created_by',
+                            'wlg_corporation_payment_vouchers.invoice_number',
+                            'wlg_corporation_payment_vouchers.voucher_ref_number',
+                            'wlg_corporation_payment_vouchers.issued_date',
+                            'wlg_corporation_payment_vouchers.category',
+                            'wlg_corporation_payment_vouchers.amount_due',
+                            'wlg_corporation_payment_vouchers.delivered_date',
+                            'wlg_corporation_payment_vouchers.status',
+                            'wlg_corporation_payment_vouchers.cheque_number',
+                            'wlg_corporation_payment_vouchers.cheque_amount',
+                            'wlg_corporation_payment_vouchers.sub_category',
+                            'wlg_corporation_payment_vouchers.sub_category_account_id',
+                            'wlg_corporation_codes.wlg_code',
+                            'wlg_corporation_codes.module_id',
+                            'wlg_corporation_codes.module_code',
+                            'wlg_corporation_codes.module_name')
+                            ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
+                            ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                            ->where('wlg_corporation_codes.module_name', $moduleName)
+                            ->orderBy('wlg_corporation_payment_vouchers.id', 'desc')
+                            ->get()->toArray();
+    
 
         //get total amount due
         $status = "FULLY PAID AND RELEASED";
@@ -811,8 +953,45 @@ class WlgCorporationController extends Controller
     }
 
     public function editPayablesDetail(Request $request, $id){
-        $transactionList = WlgCorporationPaymentVoucher::find($id);
-
+        $moduleName = "Payment Voucher";
+        $transactionList = DB::table(
+                            'wlg_corporation_payment_vouchers')
+                            ->select( 
+                            'wlg_corporation_payment_vouchers.id',
+                            'wlg_corporation_payment_vouchers.user_id',
+                            'wlg_corporation_payment_vouchers.pv_id',
+                            'wlg_corporation_payment_vouchers.date',
+                            'wlg_corporation_payment_vouchers.paid_to',
+                            'wlg_corporation_payment_vouchers.account_no',
+                            'wlg_corporation_payment_vouchers.account_name',
+                            'wlg_corporation_payment_vouchers.particulars',
+                            'wlg_corporation_payment_vouchers.amount',
+                            'wlg_corporation_payment_vouchers.method_of_payment',
+                            'wlg_corporation_payment_vouchers.prepared_by',
+                            'wlg_corporation_payment_vouchers.approved_by',
+                            'wlg_corporation_payment_vouchers.date_approved',
+                            'wlg_corporation_payment_vouchers.received_by_date',
+                            'wlg_corporation_payment_vouchers.created_by',
+                            'wlg_corporation_payment_vouchers.invoice_number',
+                            'wlg_corporation_payment_vouchers.voucher_ref_number',
+                            'wlg_corporation_payment_vouchers.issued_date',
+                            'wlg_corporation_payment_vouchers.category',
+                            'wlg_corporation_payment_vouchers.amount_due',
+                            'wlg_corporation_payment_vouchers.delivered_date',
+                            'wlg_corporation_payment_vouchers.status',
+                            'wlg_corporation_payment_vouchers.cheque_number',
+                            'wlg_corporation_payment_vouchers.cheque_amount',
+                            'wlg_corporation_payment_vouchers.sub_category',
+                            'wlg_corporation_payment_vouchers.sub_category_account_id',
+                            'wlg_corporation_codes.wlg_code',
+                            'wlg_corporation_codes.module_id',
+                            'wlg_corporation_codes.module_code',
+                            'wlg_corporation_codes.module_name')
+                            ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
+                            ->where('wlg_corporation_payment_vouchers.id', $id)
+                            ->where('wlg_corporation_codes.module_name', $moduleName)
+                            ->get();
+        
         $getChequeNumbers = WlgCorporationPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
         //getParticular details
@@ -843,12 +1022,12 @@ class WlgCorporationController extends Controller
         $name  = $firstName." ".$lastName;
 
         //get the latest insert id query in table payment voucher ref number
-        $dataVoucherRef = DB::select('SELECT id, voucher_ref_number FROM wlg_corporation_payment_vouchers ORDER BY id DESC LIMIT 1');
+        $dataVoucherRef = DB::select('SELECT id, wlg_code FROM wlg_corporation_codes ORDER BY id DESC LIMIT 1');
         
         //if code is not zero add plus 1 reference number
-        if(isset($dataVoucherRef[0]->voucher_ref_number) != 0){
+        if(isset($dataVoucherRef[0]->wlg_code) != 0){
             //if code is not 0
-            $newVoucherRef = $dataVoucherRef[0]->voucher_ref_number +1;
+            $newVoucherRef = $dataVoucherRef[0]->wlg_code +1;
             $uVoucher = sprintf("%06d",$newVoucherRef);   
 
         }else{
@@ -856,6 +1035,7 @@ class WlgCorporationController extends Controller
             $newVoucherRef = 1;
             $uVoucher = sprintf("%06d",$newVoucherRef);
         } 
+
 
          //check if invoice number already exists
          $target = DB::table(
@@ -869,7 +1049,6 @@ class WlgCorporationController extends Controller
                 'paid_to'=>$request->get('paidTo'),
                 'invoice_number'=>$request->get('invoiceNumber'),
                 'method_of_payment'=>$request->get('paymentMethod'),
-                'voucher_ref_number'=>$uVoucher,
                 'account_name'=>$request->get('accountName'),
                 'issued_date'=>$request->get('issuedDate'),
                 'delivered_date'=>$request->get('deliveredDate'),
@@ -882,6 +1061,18 @@ class WlgCorporationController extends Controller
             ]);
             $addPaymentVoucher->save();
             $insertedId = $addPaymentVoucher->id;
+
+            $moduleCode = "PV-";
+            $moduleName = "Payment Voucher";
+
+            $wlg = new WlgCorporationCode([
+                'user_id'=>$user->id,
+                'wlg_code'=>$uVoucher,
+                'module_id'=>$insertedId,
+                'module_code'=>$moduleCode,
+                'module_name'=>$moduleName,
+            ]);
+            $wlg->save();
 
             return redirect()->route('editPayablesDetailWlg', ['id'=>$insertedId]);
         }else{
@@ -956,12 +1147,12 @@ class WlgCorporationController extends Controller
         ]);
 
         //get the latest insert id query in table purchase order
-        $data = DB::select('SELECT id, p_o_number FROM wlg_corporation_purchase_orders ORDER BY id DESC LIMIT 1');
+        $data = DB::select('SELECT id, wlg_code FROM wlg_corporation_codes ORDER BY id DESC LIMIT 1');
 
           //if code is not zero add plus 1
-          if(isset($data[0]->p_o_number) != 0){
+          if(isset($data[0]->wlg_code) != 0){
             //if code is not 0
-            $newNum = $data[0]->p_o_number +1;
+            $newNum = $data[0]->wlg_code +1;
             $uNum = sprintf("%06d",$newNum);    
         }else{
             //if code is 0 
@@ -973,7 +1164,6 @@ class WlgCorporationController extends Controller
             'user_id' =>$user->id,
             'paid_to'=>$request->get('paidTo'),
             'address'=>$request->get('address'),
-            'p_o_number'=>$uNum,
             'date'=>$request->get('date'),
             'model'=>$request->get('model'),
             'particulars'=>$request->get('particulars'),
@@ -987,6 +1177,19 @@ class WlgCorporationController extends Controller
 
         $insertedId = $purchaseOrder->id;
 
+        $moduleCode = "PO-";
+        $moduleName = "Purchase Order";
+
+        $wlg = new WlgCorporationCode([
+            'user_id'=>$user->id,
+            'wlg_code'=>$uNum,
+            'module_id'=>$insertedId,
+            'module_code'=>$moduleCode,
+            'module_name'=>$moduleName,
+        ]);
+
+        $wlg->save();
+        
         return redirect()->route('editWlg', ['id'=>$insertedId]);
       
     }
@@ -999,8 +1202,35 @@ class WlgCorporationController extends Controller
      */
     public function show($id)
     {
-        //
-        $purchaseOrder = WlgCorporationPurchaseOrder::find($id);
+        $moduleName = "Purchase Order";
+        $purchaseOrder = DB::table(
+                        'wlg_corporation_purchase_orders')
+                        ->select(
+                            'wlg_corporation_purchase_orders.id',
+                            'wlg_corporation_purchase_orders.user_id',
+                            'wlg_corporation_purchase_orders.po_id',
+                            'wlg_corporation_purchase_orders.paid_to',
+                            'wlg_corporation_purchase_orders.address',
+                            'wlg_corporation_purchase_orders.date',
+                            'wlg_corporation_purchase_orders.model',
+                            'wlg_corporation_purchase_orders.particulars',
+                            'wlg_corporation_purchase_orders.quantity',
+                            'wlg_corporation_purchase_orders.unit_price',
+                            'wlg_corporation_purchase_orders.amount',
+                            'wlg_corporation_purchase_orders.requested_by',
+                            'wlg_corporation_purchase_orders.prepared_by',
+                            'wlg_corporation_purchase_orders.checked_by',
+                            'wlg_corporation_purchase_orders.created_by',
+                            'wlg_corporation_codes.wlg_code',
+                            'wlg_corporation_codes.module_id',
+                            'wlg_corporation_codes.module_code',
+                            'wlg_corporation_codes.module_name')
+                        ->leftJoin('wlg_corporation_codes', 'wlg_corporation_purchase_orders.id', '=', 'wlg_corporation_codes.module_id')
+                        ->where('wlg_corporation_purchase_orders.id', $id)
+                        ->where('wlg_corporation_codes.module_name', $moduleName)
+                        ->get();
+
+
         $pOrders = WlgCorporationPurchaseOrder::where('po_id', $id)->get()->toArray();
         //count the total amount 
         $countTotalAmount = WlgCorporationPurchaseOrder::where('id', $id)->sum('amount');

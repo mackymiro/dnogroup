@@ -25,7 +25,7 @@
 				  					<thead>
 				  						<tr>
 				  							<th>Action</th>
-			  								<th>PO #</th>
+			  								<th>PO No</th>
 			  								<th>Paid to</th>
 			  								<th>Date</th>
 			  								<th>Created by</th>
@@ -34,7 +34,7 @@
 				  					<tfoot>
 				  						<tr>
 				  							<th>Action</th>
-			  								<th>PO #</th>
+			  								<th>PO No</th>
 			  								<th>Paid to</th>
 			  								<th>Date</th>
 			  								<th>Created by</th>
@@ -45,17 +45,17 @@
 				  						<tr>
 				  							<td>
 			  								  @if(Auth::user()['role_type'] != 3)
-					                          <a href="{{ url('wlg-corporation/edit-wlg-corporation-purchase-order/'.$purchaseOrder['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+					                          <a href="{{ url('wlg-corporation/edit-wlg-corporation-purchase-order/'.$purchaseOrder->id) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
 					                          @endif
 					                          @if(Auth::user()['role_type'] == 1)
-										  		<a id="delete" onClick="confirmDelete('{{ $purchaseOrder['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+										  		<a id="delete" onClick="confirmDelete('{{ $purchaseOrder->id }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
 						                       @endif
-				  								<a href="{{ url('wlg-corporation/view-wlg-corporation-purchase-order/'.$purchaseOrder['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
+				  								<a href="{{ url('wlg-corporation/view-wlg-corporation-purchase-order/'.$purchaseOrder->id) }}" title="View"><i class="fas fa-low-vision"></i></a>
 				  							</td>
-				  							 <td><a href="#">P.O-{{ $purchaseOrder['p_o_number'] }}</a></td>
-					                        <td>{{ $purchaseOrder['paid_to'] }}</td>
-					                        <td>{{ $purchaseOrder['date'] }}</td>
-					                        <td>{{ $purchaseOrder['created_by'] }}</td>
+				  							 <td>{{ $purchaseOrder->module_code}}{{ $purchaseOrder->wlg_code}}</td>
+					                        <td>{{ $purchaseOrder->paid_to}}</td>
+					                        <td>{{ $purchaseOrder->date }}</td>
+					                        <td>{{ $purchaseOrder->created_by }}</td>
 				  						</tr>
 				  						@endforeach
 				  					</tbody>
