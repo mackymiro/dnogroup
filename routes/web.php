@@ -3799,12 +3799,47 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dino-industrial-corporation/edit-dino-industrial-payables-detail/{id}',
 		'DinoIndustrialCorporationController@editPayablesDetail')
 		->name('editPayablesDetailDinoIndustrial');
+
+	Route::get(
+		'/dino-industrial-corporation/view-dino-industrial-payables-details/{id}',
+		'DinoIndustrialCorporationController@viewPayableDetails')
+		->name('viewPayableDetails');
+
+	Route::get(
+		'/dino-industrial-corporation/printPayables/{id}',
+		'DinoIndustrialCorporationController@printPayables')
+		->name('printPayables');
 	
 	Route::get(
 		'/dino-industrial-corporation/payables/transaction-list',
 		'DinoIndustrialCorporationController@transactionList')
 		->name('transactionListDinoIndustrial');
+
+	Route::delete(
+		'/dino-industrial-corporation/delete-transaction-list/{id}',
+		'DinoIndustrialCorporationController@destroyTransactionList')
+		->name('destroyTransactionList');
 	
+	Route::get(
+		'/dino-industrial-corporation/summary-report',
+		'DinoIndustrialCorporationController@summaryReport')
+		->name('summaryReport');
+
+	Route::get(
+		'/dino-industrial-corporation/printSummary',
+		'DinoIndustrialCorporationController@printSummary')
+		->name('printSummary');
+
+	Route::get(
+		'/dino-industrial-corporation/search-date',
+		'DinoIndustrialCorporationController@getSummaryReport')
+		->name('getSummaryReport');
+
+	Route::get(
+		'/dino-industrial-corporation/printGetSummary/{date}',
+		'DinoIndustrialCorporationController@printGetSummary')
+		->name('printGetSummary');
+
 	Route::post(
 		'/dino-industrial-corporation/add-particulars/{id}',
 		'DinoIndustrialCorporationController@addParticulars')

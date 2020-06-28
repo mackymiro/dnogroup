@@ -14,6 +14,7 @@ class DinoIndustrialCorporationPaymentVoucher extends Model
         'date',
         'paid_to',
         'account_no',
+        'account_name',
         'particulars',
         'amount',
         'method_of_payment',
