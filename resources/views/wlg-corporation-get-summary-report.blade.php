@@ -71,6 +71,9 @@
                                 Summary Reports
                             </div>
                             <div class="card-body">
+                                <div>
+                                    <h1>Search Result For: {{ $getDate }}</h1>
+                                </div>
                                  <nav>
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                         <a class="nav-item nav-link active" id="nav-purchaseOrder" data-toggle="tab" href="#purchaseOrder" role="tab" aria-controls="purchaseOrder" aria-selected="false">Petty Cash</a>
@@ -213,7 +216,7 @@
                                     <div class="tab-pane fade" id="all" role="tabpanel" aria-labelledby="all-tab">
                                          <br>
                                          <div class="float-right">
-                                             <a href="{{ action('WlgCorporationController@printSummary') }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                             <a href="{{ action('WlgCorporationController@printGetSummary', $getDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
                                         </div>
                                         <br>
                                         <div class="table-responsive">

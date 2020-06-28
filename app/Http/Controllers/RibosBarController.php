@@ -23,6 +23,159 @@ use App\RibosBarCode;
 
 class RibosBarController extends Controller
 {
+
+    public function search(Request $request){
+        $getSearchResults =RibosBarCode::where('ribos_bar_code', $request->get('searchCode'))->get();
+        if($getSearchResults[0]->module_name === "Sales Invoice"){
+            $getSearchSalesInvoices = DB::table(
+                        'ribos_bar_sales_invoices')
+                        ->select(
+                            'ribos_bar_sales_invoices.id',
+                            'ribos_bar_sales_invoices.user_id',
+                            'ribos_bar_sales_invoices.si_id',
+                            'ribos_bar_sales_invoices.invoice_number',
+                            'ribos_bar_sales_invoices.date',
+                            'ribos_bar_sales_invoices.ordered_by',
+                            'ribos_bar_sales_invoices.address',
+                            'ribos_bar_sales_invoices.qty',
+                            'ribos_bar_sales_invoices.total_kls',
+                            'ribos_bar_sales_invoices.item_description',
+                            'ribos_bar_sales_invoices.unit_price',
+                            'ribos_bar_sales_invoices.amount',
+                            'ribos_bar_sales_invoices.total_amount', 
+                            'ribos_bar_sales_invoices.created_by', 
+                            'ribos_bar_sales_invoices.created_at',                     
+                            'ribos_bar_codes.ribos_bar_code',
+                            'ribos_bar_codes.module_id',
+                            'ribos_bar_codes.module_code',
+                            'ribos_bar_codes.module_name')
+                        ->leftJoin('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
+                        ->where('ribos_bar_sales_invoices.id', $getSearchResults[0]->module_id)
+                        ->where('ribos_bar_codes.module_name', $getSearchResults[0]->module_name)
+                      
+                        ->get()->toArray();
+
+            $getAllCodes = RibosBarCode::get()->toArray();  
+            $module = $getSearchResults[0]->module_name;
+
+            return view('ribos-bar-search-results',  compact('module', 'getAllCodes', 'getSearchSalesInvoices'));
+                    
+        }else if($getSearchResults[0]->module_name === "Purchase Order"){
+            $getSearchPurchaseOrders = DB::table(
+                    'ribos_bar_purchase_orders')
+                    ->select(
+                        'ribos_bar_purchase_orders.id',
+                        'ribos_bar_purchase_orders.user_id',
+                        'ribos_bar_purchase_orders.po_id',
+                        'ribos_bar_purchase_orders.paid_to',
+                        'ribos_bar_purchase_orders.address',
+                        'ribos_bar_purchase_orders.branch_location',
+                        'ribos_bar_purchase_orders.date',
+                        'ribos_bar_purchase_orders.quantity',
+                        'ribos_bar_purchase_orders.description',
+                        'ribos_bar_purchase_orders.unit_price',
+                        'ribos_bar_purchase_orders.amount',
+                        'ribos_bar_purchase_orders.total_price',
+                        'ribos_bar_purchase_orders.requested_by',
+                        'ribos_bar_purchase_orders.prepared_by',
+                        'ribos_bar_purchase_orders.checked_by',
+                        'ribos_bar_purchase_orders.created_by',
+                        'ribos_bar_purchase_orders.created_at',
+                        'ribos_bar_codes.ribos_bar_code',
+                        'ribos_bar_codes.module_id',
+                        'ribos_bar_codes.module_code',
+                        'ribos_bar_codes.module_name')
+                    ->join('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
+                    ->where('ribos_bar_purchase_orders.id', $getSearchResults[0]->module_id)
+                    ->where('ribos_bar_codes.module_name', $getSearchResults[0]->module_name)
+                    ->get()->toArray();
+
+            $getAllCodes = RibosBarCode::get()->toArray();  
+            $module = $getSearchResults[0]->module_name;
+
+            return view('ribos-bar-search-results',  compact('module', 'getAllCodes', 'getSearchPurchaseOrders'));
+        
+
+        }else if($getSearchResults[0]->module_name === "Petty Cash"){
+            $getSearchPettyCashes = DB::table(
+                    'ribos_bar_petty_cashes')
+                    ->select( 
+                    'ribos_bar_petty_cashes.id',
+                    'ribos_bar_petty_cashes.user_id',
+                    'ribos_bar_petty_cashes.pc_id',
+                    'ribos_bar_petty_cashes.date',
+                    'ribos_bar_petty_cashes.petty_cash_name',
+                    'ribos_bar_petty_cashes.petty_cash_summary',
+                    'ribos_bar_petty_cashes.amount',
+                    'ribos_bar_petty_cashes.created_by',
+                    'ribos_bar_codes.ribos_bar_code',
+                    'ribos_bar_codes.module_id',
+                    'ribos_bar_codes.module_code',
+                    'ribos_bar_codes.module_name')
+                    ->join('ribos_bar_codes', 'ribos_bar_petty_cashes.id', '=', 'ribos_bar_codes.module_id')
+                    ->where('ribos_bar_petty_cashes.id', $getSearchResults[0]->module_id)
+                    ->where('ribos_bar_codes.module_name', $getSearchResults[0]->module_name)
+                    ->get()->toArray();
+            
+            $getAllCodes = RibosBarCode::get()->toArray();  
+            $module = $getSearchResults[0]->module_name;
+
+            return view('ribo-bar-search-results',  compact('module', 'getAllCodes', 'getSearchPettyCashes'));
+              
+        }else if($getSearchResults[0]->module_name === "Payment Voucher"){
+            $getSearchPaymentVouchers = DB::table(
+                        'ribos_bar_payment_vouchers')
+                        ->select( 
+                        'ribos_bar_payment_vouchers.id',
+                        'ribos_bar_payment_vouchers.user_id',
+                        'ribos_bar_payment_vouchers.pv_id',
+                        'ribos_bar_payment_vouchers.date',
+                        'ribos_bar_payment_vouchers.paid_to',
+                        'ribos_bar_payment_vouchers.account_no',
+                        'ribos_bar_payment_vouchers.account_name',
+                        'ribos_bar_payment_vouchers.particulars',
+                        'ribos_bar_payment_vouchers.amount',
+                        'ribos_bar_payment_vouchers.method_of_payment',
+                        'ribos_bar_payment_vouchers.prepared_by',
+                        'ribos_bar_payment_vouchers.approved_by',
+                        'ribos_bar_payment_vouchers.date_apprroved',
+                        'ribos_bar_payment_vouchers.received_by_date',
+                        'ribos_bar_payment_vouchers.created_by',
+                        'ribos_bar_payment_vouchers.created_at',
+                        'ribos_bar_payment_vouchers.invoice_number',
+                        'ribos_bar_payment_vouchers.voucher_ref_number',
+                        'ribos_bar_payment_vouchers.issued_date',
+                        'ribos_bar_payment_vouchers.category',
+                        'ribos_bar_payment_vouchers.amount_due',
+                        'ribos_bar_payment_vouchers.delivered_date',
+                        'ribos_bar_payment_vouchers.status',
+                        'ribos_bar_payment_vouchers.cheque_number',
+                        'ribos_bar_payment_vouchers.cheque_amount',
+                        'ribos_bar_payment_vouchers.sub_category',
+                        'ribos_bar_payment_vouchers.sub_category_account_id',
+                        'ribos_bar_codes.ribos_bar_code',
+                        'ribos_bar_codes.module_id',
+                        'ribos_bar_codes.module_code',
+                        'ribos_bar_codes.module_name')
+                        ->join('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                        ->where('ribos_bar_payment_vouchers.id', $getSearchResults[0]->module_id)
+                        ->where('ribos_bar_codes.module_name', $getSearchResults[0]->module_name)
+                    
+                        ->get()->toArray();
+            
+            $getAllCodes = RibosBarCode::get()->toArray();  
+            $module = $getSearchResults[0]->module_name;
+
+            return view('ribos-bar-search-results',  compact('module', 'getAllCodes', 'getSearchPaymentVouchers'));
+            
+        }
+    }
+
+    public function searchNumberCode(){
+        $getAllCodes = RibosBarCode::get()->toArray();
+        return view('ribos-bar-search-number-code', compact('getAllCodes'));
+    }
+
     public function printGetSummary($date){
         $moduleName = "Sales Invoice";
         $getAllSalesInvoices = DB::table(
@@ -47,7 +200,7 @@ class RibosBarController extends Controller
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
-                        ->join('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
+                        ->ledtJoin('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
                         ->where('ribos_bar_sales_invoices.si_id', NULL)
                         ->where('ribos_bar_codes.module_name', $moduleName)
                         ->whereDate('ribos_bar_sales_invoices.created_at', '=', date($date))
@@ -108,7 +261,7 @@ class RibosBarController extends Controller
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
-                        ->join('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
+                        ->leftJoin('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
                         ->where('ribos_bar_purchase_orders.po_id', NULL)
                         ->where('ribos_bar_codes.module_name', $moduleNamePO)
                         ->whereDate('ribos_bar_purchase_orders.created_at', '=', date($date))
@@ -3623,7 +3776,6 @@ class RibosBarController extends Controller
 
          $storeDeliveryReceipt = new RibosBarDeliveryReceipt([
             'user_id'=>$user->id,            
-            'dr_no'=>$uDr,
             'date'=>$getDateToday,
             'delivered_to'=>$request->get('deliveredTo'),
             'product_id'=>$request->get('productId'),
@@ -3642,6 +3794,20 @@ class RibosBarController extends Controller
 
         $insertedId  = $storeDeliveryReceipt->id;
 
+        $moduleCode = "DR-";
+        $moduleName = "Delivery Receipt";
+
+        //save to lechon_de_cebu_codes table
+        $ribosBar = new LechonDeCebuCode([
+            'user_id'=>$user->id,
+            'ribos_bar_code'=>$uDr,
+            'module_id'=>$insertedId,
+            'module_code'=>$moduleCode,
+            'module_name'=>$moduleName,
+
+        ]);
+        $ribosBar->save();
+        
         return redirect('ribos-bar/edit-ribos-bar-delivery-receipt/'.$insertedId);
     }
 

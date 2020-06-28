@@ -15,6 +15,89 @@ use App\DongFangCorporationCode;
 
 class DongFangCorporationController extends Controller
 {
+    public function search(Request $request){
+        $getSearchResults =DongFangCorporationCode::where('dong_fang_code', $request->get('searchCode'))->get();
+        if($getSearchResults[0]->module_name === "Petty Cash"){
+            $getSearchPettyCashes = DB::table(
+                    'dong_fang_corporation_petty_cashes')
+                    ->select( 
+                    'dong_fang_corporation_petty_cashes.id',
+                    'dong_fang_corporation_petty_cashes.user_id',
+                    'dong_fang_corporation_petty_cashes.pc_id',
+                    'dong_fang_corporation_petty_cashes.date',
+                    'dong_fang_corporation_petty_cashes.petty_cash_name',
+                    'dong_fang_corporation_petty_cashes.petty_cash_summary',
+                    'dong_fang_corporation_petty_cashes.amount',
+                    'dong_fang_corporation_petty_cashes.created_by',
+                    'dong_fang_corporation_petty_cashes.created_at',
+                    'dong_fang_corporation_codes.dong_fang_code',
+                    'dong_fang_corporation_codes.module_id',
+                    'dong_fang_corporation_codes.module_code',
+                    'dong_fang_corporation_codes.module_name')
+                    ->leftJoin('dong_fang_corporation_codes', 'dong_fang_corporation_petty_cashes.id', '=', 'dong_fang_corporation_codes.module_id')
+                    ->where('dong_fang_corporation_petty_cashes.id', $getSearchResults[0]->module_id)
+                    ->where('dong_fang_corporation_codes.module_name', $getSearchResults[0]->module_name)
+                    ->get()->toArray();
+
+            $getAllCodes = DongFangCorporationCode::get()->toArray();  
+            $module = $getSearchResults[0]->module_name;
+
+            return view('dong-fang-search-results',  compact('module', 'getAllCodes', 'getSearchPettyCashes'));
+                      
+             
+        }else if($getSearchResults[0]->module_name === "Payment Voucher"){
+            $getSearchPaymentVouchers = DB::table(
+                        'dong_fang_corporation_payment_vouchers')
+                        ->select( 
+                        'dong_fang_corporation_payment_vouchers.id',
+                        'dong_fang_corporation_payment_vouchers.user_id',
+                        'dong_fang_corporation_payment_vouchers.pv_id',
+                        'dong_fang_corporation_payment_vouchers.date',
+                        'dong_fang_corporation_payment_vouchers.paid_to',
+                        'dong_fang_corporation_payment_vouchers.account_no',
+                        'dong_fang_corporation_payment_vouchers.account_name',
+                        'dong_fang_corporation_payment_vouchers.particulars',
+                        'dong_fang_corporation_payment_vouchers.amount',
+                        'dong_fang_corporation_payment_vouchers.method_of_payment',
+                        'dong_fang_corporation_payment_vouchers.prepared_by',
+                        'dong_fang_corporation_payment_vouchers.approved_by',
+                        'dong_fang_corporation_payment_vouchers.date_approved',
+                        'dong_fang_corporation_payment_vouchers.received_by_date',
+                        'dong_fang_corporation_payment_vouchers.created_by',
+                        'dong_fang_corporation_payment_vouchers.created_at',
+                        'dong_fang_corporation_payment_vouchers.invoice_number',
+                        'dong_fang_corporation_payment_vouchers.voucher_ref_number',
+                        'dong_fang_corporation_payment_vouchers.issued_date',
+                        'dong_fang_corporation_payment_vouchers.category',
+                        'dong_fang_corporation_payment_vouchers.amount_due',
+                        'dong_fang_corporation_payment_vouchers.delivered_date',
+                        'dong_fang_corporation_payment_vouchers.status',
+                        'dong_fang_corporation_payment_vouchers.cheque_number',
+                        'dong_fang_corporation_payment_vouchers.cheque_amount',
+                        'dong_fang_corporation_payment_vouchers.sub_category',
+                        'dong_fang_corporation_payment_vouchers.sub_category_account_id',
+                        'dong_fang_corporation_codes.dong_fang_code',
+                        'dong_fang_corporation_codes.module_id',
+                        'dong_fang_corporation_codes.module_code',
+                        'dong_fang_corporation_codes.module_name')
+                        ->leftJoin('dong_fang_corporation_codes', 'dong_fang_corporation_payment_vouchers.id', '=', 'dong_fang_corporation_codes.module_id')
+                        ->where('dong_fang_corporation_payment_vouchers.id', $getSearchResults[0]->module_id)
+                        ->where('dong_fang_corporation_codes.module_name', $getSearchResults[0]->module_name)
+                        ->get()->toArray();
+
+            $getAllCodes = DongFangCorporationCode::get()->toArray();  
+            $module = $getSearchResults[0]->module_name;
+
+            return view('dong-fang-search-results',  compact('module', 'getAllCodes', 'getSearchPaymentVouchers'));
+                   
+
+        }
+    }
+
+    public function searchNumberCode(){
+        $getAllCodes = DongFangCorporationCode::get()->toArray();
+        return view('dong-fang-search-number-code', compact('getAllCodes'));
+    }
 
     public function printGetSummary($date){
         

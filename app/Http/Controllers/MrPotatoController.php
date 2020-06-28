@@ -20,6 +20,193 @@ use App\MrPotatoBillingStatement;
 
 class MrPotatoController extends Controller
 {     
+    public function search(Request $request){   
+        $getSearchResults =MrPotatoCode::where('mr_potato_code', $request->get('searchCode'))->get();
+        if($getSearchResults[0]->module_name === "Sales Invoice"){
+            $getSearchSalesInvoices = DB::table(
+                            'mr_potato_sales_invoices')
+                            ->select(
+                                'mr_potato_sales_invoices.id',
+                                'mr_potato_sales_invoices.user_id',
+                                'mr_potato_sales_invoices.si_id',
+                                'mr_potato_sales_invoices.invoice_number',
+                                'mr_potato_sales_invoices.date',
+                                'mr_potato_sales_invoices.ordered_by',
+                                'mr_potato_sales_invoices.address',
+                                'mr_potato_sales_invoices.qty',
+                                'mr_potato_sales_invoices.total_kls',
+                                'mr_potato_sales_invoices.item_description',
+                                'mr_potato_sales_invoices.unit_price',
+                                'mr_potato_sales_invoices.amount',
+                                'mr_potato_sales_invoices.total_amount',
+                                'mr_potato_sales_invoices.created_by',
+                                'mr_potato_codes.mr_potato_code',
+                                'mr_potato_codes.module_id',
+                                'mr_potato_codes.module_code',
+                                'mr_potato_codes.module_name')
+                            ->leftJoin('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
+                            ->where('mr_potato_sales_invoices.id', $getSearchResults[0]->module_id)
+                            ->where('mr_potato_codes.module_name', $getSearchResults[0]->module_name)
+                            ->get()->toArray();
+
+            $getAllCodes = MrPotatoCode::get()->toArray();  
+            $module = $getSearchResults[0]->module_name;
+
+            return view('mr-potato-search-results',  compact('module', 'getAllCodes', 'getSearchSalesInvoices'));
+        
+
+        }else if($getSearchResults[0]->module_name === "Delivery Receipt"){
+            $getSearchDeliveryReceipts = DB::table(
+                            'mr_potato_delivery_receipts')
+                            ->select( 
+                            'mr_potato_delivery_receipts.id',
+                            'mr_potato_delivery_receipts.user_id',
+                            'mr_potato_delivery_receipts.dr_id',
+                            'mr_potato_delivery_receipts.delivered_to',
+                            'mr_potato_delivery_receipts.date',
+                            'mr_potato_delivery_receipts.address',
+                            'mr_potato_delivery_receipts.product_id',
+                            'mr_potato_delivery_receipts.unit',
+                            'mr_potato_delivery_receipts.item_description',
+                            'mr_potato_delivery_receipts.unit_price',
+                            'mr_potato_delivery_receipts.amount',
+                            'mr_potato_delivery_receipts.total_amount',
+                            'mr_potato_delivery_receipts.qty',
+                            'mr_potato_delivery_receipts.prepared_by',
+                            'mr_potato_delivery_receipts.checked_by',
+                            'mr_potato_delivery_receipts.received_by',
+                            'mr_potato_delivery_receipts.created_by',
+                            'mr_potato_delivery_receipts.created_at',
+                            'mr_potato_codes.mr_potato_code',
+                            'mr_potato_codes.module_id',
+                            'mr_potato_codes.module_code',
+                            'mr_potato_codes.module_name')
+                            ->leftJoin('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
+                            ->where('mr_potato_delivery_receipts.id',$getSearchResults[0]->module_id)
+                            ->where('mr_potato_codes.module_name', $getSearchResults[0]->module_name)
+                            ->get()->toArray();
+
+            $getAllCodes = MrPotatoCode::get()->toArray();  
+            $module = $getSearchResults[0]->module_name;
+
+            return view('mr-potato-search-results',  compact('module', 'getAllCodes', 'getSearchDeliveryReceipts'));
+                        
+        }else if($getSearchResults[0]->module_name === "Purchase Order"){
+            $getSearchPurchaseOrders = DB::table(
+                    'mr_potato_purchase_orders')
+                    ->select(
+                        'mr_potato_purchase_orders.id',
+                        'mr_potato_purchase_orders.user_id',
+                        'mr_potato_purchase_orders.po_id',
+                        'mr_potato_purchase_orders.paid_to',
+                        'mr_potato_purchase_orders.branch_location',
+                        'mr_potato_purchase_orders.address',
+                        'mr_potato_purchase_orders.date',
+                        'mr_potato_purchase_orders.quantity',
+                        'mr_potato_purchase_orders.description',
+                        'mr_potato_purchase_orders.unit_price',
+                        'mr_potato_purchase_orders.amount',
+                        'mr_potato_purchase_orders.total_price',
+                        'mr_potato_purchase_orders.requested_by',
+                        'mr_potato_purchase_orders.prepared_by',
+                        'mr_potato_purchase_orders.checked_by',
+                        'mr_potato_purchase_orders.created_by',
+                        'mr_potato_purchase_orders.created_at',
+                        'mr_potato_purchase_orders.requesting_branch',
+                        'mr_potato_codes.mr_potato_code',
+                        'mr_potato_codes.module_id',
+                        'mr_potato_codes.module_code',
+                        'mr_potato_codes.module_name')
+                        ->leftJoin('mr_potato_codes', 'mr_potato_purchase_orders.id', '=', 'mr_potato_codes.module_id')
+                        ->where('mr_potato_purchase_orders.id', $getSearchResults[0]->module_id)
+                        ->where('mr_potato_codes.module_name', $getSearchResults[0]->module_name)   
+                        ->get()->toArray();
+
+            $getAllCodes = MrPotatoCode::get()->toArray();  
+            $module = $getSearchResults[0]->module_name;
+
+            return view('mr-potato-search-results',  compact('module', 'getAllCodes', 'getSearchPurchaseOrders'));
+                 
+        }else if($getSearchResults[0]->module_name === "Petty Cash"){
+            $getSearchPettyCashes = DB::table(
+                        'mr_potato_petty_cashes')
+                        ->select( 
+                        'mr_potato_petty_cashes.id',
+                        'mr_potato_petty_cashes.user_id',
+                        'mr_potato_petty_cashes.pc_id',
+                        'mr_potato_petty_cashes.date',
+                        'mr_potato_petty_cashes.petty_cash_name',
+                        'mr_potato_petty_cashes.petty_cash_summary',
+                        'mr_potato_petty_cashes.amount',
+                        'mr_potato_petty_cashes.created_by',
+                        'mr_potato_petty_cashes.created_at',
+                        'mr_potato_codes.mr_potato_code',
+                        'mr_potato_codes.module_id',
+                        'mr_potato_codes.module_code',
+                        'mr_potato_codes.module_name')
+                        ->join('mr_potato_codes', 'mr_potato_petty_cashes.id', '=', 'mr_potato_codes.module_id')
+                        ->where('mr_potato_petty_cashes.id', $getSearchResults[0]->module_id)
+                        ->where('mr_potato_codes.module_name', $getSearchResults[0]->module_name)
+                        ->get()->toArray();
+            
+            $getAllCodes = MrPotatoCode::get()->toArray();  
+            $module = $getSearchResults[0]->module_name;
+
+            return view('mr-potato-search-results',  compact('module', 'getAllCodes', 'getSearchPettyCashes'));
+                    
+        }else if($getSearchResults[0]->module_name === "Payment Voucher"){
+            $getSearchPaymentVouchers = DB::table(
+                            'mr_potato_payment_vouchers')
+                            ->select( 
+                            'mr_potato_payment_vouchers.id',
+                            'mr_potato_payment_vouchers.user_id',
+                            'mr_potato_payment_vouchers.pv_id',
+                            'mr_potato_payment_vouchers.date',
+                            'mr_potato_payment_vouchers.paid_to',
+                            'mr_potato_payment_vouchers.account_no',
+                            'mr_potato_payment_vouchers.account_name',
+                            'mr_potato_payment_vouchers.particulars',
+                            'mr_potato_payment_vouchers.amount',
+                            'mr_potato_payment_vouchers.method_of_payment',
+                            'mr_potato_payment_vouchers.prepared_by',
+                            'mr_potato_payment_vouchers.approved_by',
+                            'mr_potato_payment_vouchers.date_apprroved',
+                            'mr_potato_payment_vouchers.received_by_date',
+                            'mr_potato_payment_vouchers.created_by',
+                            'mr_potato_payment_vouchers.created_at',
+                            'mr_potato_payment_vouchers.invoice_number',
+                            'mr_potato_payment_vouchers.voucher_ref_number',
+                            'mr_potato_payment_vouchers.issued_date',
+                            'mr_potato_payment_vouchers.category',
+                            'mr_potato_payment_vouchers.amount_due',
+                            'mr_potato_payment_vouchers.delivered_date',
+                            'mr_potato_payment_vouchers.status',
+                            'mr_potato_payment_vouchers.cheque_number',
+                            'mr_potato_payment_vouchers.cheque_amount',
+                            'mr_potato_payment_vouchers.sub_category',
+                            'mr_potato_payment_vouchers.sub_category_account_id',
+                            'mr_potato_codes.mr_potato_code',
+                            'mr_potato_codes.module_id',
+                            'mr_potato_codes.module_code',
+                            'mr_potato_codes.module_name')
+                            ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                            ->where('mr_potato_payment_vouchers.id', $getSearchResults[0]->module_id)
+                            ->where('mr_potato_codes.module_name', $getSearchResults[0]->module_name)
+                            ->get()->toArray();
+
+            $getAllCodes = MrPotatoCode::get()->toArray();  
+            $module = $getSearchResults[0]->module_name;
+
+            return view('mr-potato-search-results',  compact('module', 'getAllCodes', 'getSearchPaymentVouchers'));
+                   
+        }
+       
+    }
+
+    public function searchNumberCode(){
+        $getAllCodes = MrPotatoCode::get()->toArray();
+        return view('mr-potato-search-number-code', compact('getAllCodes'));
+    }
 
     public function printGetSummary($date){
         
