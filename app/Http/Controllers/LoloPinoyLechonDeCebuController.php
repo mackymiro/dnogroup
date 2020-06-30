@@ -49,14 +49,16 @@ class LoloPinoyLechonDeCebuController extends Controller
                             'lechon_de_cebu_sales_invoices.total_amount',
                             'lechon_de_cebu_sales_invoices.created_by',
                             'lechon_de_cebu_sales_invoices.created_at',
-                            'lechon_de_cebu_sales_invoices.updated_at',                            
+                            'lechon_de_cebu_sales_invoices.updated_at',
+                            'lechon_de_cebu_sales_invoices.deleted_at',                            
                             'lechon_de_cebu_codes.lechon_de_cebu_code',
                             'lechon_de_cebu_codes.module_id',
                             'lechon_de_cebu_codes.module_code',
                             'lechon_de_cebu_codes.module_name')
-                        ->join('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+                        ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
                         ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
                         ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                        ->where('lechon_de_cebu_sales_invoices.deleted_at', NULL)
                         ->whereDate('lechon_de_cebu_sales_invoices.created_at', '=', date($getDate))
                         ->orderBy('lechon_de_cebu_sales_invoices.id', 'desc')
                         ->get()->toArray();
@@ -81,14 +83,16 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_sales_invoices.total_amount',
                                 'lechon_de_cebu_sales_invoices.created_by',
                                 'lechon_de_cebu_sales_invoices.created_at',
-                                'lechon_de_cebu_sales_invoices.updated_at',                            
+                                'lechon_de_cebu_sales_invoices.updated_at',    
+                                'lechon_de_cebu_sales_invoices.deleted_at',                            
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
                                 'lechon_de_cebu_codes.module_name')
-                            ->join('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+                            ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
                             ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
                             ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                            ->where('lechon_de_cebu_sales_invoices.deleted_at', NULL)
                             ->whereDate('lechon_de_cebu_sales_invoices.created_at', '=', date($getDate))
                             ->sum('lechon_de_cebu_sales_invoices.total_amount');
 
@@ -120,13 +124,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_delivery_receipts.received_by',
                                 'lechon_de_cebu_delivery_receipts.duplicate_status',
                                 'lechon_de_cebu_delivery_receipts.created_by',
+                                'lechon_de_cebu_delivery_receipts.deleted_at',
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
                                 'lechon_de_cebu_codes.module_name')
-                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameDelivery)
+                                ->where('lechon_de_cebu_delivery_receipts.deleted_at', NULL)
                                 ->whereDate('lechon_de_cebu_delivery_receipts.created_at', '=', date($getDate))
                                 ->orderBy('lechon_de_cebu_delivery_receipts.id', 'desc')
                                 ->get()->toArray();
@@ -158,13 +164,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_delivery_receipts.received_by',
                                 'lechon_de_cebu_delivery_receipts.duplicate_status',
                                 'lechon_de_cebu_delivery_receipts.created_by',
+                                'lechon_de_cebu_delivery_receipts.deleted_at',
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
                                 'lechon_de_cebu_codes.module_name')
-                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameDelivery)
+                                ->where('lechon_de_cebu_delivery_receipts.deleted_at', NULL)
                                 ->whereDate('lechon_de_cebu_delivery_receipts.created_at', '=', date($getDate))
                                 ->sum('lechon_de_cebu_delivery_receipts.total');
         
@@ -190,13 +198,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                             'lechon_de_cebu_purchase_orders.prepared_by',
                             'lechon_de_cebu_purchase_orders.checked_by',
                             'lechon_de_cebu_purchase_orders.created_by',
+                            'lechon_de_cebu_purchase_orders.deleted_at',
                             'lechon_de_cebu_codes.lechon_de_cebu_code',
                             'lechon_de_cebu_codes.module_id',
                             'lechon_de_cebu_codes.module_code',
                             'lechon_de_cebu_codes.module_name')
-                        ->join('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                        ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
                         ->where('lechon_de_cebu_purchase_orders.po_id', NULL)
                         ->where('lechon_de_cebu_codes.module_name', $moduleNamePurchaseOrder)
+                        ->where('lechon_de_cebu_purchase_orders.deleted_at', NULL)
                         ->whereDate('lechon_de_cebu_purchase_orders.created_at', '=', date($getDate))
                         ->orderBy('lechon_de_cebu_purchase_orders.id', 'desc')
                         ->get()->toArray();
@@ -220,6 +230,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_purchase_orders.prepared_by',
                                 'lechon_de_cebu_purchase_orders.checked_by',
                                 'lechon_de_cebu_purchase_orders.created_by',
+                                'lechon_de_cebu_purchase_orders.deleted_at',
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
@@ -227,6 +238,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                             ->join('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
                             ->where('lechon_de_cebu_purchase_orders.po_id', NULL)
                             ->where('lechon_de_cebu_codes.module_name', $moduleNamePurchaseOrder)
+                            ->where('lechon_de_cebu_purchase_orders.deleted_at', NULL)
                             ->whereDate('lechon_de_cebu_purchase_orders.created_at', '=', date($getDate))
                             ->sum('lechon_de_cebu_purchase_orders.total_price');
 
@@ -287,13 +299,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_billing_statements.total_amount',
                                     'lechon_de_cebu_billing_statements.paid_amount',
                                     'lechon_de_cebu_billing_statements.created_by',
+                                    'lechon_de_cebu_billing_statements.deleted_at',
                                     'lechon_de_cebu_codes.lechon_de_cebu_code',
                                     'lechon_de_cebu_codes.module_id',
                                     'lechon_de_cebu_codes.module_code',
                                     'lechon_de_cebu_codes.module_name')
-                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_billing_statements.billing_statement_id', NULL)
                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameBillingStatement)
+                                ->where('lechon_de_cebu_billing_statements.deleted_at', NULL)
                                 ->whereDate('lechon_de_cebu_billing_statements.created_at', '=', date($getDate))
                                 ->orderBy('lechon_de_cebu_billing_statements.id', 'desc')
                                 ->get()->toArray();
@@ -319,13 +333,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                         'lechon_de_cebu_billing_statements.total_amount',
                                         'lechon_de_cebu_billing_statements.paid_amount',
                                         'lechon_de_cebu_billing_statements.created_by',
+                                        'lechon_de_cebu_billing_statements.deleted_at',
                                         'lechon_de_cebu_codes.lechon_de_cebu_code',
                                         'lechon_de_cebu_codes.module_id',
                                         'lechon_de_cebu_codes.module_code',
                                         'lechon_de_cebu_codes.module_name')
-                                    ->join('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                    ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
                                     ->where('lechon_de_cebu_billing_statements.billing_statement_id', NULL)
                                     ->where('lechon_de_cebu_codes.module_name', $moduleNameBillingStatement)
+                                    ->where('lechon_de_cebu_billing_statements.deleted_at', NULL)
                                     ->whereDate('lechon_de_cebu_billing_statements.created_at', '=', date($getDate))
                                     ->sum('lechon_de_cebu_billing_statements.total_amount');
         
@@ -343,13 +359,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_petty_cashes.petty_cash_summary',
                                 'lechon_de_cebu_petty_cashes.amount',
                                 'lechon_de_cebu_petty_cashes.created_by',
+                                'lechon_de_cebu_petty_cashes.deleted_at',
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
                                 'lechon_de_cebu_codes.module_name')
-                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_petty_cashes.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_petty_cashes.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_petty_cashes.pc_id', NULL)
                                 ->where('lechon_de_cebu_codes.module_name', $moduleNamePettyCash)
+                                ->where('lechon_de_cebu_petty_cashes.deleted_at', NULL)
                                 ->whereDate('lechon_de_cebu_petty_cashes.created_at', '=', date($getDate))
                                 ->orderBy('lechon_de_cebu_petty_cashes.id', 'desc')
                                 ->get()->toArray();
@@ -385,14 +403,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_payment_vouchers.cheque_amount',
                                 'lechon_de_cebu_payment_vouchers.sub_category',
                                 'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                'lechon_de_cebu_payment_vouchers.deleted_at',
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
                                 'lechon_de_cebu_codes.module_name')
-                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
                                 ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDate))
-                                
+                                ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
                                 ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
                                 ->get()->toArray();
@@ -427,6 +446,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_payment_vouchers.cheque_amount',
                                     'lechon_de_cebu_payment_vouchers.sub_category',
                                     'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                    'lechon_de_cebu_payment_vouchers.deleted_at',
                                     'lechon_de_cebu_codes.lechon_de_cebu_code',
                                     'lechon_de_cebu_codes.module_id',
                                     'lechon_de_cebu_codes.module_code',
@@ -434,7 +454,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                                     ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
                                     ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDate))
-                                    
+                                    ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                                     ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
                                     ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $cash)
                                     ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
@@ -470,14 +490,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                             'lechon_de_cebu_payment_vouchers.cheque_amount',
                                             'lechon_de_cebu_payment_vouchers.sub_category',
                                             'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                            'lechon_de_cebu_payment_vouchers.deleted_at',
                                             'lechon_de_cebu_codes.lechon_de_cebu_code',
                                             'lechon_de_cebu_codes.module_id',
                                             'lechon_de_cebu_codes.module_code',
                                             'lechon_de_cebu_codes.module_name')
-                                            ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                            ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                                             ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
                                             ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDate))
-                                            
+                                            ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                                             ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
                                             ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $check)
                                             ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
@@ -513,12 +534,14 @@ class LoloPinoyLechonDeCebuController extends Controller
                             'lechon_de_cebu_payment_vouchers.cheque_amount',
                             'lechon_de_cebu_payment_vouchers.sub_category',
                             'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                            'lechon_de_cebu_payment_vouchers.deleted_at',
                             'lechon_de_cebu_codes.lechon_de_cebu_code',
                             'lechon_de_cebu_codes.module_id',
                             'lechon_de_cebu_codes.module_code',
                             'lechon_de_cebu_codes.module_name')
-                            ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                            ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                             ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
+                            ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                             ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDate))
                             ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
                             ->sum('lechon_de_cebu_payment_vouchers.amount_due');
@@ -553,14 +576,16 @@ class LoloPinoyLechonDeCebuController extends Controller
                              'lechon_de_cebu_sales_invoices.total_amount',
                              'lechon_de_cebu_sales_invoices.created_by',
                              'lechon_de_cebu_sales_invoices.created_at',
-                             'lechon_de_cebu_sales_invoices.updated_at',                            
+                             'lechon_de_cebu_sales_invoices.updated_at',  
+                             'lechon_de_cebu_sales_invoices.deleted_at',                            
                              'lechon_de_cebu_codes.lechon_de_cebu_code',
                              'lechon_de_cebu_codes.module_id',
                              'lechon_de_cebu_codes.module_code',
                              'lechon_de_cebu_codes.module_name')
-                         ->join('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+                         ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
                          ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
                          ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                         ->where('lechon_de_cebu_sales_invoices.deleted_at', NULL)
                          ->whereDate('lechon_de_cebu_sales_invoices.created_at', '=', date($date))
                          ->orderBy('lechon_de_cebu_sales_invoices.id', 'desc')
                          ->get()->toArray();
@@ -585,14 +610,16 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_sales_invoices.total_amount',
                                 'lechon_de_cebu_sales_invoices.created_by',
                                 'lechon_de_cebu_sales_invoices.created_at',
-                                'lechon_de_cebu_sales_invoices.updated_at',                            
+                                'lechon_de_cebu_sales_invoices.updated_at',
+                                'lechon_de_cebu_sales_invoices.deleted_at',                            
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
                                 'lechon_de_cebu_codes.module_name')
-                            ->join('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+                            ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
                             ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
                             ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                            ->where('lechon_de_cebu_sales_invoices.deleted_at', NULL)
                             ->whereDate('lechon_de_cebu_sales_invoices.created_at', '=', date($date))
                             ->sum('lechon_de_cebu_sales_invoices.total_amount');
 
@@ -625,13 +652,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                  'lechon_de_cebu_delivery_receipts.received_by',
                                  'lechon_de_cebu_delivery_receipts.duplicate_status',
                                  'lechon_de_cebu_delivery_receipts.created_by',
+                                 'lechon_de_cebu_delivery_receipts.deleted_at',
                                  'lechon_de_cebu_codes.lechon_de_cebu_code',
                                  'lechon_de_cebu_codes.module_id',
                                  'lechon_de_cebu_codes.module_code',
                                  'lechon_de_cebu_codes.module_name')
-                                 ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                 ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
                                  ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
                                  ->where('lechon_de_cebu_codes.module_name', $moduleNameDelivery)
+                                 ->where('lechon_de_cebu_delivery_receipts.deleted_at', NULL)
                                  ->whereDate('lechon_de_cebu_delivery_receipts.created_at', '=', date($date))
                                  ->orderBy('lechon_de_cebu_delivery_receipts.id', 'desc')
                                  ->get()->toArray();
@@ -663,13 +692,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                  'lechon_de_cebu_delivery_receipts.received_by',
                                  'lechon_de_cebu_delivery_receipts.duplicate_status',
                                  'lechon_de_cebu_delivery_receipts.created_by',
+                                 'lechon_de_cebu_delivery_receipts.deleted_at',
                                  'lechon_de_cebu_codes.lechon_de_cebu_code',
                                  'lechon_de_cebu_codes.module_id',
                                  'lechon_de_cebu_codes.module_code',
                                  'lechon_de_cebu_codes.module_name')
-                                 ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                 ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
                                  ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
                                  ->where('lechon_de_cebu_codes.module_name', $moduleNameDelivery)
+                                 ->where('lechon_de_cebu_delivery_receipts.deleted_at', NULL)
                                  ->whereDate('lechon_de_cebu_delivery_receipts.created_at', '=', date($date))
                                  ->sum('lechon_de_cebu_delivery_receipts.total');
          
@@ -695,13 +726,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                              'lechon_de_cebu_purchase_orders.prepared_by',
                              'lechon_de_cebu_purchase_orders.checked_by',
                              'lechon_de_cebu_purchase_orders.created_by',
+                             'lechon_de_cebu_purchase_orders.deleted_at',
                              'lechon_de_cebu_codes.lechon_de_cebu_code',
                              'lechon_de_cebu_codes.module_id',
                              'lechon_de_cebu_codes.module_code',
                              'lechon_de_cebu_codes.module_name')
-                         ->join('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                         ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
                          ->where('lechon_de_cebu_purchase_orders.po_id', NULL)
                          ->where('lechon_de_cebu_codes.module_name', $moduleNamePurchaseOrder)
+                         ->where('lechon_de_cebu_purchase_orders.deleted_at', NULL)
                          ->whereDate('lechon_de_cebu_purchase_orders.created_at', '=', date($date))
                          ->orderBy('lechon_de_cebu_purchase_orders.id', 'desc')
                          ->get()->toArray();
@@ -725,13 +758,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                  'lechon_de_cebu_purchase_orders.prepared_by',
                                  'lechon_de_cebu_purchase_orders.checked_by',
                                  'lechon_de_cebu_purchase_orders.created_by',
+                                 'lechon_de_cebu_purchase_orders.deleted_at',
                                  'lechon_de_cebu_codes.lechon_de_cebu_code',
                                  'lechon_de_cebu_codes.module_id',
                                  'lechon_de_cebu_codes.module_code',
                                  'lechon_de_cebu_codes.module_name')
-                             ->join('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                             ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
                              ->where('lechon_de_cebu_purchase_orders.po_id', NULL)
                              ->where('lechon_de_cebu_codes.module_name', $moduleNamePurchaseOrder)
+                             ->where('lechon_de_cebu_purchase_orders.deleted_at', NULL)
                              ->whereDate('lechon_de_cebu_purchase_orders.created_at', '=', date($date))
                              ->sum('lechon_de_cebu_purchase_orders.total_price');
 
@@ -759,13 +794,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                      'lechon_de_cebu_billing_statements.total_amount',
                                      'lechon_de_cebu_billing_statements.paid_amount',
                                      'lechon_de_cebu_billing_statements.created_by',
+                                     'lechon_de_cebu_billing_statements.deleted_at',
                                      'lechon_de_cebu_codes.lechon_de_cebu_code',
                                      'lechon_de_cebu_codes.module_id',
                                      'lechon_de_cebu_codes.module_code',
                                      'lechon_de_cebu_codes.module_name')
-                                 ->join('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                 ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
                                  ->where('lechon_de_cebu_billing_statements.billing_statement_id', NULL)
                                  ->where('lechon_de_cebu_codes.module_name', $moduleNameBillingStatement)
+                                 ->where('lechon_de_cebu_billing_statements.deleted_at', NULL)
                                  ->whereDate('lechon_de_cebu_billing_statements.created_at', '=', date($date))
                                  ->orderBy('lechon_de_cebu_billing_statements.id', 'desc')
                                  ->get()->toArray();
@@ -791,13 +828,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                          'lechon_de_cebu_billing_statements.total_amount',
                                          'lechon_de_cebu_billing_statements.paid_amount',
                                          'lechon_de_cebu_billing_statements.created_by',
+                                         'lechon_de_cebu_billing_statements.deleted_at',
                                          'lechon_de_cebu_codes.lechon_de_cebu_code',
                                          'lechon_de_cebu_codes.module_id',
                                          'lechon_de_cebu_codes.module_code',
                                          'lechon_de_cebu_codes.module_name')
-                                     ->join('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                     ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
                                      ->where('lechon_de_cebu_billing_statements.billing_statement_id', NULL)
                                      ->where('lechon_de_cebu_codes.module_name', $moduleNameBillingStatement)
+                                     ->where('lechon_de_cebu_billing_statements.deleted_at', NULL)
                                      ->whereDate('lechon_de_cebu_billing_statements.created_at', '=', date($date))
                                      ->sum('lechon_de_cebu_billing_statements.total_amount');
          
@@ -815,13 +854,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                  'lechon_de_cebu_petty_cashes.petty_cash_summary',
                                  'lechon_de_cebu_petty_cashes.amount',
                                  'lechon_de_cebu_petty_cashes.created_by',
+                                 'lechon_de_cebu_petty_cashes.deleted_at',
                                  'lechon_de_cebu_codes.lechon_de_cebu_code',
                                  'lechon_de_cebu_codes.module_id',
                                  'lechon_de_cebu_codes.module_code',
                                  'lechon_de_cebu_codes.module_name')
-                                 ->join('lechon_de_cebu_codes', 'lechon_de_cebu_petty_cashes.id', '=', 'lechon_de_cebu_codes.module_id')
+                                 ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_petty_cashes.id', '=', 'lechon_de_cebu_codes.module_id')
                                  ->where('lechon_de_cebu_petty_cashes.pc_id', NULL)
                                  ->where('lechon_de_cebu_codes.module_name', $moduleNamePettyCash)
+                                 ->where('lechon_de_cebu_petty_cashes.deleted_at', NULL)
                                  ->whereDate('lechon_de_cebu_petty_cashes.created_at', '=', date($date))
                                  ->orderBy('lechon_de_cebu_petty_cashes.id', 'desc')
                                  ->get()->toArray();
@@ -858,14 +899,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                  'lechon_de_cebu_payment_vouchers.cheque_amount',
                                  'lechon_de_cebu_payment_vouchers.sub_category',
                                  'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                 'lechon_de_cebu_payment_vouchers.deleted_at',
                                  'lechon_de_cebu_codes.lechon_de_cebu_code',
                                  'lechon_de_cebu_codes.module_id',
                                  'lechon_de_cebu_codes.module_code',
                                  'lechon_de_cebu_codes.module_name')
-                                 ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                 ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                                  ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
                                  ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($date))
-                                 
+                                 ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                                  ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
                                  ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $cash)
                                  ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
@@ -900,14 +942,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                         'lechon_de_cebu_payment_vouchers.cheque_amount',
                                         'lechon_de_cebu_payment_vouchers.sub_category',
                                         'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                        'lechon_de_cebu_payment_vouchers.deleted_at',
                                         'lechon_de_cebu_codes.lechon_de_cebu_code',
                                         'lechon_de_cebu_codes.module_id',
                                         'lechon_de_cebu_codes.module_code',
                                         'lechon_de_cebu_codes.module_name')
-                                        ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                        ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                                         ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
                                         ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($date))
-                                        
+                                        ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                                         ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
                                         ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $check)
                                         ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
@@ -943,14 +986,16 @@ class LoloPinoyLechonDeCebuController extends Controller
                              'lechon_de_cebu_payment_vouchers.cheque_amount',
                              'lechon_de_cebu_payment_vouchers.sub_category',
                              'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                             'lechon_de_cebu_payment_vouchers.deleted_at',
                              'lechon_de_cebu_codes.lechon_de_cebu_code',
                              'lechon_de_cebu_codes.module_id',
                              'lechon_de_cebu_codes.module_code',
                              'lechon_de_cebu_codes.module_name')
-                             ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                             ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                              ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
                              ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($date))
                              ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
+                             ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                              ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $cash)
                              ->sum('lechon_de_cebu_payment_vouchers.amount_due');
 
@@ -983,14 +1028,16 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_payment_vouchers.cheque_amount',
                                 'lechon_de_cebu_payment_vouchers.sub_category',
                                 'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                'lechon_de_cebu_payment_vouchers.deleted_at',
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
                                 'lechon_de_cebu_codes.module_name')
-                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
                                 ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($date))
                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
+                                ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                                 ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $check)
                                 ->sum('lechon_de_cebu_payment_vouchers.amount_due');
          
@@ -1029,14 +1076,16 @@ class LoloPinoyLechonDeCebuController extends Controller
                              'lechon_de_cebu_sales_invoices.total_amount',
                              'lechon_de_cebu_sales_invoices.created_by',
                              'lechon_de_cebu_sales_invoices.created_at',
-                             'lechon_de_cebu_sales_invoices.updated_at',                            
+                             'lechon_de_cebu_sales_invoices.updated_at',
+                             'lechon_de_cebu_sales_invoices.deleted_at',                            
                              'lechon_de_cebu_codes.lechon_de_cebu_code',
                              'lechon_de_cebu_codes.module_id',
                              'lechon_de_cebu_codes.module_code',
                              'lechon_de_cebu_codes.module_name')
-                         ->join('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+                         ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
                          ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
                          ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                         ->where('lechon_de_cebu_sales_invoices.deleted_at', NULL)
                          ->whereDate('lechon_de_cebu_sales_invoices.created_at', '=', date($getDateToday))
                          ->orderBy('lechon_de_cebu_sales_invoices.id', 'desc')
                          ->get()->toArray();
@@ -1061,14 +1110,16 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_sales_invoices.total_amount',
                                 'lechon_de_cebu_sales_invoices.created_by',
                                 'lechon_de_cebu_sales_invoices.created_at',
-                                'lechon_de_cebu_sales_invoices.updated_at',                            
+                                'lechon_de_cebu_sales_invoices.updated_at', 
+                                'lechon_de_cebu_sales_invoices.deleted_at',                            
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
                                 'lechon_de_cebu_codes.module_name')
-                            ->join('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+                            ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
                             ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
                             ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                            ->where('lechon_de_cebu_sales_invoices.deleted_at', NULL)
                             ->whereDate('lechon_de_cebu_sales_invoices.created_at', '=', date($getDateToday))
                             ->sum('lechon_de_cebu_sales_invoices.total_amount');
 
@@ -1101,6 +1152,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                  'lechon_de_cebu_delivery_receipts.received_by',
                                  'lechon_de_cebu_delivery_receipts.duplicate_status',
                                  'lechon_de_cebu_delivery_receipts.created_by',
+                                 'lechon_de_cebu_delivery_receipts.deleted_at',
                                  'lechon_de_cebu_codes.lechon_de_cebu_code',
                                  'lechon_de_cebu_codes.module_id',
                                  'lechon_de_cebu_codes.module_code',
@@ -1108,6 +1160,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                  ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
                                  ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
                                  ->where('lechon_de_cebu_codes.module_name', $moduleNameDelivery)
+                                 ->where('lechon_de_cebu_delivery_receipts.deleted_at', NULL)
                                  ->whereDate('lechon_de_cebu_delivery_receipts.created_at', '=', date($getDateToday))
                                  ->orderBy('lechon_de_cebu_delivery_receipts.id', 'desc')
                                  ->get()->toArray();
@@ -1139,13 +1192,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                  'lechon_de_cebu_delivery_receipts.received_by',
                                  'lechon_de_cebu_delivery_receipts.duplicate_status',
                                  'lechon_de_cebu_delivery_receipts.created_by',
+                                 'lechon_de_cebu_delivery_receipts.deleted_at',
                                  'lechon_de_cebu_codes.lechon_de_cebu_code',
                                  'lechon_de_cebu_codes.module_id',
                                  'lechon_de_cebu_codes.module_code',
                                  'lechon_de_cebu_codes.module_name')
-                                 ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                 ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
                                  ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
                                  ->where('lechon_de_cebu_codes.module_name', $moduleNameDelivery)
+                                 ->where('lechon_de_cebu_delivery_receipts.deleted_at', NULL)
                                  ->whereDate('lechon_de_cebu_delivery_receipts.created_at', '=', date($getDateToday))
                                  ->sum('lechon_de_cebu_delivery_receipts.total');
          
@@ -1171,13 +1226,16 @@ class LoloPinoyLechonDeCebuController extends Controller
                              'lechon_de_cebu_purchase_orders.prepared_by',
                              'lechon_de_cebu_purchase_orders.checked_by',
                              'lechon_de_cebu_purchase_orders.created_by',
+                             'lechon_de_cebu_purchase_orders.deleted_at',
                              'lechon_de_cebu_codes.lechon_de_cebu_code',
                              'lechon_de_cebu_codes.module_id',
                              'lechon_de_cebu_codes.module_code',
                              'lechon_de_cebu_codes.module_name')
-                         ->join('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                         ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
                          ->where('lechon_de_cebu_purchase_orders.po_id', NULL)
                          ->where('lechon_de_cebu_codes.module_name', $moduleNamePurchaseOrder)
+                         ->where('lechon_de_cebu_purchase_orders.deleted_at', NULL)
+                         ->where('lechon_de_cebu_purchase_orders.deleted_at', NULL)
                          ->whereDate('lechon_de_cebu_purchase_orders.created_at', '=', date($getDateToday))
                          ->orderBy('lechon_de_cebu_purchase_orders.id', 'desc')
                          ->get()->toArray();
@@ -1201,13 +1259,16 @@ class LoloPinoyLechonDeCebuController extends Controller
                                  'lechon_de_cebu_purchase_orders.prepared_by',
                                  'lechon_de_cebu_purchase_orders.checked_by',
                                  'lechon_de_cebu_purchase_orders.created_by',
+                                  'lechon_de_cebu_purchase_orders.created_by',
+                                 'lechon_de_cebu_purchase_orders.deleted_at',
                                  'lechon_de_cebu_codes.lechon_de_cebu_code',
                                  'lechon_de_cebu_codes.module_id',
                                  'lechon_de_cebu_codes.module_code',
                                  'lechon_de_cebu_codes.module_name')
-                             ->join('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                             ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
                              ->where('lechon_de_cebu_purchase_orders.po_id', NULL)
                              ->where('lechon_de_cebu_codes.module_name', $moduleNamePurchaseOrder)
+                             ->where('lechon_de_cebu_purchase_orders.deleted_at', NULL)
                              ->whereDate('lechon_de_cebu_purchase_orders.created_at', '=', date($getDateToday))
                              ->sum('lechon_de_cebu_purchase_orders.total_price');
 
@@ -1235,13 +1296,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                      'lechon_de_cebu_billing_statements.total_amount',
                                      'lechon_de_cebu_billing_statements.paid_amount',
                                      'lechon_de_cebu_billing_statements.created_by',
+                                     'lechon_de_cebu_billing_statements.deleted_at',
                                      'lechon_de_cebu_codes.lechon_de_cebu_code',
                                      'lechon_de_cebu_codes.module_id',
                                      'lechon_de_cebu_codes.module_code',
                                      'lechon_de_cebu_codes.module_name')
-                                 ->join('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                 ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
                                  ->where('lechon_de_cebu_billing_statements.billing_statement_id', NULL)
                                  ->where('lechon_de_cebu_codes.module_name', $moduleNameBillingStatement)
+                                 ->where('lechon_de_cebu_billing_statements.deleted_at', NULL)
                                  ->whereDate('lechon_de_cebu_billing_statements.created_at', '=', date($getDateToday))
                                  ->orderBy('lechon_de_cebu_billing_statements.id', 'desc')
                                  ->get()->toArray();
@@ -1267,13 +1330,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                          'lechon_de_cebu_billing_statements.total_amount',
                                          'lechon_de_cebu_billing_statements.paid_amount',
                                          'lechon_de_cebu_billing_statements.created_by',
+                                         'lechon_de_cebu_billing_statements.deleted_at',
                                          'lechon_de_cebu_codes.lechon_de_cebu_code',
                                          'lechon_de_cebu_codes.module_id',
                                          'lechon_de_cebu_codes.module_code',
                                          'lechon_de_cebu_codes.module_name')
-                                     ->join('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                     ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
                                      ->where('lechon_de_cebu_billing_statements.billing_statement_id', NULL)
                                      ->where('lechon_de_cebu_codes.module_name', $moduleNameBillingStatement)
+                                     ->where('lechon_de_cebu_billing_statements.deleted_at', NULL)
                                      ->whereDate('lechon_de_cebu_billing_statements.created_at', '=', date($getDateToday))
                                      ->sum('lechon_de_cebu_billing_statements.total_amount');
          
@@ -1291,6 +1356,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                  'lechon_de_cebu_petty_cashes.petty_cash_summary',
                                  'lechon_de_cebu_petty_cashes.amount',
                                  'lechon_de_cebu_petty_cashes.created_by',
+                                 'lechon_de_cebu_petty_cashes.deleted_at',
                                  'lechon_de_cebu_codes.lechon_de_cebu_code',
                                  'lechon_de_cebu_codes.module_id',
                                  'lechon_de_cebu_codes.module_code',
@@ -1298,6 +1364,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                  ->join('lechon_de_cebu_codes', 'lechon_de_cebu_petty_cashes.id', '=', 'lechon_de_cebu_codes.module_id')
                                  ->where('lechon_de_cebu_petty_cashes.pc_id', NULL)
                                  ->where('lechon_de_cebu_codes.module_name', $moduleNamePettyCash)
+                                 ->where('lechon_de_cebu_petty_cashes.deleted_at', NULL)
                                  ->whereDate('lechon_de_cebu_petty_cashes.created_at', '=', date($getDateToday))
                                  ->orderBy('lechon_de_cebu_petty_cashes.id', 'desc')
                                  ->get()->toArray();
@@ -1334,14 +1401,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                  'lechon_de_cebu_payment_vouchers.cheque_amount',
                                  'lechon_de_cebu_payment_vouchers.sub_category',
                                  'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                 'lechon_de_cebu_payment_vouchers.deleted_at',
                                  'lechon_de_cebu_codes.lechon_de_cebu_code',
                                  'lechon_de_cebu_codes.module_id',
                                  'lechon_de_cebu_codes.module_code',
                                  'lechon_de_cebu_codes.module_name')
-                                 ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                 ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                                  ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
                                  ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDateToday))
-                                 
+                                 ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                                  ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
                                  ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $cash)
                                  ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
@@ -1376,14 +1444,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                         'lechon_de_cebu_payment_vouchers.cheque_amount',
                                         'lechon_de_cebu_payment_vouchers.sub_category',
                                         'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                        'lechon_de_cebu_payment_vouchers.deleted_at',
                                         'lechon_de_cebu_codes.lechon_de_cebu_code',
                                         'lechon_de_cebu_codes.module_id',
                                         'lechon_de_cebu_codes.module_code',
                                         'lechon_de_cebu_codes.module_name')
-                                        ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                        ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                                         ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
                                         ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDateToday))
-                                        
+                                        ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                                         ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
                                         ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $check)
                                         ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
@@ -1419,6 +1488,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                              'lechon_de_cebu_payment_vouchers.cheque_amount',
                              'lechon_de_cebu_payment_vouchers.sub_category',
                              'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                             'lechon_de_cebu_payment_vouchers.deleted_at',
                              'lechon_de_cebu_codes.lechon_de_cebu_code',
                              'lechon_de_cebu_codes.module_id',
                              'lechon_de_cebu_codes.module_code',
@@ -1427,6 +1497,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                              ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
                              ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDateToday))
                              ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
+                             ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                              ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $cash)
                              ->sum('lechon_de_cebu_payment_vouchers.amount_due');
 
@@ -1459,14 +1530,16 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_payment_vouchers.cheque_amount',
                                 'lechon_de_cebu_payment_vouchers.sub_category',
                                 'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                'lechon_de_cebu_payment_vouchers.deleted_at',
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
                                 'lechon_de_cebu_codes.module_name')
-                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
                                 ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
+                                ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                                 ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $check)
                                 ->sum('lechon_de_cebu_payment_vouchers.amount_due');
          
@@ -1500,7 +1573,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_sales_invoices.amount',
                                 'lechon_de_cebu_sales_invoices.created_by',
                                 'lechon_de_cebu_sales_invoices.created_at',
-                                'lechon_de_cebu_sales_invoices.updated_at',                            
+                                'lechon_de_cebu_sales_invoices.updated_at',
+                                'lechon_de_cebu_sales_invoices.deleted_at',                            
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
@@ -1509,7 +1583,9 @@ class LoloPinoyLechonDeCebuController extends Controller
                             ->where('lechon_de_cebu_sales_invoices.id', $getSearchResults[0]->module_id)
                             ->where('lechon_de_cebu_codes.module_name', $getSearchResults[0]->module_name)
                             ->get()->toArray();
-            
+
+           
+
             $getAllCodes = LechonDeCebuCode::get()->toArray();  
             $module = $getSearchResults[0]->module_name;
            
@@ -1541,6 +1617,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_delivery_receipts.received_by',
                                     'lechon_de_cebu_delivery_receipts.duplicate_status',
                                     'lechon_de_cebu_delivery_receipts.created_by',
+                                    'lechon_de_cebu_delivery_receipts.deleted_at',
                                     'lechon_de_cebu_codes.lechon_de_cebu_code',
                                     'lechon_de_cebu_codes.module_id',
                                     'lechon_de_cebu_codes.module_code',
@@ -1549,7 +1626,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     ->where('lechon_de_cebu_delivery_receipts.id', $getSearchResults[0]->module_id)
                                     ->where('lechon_de_cebu_codes.module_name', $getSearchResults[0]->module_name)
                                     ->get()->toArray();
-            
+
+        
             $getAllCodes = LechonDeCebuCode::get()->toArray();
             $module = $getSearchResults[0]->module_name;  
             return view('lechon-de-cebu-search-results', compact('module', 'getAllCodes', 'getSearchDeliveryReceipts'));
@@ -1574,6 +1652,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                         'lechon_de_cebu_purchase_orders.prepared_by',
                                         'lechon_de_cebu_purchase_orders.checked_by',
                                         'lechon_de_cebu_purchase_orders.created_by',
+                                        'lechon_de_cebu_purchase_orders.deleted_at',
                                         'lechon_de_cebu_codes.lechon_de_cebu_code',
                                         'lechon_de_cebu_codes.module_id',
                                         'lechon_de_cebu_codes.module_code',
@@ -1583,6 +1662,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     ->where('lechon_de_cebu_codes.module_name', $getSearchResults[0]->module_name)
                                     ->get()->toArray();
 
+            
+           
             $getAllCodes = LechonDeCebuCode::get()->toArray();
             $module = $getSearchResults[0]->module_name;  
             return view('lechon-de-cebu-search-results', compact('module', 'getAllCodes', 'getSearchPurchaseOrders'));
@@ -1615,6 +1696,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_statement_of_accounts.or_number',
                                 'lechon_de_cebu_statement_of_accounts.payment_method',
                                 'lechon_de_cebu_statement_of_accounts.created_by',
+                                'lechon_de_cebu_statement_of_accounts.deleted_at',
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
@@ -1623,7 +1705,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                             ->where('lechon_de_cebu_statement_of_accounts.id', $getSearchResults[0]->module_id)
                             ->where('lechon_de_cebu_codes.module_name', $getSearchResults[0]->module_name)
                             ->get()->toArray(); 
-            
+
+          
             $getAllCodes = LechonDeCebuCode::get()->toArray();
             $module = $getSearchResults[0]->module_name;  
             return view('lechon-de-cebu-search-results', compact('module', 'getAllCodes', 'getSearchSOAS'));
@@ -1650,6 +1733,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_billing_statements.amount',
                                     'lechon_de_cebu_billing_statements.paid_amount',
                                     'lechon_de_cebu_billing_statements.created_by',
+                                    'lechon_de_cebu_billing_statements.deleted_at',
                                     'lechon_de_cebu_codes.lechon_de_cebu_code',
                                     'lechon_de_cebu_codes.module_id',
                                     'lechon_de_cebu_codes.module_code',
@@ -1658,7 +1742,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 ->where('lechon_de_cebu_billing_statements.id', $getSearchResults[0]->module_id)
                                 ->where('lechon_de_cebu_codes.module_name', $getSearchResults[0]->module_name)
                                 ->get()->toArray();
-            
+
+           
             $getAllCodes = LechonDeCebuCode::get()->toArray();
             $module = $getSearchResults[0]->module_name;  
             return view('lechon-de-cebu-search-results', compact('module', 'getAllCodes', 'getSearchBillingStatements'));
@@ -1676,6 +1761,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_petty_cashes.petty_cash_summary',
                                 'lechon_de_cebu_petty_cashes.amount',
                                 'lechon_de_cebu_petty_cashes.created_by',
+                                'lechon_de_cebu_petty_cashes.deleted_at',
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
@@ -1684,7 +1770,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 ->where('lechon_de_cebu_petty_cashes.id', $getSearchResults[0]->module_id)
                                 ->where('lechon_de_cebu_codes.module_name', $getSearchResults[0]->module_name)
                                 ->get()->toArray();
-            
+
+           
             $getAllCodes = LechonDeCebuCode::get()->toArray();
             $module = $getSearchResults[0]->module_name;  
             return view('lechon-de-cebu-search-results', compact('module', 'getAllCodes', 'getSearchPettyCashes'));
@@ -1719,6 +1806,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                             'lechon_de_cebu_payment_vouchers.cheque_amount',
                             'lechon_de_cebu_payment_vouchers.sub_category',
                             'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                            'lechon_de_cebu_payment_vouchers.deleted_at',
                             'lechon_de_cebu_codes.lechon_de_cebu_code',
                             'lechon_de_cebu_codes.module_id',
                             'lechon_de_cebu_codes.module_code',
@@ -1727,7 +1815,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                             ->where('lechon_de_cebu_payment_vouchers.id', $getSearchResults[0]->module_id)
                             ->where('lechon_de_cebu_codes.module_name', $getSearchResults[0]->module_name)
                             ->get()->toArray();
-            
+
+        
             $getAllCodes = LechonDeCebuCode::get()->toArray();
             $module = $getSearchResults[0]->module_name;  
             return view('lechon-de-cebu-search-results', compact('module', 'getAllCodes', 'getSearchPaymentVouchers'));
@@ -1767,14 +1856,16 @@ class LoloPinoyLechonDeCebuController extends Controller
                             'lechon_de_cebu_sales_invoices.total_amount',
                             'lechon_de_cebu_sales_invoices.created_by',
                             'lechon_de_cebu_sales_invoices.created_at',
-                            'lechon_de_cebu_sales_invoices.updated_at',                            
+                            'lechon_de_cebu_sales_invoices.updated_at',  
+                            'lechon_de_cebu_sales_invoices.deleted_at',                            
                             'lechon_de_cebu_codes.lechon_de_cebu_code',
                             'lechon_de_cebu_codes.module_id',
                             'lechon_de_cebu_codes.module_code',
                             'lechon_de_cebu_codes.module_name')
-                        ->join('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+                        ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
                         ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
                         ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                        ->where('lechon_de_cebu_sales_invoices.deleted_at', NULL)
                         ->whereDate('lechon_de_cebu_sales_invoices.created_at', '=', date($getDateToday))
                         ->orderBy('lechon_de_cebu_sales_invoices.id', 'desc')
                         ->get()->toArray();
@@ -1799,15 +1890,17 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_sales_invoices.total_amount',
                                 'lechon_de_cebu_sales_invoices.created_by',
                                 'lechon_de_cebu_sales_invoices.created_at',
-                                'lechon_de_cebu_sales_invoices.updated_at',                            
+                                'lechon_de_cebu_sales_invoices.updated_at',   
+                                'lechon_de_cebu_sales_invoices.deleted_at',                            
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
                                 'lechon_de_cebu_codes.module_name')
-                            ->join('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+                            ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
                             ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
                             ->where('lechon_de_cebu_codes.module_name', $moduleName)
                             ->whereDate('lechon_de_cebu_sales_invoices.created_at', '=', date($getDateToday))
+                            ->where('lechon_de_cebu_sales_invoices.deleted_at', NULL)
                             ->sum('lechon_de_cebu_sales_invoices.total_amount');
 
 
@@ -1838,13 +1931,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_delivery_receipts.received_by',
                                 'lechon_de_cebu_delivery_receipts.duplicate_status',
                                 'lechon_de_cebu_delivery_receipts.created_by',
+                                'lechon_de_cebu_delivery_receipts.deleted_at',
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
                                 'lechon_de_cebu_codes.module_name')
-                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameDelivery)
+                                ->where('lechon_de_cebu_delivery_receipts.deleted_at', NULL)
                                 ->whereDate('lechon_de_cebu_delivery_receipts.created_at', '=', date($getDateToday))
                                 ->orderBy('lechon_de_cebu_delivery_receipts.id', 'desc')
                                 ->get()->toArray();
@@ -1875,6 +1970,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_delivery_receipts.received_by',
                                 'lechon_de_cebu_delivery_receipts.duplicate_status',
                                 'lechon_de_cebu_delivery_receipts.created_by',
+                                'lechon_de_cebu_delivery_receipts.deleted_at',
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
@@ -1882,6 +1978,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameDelivery)
+                                ->where('lechon_de_cebu_delivery_receipts.deleted_at', NULL)
                                 ->whereDate('lechon_de_cebu_delivery_receipts.created_at', '=', date($getDateToday))
                                 ->sum('lechon_de_cebu_delivery_receipts.total');
         
@@ -1907,13 +2004,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                             'lechon_de_cebu_purchase_orders.prepared_by',
                             'lechon_de_cebu_purchase_orders.checked_by',
                             'lechon_de_cebu_purchase_orders.created_by',
+                            'lechon_de_cebu_purchase_orders.deleted_at',
                             'lechon_de_cebu_codes.lechon_de_cebu_code',
                             'lechon_de_cebu_codes.module_id',
                             'lechon_de_cebu_codes.module_code',
                             'lechon_de_cebu_codes.module_name')
-                        ->join('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                        ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
                         ->where('lechon_de_cebu_purchase_orders.po_id', NULL)
                         ->where('lechon_de_cebu_codes.module_name', $moduleNamePurchaseOrder)
+                        ->where('lechon_de_cebu_purchase_orders.deleted_at', NULL)
                         ->whereDate('lechon_de_cebu_purchase_orders.created_at', '=', date($getDateToday))
                         ->orderBy('lechon_de_cebu_purchase_orders.id', 'desc')
                         ->get()->toArray();
@@ -1937,13 +2036,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_purchase_orders.prepared_by',
                                 'lechon_de_cebu_purchase_orders.checked_by',
                                 'lechon_de_cebu_purchase_orders.created_by',
+                                'lechon_de_cebu_purchase_orders.deleted_at',
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
                                 'lechon_de_cebu_codes.module_name')
-                            ->join('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                            ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
                             ->where('lechon_de_cebu_purchase_orders.po_id', NULL)
                             ->where('lechon_de_cebu_codes.module_name', $moduleNamePurchaseOrder)
+                            ->where('lechon_de_cebu_purchase_orders.deleted_at', NULL)
                             ->whereDate('lechon_de_cebu_purchase_orders.created_at', '=', date($getDateToday))
                             ->sum('lechon_de_cebu_purchase_orders.total_price');
 
@@ -2004,13 +2105,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_billing_statements.total_amount',
                                     'lechon_de_cebu_billing_statements.paid_amount',
                                     'lechon_de_cebu_billing_statements.created_by',
+                                    'lechon_de_cebu_billing_statements.deleted_at',
                                     'lechon_de_cebu_codes.lechon_de_cebu_code',
                                     'lechon_de_cebu_codes.module_id',
                                     'lechon_de_cebu_codes.module_code',
                                     'lechon_de_cebu_codes.module_name')
-                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_billing_statements.billing_statement_id', NULL)
                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameBillingStatement)
+                                ->where('lechon_de_cebu_billing_statements.deleted_at', NULL)
                                 ->whereDate('lechon_de_cebu_billing_statements.created_at', '=', date($getDateToday))
                                 ->orderBy('lechon_de_cebu_billing_statements.id', 'desc')
                                 ->get()->toArray();
@@ -2036,6 +2139,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                         'lechon_de_cebu_billing_statements.total_amount',
                                         'lechon_de_cebu_billing_statements.paid_amount',
                                         'lechon_de_cebu_billing_statements.created_by',
+                                        'lechon_de_cebu_billing_statements.deleted_at',
                                         'lechon_de_cebu_codes.lechon_de_cebu_code',
                                         'lechon_de_cebu_codes.module_id',
                                         'lechon_de_cebu_codes.module_code',
@@ -2043,6 +2147,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     ->join('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
                                     ->where('lechon_de_cebu_billing_statements.billing_statement_id', NULL)
                                     ->where('lechon_de_cebu_codes.module_name', $moduleNameBillingStatement)
+                                    ->where('lechon_de_cebu_billing_statements.deleted_at', NULL)
                                     ->whereDate('lechon_de_cebu_billing_statements.created_at', '=', date($getDateToday))
                                     ->sum('lechon_de_cebu_billing_statements.total_amount');
         
@@ -2060,6 +2165,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_petty_cashes.petty_cash_summary',
                                 'lechon_de_cebu_petty_cashes.amount',
                                 'lechon_de_cebu_petty_cashes.created_by',
+                                'lechon_de_cebu_petty_cashes.deleted_at',
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
@@ -2067,6 +2173,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 ->join('lechon_de_cebu_codes', 'lechon_de_cebu_petty_cashes.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_petty_cashes.pc_id', NULL)
                                 ->where('lechon_de_cebu_codes.module_name', $moduleNamePettyCash)
+                                ->where('lechon_de_cebu_petty_cashes.deleted_at', NULL)
                                 ->whereDate('lechon_de_cebu_petty_cashes.created_at', '=', date($getDateToday))
                                 ->orderBy('lechon_de_cebu_petty_cashes.id', 'desc')
                                 ->get()->toArray();
@@ -2102,14 +2209,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_payment_vouchers.cheque_amount',
                                 'lechon_de_cebu_payment_vouchers.sub_category',
                                 'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                'lechon_de_cebu_payment_vouchers.deleted_at',
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
                                 'lechon_de_cebu_codes.module_name')
-                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
                                 ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDateToday))
-                                
+                                ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
                                 ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
                                 ->get()->toArray();
@@ -2144,14 +2252,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_payment_vouchers.cheque_amount',
                                     'lechon_de_cebu_payment_vouchers.sub_category',
                                     'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                    'lechon_de_cebu_payment_vouchers.deleted_at',
                                     'lechon_de_cebu_codes.lechon_de_cebu_code',
                                     'lechon_de_cebu_codes.module_id',
                                     'lechon_de_cebu_codes.module_code',
                                     'lechon_de_cebu_codes.module_name')
-                                    ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                    ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                                     ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
                                     ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDateToday))
-                                    
+                                    ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                                     ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
                                     ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $cash)
                                     ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
@@ -2186,6 +2295,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                         'lechon_de_cebu_payment_vouchers.cheque_amount',
                                         'lechon_de_cebu_payment_vouchers.sub_category',
                                         'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                        'lechon_de_cebu_payment_vouchers.deleted_at',
                                         'lechon_de_cebu_codes.lechon_de_cebu_code',
                                         'lechon_de_cebu_codes.module_id',
                                         'lechon_de_cebu_codes.module_code',
@@ -2193,7 +2303,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                         ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                                         ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
                                         ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDateToday))
-                                        
+                                        ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                                         ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
                                         ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $cash)
                                         ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
@@ -2230,14 +2340,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                             'lechon_de_cebu_payment_vouchers.cheque_amount',
                                             'lechon_de_cebu_payment_vouchers.sub_category',
                                             'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                            'lechon_de_cebu_payment_vouchers.deleted_at',
                                             'lechon_de_cebu_codes.lechon_de_cebu_code',
                                             'lechon_de_cebu_codes.module_id',
                                             'lechon_de_cebu_codes.module_code',
                                             'lechon_de_cebu_codes.module_name')
-                                            ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                            ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                                             ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
                                             ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDateToday))
-                                            
+                                            ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                                             ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
                                             ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $check)
                                             ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
@@ -2272,14 +2383,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_payment_vouchers.cheque_amount',
                                     'lechon_de_cebu_payment_vouchers.sub_category',
                                     'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                    'lechon_de_cebu_payment_vouchers.deleted_at',
                                     'lechon_de_cebu_codes.lechon_de_cebu_code',
                                     'lechon_de_cebu_codes.module_id',
                                     'lechon_de_cebu_codes.module_code',
                                     'lechon_de_cebu_codes.module_name')
-                                    ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                    ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                                     ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
                                     ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDateToday))
-                                    
+                                    ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                                     ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
                                     ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $check)
                                     ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
@@ -2316,12 +2428,14 @@ class LoloPinoyLechonDeCebuController extends Controller
                             'lechon_de_cebu_payment_vouchers.cheque_amount',
                             'lechon_de_cebu_payment_vouchers.sub_category',
                             'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                            'lechon_de_cebu_payment_vouchers.deleted_at',
                             'lechon_de_cebu_codes.lechon_de_cebu_code',
                             'lechon_de_cebu_codes.module_id',
                             'lechon_de_cebu_codes.module_code',
                             'lechon_de_cebu_codes.module_name')
-                            ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                            ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                             ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
+                            ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                             ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDateToday))
                             ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
                             ->sum('lechon_de_cebu_payment_vouchers.amount_due');
@@ -2489,11 +2603,12 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_petty_cashes.petty_cash_summary',
                                 'lechon_de_cebu_petty_cashes.amount',
                                 'lechon_de_cebu_petty_cashes.created_by',
+                                'lechon_de_cebu_petty_cashes.deleted_at',
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
                                 'lechon_de_cebu_codes.module_name')
-                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_petty_cashes.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_petty_cashes.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_petty_cashes.id', $id)
                                 ->where('lechon_de_cebu_codes.module_name', $moduleName)
                                 ->get();
@@ -2663,6 +2778,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                'lechon_de_cebu_petty_cashes.petty_cash_summary',
                                'lechon_de_cebu_petty_cashes.amount',
                                'lechon_de_cebu_petty_cashes.created_by',
+                               'lechon_de_cebu_petty_cashes.deleted_at',
                                'lechon_de_cebu_codes.lechon_de_cebu_code',
                                'lechon_de_cebu_codes.module_id',
                                'lechon_de_cebu_codes.module_code',
@@ -2671,6 +2787,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                ->where('lechon_de_cebu_petty_cashes.pc_id', NULL)
                                ->where('lechon_de_cebu_codes.module_name', $moduleName)
                                ->orderBy('lechon_de_cebu_petty_cashes.id', 'desc')
+                               ->where('lechon_de_cebu_petty_cashes.deleted_at', NULL)
                                ->get()->toArray();
      
 
@@ -2903,6 +3020,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                             'lechon_de_cebu_payment_vouchers.cheque_amount',
                             'lechon_de_cebu_payment_vouchers.sub_category',
                             'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                            'lechon_de_cebu_payment_vouchers.deleted_at',
                             'lechon_de_cebu_codes.lechon_de_cebu_code',
                             'lechon_de_cebu_codes.module_id',
                             'lechon_de_cebu_codes.module_code',
@@ -3165,14 +3283,17 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_payment_vouchers.cheque_amount',
                                 'lechon_de_cebu_payment_vouchers.sub_category',
                                 'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                'lechon_de_cebu_payment_vouchers.deleted_at',
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
                                 'lechon_de_cebu_codes.module_name')
-                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
-                                ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
                                 ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                                ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
+                                ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
+                               
                                 ->get()->toArray();
       
 
@@ -3918,9 +4039,6 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     //view sales invoice
     public function viewSalesInvoice($id){
-    
-
-        $viewSalesInvoice = LechonDeCebuSalesInvoice::find($id);
 
         $moduleName = "Sales Invoice";
         $viewSalesInvoice = DB::table(
@@ -3941,11 +4059,12 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_sales_invoices.unit_price',
                                     'lechon_de_cebu_sales_invoices.amount',
                                     'lechon_de_cebu_sales_invoices.created_by',
+                                    'lechon_de_cebu_sales_invoices.deleted_at',
                                     'lechon_de_cebu_codes.lechon_de_cebu_code',
                                     'lechon_de_cebu_codes.module_id',
                                     'lechon_de_cebu_codes.module_code',
                                     'lechon_de_cebu_codes.module_name')
-                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_sales_invoices.id', $id)
                                 ->get();
     
@@ -4386,11 +4505,12 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_delivery_receipts.received_by',
                                 'lechon_de_cebu_delivery_receipts.duplicate_status',
                                 'lechon_de_cebu_delivery_receipts.created_by',
+                                'lechon_de_cebu_delivery_receipts.deleted_at',
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
                                 'lechon_de_cebu_codes.module_name')
-                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_delivery_receipts.id', $id)
                                 ->where('lechon_de_cebu_codes.module_name', $moduleName)
                                 ->get()->toArray();
@@ -4461,6 +4581,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_delivery_receipts.received_by',
                                 'lechon_de_cebu_delivery_receipts.duplicate_status',
                                 'lechon_de_cebu_delivery_receipts.created_by',
+                                'lechon_de_cebu_delivery_receipts.deleted_at',
                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
@@ -4468,6 +4589,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
                                 ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                                ->where('lechon_de_cebu_delivery_receipts.deleted_at', NULL)
                                 ->orderBy('lechon_de_cebu_delivery_receipts.id', 'desc')
                                 ->get()->toArray();
       
@@ -5559,11 +5681,12 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_billing_statements.amount',
                                     'lechon_de_cebu_billing_statements.paid_amount',
                                     'lechon_de_cebu_billing_statements.created_by',
+                                    'lechon_de_cebu_billing_statements.deleted_at',
                                     'lechon_de_cebu_codes.lechon_de_cebu_code',
                                     'lechon_de_cebu_codes.module_id',
                                     'lechon_de_cebu_codes.module_code',
                                     'lechon_de_cebu_codes.module_name')
-                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_billing_statements.id', $id)
                                 ->where('lechon_de_cebu_codes.module_name', $moduleName)
                                 ->get();
@@ -5652,13 +5775,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_billing_statements.amount',
                                     'lechon_de_cebu_billing_statements.paid_amount',
                                     'lechon_de_cebu_billing_statements.created_by',
+                                    'lechon_de_cebu_billing_statements.deleted_at',
                                     'lechon_de_cebu_codes.lechon_de_cebu_code',
                                     'lechon_de_cebu_codes.module_id',
                                     'lechon_de_cebu_codes.module_code',
                                     'lechon_de_cebu_codes.module_name')
-                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_billing_statements.billing_statement_id', NULL)
                                 ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                                ->where('lechon_de_cebu_billing_statements.deleted_at', NULL)
                                 ->orderBy('lechon_de_cebu_billing_statements.id', 'desc')
                                 ->get()->toArray();
        
@@ -6167,6 +6292,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                             'lechon_de_cebu_purchase_orders.prepared_by',
                             'lechon_de_cebu_purchase_orders.checked_by',
                             'lechon_de_cebu_purchase_orders.created_by',
+                            'lechon_de_cebu_purchase_orders.deleted_at',
                             'lechon_de_cebu_codes.lechon_de_cebu_code',
                             'lechon_de_cebu_codes.module_id',
                             'lechon_de_cebu_codes.module_code',
@@ -6174,6 +6300,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                         ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
                         ->where('lechon_de_cebu_purchase_orders.po_id', NULL)
                         ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                        ->where('lechon_de_cebu_purchase_orders.deleted_at', NULL)
                         ->orderBy('lechon_de_cebu_purchase_orders.id', 'desc')
                         ->get()->toArray();
 
@@ -6218,6 +6345,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_sales_invoices.unit_price',
                                     'lechon_de_cebu_sales_invoices.amount',
                                     'lechon_de_cebu_sales_invoices.created_by',
+                                    'lechon_de_cebu_sales_invoices.deleted_at',
                                     'lechon_de_cebu_codes.lechon_de_cebu_code',
                                     'lechon_de_cebu_codes.module_id',
                                     'lechon_de_cebu_codes.module_code',
@@ -6226,6 +6354,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
                                 ->orderBy('lechon_de_cebu_sales_invoices.id', 'desc')
                                 ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                                ->where('lechon_de_cebu_sales_invoices.deleted_at', NULL)
                                 ->get()->toArray();
       
         //
@@ -6349,11 +6478,12 @@ class LoloPinoyLechonDeCebuController extends Controller
                             'lechon_de_cebu_purchase_orders.prepared_by',
                             'lechon_de_cebu_purchase_orders.checked_by',
                             'lechon_de_cebu_purchase_orders.created_by',
+                            'lechon_de_cebu_purchase_orders.deleted_at',
                             'lechon_de_cebu_codes.lechon_de_cebu_code',
                             'lechon_de_cebu_codes.module_id',
                             'lechon_de_cebu_codes.module_code',
                             'lechon_de_cebu_codes.module_name')
-                        ->join('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                        ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
                         ->where('lechon_de_cebu_purchase_orders.id', $id)
                         ->where('lechon_de_cebu_codes.module_name', $moduleName)
                         ->get();

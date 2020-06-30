@@ -200,7 +200,7 @@ class RibosBarController extends Controller
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
-                        ->ledtJoin('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
+                        ->leftJoin('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
                         ->where('ribos_bar_sales_invoices.si_id', NULL)
                         ->where('ribos_bar_codes.module_name', $moduleName)
                         ->whereDate('ribos_bar_sales_invoices.created_at', '=', date($date))
@@ -229,7 +229,7 @@ class RibosBarController extends Controller
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
-                            ->join('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_sales_invoices.si_id', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleName)
                             ->whereDate('ribos_bar_sales_invoices.created_at', '=', date($date))
@@ -292,7 +292,7 @@ class RibosBarController extends Controller
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
-                            ->join('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_purchase_orders.po_id', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleNamePO)
                             ->whereDate('ribos_bar_purchase_orders.created_at', '=', date($date))
@@ -334,7 +334,7 @@ class RibosBarController extends Controller
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
-                            ->join('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_payment_vouchers.pv_id', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleNamePV)
                             ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($date))
@@ -376,7 +376,7 @@ class RibosBarController extends Controller
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
-                                ->join('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                                ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                                 ->where('ribos_bar_payment_vouchers.pv_id', NULL)
                                 ->where('ribos_bar_codes.module_name', $moduleNamePV)
                                 ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($date))
@@ -419,7 +419,7 @@ class RibosBarController extends Controller
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
-                            ->join('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_payment_vouchers.pv_id', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleNamePV)
                             ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($date))
@@ -462,7 +462,7 @@ class RibosBarController extends Controller
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
-                            ->join('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_payment_vouchers.pv_id', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleNamePV)
                             ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($date))

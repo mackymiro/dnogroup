@@ -26,11 +26,16 @@
              				<div class="card-header">
 	                              <i class="fas fa-cash-register" aria-hidden="true"></i>
 	                            View Sales Invoice
+								@if($viewSalesInvoice[0]->deleted_at == NULL)
                                 <div class="float-right">
                                       <a href="{{ action('LoloPinoyLechonDeCebuController@printSalesInvoice', $viewSalesInvoice[0]->id)}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                                 </div>
+								@endif
                             </div>
                             <div class="card-body">
+								@if($viewSalesInvoice[0]->deleted_at != NULL)
+								<h1 style="color:red; font-size:28px; font-weight:bold">This Item Has Been Deleted! (CLERICAL ERROR)</h1>
+								@endif
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>

@@ -116,6 +116,7 @@
 <script type="text/javascript">
    function confirmDelete(id){
       var x = confirm("Do you want to delete this?");
+     
       if(x){
         $.ajax({
                 type: "DELETE",

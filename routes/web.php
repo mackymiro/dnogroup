@@ -253,7 +253,7 @@ Route::group(['middleware' =>['user']], function(){
 		->name('lolo-pinoy-lechon-de-cebu.destroySalesInvoice');
 
 	Route::delete(
-		'/lolo-pinoy-lechon-de-cebu/delete/SI/',
+		'/lolo-pinoy-lechon-de-cebu/delete/SI/{id}',
 		'LoloPinoyLechonDeCebuController@destroySI')
 		->name('destroySI');
 	
@@ -925,7 +925,7 @@ Route::group(['middleware' =>['sales']], function(){
 	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-sales-invoice/{id}', 'LoloPinoyLechonDeCebuController@destroySalesInvoice')->name('lolo-pinoy-lechon-de-cebu.destroySalesInvoice');
 	
 	Route::delete(
-		'/lolo-pinoy-lechon-de-cebu/delete/SI/',
+		'/lolo-pinoy-lechon-de-cebu/delete/SI/{id}',
 		'LoloPinoyLechonDeCebuController@destroySI')
 		->name('destroySI');
 
@@ -1148,6 +1148,7 @@ Route::group(['middleware' => ['auth']], function(){
 	//
 	Route::post('/lolo-pinoy-lechon-de-cebu/store-billing-statement', 'LoloPinoyLechonDeCebuController@storeBillingStatement')->name('lolo-pinoy-lechon-de-cebu.storeBillingStatement');
 
+
 	//route for lechon de cebu billing statement form edit
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/edit-billing-statement/{id}', 
@@ -1317,6 +1318,12 @@ Route::group(['middleware' => ['auth']], function(){
 
 	//route for sales invoice form lechon de cebu
 	Route::get('/lolo-pinoy-lechon-de-cebu/sales-invoice-form', 'LoloPinoyLechonDeCebuController@salesInvoiceForm')->name('lolo-pinoy-lechon-de-cebu.salesInvoiceForm');
+
+	Route::delete(
+		'/lolo-pinoy-lechon-de-cebu/delete/SI/{id}',
+		'LoloPinoyLechonDeCebuController@destroySI')
+		->name('destroySI');
+
 
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/sales-per-outlet',

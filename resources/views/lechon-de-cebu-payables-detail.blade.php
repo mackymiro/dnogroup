@@ -266,7 +266,7 @@
 									<tbody>
   										
 										<tr>	
-											<td>{{ $transactionList[0]->date }}</td>
+											<td>{{ $transactionList[0]->issued_date }}</td>
   											<td>{{ $transactionList[0]->particulars}}</td>
 											<td><?php echo number_format($transactionList[0]->amount, 2); ?></td>
 										</tr>

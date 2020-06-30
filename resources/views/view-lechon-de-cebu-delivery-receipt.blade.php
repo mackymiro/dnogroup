@@ -26,13 +26,18 @@
                   	 	 	<div class="card-header">
                             <i class="fas fa-receipt" aria-hidden="true"></i>
                                   View Delivery Receipt
-                             <div class="float-right">
-                               
-                                 <a href="{{ action('LoloPinoyLechonDeCebuController@printDelivery', $viewDeliveryReceipt[0]->id)}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
-                               
-                              </div>
+                                  @if($viewDeliveryReceipt[0]->deleted_at == NULL)
+                                  <div class="float-right">
+                                  
+                                    <a href="{{ action('LoloPinoyLechonDeCebuController@printDelivery', $viewDeliveryReceipt[0]->id)}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                                  
+                                  </div>
+                                  @endif
                         </div>
                         <div class="card-body">
+                        @if($viewDeliveryReceipt[0]->deleted_at != NULL)
+                          <h1 style="color:red; font-size:28px; font-weight:bold">This Item Has Been Deleted! (CLERICAL ERROR)</h1>
+                          @endif
                           <div class="form-group">
                               <div class="form-row">
                                    <div class="col-lg-6">
