@@ -66,6 +66,7 @@ class DnoPersonalController extends Controller
                             ->orderBy('dno_personal_payment_vouchers.id', 'desc')
                             ->get()->toArray();
     
+        $status = "FULLY PAID AND RELEASED";
         $totalAmountCashes = DB::table(
                                 'dno_personal_payment_vouchers')
                                 ->select( 
@@ -107,7 +108,7 @@ class DnoPersonalController extends Controller
                                 ->where('dno_personal_codes.module_name', $moduleNamePV)
                                 ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($date))
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $cash)
-                                ->orderBy('dno_personal_payment_vouchers.id', 'desc')
+                                ->where('dno_personal_payment_vouchers.status', '!=', $status)
                                 ->sum('dno_personal_payment_vouchers.amount_due');
 
             $check = "CHECK";
@@ -141,6 +142,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.status',
                                 'dno_personal_payment_vouchers.cheque_number',
                                 'dno_personal_payment_vouchers.cheque_amount',
+                                'dno_personal_payment_vouchers.cheque_total_amount',
                                 'dno_personal_payment_vouchers.sub_category',
                                 'dno_personal_payment_vouchers.sub_category_account_id',
                                 'dno_personal_codes.dno_personal_code',
@@ -197,7 +199,7 @@ class DnoPersonalController extends Controller
                                 ->where('dno_personal_codes.module_name', $moduleNamePV)
                                 ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($date))
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $check)
-                                ->orderBy('dno_personal_payment_vouchers.id', 'desc')
+                                ->where('dno_personal_payment_vouchers.status', '!=', $status)
                                 ->sum('dno_personal_payment_vouchers.amount_due');
                                 
 
@@ -486,6 +488,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.status',
                                 'dno_personal_payment_vouchers.cheque_number',
                                 'dno_personal_payment_vouchers.cheque_amount',
+                                'dno_personal_payment_vouchers.cheque_total_amount',
                                 'dno_personal_payment_vouchers.sub_category',
                                 'dno_personal_payment_vouchers.sub_category_account_id',
                                 'dno_personal_codes.dno_personal_code',
@@ -599,6 +602,7 @@ class DnoPersonalController extends Controller
                             ->orderBy('dno_personal_payment_vouchers.id', 'desc')
                             ->get()->toArray();
     
+        $status = "FULLY PAID AND RELEASED";
         $totalAmountCashes = DB::table(
                                 'dno_personal_payment_vouchers')
                                 ->select( 
@@ -640,7 +644,7 @@ class DnoPersonalController extends Controller
                                 ->where('dno_personal_codes.module_name', $moduleNamePV)
                                 ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $cash)
-                                ->orderBy('dno_personal_payment_vouchers.id', 'desc')
+                                ->where('dno_personal_payment_vouchers.status', '!=', $status)
                                 ->sum('dno_personal_payment_vouchers.amount_due');
 
             $check = "CHECK";
@@ -674,6 +678,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.status',
                                 'dno_personal_payment_vouchers.cheque_number',
                                 'dno_personal_payment_vouchers.cheque_amount',
+                                'dno_personal_payment_vouchers.cheque_total_amount',
                                 'dno_personal_payment_vouchers.sub_category',
                                 'dno_personal_payment_vouchers.sub_category_account_id',
                                 'dno_personal_codes.dno_personal_code',
@@ -730,7 +735,7 @@ class DnoPersonalController extends Controller
                                 ->where('dno_personal_codes.module_name', $moduleNamePV)
                                 ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $check)
-                                ->orderBy('dno_personal_payment_vouchers.id', 'desc')
+                                ->where('dno_personal_payment_vouchers.status', '!=', $status)
                                 ->sum('dno_personal_payment_vouchers.amount_due');
             
         $pdf = PDF::loadView('printSummaryDnoPersonal',  compact('date', 'getDateToday', 
@@ -858,6 +863,7 @@ class DnoPersonalController extends Controller
                             ->orderBy('dno_personal_payment_vouchers.id', 'desc')
                             ->get()->toArray();
     
+        $status = "FULLY PAID AND RELEASED";
         $totalAmountCashes = DB::table(
                                 'dno_personal_payment_vouchers')
                                 ->select( 
@@ -899,8 +905,10 @@ class DnoPersonalController extends Controller
                                 ->where('dno_personal_codes.module_name', $moduleNamePV)
                                 ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $cash)
-                                ->orderBy('dno_personal_payment_vouchers.id', 'desc')
+                                ->where('dno_personal_payment_vouchers.status', '!=', $status)
                                 ->sum('dno_personal_payment_vouchers.amount_due');
+
+            
 
             $check = "CHECK";
             $getTransactionListChecks = DB::table(
@@ -933,6 +941,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.status',
                                 'dno_personal_payment_vouchers.cheque_number',
                                 'dno_personal_payment_vouchers.cheque_amount',
+                                'dno_personal_payment_vouchers.cheque_total_amount',
                                 'dno_personal_payment_vouchers.sub_category',
                                 'dno_personal_payment_vouchers.sub_category_account_id',
                                 'dno_personal_codes.dno_personal_code',
@@ -947,7 +956,7 @@ class DnoPersonalController extends Controller
                                 ->orderBy('dno_personal_payment_vouchers.id', 'desc')
                                 ->get()->toArray();
 
-             
+       
         $totalAmountCheck = DB::table(
                                 'dno_personal_payment_vouchers')
                                 ->select( 
@@ -978,6 +987,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.status',
                                 'dno_personal_payment_vouchers.cheque_number',
                                 'dno_personal_payment_vouchers.cheque_amount',
+                                'dno_personal_payment_vouchers.cheque_total_amount',
                                 'dno_personal_payment_vouchers.sub_category',
                                 'dno_personal_payment_vouchers.sub_category_account_id',
                                 'dno_personal_codes.dno_personal_code',
@@ -989,9 +999,8 @@ class DnoPersonalController extends Controller
                                 ->where('dno_personal_codes.module_name', $moduleNamePV)
                                 ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $check)
-                                ->orderBy('dno_personal_payment_vouchers.id', 'desc')
+                                ->where('dno_personal_payment_vouchers.status', '!=', $status)
                                 ->sum('dno_personal_payment_vouchers.amount_due');
-            
 
         return view('dno-personal-summary-report', compact('pettyCashLists', 
         'getTransactionLists', 'getTransactionListCashes', 'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck'));
@@ -2472,7 +2481,10 @@ class DnoPersonalController extends Controller
 
         $name  = $firstName." ".$lastName;
 
-         $paymentData = DnoPersonalPaymentVoucher::find($id);
+        $paymentData = DnoPersonalPaymentVoucher::find($id);
+
+        $totalChequeAmount = $paymentData->cheque_total_amount + $request->get('chequeAmount');
+ 
 
         //save payment cheque num and cheque amount
         $addPayment = new DnoPersonalPaymentVoucher([
@@ -2486,7 +2498,13 @@ class DnoPersonalController extends Controller
 
         ]);
 
-         $addPayment->save();
+        $addPayment->save();
+        
+        //update the total cheque amount
+        $paymentData->cheque_total_amount = $totalChequeAmount;
+        $paymentData->save();
+
+        
 
         Session::flash('paymentAdded', 'Payment added.');
 
@@ -2691,6 +2709,7 @@ class DnoPersonalController extends Controller
             $subCatName = $subCatExp[1];
 
             $selectAccountID = "NULL";
+            $bills = NULL;
           
         }else{
             $subCat = "NULL";

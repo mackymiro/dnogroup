@@ -3176,6 +3176,16 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('summaryReport');
 
 	Route::get(
+		'/dno-food-ventures/summary-report/search-number-code',
+		'DnoFoodVenturesController@searchNumberCode')
+		->name('searchNumberCode');
+
+	Route::get(
+		'/dno-food-ventures/search',
+		'DnoFoodVenturesController@search')
+		->name('search');
+
+	Route::get(
 		'/dno-food-ventures/search-date',
 		'DnoFoodVenturesController@getSummaryReport')
 		->name('getSummaryReport');
@@ -3227,6 +3237,16 @@ Route::group(['middleware' => ['auth']], function(){
 		'DnoResourcesDevelopmentController@summaryReport')
 		->name('summaryReport');
 
+	
+	Route::get(
+		'/dno-resources-development/summary-report/search-number-code',
+		'DnoResourcesDevelopmentController@searchNumberCode')
+		->name('searchNumberCode');
+
+	Route::get(
+		'/dno-resources-development/search',
+		'DnoResourcesDevelopmentController@search')
+		->name('search');
 	
 	Route::get(
 		'/dno-resources-development/purchase-order',
@@ -3563,6 +3583,16 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('summaryReport');
 
 	Route::get(
+		'/wlg-corporation/summary-report/search-number-code',
+		'WlgCorporationController@searchNumberCode')
+		->name('searchNumberCode');
+
+	Route::get(
+		'/wlg-corporation/search',
+		'WlgCorporationController@search')
+		->name('search');
+
+	Route::get(
 		'/wlg-corporation/printSummary',
 		'WlgCorporationController@printSummary')
 		->name('printSummary');
@@ -3824,6 +3854,16 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dino-industrial-corporation/summary-report',
 		'DinoIndustrialCorporationController@summaryReport')
 		->name('summaryReport');
+
+	Route::get(
+		'/dino-industrial-corporation/summary-report/search-number-code',
+		'DinoIndustrialCorporationController@searchNumberCode')
+		->name('searchNumberCode');
+
+	Route::get(
+		'/dino-industrial-corporation/search',
+		'DinoIndustrialCorporationController@search')
+		->name('search');
 
 	Route::get(
 		'/dino-industrial-corporation/printSummary',

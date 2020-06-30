@@ -191,7 +191,28 @@
                           </table>
 
 						  @endif
-                           <div style="margin-top:100px;">
+						  <br>
+						  <table style="border:1px solid black;">
+								<thead>
+									<tr>
+									
+									<td style="height: 1%; text-align: center; border: 1px solid black; width:50%;">Bank Name/Branch:</td>
+									<td style="height: 1%; text-align: center; border: 1px solid black; width:50%;">&nbsp;</td>
+									
+									</tr>
+								</thead>
+								<tbody>
+                                
+									
+									 <tr style="border:1px solid black;">
+									 
+									  <td style=" text-align:center; border: 1px solid black;">Check No</td>
+									  <td style=" text-align:center; border: 1px solid black;"> </td>
+									</tr>
+							</tbody>
+                                
+                          </table>
+                           <div style="margin-top:50px;">
                            		<table  >
                            			<thead>
                            				<tr>
@@ -226,7 +247,7 @@
                            		</table>
                            	
                            </div>
-						   <div style="margin-top:100px;">
+						   <div style="margin-top:30px;">
                            		<table  >
                            			<thead>
                            				<tr>

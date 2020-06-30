@@ -15,6 +15,62 @@ use App\DinoIndustrialCorporationCode;
 class DinoIndustrialCorporationController extends Controller
 {
 
+    public function search(Request $request){
+        $getSearchResults =DinoIndustrialCorporationCode::where('dic_code', $request->get('searchCode'))->get();
+        if($getSearchResults[0]->module_name === "Payment Voucher"){
+            $getSearchPaymentVouchers = DB::table(
+                        'dino_industrial_corporation_payment_vouchers')
+                        ->select( 
+                        'dino_industrial_corporation_payment_vouchers.id',
+                        'dino_industrial_corporation_payment_vouchers.user_id',
+                        'dino_industrial_corporation_payment_vouchers.pv_id',
+                        'dino_industrial_corporation_payment_vouchers.date',
+                        'dino_industrial_corporation_payment_vouchers.paid_to',
+                        'dino_industrial_corporation_payment_vouchers.account_no',
+                        'dino_industrial_corporation_payment_vouchers.account_name',
+                        'dino_industrial_corporation_payment_vouchers.particulars',
+                        'dino_industrial_corporation_payment_vouchers.amount',
+                        'dino_industrial_corporation_payment_vouchers.method_of_payment',
+                        'dino_industrial_corporation_payment_vouchers.prepared_by',
+                        'dino_industrial_corporation_payment_vouchers.approved_by',
+                        'dino_industrial_corporation_payment_vouchers.date_approved',
+                        'dino_industrial_corporation_payment_vouchers.received_by_date',
+                        'dino_industrial_corporation_payment_vouchers.created_by',
+                        'dino_industrial_corporation_payment_vouchers.invoice_number',
+                        'dino_industrial_corporation_payment_vouchers.issued_date',
+                        'dino_industrial_corporation_payment_vouchers.category',
+                        'dino_industrial_corporation_payment_vouchers.amount_due',
+                        'dino_industrial_corporation_payment_vouchers.delivered_date',
+                        'dino_industrial_corporation_payment_vouchers.status',
+                        'dino_industrial_corporation_payment_vouchers.cheque_number',
+                        'dino_industrial_corporation_payment_vouchers.cheque_amount',
+                        'dino_industrial_corporation_payment_vouchers.sub_category',
+                        'dino_industrial_corporation_payment_vouchers.sub_category_account_id',
+                        'dino_industrial_corporation_codes.dic_code',
+                        'dino_industrial_corporation_codes.module_id',
+                        'dino_industrial_corporation_codes.module_code',
+                        'dino_industrial_corporation_codes.module_name')
+                        ->leftJoin('dino_industrial_corporation_codes', 'dino_industrial_corporation_payment_vouchers.id', '=', 'dino_industrial_corporation_codes.module_id')
+                        ->where('dino_industrial_corporation_payment_vouchers.id', $getSearchResults[0]->module_id)
+                        ->where('dino_industrial_corporation_codes.module_name', $getSearchResults[0]->module_name)
+                        
+                        ->get()->toArray();
+            
+                              
+            $getAllCodes = DinoIndustrialCorporationCode::get()->toArray();  
+            $module = $getSearchResults[0]->module_name;
+
+            return view('dino-industrial-search-results',  compact('module', 'getAllCodes', 'getSearchPaymentVouchers'));
+                
+
+        }
+    }
+
+    public function searchNumberCode(){
+        $getAllCodes = DinoIndustrialCorporationCode::get()->toArray();
+        return view('dino-industrial-search-number-code', compact('getAllCodes'));
+    }
+
     public function printGetSummary($date){
         $moduleName = "Payment Voucher";
         $cash = "CASH";

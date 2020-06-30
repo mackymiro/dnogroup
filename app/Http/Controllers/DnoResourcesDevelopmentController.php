@@ -16,6 +16,62 @@ use App\DnoResourcesDevelopmentCode;
 
 class DnoResourcesDevelopmentController extends Controller
 {
+
+    public function search(Request $request){
+        $getSearchResults =DnoResourcesDevelopmentCode::where('dno_resources_code', $request->get('searchCode'))->get();
+        if($getSearchResults[0]->module_name === "Payment Voucher"){
+           $getSearchPaymentVouchers = DB::table(
+                                'dno_resources_development_corp_payment_vouchers')
+                                ->select( 
+                                'dno_resources_development_corp_payment_vouchers.id',
+                                'dno_resources_development_corp_payment_vouchers.user_id',
+                                'dno_resources_development_corp_payment_vouchers.pv_id',
+                                'dno_resources_development_corp_payment_vouchers.date',
+                                'dno_resources_development_corp_payment_vouchers.paid_to',
+                                'dno_resources_development_corp_payment_vouchers.account_no',
+                                'dno_resources_development_corp_payment_vouchers.account_name',
+                                'dno_resources_development_corp_payment_vouchers.particulars',
+                                'dno_resources_development_corp_payment_vouchers.amount',
+                                'dno_resources_development_corp_payment_vouchers.method_of_payment',
+                                'dno_resources_development_corp_payment_vouchers.prepared_by',
+                                'dno_resources_development_corp_payment_vouchers.approved_by',
+                                'dno_resources_development_corp_payment_vouchers.date_apprroved',
+                                'dno_resources_development_corp_payment_vouchers.received_by_date',
+                                'dno_resources_development_corp_payment_vouchers.created_by',
+                                'dno_resources_development_corp_payment_vouchers.invoice_number',
+                                'dno_resources_development_corp_payment_vouchers.issued_date',
+                                'dno_resources_development_corp_payment_vouchers.category',
+                                'dno_resources_development_corp_payment_vouchers.amount_due',
+                                'dno_resources_development_corp_payment_vouchers.delivered_date',
+                                'dno_resources_development_corp_payment_vouchers.status',
+                                'dno_resources_development_corp_payment_vouchers.cheque_number',
+                                'dno_resources_development_corp_payment_vouchers.cheque_amount',
+                                'dno_resources_development_corp_payment_vouchers.sub_category',
+                                'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
+                                'dno_resources_development_codes.dno_resources_code',
+                                'dno_resources_development_codes.module_id',
+                                'dno_resources_development_codes.module_code',
+                                'dno_resources_development_codes.module_name')
+                                ->leftJoin('dno_resources_development_codes', 'dno_resources_development_corp_payment_vouchers.id', '=', 'dno_resources_development_codes.module_id')
+                                ->where('dno_resources_development_corp_payment_vouchers.id', $getSearchResults[0]->module_id)
+                                ->where('dno_resources_development_codes.module_name', $getSearchResults[0]->module_name)
+                                ->get();
+
+            $getAllCodes = DnoResourcesDevelopmentCode::get()->toArray();  
+            $module = $getSearchResults[0]->module_name;
+
+            return view('dno-resources-search-results',  compact('module', 'getAllCodes', 'getSearchPaymentVouchers'));
+                        
+
+    
+        }
+    }
+
+    public function searchNumberCode(){
+        $getAllCodes = DnoResourcesDevelopmentCode::get()->toArray();
+        return view('dno-resources-search-number-code', compact('getAllCodes'));
+    }
+
     public function printGetSummary($date){ 
         $moduleName = "Payment Voucher";
         $cash = "CASH";

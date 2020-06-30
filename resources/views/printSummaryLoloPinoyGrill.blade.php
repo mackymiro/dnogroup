@@ -37,7 +37,7 @@
                      <?php elseif($date != ""):?>
                         {{ $date}}
                      <?php endif; ?>
-                     </u></h4>
+                     </u>Lolo Pinoy Grill Commissary</h4>
 	            </div>
 				<div class="row">
 					<div class="col-lg-12">

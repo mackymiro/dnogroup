@@ -38,6 +38,7 @@ class DnoPersonalPaymentVoucher extends Model
         'status',
         'cheque_number',
         'cheque_amount',
+        'cheque_total_amount',
         'type_of_card',
         'utility_sub_category',
         'utility_sub_category_name',

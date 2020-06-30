@@ -15,6 +15,59 @@ use App\DnoFoodVenturesCode;
 
 class DnoFoodVenturesController extends Controller
 {
+    public function search(Request $request){
+        $getSearchResults =DnoFoodVenturesCode::where('dno_food_venture_code', $request->get('searchCode'))->get();
+        if($getSearchResults[0]->module_name === "Payment Voucher"){
+            $getSearchPaymentVouchers = DB::table(
+                                'dno_food_ventures_payment_vouchers')
+                                ->select( 
+                                'dno_food_ventures_payment_vouchers.id',
+                                'dno_food_ventures_payment_vouchers.user_id',
+                                'dno_food_ventures_payment_vouchers.pv_id',
+                                'dno_food_ventures_payment_vouchers.date',
+                                'dno_food_ventures_payment_vouchers.paid_to',
+                                'dno_food_ventures_payment_vouchers.account_no',
+                                'dno_food_ventures_payment_vouchers.account_name',
+                                'dno_food_ventures_payment_vouchers.particulars',
+                                'dno_food_ventures_payment_vouchers.amount',
+                                'dno_food_ventures_payment_vouchers.method_of_payment',
+                                'dno_food_ventures_payment_vouchers.prepared_by',
+                                'dno_food_ventures_payment_vouchers.approved_by',
+                                'dno_food_ventures_payment_vouchers.date_approved',
+                                'dno_food_ventures_payment_vouchers.received_by_date',
+                                'dno_food_ventures_payment_vouchers.created_by',
+                                'dno_food_ventures_payment_vouchers.invoice_number',
+                                'dno_food_ventures_payment_vouchers.voucher_ref_number',
+                                'dno_food_ventures_payment_vouchers.issued_date',
+                                'dno_food_ventures_payment_vouchers.category',
+                                'dno_food_ventures_payment_vouchers.amount_due',
+                                'dno_food_ventures_payment_vouchers.delivered_date',
+                                'dno_food_ventures_payment_vouchers.status',
+                                'dno_food_ventures_payment_vouchers.cheque_number',
+                                'dno_food_ventures_payment_vouchers.cheque_amount',
+                                'dno_food_ventures_payment_vouchers.sub_category',
+                                'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                                'dno_food_ventures_codes.dno_food_venture_code',
+                                'dno_food_ventures_codes.module_id',
+                                'dno_food_ventures_codes.module_code',
+                                'dno_food_ventures_codes.module_name')
+                                ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
+                                ->where('dno_food_ventures_payment_vouchers.id', $getSearchResults[0]->module_id)
+                                ->where('dno_food_ventures_codes.module_name', $getSearchResults[0]->module_name)
+                                ->get()->toArray();
+
+            $getAllCodes = DnoFoodVenturesCode::get()->toArray();  
+            $module = $getSearchResults[0]->module_name;
+
+            return view('dno-food-ventures-search-results',  compact('module', 'getAllCodes', 'getSearchPaymentVouchers'));
+    
+        }
+    }
+
+    public function searchNumberCode(){
+        $getAllCodes = DnoFoodVenturesCode::get()->toArray();
+        return view('dno-food-ventures-search-number-code', compact('getAllCodes'));
+    }
 
     public function printGetSummary($date){
         $moduleName = "Payment Voucher";

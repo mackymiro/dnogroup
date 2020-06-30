@@ -90,7 +90,7 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Total:</th>
+                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Total Balance:</th>
                                         <th  style="text-align:center; border: 1px solid black;"><?php echo number_format($totalAmountCashes, 2);?></th>
                                     </tr>
                                 </thead>
@@ -107,7 +107,9 @@
                                         <th style="height: 1%; text-align: center;">ISSUED DATE</th>
                                         <th style="height: 1%; text-align: center;">PAID TO</th>
                                         <th style="height: 1%; text-align: center;">BANK NAME/CHECK NO</th>
-                                        <th style="height: 1%; text-align: center;">AMOUNT</th>
+                                        <th style="height: 1%; text-align: center;">PAID AMOUNT</th>
+                                        <th style="height: 1%; text-align: center;">BALANCE</th>
+                                       
                                         <th style="height: 1%; text-align: center;">STATUS</th>
                                         <th style="height: 1%; text-align: center;">CREATED BY</th>
 									</tr>
@@ -144,8 +146,17 @@
                                                 <?php echo $getCheck->cheque_number; ?>
                                             <?php endforeach; ?>
                                         </td>
-                                        
-                                        <td style="text-align:center; border: 1px solid black;"><?php echo number_format($compute, 2); ?></td>
+                                        <td style="text-align:center; border: 1px solid black;"><?php echo number_format($getTransactionListCheck->cheque_total_amount, 2); ?></td>
+                                      
+                                        <td style="text-align:center; border: 1px solid black;">
+                                             @if($getTransactionListCheck->status === "FULLY PAID AND RELEASED")
+                                             <p >0</p>
+                                             @else
+                                            <?php echo number_format($compute, 2); ?>
+                                            @endif
+                                            
+                                        </td>
+                                      
                                         <td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->status }}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->created_by }}</td>
 									</tr>
@@ -156,7 +167,7 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Total:</th>
+                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Total Balance:</th>
                                         <th  style="text-align:center; border: 1px solid black;"><?php echo number_format($totalAmountCheck, 2);?></th>
                                     </tr>
                                 </thead>
