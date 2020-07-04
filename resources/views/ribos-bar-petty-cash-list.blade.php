@@ -147,6 +147,33 @@
 <script type="text/javascript">
      $("#validate").hide();
 
+     const confirmDelete = (id) =>{
+        const  x = confirm("Do you want to delete this?");
+          if(x){
+              $.ajax({
+                type: "DELETE",
+                url: '/ribos-bar/petty-cash/delete/' + id,
+                data:{
+                  _method: 'delete', 
+                  "_token": "{{ csrf_token() }}",
+                  "id": id
+                },
+                success: function(data){
+                  console.log(data);
+                  $("#deletedId"+id).fadeOut('slow');
+                
+                },
+                error: function(data){
+                  console.log('Error:', data);
+                }
+
+              });
+
+          }else{
+              return false;
+          }
+     }
+
      const addPettyCash = () =>{
         const reqDate = $("#date").val();
         const pettyCashName = $("#pettyCashName").val();

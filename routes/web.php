@@ -1838,6 +1838,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'LoloPinoyGrillBranchesController@requisitionSlipList')
 		->name('lolo-pinoy-grill-branches.requisitionSlipList');
 
+	Route::delete(
+		'/lolo-pinoy-grill-branches/delete/{id}',
+		'LoloPinoyGrillBranchesController@destroy')
+		->name('destroy');
+
 	Route::get(
 		'/lolo-pinoy-grill-branches/view/{id}',
 		'LoloPinoyGrillBranchesController@show')
@@ -3231,6 +3236,11 @@ Route::group(['middleware' => ['auth']], function(){
 			'/dno-food-ventures/accept/{id}',
 			'DnoFoodVenturesController@accept')
 			->name('accept');
+
+	Route::delete(
+		'/dno-food-ventures/delete-transaction-list/{id}',
+		'DnoFoodVenturesController@destroyTransactionList')
+		->name('destroyTransactionList');
 	
 
 	//DNO resources and devlopment corp

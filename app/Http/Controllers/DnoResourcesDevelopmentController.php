@@ -19,7 +19,44 @@ class DnoResourcesDevelopmentController extends Controller
 
     public function search(Request $request){
         $getSearchResults =DnoResourcesDevelopmentCode::where('dno_resources_code', $request->get('searchCode'))->get();
-        if($getSearchResults[0]->module_name === "Payment Voucher"){
+        if($getSearchResults[0]->module_name === "Purchase Order"){ 
+            $getSearchPurchaseOrders = DB::table(
+                            'dno_resources_development_corp_purchase_orders')
+                            ->select( 
+                            'dno_resources_development_corp_purchase_orders.id',
+                            'dno_resources_development_corp_purchase_orders.user_id',
+                            'dno_resources_development_corp_purchase_orders.po_id',
+                            'dno_resources_development_corp_purchase_orders.paid_to',
+                            'dno_resources_development_corp_purchase_orders.address',
+                            'dno_resources_development_corp_purchase_orders.date',
+                            'dno_resources_development_corp_purchase_orders.quantity',
+                            'dno_resources_development_corp_purchase_orders.description',
+                            'dno_resources_development_corp_purchase_orders.unit',
+                            'dno_resources_development_corp_purchase_orders.unit_price',
+                            'dno_resources_development_corp_purchase_orders.amount',
+                            'dno_resources_development_corp_purchase_orders.total_price',
+                            'dno_resources_development_corp_purchase_orders.prepared_by',
+                            'dno_resources_development_corp_purchase_orders.checked_by',
+                            'dno_resources_development_corp_purchase_orders.ordered_by',
+                            'dno_resources_development_corp_purchase_orders.particulars',
+                            'dno_resources_development_corp_purchase_orders.qty',
+                            'dno_resources_development_corp_purchase_orders.created_by',
+                            'dno_resources_development_corp_purchase_orders.deleted_at',
+                            'dno_resources_development_codes.dno_resources_code',
+                            'dno_resources_development_codes.module_id',
+                            'dno_resources_development_codes.module_code',
+                            'dno_resources_development_codes.module_name')
+                            ->leftJoin('dno_resources_development_codes', 'dno_resources_development_corp_purchase_orders.id', '=', 'dno_resources_development_codes.module_id')
+                            ->where('dno_resources_development_corp_purchase_orders.id', $getSearchResults[0]->module_id)
+                            ->where('dno_resources_development_codes.module_name', $getSearchResults[0]->module_name)
+                            ->get();
+
+            $getAllCodes = DnoResourcesDevelopmentCode::get()->toArray();  
+            $module = $getSearchResults[0]->module_name;
+           
+            return view('dno-resources-search-results',  compact('module', 'getAllCodes', 'getSearchPurchaseOrders'));
+                          
+        }else if($getSearchResults[0]->module_name === "Payment Voucher"){
            $getSearchPaymentVouchers = DB::table(
                                 'dno_resources_development_corp_payment_vouchers')
                                 ->select( 
@@ -48,6 +85,7 @@ class DnoResourcesDevelopmentController extends Controller
                                 'dno_resources_development_corp_payment_vouchers.cheque_amount',
                                 'dno_resources_development_corp_payment_vouchers.sub_category',
                                 'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
+                                'dno_resources_development_corp_payment_vouchers.deleted_at',
                                 'dno_resources_development_codes.dno_resources_code',
                                 'dno_resources_development_codes.module_id',
                                 'dno_resources_development_codes.module_code',
@@ -182,6 +220,7 @@ class DnoResourcesDevelopmentController extends Controller
                             'dno_resources_development_corp_payment_vouchers.status',
                             'dno_resources_development_corp_payment_vouchers.cheque_number',
                             'dno_resources_development_corp_payment_vouchers.cheque_amount',
+                            'dno_resources_development_corp_payment_vouchers.cheque_total_amount',
                             'dno_resources_development_corp_payment_vouchers.sub_category',
                             'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
                             'dno_resources_development_codes.dno_resources_code',
@@ -195,6 +234,7 @@ class DnoResourcesDevelopmentController extends Controller
                             ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
                             ->get();
 
+        $status = "FULLY PAID AND RELEASED";
         $totalAmountCheck = DB::table(
                                 'dno_resources_development_corp_payment_vouchers')
                                 ->select( 
@@ -233,12 +273,57 @@ class DnoResourcesDevelopmentController extends Controller
                                 ->where('dno_resources_development_codes.module_name', $moduleName)
                                 ->whereDate('dno_resources_development_corp_payment_vouchers.created_at', '=', date($date))
                                 ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
+                                ->where('dno_resources_development_corp_payment_vouchers.status', '!=', $status)
                                 ->sum('dno_resources_development_corp_payment_vouchers.amount_due');
 
+                            
+        $totalPaidAmountCheck = DB::table(
+                                    'dno_resources_development_corp_payment_vouchers')
+                                    ->select( 
+                                    'dno_resources_development_corp_payment_vouchers.id',
+                                    'dno_resources_development_corp_payment_vouchers.user_id',
+                                    'dno_resources_development_corp_payment_vouchers.pv_id',
+                                    'dno_resources_development_corp_payment_vouchers.date',
+                                    'dno_resources_development_corp_payment_vouchers.paid_to',
+                                    'dno_resources_development_corp_payment_vouchers.account_no',
+                                    'dno_resources_development_corp_payment_vouchers.account_name',
+                                    'dno_resources_development_corp_payment_vouchers.particulars',
+                                    'dno_resources_development_corp_payment_vouchers.amount',
+                                    'dno_resources_development_corp_payment_vouchers.method_of_payment',
+                                    'dno_resources_development_corp_payment_vouchers.prepared_by',
+                                    'dno_resources_development_corp_payment_vouchers.approved_by',
+                                    'dno_resources_development_corp_payment_vouchers.date_apprroved',
+                                    'dno_resources_development_corp_payment_vouchers.received_by_date',
+                                    'dno_resources_development_corp_payment_vouchers.created_by',
+                                    'dno_resources_development_corp_payment_vouchers.created_at',
+                                    'dno_resources_development_corp_payment_vouchers.invoice_number',
+                                    'dno_resources_development_corp_payment_vouchers.issued_date',
+                                    'dno_resources_development_corp_payment_vouchers.category',
+                                    'dno_resources_development_corp_payment_vouchers.amount_due',
+                                    'dno_resources_development_corp_payment_vouchers.delivered_date',
+                                    'dno_resources_development_corp_payment_vouchers.status',
+                                    'dno_resources_development_corp_payment_vouchers.cheque_number',
+                                    'dno_resources_development_corp_payment_vouchers.cheque_amount',
+                                    'dno_resources_development_corp_payment_vouchers.cheque_total_amount',
+                                    'dno_resources_development_corp_payment_vouchers.sub_category',
+                                    'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
+                                    'dno_resources_development_codes.dno_resources_code',
+                                    'dno_resources_development_codes.module_id',
+                                    'dno_resources_development_codes.module_code',
+                                    'dno_resources_development_codes.module_name')
+                                    ->leftJoin('dno_resources_development_codes', 'dno_resources_development_corp_payment_vouchers.id', '=', 'dno_resources_development_codes.module_id')
+                                    ->where('dno_resources_development_corp_payment_vouchers.pv_id', NULL)
+                                    ->where('dno_resources_development_codes.module_name', $moduleName)
+                                    ->whereDate('dno_resources_development_corp_payment_vouchers.created_at', '=', date($date))
+                                    ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
+                                    ->where('dno_resources_development_corp_payment_vouchers.status', $status)
+                                    ->sum('dno_resources_development_corp_payment_vouchers.cheque_total_amount');
+    
+                                
         $getDateToday = "";
         $pdf = PDF::loadView('printSummaryDnoResoures',  compact('date', 'getDateToday', 
         'getTransactionListCashes', 'getTransactionListChecks',  
-        'totalAmountCashes','totalAmountCheck'));
+        'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck'));
         
         return $pdf->download('dno-resources-summary-report.pdf');
     
@@ -395,6 +480,7 @@ class DnoResourcesDevelopmentController extends Controller
                             'dno_resources_development_corp_payment_vouchers.status',
                             'dno_resources_development_corp_payment_vouchers.cheque_number',
                             'dno_resources_development_corp_payment_vouchers.cheque_amount',
+                            'dno_resources_development_corp_payment_vouchers.cheque_total_amount',
                             'dno_resources_development_corp_payment_vouchers.sub_category',
                             'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
                             'dno_resources_development_codes.dno_resources_code',
@@ -408,6 +494,7 @@ class DnoResourcesDevelopmentController extends Controller
                             ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
                             ->get();
 
+        $status = "FULLY PAID AND RELEASED";
         $totalAmountCheck = DB::table(
                                 'dno_resources_development_corp_payment_vouchers')
                                 ->select( 
@@ -446,6 +533,7 @@ class DnoResourcesDevelopmentController extends Controller
                                 ->where('dno_resources_development_codes.module_name', $moduleName)
                                 ->whereDate('dno_resources_development_corp_payment_vouchers.created_at', '=', date($getDate))
                                 ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
+                                ->where('dno_resources_development_corp_payment_vouchers.status', '!=', $status)
                                 ->sum('dno_resources_development_corp_payment_vouchers.amount_due');
     
         return view('dno-resources-get-summary-report', compact('getDate', 'getTransactionLists', 
@@ -566,6 +654,7 @@ class DnoResourcesDevelopmentController extends Controller
                             'dno_resources_development_corp_payment_vouchers.status',
                             'dno_resources_development_corp_payment_vouchers.cheque_number',
                             'dno_resources_development_corp_payment_vouchers.cheque_amount',
+                            'dno_resources_development_corp_payment_vouchers.cheque_total_amount',
                             'dno_resources_development_corp_payment_vouchers.sub_category',
                             'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
                             'dno_resources_development_codes.dno_resources_code',
@@ -578,7 +667,8 @@ class DnoResourcesDevelopmentController extends Controller
                             ->whereDate('dno_resources_development_corp_payment_vouchers.created_at', '=', date($getDateToday))
                             ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
                             ->get();
-
+        
+        $status = "FULLY PAID AND RELEASED";    
         $totalAmountCheck = DB::table(
                                 'dno_resources_development_corp_payment_vouchers')
                                 ->select( 
@@ -617,11 +707,53 @@ class DnoResourcesDevelopmentController extends Controller
                                 ->where('dno_resources_development_codes.module_name', $moduleName)
                                 ->whereDate('dno_resources_development_corp_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
+                                ->where('dno_resources_development_corp_payment_vouchers.status', '!=', $status)
                                 ->sum('dno_resources_development_corp_payment_vouchers.amount_due');
-    
+                            
+        $totalPaidAmountCheck = DB::table(
+                                    'dno_resources_development_corp_payment_vouchers')
+                                    ->select( 
+                                    'dno_resources_development_corp_payment_vouchers.id',
+                                    'dno_resources_development_corp_payment_vouchers.user_id',
+                                    'dno_resources_development_corp_payment_vouchers.pv_id',
+                                    'dno_resources_development_corp_payment_vouchers.date',
+                                    'dno_resources_development_corp_payment_vouchers.paid_to',
+                                    'dno_resources_development_corp_payment_vouchers.account_no',
+                                    'dno_resources_development_corp_payment_vouchers.account_name',
+                                    'dno_resources_development_corp_payment_vouchers.particulars',
+                                    'dno_resources_development_corp_payment_vouchers.amount',
+                                    'dno_resources_development_corp_payment_vouchers.method_of_payment',
+                                    'dno_resources_development_corp_payment_vouchers.prepared_by',
+                                    'dno_resources_development_corp_payment_vouchers.approved_by',
+                                    'dno_resources_development_corp_payment_vouchers.date_apprroved',
+                                    'dno_resources_development_corp_payment_vouchers.received_by_date',
+                                    'dno_resources_development_corp_payment_vouchers.created_by',
+                                    'dno_resources_development_corp_payment_vouchers.created_at',
+                                    'dno_resources_development_corp_payment_vouchers.invoice_number',
+                                    'dno_resources_development_corp_payment_vouchers.issued_date',
+                                    'dno_resources_development_corp_payment_vouchers.category',
+                                    'dno_resources_development_corp_payment_vouchers.amount_due',
+                                    'dno_resources_development_corp_payment_vouchers.delivered_date',
+                                    'dno_resources_development_corp_payment_vouchers.status',
+                                    'dno_resources_development_corp_payment_vouchers.cheque_number',
+                                    'dno_resources_development_corp_payment_vouchers.cheque_amount',
+                                    'dno_resources_development_corp_payment_vouchers.sub_category',
+                                    'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
+                                    'dno_resources_development_codes.dno_resources_code',
+                                    'dno_resources_development_codes.module_id',
+                                    'dno_resources_development_codes.module_code',
+                                    'dno_resources_development_codes.module_name')
+                                    ->leftJoin('dno_resources_development_codes', 'dno_resources_development_corp_payment_vouchers.id', '=', 'dno_resources_development_codes.module_id')
+                                    ->where('dno_resources_development_corp_payment_vouchers.pv_id', NULL)
+                                    ->where('dno_resources_development_codes.module_name', $moduleName)
+                                    ->whereDate('dno_resources_development_corp_payment_vouchers.created_at', '=', date($getDateToday))
+                                    ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
+                                    ->where('dno_resources_development_corp_payment_vouchers.status', $status)
+                                    ->sum('dno_resources_development_corp_payment_vouchers.amount_due');
+                                
         $pdf = PDF::loadView('printSummaryDnoResoures',  compact('date', 'getDateToday', 
         'getTransactionListCashes', 'getTransactionListChecks',  
-        'totalAmountCashes','totalAmountCheck'));
+        'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck'));
         
         return $pdf->download('dno-resources-summary-report.pdf');
     }
@@ -777,6 +909,7 @@ class DnoResourcesDevelopmentController extends Controller
                             'dno_resources_development_corp_payment_vouchers.status',
                             'dno_resources_development_corp_payment_vouchers.cheque_number',
                             'dno_resources_development_corp_payment_vouchers.cheque_amount',
+                            'dno_resources_development_corp_payment_vouchers.cheque_total_amount',
                             'dno_resources_development_corp_payment_vouchers.sub_category',
                             'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
                             'dno_resources_development_codes.dno_resources_code',
@@ -790,6 +923,7 @@ class DnoResourcesDevelopmentController extends Controller
                             ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
                             ->get();
 
+        $status = "FULLY PAID AND RELEASED";
         $totalAmountCheck = DB::table(
                                 'dno_resources_development_corp_payment_vouchers')
                                 ->select( 
@@ -828,6 +962,7 @@ class DnoResourcesDevelopmentController extends Controller
                                 ->where('dno_resources_development_codes.module_name', $moduleName)
                                 ->whereDate('dno_resources_development_corp_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
+                                ->where('dno_resources_development_corp_payment_vouchers.status', '!=', $status)
                                 ->sum('dno_resources_development_corp_payment_vouchers.amount_due');
     
                 
@@ -938,7 +1073,39 @@ class DnoResourcesDevelopmentController extends Controller
     }
 
     public function purchaseOrderList(){
-        $purchaseOrders = DnoResourcesDevelopmentCorpPurchaseOrder::where('po_id', NULL)->get()->toArray();
+        $moduleName = "Purchase Order";
+        $purchaseOrders = DB::table(
+                            'dno_resources_development_corp_purchase_orders')
+                            ->select( 
+                            'dno_resources_development_corp_purchase_orders.id',
+                            'dno_resources_development_corp_purchase_orders.user_id',
+                            'dno_resources_development_corp_purchase_orders.po_id',
+                            'dno_resources_development_corp_purchase_orders.paid_to',
+                            'dno_resources_development_corp_purchase_orders.address',
+                            'dno_resources_development_corp_purchase_orders.date',
+                            'dno_resources_development_corp_purchase_orders.quantity',
+                            'dno_resources_development_corp_purchase_orders.description',
+                            'dno_resources_development_corp_purchase_orders.unit',
+                            'dno_resources_development_corp_purchase_orders.unit_price',
+                            'dno_resources_development_corp_purchase_orders.amount',
+                            'dno_resources_development_corp_purchase_orders.total_price',
+                            'dno_resources_development_corp_purchase_orders.prepared_by',
+                            'dno_resources_development_corp_purchase_orders.checked_by',
+                            'dno_resources_development_corp_purchase_orders.ordered_by',
+                            'dno_resources_development_corp_purchase_orders.particulars',
+                            'dno_resources_development_corp_purchase_orders.qty',
+                            'dno_resources_development_corp_purchase_orders.created_by',
+                            'dno_resources_development_corp_purchase_orders.deleted_at',
+                            'dno_resources_development_codes.dno_resources_code',
+                            'dno_resources_development_codes.module_id',
+                            'dno_resources_development_codes.module_code',
+                            'dno_resources_development_codes.module_name')
+                            ->leftJoin('dno_resources_development_codes', 'dno_resources_development_corp_purchase_orders.id', '=', 'dno_resources_development_codes.module_id')
+                            ->where('dno_resources_development_corp_purchase_orders.po_id', NULL)
+                            ->where('dno_resources_development_codes.module_name', $moduleName)
+                            ->where('dno_resources_development_corp_purchase_orders.deleted_at', NULL)
+                            ->orderBy('dno_resources_development_corp_purchase_orders.id', 'desc')
+                            ->get()->toArray();
 
         return view('dno-resources-purchase-order-lists', compact('purchaseOrders'));
     }
@@ -1088,6 +1255,7 @@ class DnoResourcesDevelopmentController extends Controller
                             'dno_resources_development_corp_payment_vouchers.cheque_amount',
                             'dno_resources_development_corp_payment_vouchers.sub_category',
                             'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
+                            'dno_resources_development_corp_payment_vouchers.deleted_at',
                             'dno_resources_development_codes.dno_resources_code',
                             'dno_resources_development_codes.module_id',
                             'dno_resources_development_codes.module_code',
@@ -1096,8 +1264,6 @@ class DnoResourcesDevelopmentController extends Controller
                             ->where('dno_resources_development_corp_payment_vouchers.id', $id)
                             ->where('dno_resources_development_codes.module_name', $moduleName)
                             ->get();
-
-
 
         //
         $getViewPaymentDetails = DnoResourcesDevelopmentCorpPaymentVoucher::where('pv_id', $id)->get()->toArray();
@@ -1240,18 +1406,25 @@ class DnoResourcesDevelopmentController extends Controller
 
         $paymentData = DnoResourcesDevelopmentCorpPaymentVoucher::find($id);
 
+        $totalChequeAmount = $paymentData->cheque_total_amount + $request->get('chequeAmount');
+
+
         //save payment cheque num and cheque amount
         $addPayment = new DnoResourcesDevelopmentCorpPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
-            'voucher_ref_number'=>$paymentData['voucher_ref_number'],
             'cheque_number'=>$request->get('chequeNumber'),
             'cheque_amount'=>$request->get('chequeAmount'),
             'created_by'=>$name,
 
         ]);
 
-         $addPayment->save();
+        $addPayment->save();
+
+         //update the total cheque amount
+         $paymentData->cheque_total_amount = $totalChequeAmount;
+         $paymentData->save();
+
         Session::flash('paymentAdded', 'Payment added.');
 
          return redirect('dno-resources-development/edit-dno-resources-payables-detail/'.$id);
@@ -1351,6 +1524,7 @@ class DnoResourcesDevelopmentController extends Controller
                             'dno_resources_development_corp_payment_vouchers.cheque_amount',
                             'dno_resources_development_corp_payment_vouchers.sub_category',
                             'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
+                            'dno_resources_development_corp_payment_vouchers.deleted_at',
                             'dno_resources_development_codes.dno_resources_code',
                             'dno_resources_development_codes.module_id',
                             'dno_resources_development_codes.module_code',
@@ -1358,6 +1532,8 @@ class DnoResourcesDevelopmentController extends Controller
                             ->leftJoin('dno_resources_development_codes', 'dno_resources_development_corp_payment_vouchers.id', '=', 'dno_resources_development_codes.module_id')
                             ->where('dno_resources_development_corp_payment_vouchers.pv_id', NULL)
                             ->where('dno_resources_development_codes.module_name', $moduleName)
+                            ->where('dno_resources_development_corp_payment_vouchers.deleted_at', NULL  )
+                            ->orderBy('dno_resources_development_corp_payment_vouchers.id', 'desc')
                             ->get();
 
 
@@ -1503,13 +1679,13 @@ class DnoResourcesDevelopmentController extends Controller
             'description'=>'required',
         ]);
 
-          //get the latest insert id query in table purchase order
-          $data = DB::select('SELECT id, p_o_number FROM dno_resources_development_corp_purchase_orders ORDER BY id DESC LIMIT 1');
+          //get the latest insert id query in table dno resources development codes
+          $data = DB::select('SELECT id, dno_resources_code FROM dno_resources_development_codes ORDER BY id DESC LIMIT 1');
 
           //if code is not zero add plus 1
-           if(isset($data[0]->p_o_number) != 0){
+           if(isset($data[0]->dno_resources_code) != 0){
               //if code is not 0
-              $newNum = $data[0]->p_o_number +1;
+              $newNum = $data[0]->dno_resources_code +1;
               $uNum = sprintf("%06d",$newNum);    
           }else{
               //if code is 0 
@@ -1519,7 +1695,6 @@ class DnoResourcesDevelopmentController extends Controller
 
           $purchaseOrder = new DnoResourcesDevelopmentCorpPurchaseOrder([
                 'user_id' =>$user->id,
-                'p_o_number'=>$uNum,
                 'paid_to'=>$request->get('paidTo'),
                 'date'=>$request->get('date'),
                 'address'=>$request->get('address'),
@@ -1536,6 +1711,20 @@ class DnoResourcesDevelopmentController extends Controller
 
           $insertedId = $purchaseOrder->id;
 
+          $moduleCode = "PO-";
+          $moduleName = "Purchase Order";
+
+          $dnoResources = new DnoResourcesDevelopmentCode([
+                'user_id'=>$user->id,
+                'dno_resources_code'=>$uNum,
+                'module_id'=>$insertedId,
+                'module_code'=>$moduleCode,
+                'module_name'=>$moduleName,
+          ]);
+
+          $dnoResources->save();
+
+
           return redirect()->route('edit', ['id'=>$insertedId]);
 
     }
@@ -1548,9 +1737,38 @@ class DnoResourcesDevelopmentController extends Controller
      */
     public function show($id)
     {
-        //
-        $purchaseOrder = DnoResourcesDevelopmentCorpPurchaseOrder::find($id);
-
+    
+        $moduleName = "Purchase Order";
+        $purchaseOrder = DB::table(
+                            'dno_resources_development_corp_purchase_orders')
+                            ->select( 
+                            'dno_resources_development_corp_purchase_orders.id',
+                            'dno_resources_development_corp_purchase_orders.user_id',
+                            'dno_resources_development_corp_purchase_orders.po_id',
+                            'dno_resources_development_corp_purchase_orders.paid_to',
+                            'dno_resources_development_corp_purchase_orders.address',
+                            'dno_resources_development_corp_purchase_orders.date',
+                            'dno_resources_development_corp_purchase_orders.quantity',
+                            'dno_resources_development_corp_purchase_orders.description',
+                            'dno_resources_development_corp_purchase_orders.unit',
+                            'dno_resources_development_corp_purchase_orders.unit_price',
+                            'dno_resources_development_corp_purchase_orders.amount',
+                            'dno_resources_development_corp_purchase_orders.total_price',
+                            'dno_resources_development_corp_purchase_orders.prepared_by',
+                            'dno_resources_development_corp_purchase_orders.checked_by',
+                            'dno_resources_development_corp_purchase_orders.ordered_by',
+                            'dno_resources_development_corp_purchase_orders.particulars',
+                            'dno_resources_development_corp_purchase_orders.qty',
+                            'dno_resources_development_corp_purchase_orders.created_by',
+                            'dno_resources_development_corp_purchase_orders.deleted_at',
+                            'dno_resources_development_codes.dno_resources_code',
+                            'dno_resources_development_codes.module_id',
+                            'dno_resources_development_codes.module_code',
+                            'dno_resources_development_codes.module_name')
+                            ->leftJoin('dno_resources_development_codes', 'dno_resources_development_corp_purchase_orders.id', '=', 'dno_resources_development_codes.module_id')
+                            ->where('dno_resources_development_corp_purchase_orders.id', $id)
+                            ->where('dno_resources_development_codes.module_name', $moduleName)
+                            ->get();
 
         //
         $pOrders = DnoResourcesDevelopmentCorpPurchaseOrder::where('po_id', $id)->get()->toArray();

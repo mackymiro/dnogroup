@@ -3,10 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class DnoFoodVenturesPaymentVoucher extends Model
 {
-    //
+	use SoftDeletes;
+	
+	protected $dates = ['deleted_at'];
+	
     protected $fillable = [
     	'user_id',
         'pv_id',
@@ -29,7 +33,8 @@ class DnoFoodVenturesPaymentVoucher extends Model
         'delivered_date',
         'status',
         'cheque_number',
-        'cheque_amount',
+		'cheque_amount',
+		'cheque_total_amount',
 		'category',
 		'sub_category',
 		'sub_category_account_id',

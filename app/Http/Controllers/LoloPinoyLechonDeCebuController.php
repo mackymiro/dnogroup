@@ -459,6 +459,50 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $cash)
                                     ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
                                     ->get()->toArray();
+
+            $status = "FULLY PAID AND RELEASED";
+            $totalPaymentVoucher = DB::table(
+                                        'lechon_de_cebu_payment_vouchers')
+                                        ->select( 
+                                        'lechon_de_cebu_payment_vouchers.id',
+                                        'lechon_de_cebu_payment_vouchers.user_id',
+                                        'lechon_de_cebu_payment_vouchers.pv_id',
+                                        'lechon_de_cebu_payment_vouchers.date',
+                                        'lechon_de_cebu_payment_vouchers.paid_to',
+                                        'lechon_de_cebu_payment_vouchers.account_no',
+                                        'lechon_de_cebu_payment_vouchers.account_name',
+                                        'lechon_de_cebu_payment_vouchers.particulars',
+                                        'lechon_de_cebu_payment_vouchers.amount',
+                                        'lechon_de_cebu_payment_vouchers.method_of_payment',
+                                        'lechon_de_cebu_payment_vouchers.prepared_by',
+                                        'lechon_de_cebu_payment_vouchers.approved_by',
+                                        'lechon_de_cebu_payment_vouchers.date_apprroved',
+                                        'lechon_de_cebu_payment_vouchers.received_by_date',
+                                        'lechon_de_cebu_payment_vouchers.created_by',
+                                        'lechon_de_cebu_payment_vouchers.invoice_number',
+                                        'lechon_de_cebu_payment_vouchers.voucher_ref_number',
+                                        'lechon_de_cebu_payment_vouchers.issued_date',
+                                        'lechon_de_cebu_payment_vouchers.category',
+                                        'lechon_de_cebu_payment_vouchers.amount_due',
+                                        'lechon_de_cebu_payment_vouchers.delivered_date',
+                                        'lechon_de_cebu_payment_vouchers.status',
+                                        'lechon_de_cebu_payment_vouchers.cheque_number',
+                                        'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                        'lechon_de_cebu_payment_vouchers.sub_category',
+                                        'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                        'lechon_de_cebu_payment_vouchers.deleted_at',
+                                        'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                        'lechon_de_cebu_codes.module_id',
+                                        'lechon_de_cebu_codes.module_code',
+                                        'lechon_de_cebu_codes.module_name')
+                                        ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                        ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
+                                        ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDate))
+                                        ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
+                                        ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
+                                        ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $cash)
+                                        ->where('lechon_de_cebu_payment_vouchers.status', '!=', $status)
+                                       ->sum('lechon_de_cebu_payment_vouchers.amount_due');
           
             $check = "CHECK";
             $getTransactionListChecks = DB::table(
@@ -488,6 +532,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                             'lechon_de_cebu_payment_vouchers.status',
                                             'lechon_de_cebu_payment_vouchers.cheque_number',
                                             'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                            'lechon_de_cebu_payment_vouchers.cheque_total_amount',
                                             'lechon_de_cebu_payment_vouchers.sub_category',
                                             'lechon_de_cebu_payment_vouchers.sub_category_account_id',
                                             'lechon_de_cebu_payment_vouchers.deleted_at',
@@ -505,7 +550,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                             ->get()->toArray();
                                   
         //
-        $totalPaymentVoucher = DB::table(
+        $totalPaymentVoucherCheck = DB::table(
                             'lechon_de_cebu_payment_vouchers')
                             ->select( 
                             'lechon_de_cebu_payment_vouchers.id',
@@ -532,6 +577,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                             'lechon_de_cebu_payment_vouchers.status',
                             'lechon_de_cebu_payment_vouchers.cheque_number',
                             'lechon_de_cebu_payment_vouchers.cheque_amount',
+                            'lechon_de_cebu_payment_vouchers.cheque_total_amount',
                             'lechon_de_cebu_payment_vouchers.sub_category',
                             'lechon_de_cebu_payment_vouchers.sub_category_account_id',
                             'lechon_de_cebu_payment_vouchers.deleted_at',
@@ -544,11 +590,15 @@ class LoloPinoyLechonDeCebuController extends Controller
                             ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                             ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDate))
                             ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
+                            ->where('lechon_de_cebu_payment_vouchers.status', '!=', $status)
+                            ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $check)
                             ->sum('lechon_de_cebu_payment_vouchers.amount_due');
 
         return view('lechon-de-cebu-get-summary-report', compact('getDate', 'getAllSalesInvoices', 
         'getAllDeliveryReceipts', 'purchaseOrders', 'statementOfAccounts', 'billingStatements', 
-        'pettyCashLists',  'getTransactionLists', 'getTransactionListCashes', 'getTransactionListChecks', 'totalSalesInvoice', 'totalDeliveryReceipt', 'totalPOrder', 'totalBStatement', 'totalPaymentVoucher'));
+        'pettyCashLists',  'getTransactionLists', 'getTransactionListCashes', 
+        'getTransactionListChecks', 'totalSalesInvoice', 'totalDeliveryReceipt', 
+        'totalPOrder', 'totalBStatement', 'totalPaymentVoucher', 'totalPaymentVoucherCheck'));
     
 
         
@@ -666,7 +716,6 @@ class LoloPinoyLechonDeCebuController extends Controller
                                  ->get()->toArray();
  
          //total for delivery receipt
-         $moduleNameDelivery = "Delivery Receipt";
          $totalDeliveryReceipt = DB::table(
                                  'lechon_de_cebu_delivery_receipts')
                                  ->select( 
@@ -912,6 +961,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                  ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $cash)
                                  ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
                                  ->get()->toArray();
+
             $check = "CHECK";
             $getTransactionListChecks = DB::table(
                                         'lechon_de_cebu_payment_vouchers')
@@ -940,6 +990,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                         'lechon_de_cebu_payment_vouchers.status',
                                         'lechon_de_cebu_payment_vouchers.cheque_number',
                                         'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                        'lechon_de_cebu_payment_vouchers.cheque_total_amount',
                                         'lechon_de_cebu_payment_vouchers.sub_category',
                                         'lechon_de_cebu_payment_vouchers.sub_category_account_id',
                                         'lechon_de_cebu_payment_vouchers.deleted_at',
@@ -956,7 +1007,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                         ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
                                         ->get()->toArray();
        
-         //
+        $status = "FULLY PAID AND RELEASED";    
          $totalPaymentVoucherCash = DB::table(
                              'lechon_de_cebu_payment_vouchers')
                              ->select( 
@@ -997,6 +1048,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                              ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
                              ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                              ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $cash)
+                             ->where('lechon_de_cebu_payment_vouchers.status', '!=', $status)
                              ->sum('lechon_de_cebu_payment_vouchers.amount_due');
 
         $totalPaymentVoucherCheck = DB::table(
@@ -1026,6 +1078,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_payment_vouchers.status',
                                 'lechon_de_cebu_payment_vouchers.cheque_number',
                                 'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                'lechon_de_cebu_payment_vouchers.cheque_total_amount',
                                 'lechon_de_cebu_payment_vouchers.sub_category',
                                 'lechon_de_cebu_payment_vouchers.sub_category_account_id',
                                 'lechon_de_cebu_payment_vouchers.deleted_at',
@@ -1039,13 +1092,59 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
                                 ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                                 ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $check)
+                                ->where('lechon_de_cebu_payment_vouchers.status', '!=', $status)
                                 ->sum('lechon_de_cebu_payment_vouchers.amount_due');
          
+        //
+        $totalPaidAmountCheck = DB::table(
+                                    'lechon_de_cebu_payment_vouchers')
+                                    ->select( 
+                                    'lechon_de_cebu_payment_vouchers.id',
+                                    'lechon_de_cebu_payment_vouchers.user_id',
+                                    'lechon_de_cebu_payment_vouchers.pv_id',
+                                    'lechon_de_cebu_payment_vouchers.date',
+                                    'lechon_de_cebu_payment_vouchers.paid_to',
+                                    'lechon_de_cebu_payment_vouchers.account_no',
+                                    'lechon_de_cebu_payment_vouchers.account_name',
+                                    'lechon_de_cebu_payment_vouchers.particulars',
+                                    'lechon_de_cebu_payment_vouchers.amount',
+                                    'lechon_de_cebu_payment_vouchers.method_of_payment',
+                                    'lechon_de_cebu_payment_vouchers.prepared_by',
+                                    'lechon_de_cebu_payment_vouchers.approved_by',
+                                    'lechon_de_cebu_payment_vouchers.date_apprroved',
+                                    'lechon_de_cebu_payment_vouchers.received_by_date',
+                                    'lechon_de_cebu_payment_vouchers.created_by',
+                                    'lechon_de_cebu_payment_vouchers.invoice_number',
+                                    'lechon_de_cebu_payment_vouchers.voucher_ref_number',
+                                    'lechon_de_cebu_payment_vouchers.issued_date',
+                                    'lechon_de_cebu_payment_vouchers.category',
+                                    'lechon_de_cebu_payment_vouchers.amount_due',
+                                    'lechon_de_cebu_payment_vouchers.delivered_date',
+                                    'lechon_de_cebu_payment_vouchers.status',
+                                    'lechon_de_cebu_payment_vouchers.cheque_number',
+                                    'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                    'lechon_de_cebu_payment_vouchers.cheque_total_amount',
+                                    'lechon_de_cebu_payment_vouchers.sub_category',
+                                    'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                    'lechon_de_cebu_payment_vouchers.deleted_at',
+                                    'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                    'lechon_de_cebu_codes.module_id',
+                                    'lechon_de_cebu_codes.module_code',
+                                    'lechon_de_cebu_codes.module_name')
+                                    ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                    ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
+                                    ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($date))
+                                    ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
+                                    ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
+                                    ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $check)
+                                    ->where('lechon_de_cebu_payment_vouchers.status',  $status)
+                                    ->sum('lechon_de_cebu_payment_vouchers.cheque_total_amount');
+
         $getDateToday = "";
          $pdf = PDF::loadView('printSummary',  compact('date', 'getDateToday', 'getAllSalesInvoices', 
         'getAllDeliveryReceipts', 'purchaseOrders', 'statementOfAccounts', 'billingStatements', 
         'pettyCashLists',  'getTransactionLists', 'getTransactionListCashes', 'getTransactionListChecks', 'totalSalesInvoice', 'totalDeliveryReceipt', 'totalPOrder', 'totalBStatement', 
-        'totalPaymentVoucherCash','totalPaymentVoucherCheck'));
+        'totalPaymentVoucherCash','totalPaymentVoucherCheck', 'totalPaidAmountCheck'));
         
         return $pdf->download('lechon-de-cebu-summary-report.pdf');
         
@@ -1399,6 +1498,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                  'lechon_de_cebu_payment_vouchers.status',
                                  'lechon_de_cebu_payment_vouchers.cheque_number',
                                  'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                 'lechon_de_cebu_payment_vouchers.cheque_total_amount',
                                  'lechon_de_cebu_payment_vouchers.sub_category',
                                  'lechon_de_cebu_payment_vouchers.sub_category_account_id',
                                  'lechon_de_cebu_payment_vouchers.deleted_at',
@@ -1442,6 +1542,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                         'lechon_de_cebu_payment_vouchers.status',
                                         'lechon_de_cebu_payment_vouchers.cheque_number',
                                         'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                        'lechon_de_cebu_payment_vouchers.cheque_total_amount',
                                         'lechon_de_cebu_payment_vouchers.sub_category',
                                         'lechon_de_cebu_payment_vouchers.sub_category_account_id',
                                         'lechon_de_cebu_payment_vouchers.deleted_at',
@@ -1458,7 +1559,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                         ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
                                         ->get()->toArray();
        
-         //
+        $status = "FULLY PAID AND RELEASED"; 
          $totalPaymentVoucherCash = DB::table(
                              'lechon_de_cebu_payment_vouchers')
                              ->select( 
@@ -1486,6 +1587,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                              'lechon_de_cebu_payment_vouchers.status',
                              'lechon_de_cebu_payment_vouchers.cheque_number',
                              'lechon_de_cebu_payment_vouchers.cheque_amount',
+                             'lechon_de_cebu_payment_vouchers.cheque_total_amount',
                              'lechon_de_cebu_payment_vouchers.sub_category',
                              'lechon_de_cebu_payment_vouchers.sub_category_account_id',
                              'lechon_de_cebu_payment_vouchers.deleted_at',
@@ -1499,6 +1601,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                              ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
                              ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                              ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $cash)
+                             ->where('lechon_de_cebu_payment_vouchers.status', '!=', $status)
                              ->sum('lechon_de_cebu_payment_vouchers.amount_due');
 
         $totalPaymentVoucherCheck = DB::table(
@@ -1541,12 +1644,58 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
                                 ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                                 ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $check)
+                                ->where('lechon_de_cebu_payment_vouchers.status', '!=', $status)
                                 ->sum('lechon_de_cebu_payment_vouchers.amount_due');
          
+        
+        $totalPaidAmountCheck  = DB::table(
+                                    'lechon_de_cebu_payment_vouchers')
+                                    ->select( 
+                                    'lechon_de_cebu_payment_vouchers.id',
+                                    'lechon_de_cebu_payment_vouchers.user_id',
+                                    'lechon_de_cebu_payment_vouchers.pv_id',
+                                    'lechon_de_cebu_payment_vouchers.date',
+                                    'lechon_de_cebu_payment_vouchers.paid_to',
+                                    'lechon_de_cebu_payment_vouchers.account_no',
+                                    'lechon_de_cebu_payment_vouchers.account_name',
+                                    'lechon_de_cebu_payment_vouchers.particulars',
+                                    'lechon_de_cebu_payment_vouchers.amount',
+                                    'lechon_de_cebu_payment_vouchers.method_of_payment',
+                                    'lechon_de_cebu_payment_vouchers.prepared_by',
+                                    'lechon_de_cebu_payment_vouchers.approved_by',
+                                    'lechon_de_cebu_payment_vouchers.date_apprroved',
+                                    'lechon_de_cebu_payment_vouchers.received_by_date',
+                                    'lechon_de_cebu_payment_vouchers.created_by',
+                                    'lechon_de_cebu_payment_vouchers.invoice_number',
+                                    'lechon_de_cebu_payment_vouchers.voucher_ref_number',
+                                    'lechon_de_cebu_payment_vouchers.issued_date',
+                                    'lechon_de_cebu_payment_vouchers.category',
+                                    'lechon_de_cebu_payment_vouchers.amount_due',
+                                    'lechon_de_cebu_payment_vouchers.delivered_date',
+                                    'lechon_de_cebu_payment_vouchers.status',
+                                    'lechon_de_cebu_payment_vouchers.cheque_number',
+                                    'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                    'lechon_de_cebu_payment_vouchers.cheque_total_amount',
+                                    'lechon_de_cebu_payment_vouchers.sub_category',
+                                    'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                    'lechon_de_cebu_payment_vouchers.deleted_at',
+                                    'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                    'lechon_de_cebu_codes.module_id',
+                                    'lechon_de_cebu_codes.module_code',
+                                    'lechon_de_cebu_codes.module_name')
+                                    ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                    ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
+                                    ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDateToday))
+                                    ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
+                                    ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
+                                    ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $check)
+                                    ->where('lechon_de_cebu_payment_vouchers.status', $status)
+                                    ->sum('lechon_de_cebu_payment_vouchers.cheque_total_amount');
+
          $pdf = PDF::loadView('printSummary',  compact('date', 'getDateToday', 'getAllSalesInvoices', 
         'getAllDeliveryReceipts', 'purchaseOrders', 'statementOfAccounts', 'billingStatements', 
         'pettyCashLists',  'getTransactionLists', 'getTransactionListCashes', 'getTransactionListChecks', 'totalSalesInvoice', 'totalDeliveryReceipt', 'totalPOrder', 'totalBStatement', 
-        'totalPaymentVoucherCash','totalPaymentVoucherCheck'));
+        'totalPaymentVoucherCash','totalPaymentVoucherCheck', 'totalPaidAmountCheck'));
         
         return $pdf->download('lechon-de-cebu-summary-report.pdf');
     }
@@ -2074,7 +2223,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_codes.module_id',
                                     'lechon_de_cebu_codes.module_code',
                                     'lechon_de_cebu_codes.module_name')
-                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_statement_of_accounts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_statement_of_accounts.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_statement_of_accounts.bill_to', '!=', NULL)
                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameSOA)
                                 ->whereDate('lechon_de_cebu_statement_of_accounts.created_at', '=', date($getDateToday))
@@ -2144,7 +2293,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                         'lechon_de_cebu_codes.module_id',
                                         'lechon_de_cebu_codes.module_code',
                                         'lechon_de_cebu_codes.module_name')
-                                    ->join('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                    ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
                                     ->where('lechon_de_cebu_billing_statements.billing_statement_id', NULL)
                                     ->where('lechon_de_cebu_codes.module_name', $moduleNameBillingStatement)
                                     ->where('lechon_de_cebu_billing_statements.deleted_at', NULL)
@@ -2170,7 +2319,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_codes.module_id',
                                 'lechon_de_cebu_codes.module_code',
                                 'lechon_de_cebu_codes.module_name')
-                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_petty_cashes.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_petty_cashes.id', '=', 'lechon_de_cebu_codes.module_id')
                                 ->where('lechon_de_cebu_petty_cashes.pc_id', NULL)
                                 ->where('lechon_de_cebu_codes.module_name', $moduleNamePettyCash)
                                 ->where('lechon_de_cebu_petty_cashes.deleted_at', NULL)
@@ -2207,6 +2356,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_payment_vouchers.status',
                                 'lechon_de_cebu_payment_vouchers.cheque_number',
                                 'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                'lechon_de_cebu_payment_vouchers.cheque_total_amount',
                                 'lechon_de_cebu_payment_vouchers.sub_category',
                                 'lechon_de_cebu_payment_vouchers.sub_category_account_id',
                                 'lechon_de_cebu_payment_vouchers.deleted_at',
@@ -2250,6 +2400,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_payment_vouchers.status',
                                     'lechon_de_cebu_payment_vouchers.cheque_number',
                                     'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                    'lechon_de_cebu_payment_vouchers.cheque_total_amount',
                                     'lechon_de_cebu_payment_vouchers.sub_category',
                                     'lechon_de_cebu_payment_vouchers.sub_category_account_id',
                                     'lechon_de_cebu_payment_vouchers.deleted_at',
@@ -2265,7 +2416,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $cash)
                                     ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
                                     ->get()->toArray();
-          
+                                    
+            $status = "FULLY PAID AND RELEASED";
             $totalAmountCashes = DB::table(
                                         'lechon_de_cebu_payment_vouchers')
                                         ->select( 
@@ -2293,6 +2445,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                         'lechon_de_cebu_payment_vouchers.status',
                                         'lechon_de_cebu_payment_vouchers.cheque_number',
                                         'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                        'lechon_de_cebu_payment_vouchers.cheque_total_amount',
                                         'lechon_de_cebu_payment_vouchers.sub_category',
                                         'lechon_de_cebu_payment_vouchers.sub_category_account_id',
                                         'lechon_de_cebu_payment_vouchers.deleted_at',
@@ -2300,13 +2453,13 @@ class LoloPinoyLechonDeCebuController extends Controller
                                         'lechon_de_cebu_codes.module_id',
                                         'lechon_de_cebu_codes.module_code',
                                         'lechon_de_cebu_codes.module_name')
-                                        ->join('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
+                                        ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_payment_vouchers.id', '=', 'lechon_de_cebu_codes.module_id')
                                         ->where('lechon_de_cebu_payment_vouchers.pv_id', NULL)
                                         ->whereDate('lechon_de_cebu_payment_vouchers.created_at', '=', date($getDateToday))
                                         ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                                         ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
                                         ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $cash)
-                                        ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
+                                        ->where('lechon_de_cebu_payment_vouchers.status', '!=', $status)
                                         ->sum('lechon_de_cebu_payment_vouchers.amount_due');
 
 
@@ -2338,6 +2491,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                             'lechon_de_cebu_payment_vouchers.status',
                                             'lechon_de_cebu_payment_vouchers.cheque_number',
                                             'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                            'lechon_de_cebu_payment_vouchers.cheque_total_amount',
                                             'lechon_de_cebu_payment_vouchers.sub_category',
                                             'lechon_de_cebu_payment_vouchers.sub_category_account_id',
                                             'lechon_de_cebu_payment_vouchers.deleted_at',
@@ -2381,6 +2535,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_payment_vouchers.status',
                                     'lechon_de_cebu_payment_vouchers.cheque_number',
                                     'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                    'lechon_de_cebu_payment_vouchers.cheque_total_amount',
                                     'lechon_de_cebu_payment_vouchers.sub_category',
                                     'lechon_de_cebu_payment_vouchers.sub_category_account_id',
                                     'lechon_de_cebu_payment_vouchers.deleted_at',
@@ -2394,7 +2549,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     ->where('lechon_de_cebu_payment_vouchers.deleted_at', NULL)
                                     ->where('lechon_de_cebu_codes.module_name', $moduleNameVoucher)
                                     ->where('lechon_de_cebu_payment_vouchers.method_of_payment', $check)
-                                    ->orderBy('lechon_de_cebu_payment_vouchers.id', 'desc')
+                                    ->where('lechon_de_cebu_payment_vouchers.status', '!=', $status)
                                     ->sum('lechon_de_cebu_payment_vouchers.amount_due');
 
 
@@ -2426,6 +2581,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                             'lechon_de_cebu_payment_vouchers.status',
                             'lechon_de_cebu_payment_vouchers.cheque_number',
                             'lechon_de_cebu_payment_vouchers.cheque_amount',
+                            'lechon_de_cebu_payment_vouchers.cheque_total_amount',
                             'lechon_de_cebu_payment_vouchers.sub_category',
                             'lechon_de_cebu_payment_vouchers.sub_category_account_id',
                             'lechon_de_cebu_payment_vouchers.deleted_at',
@@ -3168,6 +3324,11 @@ class LoloPinoyLechonDeCebuController extends Controller
         $lastName = $user->last_name;
 
         $name  = $firstName." ".$lastName;
+
+        $paymentData = LechonDeCebuPaymentVoucher::find($id);
+
+        $totalChequeAmount = $paymentData->cheque_total_amount + $request->get('chequeAmount');
+
         
         //save payment cheque num and cheque amount
         $addPayment = new LechonDeCebuPaymentVoucher([
@@ -3181,6 +3342,11 @@ class LoloPinoyLechonDeCebuController extends Controller
         ]);
 
         $addPayment->save();
+
+        //update the total cheque amount
+        $paymentData->cheque_total_amount = $totalChequeAmount;
+        $paymentData->save();
+
         Session::flash('paymentAdded', 'Payment added.');
 
         return redirect()->route('editPayablesDetailLechonDeCebu', ['id'=>$id]);

@@ -3,10 +3,17 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class RibosBarPaymentVoucher extends Model
 {
-      protected $fillable = [
+
+    use SoftDeletes;
+	
+    protected $dates = ['deleted_at'];
+
+    protected $fillable = [
         'user_id',
         'pv_id',
         'reference_number',

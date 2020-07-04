@@ -64,10 +64,19 @@
                           
                              @if($module === "Payment Voucher")
                                 @foreach($getSearchPaymentVouchers as $getSearchPaymentVoucher)
+                                    @if($getSearchPaymentVoucher->deleted_at ==  NULL)
                                     <p style="font-size:28px;">
                                         {{ $getSearchPaymentVoucher->module_name}} <br>{{ $getSearchPaymentVoucher->module_code }}{{ $getSearchPaymentVoucher->dic_code }}
                                         <a href="{{ url('dino-industrial-corporation/view-dino-industrial-payables-details/'.$getSearchPaymentVoucher->id) }}">View Number Code</a> 
                                     </p>
+                                    @else
+                                    <p style="color:red; font-weight:bold; font-size:20px;">This Item Has Been Deleted! (CLERICAL ERROR)</p>
+                                
+                                    <p style="font-size:28px;">
+                                        {{ $getSearchPaymentVoucher->module_name}} <br>{{ $getSearchPaymentVoucher->module_code }}{{ $getSearchPaymentVoucher->dic_code }}
+                                        <a href="{{ url('dino-industrial-corporation/view-dino-industrial-payables-details/'.$getSearchPaymentVoucher->id) }}">View Number Code</a> 
+                                    </p>
+                                    @endif
                                 @endforeach
                           
                             @endif

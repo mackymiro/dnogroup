@@ -43,20 +43,20 @@
                             </tfoot>
                             <tbody>
                               @foreach($purchaseOrders as $purchaseOrder)
-                              <tr id="deletedId{{ $purchaseOrder['id'] }}">
+                              <tr id="deletedId{{ $purchaseOrder->id }}">
                                   <td>
                                   @if(Auth::user()['role_type'] != 3)
-                                  <a href="{{ url('dno-resources-development/edit-dno-resources-purchase-order/'.$purchaseOrder['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                  <a href="{{ url('dno-resources-development/edit-dno-resources-purchase-order/'.$purchaseOrder->id) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                   @endif
                                   @if(Auth::user()['role_type'] == 1)
-                                  <a id="delete" onClick="confirmDelete('{{ $purchaseOrder['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                                  <a id="delete" onClick="confirmDelete('{{ $purchaseOrder->id }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
                                   @endif
-                                  <a href="{{ url('dno-resources-development/view-dno-resources-purchase-order/'.$purchaseOrder['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
+                                  <a href="{{ url('dno-resources-development/view-dno-resources-purchase-order/'.$purchaseOrder->id) }}" title="View"><i class="fas fa-low-vision"></i></a>
                                   </td>
-                                  <td><a href="#">P.O-{{ $purchaseOrder['p_o_number'] }}</a></td>
-                                  <td>{{ $purchaseOrder['paid_to'] }}</td>
-                                  <td>{{ $purchaseOrder['date'] }}</td>
-                                  <td>{{ $purchaseOrder['created_by'] }}</td>
+                                  <td>{{ $purchaseOrder->module_code}}{{ $purchaseOrder->dno_resources_code}}</td>
+                                  <td>{{ $purchaseOrder->paid_to }}</td>
+                                  <td>{{ $purchaseOrder->date }}</td>
+                                  <td>{{ $purchaseOrder->created_by }}</td>
                               </tr>
                               @endforeach
 				  					</tbody>

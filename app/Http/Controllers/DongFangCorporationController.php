@@ -30,6 +30,7 @@ class DongFangCorporationController extends Controller
                     'dong_fang_corporation_petty_cashes.amount',
                     'dong_fang_corporation_petty_cashes.created_by',
                     'dong_fang_corporation_petty_cashes.created_at',
+                    'dong_fang_corporation_petty_cashes.deleted_at',
                     'dong_fang_corporation_codes.dong_fang_code',
                     'dong_fang_corporation_codes.module_id',
                     'dong_fang_corporation_codes.module_code',
@@ -76,6 +77,7 @@ class DongFangCorporationController extends Controller
                         'dong_fang_corporation_payment_vouchers.cheque_amount',
                         'dong_fang_corporation_payment_vouchers.sub_category',
                         'dong_fang_corporation_payment_vouchers.sub_category_account_id',
+                        'dong_fang_corporation_payment_vouchers.deleted_at',
                         'dong_fang_corporation_codes.dong_fang_code',
                         'dong_fang_corporation_codes.module_id',
                         'dong_fang_corporation_codes.module_code',
@@ -216,6 +218,7 @@ class DongFangCorporationController extends Controller
                             'dong_fang_corporation_payment_vouchers.status',
                             'dong_fang_corporation_payment_vouchers.cheque_number',
                             'dong_fang_corporation_payment_vouchers.cheque_amount',
+                            'dong_fang_corporation_payment_vouchers.cheque_total_amount',
                             'dong_fang_corporation_payment_vouchers.sub_category',
                             'dong_fang_corporation_payment_vouchers.sub_category_account_id',
                             'dong_fang_corporation_codes.dong_fang_code',
@@ -230,6 +233,7 @@ class DongFangCorporationController extends Controller
                             ->orderBy('dong_fang_corporation_payment_vouchers.id', 'desc')
                             ->get()->toArray();
 
+        $status = "FULLY PAID AND RELEASED";
         $totalAmountCheck = DB::table(
                                 'dong_fang_corporation_payment_vouchers')
                                 ->select( 
@@ -269,12 +273,57 @@ class DongFangCorporationController extends Controller
                                 ->where('dong_fang_corporation_codes.module_name', $moduleNamePV)
                                 ->whereDate('dong_fang_corporation_payment_vouchers.created_at', '=', date($date))
                                 ->where('dong_fang_corporation_payment_vouchers.method_of_payment', $check)
-                                ->orderBy('dong_fang_corporation_payment_vouchers.id', 'desc')
+                                ->where('dong_fang_corporation_payment_vouchers.status', '!=', $status)
                                 ->sum('dong_fang_corporation_payment_vouchers.amount_due');
 
+        
+        $totalPaidAmountCheck = DB::table(
+                                    'dong_fang_corporation_payment_vouchers')
+                                    ->select( 
+                                    'dong_fang_corporation_payment_vouchers.id',
+                                    'dong_fang_corporation_payment_vouchers.user_id',
+                                    'dong_fang_corporation_payment_vouchers.pv_id',
+                                    'dong_fang_corporation_payment_vouchers.date',
+                                    'dong_fang_corporation_payment_vouchers.paid_to',
+                                    'dong_fang_corporation_payment_vouchers.account_no',
+                                    'dong_fang_corporation_payment_vouchers.account_name',
+                                    'dong_fang_corporation_payment_vouchers.particulars',
+                                    'dong_fang_corporation_payment_vouchers.amount',
+                                    'dong_fang_corporation_payment_vouchers.method_of_payment',
+                                    'dong_fang_corporation_payment_vouchers.prepared_by',
+                                    'dong_fang_corporation_payment_vouchers.approved_by',
+                                    'dong_fang_corporation_payment_vouchers.date_approved',
+                                    'dong_fang_corporation_payment_vouchers.received_by_date',
+                                    'dong_fang_corporation_payment_vouchers.created_by',
+                                    'dong_fang_corporation_payment_vouchers.created_at',
+                                    'dong_fang_corporation_payment_vouchers.invoice_number',
+                                    'dong_fang_corporation_payment_vouchers.voucher_ref_number',
+                                    'dong_fang_corporation_payment_vouchers.issued_date',
+                                    'dong_fang_corporation_payment_vouchers.category',
+                                    'dong_fang_corporation_payment_vouchers.amount_due',
+                                    'dong_fang_corporation_payment_vouchers.delivered_date',
+                                    'dong_fang_corporation_payment_vouchers.status',
+                                    'dong_fang_corporation_payment_vouchers.cheque_number',
+                                    'dong_fang_corporation_payment_vouchers.cheque_amount',
+                                    'dong_fang_corporation_payment_vouchers.cheque_total_amount',
+                                    'dong_fang_corporation_payment_vouchers.sub_category',
+                                    'dong_fang_corporation_payment_vouchers.sub_category_account_id',
+                                    'dong_fang_corporation_codes.dong_fang_code',
+                                    'dong_fang_corporation_codes.module_id',
+                                    'dong_fang_corporation_codes.module_code',
+                                    'dong_fang_corporation_codes.module_name')
+                                    ->leftJoin('dong_fang_corporation_codes', 'dong_fang_corporation_payment_vouchers.id', '=', 'dong_fang_corporation_codes.module_id')
+                                    ->where('dong_fang_corporation_payment_vouchers.pv_id', NULL)
+                                    ->where('dong_fang_corporation_codes.module_name', $moduleNamePV)
+                                    ->whereDate('dong_fang_corporation_payment_vouchers.created_at', '=', date($date))
+                                    ->where('dong_fang_corporation_payment_vouchers.method_of_payment', $check)
+                                    ->where('dong_fang_corporation_payment_vouchers.status', $status)
+                                    ->sum('dong_fang_corporation_payment_vouchers.cheque_total_amount');
+    
+            
         $getDateToday = "";  
         $pdf = PDF::loadView('printSummaryDongFang', compact('date', 'getDateToday', 'getTransactionListCashes', 
-                'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck'));
+                'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck', 'totalPaidAmountCheck'));
                                                         
         return $pdf->download('dong-fang-corporation-summary-report.pdf');
         
@@ -464,6 +513,7 @@ class DongFangCorporationController extends Controller
                             'dong_fang_corporation_payment_vouchers.status',
                             'dong_fang_corporation_payment_vouchers.cheque_number',
                             'dong_fang_corporation_payment_vouchers.cheque_amount',
+                            'dong_fang_corporation_payment_vouchers.cheque_total_amount',
                             'dong_fang_corporation_payment_vouchers.sub_category',
                             'dong_fang_corporation_payment_vouchers.sub_category_account_id',
                             'dong_fang_corporation_codes.dong_fang_code',
@@ -644,6 +694,7 @@ class DongFangCorporationController extends Controller
                             'dong_fang_corporation_payment_vouchers.status',
                             'dong_fang_corporation_payment_vouchers.cheque_number',
                             'dong_fang_corporation_payment_vouchers.cheque_amount',
+                            'dong_fang_corporation_payment_vouchers.cheque_total_amount',
                             'dong_fang_corporation_payment_vouchers.sub_category',
                             'dong_fang_corporation_payment_vouchers.sub_category_account_id',
                             'dong_fang_corporation_codes.dong_fang_code',
@@ -658,6 +709,7 @@ class DongFangCorporationController extends Controller
                             ->orderBy('dong_fang_corporation_payment_vouchers.id', 'desc')
                             ->get()->toArray();
 
+        $status = "FULLY PAID AND RELEASED";
         $totalAmountCheck = DB::table(
                                 'dong_fang_corporation_payment_vouchers')
                                 ->select( 
@@ -697,11 +749,54 @@ class DongFangCorporationController extends Controller
                                 ->where('dong_fang_corporation_codes.module_name', $moduleNamePV)
                                 ->whereDate('dong_fang_corporation_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('dong_fang_corporation_payment_vouchers.method_of_payment', $check)
-                                ->orderBy('dong_fang_corporation_payment_vouchers.id', 'desc')
+                                ->where('dong_fang_corporation_payment_vouchers.status', '!=', $status)
                                 ->sum('dong_fang_corporation_payment_vouchers.amount_due');
         
+        $totalPaidAmountCheck = DB::table(
+                                    'dong_fang_corporation_payment_vouchers')
+                                    ->select( 
+                                    'dong_fang_corporation_payment_vouchers.id',
+                                    'dong_fang_corporation_payment_vouchers.user_id',
+                                    'dong_fang_corporation_payment_vouchers.pv_id',
+                                    'dong_fang_corporation_payment_vouchers.date',
+                                    'dong_fang_corporation_payment_vouchers.paid_to',
+                                    'dong_fang_corporation_payment_vouchers.account_no',
+                                    'dong_fang_corporation_payment_vouchers.account_name',
+                                    'dong_fang_corporation_payment_vouchers.particulars',
+                                    'dong_fang_corporation_payment_vouchers.amount',
+                                    'dong_fang_corporation_payment_vouchers.method_of_payment',
+                                    'dong_fang_corporation_payment_vouchers.prepared_by',
+                                    'dong_fang_corporation_payment_vouchers.approved_by',
+                                    'dong_fang_corporation_payment_vouchers.date_approved',
+                                    'dong_fang_corporation_payment_vouchers.received_by_date',
+                                    'dong_fang_corporation_payment_vouchers.created_by',
+                                    'dong_fang_corporation_payment_vouchers.created_at',
+                                    'dong_fang_corporation_payment_vouchers.invoice_number',
+                                    'dong_fang_corporation_payment_vouchers.voucher_ref_number',
+                                    'dong_fang_corporation_payment_vouchers.issued_date',
+                                    'dong_fang_corporation_payment_vouchers.category',
+                                    'dong_fang_corporation_payment_vouchers.amount_due',
+                                    'dong_fang_corporation_payment_vouchers.delivered_date',
+                                    'dong_fang_corporation_payment_vouchers.status',
+                                    'dong_fang_corporation_payment_vouchers.cheque_number',
+                                    'dong_fang_corporation_payment_vouchers.cheque_amount',
+                                    'dong_fang_corporation_payment_vouchers.cheque_total_amount',
+                                    'dong_fang_corporation_payment_vouchers.sub_category',
+                                    'dong_fang_corporation_payment_vouchers.sub_category_account_id',
+                                    'dong_fang_corporation_codes.dong_fang_code',
+                                    'dong_fang_corporation_codes.module_id',
+                                    'dong_fang_corporation_codes.module_code',
+                                    'dong_fang_corporation_codes.module_name')
+                                    ->leftJoin('dong_fang_corporation_codes', 'dong_fang_corporation_payment_vouchers.id', '=', 'dong_fang_corporation_codes.module_id')
+                                    ->where('dong_fang_corporation_payment_vouchers.pv_id', NULL)
+                                    ->where('dong_fang_corporation_codes.module_name', $moduleNamePV)
+                                    ->whereDate('dong_fang_corporation_payment_vouchers.created_at', '=', date($getDateToday))
+                                    ->where('dong_fang_corporation_payment_vouchers.method_of_payment', $check)
+                                    ->where('dong_fang_corporation_payment_vouchers.status', $status)
+                                    ->sum('dong_fang_corporation_payment_vouchers.cheque_total_amount');
+
         $pdf = PDF::loadView('printSummaryDongFang', compact('date', 'getDateToday', 'getTransactionListCashes', 
-        'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck'));
+        'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck', 'totalPaidAmountCheck'));
                                 
         return $pdf->download('dong-fang-corporation-summary-report.pdf');
                     
@@ -891,6 +986,7 @@ class DongFangCorporationController extends Controller
                             'dong_fang_corporation_payment_vouchers.status',
                             'dong_fang_corporation_payment_vouchers.cheque_number',
                             'dong_fang_corporation_payment_vouchers.cheque_amount',
+                            'dong_fang_corporation_payment_vouchers.cheque_total_amount',
                             'dong_fang_corporation_payment_vouchers.sub_category',
                             'dong_fang_corporation_payment_vouchers.sub_category_account_id',
                             'dong_fang_corporation_codes.dong_fang_code',
@@ -905,6 +1001,7 @@ class DongFangCorporationController extends Controller
                             ->orderBy('dong_fang_corporation_payment_vouchers.id', 'desc')
                             ->get()->toArray();
 
+        $status = "FULLY PAID AND RELEASED";
         $totalAmountCheck = DB::table(
                                 'dong_fang_corporation_payment_vouchers')
                                 ->select( 
@@ -944,7 +1041,7 @@ class DongFangCorporationController extends Controller
                                 ->where('dong_fang_corporation_codes.module_name', $moduleNamePV)
                                 ->whereDate('dong_fang_corporation_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('dong_fang_corporation_payment_vouchers.method_of_payment', $check)
-                                ->orderBy('dong_fang_corporation_payment_vouchers.id', 'desc')
+                                ->where('dong_fang_corporation_payment_vouchers.status', '!=', $status)
                                 ->sum('dong_fang_corporation_payment_vouchers.amount_due');
                     
     
@@ -966,6 +1063,7 @@ class DongFangCorporationController extends Controller
                         'dong_fang_corporation_petty_cashes.petty_cash_summary',
                         'dong_fang_corporation_petty_cashes.amount',
                         'dong_fang_corporation_petty_cashes.created_by',
+                        'dong_fang_corporation_petty_cashes.deleted_at',
                         'dong_fang_corporation_codes.dong_fang_code',
                         'dong_fang_corporation_codes.module_id',
                         'dong_fang_corporation_codes.module_code',
@@ -1136,6 +1234,7 @@ class DongFangCorporationController extends Controller
                         'dong_fang_corporation_petty_cashes.petty_cash_summary',
                         'dong_fang_corporation_petty_cashes.amount',
                         'dong_fang_corporation_petty_cashes.created_by',
+                        'dong_fang_corporation_petty_cashes.deleted_at',
                         'dong_fang_corporation_codes.dong_fang_code',
                         'dong_fang_corporation_codes.module_id',
                         'dong_fang_corporation_codes.module_code',
@@ -1143,6 +1242,8 @@ class DongFangCorporationController extends Controller
                         ->leftJoin('dong_fang_corporation_codes', 'dong_fang_corporation_petty_cashes.id', '=', 'dong_fang_corporation_codes.module_id')
                         ->where('dong_fang_corporation_petty_cashes.pc_id', NUll)
                         ->where('dong_fang_corporation_codes.module_name', $moduleName)
+                        ->where('dong_fang_corporation_petty_cashes.deleted_at', NULL)
+                        ->orderBy('dong_fang_corporation_petty_cashes.id',  'desc')
                         ->get()->toArray();
         
         return view('dong-fang-corporation-petty-cash-list', compact('pettyCashLists'));
@@ -1243,6 +1344,7 @@ class DongFangCorporationController extends Controller
                             'dong_fang_corporation_payment_vouchers.cheque_amount',
                             'dong_fang_corporation_payment_vouchers.sub_category',
                             'dong_fang_corporation_payment_vouchers.sub_category_account_id',
+                            'dong_fang_corporation_payment_vouchers.deleted_at',
                             'dong_fang_corporation_codes.dong_fang_code',
                             'dong_fang_corporation_codes.module_id',
                             'dong_fang_corporation_codes.module_code',
@@ -1418,6 +1520,7 @@ class DongFangCorporationController extends Controller
                             'dong_fang_corporation_payment_vouchers.cheque_amount',
                             'dong_fang_corporation_payment_vouchers.sub_category',
                             'dong_fang_corporation_payment_vouchers.sub_category_account_id',
+                            'dong_fang_corporation_payment_vouchers.deleted_at',
                             'dong_fang_corporation_codes.dong_fang_code',
                             'dong_fang_corporation_codes.module_id',
                             'dong_fang_corporation_codes.module_code',
@@ -1425,6 +1528,7 @@ class DongFangCorporationController extends Controller
                             ->leftJoin('dong_fang_corporation_codes', 'dong_fang_corporation_payment_vouchers.id', '=', 'dong_fang_corporation_codes.module_id')
                             ->where('dong_fang_corporation_payment_vouchers.pv_id', NULL)
                             ->where('dong_fang_corporation_codes.module_name', $moduleName)
+                            ->where('dong_fang_corporation_payment_vouchers.deleted_at', NULL)
                             ->orderBy('dong_fang_corporation_payment_vouchers.id', 'desc')
                             ->get()->toArray();
         
@@ -1486,12 +1590,13 @@ class DongFangCorporationController extends Controller
         $name  = $firstName." ".$lastName;
 
         $paymentData = DongFangCorporationPaymentVoucher::find($id);
-         
+        
+        $totalChequeAmount = $paymentData->cheque_total_amount + $request->get('chequeAmount');
+
         //save payment cheque num and cheque amount
          $addPayment = new DongFangCorporationPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
-            'voucher_ref_number'=>$paymentData['voucher_ref_number'],
             'date'=>$request->get('date'),
             'cheque_number'=>$request->get('chequeNumber'),
             'cheque_amount'=>$request->get('chequeAmount'),
@@ -1499,6 +1604,10 @@ class DongFangCorporationController extends Controller
         ]);
 
         $addPayment->save();
+
+         //update the total cheque amount
+         $paymentData->cheque_total_amount = $totalChequeAmount;
+         $paymentData->save();
 
         Session::flash('paymentAdded', 'Payment added.');
         

@@ -24,13 +24,18 @@
                         <div class="card-header">
                               <i class="fab fa-first-order" aria-hidden="true"></i>
                             View Purchase Order
+                            @if($purchaseOrder[0]->deleted_at == NULL)
                              <div class="float-right">
                                
-                                 <a href="{{ action('RibosBarController@printPO', $purchaseOrder['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                                 <a href="{{ action('RibosBarController@printPO', $purchaseOrder[0]->id)}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                                
                               </div>
+                            @endif
                         </div>
                         <div class="card-body">
+                           @if($purchaseOrder[0]->deleted_at != NULL)
+                                <h1 style="color:red; font-size:28px; font-weight:bold">This Item Has Been Deleted! (CLERICAL ERROR)</h1>
+                            @endif
                             <div class="form-group">
                                 <div class="form-row">
                                   <div class="col-lg-6">
@@ -38,12 +43,12 @@
                                         <thead>
                                             <tr>
                                                 <th width="25%">Paid To</th>
-                                                <th>{{ $purchaseOrder['paid_to'] }}</th>
+                                                <th>{{ $purchaseOrder[0]->paid_to }}</th>
                                             </tr>
 		                                            
                                             <tr>
                                                 <th>Address</th>
-                                                <th>{{ $purchaseOrder['address']}}</th>
+                                                <th>{{ $purchaseOrder[0]->address}}</th>
                                             </tr>
                                         </thead>
 
@@ -55,11 +60,11 @@
                                         <thead>
                                             <tr>
                                                 <th width="20%">P.O Number</th>
-                                                <th><a href="#">P.O-{{ $purchaseOrder['p_o_number'] }}</a></th>
+                                                <th>{{ $purchaseOrder[0]->module_code}}{{ $purchaseOrder[0]->dno_resources_code}}</th>
                                             </tr>
                                             <tr>
                                                 <th>Date</th>
-                                                <th> {{ $purchaseOrder['date'] }}</th>
+                                                <th> {{ $purchaseOrder[0]->date }}</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -80,10 +85,10 @@
                                   <tbody>
 
                                     <tr>
-                                        <td>{{ $purchaseOrder['quantity']}}</td>
-                                        <td>{{ $purchaseOrder['description']}}</td>
-                                        <td>{{ $purchaseOrder['unit_price']}}</td>
-                                        <td><?php echo number_format($purchaseOrder['amount'], 2); ?></td>
+                                        <td>{{ $purchaseOrder[0]->quantity}}</td>
+                                        <td>{{ $purchaseOrder[0]->description}}</td>
+                                        <td>{{ $purchaseOrder[0]->unit_price}}</td>
+                                        <td><?php echo number_format($purchaseOrder[0]->amount, 2); ?></td>
 												                 
                                     </tr>
                                     @foreach($pOrders as $pOrder)
@@ -126,7 +131,7 @@
                                             <thead>
                                                 <tr>
                                                     <th width="20%">Prepared By</th>
-                                                    <th>{{ $purchaseOrder['created_by'] }}</th>
+                                                    <th>{{ $purchaseOrder[0]->created_by}}</th>
                                                 </tr>
                                             </thead>
                                         </table>

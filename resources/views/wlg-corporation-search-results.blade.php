@@ -64,17 +64,36 @@
                           
                              @if($module === "Payment Voucher")
                                 @foreach($getSearchPaymentVouchers as $getSearchPaymentVoucher)
+                                   @if($getSearchPaymentVoucher->deleted_at ==  NULL)
                                     <p style="font-size:28px;">
                                         {{ $getSearchPaymentVoucher->module_name}} <br>{{ $getSearchPaymentVoucher->module_code }}{{ $getSearchPaymentVoucher->wlg_code }}
-                                        <a href="{{ url('dno-resources-development/view-dno-resources-payables-details/'.$getSearchPaymentVoucher->id) }}">View Number Code</a> 
+                                        <a href="{{ url('wlg-corporation/view-wlg-corporation-payables-details/'.$getSearchPaymentVoucher->id) }}">View Number Code</a> 
                                     </p>
+                                    @else 
+                                    <p style="color:red; font-weight:bold; font-size:20px;">This Item Has Been Deleted! (CLERICAL ERROR)</p>
+                                
+                                    <p style="font-size:28px;">
+                                        {{ $getSearchPaymentVoucher->module_name}} <br>{{ $getSearchPaymentVoucher->module_code }}{{ $getSearchPaymentVoucher->wlg_code }}
+                                        <a href="{{ url('wlg-corporation/view-wlg-corporation-payables-details/'.$getSearchPaymentVoucher->id) }}">View Number Code</a> 
+                                    </p>
+
+                                    @endif
                                 @endforeach
                             @elseif($module === "Purchase Order")
                                  @foreach($getSearchPurchaseOrders as $getSearchPurchaseOrder)
+                                   @if($getSearchPurchaseOrder->deleted_at ==  NULL)
                                     <p style="font-size:28px;">
                                         {{ $getSearchPurchaseOrder->module_name}} <br>{{ $getSearchPurchaseOrder->module_code }}{{ $getSearchPurchaseOrder->wlg_code }}
                                         <a href="{{ url('wlg-corporation/view-wlg-corporation-purchase-order/'.$getSearchPurchaseOrder->id) }}">View Number Code</a> 
                                     </p>
+                                    @else
+                                    <p style="color:red; font-weight:bold; font-size:20px;">This Item Has Been Deleted! (CLERICAL ERROR)</p>
+                                
+                                    <p style="font-size:28px;">
+                                        {{ $getSearchPurchaseOrder->module_name}} <br>{{ $getSearchPurchaseOrder->module_code }}{{ $getSearchPurchaseOrder->wlg_code }}
+                                        <a href="{{ url('wlg-corporation/view-wlg-corporation-purchase-order/'.$getSearchPurchaseOrder->id) }}">View Number Code</a> 
+                                    </p>
+                                    @endif
                                 @endforeach
                             @endif
                         </div>

@@ -167,10 +167,16 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Total Balance:</th>
+                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Remaining Balance:</th>
                                         <th  style="text-align:center; border: 1px solid black;"><?php echo number_format($totalAmountCheck, 2);?></th>
                                     </tr>
                                 </thead>
+                                <tbody>
+                                      <tr>
+                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Total Paid Amount:</th>
+                                        <th  style="text-align:center; border: 1px solid black;"><?php echo number_format($totalPaidAmountCheck, 2);?></th>
+                                    </tr>
+                                </tbody>
                             </table>
                         
 						 </div>

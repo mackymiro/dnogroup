@@ -132,7 +132,9 @@
 										<th style="height: 1%; text-align: center;">PV NO</th>
                                         <th style="height: 1%; text-align: center;">ISSUED DATE</th>
                                         <th style="height: 1%; text-align: center;">PAID TO</th>
-                                        <th style="height: 1%; text-align: center;">AMOUNT</th>
+                                        <th style="height: 1%; text-align: center;">BANK NAME/CHECK NO</th>
+                                        <th style="height: 1%; text-align: center;">PAID AMOUNT</th>
+                                        <th style="height: 1%; text-align: center;">BALANCE</th>
                                         <th style="height: 1%; text-align: center;">STATUS</th>
                                         <th style="height: 1%; text-align: center;">CREATED BY</th>
 									</tr>
@@ -152,6 +154,12 @@
                                                 ->where('pv_id', $id)
                                                 ->sum('amount');
                                     $compute = $amount1 + $amount2;
+
+                                      //get the check account no
+                                    $getChecks = DB::table('dong_fang_corporation_payment_vouchers')
+                                                    ->select('*')
+                                                    ->where('pv_id', $id)
+                                                    ->get()->toArray();
                                 ?>
                         
 									<tr style="border:1px solid black;">
@@ -160,21 +168,41 @@
 										<td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->module_code}}{{ $getTransactionListCheck->dong_fang_code}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->issued_date}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->paid_to}}</td>
-                                        <td style="text-align:center; border: 1px solid black;"><?php echo number_format($compute, 2); ?></td>
+                                        <td style="text-align:center; border: 1px solid black;">
+                                            <?php foreach($getChecks as $getCheck): ?>
+                                                <?php echo $getCheck->cheque_number; ?>
+                                            <?php endforeach; ?>
+                                        </td>
+                                        <td style="text-align:center; border: 1px solid black;"><?php echo number_format($getTransactionListCheck->cheque_total_amount, 2); ?></td>
+                                    
+                                      
+                                        <td style="text-align:center; border: 1px solid black;">
+                                            @if($getTransactionListCheck->status === "FULLY PAID AND RELEASED")
+                                             <p >0</p>
+                                             @else
+                                            <?php echo number_format($compute, 2); ?>
+                                            @endif 
+                                        </td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->status }}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->created_by }}</td>
 									</tr>
 									@endforeach
 								</tbody>	
 						    </table>
-                            
+                            <br>
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Total:</th>
+                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Remaining Balance:</th>
                                         <th  style="text-align:center; border: 1px solid black;"><?php echo number_format($totalAmountCheck, 2);?></th>
                                     </tr>
                                 </thead>
+                                <tbody>
+                                      <tr>
+                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Total Paid Amount:</th>
+                                        <th  style="text-align:center; border: 1px solid black;"><?php echo number_format($totalPaidAmountCheck, 2);?></th>
+                                    </tr>
+                                </tbody>
                             </table>
                         
 						 </div>

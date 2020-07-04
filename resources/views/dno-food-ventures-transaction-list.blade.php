@@ -163,7 +163,7 @@
         if(x){
             $.ajax({
               type: "DELETE",
-              url: '/lolo-pinoy-lechon-de-cebu/delete-transaction-list/' + id,
+              url: '/dno-food-ventures/delete-transaction-list/' + id,
               data:{
                 _method: 'delete', 
                 "_token": "{{ csrf_token() }}",

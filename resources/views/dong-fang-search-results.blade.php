@@ -63,17 +63,35 @@
                         <div class="card-body">
                             @if($module === "Petty Cash")
                                 @foreach($getSearchPettyCashes as $getSearchPettyCash)
+                                    @if($getSearchPettyCash->deleted_at ==  NULL)
                                     <p style="font-size:28px;">
                                         {{ $getSearchPettyCash->module_name}} <br>{{ $getSearchPettyCash->module_code }}{{ $getSearchPettyCash->dong_fang_code }}
                                         <a href="{{ url('dong-fang-corporation/petty-cash/view/'.$getSearchPettyCash->id) }}">View Number Code</a> 
                                     </p>
+                                    @else
+                                    <p style="color:red; font-weight:bold; font-size:20px;">This Item Has Been Deleted! (CLERICAL ERROR)</p>
+                                
+                                    <p style="font-size:28px;">
+                                        {{ $getSearchPettyCash->module_name}} <br>{{ $getSearchPettyCash->module_code }}{{ $getSearchPettyCash->dong_fang_code }}
+                                        <a href="{{ url('dong-fang-corporation/petty-cash/view/'.$getSearchPettyCash->id) }}">View Number Code</a> 
+                                    </p>
+                                    @endif
                                 @endforeach
                              @elseif($module === "Payment Voucher")
                                 @foreach($getSearchPaymentVouchers as $getSearchPaymentVoucher)
+                                    @if($getSearchPaymentVoucher->deleted_at ==  NULL)
                                     <p style="font-size:28px;">
                                         {{ $getSearchPaymentVoucher->module_name}} <br>{{ $getSearchPaymentVoucher->module_code }}{{ $getSearchPaymentVoucher->dong_fang_code }}
                                         <a href="{{ url('dong-fang-corporation/view-dong-fang-payables-details/'.$getSearchPaymentVoucher->id) }}">View Number Code</a> 
                                     </p>
+                                    @else
+                                    <p style="color:red; font-weight:bold; font-size:20px;">This Item Has Been Deleted! (CLERICAL ERROR)</p>
+                                
+                                    <p style="font-size:28px;">
+                                        {{ $getSearchPaymentVoucher->module_name}} <br>{{ $getSearchPaymentVoucher->module_code }}{{ $getSearchPaymentVoucher->dong_fang_code }}
+                                        <a href="{{ url('dong-fang-corporation/view-dong-fang-payables-details/'.$getSearchPaymentVoucher->id) }}">View Number Code</a> 
+                                    </p>
+                                    @endif
                                 @endforeach
                             @endif
                         </div>

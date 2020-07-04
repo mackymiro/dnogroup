@@ -42,7 +42,7 @@
 				  					</tfoot>
 				  					<tbody>
 				  						@foreach($purchaseOrders as $purchaseOrder)
-				  						<tr>
+				  						<tr id="deletedId{{ $purchaseOrder->id}}">
 				  							<td>
 			  								  @if(Auth::user()['role_type'] != 3)
 					                          <a href="{{ url('wlg-corporation/edit-wlg-corporation-purchase-order/'.$purchaseOrder->id) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
@@ -79,4 +79,33 @@
         </div>
       </footer>
 </div>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script type="text/javascript">
+	 const confirmDelete = (id) =>{
+        const x = confirm("Do you want to delete this?");
+        if(x){
+            $.ajax({
+              type: "DELETE",
+              url: '/wlg-corporation/delete/' + id,
+              data:{
+                _method: 'delete', 
+                "_token": "{{ csrf_token() }}",
+                "id": id
+              },
+              success: function(data){
+                console.log(data);
+                $("#deletedId"+id).fadeOut('slow');
+               
+              },
+              error: function(data){
+                console.log('Error:', data);
+              }
+
+            });
+
+        }else{
+            return false;
+        }
+    }
+</script>
 @endsection

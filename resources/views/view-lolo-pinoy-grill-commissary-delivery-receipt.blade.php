@@ -25,13 +25,18 @@
 		  					<div class="card-header">
 		                        <i class="fas fa-receipt" aria-hidden="true"></i>
 		                              View Delivery Receipt
-		                         <div class="float-right">
-                               
-                                 	<a href="{{ action('LoloPinoyGrillCommissaryController@printDelivery', $viewDeliveryReceipt['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
-                               
-                             	 </div>
+									@if($viewDeliveryReceipt[0]->deleted_at == NULL)
+									<div class="float-right">
+								
+										<a href="{{ action('LoloPinoyGrillCommissaryController@printDelivery', $viewDeliveryReceipt[0]->id)}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+								
+									</div>
+									@endif
 		                    </div>
 		                    <div class="card-body">
+								@if($viewDeliveryReceipt[0]->deleted_at != NULL)
+								<h1 style="color:red; font-size:28px; font-weight:bold">This Item Has Been Deleted! (CLERICAL ERROR)</h1>
+								@endif	
 	                    		<div class="form-group">
 	                    			<div class="form-row">
 	                    				 <div class="col-lg-6">
@@ -39,15 +44,15 @@
 	                    				 		<thead>
 	                    				 			<tr>
 		                    				 			<th width="30%">Delivered To</th>
-		                    				 			<th>{{ $viewDeliveryReceipt['delivered_to']}}</th>
+		                    				 			<th>{{ $viewDeliveryReceipt[0]->delivered_to}}</th>
 	                    				 			</tr>
 	                    				 			<tr>
 	                    				 				<th>Address</th>
-	                    				 				<th>{{ $viewDeliveryReceipt['address']}}</th>
+	                    				 				<th>{{ $viewDeliveryReceipt[0]->address}}</th>
 	                    				 			</tr>
 													 <tr>
-	                    				 				<th>Charget To</th>
-	                    				 				<th>{{ $viewDeliveryReceipt['charge_to']}}</th>
+	                    				 				<th>Charge To</th>
+	                    				 				<th>{{ $viewDeliveryReceipt[0]->charge_to}}</th>
 	                    				 			</tr>
 	                    				 		</thead>	
 	                    				 	</table>
@@ -57,15 +62,15 @@
                     				 			<thead>
                     				 				<tr>
                     				 					<th width="30%">DR No</th>
-                    				 					<th>{{ $viewDeliveryReceipt['dr_no']}}</th>
+                    				 					<th>{{ $viewDeliveryReceipt[0]->module_code}}{{ $viewDeliveryReceipt[0]->lolo_pinoy_grill_code}}</th>
                     				 				</tr>
                     				 				<tr>
                     				 					<th>Date</th>
-                    				 					<th>{{ $viewDeliveryReceipt['date']}}</th>
+                    				 					<th>{{ $viewDeliveryReceipt[0]->date}}</th>
                     				 				</tr>
 													 <tr>
                     				 					<th>Address To</th>
-                    				 					<th>{{ $viewDeliveryReceipt['address_to']}}</th>
+                    				 					<th>{{ $viewDeliveryReceipt[0]->address_to}}</th>
                     				 				</tr>
                     				 			</thead>
                     				 		</table>
@@ -85,12 +90,12 @@
 	                    			</thead>
 	                    			<tbody>
 	                    				<tr>
-	                    					<td>{{ $viewDeliveryReceipt['product_id']}}</td>
-	                    					<td>{{ $viewDeliveryReceipt['qty']}}</td>
-	                    					<td>{{ $viewDeliveryReceipt['unit']}}</td>
-	                    					<td>{{ $viewDeliveryReceipt['item_description']}}</td>
-	                    					<td><?php echo number_format($viewDeliveryReceipt['unit_price'], 2)?></td>
-	                    					<td><?php echo number_format($viewDeliveryReceipt['amount'], 2)?></td>
+	                    					<td>{{ $viewDeliveryReceipt[0]->product_id}}</td>
+	                    					<td>{{ $viewDeliveryReceipt[0]->qty}}</td>
+	                    					<td>{{ $viewDeliveryReceipt[0]->unit}}</td>
+	                    					<td>{{ $viewDeliveryReceipt[0]->item_description}}</td>
+	                    					<td><?php echo number_format($viewDeliveryReceipt[0]->unit_price, 2)?></td>
+	                    					<td><?php echo number_format($viewDeliveryReceipt[0]->amount, 2)?></td>
 	                    				</tr>
 
 	                    				@foreach($deliveryReceipts as $deliveryReceipt)
@@ -125,7 +130,7 @@
                        			 	</thead>
                        			 	<tbody>
                        			 		<tr>
-                       			 			<td>{{ $viewDeliveryReceipt['created_by']}}</td>
+                       			 			<td>{{ $viewDeliveryReceipt[0]->created_by}}</td>
                        			 			<td></td>
                        			 			<td></td>
                        			 		</tr>

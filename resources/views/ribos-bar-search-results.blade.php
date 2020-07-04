@@ -63,35 +63,70 @@
                         <div class="card-body">
                             @if($module === "Sales Invoice")
                                 @foreach($getSearchSalesInvoices as $getSearchSalesInvoice)
+                                @if($getSearchSalesInvoice->deleted_at ==  NULL)
                                 <p style="font-size:28px;">
                                     {{ $getSearchSalesInvoice->module_name}} <br>{{ $getSearchSalesInvoice->module_code }}{{ $getSearchSalesInvoice->ribos_bar_code }}
-                                    <a href="{{ url('ribos-bar/view-sales-invoice/'.$getSearchSalesInvoice->id) }}">View Number Code</a> 
+                                    <a href="{{ url('ribos-bar/view-ribos-bar-sales-invoice/'.$getSearchSalesInvoice->id) }}">View Number Code</a> 
                                 </p>
-                                
+                                @else
+                                <p style="color:red; font-weight:bold; font-size:20px;">This Item Has Been Deleted! (CLERICAL ERROR)</p>
+                              
+                                <p style="font-size:28px;">
+                                    {{ $getSearchSalesInvoice->module_name}} <br>{{ $getSearchSalesInvoice->module_code }}{{ $getSearchSalesInvoice->ribos_bar_code }}
+                                    <a href="{{ url('ribos-bar/view-ribos-bar-sales-invoice/'.$getSearchSalesInvoice->id) }}">View Number Code</a> 
+                                </p>
+                                @endif
                                 @endforeach
         
                             @elseif($module === "Purchase Order")
                                  @foreach($getSearchPurchaseOrders as $getSearchPurchaseOrder)
+                                     @if($getSearchPurchaseOrder->deleted_at ==  NULL)
                                     <p style="font-size:28px;">
                                         {{ $getSearchPurchaseOrder->module_name}} <br>{{ $getSearchPurchaseOrder->module_code }}{{ $getSearchPurchaseOrder->ribos_bar_code }}
-                                        <a href="{{ url('ribos-bar/view/'.$getSearchPurchaseOrder->id) }}">View Number Code</a> 
+                                        <a href="{{ url('ribos-bar/view-ribos-bar-purchase-order/'.$getSearchPurchaseOrder->id) }}">View Number Code</a> 
                                     </p>
+                                    @else
+                                    <p style="color:red; font-weight:bold; font-size:20px;">This Item Has Been Deleted! (CLERICAL ERROR)</p>
+                              
+                                    <p style="font-size:28px;">
+                                        {{ $getSearchPurchaseOrder->module_name}} <br>{{ $getSearchPurchaseOrder->module_code }}{{ $getSearchPurchaseOrder->ribos_bar_code }}
+                                        <a href="{{ url('ribos-bar/view-ribos-bar-purchase-order/'.$getSearchPurchaseOrder->id) }}">View Number Code</a> 
+                                    </p>
+                                    @endif
                                 @endforeach
                             
                           
                              @elseif($module === "Petty Cash")
                                 @foreach($getSearchPettyCashes as $getSearchPettyCash)
+                                    @if($getSearchPettyCash->deleted_at ==  NULL)
                                     <p style="font-size:28px;">
                                         {{ $getSearchPettyCash->module_name}} <br>{{ $getSearchPettyCash->module_code }}{{ $getSearchPettyCash->ribos_bar_code }}
                                         <a href="{{ url('ribos-bar/petty-cash/view/'.$getSearchPettyCash->id) }}">View Number Code</a> 
                                     </p>
+                                    @else 
+                                    <p style="color:red; font-weight:bold; font-size:20px;">This Item Has Been Deleted! (CLERICAL ERROR)</p>
+                                
+                                    <p style="font-size:28px;">
+                                        {{ $getSearchPettyCash->module_name}} <br>{{ $getSearchPettyCash->module_code }}{{ $getSearchPettyCash->ribos_bar_code }}
+                                        <a href="{{ url('ribos-bar/petty-cash/view/'.$getSearchPettyCash->id) }}">View Number Code</a> 
+                                    </p>
+                                    @endif
                                 @endforeach
                              @elseif($module === "Payment Voucher")
                                 @foreach($getSearchPaymentVouchers as $getSearchPaymentVoucher)
+                                    @if($getSearchPaymentVoucher->deleted_at ==  NULL)
                                     <p style="font-size:28px;">
                                         {{ $getSearchPaymentVoucher->module_name}} <br>{{ $getSearchPaymentVoucher->module_code }}{{ $getSearchPaymentVoucher->ribos_bar_code }}
                                         <a href="{{ url('ribos-bar/view-payables-details/'.$getSearchPaymentVoucher->id) }}">View Number Code</a> 
                                     </p>
+                                    @else
+                                    <p style="color:red; font-weight:bold; font-size:20px;">This Item Has Been Deleted! (CLERICAL ERROR)</p>
+                                
+                                    <p style="font-size:28px;">
+                                        {{ $getSearchPaymentVoucher->module_name}} <br>{{ $getSearchPaymentVoucher->module_code }}{{ $getSearchPaymentVoucher->ribos_bar_code }}
+                                        <a href="{{ url('ribos-bar/view-payables-details/'.$getSearchPaymentVoucher->id) }}">View Number Code</a> 
+                                    </p>
+                                    @endif
                                 @endforeach
                             @endif
                         </div>

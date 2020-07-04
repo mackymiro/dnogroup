@@ -6,6 +6,12 @@
       $('.alert-success').fadeIn().delay(3000).fadeOut();
   });
 </script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css" >
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+
 <div id="wrapper">
 	 @include('sidebar.sidebar-lolo-pinoy-grill')
 	 <div id="content-wrapper">
@@ -33,7 +39,7 @@
                     			<div class="form-row">
                       				<div class="col-md-2">
 	            						<label>Product Id</label>
-            							<select name="productId" class="form-control">
+            							<select data-live-search="true" name="productId" class="form-control selectpicker">
 		                                    <option value="0">--Please Select--</option>
 		                                    @foreach($getRawMaterials as $getRawMaterial)
 		                                    <option value="{{ $getRawMaterial['id']}}-{{ $getRawMaterial['product_id_no']}}">{{ $getRawMaterial['product_id_no']}}</option>
@@ -97,9 +103,9 @@
                                   ->get(); ?>
           <?php foreach($getRawMaterials as $key=>$getRawMaterial): ?>
               
-              const prodId = $(this).children("option:selected").val();
-              const prodIdSplit = prodId.split("-");
-              const prodArr = prodIdSplit[0];
+              var prodId = $(this).children("option:selected").val();
+              var prodIdSplit = prodId.split("-");
+              var prodArr = prodIdSplit[0];
   
               if(prodArr  == "<?php echo $getRawMaterial->id;?>"){
                     <?php 

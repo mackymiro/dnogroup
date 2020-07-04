@@ -63,26 +63,52 @@
                         <div class="card-body">
                             @if($module === "Requisition Slip")
                                 @foreach($getSearchReqSlips as $getSearchReqSlip)
+                                @if($getSearchReqSlip->deleted_at ==  NULL)
                                 <p style="font-size:28px;">
                                     {{ $getSearchReqSlip->module_name}} <br>{{ $getSearchReqSlip->module_code }}{{ $getSearchReqSlip->lolo_pinoy_branches_code }}
                                     <a href="{{ url('lolo-pinoy-grill-branches/view/'.$getSearchReqSlip->id) }}">View Number Code</a> 
                                 </p>
-                                
+                                @else
+                                <p style="color:red; font-weight:bold; font-size:20px;">This Item Has Been Deleted! (CLERICAL ERROR)</p>
+                               
+                                <p style="font-size:28px;">
+                                    {{ $getSearchReqSlip->module_name}} <br>{{ $getSearchReqSlip->module_code }}{{ $getSearchReqSlip->lolo_pinoy_branches_code }}
+                                    <a href="{{ url('lolo-pinoy-grill-branches/view/'.$getSearchReqSlip->id) }}">View Number Code</a> 
+                                </p>
+                                @endif
                                 @endforeach 
                           
                              @elseif($module === "Petty Cash")
                                 @foreach($getSearchPettyCashes as $getSearchPettyCash)
+                                    @if($getSearchPettyCash->deleted_at ==  NULL)
                                     <p style="font-size:28px;">
                                         {{ $getSearchPettyCash->module_name}} <br>{{ $getSearchPettyCash->module_code }}{{ $getSearchPettyCash->lolo_pinoy_branches_code }}
                                         <a href="{{ url('lolo-pinoy-grill-branches/petty-cash/view/'.$getSearchPettyCash->id) }}">View Number Code</a> 
                                     </p>
+                                    @else
+                                    <p style="color:red; font-weight:bold; font-size:20px;">This Item Has Been Deleted! (CLERICAL ERROR)</p>
+                               
+                                    <p style="font-size:28px;">
+                                        {{ $getSearchPettyCash->module_name}} <br>{{ $getSearchPettyCash->module_code }}{{ $getSearchPettyCash->lolo_pinoy_branches_code }}
+                                        <a href="{{ url('lolo-pinoy-grill-branches/petty-cash/view/'.$getSearchPettyCash->id) }}">View Number Code</a> 
+                                    </p>
+                                    @endif
                                 @endforeach
                              @elseif($module === "Payment Voucher")
                                 @foreach($getSearchPaymentVouchers as $getSearchPaymentVoucher)
+                                     @if($getSearchPaymentVoucher->deleted_at ==  NULL)
                                     <p style="font-size:28px;">
                                         {{ $getSearchPaymentVoucher->module_name}} <br>{{ $getSearchPaymentVoucher->module_code }}{{ $getSearchPaymentVoucher->lolo_pinoy_branches_code }}
                                         <a href="{{ url('lolo-pinoy-grill-branches/view-lolo-pinoy-grill-branches-payables-details/'.$getSearchPaymentVoucher->id)}}">View Number Code</a> 
                                     </p>
+                                    @else
+                                    <p style="color:red; font-weight:bold; font-size:20px;">This Item Has Been Deleted! (CLERICAL ERROR)</p>
+                               
+                                    <p style="font-size:28px;">
+                                        {{ $getSearchPaymentVoucher->module_name}} <br>{{ $getSearchPaymentVoucher->module_code }}{{ $getSearchPaymentVoucher->lolo_pinoy_branches_code }}
+                                        <a href="{{ url('lolo-pinoy-grill-branches/view-lolo-pinoy-grill-branches-payables-details/'.$getSearchPaymentVoucher->id)}}">View Number Code</a> 
+                                    </p>
+                                    @endif
                                 @endforeach
                             @endif
                         </div>

@@ -390,8 +390,10 @@
                                                         <th>PV No</th>
                                                         <th>Issued Date</th>
                                                         <th>Paid To</th>
+                                                        <th>Bank Name/Check No</th>
                                                         <th>Payment Method</th>
-                                                        <th  class="bg-danger" style="color:white;">Amount Due</th>
+                                                        <th class="bg-success" style="color:white;">Paid Amount</th>
+                                                        <th class="bg-danger" style="color:white;">Balance</th>
                                                         <th class="bg-success" style="color:white;">Status</th>
                                                         <th>Created By</th>
                                                     </tr>
@@ -402,8 +404,10 @@
                                                         <th>PV No</th>
                                                         <th>Issued Date</th>
                                                         <th>Paid To</th>
+                                                        <th>Bank Name/Check No</th>
                                                         <th>Payment Method</th>
-                                                        <th  class="bg-danger" style="color:white;">Amount Due</th>
+                                                        <th class="bg-success" style="color:white;">Paid Amount</th>
+                                                        <th class="bg-danger" style="color:white;">Balance</th>
                                                         <th class="bg-success" style="color:white;">Status</th>
                                                         <th>Created By</th>
                                                     </tr>
@@ -422,6 +426,12 @@
                                                                     ->where('pv_id', $id)
                                                                     ->sum('amount');
                                                         $compute = $amount1 + $amount2;
+
+                                                          //get the check account no
+                                                          $getChecks = DB::table('lolo_pinoy_grill_branches_payment_vouchers')
+                                                                        ->select('*')
+                                                                        ->where('pv_id', $id)
+                                                                        ->get()->toArray();
                                                     ?>
                                             
                                                     
@@ -435,13 +445,22 @@
                                                         <td><p style="width:130px;">{{ $getTransactionListCheck->issued_date}}</p></td>
                 
                                                         <td><p style="width:200px;">{{ $getTransactionListCheck->paid_to}}</p></td>
-                                                        
+                                                        <td>
+                                                            <p style="width:190px;">
+                                                            <?php foreach($getChecks as $getCheck): ?>
+                                                                    <?php echo $getCheck->cheque_number; ?>
+                                                                <?php endforeach; ?>
+                                                            </p>
+                                                        </td>
                                                         <td><p style="width:200px;">{{ $getTransactionListCheck->method_of_payment}}</p></td>
-                                                       
+                                                        <td class="bg-success" style="color:white"><p style="width:170px;"><?php echo number_format($getTransactionListCheck->cheque_total_amount, 2); ?></p></td>
+                                                        @if($getTransactionListCheck->status === "FULLY PAID AND RELEASED")
+                                                            <td class="bg-danger" style="color:white;"> <p style="width:170px;">0</p></td>
+                                                        @else
                                                         <td class="bg-danger" style="color:white;">												  
                                                         <p style="width:170px;"><?php echo number_format($compute, 2); ?></p></td>
-                                                        
-                                                        <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('lolo-pinoy-grill-branches/view-payables-details/'.$getTransactionList->id) }}">{{ $getTransactionList->status }}</a></p></td>
+                                                        @endif
+                                                        <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('lolo-pinoy-grill-branches/view-payables-details/'.$getTransactionListCheck->id) }}">{{ $getTransactionListCheck->status }}</a></p></td>
                                                         <td><p style="width:190px;">{{ $getTransactionListCheck->created_by}}</p></td>
                                                         </tr>
                                                     

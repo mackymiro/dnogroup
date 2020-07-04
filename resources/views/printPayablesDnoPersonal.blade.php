@@ -130,7 +130,7 @@
 												<th>{{ $payableId[0]->method_of_payment}}</th>
 											</tr>
                                             <tr>
-                                                <th>Check Issued:</th>
+                                                <th>Date Issued:</th>
                                                 <th> {{ $payableId[0]->issued_date }} </th>
                                             </tr>  
                                         </thead>

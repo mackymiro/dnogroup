@@ -25,13 +25,19 @@
                         <div class="card-header">
                               <i class="fab fa-first-order" aria-hidden="true"></i>
                             View Purchase Order
+                            @if($requisitionSlip[0]->deleted_at == NULL)
                              <div class="float-right">
                                
-                                 <a href="{{ action('LoloPinoyGrillBranchesController@printRS', $requisitionSlip['id'])}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                                 <a href="{{ action('LoloPinoyGrillBranchesController@printRS', $requisitionSlip[0]->id)}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                                
                               </div>
+
+                              @endif
                         </div>
                         <div class="card-body">
+                            @if($requisitionSlip[0]->deleted_at != NULL)
+                              <h1 style="color:red; font-size:28px; font-weight:bold">This Item Has Been Deleted! (CLERICAL ERROR)</h1>
+                              @endif
                             <div class="form-group">
                                 <div class="form-row">
                                   <div class="col-lg-6">
@@ -39,11 +45,11 @@
                                         <thead>
                                             <tr>
                                                 <th width="20%">Requesting Department</th>
-                                                <th>{{ $requisitionSlip['requesting_department'] }}</th>
+                                                <th>{{ $requisitionSlip[0]->requesting_department }}</th>
                                             </tr>
                                             <tr>
                                                 <th>Request Date</th>
-                                                <th>{{ $requisitionSlip['request_date']}}</th>
+                                                <th>{{ $requisitionSlip[0]->request_date}}</th>
                                             </tr>
                                         </thead>
 
@@ -54,12 +60,12 @@
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th width="20%">R.S Number</th>
-                                                <th><a href="#">R.S-{{ $requisitionSlip['rs_number'] }}</a></th>
+                                                <th width="20%">RS No</th>
+                                                <th><a href="#">{{ $requisitionSlip[0]->module_code}}{{ $requisitionSlip[0]->lolo_pinoy_branches_code}}</a></th>
                                             </tr>
                                             <tr>
                                                 <th>Date Released</th>
-                                                <th> {{ $requisitionSlip['date_released'] }}</th>
+                                                <th> {{ $requisitionSlip[0]->date_released }}</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -80,11 +86,11 @@
                                   <tbody>
 
                                     <tr>
-                                      <td>{{ $requisitionSlip['quantity_requested']}}</td>
-                                      <td>{{ $requisitionSlip['unit']}}</td>
+                                      <td>{{ $requisitionSlip[0]->quantity_requested}}</td>
+                                      <td>{{ $requisitionSlip[0]->unit}}</td>
                                      
-                                      <td>{{ $requisitionSlip['item']}}</td>
-                                      <td>{{ $requisitionSlip['quantity_given']}}</td>
+                                      <td>{{ $requisitionSlip[0]->item}}</td>
+                                      <td>{{ $requisitionSlip[0]->quantity_given}}</td>
                                     </tr>
                                     @foreach($rSlips as $rSlips)
                                     <tr>
@@ -121,7 +127,7 @@
                                             <thead>
                                                 <tr>
                                                     <th width="20%">Prepared By</th>
-                                                    <th>{{ $requisitionSlip['created_by'] }}</th>
+                                                    <th>{{ $requisitionSlip[0]->created_by }}</th>
                                                 </tr>
                                             </thead>
                                         </table>

@@ -1,4 +1,4 @@
-@extends('layouts.dong-fang-corporation-app')
+@extends('layouts.wlg-corporation-app')
 @section('title', 'Payment Voucher Form |')
 @section('content')
 <script>

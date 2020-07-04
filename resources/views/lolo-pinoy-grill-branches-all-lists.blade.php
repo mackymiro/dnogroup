@@ -91,7 +91,7 @@
         if(x){
             $.ajax({
               type: "DELETE",
-              url: '/lolo-pinoy-lechon-de-cebu/delete/' + id,
+              url: '/lolo-pinoy-grill-branches/delete/' + id,
               data:{
                 _method: 'delete', 
                 "_token": "{{ csrf_token() }}",

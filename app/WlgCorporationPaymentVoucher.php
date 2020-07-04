@@ -3,9 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class WlgCorporationPaymentVoucher extends Model
 {
+    use SoftDeletes;
+	
+    protected $dates = ['deleted_at'];
+    
     protected $fillable = [
         'user_id',
         'pv_id',
@@ -32,6 +37,7 @@ class WlgCorporationPaymentVoucher extends Model
         'status',
         'cheque_number',
         'cheque_amount',
+        'cheque_total_amount',
         'created_by',
 
     ];

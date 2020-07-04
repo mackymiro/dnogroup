@@ -61,13 +61,40 @@
                              Search Result
                         </div>
                         <div class="card-body">
-                          
-                             @if($module === "Payment Voucher")
+                             @if($module === "Purchase Order")
+      
+                                @foreach($getSearchPurchaseOrders as $getSearchPurchaseOrder)
+                                    @if($getSearchPurchaseOrder->deleted_at ==  NULL)
+                                    <p style="font-size:28px;">
+                                        {{ $getSearchPurchaseOrder->module_name}} <br>{{ $getSearchPurchaseOrder->module_code }}{{ $getSearchPurchaseOrder->dno_resources_code }}
+                                        <a href="{{ url('dno-resources-development/view-dno-resources-purchase-order/'.$getSearchPurchaseOrder->id) }}">View Number Code</a> 
+                                    </p>
+                                    @else  
+                                    <p style="color:red; font-weight:bold; font-size:20px;">This Item Has Been Deleted! (CLERICAL ERROR)</p>
+                                
+                                    <p style="font-size:28px;">
+                                        {{ $getSearchPurchaseOrder->module_name}} <br>{{ $getSearchPurchaseOrder->module_code }}{{ $getSearchPurchaseOrder->dno_resources_code }}
+                                        <a href="{{ url('dno-resources-development/view-dno-resources-purchase-order/'.$getSearchPurchaseOrder->id) }}">View Number Code</a> 
+                                    </p>
+                                    @endif
+                                @endforeach
+                            
+                             @elseif($module === "Payment Voucher")
                                 @foreach($getSearchPaymentVouchers as $getSearchPaymentVoucher)
+                                    @if($getSearchPaymentVoucher->deleted_at ==  NULL)
                                     <p style="font-size:28px;">
                                         {{ $getSearchPaymentVoucher->module_name}} <br>{{ $getSearchPaymentVoucher->module_code }}{{ $getSearchPaymentVoucher->dno_resources_code }}
                                         <a href="{{ url('dno-resources-development/view-dno-resources-payables-details/'.$getSearchPaymentVoucher->id) }}">View Number Code</a> 
                                     </p>
+                                    @else
+                                    <p style="color:red; font-weight:bold; font-size:20px;">This Item Has Been Deleted! (CLERICAL ERROR)</p>
+                                
+                                    <p style="font-size:28px;">
+                                        {{ $getSearchPaymentVoucher->module_name}} <br>{{ $getSearchPaymentVoucher->module_code }}{{ $getSearchPaymentVoucher->dno_resources_code }}
+                                        <a href="{{ url('dno-resources-development/view-dno-resources-payables-details/'.$getSearchPaymentVoucher->id) }}">View Number Code</a> 
+                                    </p>
+
+                                    @endif
                                 @endforeach
                             @endif
                         </div>
