@@ -227,6 +227,7 @@
 
 						  @endif
 						  <br>
+						  @if($payableId[0]->method_of_payment != "CASH")
 						  <table style="border:1px solid black;">
 								<thead>
 									<tr>
@@ -247,6 +248,7 @@
 							</tbody>
                                 
                           </table>
+						  @endif
                            <div style="margin-top:70px;">
                            		<table  >
                            			<thead>

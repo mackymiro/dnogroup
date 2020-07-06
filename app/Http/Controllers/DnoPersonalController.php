@@ -895,6 +895,7 @@ class DnoPersonalController extends Controller
                             'dno_personal_payment_vouchers.amount_due',
                             'dno_personal_payment_vouchers.delivered_date',
                             'dno_personal_payment_vouchers.status',
+                            'dno_personal_payment_vouchers.account_name_no',
                             'dno_personal_payment_vouchers.cheque_number',
                             'dno_personal_payment_vouchers.cheque_amount',
                             'dno_personal_payment_vouchers.sub_category',
@@ -984,6 +985,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.amount_due',
                                 'dno_personal_payment_vouchers.delivered_date',
                                 'dno_personal_payment_vouchers.status',
+                                
                                 'dno_personal_payment_vouchers.cheque_number',
                                 'dno_personal_payment_vouchers.cheque_amount',
                                 'dno_personal_payment_vouchers.sub_category',
@@ -1031,6 +1033,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.amount_due',
                                 'dno_personal_payment_vouchers.delivered_date',
                                 'dno_personal_payment_vouchers.status',
+                                'dno_personal_payment_vouchers.account_name_no',
                                 'dno_personal_payment_vouchers.cheque_number',
                                 'dno_personal_payment_vouchers.cheque_amount',
                                 'dno_personal_payment_vouchers.cheque_total_amount',
@@ -2586,8 +2589,8 @@ class DnoPersonalController extends Controller
         $addPayment = new DnoPersonalPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
-            'voucher_ref_number'=>$paymentData['voucher_ref_number'],
             'date'=>$request->get('date'),
+            'account_name_no'=>$request->get('accountNameNo'),
             'cheque_number'=>$request->get('chequeNumber'),
             'cheque_amount'=>$request->get('chequeAmount'),
             'created_by'=>$name,

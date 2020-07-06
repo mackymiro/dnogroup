@@ -120,6 +120,15 @@
 									<div class="form-group">
     					  				<div class="form-row">
 					  						<div class="col-lg-12">
+				  								<label>Account Name/No</label>
+				  								<input type="text" name="accountNameNo" class="form-control"  />
+					  						</div> 
+
+    					  				</div>
+	    					  		</div>
+									<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-12">
 				  								<label>Payment Check Number</label>
 				  								<input type="text" name="chequeNumber" class="form-control" required="required" />
 					  						</div> 
