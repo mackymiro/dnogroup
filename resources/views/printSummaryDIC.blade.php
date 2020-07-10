@@ -33,11 +33,15 @@
 						Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
             	 	 </p>
 	            	 <h4 ><u>SUMMARY REPORT FOR 
-                     <?php if($getDateToday): ?>
-                            {{ $getDateToday}}
-                     <?php elseif($date != ""):?>
-                        {{ $date}}
-                     <?php endif; ?>
+                     <?php if($uri0 != "" || $uri1 != ""): ?>
+                        {{ $uri0 }} To {{ $uri1 }}
+                     <?php else: ?>
+                        <?php if($getDateToday): ?>
+                                {{ $getDateToday}}
+                        <?php elseif($date != ""):?>
+                            {{ $date}}
+                        <?php endif; ?>
+                    <?php endif; ?>
                      </u></h4>
 	            </div>
 				<div class="row">

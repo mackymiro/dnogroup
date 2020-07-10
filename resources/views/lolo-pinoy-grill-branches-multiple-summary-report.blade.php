@@ -98,6 +98,9 @@
                                 Summary Reports
                             </div>
                             <div class="card-body">
+                                <div>
+                                    <h1>Search Result For: {{ $startDate }} TO {{ $endDate}}</h1>
+                                </div>
                                   <nav>
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                         <a class="nav-item nav-link active" id="nav-reqSlip" data-toggle="tab" href="#reqSlip" role="tab" aria-controls="reqSlip" aria-selected="true">Requisition Slip</a>
@@ -319,7 +322,7 @@
                                     <div class="tab-pane fade" id="all" role="tabpanel" aria-labelledby="all-tab">
                                     <br>
                                          <div class="float-right">
-                                             <a href="{{ action('LoloPinoyGrillBranchesController@printSummary') }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                             <a href="{{ action('LoloPinoyGrillBranchesController@printMultipleSummary',  $startDate.'TO'.$endDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
                                         </div>
                                        
                                         <br>

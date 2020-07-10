@@ -96,8 +96,8 @@
                                 Summary Reports
                             </div>
                             <div class="card-body">
-                                <div>
-                                    <h1>Search Result For: {{ $getDate }}</h1>
+                                 <div>
+                                    <h1>Search Result For: {{ $startDate }} TO {{ $endDate}}</h1>
                                 </div>
                                  <nav>
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
@@ -221,7 +221,7 @@
                                     <div class="tab-pane fade" id="all" role="tabpanel" aria-labelledby="all-tab">
                                          <br>
                                          <div class="float-right">
-                                             <a href="{{ action('DinoIndustrialCorporationController@printGetSummary', $getDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                             <a href="{{ action('DinoIndustrialCorporationController@printMultipleSummary',  $startDate.'TO'.$endDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
                                         </div>
                                         <br>
                                         <div class="table-responsive">
@@ -352,9 +352,9 @@
 
                                                                //get the check account no
                                                             $getChecks = DB::table('dino_industrial_corporation_payment_vouchers')
-                                                                    ->select('*')
-                                                                    ->where('pv_id', $id)
-                                                                    ->get()->toArray();
+                                                                        ->select('*')
+                                                                        ->where('pv_id', $id)
+                                                                        ->get()->toArray();
                                                         ?>
                                                         <tr >
                                                           

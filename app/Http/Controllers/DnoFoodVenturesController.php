@@ -15,6 +15,476 @@ use App\DnoFoodVenturesCode;
 
 class DnoFoodVenturesController extends Controller
 {
+
+    public function printMultipleSummary(Request $request, $date){
+        $urlSegment = \Request::segment(3);
+        $uri = explode("TO", $urlSegment);
+        $uri0 = $uri[0];
+        $uri1 = $uri[1];
+
+        $moduleName = "Payment Voucher";
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                        'dno_food_ventures_payment_vouchers')
+                        ->select( 
+                        'dno_food_ventures_payment_vouchers.id',
+                        'dno_food_ventures_payment_vouchers.user_id',
+                        'dno_food_ventures_payment_vouchers.pv_id',
+                        'dno_food_ventures_payment_vouchers.date',
+                        'dno_food_ventures_payment_vouchers.paid_to',
+                        'dno_food_ventures_payment_vouchers.account_no',
+                        'dno_food_ventures_payment_vouchers.account_name',
+                        'dno_food_ventures_payment_vouchers.particulars',
+                        'dno_food_ventures_payment_vouchers.amount',
+                        'dno_food_ventures_payment_vouchers.method_of_payment',
+                        'dno_food_ventures_payment_vouchers.prepared_by',
+                        'dno_food_ventures_payment_vouchers.approved_by',
+                        'dno_food_ventures_payment_vouchers.date_approved',
+                        'dno_food_ventures_payment_vouchers.received_by_date',
+                        'dno_food_ventures_payment_vouchers.created_by',
+                        'dno_food_ventures_payment_vouchers.created_at',
+                        'dno_food_ventures_payment_vouchers.invoice_number',
+                        'dno_food_ventures_payment_vouchers.voucher_ref_number',
+                        'dno_food_ventures_payment_vouchers.issued_date',
+                        'dno_food_ventures_payment_vouchers.category',
+                        'dno_food_ventures_payment_vouchers.amount_due',
+                        'dno_food_ventures_payment_vouchers.delivered_date',
+                        'dno_food_ventures_payment_vouchers.status',
+                        'dno_food_ventures_payment_vouchers.cheque_number',
+                        'dno_food_ventures_payment_vouchers.cheque_amount',
+                        'dno_food_ventures_payment_vouchers.sub_category',
+                        'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                        'dno_food_ventures_payment_vouchers.deleted_at',
+                        'dno_food_ventures_codes.dno_food_venture_code',
+                        'dno_food_ventures_codes.module_id',
+                        'dno_food_ventures_codes.module_code',
+                        'dno_food_ventures_codes.module_name')
+                        ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
+                        ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                        ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
+                        ->where('dno_food_ventures_codes.module_name', $moduleName)
+                        ->whereBetween('dno_food_ventures_payment_vouchers.created_at', [$uri0, $uri1])
+                        ->where('dno_food_ventures_payment_vouchers.method_of_payment', $cash)
+                        ->get();
+
+        $totalAmountCashes = DB::table(
+                            'dno_food_ventures_payment_vouchers')
+                            ->select( 
+                            'dno_food_ventures_payment_vouchers.id',
+                            'dno_food_ventures_payment_vouchers.user_id',
+                            'dno_food_ventures_payment_vouchers.pv_id',
+                            'dno_food_ventures_payment_vouchers.date',
+                            'dno_food_ventures_payment_vouchers.paid_to',
+                            'dno_food_ventures_payment_vouchers.account_no',
+                            'dno_food_ventures_payment_vouchers.account_name',
+                            'dno_food_ventures_payment_vouchers.particulars',
+                            'dno_food_ventures_payment_vouchers.amount',
+                            'dno_food_ventures_payment_vouchers.method_of_payment',
+                            'dno_food_ventures_payment_vouchers.prepared_by',
+                            'dno_food_ventures_payment_vouchers.approved_by',
+                            'dno_food_ventures_payment_vouchers.date_approved',
+                            'dno_food_ventures_payment_vouchers.received_by_date',
+                            'dno_food_ventures_payment_vouchers.created_by',
+                            'dno_food_ventures_payment_vouchers.created_at',
+                            'dno_food_ventures_payment_vouchers.invoice_number',
+                            'dno_food_ventures_payment_vouchers.voucher_ref_number',
+                            'dno_food_ventures_payment_vouchers.issued_date',
+                            'dno_food_ventures_payment_vouchers.category',
+                            'dno_food_ventures_payment_vouchers.amount_due',
+                            'dno_food_ventures_payment_vouchers.delivered_date',
+                            'dno_food_ventures_payment_vouchers.status',
+                            'dno_food_ventures_payment_vouchers.cheque_number',
+                            'dno_food_ventures_payment_vouchers.cheque_amount',
+                            'dno_food_ventures_payment_vouchers.sub_category',
+                            'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                            'dno_food_ventures_payment_vouchers.deleted_at',
+                            'dno_food_ventures_codes.dno_food_venture_code',
+                            'dno_food_ventures_codes.module_id',
+                            'dno_food_ventures_codes.module_code',
+                            'dno_food_ventures_codes.module_name')
+                            ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
+                            ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                            ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
+                            ->where('dno_food_ventures_codes.module_name', $moduleName)
+                            ->whereBetween('dno_food_ventures_payment_vouchers.created_at', [$uri0, $uri1])
+                            ->where('dno_food_ventures_payment_vouchers.method_of_payment', $cash)
+                            ->sum('dno_food_ventures_payment_vouchers.amount_due');
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                                'dno_food_ventures_payment_vouchers')
+                                ->select( 
+                                'dno_food_ventures_payment_vouchers.id',
+                                'dno_food_ventures_payment_vouchers.user_id',
+                                'dno_food_ventures_payment_vouchers.pv_id',
+                                'dno_food_ventures_payment_vouchers.date',
+                                'dno_food_ventures_payment_vouchers.paid_to',
+                                'dno_food_ventures_payment_vouchers.account_no',
+                                'dno_food_ventures_payment_vouchers.account_name',
+                                'dno_food_ventures_payment_vouchers.particulars',
+                                'dno_food_ventures_payment_vouchers.amount',
+                                'dno_food_ventures_payment_vouchers.method_of_payment',
+                                'dno_food_ventures_payment_vouchers.prepared_by',
+                                'dno_food_ventures_payment_vouchers.approved_by',
+                                'dno_food_ventures_payment_vouchers.date_approved',
+                                'dno_food_ventures_payment_vouchers.received_by_date',
+                                'dno_food_ventures_payment_vouchers.created_by',
+                                'dno_food_ventures_payment_vouchers.created_at',
+                                'dno_food_ventures_payment_vouchers.invoice_number',
+                                'dno_food_ventures_payment_vouchers.voucher_ref_number',
+                                'dno_food_ventures_payment_vouchers.issued_date',
+                                'dno_food_ventures_payment_vouchers.category',
+                                'dno_food_ventures_payment_vouchers.amount_due',
+                                'dno_food_ventures_payment_vouchers.delivered_date',
+                                'dno_food_ventures_payment_vouchers.status',
+                                'dno_food_ventures_payment_vouchers.cheque_number',
+                                'dno_food_ventures_payment_vouchers.cheque_amount',
+                                'dno_food_ventures_payment_vouchers.cheque_total_amount',
+                                'dno_food_ventures_payment_vouchers.sub_category',
+                                'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                                'dno_food_ventures_payment_vouchers.deleted_at',
+                                'dno_food_ventures_codes.dno_food_venture_code',
+                                'dno_food_ventures_codes.module_id',
+                                'dno_food_ventures_codes.module_code',
+                                'dno_food_ventures_codes.module_name')
+                                ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
+                                ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                                ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
+                                ->where('dno_food_ventures_codes.module_name', $moduleName)
+                                ->whereBetween('dno_food_ventures_payment_vouchers.created_at', [$uri0, $uri1])
+                                ->where('dno_food_ventures_payment_vouchers.method_of_payment', $check)
+                                ->get();
+        
+        $status = "FULLY PAID AND RELEASED";
+        $totalAmountCheck = DB::table(
+                                    'dno_food_ventures_payment_vouchers')
+                                    ->select( 
+                                    'dno_food_ventures_payment_vouchers.id',
+                                    'dno_food_ventures_payment_vouchers.user_id',
+                                    'dno_food_ventures_payment_vouchers.pv_id',
+                                    'dno_food_ventures_payment_vouchers.date',
+                                    'dno_food_ventures_payment_vouchers.paid_to',
+                                    'dno_food_ventures_payment_vouchers.account_no',
+                                    'dno_food_ventures_payment_vouchers.account_name',
+                                    'dno_food_ventures_payment_vouchers.particulars',
+                                    'dno_food_ventures_payment_vouchers.amount',
+                                    'dno_food_ventures_payment_vouchers.method_of_payment',
+                                    'dno_food_ventures_payment_vouchers.prepared_by',
+                                    'dno_food_ventures_payment_vouchers.approved_by',
+                                    'dno_food_ventures_payment_vouchers.date_approved',
+                                    'dno_food_ventures_payment_vouchers.received_by_date',
+                                    'dno_food_ventures_payment_vouchers.created_by',
+                                    'dno_food_ventures_payment_vouchers.created_at',
+                                    'dno_food_ventures_payment_vouchers.invoice_number',
+                                    'dno_food_ventures_payment_vouchers.voucher_ref_number',
+                                    'dno_food_ventures_payment_vouchers.issued_date',
+                                    'dno_food_ventures_payment_vouchers.category',
+                                    'dno_food_ventures_payment_vouchers.amount_due',
+                                    'dno_food_ventures_payment_vouchers.delivered_date',
+                                    'dno_food_ventures_payment_vouchers.status',
+                                    'dno_food_ventures_payment_vouchers.cheque_number',
+                                    'dno_food_ventures_payment_vouchers.cheque_amount',
+                                    'dno_food_ventures_payment_vouchers.sub_category',
+                                    'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                                    'dno_food_ventures_payment_vouchers.deleted_at',
+                                    'dno_food_ventures_codes.dno_food_venture_code',
+                                    'dno_food_ventures_codes.module_id',
+                                    'dno_food_ventures_codes.module_code',
+                                    'dno_food_ventures_codes.module_name')
+                                    ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
+                                    ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                                    ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
+                                    ->where('dno_food_ventures_codes.module_name', $moduleName)
+                                    ->whereBetween('dno_food_ventures_payment_vouchers.created_at', [$uri0, $uri1])                                    ->where('dno_food_ventures_payment_vouchers.method_of_payment', $check)
+                                    ->where('dno_food_ventures_payment_vouchers.status', '!=', $status)
+                                    ->sum('dno_food_ventures_payment_vouchers.amount_due');
+
+            $totalPaidAmountCheck = DB::table(
+                                        'dno_food_ventures_payment_vouchers')
+                                        ->select( 
+                                        'dno_food_ventures_payment_vouchers.id',
+                                        'dno_food_ventures_payment_vouchers.user_id',
+                                        'dno_food_ventures_payment_vouchers.pv_id',
+                                        'dno_food_ventures_payment_vouchers.date',
+                                        'dno_food_ventures_payment_vouchers.paid_to',
+                                        'dno_food_ventures_payment_vouchers.account_no',
+                                        'dno_food_ventures_payment_vouchers.account_name',
+                                        'dno_food_ventures_payment_vouchers.particulars',
+                                        'dno_food_ventures_payment_vouchers.amount',
+                                        'dno_food_ventures_payment_vouchers.method_of_payment',
+                                        'dno_food_ventures_payment_vouchers.prepared_by',
+                                        'dno_food_ventures_payment_vouchers.approved_by',
+                                        'dno_food_ventures_payment_vouchers.date_approved',
+                                        'dno_food_ventures_payment_vouchers.received_by_date',
+                                        'dno_food_ventures_payment_vouchers.created_by',
+                                        'dno_food_ventures_payment_vouchers.created_at',
+                                        'dno_food_ventures_payment_vouchers.invoice_number',
+                                        'dno_food_ventures_payment_vouchers.voucher_ref_number',
+                                        'dno_food_ventures_payment_vouchers.issued_date',
+                                        'dno_food_ventures_payment_vouchers.category',
+                                        'dno_food_ventures_payment_vouchers.amount_due',
+                                        'dno_food_ventures_payment_vouchers.delivered_date',
+                                        'dno_food_ventures_payment_vouchers.status',
+                                        'dno_food_ventures_payment_vouchers.cheque_number',
+                                        'dno_food_ventures_payment_vouchers.cheque_amount',
+                                        'dno_food_ventures_payment_vouchers.sub_category',
+                                        'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                                        'dno_food_ventures_payment_vouchers.deleted_at',
+                                        'dno_food_ventures_codes.dno_food_venture_code',
+                                        'dno_food_ventures_codes.module_id',
+                                        'dno_food_ventures_codes.module_code',
+                                        'dno_food_ventures_codes.module_name')
+                                        ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
+                                        ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                                        ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
+                                        ->where('dno_food_ventures_codes.module_name', $moduleName)
+                                        ->whereBetween('dno_food_ventures_payment_vouchers.created_at', [$uri0, $uri1])
+                                        ->where('dno_food_ventures_payment_vouchers.method_of_payment', $check)
+                                        ->where('dno_food_ventures_payment_vouchers.status', $status)
+                                        ->sum('dno_food_ventures_payment_vouchers.amount_due');
+
+        $getDateToday = "";
+        $pdf = PDF::loadView('printSummaryDnoFoodVentures',  compact('date', 'getDateToday', 'uri0', 'uri1',
+        'getTransactionListCashes', 'getTransactionListChecks',  
+        'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck'));
+                                        
+        return $pdf->download('dno-food-ventures-summary-report.pdf');
+
+
+    }
+
+    public function getSummaryReportMultiple(Request $request){
+        $startDate = date("Y-m-d",strtotime($request->input('startDate')));
+        $endDate = date("Y-m-d",strtotime($request->input('endDate')."+1 day"));
+
+        $moduleName = "Payment Voucher";
+        $getTransactionLists = DB::table(
+                            'dno_food_ventures_payment_vouchers')
+                            ->select( 
+                            'dno_food_ventures_payment_vouchers.id',
+                            'dno_food_ventures_payment_vouchers.user_id',
+                            'dno_food_ventures_payment_vouchers.pv_id',
+                            'dno_food_ventures_payment_vouchers.date',
+                            'dno_food_ventures_payment_vouchers.paid_to',
+                            'dno_food_ventures_payment_vouchers.account_no',
+                            'dno_food_ventures_payment_vouchers.account_name',
+                            'dno_food_ventures_payment_vouchers.particulars',
+                            'dno_food_ventures_payment_vouchers.amount',
+                            'dno_food_ventures_payment_vouchers.method_of_payment',
+                            'dno_food_ventures_payment_vouchers.prepared_by',
+                            'dno_food_ventures_payment_vouchers.approved_by',
+                            'dno_food_ventures_payment_vouchers.date_approved',
+                            'dno_food_ventures_payment_vouchers.received_by_date',
+                            'dno_food_ventures_payment_vouchers.created_by',
+                            'dno_food_ventures_payment_vouchers.created_at',
+                            'dno_food_ventures_payment_vouchers.invoice_number',
+                            'dno_food_ventures_payment_vouchers.voucher_ref_number',
+                            'dno_food_ventures_payment_vouchers.issued_date',
+                            'dno_food_ventures_payment_vouchers.category',
+                            'dno_food_ventures_payment_vouchers.amount_due',
+                            'dno_food_ventures_payment_vouchers.delivered_date',
+                            'dno_food_ventures_payment_vouchers.status',
+                            'dno_food_ventures_payment_vouchers.cheque_number',
+                            'dno_food_ventures_payment_vouchers.cheque_amount',
+                            'dno_food_ventures_payment_vouchers.sub_category',
+                            'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                            'dno_food_ventures_payment_vouchers.deleted_at',
+                            'dno_food_ventures_codes.dno_food_venture_code',
+                            'dno_food_ventures_codes.module_id',
+                            'dno_food_ventures_codes.module_code',
+                            'dno_food_ventures_codes.module_name')
+                            ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
+                            ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                            ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
+                            ->where('dno_food_ventures_codes.module_name', $moduleName)
+                            ->whereBetween('dno_food_ventures_payment_vouchers.created_at', [$startDate, $endDate])
+                            ->orderBy('dno_food_ventures_payment_vouchers.id', 'desc')
+                            ->get();
+
+        
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                        'dno_food_ventures_payment_vouchers')
+                        ->select( 
+                        'dno_food_ventures_payment_vouchers.id',
+                        'dno_food_ventures_payment_vouchers.user_id',
+                        'dno_food_ventures_payment_vouchers.pv_id',
+                        'dno_food_ventures_payment_vouchers.date',
+                        'dno_food_ventures_payment_vouchers.paid_to',
+                        'dno_food_ventures_payment_vouchers.account_no',
+                        'dno_food_ventures_payment_vouchers.account_name',
+                        'dno_food_ventures_payment_vouchers.particulars',
+                        'dno_food_ventures_payment_vouchers.amount',
+                        'dno_food_ventures_payment_vouchers.method_of_payment',
+                        'dno_food_ventures_payment_vouchers.prepared_by',
+                        'dno_food_ventures_payment_vouchers.approved_by',
+                        'dno_food_ventures_payment_vouchers.date_approved',
+                        'dno_food_ventures_payment_vouchers.received_by_date',
+                        'dno_food_ventures_payment_vouchers.created_by',
+                        'dno_food_ventures_payment_vouchers.created_at',
+                        'dno_food_ventures_payment_vouchers.invoice_number',
+                        'dno_food_ventures_payment_vouchers.voucher_ref_number',
+                        'dno_food_ventures_payment_vouchers.issued_date',
+                        'dno_food_ventures_payment_vouchers.category',
+                        'dno_food_ventures_payment_vouchers.amount_due',
+                        'dno_food_ventures_payment_vouchers.delivered_date',
+                        'dno_food_ventures_payment_vouchers.status',
+                        'dno_food_ventures_payment_vouchers.cheque_number',
+                        'dno_food_ventures_payment_vouchers.cheque_amount',
+                        'dno_food_ventures_payment_vouchers.sub_category',
+                        'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                        'dno_food_ventures_payment_vouchers.deleted_at',
+                        'dno_food_ventures_codes.dno_food_venture_code',
+                        'dno_food_ventures_codes.module_id',
+                        'dno_food_ventures_codes.module_code',
+                        'dno_food_ventures_codes.module_name')
+                        ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
+                        ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                        ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
+                        ->where('dno_food_ventures_codes.module_name', $moduleName)
+                        ->whereBetween('dno_food_ventures_payment_vouchers.created_at', [$startDate, $endDate])
+                        ->where('dno_food_ventures_payment_vouchers.method_of_payment', $cash)
+                        ->get();
+
+        $totalAmountCashes = DB::table(
+                            'dno_food_ventures_payment_vouchers')
+                            ->select( 
+                            'dno_food_ventures_payment_vouchers.id',
+                            'dno_food_ventures_payment_vouchers.user_id',
+                            'dno_food_ventures_payment_vouchers.pv_id',
+                            'dno_food_ventures_payment_vouchers.date',
+                            'dno_food_ventures_payment_vouchers.paid_to',
+                            'dno_food_ventures_payment_vouchers.account_no',
+                            'dno_food_ventures_payment_vouchers.account_name',
+                            'dno_food_ventures_payment_vouchers.particulars',
+                            'dno_food_ventures_payment_vouchers.amount',
+                            'dno_food_ventures_payment_vouchers.method_of_payment',
+                            'dno_food_ventures_payment_vouchers.prepared_by',
+                            'dno_food_ventures_payment_vouchers.approved_by',
+                            'dno_food_ventures_payment_vouchers.date_approved',
+                            'dno_food_ventures_payment_vouchers.received_by_date',
+                            'dno_food_ventures_payment_vouchers.created_by',
+                            'dno_food_ventures_payment_vouchers.created_at',
+                            'dno_food_ventures_payment_vouchers.invoice_number',
+                            'dno_food_ventures_payment_vouchers.voucher_ref_number',
+                            'dno_food_ventures_payment_vouchers.issued_date',
+                            'dno_food_ventures_payment_vouchers.category',
+                            'dno_food_ventures_payment_vouchers.amount_due',
+                            'dno_food_ventures_payment_vouchers.delivered_date',
+                            'dno_food_ventures_payment_vouchers.status',
+                            'dno_food_ventures_payment_vouchers.cheque_number',
+                            'dno_food_ventures_payment_vouchers.cheque_amount',
+                            'dno_food_ventures_payment_vouchers.sub_category',
+                            'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                            'dno_food_ventures_payment_vouchers.deleted_at',
+                            'dno_food_ventures_codes.dno_food_venture_code',
+                            'dno_food_ventures_codes.module_id',
+                            'dno_food_ventures_codes.module_code',
+                            'dno_food_ventures_codes.module_name')
+                            ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
+                            ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                            ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
+                            ->where('dno_food_ventures_codes.module_name', $moduleName)
+                            ->whereBetween('dno_food_ventures_payment_vouchers.created_at', [$startDate, $endDate])
+                            ->where('dno_food_ventures_payment_vouchers.method_of_payment', $cash)
+                            ->sum('dno_food_ventures_payment_vouchers.amount_due');
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                                'dno_food_ventures_payment_vouchers')
+                                ->select( 
+                                'dno_food_ventures_payment_vouchers.id',
+                                'dno_food_ventures_payment_vouchers.user_id',
+                                'dno_food_ventures_payment_vouchers.pv_id',
+                                'dno_food_ventures_payment_vouchers.date',
+                                'dno_food_ventures_payment_vouchers.paid_to',
+                                'dno_food_ventures_payment_vouchers.account_no',
+                                'dno_food_ventures_payment_vouchers.account_name',
+                                'dno_food_ventures_payment_vouchers.particulars',
+                                'dno_food_ventures_payment_vouchers.amount',
+                                'dno_food_ventures_payment_vouchers.method_of_payment',
+                                'dno_food_ventures_payment_vouchers.prepared_by',
+                                'dno_food_ventures_payment_vouchers.approved_by',
+                                'dno_food_ventures_payment_vouchers.date_approved',
+                                'dno_food_ventures_payment_vouchers.received_by_date',
+                                'dno_food_ventures_payment_vouchers.created_by',
+                                'dno_food_ventures_payment_vouchers.created_at',
+                                'dno_food_ventures_payment_vouchers.invoice_number',
+                                'dno_food_ventures_payment_vouchers.voucher_ref_number',
+                                'dno_food_ventures_payment_vouchers.issued_date',
+                                'dno_food_ventures_payment_vouchers.category',
+                                'dno_food_ventures_payment_vouchers.amount_due',
+                                'dno_food_ventures_payment_vouchers.delivered_date',
+                                'dno_food_ventures_payment_vouchers.status',
+                                'dno_food_ventures_payment_vouchers.cheque_number',
+                                'dno_food_ventures_payment_vouchers.cheque_amount',
+                                'dno_food_ventures_payment_vouchers.cheque_total_amount',
+                                'dno_food_ventures_payment_vouchers.sub_category',
+                                'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                                'dno_food_ventures_payment_vouchers.deleted_at',
+                                'dno_food_ventures_codes.dno_food_venture_code',
+                                'dno_food_ventures_codes.module_id',
+                                'dno_food_ventures_codes.module_code',
+                                'dno_food_ventures_codes.module_name')
+                                ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
+                                ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                                ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
+                                ->where('dno_food_ventures_codes.module_name', $moduleName)
+                                ->whereBetween('dno_food_ventures_payment_vouchers.created_at', [$startDate, $endDate])
+                                ->where('dno_food_ventures_payment_vouchers.method_of_payment', $check)
+                                ->get();
+
+        $status = "FULLY PAID AND RELEASED";
+        $totalAmountCheck = DB::table(
+                                    'dno_food_ventures_payment_vouchers')
+                                    ->select( 
+                                    'dno_food_ventures_payment_vouchers.id',
+                                    'dno_food_ventures_payment_vouchers.user_id',
+                                    'dno_food_ventures_payment_vouchers.pv_id',
+                                    'dno_food_ventures_payment_vouchers.date',
+                                    'dno_food_ventures_payment_vouchers.paid_to',
+                                    'dno_food_ventures_payment_vouchers.account_no',
+                                    'dno_food_ventures_payment_vouchers.account_name',
+                                    'dno_food_ventures_payment_vouchers.particulars',
+                                    'dno_food_ventures_payment_vouchers.amount',
+                                    'dno_food_ventures_payment_vouchers.method_of_payment',
+                                    'dno_food_ventures_payment_vouchers.prepared_by',
+                                    'dno_food_ventures_payment_vouchers.approved_by',
+                                    'dno_food_ventures_payment_vouchers.date_approved',
+                                    'dno_food_ventures_payment_vouchers.received_by_date',
+                                    'dno_food_ventures_payment_vouchers.created_by',
+                                    'dno_food_ventures_payment_vouchers.created_at',
+                                    'dno_food_ventures_payment_vouchers.invoice_number',
+                                    'dno_food_ventures_payment_vouchers.voucher_ref_number',
+                                    'dno_food_ventures_payment_vouchers.issued_date',
+                                    'dno_food_ventures_payment_vouchers.category',
+                                    'dno_food_ventures_payment_vouchers.amount_due',
+                                    'dno_food_ventures_payment_vouchers.delivered_date',
+                                    'dno_food_ventures_payment_vouchers.status',
+                                    'dno_food_ventures_payment_vouchers.cheque_number',
+                                    'dno_food_ventures_payment_vouchers.cheque_amount',
+                                    'dno_food_ventures_payment_vouchers.sub_category',
+                                    'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                                    'dno_food_ventures_payment_vouchers.deleted_at',
+                                    'dno_food_ventures_codes.dno_food_venture_code',
+                                    'dno_food_ventures_codes.module_id',
+                                    'dno_food_ventures_codes.module_code',
+                                    'dno_food_ventures_codes.module_name')
+                                    ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
+                                    ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                                    ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
+                                    ->where('dno_food_ventures_codes.module_name', $moduleName)
+                                    ->whereBetween('dno_food_ventures_payment_vouchers.created_at', [$startDate, $endDate]) 
+                                    ->where('dno_food_ventures_payment_vouchers.method_of_payment', $check)
+                                    ->where('dno_food_ventures_payment_vouchers.status', '!=', $status)
+                                    ->sum('dno_food_ventures_payment_vouchers.amount_due');
+        
+        return view('dno-food-ventures-multiple-summary-report', compact('getTransactionLists', 'startDate', 'endDate', 'getTransactionListCashes', 'totalAmountCashes', 
+        'getTransactionListChecks', 'totalAmountCheck'));
+
+
+    }
+
     public function search(Request $request){
         $getSearchResults =DnoFoodVenturesCode::where('dno_food_venture_code', $request->get('searchCode'))->get();
         if($getSearchResults[0]->module_name === "Payment Voucher"){
@@ -103,12 +573,14 @@ class DnoFoodVenturesController extends Controller
                         'dno_food_ventures_payment_vouchers.cheque_amount',
                         'dno_food_ventures_payment_vouchers.sub_category',
                         'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                        'dno_food_ventures_payment_vouchers.deleted_at',
                         'dno_food_ventures_codes.dno_food_venture_code',
                         'dno_food_ventures_codes.module_id',
                         'dno_food_ventures_codes.module_code',
                         'dno_food_ventures_codes.module_name')
                         ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
                         ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                        ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
                         ->where('dno_food_ventures_codes.module_name', $moduleName)
                         ->whereDate('dno_food_ventures_payment_vouchers.created_at', '=', date($date))
                         ->where('dno_food_ventures_payment_vouchers.method_of_payment', $cash)
@@ -144,12 +616,14 @@ class DnoFoodVenturesController extends Controller
                             'dno_food_ventures_payment_vouchers.cheque_amount',
                             'dno_food_ventures_payment_vouchers.sub_category',
                             'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                            'dno_food_ventures_payment_vouchers.deleted_at',
                             'dno_food_ventures_codes.dno_food_venture_code',
                             'dno_food_ventures_codes.module_id',
                             'dno_food_ventures_codes.module_code',
                             'dno_food_ventures_codes.module_name')
                             ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
                             ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                            ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
                             ->where('dno_food_ventures_codes.module_name', $moduleName)
                             ->whereDate('dno_food_ventures_payment_vouchers.created_at', '=', date($date))
                             ->where('dno_food_ventures_payment_vouchers.method_of_payment', $cash)
@@ -187,12 +661,14 @@ class DnoFoodVenturesController extends Controller
                                 'dno_food_ventures_payment_vouchers.cheque_total_amount',
                                 'dno_food_ventures_payment_vouchers.sub_category',
                                 'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                                'dno_food_ventures_payment_vouchers.deleted_at',
                                 'dno_food_ventures_codes.dno_food_venture_code',
                                 'dno_food_ventures_codes.module_id',
                                 'dno_food_ventures_codes.module_code',
                                 'dno_food_ventures_codes.module_name')
                                 ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
                                 ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                                ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
                                 ->where('dno_food_ventures_codes.module_name', $moduleName)
                                 ->whereDate('dno_food_ventures_payment_vouchers.created_at', '=', date($date))
                                 ->where('dno_food_ventures_payment_vouchers.method_of_payment', $check)
@@ -229,12 +705,14 @@ class DnoFoodVenturesController extends Controller
                                     'dno_food_ventures_payment_vouchers.cheque_amount',
                                     'dno_food_ventures_payment_vouchers.sub_category',
                                     'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                                    'dno_food_ventures_payment_vouchers.deleted_at',
                                     'dno_food_ventures_codes.dno_food_venture_code',
                                     'dno_food_ventures_codes.module_id',
                                     'dno_food_ventures_codes.module_code',
                                     'dno_food_ventures_codes.module_name')
                                     ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
                                     ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                                    ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
                                     ->where('dno_food_ventures_codes.module_name', $moduleName)
                                     ->whereDate('dno_food_ventures_payment_vouchers.created_at', '=', date($date))
                                     ->where('dno_food_ventures_payment_vouchers.method_of_payment', $check)
@@ -272,19 +750,23 @@ class DnoFoodVenturesController extends Controller
                                         'dno_food_ventures_payment_vouchers.cheque_total_amount',
                                         'dno_food_ventures_payment_vouchers.sub_category',
                                         'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                                        'dno_food_ventures_payment_vouchers.deleted_at',
                                         'dno_food_ventures_codes.dno_food_venture_code',
                                         'dno_food_ventures_codes.module_id',
                                         'dno_food_ventures_codes.module_code',
                                         'dno_food_ventures_codes.module_name')
                                         ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
                                         ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                                        ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
                                         ->where('dno_food_ventures_codes.module_name', $moduleName)
                                         ->whereDate('dno_food_ventures_payment_vouchers.created_at', '=', date($date))
                                         ->where('dno_food_ventures_payment_vouchers.method_of_payment', $check)
                                         ->where('dno_food_ventures_payment_vouchers.status',  $status)
                                         ->sum('dno_food_ventures_payment_vouchers.cheque_total_amount');
         $getDateToday = "";
-        $pdf = PDF::loadView('printSummaryDnoFoodVentures',  compact('date', 'getDateToday', 
+        $uri0  = "";
+        $uri1 = "";
+        $pdf = PDF::loadView('printSummaryDnoFoodVentures',  compact('date', 'getDateToday', 'uri0', 'uri1',
         'getTransactionListCashes', 'getTransactionListChecks',  
         'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck'));
         
@@ -326,12 +808,14 @@ class DnoFoodVenturesController extends Controller
                         'dno_food_ventures_payment_vouchers.cheque_amount',
                         'dno_food_ventures_payment_vouchers.sub_category',
                         'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                        'dno_food_ventures_payment_vouchers.deleted_at',
                         'dno_food_ventures_codes.dno_food_venture_code',
                         'dno_food_ventures_codes.module_id',
                         'dno_food_ventures_codes.module_code',
                         'dno_food_ventures_codes.module_name')
                         ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
                         ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                        ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
                         ->where('dno_food_ventures_codes.module_name', $moduleName)
                         ->whereDate('dno_food_ventures_payment_vouchers.created_at', '=', date($getDateToday))
                         ->where('dno_food_ventures_payment_vouchers.method_of_payment', $cash)
@@ -367,12 +851,14 @@ class DnoFoodVenturesController extends Controller
                             'dno_food_ventures_payment_vouchers.cheque_amount',
                             'dno_food_ventures_payment_vouchers.sub_category',
                             'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                            'dno_food_ventures_payment_vouchers.deleted_at',
                             'dno_food_ventures_codes.dno_food_venture_code',
                             'dno_food_ventures_codes.module_id',
                             'dno_food_ventures_codes.module_code',
                             'dno_food_ventures_codes.module_name')
                             ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
                             ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                            ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
                             ->where('dno_food_ventures_codes.module_name', $moduleName)
                             ->whereDate('dno_food_ventures_payment_vouchers.created_at', '=', date($getDateToday))
                             ->where('dno_food_ventures_payment_vouchers.method_of_payment', $cash)
@@ -410,12 +896,14 @@ class DnoFoodVenturesController extends Controller
                                 'dno_food_ventures_payment_vouchers.cheque_total_amount',
                                 'dno_food_ventures_payment_vouchers.sub_category',
                                 'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                                'dno_food_ventures_payment_vouchers.deleted_at',
                                 'dno_food_ventures_codes.dno_food_venture_code',
                                 'dno_food_ventures_codes.module_id',
                                 'dno_food_ventures_codes.module_code',
                                 'dno_food_ventures_codes.module_name')
                                 ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
                                 ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                                ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
                                 ->where('dno_food_ventures_codes.module_name', $moduleName)
                                 ->whereDate('dno_food_ventures_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('dno_food_ventures_payment_vouchers.method_of_payment', $check)
@@ -452,12 +940,14 @@ class DnoFoodVenturesController extends Controller
                                     'dno_food_ventures_payment_vouchers.cheque_amount',
                                     'dno_food_ventures_payment_vouchers.sub_category',
                                     'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                                    'dno_food_ventures_payment_vouchers.deleted_at',
                                     'dno_food_ventures_codes.dno_food_venture_code',
                                     'dno_food_ventures_codes.module_id',
                                     'dno_food_ventures_codes.module_code',
                                     'dno_food_ventures_codes.module_name')
                                     ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
                                     ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                                    ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
                                     ->where('dno_food_ventures_codes.module_name', $moduleName)
                                     ->whereDate('dno_food_ventures_payment_vouchers.created_at', '=', date($getDateToday))
                                     ->where('dno_food_ventures_payment_vouchers.method_of_payment', $check)
@@ -494,12 +984,14 @@ class DnoFoodVenturesController extends Controller
                                         'dno_food_ventures_payment_vouchers.cheque_amount',
                                         'dno_food_ventures_payment_vouchers.sub_category',
                                         'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                                        'dno_food_ventures_payment_vouchers.deleted_at',
                                         'dno_food_ventures_codes.dno_food_venture_code',
                                         'dno_food_ventures_codes.module_id',
                                         'dno_food_ventures_codes.module_code',
                                         'dno_food_ventures_codes.module_name')
                                         ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
                                         ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                                        ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
                                         ->where('dno_food_ventures_codes.module_name', $moduleName)
                                         ->whereDate('dno_food_ventures_payment_vouchers.created_at', '=', date($getDateToday))
                                         ->where('dno_food_ventures_payment_vouchers.method_of_payment', $check)
@@ -548,12 +1040,14 @@ class DnoFoodVenturesController extends Controller
                             'dno_food_ventures_payment_vouchers.cheque_amount',
                             'dno_food_ventures_payment_vouchers.sub_category',
                             'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                            'dno_food_ventures_payment_vouchers.deleted_at',
                             'dno_food_ventures_codes.dno_food_venture_code',
                             'dno_food_ventures_codes.module_id',
                             'dno_food_ventures_codes.module_code',
                             'dno_food_ventures_codes.module_name')
                             ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
                             ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                            ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
                             ->where('dno_food_ventures_codes.module_name', $moduleName)
                             ->whereDate('dno_food_ventures_payment_vouchers.created_at', '=', date($getDate))
                             ->orderBy('dno_food_ventures_payment_vouchers.id', 'desc')
@@ -591,12 +1085,14 @@ class DnoFoodVenturesController extends Controller
                         'dno_food_ventures_payment_vouchers.cheque_amount',
                         'dno_food_ventures_payment_vouchers.sub_category',
                         'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                        'dno_food_ventures_payment_vouchers.deleted_at',
                         'dno_food_ventures_codes.dno_food_venture_code',
                         'dno_food_ventures_codes.module_id',
                         'dno_food_ventures_codes.module_code',
                         'dno_food_ventures_codes.module_name')
                         ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
                         ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                        ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
                         ->where('dno_food_ventures_codes.module_name', $moduleName)
                         ->whereDate('dno_food_ventures_payment_vouchers.created_at', '=', date($getDate))
                         ->where('dno_food_ventures_payment_vouchers.method_of_payment', $cash)
@@ -632,12 +1128,14 @@ class DnoFoodVenturesController extends Controller
                             'dno_food_ventures_payment_vouchers.cheque_amount',
                             'dno_food_ventures_payment_vouchers.sub_category',
                             'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                            'dno_food_ventures_payment_vouchers.deleted_at',
                             'dno_food_ventures_codes.dno_food_venture_code',
                             'dno_food_ventures_codes.module_id',
                             'dno_food_ventures_codes.module_code',
                             'dno_food_ventures_codes.module_name')
                             ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
                             ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                            ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
                             ->where('dno_food_ventures_codes.module_name', $moduleName)
                             ->whereDate('dno_food_ventures_payment_vouchers.created_at', '=', date($getDate))
                             ->where('dno_food_ventures_payment_vouchers.method_of_payment', $cash)
@@ -675,12 +1173,14 @@ class DnoFoodVenturesController extends Controller
                                 'dno_food_ventures_payment_vouchers.cheque_total_amount',
                                 'dno_food_ventures_payment_vouchers.sub_category',
                                 'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                                'dno_food_ventures_payment_vouchers.deleted_at',
                                 'dno_food_ventures_codes.dno_food_venture_code',
                                 'dno_food_ventures_codes.module_id',
                                 'dno_food_ventures_codes.module_code',
                                 'dno_food_ventures_codes.module_name')
                                 ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
                                 ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                                ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
                                 ->where('dno_food_ventures_codes.module_name', $moduleName)
                                 ->whereDate('dno_food_ventures_payment_vouchers.created_at', '=', date($getDate))
                                 ->where('dno_food_ventures_payment_vouchers.method_of_payment', $check)
@@ -717,12 +1217,14 @@ class DnoFoodVenturesController extends Controller
                                     'dno_food_ventures_payment_vouchers.cheque_amount',
                                     'dno_food_ventures_payment_vouchers.sub_category',
                                     'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                                    'dno_food_ventures_payment_vouchers.deleted_at',
                                     'dno_food_ventures_codes.dno_food_venture_code',
                                     'dno_food_ventures_codes.module_id',
                                     'dno_food_ventures_codes.module_code',
                                     'dno_food_ventures_codes.module_name')
                                     ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
                                     ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                                    ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
                                     ->where('dno_food_ventures_codes.module_name', $moduleName)
                                     ->whereDate('dno_food_ventures_payment_vouchers.created_at', '=', date($getDate))
                                     ->where('dno_food_ventures_payment_vouchers.method_of_payment', $check)
@@ -768,12 +1270,14 @@ class DnoFoodVenturesController extends Controller
                             'dno_food_ventures_payment_vouchers.cheque_amount',
                             'dno_food_ventures_payment_vouchers.sub_category',
                             'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                            'dno_food_ventures_payment_vouchers.deleted_at',
                             'dno_food_ventures_codes.dno_food_venture_code',
                             'dno_food_ventures_codes.module_id',
                             'dno_food_ventures_codes.module_code',
                             'dno_food_ventures_codes.module_name')
                             ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
                             ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                            ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
                             ->where('dno_food_ventures_codes.module_name', $moduleName)
                             ->whereDate('dno_food_ventures_payment_vouchers.created_at', '=', date($getDateToday))
                             ->orderBy('dno_food_ventures_payment_vouchers.id', 'desc')
@@ -811,12 +1315,14 @@ class DnoFoodVenturesController extends Controller
                         'dno_food_ventures_payment_vouchers.cheque_amount',
                         'dno_food_ventures_payment_vouchers.sub_category',
                         'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                        'dno_food_ventures_payment_vouchers.deleted_at',
                         'dno_food_ventures_codes.dno_food_venture_code',
                         'dno_food_ventures_codes.module_id',
                         'dno_food_ventures_codes.module_code',
                         'dno_food_ventures_codes.module_name')
                         ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
                         ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                        ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
                         ->where('dno_food_ventures_codes.module_name', $moduleName)
                         ->whereDate('dno_food_ventures_payment_vouchers.created_at', '=', date($getDateToday))
                         ->where('dno_food_ventures_payment_vouchers.method_of_payment', $cash)
@@ -852,12 +1358,14 @@ class DnoFoodVenturesController extends Controller
                             'dno_food_ventures_payment_vouchers.cheque_amount',
                             'dno_food_ventures_payment_vouchers.sub_category',
                             'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                            'dno_food_ventures_payment_vouchers.deleted_at',
                             'dno_food_ventures_codes.dno_food_venture_code',
                             'dno_food_ventures_codes.module_id',
                             'dno_food_ventures_codes.module_code',
                             'dno_food_ventures_codes.module_name')
                             ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
                             ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                            ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
                             ->where('dno_food_ventures_codes.module_name', $moduleName)
                             ->whereDate('dno_food_ventures_payment_vouchers.created_at', '=', date($getDateToday))
                             ->where('dno_food_ventures_payment_vouchers.method_of_payment', $cash)
@@ -895,12 +1403,14 @@ class DnoFoodVenturesController extends Controller
                                 'dno_food_ventures_payment_vouchers.cheque_total_amount',
                                 'dno_food_ventures_payment_vouchers.sub_category',
                                 'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                                'dno_food_ventures_payment_vouchers.deleted_at',
                                 'dno_food_ventures_codes.dno_food_venture_code',
                                 'dno_food_ventures_codes.module_id',
                                 'dno_food_ventures_codes.module_code',
                                 'dno_food_ventures_codes.module_name')
                                 ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
                                 ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                                ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
                                 ->where('dno_food_ventures_codes.module_name', $moduleName)
                                 ->whereDate('dno_food_ventures_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('dno_food_ventures_payment_vouchers.method_of_payment', $check)
@@ -937,12 +1447,14 @@ class DnoFoodVenturesController extends Controller
                                     'dno_food_ventures_payment_vouchers.cheque_amount',
                                     'dno_food_ventures_payment_vouchers.sub_category',
                                     'dno_food_ventures_payment_vouchers.sub_category_account_id',
+                                    'dno_food_ventures_payment_vouchers.deleted_at',
                                     'dno_food_ventures_codes.dno_food_venture_code',
                                     'dno_food_ventures_codes.module_id',
                                     'dno_food_ventures_codes.module_code',
                                     'dno_food_ventures_codes.module_name')
                                     ->leftJoin('dno_food_ventures_codes', 'dno_food_ventures_payment_vouchers.id', '=', 'dno_food_ventures_codes.module_id')
                                     ->where('dno_food_ventures_payment_vouchers.pv_id', NULL)
+                                    ->where('dno_food_ventures_payment_vouchers.deleted_at', NULL)
                                     ->where('dno_food_ventures_codes.module_name', $moduleName)
                                     ->whereDate('dno_food_ventures_payment_vouchers.created_at', '=', date($getDateToday))
                                     ->where('dno_food_ventures_payment_vouchers.method_of_payment', $check)

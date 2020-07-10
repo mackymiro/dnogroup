@@ -16,6 +16,495 @@ use App\WlgCorporationCode;
 
 class WlgCorporationController extends Controller
 {
+
+    public function printMultipleSummary(Request $request, $date){
+        $urlSegment = \Request::segment(3);
+        $uri = explode("TO", $urlSegment);
+        $uri0 = $uri[0];
+        $uri1 = $uri[1];
+
+        $moduleNamePV = "Payment Voucher";
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                                'wlg_corporation_payment_vouchers')
+                                ->select( 
+                                'wlg_corporation_payment_vouchers.id',
+                                'wlg_corporation_payment_vouchers.user_id',
+                                'wlg_corporation_payment_vouchers.pv_id',
+                                'wlg_corporation_payment_vouchers.date',
+                                'wlg_corporation_payment_vouchers.paid_to',
+                                'wlg_corporation_payment_vouchers.account_no',
+                                'wlg_corporation_payment_vouchers.account_name',
+                                'wlg_corporation_payment_vouchers.particulars',
+                                'wlg_corporation_payment_vouchers.amount',
+                                'wlg_corporation_payment_vouchers.method_of_payment',
+                                'wlg_corporation_payment_vouchers.prepared_by',
+                                'wlg_corporation_payment_vouchers.approved_by',
+                                'wlg_corporation_payment_vouchers.date_approved',
+                                'wlg_corporation_payment_vouchers.received_by_date',
+                                'wlg_corporation_payment_vouchers.created_by',
+                                'wlg_corporation_payment_vouchers.created_at',
+                                'wlg_corporation_payment_vouchers.invoice_number',
+                                'wlg_corporation_payment_vouchers.voucher_ref_number',
+                                'wlg_corporation_payment_vouchers.issued_date',
+                                'wlg_corporation_payment_vouchers.category',
+                                'wlg_corporation_payment_vouchers.amount_due',
+                                'wlg_corporation_payment_vouchers.delivered_date',
+                                'wlg_corporation_payment_vouchers.status',
+                                'wlg_corporation_payment_vouchers.cheque_number',
+                                'wlg_corporation_payment_vouchers.cheque_amount',
+                                'wlg_corporation_payment_vouchers.sub_category',
+                                'wlg_corporation_payment_vouchers.sub_category_account_id',
+                                'wlg_corporation_payment_vouchers.deleted_at',
+                                'wlg_corporation_codes.wlg_code',
+                                'wlg_corporation_codes.module_id',
+                                'wlg_corporation_codes.module_code',
+                                'wlg_corporation_codes.module_name')
+                                ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
+                                ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                                ->where('wlg_corporation_payment_vouchers.deleted_at', NULL)
+                                ->where('wlg_corporation_codes.module_name', $moduleNamePV)
+                                ->whereBetween('wlg_corporation_payment_vouchers.created_at', [$uri0, $uri1])
+                                ->where('wlg_corporation_payment_vouchers.method_of_payment', $cash)
+                                ->get()->toArray();
+
+        $totalAmountCashes = DB::table(
+                                    'wlg_corporation_payment_vouchers')
+                                    ->select( 
+                                    'wlg_corporation_payment_vouchers.id',
+                                    'wlg_corporation_payment_vouchers.user_id',
+                                    'wlg_corporation_payment_vouchers.pv_id',
+                                    'wlg_corporation_payment_vouchers.date',
+                                    'wlg_corporation_payment_vouchers.paid_to',
+                                    'wlg_corporation_payment_vouchers.account_no',
+                                    'wlg_corporation_payment_vouchers.account_name',
+                                    'wlg_corporation_payment_vouchers.particulars',
+                                    'wlg_corporation_payment_vouchers.amount',
+                                    'wlg_corporation_payment_vouchers.method_of_payment',
+                                    'wlg_corporation_payment_vouchers.prepared_by',
+                                    'wlg_corporation_payment_vouchers.approved_by',
+                                    'wlg_corporation_payment_vouchers.date_approved',
+                                    'wlg_corporation_payment_vouchers.received_by_date',
+                                    'wlg_corporation_payment_vouchers.created_by',
+                                    'wlg_corporation_payment_vouchers.created_at',
+                                    'wlg_corporation_payment_vouchers.invoice_number',
+                                    'wlg_corporation_payment_vouchers.voucher_ref_number',
+                                    'wlg_corporation_payment_vouchers.issued_date',
+                                    'wlg_corporation_payment_vouchers.category',
+                                    'wlg_corporation_payment_vouchers.amount_due',
+                                    'wlg_corporation_payment_vouchers.delivered_date',
+                                    'wlg_corporation_payment_vouchers.status',
+                                    'wlg_corporation_payment_vouchers.cheque_number',
+                                    'wlg_corporation_payment_vouchers.cheque_amount',
+                                    'wlg_corporation_payment_vouchers.sub_category',
+                                    'wlg_corporation_payment_vouchers.sub_category_account_id',
+                                    'wlg_corporation_payment_vouchers.deleted_at',
+                                    'wlg_corporation_codes.wlg_code',
+                                    'wlg_corporation_codes.module_id',
+                                    'wlg_corporation_codes.module_code',
+                                    'wlg_corporation_codes.module_name')
+                                    ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
+                                    ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                                    ->where('wlg_corporation_payment_vouchers.deleted_at', NULL)
+                                    ->where('wlg_corporation_codes.module_name', $moduleNamePV)
+                                    ->whereBetween('wlg_corporation_payment_vouchers.created_at', [$uri0, $uri1])
+                                    ->where('wlg_corporation_payment_vouchers.method_of_payment', $cash)
+                                    ->sum('wlg_corporation_payment_vouchers.amount_due');
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                            'wlg_corporation_payment_vouchers')
+                            ->select( 
+                            'wlg_corporation_payment_vouchers.id',
+                            'wlg_corporation_payment_vouchers.user_id',
+                            'wlg_corporation_payment_vouchers.pv_id',
+                            'wlg_corporation_payment_vouchers.date',
+                            'wlg_corporation_payment_vouchers.paid_to',
+                            'wlg_corporation_payment_vouchers.account_no',
+                            'wlg_corporation_payment_vouchers.account_name',
+                            'wlg_corporation_payment_vouchers.particulars',
+                            'wlg_corporation_payment_vouchers.amount',
+                            'wlg_corporation_payment_vouchers.method_of_payment',
+                            'wlg_corporation_payment_vouchers.prepared_by',
+                            'wlg_corporation_payment_vouchers.approved_by',
+                            'wlg_corporation_payment_vouchers.date_approved',
+                            'wlg_corporation_payment_vouchers.received_by_date',
+                            'wlg_corporation_payment_vouchers.created_by',
+                            'wlg_corporation_payment_vouchers.created_at',
+                            'wlg_corporation_payment_vouchers.invoice_number',
+                            'wlg_corporation_payment_vouchers.voucher_ref_number',
+                            'wlg_corporation_payment_vouchers.issued_date',
+                            'wlg_corporation_payment_vouchers.category',
+                            'wlg_corporation_payment_vouchers.amount_due',
+                            'wlg_corporation_payment_vouchers.delivered_date',
+                            'wlg_corporation_payment_vouchers.status',
+                            'wlg_corporation_payment_vouchers.cheque_number',
+                            'wlg_corporation_payment_vouchers.cheque_amount',
+                            'wlg_corporation_payment_vouchers.cheque_total_amount',
+                            'wlg_corporation_payment_vouchers.sub_category',
+                            'wlg_corporation_payment_vouchers.sub_category_account_id',
+                            'wlg_corporation_payment_vouchers.deleted_at',
+                            'wlg_corporation_codes.wlg_code',
+                            'wlg_corporation_codes.module_id',
+                            'wlg_corporation_codes.module_code',
+                            'wlg_corporation_codes.module_name')
+                            ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
+                            ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                            ->where('wlg_corporation_payment_vouchers.deleted_at', NULL)
+                            ->where('wlg_corporation_codes.module_name', $moduleNamePV)
+                            ->whereBetween('wlg_corporation_payment_vouchers.created_at', [$uri0, $uri1])
+                            ->where('wlg_corporation_payment_vouchers.method_of_payment', $check)
+                            ->get()->toArray();
+        
+        $status = "FULLY PAID AND RELEASED";
+        $totalAmountCheck = DB::table(
+                                'wlg_corporation_payment_vouchers')
+                                ->select( 
+                                'wlg_corporation_payment_vouchers.id',
+                                'wlg_corporation_payment_vouchers.user_id',
+                                'wlg_corporation_payment_vouchers.pv_id',
+                                'wlg_corporation_payment_vouchers.date',
+                                'wlg_corporation_payment_vouchers.paid_to',
+                                'wlg_corporation_payment_vouchers.account_no',
+                                'wlg_corporation_payment_vouchers.account_name',
+                                'wlg_corporation_payment_vouchers.particulars',
+                                'wlg_corporation_payment_vouchers.amount',
+                                'wlg_corporation_payment_vouchers.method_of_payment',
+                                'wlg_corporation_payment_vouchers.prepared_by',
+                                'wlg_corporation_payment_vouchers.approved_by',
+                                'wlg_corporation_payment_vouchers.date_approved',
+                                'wlg_corporation_payment_vouchers.received_by_date',
+                                'wlg_corporation_payment_vouchers.created_by',
+                                'wlg_corporation_payment_vouchers.created_at',
+                                'wlg_corporation_payment_vouchers.invoice_number',
+                                'wlg_corporation_payment_vouchers.voucher_ref_number',
+                                'wlg_corporation_payment_vouchers.issued_date',
+                                'wlg_corporation_payment_vouchers.category',
+                                'wlg_corporation_payment_vouchers.amount_due',
+                                'wlg_corporation_payment_vouchers.delivered_date',
+                                'wlg_corporation_payment_vouchers.status',
+                                'wlg_corporation_payment_vouchers.cheque_number',
+                                'wlg_corporation_payment_vouchers.cheque_amount',
+                                'wlg_corporation_payment_vouchers.sub_category',
+                                'wlg_corporation_payment_vouchers.sub_category_account_id',
+                                'wlg_corporation_payment_vouchers.deleted_at',
+                                'wlg_corporation_codes.wlg_code',
+                                'wlg_corporation_codes.module_id',
+                                'wlg_corporation_codes.module_code',
+                                'wlg_corporation_codes.module_name')
+                                ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
+                                ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                                ->where('wlg_corporation_payment_vouchers.deleted_at', NULL)
+                                ->where('wlg_corporation_codes.module_name', $moduleNamePV)
+                                ->whereBetween('wlg_corporation_payment_vouchers.created_at', [$uri0, $uri1])
+                                ->where('wlg_corporation_payment_vouchers.method_of_payment', $check)
+                                ->where('wlg_corporation_payment_vouchers.status', '!=', $status)
+                                ->sum('wlg_corporation_payment_vouchers.amount_due');
+        
+    $totalPaidAmountCheck = DB::table(
+                                    'wlg_corporation_payment_vouchers')
+                                    ->select( 
+                                    'wlg_corporation_payment_vouchers.id',
+                                    'wlg_corporation_payment_vouchers.user_id',
+                                    'wlg_corporation_payment_vouchers.pv_id',
+                                    'wlg_corporation_payment_vouchers.date',
+                                    'wlg_corporation_payment_vouchers.paid_to',
+                                    'wlg_corporation_payment_vouchers.account_no',
+                                    'wlg_corporation_payment_vouchers.account_name',
+                                    'wlg_corporation_payment_vouchers.particulars',
+                                    'wlg_corporation_payment_vouchers.amount',
+                                    'wlg_corporation_payment_vouchers.method_of_payment',
+                                    'wlg_corporation_payment_vouchers.prepared_by',
+                                    'wlg_corporation_payment_vouchers.approved_by',
+                                    'wlg_corporation_payment_vouchers.date_approved',
+                                    'wlg_corporation_payment_vouchers.received_by_date',
+                                    'wlg_corporation_payment_vouchers.created_by',
+                                    'wlg_corporation_payment_vouchers.created_at',
+                                    'wlg_corporation_payment_vouchers.invoice_number',
+                                    'wlg_corporation_payment_vouchers.voucher_ref_number',
+                                    'wlg_corporation_payment_vouchers.issued_date',
+                                    'wlg_corporation_payment_vouchers.category',
+                                    'wlg_corporation_payment_vouchers.amount_due',
+                                    'wlg_corporation_payment_vouchers.delivered_date',
+                                    'wlg_corporation_payment_vouchers.status',
+                                    'wlg_corporation_payment_vouchers.cheque_number',
+                                    'wlg_corporation_payment_vouchers.cheque_amount',
+                                    'wlg_corporation_payment_vouchers.cheque_total_amount',
+                                    'wlg_corporation_payment_vouchers.sub_category',
+                                    'wlg_corporation_payment_vouchers.sub_category_account_id',
+                                    'wlg_corporation_payment_vouchers.deleted_at',
+                                    'wlg_corporation_codes.wlg_code',
+                                    'wlg_corporation_codes.module_id',
+                                    'wlg_corporation_codes.module_code',
+                                    'wlg_corporation_codes.module_name')
+                                    ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
+                                    ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                                    ->where('wlg_corporation_payment_vouchers.deleted_at', NULL)
+                                    ->where('wlg_corporation_codes.module_name', $moduleNamePV)
+                                    ->whereBetween('wlg_corporation_payment_vouchers.created_at', [$uri0, $uri1])
+                                    ->where('wlg_corporation_payment_vouchers.method_of_payment', $check)
+                                    ->where('wlg_corporation_payment_vouchers.status', $status)
+                                    ->sum('wlg_corporation_payment_vouchers.cheque_total_amount');
+
+        $getDateToday = "";
+        $pdf = PDF::loadView('printSummaryWlg',  compact('date', 'getDateToday', 'uri0', 'uri1',
+        'getTransactionListCashes', 'getTransactionListChecks',  
+        'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck'));
+        
+        return $pdf->download('wlg-corporation-summary-report.pdf');
+
+
+
+    }
+
+    public function getSummaryReportMultiple(Request $request){
+        $startDate = date("Y-m-d",strtotime($request->input('startDate')));
+        $endDate = date("Y-m-d",strtotime($request->input('endDate')."+1 day"));
+
+        $moduleName = "Purchase Order";
+        $purchaseOrders = DB::table(
+                        'wlg_corporation_purchase_orders')
+                        ->select(
+                            'wlg_corporation_purchase_orders.id',
+                            'wlg_corporation_purchase_orders.user_id',
+                            'wlg_corporation_purchase_orders.po_id',
+                            'wlg_corporation_purchase_orders.paid_to',
+                            'wlg_corporation_purchase_orders.address',
+                            'wlg_corporation_purchase_orders.date',
+                            'wlg_corporation_purchase_orders.model',
+                            'wlg_corporation_purchase_orders.particulars',
+                            'wlg_corporation_purchase_orders.quantity',
+                            'wlg_corporation_purchase_orders.unit_price',
+                            'wlg_corporation_purchase_orders.amount',
+                            'wlg_corporation_purchase_orders.requested_by',
+                            'wlg_corporation_purchase_orders.prepared_by',
+                            'wlg_corporation_purchase_orders.checked_by',
+                            'wlg_corporation_purchase_orders.created_by',
+                            'wlg_corporation_purchase_orders.created_at',
+                            'wlg_corporation_codes.wlg_code',
+                            'wlg_corporation_codes.module_id',
+                            'wlg_corporation_codes.module_code',
+                            'wlg_corporation_codes.module_name')
+                        ->leftJoin('wlg_corporation_codes', 'wlg_corporation_purchase_orders.id', '=', 'wlg_corporation_codes.module_id')
+                        ->where('wlg_corporation_purchase_orders.po_id', NULL)
+                        ->where('wlg_corporation_codes.module_name', $moduleName)
+                        ->whereBetween('wlg_corporation_purchase_orders.created_at', [$startDate, $endDate])
+                        ->orderBy('wlg_corporation_purchase_orders.id', 'desc')
+                        ->get()->toArray();
+
+        $moduleNamePV = "Payment Voucher";
+        $getTransactionLists = DB::table(
+                            'wlg_corporation_payment_vouchers')
+                            ->select( 
+                            'wlg_corporation_payment_vouchers.id',
+                            'wlg_corporation_payment_vouchers.user_id',
+                            'wlg_corporation_payment_vouchers.pv_id',
+                            'wlg_corporation_payment_vouchers.date',
+                            'wlg_corporation_payment_vouchers.paid_to',
+                            'wlg_corporation_payment_vouchers.account_no',
+                            'wlg_corporation_payment_vouchers.account_name',
+                            'wlg_corporation_payment_vouchers.particulars',
+                            'wlg_corporation_payment_vouchers.amount',
+                            'wlg_corporation_payment_vouchers.method_of_payment',
+                            'wlg_corporation_payment_vouchers.prepared_by',
+                            'wlg_corporation_payment_vouchers.approved_by',
+                            'wlg_corporation_payment_vouchers.date_approved',
+                            'wlg_corporation_payment_vouchers.received_by_date',
+                            'wlg_corporation_payment_vouchers.created_by',
+                            'wlg_corporation_payment_vouchers.created_at',
+                            'wlg_corporation_payment_vouchers.invoice_number',
+                            'wlg_corporation_payment_vouchers.voucher_ref_number',
+                            'wlg_corporation_payment_vouchers.issued_date',
+                            'wlg_corporation_payment_vouchers.category',
+                            'wlg_corporation_payment_vouchers.amount_due',
+                            'wlg_corporation_payment_vouchers.delivered_date',
+                            'wlg_corporation_payment_vouchers.status',
+                            'wlg_corporation_payment_vouchers.cheque_number',
+                            'wlg_corporation_payment_vouchers.cheque_amount',
+                            'wlg_corporation_payment_vouchers.sub_category',
+                            'wlg_corporation_payment_vouchers.sub_category_account_id',
+                            'wlg_corporation_codes.wlg_code',
+                            'wlg_corporation_codes.module_id',
+                            'wlg_corporation_codes.module_code',
+                            'wlg_corporation_codes.module_name')
+                            ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
+                            ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                            ->where('wlg_corporation_codes.module_name', $moduleNamePV)
+                            ->whereBetween('wlg_corporation_payment_vouchers.created_at', [$startDate, $endDate])
+                            ->get()->toArray();
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                                'wlg_corporation_payment_vouchers')
+                                ->select( 
+                                'wlg_corporation_payment_vouchers.id',
+                                'wlg_corporation_payment_vouchers.user_id',
+                                'wlg_corporation_payment_vouchers.pv_id',
+                                'wlg_corporation_payment_vouchers.date',
+                                'wlg_corporation_payment_vouchers.paid_to',
+                                'wlg_corporation_payment_vouchers.account_no',
+                                'wlg_corporation_payment_vouchers.account_name',
+                                'wlg_corporation_payment_vouchers.particulars',
+                                'wlg_corporation_payment_vouchers.amount',
+                                'wlg_corporation_payment_vouchers.method_of_payment',
+                                'wlg_corporation_payment_vouchers.prepared_by',
+                                'wlg_corporation_payment_vouchers.approved_by',
+                                'wlg_corporation_payment_vouchers.date_approved',
+                                'wlg_corporation_payment_vouchers.received_by_date',
+                                'wlg_corporation_payment_vouchers.created_by',
+                                'wlg_corporation_payment_vouchers.created_at',
+                                'wlg_corporation_payment_vouchers.invoice_number',
+                                'wlg_corporation_payment_vouchers.voucher_ref_number',
+                                'wlg_corporation_payment_vouchers.issued_date',
+                                'wlg_corporation_payment_vouchers.category',
+                                'wlg_corporation_payment_vouchers.amount_due',
+                                'wlg_corporation_payment_vouchers.delivered_date',
+                                'wlg_corporation_payment_vouchers.status',
+                                'wlg_corporation_payment_vouchers.cheque_number',
+                                'wlg_corporation_payment_vouchers.cheque_amount',
+                                'wlg_corporation_payment_vouchers.sub_category',
+                                'wlg_corporation_payment_vouchers.sub_category_account_id',
+                                'wlg_corporation_codes.wlg_code',
+                                'wlg_corporation_codes.module_id',
+                                'wlg_corporation_codes.module_code',
+                                'wlg_corporation_codes.module_name')
+                                ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
+                                ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                                ->where('wlg_corporation_codes.module_name', $moduleNamePV)
+                                ->whereBetween('wlg_corporation_payment_vouchers.created_at', [$startDate, $endDate])
+                                ->where('wlg_corporation_payment_vouchers.method_of_payment', $cash)
+                                ->get()->toArray();
+
+        $totalAmountCashes = DB::table(
+                                    'wlg_corporation_payment_vouchers')
+                                    ->select( 
+                                    'wlg_corporation_payment_vouchers.id',
+                                    'wlg_corporation_payment_vouchers.user_id',
+                                    'wlg_corporation_payment_vouchers.pv_id',
+                                    'wlg_corporation_payment_vouchers.date',
+                                    'wlg_corporation_payment_vouchers.paid_to',
+                                    'wlg_corporation_payment_vouchers.account_no',
+                                    'wlg_corporation_payment_vouchers.account_name',
+                                    'wlg_corporation_payment_vouchers.particulars',
+                                    'wlg_corporation_payment_vouchers.amount',
+                                    'wlg_corporation_payment_vouchers.method_of_payment',
+                                    'wlg_corporation_payment_vouchers.prepared_by',
+                                    'wlg_corporation_payment_vouchers.approved_by',
+                                    'wlg_corporation_payment_vouchers.date_approved',
+                                    'wlg_corporation_payment_vouchers.received_by_date',
+                                    'wlg_corporation_payment_vouchers.created_by',
+                                    'wlg_corporation_payment_vouchers.created_at',
+                                    'wlg_corporation_payment_vouchers.invoice_number',
+                                    'wlg_corporation_payment_vouchers.voucher_ref_number',
+                                    'wlg_corporation_payment_vouchers.issued_date',
+                                    'wlg_corporation_payment_vouchers.category',
+                                    'wlg_corporation_payment_vouchers.amount_due',
+                                    'wlg_corporation_payment_vouchers.delivered_date',
+                                    'wlg_corporation_payment_vouchers.status',
+                                    'wlg_corporation_payment_vouchers.cheque_number',
+                                    'wlg_corporation_payment_vouchers.cheque_amount',
+                                    'wlg_corporation_payment_vouchers.sub_category',
+                                    'wlg_corporation_payment_vouchers.sub_category_account_id',
+                                    'wlg_corporation_codes.wlg_code',
+                                    'wlg_corporation_codes.module_id',
+                                    'wlg_corporation_codes.module_code',
+                                    'wlg_corporation_codes.module_name')
+                                    ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
+                                    ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                                    ->where('wlg_corporation_codes.module_name', $moduleNamePV)
+                                    ->whereBetween('wlg_corporation_payment_vouchers.created_at', [$startDate, $endDate])
+                                    ->where('wlg_corporation_payment_vouchers.method_of_payment', $cash)
+                                    ->sum('wlg_corporation_payment_vouchers.amount_due');
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                            'wlg_corporation_payment_vouchers')
+                            ->select( 
+                            'wlg_corporation_payment_vouchers.id',
+                            'wlg_corporation_payment_vouchers.user_id',
+                            'wlg_corporation_payment_vouchers.pv_id',
+                            'wlg_corporation_payment_vouchers.date',
+                            'wlg_corporation_payment_vouchers.paid_to',
+                            'wlg_corporation_payment_vouchers.account_no',
+                            'wlg_corporation_payment_vouchers.account_name',
+                            'wlg_corporation_payment_vouchers.particulars',
+                            'wlg_corporation_payment_vouchers.amount',
+                            'wlg_corporation_payment_vouchers.method_of_payment',
+                            'wlg_corporation_payment_vouchers.prepared_by',
+                            'wlg_corporation_payment_vouchers.approved_by',
+                            'wlg_corporation_payment_vouchers.date_approved',
+                            'wlg_corporation_payment_vouchers.received_by_date',
+                            'wlg_corporation_payment_vouchers.created_by',
+                            'wlg_corporation_payment_vouchers.created_at',
+                            'wlg_corporation_payment_vouchers.invoice_number',
+                            'wlg_corporation_payment_vouchers.voucher_ref_number',
+                            'wlg_corporation_payment_vouchers.issued_date',
+                            'wlg_corporation_payment_vouchers.category',
+                            'wlg_corporation_payment_vouchers.amount_due',
+                            'wlg_corporation_payment_vouchers.delivered_date',
+                            'wlg_corporation_payment_vouchers.status',
+                            'wlg_corporation_payment_vouchers.cheque_number',
+                            'wlg_corporation_payment_vouchers.cheque_amount',
+                            'wlg_corporation_payment_vouchers.cheque_total_amount',
+                            'wlg_corporation_payment_vouchers.sub_category',
+                            'wlg_corporation_payment_vouchers.sub_category_account_id',
+                            'wlg_corporation_codes.wlg_code',
+                            'wlg_corporation_codes.module_id',
+                            'wlg_corporation_codes.module_code',
+                            'wlg_corporation_codes.module_name')
+                            ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
+                            ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                            ->where('wlg_corporation_codes.module_name', $moduleNamePV)
+                            ->whereBetween('wlg_corporation_payment_vouchers.created_at', [$startDate, $endDate])
+                            ->where('wlg_corporation_payment_vouchers.method_of_payment', $check)
+                            ->get()->toArray();
+        
+        $totalAmountCheck = DB::table(
+                                'wlg_corporation_payment_vouchers')
+                                ->select( 
+                                'wlg_corporation_payment_vouchers.id',
+                                'wlg_corporation_payment_vouchers.user_id',
+                                'wlg_corporation_payment_vouchers.pv_id',
+                                'wlg_corporation_payment_vouchers.date',
+                                'wlg_corporation_payment_vouchers.paid_to',
+                                'wlg_corporation_payment_vouchers.account_no',
+                                'wlg_corporation_payment_vouchers.account_name',
+                                'wlg_corporation_payment_vouchers.particulars',
+                                'wlg_corporation_payment_vouchers.amount',
+                                'wlg_corporation_payment_vouchers.method_of_payment',
+                                'wlg_corporation_payment_vouchers.prepared_by',
+                                'wlg_corporation_payment_vouchers.approved_by',
+                                'wlg_corporation_payment_vouchers.date_approved',
+                                'wlg_corporation_payment_vouchers.received_by_date',
+                                'wlg_corporation_payment_vouchers.created_by',
+                                'wlg_corporation_payment_vouchers.created_at',
+                                'wlg_corporation_payment_vouchers.invoice_number',
+                                'wlg_corporation_payment_vouchers.voucher_ref_number',
+                                'wlg_corporation_payment_vouchers.issued_date',
+                                'wlg_corporation_payment_vouchers.category',
+                                'wlg_corporation_payment_vouchers.amount_due',
+                                'wlg_corporation_payment_vouchers.delivered_date',
+                                'wlg_corporation_payment_vouchers.status',
+                                'wlg_corporation_payment_vouchers.cheque_number',
+                                'wlg_corporation_payment_vouchers.cheque_amount',
+                                'wlg_corporation_payment_vouchers.sub_category',
+                                'wlg_corporation_payment_vouchers.sub_category_account_id',
+                                'wlg_corporation_codes.wlg_code',
+                                'wlg_corporation_codes.module_id',
+                                'wlg_corporation_codes.module_code',
+                                'wlg_corporation_codes.module_name')
+                                ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
+                                ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                                ->where('wlg_corporation_codes.module_name', $moduleNamePV)
+                                ->whereBetween('wlg_corporation_payment_vouchers.created_at', [$startDate, $endDate])
+                                ->where('wlg_corporation_payment_vouchers.method_of_payment', $check)
+                                ->sum('wlg_corporation_payment_vouchers.amount_due');
+
+        return view('wlg-corporation-multiple-summary-report', compact('purchaseOrders', 'startDate',  'endDate',
+        'getTransactionLists', 'getTransactionListCashes', 'totalAmountCashes', 'getTransactionListChecks', 
+        'totalAmountCheck'));
+        
+    }
+
     public function search(Request $request){
         $getSearchResults =WlgCorporationCode::where('wlg_code', $request->get('searchCode'))->get();
         if($getSearchResults[0]->module_name === "Purchase Order"){
@@ -142,12 +631,14 @@ class WlgCorporationController extends Controller
                                 'wlg_corporation_payment_vouchers.cheque_amount',
                                 'wlg_corporation_payment_vouchers.sub_category',
                                 'wlg_corporation_payment_vouchers.sub_category_account_id',
+                                'wlg_corporation_payment_vouchers.deleted_at',
                                 'wlg_corporation_codes.wlg_code',
                                 'wlg_corporation_codes.module_id',
                                 'wlg_corporation_codes.module_code',
                                 'wlg_corporation_codes.module_name')
                                 ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
                                 ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                                ->where('wlg_corporation_payment_vouchers.deleted_at', NULL)
                                 ->where('wlg_corporation_codes.module_name', $moduleNamePV)
                                 ->whereDate('wlg_corporation_payment_vouchers.created_at', '=', date($date))
                                 ->where('wlg_corporation_payment_vouchers.method_of_payment', $cash)
@@ -183,12 +674,14 @@ class WlgCorporationController extends Controller
                                     'wlg_corporation_payment_vouchers.cheque_amount',
                                     'wlg_corporation_payment_vouchers.sub_category',
                                     'wlg_corporation_payment_vouchers.sub_category_account_id',
+                                    'wlg_corporation_payment_vouchers.deleted_at',
                                     'wlg_corporation_codes.wlg_code',
                                     'wlg_corporation_codes.module_id',
                                     'wlg_corporation_codes.module_code',
                                     'wlg_corporation_codes.module_name')
                                     ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
                                     ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                                    ->where('wlg_corporation_payment_vouchers.deleted_at', NULL)
                                     ->where('wlg_corporation_codes.module_name', $moduleNamePV)
                                     ->whereDate('wlg_corporation_payment_vouchers.created_at', '=', date($date))
                                     ->where('wlg_corporation_payment_vouchers.method_of_payment', $cash)
@@ -226,12 +719,14 @@ class WlgCorporationController extends Controller
                             'wlg_corporation_payment_vouchers.cheque_total_amount',
                             'wlg_corporation_payment_vouchers.sub_category',
                             'wlg_corporation_payment_vouchers.sub_category_account_id',
+                            'wlg_corporation_payment_vouchers.deleted_at',
                             'wlg_corporation_codes.wlg_code',
                             'wlg_corporation_codes.module_id',
                             'wlg_corporation_codes.module_code',
                             'wlg_corporation_codes.module_name')
                             ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
                             ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                            ->where('wlg_corporation_payment_vouchers.deleted_at', NULL)
                             ->where('wlg_corporation_codes.module_name', $moduleNamePV)
                             ->whereDate('wlg_corporation_payment_vouchers.created_at', '=', date($date))
                             ->where('wlg_corporation_payment_vouchers.method_of_payment', $check)
@@ -267,12 +762,14 @@ class WlgCorporationController extends Controller
                                 'wlg_corporation_payment_vouchers.cheque_amount',
                                 'wlg_corporation_payment_vouchers.sub_category',
                                 'wlg_corporation_payment_vouchers.sub_category_account_id',
+                                'wlg_corporation_payment_vouchers.deleted_at',
                                 'wlg_corporation_codes.wlg_code',
                                 'wlg_corporation_codes.module_id',
                                 'wlg_corporation_codes.module_code',
                                 'wlg_corporation_codes.module_name')
                                 ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
                                 ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                                ->where('wlg_corporation_payment_vouchers.deleted_at', NULL)
                                 ->where('wlg_corporation_codes.module_name', $moduleNamePV)
                                 ->whereDate('wlg_corporation_payment_vouchers.created_at', '=', date($date))
                                 ->where('wlg_corporation_payment_vouchers.method_of_payment', $check)
@@ -311,19 +808,23 @@ class WlgCorporationController extends Controller
                                     'wlg_corporation_payment_vouchers.cheque_total_amount',
                                     'wlg_corporation_payment_vouchers.sub_category',
                                     'wlg_corporation_payment_vouchers.sub_category_account_id',
+                                    'wlg_corporation_payment_vouchers.deleted_at',
                                     'wlg_corporation_codes.wlg_code',
                                     'wlg_corporation_codes.module_id',
                                     'wlg_corporation_codes.module_code',
                                     'wlg_corporation_codes.module_name')
                                     ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
                                     ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                                    ->where('wlg_corporation_payment_vouchers.deleted_at', NULL)
                                     ->where('wlg_corporation_codes.module_name', $moduleNamePV)
                                     ->whereDate('wlg_corporation_payment_vouchers.created_at', '=', date($date))
                                     ->where('wlg_corporation_payment_vouchers.method_of_payment', $check)
                                     ->where('wlg_corporation_payment_vouchers.status',  $status)
                                     ->sum('wlg_corporation_payment_vouchers.cheque_total_amount');
         $getDateToday = "";
-        $pdf = PDF::loadView('printSummaryWlg',  compact('date', 'getDateToday', 
+        $uri0 = "";
+        $uri1 = "";
+        $pdf = PDF::loadView('printSummaryWlg',  compact('date', 'getDateToday', 'uri0', 'uri1',
          'getTransactionListCashes', 'getTransactionListChecks',  
         'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck'));
         
@@ -353,12 +854,14 @@ class WlgCorporationController extends Controller
                             'wlg_corporation_purchase_orders.checked_by',
                             'wlg_corporation_purchase_orders.created_by',
                             'wlg_corporation_purchase_orders.created_at',
+                            'wlg_corporation_purchase_orders.deleted_at',
                             'wlg_corporation_codes.wlg_code',
                             'wlg_corporation_codes.module_id',
                             'wlg_corporation_codes.module_code',
                             'wlg_corporation_codes.module_name')
                         ->leftJoin('wlg_corporation_codes', 'wlg_corporation_purchase_orders.id', '=', 'wlg_corporation_codes.module_id')
                         ->where('wlg_corporation_purchase_orders.po_id', NULL)
+                        ->where('wlg_corporation_purchase_orders.deleted_at', NULL)
                         ->where('wlg_corporation_codes.module_name', $moduleName)
                         ->whereDate('wlg_corporation_purchase_orders.created_at', '=', date($getDate))
                         ->orderBy('wlg_corporation_purchase_orders.id', 'desc')
@@ -395,12 +898,14 @@ class WlgCorporationController extends Controller
                             'wlg_corporation_payment_vouchers.cheque_amount',
                             'wlg_corporation_payment_vouchers.sub_category',
                             'wlg_corporation_payment_vouchers.sub_category_account_id',
+                            'wlg_corporation_payment_vouchers.deleted_at',
                             'wlg_corporation_codes.wlg_code',
                             'wlg_corporation_codes.module_id',
                             'wlg_corporation_codes.module_code',
                             'wlg_corporation_codes.module_name')
                             ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
                             ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                            ->where('wlg_corporation_payment_vouchers.deleted_at', NULL)
                             ->where('wlg_corporation_codes.module_name', $moduleNamePV)
                             ->whereDate('wlg_corporation_payment_vouchers.created_at', '=', date($getDate))
                             ->get()->toArray();
@@ -435,12 +940,14 @@ class WlgCorporationController extends Controller
                                 'wlg_corporation_payment_vouchers.cheque_amount',
                                 'wlg_corporation_payment_vouchers.sub_category',
                                 'wlg_corporation_payment_vouchers.sub_category_account_id',
+                                'wlg_corporation_payment_vouchers.deleted_at',
                                 'wlg_corporation_codes.wlg_code',
                                 'wlg_corporation_codes.module_id',
                                 'wlg_corporation_codes.module_code',
                                 'wlg_corporation_codes.module_name')
                                 ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
                                 ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                                ->where('wlg_corporation_payment_vouchers.deleted_at', NULL)
                                 ->where('wlg_corporation_codes.module_name', $moduleNamePV)
                                 ->whereDate('wlg_corporation_payment_vouchers.created_at', '=', date($getDate))
                                 ->where('wlg_corporation_payment_vouchers.method_of_payment', $cash)
@@ -476,12 +983,14 @@ class WlgCorporationController extends Controller
                                     'wlg_corporation_payment_vouchers.cheque_amount',
                                     'wlg_corporation_payment_vouchers.sub_category',
                                     'wlg_corporation_payment_vouchers.sub_category_account_id',
+                                    'wlg_corporation_payment_vouchers.deleted_at',
                                     'wlg_corporation_codes.wlg_code',
                                     'wlg_corporation_codes.module_id',
                                     'wlg_corporation_codes.module_code',
                                     'wlg_corporation_codes.module_name')
                                     ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
                                     ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                                    ->where('wlg_corporation_payment_vouchers.deleted_at', NULL)
                                     ->where('wlg_corporation_codes.module_name', $moduleNamePV)
                                     ->whereDate('wlg_corporation_payment_vouchers.created_at', '=', date($getDate))
                                     ->where('wlg_corporation_payment_vouchers.method_of_payment', $cash)
@@ -519,12 +1028,14 @@ class WlgCorporationController extends Controller
                             'wlg_corporation_payment_vouchers.cheque_total_amount',
                             'wlg_corporation_payment_vouchers.sub_category',
                             'wlg_corporation_payment_vouchers.sub_category_account_id',
+                            'wlg_corporation_payment_vouchers.deleted_at',
                             'wlg_corporation_codes.wlg_code',
                             'wlg_corporation_codes.module_id',
                             'wlg_corporation_codes.module_code',
                             'wlg_corporation_codes.module_name')
                             ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
                             ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                            ->where('wlg_corporation_payment_vouchers.deleted_at', NULL)
                             ->where('wlg_corporation_codes.module_name', $moduleNamePV)
                             ->whereDate('wlg_corporation_payment_vouchers.created_at', '=', date($getDate))
                             ->where('wlg_corporation_payment_vouchers.method_of_payment', $check)
@@ -561,12 +1072,14 @@ class WlgCorporationController extends Controller
                                 'wlg_corporation_payment_vouchers.cheque_amount',
                                 'wlg_corporation_payment_vouchers.sub_category',
                                 'wlg_corporation_payment_vouchers.sub_category_account_id',
+                                'wlg_corporation_payment_vouchers.deleted_at',
                                 'wlg_corporation_codes.wlg_code',
                                 'wlg_corporation_codes.module_id',
                                 'wlg_corporation_codes.module_code',
                                 'wlg_corporation_codes.module_name')
                                 ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
                                 ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                                ->where('wlg_corporation_payment_vouchers.deleted_at', NULL)
                                 ->where('wlg_corporation_codes.module_name', $moduleNamePV)
                                 ->whereDate('wlg_corporation_payment_vouchers.created_at', '=', date($getDate))
                                 ->where('wlg_corporation_payment_vouchers.method_of_payment', $check)
@@ -614,12 +1127,14 @@ class WlgCorporationController extends Controller
                                 'wlg_corporation_payment_vouchers.cheque_amount',
                                 'wlg_corporation_payment_vouchers.sub_category',
                                 'wlg_corporation_payment_vouchers.sub_category_account_id',
+                                'wlg_corporation_payment_vouchers.deleted_at',
                                 'wlg_corporation_codes.wlg_code',
                                 'wlg_corporation_codes.module_id',
                                 'wlg_corporation_codes.module_code',
                                 'wlg_corporation_codes.module_name')
                                 ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
                                 ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                                ->where('wlg_corporation_payment_vouchers.deleted_at', NULL)
                                 ->where('wlg_corporation_codes.module_name', $moduleNamePV)
                                 ->whereDate('wlg_corporation_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('wlg_corporation_payment_vouchers.method_of_payment', $cash)
@@ -655,12 +1170,14 @@ class WlgCorporationController extends Controller
                                     'wlg_corporation_payment_vouchers.cheque_amount',
                                     'wlg_corporation_payment_vouchers.sub_category',
                                     'wlg_corporation_payment_vouchers.sub_category_account_id',
+                                    'wlg_corporation_payment_vouchers.deleted_at',
                                     'wlg_corporation_codes.wlg_code',
                                     'wlg_corporation_codes.module_id',
                                     'wlg_corporation_codes.module_code',
                                     'wlg_corporation_codes.module_name')
                                     ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
                                     ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                                    ->where('wlg_corporation_payment_vouchers.deleted_at', NULL)
                                     ->where('wlg_corporation_codes.module_name', $moduleNamePV)
                                     ->whereDate('wlg_corporation_payment_vouchers.created_at', '=', date($getDateToday))
                                     ->where('wlg_corporation_payment_vouchers.method_of_payment', $cash)
@@ -698,12 +1215,14 @@ class WlgCorporationController extends Controller
                             'wlg_corporation_payment_vouchers.cheque_total_amount',
                             'wlg_corporation_payment_vouchers.sub_category',
                             'wlg_corporation_payment_vouchers.sub_category_account_id',
+                            'wlg_corporation_payment_vouchers.deleted_at',
                             'wlg_corporation_codes.wlg_code',
                             'wlg_corporation_codes.module_id',
                             'wlg_corporation_codes.module_code',
                             'wlg_corporation_codes.module_name')
                             ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
                             ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                            ->where('wlg_corporation_payment_vouchers.deleted_at', NULL)
                             ->where('wlg_corporation_codes.module_name', $moduleNamePV)
                             ->whereDate('wlg_corporation_payment_vouchers.created_at', '=', date($getDateToday))
                             ->where('wlg_corporation_payment_vouchers.method_of_payment', $check)
@@ -740,12 +1259,14 @@ class WlgCorporationController extends Controller
                                 'wlg_corporation_payment_vouchers.cheque_amount',
                                 'wlg_corporation_payment_vouchers.sub_category',
                                 'wlg_corporation_payment_vouchers.sub_category_account_id',
+                                'wlg_corporation_payment_vouchers.deleted_at',
                                 'wlg_corporation_codes.wlg_code',
                                 'wlg_corporation_codes.module_id',
                                 'wlg_corporation_codes.module_code',
                                 'wlg_corporation_codes.module_name')
                                 ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
                                 ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                                ->where('wlg_corporation_payment_vouchers.deleted_at', NULL)
                                 ->where('wlg_corporation_codes.module_name', $moduleNamePV)
                                 ->whereDate('wlg_corporation_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('wlg_corporation_payment_vouchers.method_of_payment', $check)
@@ -783,12 +1304,14 @@ class WlgCorporationController extends Controller
                                     'wlg_corporation_payment_vouchers.cheque_total_amount',
                                     'wlg_corporation_payment_vouchers.sub_category',
                                     'wlg_corporation_payment_vouchers.sub_category_account_id',
+                                    'wlg_corporation_payment_vouchers.deleted_at',
                                     'wlg_corporation_codes.wlg_code',
                                     'wlg_corporation_codes.module_id',
                                     'wlg_corporation_codes.module_code',
                                     'wlg_corporation_codes.module_name')
                                     ->leftJoin('wlg_corporation_codes', 'wlg_corporation_payment_vouchers.id', '=', 'wlg_corporation_codes.module_id')
                                     ->where('wlg_corporation_payment_vouchers.pv_id', NULL)
+                                    ->where('wlg_corporation_payment_vouchers.deleted_at', NULL)
                                     ->where('wlg_corporation_codes.module_name', $moduleNamePV)
                                     ->whereDate('wlg_corporation_payment_vouchers.created_at', '=', date($getDateToday))
                                     ->where('wlg_corporation_payment_vouchers.method_of_payment', $check)

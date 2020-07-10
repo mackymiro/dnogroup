@@ -98,6 +98,9 @@
 	    					               Summary Reports
                             </div>
                             <div class="card-body">
+                                <div>
+                                    <h1>Search Result For: {{ $startDate }} TO {{ $endDate}}</h1>
+                                </div>
                                 <nav>
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                         <a class="nav-item nav-link active" id="nav-pettyCash" data-toggle="tab" href="#pettyCash" role="tab" aria-controls="pettyCash" aria-selected="false">Petty Cash</a>
@@ -232,9 +235,8 @@
                                       <div class="tab-pane fade" id="all" role="tabpanel" aria-labelledby="all-tab">
                                          <br>
                                          <div class="float-right">
-                                             <a href="{{ action('DnoPersonalController@printSummary') }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                             <a href="{{ action('DnoPersonalController@printMultipleSummary', $startDate.'TO'.$endDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
                                         </div>
-                                       
                                         <br>
                                         <div class="table-responsive">
                                              <h1>Payment Cash Voucher </h1>

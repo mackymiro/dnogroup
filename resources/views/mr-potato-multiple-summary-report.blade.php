@@ -97,6 +97,9 @@
                                 Summary Reports
                             </div>
                             <div class="card-body">
+                                 <div>
+                                    <h1>Search Result For: {{ $startDate }} TO {{ $endDate}}</h1>
+                                </div>
                                  <nav>
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                         <a class="nav-item nav-link active" id="nav-salesInvoice" data-toggle="tab" href="#salesInvoice" role="tab" aria-controls="salesInvoice" aria-selected="true">Sales Invoice</a>
@@ -391,7 +394,7 @@
                                         <br>
                                         
                                         <div class="float-right">
-                                             <a href="{{ action('MrPotatoController@printSummary') }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                             <a href="{{ action('MrPotatoController@printMultipleSummary',  $startDate.'TO'.$endDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
                                         </div>
                                        
                                         <br>

@@ -11,6 +11,14 @@
 <link rel="stylesheet" href="/resources/demos/style.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css" >
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+
+
 <div id="wrapper">
 	<!-- Sidebar -->
      @include('sidebar.sidebar-lolo-pinoy-grill')
@@ -71,45 +79,46 @@
                                   
                               </div> 
                           </div>
+                          
                         	<div class="form-group">
-                    			<div class="form-row">
-                      				<div class="col-md-2">
-                    						<label>Product Id</label>
-                    						<select name="productId" class="form-control">
-                                    <option value="0">--Please Select--</option>
-                                    @foreach($getRawMaterials as $getRawMaterial)
-                                    <option value="{{ $getRawMaterial['id']}}-{{ $getRawMaterial['product_id_no']}}">{{ $getRawMaterial['product_id_no']}}</option>
-                                    @endforeach
-                                </select>
-                      				</div>
-                        				<div class="col-md-1">
-                    						<label>QTY</label>
-                    						<input type="text" name="qty" class="form-control" required="required" />
-                                
-                        				</div>
-                        				<div class="col-md-1">
-                    						<label>Unit</label>
-                                <div id="unitClose">
-                    						    <input type="text" name="unit" class="form-control"/>
+                            <div class="form-row">
+                                <div class="col-md-2">
+                                  <label>Product Id</label>
+                                  <select data-live-search="true" name="productId" class="selectpicker form-control">
+                                      <option value="0">--Please Select--</option>
+                                      @foreach($getRawMaterials as $getRawMaterial)
+                                        <option value="{{ $getRawMaterial['id']}}-{{ $getRawMaterial['product_id_no']}}">{{ $getRawMaterial['product_id_no']}}</option>
+                                      @endforeach
+                                  </select>
                                 </div>
-                                <div id="unit"></div>
-                        				</div>
-                        				<div class="col-md-4">
-                        					<label>Item Description</label>
-                                  <div id="itemDescClose">
-                        					   <input type="text" name="itemDescription" class="form-control" />
+                                  <div class="col-md-1">
+                                    <label>QTY</label>
+                                    <input type="text" name="qty" class="form-control" required="required" />
+                                    
                                   </div>
-                                  <div id="itemDesc"></div>
-                        				</div>
-                        				<div class="col-md-2">
-                        					<label>Unit Price</label>
-                                  <div id="unitPriceClose">
-                        					   <input type="text" name="unitPrice" class="form-control"  />
+                                  <div class="col-md-1">
+                                    <label>Unit</label>
+                                    <div id="unitClose">
+                                        <input type="text" name="unit" class="form-control"/>
+                                    </div>
+                                    <div id="unit"></div>
                                   </div>
-                                  <div id="unitPrice"></div>
-                        				</div>
-                    				
-                    			 </div>
+                                  <div class="col-md-4">
+                                    <label>Item Description</label>
+                                    <div id="itemDescClose">
+                                      <input type="text" name="itemDescription" class="form-control" />
+                                    </div>
+                                    <div id="itemDesc"></div>
+                                  </div>
+                                  <div class="col-md-2">
+                                    <label>Unit Price</label>
+                                    <div id="unitPriceClose">
+                                      <input type="text" name="unitPrice" class="form-control"  />
+                                    </div>
+                                    <div id="unitPrice"></div>
+                                  </div>
+                              
+                            </div>
                         	</div>
                         	<div>
                           <button type="submit" class="btn btn-success btn-lg float-right"><i class="fas fa-save"></i> Save Delivery Receipt</button>

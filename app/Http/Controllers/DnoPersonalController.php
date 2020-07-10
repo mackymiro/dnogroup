@@ -17,9 +17,16 @@ use App\DnoPersonalPettyCash;
 use App\DnoPersonalReceivable;
 use App\DnoPersonalCode;
 
+
 class DnoPersonalController extends Controller
 {   
-    public function printGetSummary($date){
+
+    public function printMultipleSummary(Request $request, $date){
+        $urlSegment = \Request::segment(3);
+        $uri = explode("TO", $urlSegment);
+        $uri0 = $uri[0];
+        $uri1 = $uri[1];
+
         $moduleNamePV = "Payment Voucher";
         $cash = "CASH";
         $getTransactionListCashes = DB::table(
@@ -54,6 +61,534 @@ class DnoPersonalController extends Controller
                             'dno_personal_payment_vouchers.cheque_amount',
                             'dno_personal_payment_vouchers.sub_category',
                             'dno_personal_payment_vouchers.sub_category_account_id',
+                            'dno_personal_payment_vouchers.deleted_at',
+                            'dno_personal_codes.dno_personal_code',
+                            'dno_personal_codes.module_id',
+                            'dno_personal_codes.module_code',
+                            'dno_personal_codes.module_name')
+                            ->leftJoin('dno_personal_codes', 'dno_personal_payment_vouchers.id', '=', 'dno_personal_codes.module_id')
+                            ->where('dno_personal_payment_vouchers.pv_id', NULL)
+                            ->where('dno_personal_codes.module_name', $moduleNamePV)
+                            ->whereBetween('dno_personal_payment_vouchers.created_at', [$uri[0], $uri[1]])
+                            ->where('dno_personal_payment_vouchers.method_of_payment', $cash)
+                            ->where('dno_personal_payment_vouchers.deleted_at', NULL)       
+                            ->orderBy('dno_personal_payment_vouchers.id', 'desc')
+                            ->get()->toArray();
+          
+            $status = "FULLY PAID AND RELEASED";
+            $totalAmountCashes = DB::table(
+                                    'dno_personal_payment_vouchers')
+                                    ->select( 
+                                    'dno_personal_payment_vouchers.id',
+                                    'dno_personal_payment_vouchers.user_id',
+                                    'dno_personal_payment_vouchers.pv_id',
+                                    'dno_personal_payment_vouchers.date',
+                                    'dno_personal_payment_vouchers.paid_to',
+                                    'dno_personal_payment_vouchers.account_no',
+                                    'dno_personal_payment_vouchers.bank_card',
+                                    'dno_personal_payment_vouchers.use_credit_card',
+                                    'dno_personal_payment_vouchers.type_of_card',
+                                    'dno_personal_payment_vouchers.account_name',
+                                    'dno_personal_payment_vouchers.particulars',
+                                    'dno_personal_payment_vouchers.amount',
+                                    'dno_personal_payment_vouchers.method_of_payment',
+                                    'dno_personal_payment_vouchers.prepared_by',
+                                    'dno_personal_payment_vouchers.approved_by',
+                                    'dno_personal_payment_vouchers.date_apprroved',
+                                    'dno_personal_payment_vouchers.received_by_date',
+                                    'dno_personal_payment_vouchers.created_by',
+                                    'dno_personal_payment_vouchers.created_at',
+                                    'dno_personal_payment_vouchers.invoice_number',
+                                    'dno_personal_payment_vouchers.issued_date',
+                                    'dno_personal_payment_vouchers.category',
+                                    'dno_personal_payment_vouchers.amount_due',
+                                    'dno_personal_payment_vouchers.delivered_date',
+                                    'dno_personal_payment_vouchers.status',                   
+                                    'dno_personal_payment_vouchers.cheque_number',
+                                    'dno_personal_payment_vouchers.cheque_amount',
+                                    'dno_personal_payment_vouchers.sub_category',
+                                    'dno_personal_payment_vouchers.sub_category_account_id',
+                                    'dno_personal_payment_vouchers.deleted_at',
+                                    'dno_personal_codes.dno_personal_code',
+                                    'dno_personal_codes.module_id',
+                                    'dno_personal_codes.module_code',
+                                    'dno_personal_codes.module_name')
+                                    ->leftJoin('dno_personal_codes', 'dno_personal_payment_vouchers.id', '=', 'dno_personal_codes.module_id')
+                                    ->where('dno_personal_payment_vouchers.pv_id', NULL)
+                                    ->where('dno_personal_codes.module_name', $moduleNamePV)
+                                    ->whereBetween('dno_personal_payment_vouchers.created_at', [$uri[0], $uri[1]])
+                                    ->where('dno_personal_payment_vouchers.method_of_payment', $cash)
+                                    ->where('dno_personal_payment_vouchers.status', '!=', $status)
+                                    ->where('dno_personal_payment_vouchers.deleted_at', NULL)
+                                    ->sum('dno_personal_payment_vouchers.amount_due');
+    
+            $check = "CHECK";
+            $getTransactionListChecks = DB::table(
+                                'dno_personal_payment_vouchers')
+                                ->select( 
+                                'dno_personal_payment_vouchers.id',
+                                'dno_personal_payment_vouchers.user_id',
+                                'dno_personal_payment_vouchers.pv_id',
+                                'dno_personal_payment_vouchers.date',
+                                'dno_personal_payment_vouchers.paid_to',
+                                'dno_personal_payment_vouchers.account_no',
+                                'dno_personal_payment_vouchers.bank_card',
+                                'dno_personal_payment_vouchers.use_credit_card',
+                                'dno_personal_payment_vouchers.type_of_card',
+                                'dno_personal_payment_vouchers.account_name',
+                                'dno_personal_payment_vouchers.particulars',
+                                'dno_personal_payment_vouchers.amount',
+                                'dno_personal_payment_vouchers.method_of_payment',
+                                'dno_personal_payment_vouchers.prepared_by',
+                                'dno_personal_payment_vouchers.approved_by',
+                                'dno_personal_payment_vouchers.date_apprroved',
+                                'dno_personal_payment_vouchers.received_by_date',
+                                'dno_personal_payment_vouchers.created_by',
+                                'dno_personal_payment_vouchers.created_at',
+                                'dno_personal_payment_vouchers.invoice_number',
+                                'dno_personal_payment_vouchers.issued_date',
+                                'dno_personal_payment_vouchers.category',
+                                'dno_personal_payment_vouchers.amount_due',
+                                'dno_personal_payment_vouchers.delivered_date',
+                                'dno_personal_payment_vouchers.status',
+                                'dno_personal_payment_vouchers.cheque_number',
+                                'dno_personal_payment_vouchers.cheque_amount',
+                                'dno_personal_payment_vouchers.cheque_total_amount',
+                                'dno_personal_payment_vouchers.sub_category',
+                                'dno_personal_payment_vouchers.sub_category_account_id',
+                                'dno_personal_payment_vouchers.deleted_at',
+                                'dno_personal_codes.dno_personal_code',
+                                'dno_personal_codes.module_id',
+                                'dno_personal_codes.module_code',
+                                'dno_personal_codes.module_name')
+                                ->leftJoin('dno_personal_codes', 'dno_personal_payment_vouchers.id', '=', 'dno_personal_codes.module_id')
+                                ->where('dno_personal_payment_vouchers.pv_id', NULL)
+                                ->where('dno_personal_codes.module_name', $moduleNamePV) 
+                                ->where('dno_personal_payment_vouchers.method_of_payment', $check)
+                                ->where('dno_personal_payment_vouchers.deleted_at', NULL)
+                                ->whereBetween('dno_personal_payment_vouchers.created_at', [$uri[0], $uri[1]])
+                                ->orderBy('dno_personal_payment_vouchers.id', 'desc')
+                                ->get()->toArray();
+            
+
+        $totalAmountCheck  = DB::table(
+                            'dno_personal_payment_vouchers')
+                            ->select( 
+                            'dno_personal_payment_vouchers.id',
+                            'dno_personal_payment_vouchers.user_id',
+                            'dno_personal_payment_vouchers.pv_id',
+                            'dno_personal_payment_vouchers.date',
+                            'dno_personal_payment_vouchers.paid_to',
+                            'dno_personal_payment_vouchers.account_no',
+                            'dno_personal_payment_vouchers.bank_card',
+                            'dno_personal_payment_vouchers.use_credit_card',
+                            'dno_personal_payment_vouchers.type_of_card',
+                            'dno_personal_payment_vouchers.account_name',
+                            'dno_personal_payment_vouchers.particulars',
+                            'dno_personal_payment_vouchers.amount',
+                            'dno_personal_payment_vouchers.method_of_payment',
+                            'dno_personal_payment_vouchers.prepared_by',
+                            'dno_personal_payment_vouchers.approved_by',
+                            'dno_personal_payment_vouchers.date_apprroved',
+                            'dno_personal_payment_vouchers.received_by_date',
+                            'dno_personal_payment_vouchers.created_by',
+                            'dno_personal_payment_vouchers.created_at',
+                            'dno_personal_payment_vouchers.invoice_number',
+                            'dno_personal_payment_vouchers.issued_date',
+                            'dno_personal_payment_vouchers.category',
+                            'dno_personal_payment_vouchers.amount_due',
+                            'dno_personal_payment_vouchers.delivered_date',
+                            'dno_personal_payment_vouchers.status',
+                            'dno_personal_payment_vouchers.cheque_number',
+                            'dno_personal_payment_vouchers.cheque_amount',
+                            'dno_personal_payment_vouchers.cheque_total_amount',
+                            'dno_personal_payment_vouchers.sub_category',
+                            'dno_personal_payment_vouchers.sub_category_account_id',
+                            'dno_personal_payment_vouchers.deleted_at',
+                            'dno_personal_codes.dno_personal_code',
+                            'dno_personal_codes.module_id',
+                            'dno_personal_codes.module_code',
+                            'dno_personal_codes.module_name')
+                            ->leftJoin('dno_personal_codes', 'dno_personal_payment_vouchers.id', '=', 'dno_personal_codes.module_id')
+                            ->where('dno_personal_payment_vouchers.pv_id', NULL)
+                            ->where('dno_personal_codes.module_name', $moduleNamePV)
+                            ->whereBetween('dno_personal_payment_vouchers.created_at', [$uri[0], $uri[1]])
+                            ->where('dno_personal_payment_vouchers.method_of_payment', $check)
+                            ->where('dno_personal_payment_vouchers.status', '!=', $status)
+                            ->where('dno_personal_payment_vouchers.deleted_at', NULL)
+                            ->sum('dno_personal_payment_vouchers.amount_due');
+                       
+        $totalPaidAmountCheck  = DB::table(
+                                'dno_personal_payment_vouchers')
+                                ->select( 
+                                'dno_personal_payment_vouchers.id',
+                                'dno_personal_payment_vouchers.user_id',
+                                'dno_personal_payment_vouchers.pv_id',
+                                'dno_personal_payment_vouchers.date',
+                                'dno_personal_payment_vouchers.paid_to',
+                                'dno_personal_payment_vouchers.account_no',
+                                'dno_personal_payment_vouchers.bank_card',
+                                'dno_personal_payment_vouchers.use_credit_card',
+                                'dno_personal_payment_vouchers.type_of_card',
+                                'dno_personal_payment_vouchers.account_name',
+                                'dno_personal_payment_vouchers.particulars',
+                                'dno_personal_payment_vouchers.amount',
+                                'dno_personal_payment_vouchers.method_of_payment',
+                                'dno_personal_payment_vouchers.prepared_by',
+                                'dno_personal_payment_vouchers.approved_by',
+                                'dno_personal_payment_vouchers.date_apprroved',
+                                'dno_personal_payment_vouchers.received_by_date',
+                                'dno_personal_payment_vouchers.created_by',
+                                'dno_personal_payment_vouchers.created_at',
+                                'dno_personal_payment_vouchers.invoice_number',
+                                'dno_personal_payment_vouchers.issued_date',
+                                'dno_personal_payment_vouchers.category',
+                                'dno_personal_payment_vouchers.amount_due',
+                                'dno_personal_payment_vouchers.delivered_date',
+                                'dno_personal_payment_vouchers.status',
+                                'dno_personal_payment_vouchers.cheque_number',
+                                'dno_personal_payment_vouchers.cheque_amount',
+                                'dno_personal_payment_vouchers.cheque_total_amount',
+                                'dno_personal_payment_vouchers.sub_category',
+                                'dno_personal_payment_vouchers.sub_category_account_id',
+                                'dno_personal_payment_vouchers.deleted_at',
+                                'dno_personal_codes.dno_personal_code',
+                                'dno_personal_codes.module_id',
+                                'dno_personal_codes.module_code',
+                                'dno_personal_codes.module_name')
+                                ->leftJoin('dno_personal_codes', 'dno_personal_payment_vouchers.id', '=', 'dno_personal_codes.module_id')
+                                ->where('dno_personal_payment_vouchers.pv_id', NULL)
+                                ->where('dno_personal_codes.module_name', $moduleNamePV)
+                                ->whereBetween('dno_personal_payment_vouchers.created_at', [$uri[0], $uri[1]])
+                                ->where('dno_personal_payment_vouchers.method_of_payment', $check)
+                                ->where('dno_personal_payment_vouchers.status', $status)
+                                ->where('dno_personal_payment_vouchers.deleted_at', NULL)
+                                ->sum('dno_personal_payment_vouchers.amount_due');
+                           
+        $pdf = PDF::loadView('printSummaryDnoPersonal',  compact('date', 'uri0', 'uri1',
+        'getTransactionListCashes', 'getTransactionListChecks', 
+        'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck'));
+        
+        return $pdf->download('dno-personal-summary-report.pdf');
+    
+
+    }
+
+    public function getSummaryReportMultiple(Request $request){
+     
+        $startDate = date("Y-m-d",strtotime($request->input('startDate')));
+        $endDate = date("Y-m-d",strtotime($request->input('endDate')."+1 day"));
+
+
+        $moduleName = "Petty Cash";
+        $pettyCashLists = DB::table(
+                                'dno_personal_petty_cashes')
+                                ->select( 
+                                'dno_personal_petty_cashes.id',
+                                'dno_personal_petty_cashes.user_id',
+                                'dno_personal_petty_cashes.pc_id',
+                                'dno_personal_petty_cashes.date',
+                                'dno_personal_petty_cashes.petty_cash_name',
+                                'dno_personal_petty_cashes.petty_cash_summary',
+                                'dno_personal_petty_cashes.amount',
+                                'dno_personal_petty_cashes.created_by',
+                                'dno_personal_petty_cashes.created_at',
+                                'dno_personal_codes.dno_personal_code',
+                                'dno_personal_codes.module_id',
+                                'dno_personal_codes.module_code',
+                                'dno_personal_codes.module_name')
+                                ->leftJoin('dno_personal_codes', 'dno_personal_petty_cashes.id', '=', 'dno_personal_codes.module_id')
+                                ->where('dno_personal_petty_cashes.pc_id', NULL)
+                                ->where('dno_personal_codes.module_name', $moduleName)
+                                ->whereBetween('dno_personal_petty_cashes.created_at', [$startDate, $endDate])
+                                ->orderBy('dno_personal_petty_cashes.id', 'desc')
+                                ->get()->toArray();
+
+        $moduleNamePV = "Payment Voucher";
+        $getTransactionLists = DB::table(
+                        'dno_personal_payment_vouchers')
+                        ->select( 
+                        'dno_personal_payment_vouchers.id',
+                        'dno_personal_payment_vouchers.user_id',
+                        'dno_personal_payment_vouchers.pv_id',
+                        'dno_personal_payment_vouchers.date',
+                        'dno_personal_payment_vouchers.paid_to',
+                        'dno_personal_payment_vouchers.account_no',
+                        'dno_personal_payment_vouchers.bank_card',
+                        'dno_personal_payment_vouchers.use_credit_card',
+                        'dno_personal_payment_vouchers.type_of_card',
+                        'dno_personal_payment_vouchers.account_name',
+                        'dno_personal_payment_vouchers.particulars',
+                        'dno_personal_payment_vouchers.amount',
+                        'dno_personal_payment_vouchers.method_of_payment',
+                        'dno_personal_payment_vouchers.prepared_by',
+                        'dno_personal_payment_vouchers.approved_by',
+                        'dno_personal_payment_vouchers.date_apprroved',
+                        'dno_personal_payment_vouchers.received_by_date',
+                        'dno_personal_payment_vouchers.created_by',
+                        'dno_personal_payment_vouchers.created_at',
+                        'dno_personal_payment_vouchers.invoice_number',
+                        'dno_personal_payment_vouchers.issued_date',
+                        'dno_personal_payment_vouchers.category',
+                        'dno_personal_payment_vouchers.amount_due',
+                        'dno_personal_payment_vouchers.delivered_date',
+                        'dno_personal_payment_vouchers.status',
+                        'dno_personal_payment_vouchers.account_name_no',
+                        'dno_personal_payment_vouchers.cheque_number',
+                        'dno_personal_payment_vouchers.cheque_amount',
+                        'dno_personal_payment_vouchers.sub_category',
+                        'dno_personal_payment_vouchers.sub_category_account_id',
+                        'dno_personal_payment_vouchers.deleted_at',
+                        'dno_personal_codes.dno_personal_code',
+                        'dno_personal_codes.module_id',
+                        'dno_personal_codes.module_code',
+                        'dno_personal_codes.module_name')
+                        ->leftJoin('dno_personal_codes', 'dno_personal_payment_vouchers.id', '=', 'dno_personal_codes.module_id')
+                        ->where('dno_personal_payment_vouchers.pv_id', NULL)
+                        ->where('dno_personal_codes.module_name', $moduleNamePV)
+                        ->whereBetween('dno_personal_payment_vouchers.created_at', [$startDate, $endDate])
+                        ->where('dno_personal_payment_vouchers.deleted_at', NULL)
+                        ->orderBy('dno_personal_payment_vouchers.id', 'desc')
+                        ->get()->toArray();
+
+
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                            'dno_personal_payment_vouchers')
+                            ->select( 
+                            'dno_personal_payment_vouchers.id',
+                            'dno_personal_payment_vouchers.user_id',
+                            'dno_personal_payment_vouchers.pv_id',
+                            'dno_personal_payment_vouchers.date',
+                            'dno_personal_payment_vouchers.paid_to',
+                            'dno_personal_payment_vouchers.account_no',
+                            'dno_personal_payment_vouchers.bank_card',
+                            'dno_personal_payment_vouchers.use_credit_card',
+                            'dno_personal_payment_vouchers.type_of_card',
+                            'dno_personal_payment_vouchers.account_name',
+                            'dno_personal_payment_vouchers.particulars',
+                            'dno_personal_payment_vouchers.amount',
+                            'dno_personal_payment_vouchers.method_of_payment',
+                            'dno_personal_payment_vouchers.prepared_by',
+                            'dno_personal_payment_vouchers.approved_by',
+                            'dno_personal_payment_vouchers.date_apprroved',
+                            'dno_personal_payment_vouchers.received_by_date',
+                            'dno_personal_payment_vouchers.created_by',
+                            'dno_personal_payment_vouchers.created_at',
+                            'dno_personal_payment_vouchers.invoice_number',
+                            'dno_personal_payment_vouchers.issued_date',
+                            'dno_personal_payment_vouchers.category',
+                            'dno_personal_payment_vouchers.amount_due',
+                            'dno_personal_payment_vouchers.delivered_date',
+                            'dno_personal_payment_vouchers.status',
+                            'dno_personal_payment_vouchers.cheque_number',
+                            'dno_personal_payment_vouchers.cheque_amount',
+                            'dno_personal_payment_vouchers.sub_category',
+                            'dno_personal_payment_vouchers.sub_category_account_id',
+                            'dno_personal_payment_vouchers.deleted_at',
+                            'dno_personal_codes.dno_personal_code',
+                            'dno_personal_codes.module_id',
+                            'dno_personal_codes.module_code',
+                            'dno_personal_codes.module_name')
+                            ->leftJoin('dno_personal_codes', 'dno_personal_payment_vouchers.id', '=', 'dno_personal_codes.module_id')
+                            ->where('dno_personal_payment_vouchers.pv_id', NULL)
+                            ->where('dno_personal_codes.module_name', $moduleNamePV)
+                            ->whereBetween('dno_personal_payment_vouchers.created_at', [$startDate, $endDate])
+                            ->where('dno_personal_payment_vouchers.method_of_payment', $cash)
+                            ->where('dno_personal_payment_vouchers.deleted_at', NULL)       
+                            ->orderBy('dno_personal_payment_vouchers.id', 'desc')
+                            ->get()->toArray();
+          
+            $status = "FULLY PAID AND RELEASED";
+            $totalAmountCashes = DB::table(
+                                    'dno_personal_payment_vouchers')
+                                    ->select( 
+                                    'dno_personal_payment_vouchers.id',
+                                    'dno_personal_payment_vouchers.user_id',
+                                    'dno_personal_payment_vouchers.pv_id',
+                                    'dno_personal_payment_vouchers.date',
+                                    'dno_personal_payment_vouchers.paid_to',
+                                    'dno_personal_payment_vouchers.account_no',
+                                    'dno_personal_payment_vouchers.bank_card',
+                                    'dno_personal_payment_vouchers.use_credit_card',
+                                    'dno_personal_payment_vouchers.type_of_card',
+                                    'dno_personal_payment_vouchers.account_name',
+                                    'dno_personal_payment_vouchers.particulars',
+                                    'dno_personal_payment_vouchers.amount',
+                                    'dno_personal_payment_vouchers.method_of_payment',
+                                    'dno_personal_payment_vouchers.prepared_by',
+                                    'dno_personal_payment_vouchers.approved_by',
+                                    'dno_personal_payment_vouchers.date_apprroved',
+                                    'dno_personal_payment_vouchers.received_by_date',
+                                    'dno_personal_payment_vouchers.created_by',
+                                    'dno_personal_payment_vouchers.created_at',
+                                    'dno_personal_payment_vouchers.invoice_number',
+                                    'dno_personal_payment_vouchers.issued_date',
+                                    'dno_personal_payment_vouchers.category',
+                                    'dno_personal_payment_vouchers.amount_due',
+                                    'dno_personal_payment_vouchers.delivered_date',
+                                    'dno_personal_payment_vouchers.status',
+                                    
+                                    'dno_personal_payment_vouchers.cheque_number',
+                                    'dno_personal_payment_vouchers.cheque_amount',
+                                    'dno_personal_payment_vouchers.sub_category',
+                                    'dno_personal_payment_vouchers.sub_category_account_id',
+                                    'dno_personal_payment_vouchers.deleted_at',
+                                    'dno_personal_codes.dno_personal_code',
+                                    'dno_personal_codes.module_id',
+                                    'dno_personal_codes.module_code',
+                                    'dno_personal_codes.module_name')
+                                    ->leftJoin('dno_personal_codes', 'dno_personal_payment_vouchers.id', '=', 'dno_personal_codes.module_id')
+                                    ->where('dno_personal_payment_vouchers.pv_id', NULL)
+                                    ->where('dno_personal_codes.module_name', $moduleNamePV)
+                                    ->whereBetween('dno_personal_payment_vouchers.created_at', [$startDate, $endDate])
+                                    ->where('dno_personal_payment_vouchers.method_of_payment', $cash)
+                                    ->where('dno_personal_payment_vouchers.status', '!=', $status)
+                                    ->where('dno_personal_payment_vouchers.deleted_at', NULL)
+                                    ->sum('dno_personal_payment_vouchers.amount_due');
+    
+            $check = "CHECK";
+            $getTransactionListChecks = DB::table(
+                                'dno_personal_payment_vouchers')
+                                ->select( 
+                                'dno_personal_payment_vouchers.id',
+                                'dno_personal_payment_vouchers.user_id',
+                                'dno_personal_payment_vouchers.pv_id',
+                                'dno_personal_payment_vouchers.date',
+                                'dno_personal_payment_vouchers.paid_to',
+                                'dno_personal_payment_vouchers.account_no',
+                                'dno_personal_payment_vouchers.bank_card',
+                                'dno_personal_payment_vouchers.use_credit_card',
+                                'dno_personal_payment_vouchers.type_of_card',
+                                'dno_personal_payment_vouchers.account_name',
+                                'dno_personal_payment_vouchers.particulars',
+                                'dno_personal_payment_vouchers.amount',
+                                'dno_personal_payment_vouchers.method_of_payment',
+                                'dno_personal_payment_vouchers.prepared_by',
+                                'dno_personal_payment_vouchers.approved_by',
+                                'dno_personal_payment_vouchers.date_apprroved',
+                                'dno_personal_payment_vouchers.received_by_date',
+                                'dno_personal_payment_vouchers.created_by',
+                                'dno_personal_payment_vouchers.created_at',
+                                'dno_personal_payment_vouchers.invoice_number',
+                                'dno_personal_payment_vouchers.issued_date',
+                                'dno_personal_payment_vouchers.category',
+                                'dno_personal_payment_vouchers.amount_due',
+                                'dno_personal_payment_vouchers.delivered_date',
+                                'dno_personal_payment_vouchers.status',
+                                'dno_personal_payment_vouchers.cheque_number',
+                                'dno_personal_payment_vouchers.cheque_amount',
+                                'dno_personal_payment_vouchers.cheque_total_amount',
+                                'dno_personal_payment_vouchers.sub_category',
+                                'dno_personal_payment_vouchers.sub_category_account_id',
+                                'dno_personal_payment_vouchers.deleted_at',
+                                'dno_personal_codes.dno_personal_code',
+                                'dno_personal_codes.module_id',
+                                'dno_personal_codes.module_code',
+                                'dno_personal_codes.module_name')
+                                ->leftJoin('dno_personal_codes', 'dno_personal_payment_vouchers.id', '=', 'dno_personal_codes.module_id')
+                                ->where('dno_personal_payment_vouchers.pv_id', NULL)
+                                ->where('dno_personal_codes.module_name', $moduleNamePV) 
+                                ->where('dno_personal_payment_vouchers.method_of_payment', $check)
+                                ->where('dno_personal_payment_vouchers.deleted_at', NULL)
+                                ->whereBetween('dno_personal_payment_vouchers.created_at', [$startDate, $endDate])
+                                ->orderBy('dno_personal_payment_vouchers.id', 'desc')
+                                ->get()->toArray();
+            
+
+        $totalAmountCheck = DB::table(
+                            'dno_personal_payment_vouchers')
+                            ->select( 
+                            'dno_personal_payment_vouchers.id',
+                            'dno_personal_payment_vouchers.user_id',
+                            'dno_personal_payment_vouchers.pv_id',
+                            'dno_personal_payment_vouchers.date',
+                            'dno_personal_payment_vouchers.paid_to',
+                            'dno_personal_payment_vouchers.account_no',
+                            'dno_personal_payment_vouchers.bank_card',
+                            'dno_personal_payment_vouchers.use_credit_card',
+                            'dno_personal_payment_vouchers.type_of_card',
+                            'dno_personal_payment_vouchers.account_name',
+                            'dno_personal_payment_vouchers.particulars',
+                            'dno_personal_payment_vouchers.amount',
+                            'dno_personal_payment_vouchers.method_of_payment',
+                            'dno_personal_payment_vouchers.prepared_by',
+                            'dno_personal_payment_vouchers.approved_by',
+                            'dno_personal_payment_vouchers.date_apprroved',
+                            'dno_personal_payment_vouchers.received_by_date',
+                            'dno_personal_payment_vouchers.created_by',
+                            'dno_personal_payment_vouchers.created_at',
+                            'dno_personal_payment_vouchers.invoice_number',
+                            'dno_personal_payment_vouchers.issued_date',
+                            'dno_personal_payment_vouchers.category',
+                            'dno_personal_payment_vouchers.amount_due',
+                            'dno_personal_payment_vouchers.delivered_date',
+                            'dno_personal_payment_vouchers.status',
+                            'dno_personal_payment_vouchers.cheque_number',
+                            'dno_personal_payment_vouchers.cheque_amount',
+                            'dno_personal_payment_vouchers.cheque_total_amount',
+                            'dno_personal_payment_vouchers.sub_category',
+                            'dno_personal_payment_vouchers.sub_category_account_id',
+                            'dno_personal_payment_vouchers.deleted_at',
+                            'dno_personal_codes.dno_personal_code',
+                            'dno_personal_codes.module_id',
+                            'dno_personal_codes.module_code',
+                            'dno_personal_codes.module_name')
+                            ->leftJoin('dno_personal_codes', 'dno_personal_payment_vouchers.id', '=', 'dno_personal_codes.module_id')
+                            ->where('dno_personal_payment_vouchers.pv_id', NULL)
+                            ->where('dno_personal_codes.module_name', $moduleNamePV)
+                            ->whereBetween('dno_personal_payment_vouchers.created_at', [$startDate, $endDate])
+                            ->where('dno_personal_payment_vouchers.method_of_payment', $check)
+                            ->where('dno_personal_payment_vouchers.status', '!=', $status)
+                            ->where('dno_personal_payment_vouchers.deleted_at', NULL)
+                            ->sum('dno_personal_payment_vouchers.amount_due');
+                            
+                            
+        return view('dno-personal-mulitple-summary-report', compact('startDate', 'endDate', 'pettyCashLists', 
+        'getTransactionLists', 'getTransactionListCashes', 'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck'));
+
+
+    }
+
+    public function printGetSummary($date){
+        $uri0 = "";
+        $uri1 = "";
+
+        $moduleNamePV = "Payment Voucher";
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                            'dno_personal_payment_vouchers')
+                            ->select( 
+                            'dno_personal_payment_vouchers.id',
+                            'dno_personal_payment_vouchers.user_id',
+                            'dno_personal_payment_vouchers.pv_id',
+                            'dno_personal_payment_vouchers.date',
+                            'dno_personal_payment_vouchers.paid_to',
+                            'dno_personal_payment_vouchers.account_no',
+                            'dno_personal_payment_vouchers.bank_card',
+                            'dno_personal_payment_vouchers.use_credit_card',
+                            'dno_personal_payment_vouchers.type_of_card',
+                            'dno_personal_payment_vouchers.account_name',
+                            'dno_personal_payment_vouchers.particulars',
+                            'dno_personal_payment_vouchers.amount',
+                            'dno_personal_payment_vouchers.method_of_payment',
+                            'dno_personal_payment_vouchers.prepared_by',
+                            'dno_personal_payment_vouchers.approved_by',
+                            'dno_personal_payment_vouchers.date_apprroved',
+                            'dno_personal_payment_vouchers.received_by_date',
+                            'dno_personal_payment_vouchers.created_by',
+                            'dno_personal_payment_vouchers.created_at',
+                            'dno_personal_payment_vouchers.invoice_number',
+                            'dno_personal_payment_vouchers.issued_date',
+                            'dno_personal_payment_vouchers.category',
+                            'dno_personal_payment_vouchers.amount_due',
+                            'dno_personal_payment_vouchers.delivered_date',
+                            'dno_personal_payment_vouchers.status',
+                            'dno_personal_payment_vouchers.cheque_number',
+                            'dno_personal_payment_vouchers.cheque_amount',
+                            'dno_personal_payment_vouchers.sub_category',
+                            'dno_personal_payment_vouchers.sub_category_account_id',
+                            'dno_personal_payment_vouchers.deleted_at',
                             'dno_personal_codes.dno_personal_code',
                             'dno_personal_codes.module_id',
                             'dno_personal_codes.module_code',
@@ -63,6 +598,7 @@ class DnoPersonalController extends Controller
                             ->where('dno_personal_codes.module_name', $moduleNamePV)
                             ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($date))
                             ->where('dno_personal_payment_vouchers.method_of_payment', $cash)
+                            ->where('dno_personal_payment_vouchers.deleted_at', NULL)
                             ->orderBy('dno_personal_payment_vouchers.id', 'desc')
                             ->get()->toArray();
     
@@ -99,6 +635,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.cheque_amount',
                                 'dno_personal_payment_vouchers.sub_category',
                                 'dno_personal_payment_vouchers.sub_category_account_id',
+                                'dno_personal_payment_vouchers.deleted_at',
                                 'dno_personal_codes.dno_personal_code',
                                 'dno_personal_codes.module_id',
                                 'dno_personal_codes.module_code',
@@ -109,6 +646,7 @@ class DnoPersonalController extends Controller
                                 ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($date))
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $cash)
                                 ->where('dno_personal_payment_vouchers.status', '!=', $status)
+                                ->where('dno_personal_payment_vouchers.deleted_at', NULL)
                                 ->sum('dno_personal_payment_vouchers.amount_due');
 
             $check = "CHECK";
@@ -145,6 +683,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.cheque_total_amount',
                                 'dno_personal_payment_vouchers.sub_category',
                                 'dno_personal_payment_vouchers.sub_category_account_id',
+                                'dno_personal_payment_vouchers.deleted_at',
                                 'dno_personal_codes.dno_personal_code',
                                 'dno_personal_codes.module_id',
                                 'dno_personal_codes.module_code',
@@ -154,6 +693,7 @@ class DnoPersonalController extends Controller
                                 ->where('dno_personal_codes.module_name', $moduleNamePV)
                                 ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($date))
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $check)
+                                ->where('dno_personal_payment_vouchers.deleted_at', NULL)
                                 ->orderBy('dno_personal_payment_vouchers.id', 'desc')
                                 ->get()->toArray();
 
@@ -190,6 +730,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.cheque_amount',
                                 'dno_personal_payment_vouchers.sub_category',
                                 'dno_personal_payment_vouchers.sub_category_account_id',
+                                'dno_personal_payment_vouchers.deleted_at',
                                 'dno_personal_codes.dno_personal_code',
                                 'dno_personal_codes.module_id',
                                 'dno_personal_codes.module_code',
@@ -200,6 +741,7 @@ class DnoPersonalController extends Controller
                                 ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($date))
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $check)
                                 ->where('dno_personal_payment_vouchers.status', '!=', $status)
+                                ->where('dno_personal_payment_vouchers.deleted_at', NULL)
                                 ->sum('dno_personal_payment_vouchers.amount_due');
                                 
         //total paid amount check
@@ -236,6 +778,7 @@ class DnoPersonalController extends Controller
                                     'dno_personal_payment_vouchers.cheque_total_amount',
                                     'dno_personal_payment_vouchers.sub_category',
                                     'dno_personal_payment_vouchers.sub_category_account_id',
+                                    'dno_personal_payment_vouchers.deleted_at',
                                     'dno_personal_codes.dno_personal_code',
                                     'dno_personal_codes.module_id',
                                     'dno_personal_codes.module_code',
@@ -246,10 +789,11 @@ class DnoPersonalController extends Controller
                                     ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($date))
                                     ->where('dno_personal_payment_vouchers.method_of_payment', $check)
                                     ->where('dno_personal_payment_vouchers.status',  $status)
+                                    ->where('dno_personal_payment_vouchers.deleted_at', NULL)
                                     ->sum('dno_personal_payment_vouchers.cheque_total_amount');
 
         $getDateToday = "";     
-        $pdf = PDF::loadView('printSummaryDnoPersonal',  compact('date', 'getDateToday', 
+        $pdf = PDF::loadView('printSummaryDnoPersonal',  compact('date', 'getDateToday', 'uri0', 'uri1', 
          'getTransactionListCashes', 'getTransactionListChecks', 'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck'));
         
         return $pdf->download('dno-personal-summary-report.pdf');
@@ -402,6 +946,7 @@ class DnoPersonalController extends Controller
                             'dno_personal_payment_vouchers.cheque_amount',
                             'dno_personal_payment_vouchers.sub_category',
                             'dno_personal_payment_vouchers.sub_category_account_id',
+                            'dno_personal_payment_vouchers.deleted_at',
                             'dno_personal_codes.dno_personal_code',
                             'dno_personal_codes.module_id',
                             'dno_personal_codes.module_code',
@@ -410,6 +955,7 @@ class DnoPersonalController extends Controller
                             ->where('dno_personal_payment_vouchers.pv_id', NULL)
                             ->where('dno_personal_codes.module_name', $moduleNamePV)
                             ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($getDate))
+                            ->where('dno_personal_payment_vouchers.deleted_at', NULL)
                             ->orderBy('dno_personal_payment_vouchers.id', 'desc')
                             ->get()->toArray();
 
@@ -446,6 +992,7 @@ class DnoPersonalController extends Controller
                             'dno_personal_payment_vouchers.cheque_amount',
                             'dno_personal_payment_vouchers.sub_category',
                             'dno_personal_payment_vouchers.sub_category_account_id',
+                            'dno_personal_payment_vouchers.deleted_at',
                             'dno_personal_codes.dno_personal_code',
                             'dno_personal_codes.module_id',
                             'dno_personal_codes.module_code',
@@ -455,6 +1002,7 @@ class DnoPersonalController extends Controller
                             ->where('dno_personal_codes.module_name', $moduleNamePV)
                             ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($getDate))
                             ->where('dno_personal_payment_vouchers.method_of_payment', $cash)
+                            ->where('dno_personal_payment_vouchers.deleted_at', NULL)
                             ->orderBy('dno_personal_payment_vouchers.id', 'desc')
                             ->get()->toArray();
 
@@ -491,6 +1039,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.cheque_amount',
                                 'dno_personal_payment_vouchers.sub_category',
                                 'dno_personal_payment_vouchers.sub_category_account_id',
+                                'dno_personal_payment_vouchers.deleted_at',
                                 'dno_personal_codes.dno_personal_code',
                                 'dno_personal_codes.module_id',
                                 'dno_personal_codes.module_code',
@@ -500,6 +1049,7 @@ class DnoPersonalController extends Controller
                                 ->where('dno_personal_codes.module_name', $moduleNamePV)
                                 ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($getDate))
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $cash)
+                                ->where('dno_personal_payment_vouchers.deleted_at', NULL)
                                 ->where('dno_personal_payment_vouchers.status', '!=', $status)
                                 ->sum('dno_personal_payment_vouchers.amount_due');
 
@@ -537,6 +1087,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.cheque_total_amount',
                                 'dno_personal_payment_vouchers.sub_category',
                                 'dno_personal_payment_vouchers.sub_category_account_id',
+                                'dno_personal_payment_vouchers.deleted_at',
                                 'dno_personal_codes.dno_personal_code',
                                 'dno_personal_codes.module_id',
                                 'dno_personal_codes.module_code',
@@ -546,6 +1097,7 @@ class DnoPersonalController extends Controller
                                 ->where('dno_personal_codes.module_name', $moduleNamePV)
                                 ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($getDate))
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $check)
+                                ->where('dno_personal_payment_vouchers.deleted_at', NULL)
                                 ->orderBy('dno_personal_payment_vouchers.issued_date', 'desc')
                                 ->get()->toArray();
 
@@ -582,6 +1134,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.cheque_amount',
                                 'dno_personal_payment_vouchers.sub_category',
                                 'dno_personal_payment_vouchers.sub_category_account_id',
+                                'dno_personal_payment_vouchers.deleted_at',
                                 'dno_personal_codes.dno_personal_code',
                                 'dno_personal_codes.module_id',
                                 'dno_personal_codes.module_code',
@@ -592,6 +1145,7 @@ class DnoPersonalController extends Controller
                                 ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($getDate))
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $check)
                                 ->where('dno_personal_payment_vouchers.status',  '!=', $status)
+                                ->where('dno_personal_payment_vouchers.deleted_at', NULL)
                                 ->sum('dno_personal_payment_vouchers.amount_due');
             
         return view('dno-personal-get-summary-report', compact('getDate', 'pettyCashLists', 
@@ -600,6 +1154,8 @@ class DnoPersonalController extends Controller
     }
 
     public function printSummary(){
+        $uri0 = "";
+        $uri1 = ""; 
         $getDateToday = date("Y-m-d");
 
         $moduleNamePV = "Payment Voucher";
@@ -636,6 +1192,7 @@ class DnoPersonalController extends Controller
                             'dno_personal_payment_vouchers.cheque_amount',
                             'dno_personal_payment_vouchers.sub_category',
                             'dno_personal_payment_vouchers.sub_category_account_id',
+                            'dno_personal_payment_vouchers.deleted_at',
                             'dno_personal_codes.dno_personal_code',
                             'dno_personal_codes.module_id',
                             'dno_personal_codes.module_code',
@@ -645,6 +1202,7 @@ class DnoPersonalController extends Controller
                             ->where('dno_personal_codes.module_name', $moduleNamePV)
                             ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($getDateToday))
                             ->where('dno_personal_payment_vouchers.method_of_payment', $cash)
+                            ->where('dno_personal_payment_vouchers.deleted_at', NULL)
                             ->orderBy('dno_personal_payment_vouchers.id', 'desc')
                             ->get()->toArray();
     
@@ -681,6 +1239,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.cheque_amount',
                                 'dno_personal_payment_vouchers.sub_category',
                                 'dno_personal_payment_vouchers.sub_category_account_id',
+                                'dno_personal_payment_vouchers.deleted_at',
                                 'dno_personal_codes.dno_personal_code',
                                 'dno_personal_codes.module_id',
                                 'dno_personal_codes.module_code',
@@ -691,6 +1250,7 @@ class DnoPersonalController extends Controller
                                 ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $cash)
                                 ->where('dno_personal_payment_vouchers.status', '!=', $status)
+                                ->where('dno_personal_payment_vouchers.deleted_at', NULL)
                                 ->sum('dno_personal_payment_vouchers.amount_due');
 
             $check = "CHECK";
@@ -727,6 +1287,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.cheque_total_amount',
                                 'dno_personal_payment_vouchers.sub_category',
                                 'dno_personal_payment_vouchers.sub_category_account_id',
+                                'dno_personal_payment_vouchers.deleted_at',
                                 'dno_personal_codes.dno_personal_code',
                                 'dno_personal_codes.module_id',
                                 'dno_personal_codes.module_code',
@@ -736,6 +1297,7 @@ class DnoPersonalController extends Controller
                                 ->where('dno_personal_codes.module_name', $moduleNamePV)
                                 ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $check)
+                                ->where('dno_personal_payment_vouchers.deleted_at', NULL)
                                 ->orderBy('dno_personal_payment_vouchers.id', 'desc')
                                 ->get()->toArray();
 
@@ -772,6 +1334,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.cheque_amount',
                                 'dno_personal_payment_vouchers.sub_category',
                                 'dno_personal_payment_vouchers.sub_category_account_id',
+                                'dno_personal_payment_vouchers.deleted_at',
                                 'dno_personal_codes.dno_personal_code',
                                 'dno_personal_codes.module_id',
                                 'dno_personal_codes.module_code',
@@ -782,6 +1345,7 @@ class DnoPersonalController extends Controller
                                 ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $check)
                                 ->where('dno_personal_payment_vouchers.status', '!=', $status)
+                                ->where('dno_personal_payment_vouchers.deleted_at', NULL)
                                 ->sum('dno_personal_payment_vouchers.amount_due');
 
         //total paid amount check
@@ -818,6 +1382,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.cheque_total_amount',
                                 'dno_personal_payment_vouchers.sub_category',
                                 'dno_personal_payment_vouchers.sub_category_account_id',
+                                'dno_personal_payment_vouchers.deleted_at',
                                 'dno_personal_codes.dno_personal_code',
                                 'dno_personal_codes.module_id',
                                 'dno_personal_codes.module_code',
@@ -828,9 +1393,10 @@ class DnoPersonalController extends Controller
                                 ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $check)
                                 ->where('dno_personal_payment_vouchers.status',  $status)
+                                ->where('dno_personal_payment_vouchers.deleted_at', NULL)
                                 ->sum('dno_personal_payment_vouchers.cheque_total_amount');
             
-        $pdf = PDF::loadView('printSummaryDnoPersonal',  compact('date', 'getDateToday', 
+        $pdf = PDF::loadView('printSummaryDnoPersonal',  compact('date', 'getDateToday', 'uri0', 'uri1',
          'getTransactionListCashes', 'getTransactionListChecks', 
         'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck'));
         
@@ -900,6 +1466,7 @@ class DnoPersonalController extends Controller
                             'dno_personal_payment_vouchers.cheque_amount',
                             'dno_personal_payment_vouchers.sub_category',
                             'dno_personal_payment_vouchers.sub_category_account_id',
+                            'dno_personal_payment_vouchers.deleted_at',
                             'dno_personal_codes.dno_personal_code',
                             'dno_personal_codes.module_id',
                             'dno_personal_codes.module_code',
@@ -908,6 +1475,7 @@ class DnoPersonalController extends Controller
                             ->where('dno_personal_payment_vouchers.pv_id', NULL)
                             ->where('dno_personal_codes.module_name', $moduleNamePV)
                             ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($getDateToday))
+                            ->where('dno_personal_payment_vouchers.deleted_at', NULL)
                             ->orderBy('dno_personal_payment_vouchers.id', 'desc')
                             ->get()->toArray();
 
@@ -944,6 +1512,7 @@ class DnoPersonalController extends Controller
                             'dno_personal_payment_vouchers.cheque_amount',
                             'dno_personal_payment_vouchers.sub_category',
                             'dno_personal_payment_vouchers.sub_category_account_id',
+                            'dno_personal_payment_vouchers.deleted_at',
                             'dno_personal_codes.dno_personal_code',
                             'dno_personal_codes.module_id',
                             'dno_personal_codes.module_code',
@@ -953,6 +1522,7 @@ class DnoPersonalController extends Controller
                             ->where('dno_personal_codes.module_name', $moduleNamePV)
                             ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($getDateToday))
                             ->where('dno_personal_payment_vouchers.method_of_payment', $cash)
+                            ->where('dno_personal_payment_vouchers.deleted_at', NULL)
                             ->orderBy('dno_personal_payment_vouchers.id', 'desc')
                             ->get()->toArray();
     
@@ -990,6 +1560,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.cheque_amount',
                                 'dno_personal_payment_vouchers.sub_category',
                                 'dno_personal_payment_vouchers.sub_category_account_id',
+                                'dno_personal_payment_vouchers.deleted_at',
                                 'dno_personal_codes.dno_personal_code',
                                 'dno_personal_codes.module_id',
                                 'dno_personal_codes.module_code',
@@ -1000,6 +1571,7 @@ class DnoPersonalController extends Controller
                                 ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $cash)
                                 ->where('dno_personal_payment_vouchers.status', '!=', $status)
+                                ->where('dno_personal_payment_vouchers.deleted_at', NULL)
                                 ->sum('dno_personal_payment_vouchers.amount_due');
 
             
@@ -1039,6 +1611,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.cheque_total_amount',
                                 'dno_personal_payment_vouchers.sub_category',
                                 'dno_personal_payment_vouchers.sub_category_account_id',
+                                'dno_personal_payment_vouchers.deleted_at',
                                 'dno_personal_codes.dno_personal_code',
                                 'dno_personal_codes.module_id',
                                 'dno_personal_codes.module_code',
@@ -1048,6 +1621,7 @@ class DnoPersonalController extends Controller
                                 ->where('dno_personal_codes.module_name', $moduleNamePV)
                                 ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $check)
+                                ->where('dno_personal_payment_vouchers.deleted_at', NULL)
                                 ->orderBy('dno_personal_payment_vouchers.id', 'desc')
                                 ->get()->toArray();
 
@@ -1085,6 +1659,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.cheque_total_amount',
                                 'dno_personal_payment_vouchers.sub_category',
                                 'dno_personal_payment_vouchers.sub_category_account_id',
+                                'dno_personal_payment_vouchers.deleted_at',
                                 'dno_personal_codes.dno_personal_code',
                                 'dno_personal_codes.module_id',
                                 'dno_personal_codes.module_code',
@@ -1095,6 +1670,7 @@ class DnoPersonalController extends Controller
                                 ->whereDate('dno_personal_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('dno_personal_payment_vouchers.method_of_payment', $check)
                                 ->where('dno_personal_payment_vouchers.status', '!=', $status)
+                                ->where('dno_personal_payment_vouchers.deleted_at', NULL)
                                 ->sum('dno_personal_payment_vouchers.amount_due');
 
         return view('dno-personal-summary-report', compact('pettyCashLists', 

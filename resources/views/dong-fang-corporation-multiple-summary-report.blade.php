@@ -97,6 +97,9 @@
                                         Summary Reports
                                     </div>
                                     <div class="card-body">
+                                        <div>
+                                            <h1>Search Result For: {{ $startDate }} TO {{ $endDate}}</h1>
+                                        </div>
                                         <nav>
                                             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                                                 <a class="nav-item nav-link active" id="nav-billingStatement" data-toggle="tab" href="#billingStatement" role="tab" aria-controls="billingStatement" aria-selected="false">Billing Statement</a>
@@ -269,7 +272,7 @@
                                             <div class="tab-pane fade" id="all" role="tabpanel" aria-labelledby="all-tab">
                                                  <br>
                                                 <div class="float-right">
-                                                    <a href="{{ action('DongFangCorporationController@printSummary') }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                                    <a href="{{ action('DongFangCorporationController@printMultipleSummary',  $startDate.'TO'.$endDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
                                                 </div>
                                                  <br>
                                                 <div class="table-responsive">

@@ -1,4 +1,4 @@
-@extends('layouts.dino-industrial-corporation-app')
+@extends('layouts.wlg-corporation-app')
 @section('title', 'Summary Reports |')
 @section('content')
 <style >
@@ -25,14 +25,14 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="wrapper">
-      @include('sidebar.sidebar-dino-industrial-corporation')
+      @include('sidebar.sidebar-wlg-corporation')
       <div id="content-wrapper">
             <div class="container-fluid">
                   <!-- Breadcrumbs-->
                 <h1 class="mt-4">Summary Report(s)</h1>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                    <a href="#">DINO Industrial Corporation </a>
+                    <a href="#">WLG Corporation </a>
                     </li>
                     <li class="breadcrumb-item active">Summary Report(s)</li>
                 </ol>
@@ -48,7 +48,7 @@
                                       <div class="form-row">
                                           
                                           <div class="col-lg-4">
-                                              <form action="{{ action('DinoIndustrialCorporationController@getSummaryReport') }}" method="get">
+                                              <form action="{{ action('WlgCorporationController@getSummaryReport') }}" method="get">
                                               {{ csrf_field() }}
                                               <h1>Search Date</h1>
                                               <input type="text" name="selectDate" class="datepicker form-control"  required/>
@@ -59,31 +59,31 @@
                                           
                                       </div>
                                   </div>
-                                  <form action="{{ action('DinoIndustrialCorporationController@getSummaryReportMultiple')}}" method="get"> 
-                                        {{ csrf_field() }}
-                                        <div class="form-group">
-                                            <div class="form-row">
-                                                <div class="col-lg-4">
-                                                <h1>Search Start Date</h1>
-                                                <input type="text" name="startDate" class="datepicker form-control"  required/>
+                                  <form action="{{ action('WlgCorporationController@getSummaryReportMultiple')}}" method="get"> 
+                                            {{ csrf_field() }}
+                                            <div class="form-group">
+                                                <div class="form-row">
+                                                    <div class="col-lg-4">
+                                                    <h1>Search Start Date</h1>
+                                                    <input type="text" name="startDate" class="datepicker form-control"  required/>
+                                                        
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                    <h1>Search End Date</h1>
+                                                    <input type="text" name="endDate" class="datepicker form-control"  required/>
+                                                    
+                                                    </div>
+                                                
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-row">
+                                                    <br>
+                                                    <button type="submit" class="btn btn-success  btn-lg"><i class="fa fa-search" aria-hidden="true"></i> Search Date</button>
                                                     
                                                 </div>
-                                                <div class="col-lg-4">
-                                                <h1>Search End Date</h1>
-                                                <input type="text" name="endDate" class="datepicker form-control"  required/>
-                                                
-                                                </div>
-                                            
                                             </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-row">
-                                                <br>
-                                                <button type="submit" class="btn btn-success  btn-lg"><i class="fa fa-search" aria-hidden="true"></i> Search Date</button>
-                                                
-                                            </div>
-                                        </div>
-                                </form>
+                                    </form>
                             </div>
                          </div>
                     </div>
@@ -96,19 +96,19 @@
                                 Summary Reports
                             </div>
                             <div class="card-body">
-                                <div>
-                                    <h1>Search Result For: {{ $getDate }}</h1>
+                                 <div>
+                                    <h1>Search Result For: {{ $startDate }} TO {{ $endDate}}</h1>
                                 </div>
                                  <nav>
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                        <a class="nav-item nav-link active" id="nav-pettyCash" data-toggle="tab" href="#pettyCash" role="tab" aria-controls="purchaseOrder" aria-selected="false">Petty Cash</a>
+                                        <a class="nav-item nav-link active" id="nav-purchaseOrder" data-toggle="tab" href="#purchaseOrder" role="tab" aria-controls="purchaseOrder" aria-selected="false">Petty Cash</a>
                                         <a class="nav-item nav-link" id="nav-payables" data-toggle="tab" href="#payables" role="tab" aria-controls="payables" aria-selected="false">Payables</a>
                                         <a class="nav-item nav-link" id="nav-all" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="false">All</a>
                                    
                                     </div>
                                 </nav>
                                 <div class="tab-content" id="nav-tabContent">
-                                     <div class="tab-pane fade show active" id="pettyCash" role="tabpanel" aria-labelledby="pettyCash-tab">
+                                     <div class="tab-pane fade show active" id="purchaseOrder" role="tabpanel" aria-labelledby="purchaseOrder-tab">
                                        <br>
                                        <div class="table-responsive">
                                              <table class="table table-bordered display" width="100%" cellspacing="0">
@@ -131,7 +131,23 @@
                                                     </tr>
                                                 </tfoot>
                                                 <tbody>
-                                                   
+                                                    @foreach($purchaseOrders as $purchaseOrder)
+                                                        <tr>
+                                                            <td>
+                                                            @if(Auth::user()['role_type'] != 3)
+                                                            <a href="{{ url('wlg-corporation/edit-wlg-corporation-purchase-order/'.$purchaseOrder->id) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                                            @endif
+                                                            @if(Auth::user()['role_type'] == 1)
+                                                                <a id="delete" onClick="confirmDelete('{{ $purchaseOrder->id }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                                                            @endif
+                                                                <a href="{{ url('wlg-corporation/view-wlg-corporation-purchase-order/'.$purchaseOrder->id) }}" title="View"><i class="fas fa-low-vision"></i></a>
+                                                            </td>
+                                                            <td>{{ $purchaseOrder->module_code}}{{ $purchaseOrder->wlg_code}}</td>
+                                                            <td>{{ $purchaseOrder->paid_to}}</td>
+                                                            <td>{{ $purchaseOrder->date }}</td>
+                                                            <td>{{ $purchaseOrder->created_by }}</td>
+                                                        </tr>
+                                                    @endforeach
                                                 </tbody>
                                              </table>
                                         </div>
@@ -142,7 +158,7 @@
                                             <table class="table table-bordered display" width="100%" cellspacing="0">
                                             <thead>
                                                     <tr>
-                                                  
+                                                    <th>Action</th>
                                                     <th>Invoice #</th>
                                                     <th>PV No</th>
                                                     <th  class="bg-info" style="color:#fff;">Category</th>
@@ -158,7 +174,7 @@
                                             </thead>
                                             <tfoot>
                                                 <tr>
-                                                  
+                                                    <th>Action</th>
                                                     <th>Invoice #</th>
                                                     <th>PV No</th>
                                                     <th class="bg-info" style="color:#fff;">Category</th>
@@ -174,31 +190,35 @@
                                             </tfoot>
                                             <tbody>
                                             @foreach($getTransactionLists as $getTransactionList)
-                                            <?php $id = $getTransactionList->id; ?>
-                                            <?php
-                                            $amount1 = DB::table('dino_industrial_corporation_payment_vouchers')
-                                                    ->select('*')
-                                                    ->where('id', $id)
-                                                    ->sum('amount');
-                                            
-                                            $amount2 = DB::table('dino_industrial_corporation_payment_vouchers')
-                                                    ->select('*')
-                                                    ->where('pv_id', $id)
-                                                    ->sum('amount');
-                                            $compute = $amount1 + $amount2;
-                                            ?>
-                                          <tr >
+                                        <?php $id = $getTransactionList->id; ?>
+                                        <?php
+                                          $amount1 = DB::table('wlg_corporation_payment_vouchers')
+                                                ->select('*')
+                                                ->where('id', $id)
+                                                ->sum('amount');
                                           
+                                          $amount2 = DB::table('wlg_corporation_payment_vouchers')
+                                                ->select('*')
+                                                ->where('pv_id', $id)
+                                                ->sum('amount');
+                                          $compute = $amount1 + $amount2;
+                                        ?>
+                                          <tr id="deletedId{{ $getTransactionList->id }}">
+                                            <td width="2%">
+                                              @if(Auth::user()['role_type'] == 1)
+                                                <a id="delete" onClick="confirmDelete('{{ $getTransactionList->id}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                                                    @endif
+                                            </td>
                                             <td>
                                               @if($getTransactionList->status != "FULLY PAID AND RELEASED")
                                               <p style="width:250px;">
-                                              <a href="{{ url('dino-industrial-corporation/edit-dic-industrial-payables-detail/'.$getTransactionList->id) }}" title="Edit">{{ $getTransactionList->invoice_number}}</a>
+                                              <a href="{{ url('wlg-corporation/edit-wlg-corporation-payables-detail/'.$getTransactionList->id) }}" title="Edit">{{ $getTransactionList->invoice_number}}</a>
                                               </p>
                                               @else
                                               <p style="width:250px;">{{ $getTransactionList->invoice_number}}</p>
                                               @endif
                                             </td>
-                                            <td><p style="width:140px;">{{ $getTransactionList->module_code}}{{ $getTransactionList->dic_code}}</p></td>
+                                            <td><p style="width:140px;">{{ $getTransactionList->module_code}}{{ $getTransactionList->wlg_code}}</p></td>
                                             <td class="bg-info" style="color:#fff;"><p style="width:150px;">{{ $getTransactionList->category}}</p></td>
                                             <td><p style="width:130px;">{{ $getTransactionList->issued_date}}</p></td>
                                             <td><p style="width:200px;">{{ $getTransactionList->paid_to}}</p></td>
@@ -208,7 +228,7 @@
                                             <p style="width:170px;"><?php echo number_format($compute, 2);?></p></td>
                                             <td><p style="width:160px;">{{ $getTransactionList->delivered_date}}</p></td>
                                               <td><p style="width:190px;">{{ $getTransactionList->method_of_payment }}</p></td>
-                                            <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('dino-industrial-corporation/view-dino-industrial-payables-details/'.$getTransactionList->id) }}">{{ $getTransactionList->status }}</a></p></td>
+                                            <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('wlg-corporation/view-wlg-corporation-payables-details/'.$getTransactionList->id) }}">{{ $getTransactionList->status }}</a></p></td>
                                             <td><p style="width:190px;">{{ $getTransactionList->created_by}}</p></td>
                                             
                                           </tr>
@@ -221,7 +241,7 @@
                                     <div class="tab-pane fade" id="all" role="tabpanel" aria-labelledby="all-tab">
                                          <br>
                                          <div class="float-right">
-                                             <a href="{{ action('DinoIndustrialCorporationController@printGetSummary', $getDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                             <a href="{{ action('WlgCorporationController@printMultipleSummary',  $startDate.'TO'.$endDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
                                         </div>
                                         <br>
                                         <div class="table-responsive">
@@ -255,12 +275,12 @@
                                                 @foreach($getTransactionListCashes as $getTransactionListCash)
                                                         <?php $id = $getTransactionListCash->id; ?>
                                                         <?php
-                                                            $amount1 = DB::table('dino_industrial_corporation_payment_vouchers')
+                                                            $amount1 = DB::table('wlg_corporation_payment_vouchers')
                                                                         ->select('*')
                                                                         ->where('id', $id)
                                                                         ->sum('amount');
                                                             
-                                                            $amount2 = DB::table('dino_industrial_corporation_payment_vouchers')
+                                                            $amount2 = DB::table('wlg_corporation_payment_vouchers')
                                                                         ->select('*')
                                                                         ->where('pv_id', $id)
                                                                         ->sum('amount');
@@ -271,13 +291,13 @@
                                                             <td>
                                                                 @if($getTransactionListCash->status != "FULLY PAID AND RELEASED")
                                                                 <p style="width:250px;">
-                                                                    <a href="{{ url('dino-industrial-corporation/edit-dino-industrial-payables-detail/'.$getTransactionListCash->id) }}" title="Edit">{{ $getTransactionListCash->invoice_number}}</a>
+                                                                    <a href="{{ url('wlg-corporation/edit-wlg-corporation-payables-detail/'.$getTransactionListCash->id) }}" title="Edit">{{ $getTransactionListCash->invoice_number}}</a>
                                                                 </p>
                                                                 @else
                                                                 <p style="width:250px;">{{ $getTransactionListCash->invoice_number}}</p>
                                                                 @endif
                                                             </td>
-                                                            <td><p style="width:140px;">{{ $getTransactionListCash->module_code}}{{ $getTransactionListCash->dic_code}}</p></td>
+                                                            <td><p style="width:140px;">{{ $getTransactionListCash->module_code}}{{ $getTransactionListCash->wlg_code}}</p></td>
                                                            
                                                             <td><p style="width:130px;">{{ $getTransactionListCash->issued_date}}</p></td>
                                                             <td><p style="width:200px;">{{ $getTransactionListCash->paid_to}}</p></td>
@@ -286,7 +306,7 @@
                                                             <td class="bg-danger" style="color:white;"> <p style="width:170px;"><?php echo number_format($compute, 2);?></p></td>
                                                             
                                                             
-                                                            <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('dino-industrial-corporation/view-dino-industrial-payables-details/'.$getTransactionListCash->id) }}">{{ $getTransactionListCash->status }}</a></p></td>
+                                                            <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('wlg-corporation/view-wlg-corporation-payables-details/'.$getTransactionListCash->id) }}">{{ $getTransactionListCash->status }}</a></p></td>
                                                             <td><p style="width:190px;">{{ $getTransactionListCash->created_by}}</p></td>
                                                             
                                                         </tr>
@@ -339,22 +359,22 @@
                                                 @foreach($getTransactionListChecks as $getTransactionListCheck)
                                                         <?php $id = $getTransactionListCheck->id; ?>
                                                         <?php
-                                                            $amount1 = DB::table('dino_industrial_corporation_payment_vouchers')
+                                                            $amount1 = DB::table('wlg_corporation_payment_vouchers')
                                                                         ->select('*')
                                                                         ->where('id', $id)
                                                                         ->sum('amount');
                                                             
-                                                            $amount2 = DB::table('dino_industrial_corporation_payment_vouchers')
+                                                            $amount2 = DB::table('wlg_corporation_payment_vouchers')
                                                                         ->select('*')
                                                                         ->where('pv_id', $id)
                                                                         ->sum('amount');
                                                             $compute = $amount1 + $amount2;
 
                                                                //get the check account no
-                                                            $getChecks = DB::table('dino_industrial_corporation_payment_vouchers')
-                                                                    ->select('*')
-                                                                    ->where('pv_id', $id)
-                                                                    ->get()->toArray();
+                                                            $getChecks = DB::table('wlg_corporation_payment_vouchers')
+                                                                        ->select('*')
+                                                                        ->where('pv_id', $id)
+                                                                        ->get()->toArray();
                                                         ?>
                                                         <tr >
                                                           
@@ -367,7 +387,7 @@
                                                                 <p style="width:250px;">{{ $getTransactionListCheck->invoice_number}}</p>
                                                                 @endif
                                                             </td>
-                                                            <td><p style="width:140px;">{{ $getTransactionListCheck->module_code}}{{ $getTransactionListCheck->dic_code}}</p></td>
+                                                            <td><p style="width:140px;">{{ $getTransactionListCheck->module_code}}{{ $getTransactionListCheck->wlg_code}}</p></td>
                                                            
                                                             <td><p style="width:130px;">{{ $getTransactionListCheck->issued_date}}</p></td>
                                                             <td><p style="width:200px;">{{ $getTransactionListCheck->paid_to}}</p></td>

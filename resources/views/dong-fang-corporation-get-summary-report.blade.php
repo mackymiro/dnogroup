@@ -59,6 +59,31 @@
                                                 
                                             </div>
                                         </div>
+                                        <form action="{{ action('DongFangCorporationController@getSummaryReportMultiple')}}" method="get"> 
+                                            {{ csrf_field() }}
+                                            <div class="form-group">
+                                                <div class="form-row">
+                                                    <div class="col-lg-4">
+                                                    <h1>Search Start Date</h1>
+                                                    <input type="text" name="startDate" class="datepicker form-control"  required/>
+                                                        
+                                                    </div>
+                                                    <div class="col-lg-4">
+                                                    <h1>Search End Date</h1>
+                                                    <input type="text" name="endDate" class="datepicker form-control"  required/>
+                                                    
+                                                    </div>
+                                                
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-row">
+                                                    <br>
+                                                    <button type="submit" class="btn btn-success  btn-lg"><i class="fa fa-search" aria-hidden="true"></i> Search Date</button>
+                                                    
+                                                </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                         </div>

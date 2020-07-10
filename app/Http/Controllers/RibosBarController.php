@@ -24,6 +24,771 @@ use App\RibosBarCode;
 class RibosBarController extends Controller
 {
 
+    public function printMultipleSummary(Request $request, $date){  
+        $urlSegment = \Request::segment(3);
+        $uri = explode("TO", $urlSegment);
+        $uri0 = $uri[0];
+        $uri1 = $uri[1];
+
+        $moduleName = "Sales Invoice";
+        $getAllSalesInvoices = DB::table(
+                        'ribos_bar_sales_invoices')
+                        ->select(
+                            'ribos_bar_sales_invoices.id',
+                            'ribos_bar_sales_invoices.user_id',
+                            'ribos_bar_sales_invoices.si_id',
+                            'ribos_bar_sales_invoices.invoice_number',
+                            'ribos_bar_sales_invoices.date',
+                            'ribos_bar_sales_invoices.ordered_by',
+                            'ribos_bar_sales_invoices.address',
+                            'ribos_bar_sales_invoices.qty',
+                            'ribos_bar_sales_invoices.total_kls',
+                            'ribos_bar_sales_invoices.item_description',
+                            'ribos_bar_sales_invoices.unit_price',
+                            'ribos_bar_sales_invoices.amount',
+                            'ribos_bar_sales_invoices.total_amount', 
+                            'ribos_bar_sales_invoices.created_by', 
+                            'ribos_bar_sales_invoices.created_at',
+                            'ribos_bar_sales_invoices.deleted_at',                     
+                            'ribos_bar_codes.ribos_bar_code',
+                            'ribos_bar_codes.module_id',
+                            'ribos_bar_codes.module_code',
+                            'ribos_bar_codes.module_name')
+                        ->leftJoin('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
+                        ->where('ribos_bar_sales_invoices.si_id', NULL)
+                        ->where('ribos_bar_sales_invoices.deleted_at', NULL)
+                        ->where('ribos_bar_codes.module_name', $moduleName)
+                        ->whereBetween('ribos_bar_sales_invoices.created_at', [$uri0, $uri1])
+                        ->orderBy('ribos_bar_sales_invoices.id', 'desc')
+                        ->get()->toArray();
+
+        $totalSalesInvoice = DB::table(
+                            'ribos_bar_sales_invoices')
+                            ->select(
+                                'ribos_bar_sales_invoices.id',
+                                'ribos_bar_sales_invoices.user_id',
+                                'ribos_bar_sales_invoices.si_id',
+                                'ribos_bar_sales_invoices.invoice_number',
+                                'ribos_bar_sales_invoices.date',
+                                'ribos_bar_sales_invoices.ordered_by',
+                                'ribos_bar_sales_invoices.address',
+                                'ribos_bar_sales_invoices.qty',
+                                'ribos_bar_sales_invoices.total_kls',
+                                'ribos_bar_sales_invoices.item_description',
+                                'ribos_bar_sales_invoices.unit_price',
+                                'ribos_bar_sales_invoices.amount',
+                                'ribos_bar_sales_invoices.total_amount', 
+                                'ribos_bar_sales_invoices.created_by', 
+                                'ribos_bar_sales_invoices.created_at', 
+                                'ribos_bar_sales_invoices.deleted_at', 
+                                'ribos_bar_codes.ribos_bar_code',
+                                'ribos_bar_codes.module_id',
+                                'ribos_bar_codes.module_code',
+                                'ribos_bar_codes.module_name')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
+                            ->where('ribos_bar_sales_invoices.si_id', NULL)
+                            ->where('ribos_bar_sales_invoices.deleted_at', NULL)
+                            ->where('ribos_bar_codes.module_name', $moduleName)
+                            ->whereBetween('ribos_bar_sales_invoices.created_at', [$uri0, $uri1])
+                            ->sum('ribos_bar_sales_invoices.total_amount');
+        
+
+        $moduleNamePO = "Purchase Order";
+        $purchaseOrders = DB::table(
+                        'ribos_bar_purchase_orders')
+                        ->select(
+                            'ribos_bar_purchase_orders.id',
+                            'ribos_bar_purchase_orders.user_id',
+                            'ribos_bar_purchase_orders.po_id',
+                            'ribos_bar_purchase_orders.paid_to',
+                            'ribos_bar_purchase_orders.address',
+                            'ribos_bar_purchase_orders.branch_location',
+                            'ribos_bar_purchase_orders.date',
+                            'ribos_bar_purchase_orders.quantity',
+                            'ribos_bar_purchase_orders.description',
+                            'ribos_bar_purchase_orders.unit_price',
+                            'ribos_bar_purchase_orders.amount',
+                            'ribos_bar_purchase_orders.total_price',
+                            'ribos_bar_purchase_orders.requested_by',
+                            'ribos_bar_purchase_orders.prepared_by',
+                            'ribos_bar_purchase_orders.checked_by',
+                            'ribos_bar_purchase_orders.created_by',
+                            'ribos_bar_purchase_orders.created_at',
+                            'ribos_bar_purchase_orders.deleted_at',
+                            'ribos_bar_codes.ribos_bar_code',
+                            'ribos_bar_codes.module_id',
+                            'ribos_bar_codes.module_code',
+                            'ribos_bar_codes.module_name')
+                        ->leftJoin('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
+                        ->where('ribos_bar_purchase_orders.po_id', NULL)
+                        ->where('ribos_bar_purchase_orders.deleted_at', NULL)
+                        ->where('ribos_bar_codes.module_name', $moduleNamePO)
+                        ->whereBetween('ribos_bar_purchase_orders.created_at', [$uri0, $uri1])
+                        ->orderBy('ribos_bar_purchase_orders.id', 'desc')
+                        ->get()->toArray();
+        
+        $totalPOrder = DB::table(
+                            'ribos_bar_purchase_orders')
+                            ->select(
+                                'ribos_bar_purchase_orders.id',
+                                'ribos_bar_purchase_orders.user_id',
+                                'ribos_bar_purchase_orders.po_id',
+                                'ribos_bar_purchase_orders.paid_to',
+                                'ribos_bar_purchase_orders.address',
+                                'ribos_bar_purchase_orders.branch_location',
+                                'ribos_bar_purchase_orders.date',
+                                'ribos_bar_purchase_orders.quantity',
+                                'ribos_bar_purchase_orders.description',
+                                'ribos_bar_purchase_orders.unit_price',
+                                'ribos_bar_purchase_orders.amount',
+                                'ribos_bar_purchase_orders.total_price',
+                                'ribos_bar_purchase_orders.requested_by',
+                                'ribos_bar_purchase_orders.prepared_by',
+                                'ribos_bar_purchase_orders.checked_by',
+                                'ribos_bar_purchase_orders.created_by',
+                                'ribos_bar_purchase_orders.created_at',
+                                'ribos_bar_purchase_orders.deleted_at',
+                                'ribos_bar_codes.ribos_bar_code',
+                                'ribos_bar_codes.module_id',
+                                'ribos_bar_codes.module_code',
+                                'ribos_bar_codes.module_name')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
+                            ->where('ribos_bar_purchase_orders.po_id', NULL)
+                            ->where('ribos_bar_purchase_orders.deleted_at', NULL)
+                            ->where('ribos_bar_codes.module_name', $moduleNamePO)
+                            ->whereBetween('ribos_bar_purchase_orders.created_at', [$uri0, $uri1])
+                            ->sum('ribos_bar_purchase_orders.total_price');
+        
+        $moduleNamePV = "Payment Voucher";
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                            'ribos_bar_payment_vouchers')
+                            ->select( 
+                            'ribos_bar_payment_vouchers.id',
+                            'ribos_bar_payment_vouchers.user_id',
+                            'ribos_bar_payment_vouchers.pv_id',
+                            'ribos_bar_payment_vouchers.date',
+                            'ribos_bar_payment_vouchers.paid_to',
+                            'ribos_bar_payment_vouchers.account_no',
+                            'ribos_bar_payment_vouchers.account_name',
+                            'ribos_bar_payment_vouchers.particulars',
+                            'ribos_bar_payment_vouchers.amount',
+                            'ribos_bar_payment_vouchers.method_of_payment',
+                            'ribos_bar_payment_vouchers.prepared_by',
+                            'ribos_bar_payment_vouchers.approved_by',
+                            'ribos_bar_payment_vouchers.date_apprroved',
+                            'ribos_bar_payment_vouchers.received_by_date',
+                            'ribos_bar_payment_vouchers.created_by',
+                            'ribos_bar_payment_vouchers.created_at',
+                            'ribos_bar_payment_vouchers.invoice_number',
+                            'ribos_bar_payment_vouchers.voucher_ref_number',
+                            'ribos_bar_payment_vouchers.issued_date',
+                            'ribos_bar_payment_vouchers.category',
+                            'ribos_bar_payment_vouchers.amount_due',
+                            'ribos_bar_payment_vouchers.delivered_date',
+                            'ribos_bar_payment_vouchers.status',
+                            'ribos_bar_payment_vouchers.cheque_number',
+                            'ribos_bar_payment_vouchers.cheque_amount',
+                            'ribos_bar_payment_vouchers.sub_category',
+                            'ribos_bar_payment_vouchers.sub_category_account_id',
+                            'ribos_bar_payment_vouchers.deleted_at',
+                            'ribos_bar_codes.ribos_bar_code',
+                            'ribos_bar_codes.module_id',
+                            'ribos_bar_codes.module_code',
+                            'ribos_bar_codes.module_name')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                            ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                            ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
+                            ->where('ribos_bar_codes.module_name', $moduleNamePV)
+                            ->whereBetween('ribos_bar_payment_vouchers.created_at', [$uri0, $uri1])
+                            ->where('ribos_bar_payment_vouchers.method_of_payment', $cash)
+                            ->orderBy('ribos_bar_payment_vouchers.id', 'desc')
+                            ->get()->toArray();
+    
+        $totalAmountCashes = DB::table(
+                                'ribos_bar_payment_vouchers')
+                                ->select( 
+                                'ribos_bar_payment_vouchers.id',
+                                'ribos_bar_payment_vouchers.user_id',
+                                'ribos_bar_payment_vouchers.pv_id',
+                                'ribos_bar_payment_vouchers.date',
+                                'ribos_bar_payment_vouchers.paid_to',
+                                'ribos_bar_payment_vouchers.account_no',
+                                'ribos_bar_payment_vouchers.account_name',
+                                'ribos_bar_payment_vouchers.particulars',
+                                'ribos_bar_payment_vouchers.amount',
+                                'ribos_bar_payment_vouchers.method_of_payment',
+                                'ribos_bar_payment_vouchers.prepared_by',
+                                'ribos_bar_payment_vouchers.approved_by',
+                                'ribos_bar_payment_vouchers.date_apprroved',
+                                'ribos_bar_payment_vouchers.received_by_date',
+                                'ribos_bar_payment_vouchers.created_by',
+                                'ribos_bar_payment_vouchers.created_at',
+                                'ribos_bar_payment_vouchers.invoice_number',
+                                'ribos_bar_payment_vouchers.voucher_ref_number',
+                                'ribos_bar_payment_vouchers.issued_date',
+                                'ribos_bar_payment_vouchers.category',
+                                'ribos_bar_payment_vouchers.amount_due',
+                                'ribos_bar_payment_vouchers.delivered_date',
+                                'ribos_bar_payment_vouchers.status',
+                                'ribos_bar_payment_vouchers.cheque_number',
+                                'ribos_bar_payment_vouchers.cheque_amount',
+                                'ribos_bar_payment_vouchers.sub_category',
+                                'ribos_bar_payment_vouchers.sub_category_account_id',
+                                'ribos_bar_payment_vouchers.deleted_at',
+                                'ribos_bar_codes.ribos_bar_code',
+                                'ribos_bar_codes.module_id',
+                                'ribos_bar_codes.module_code',
+                                'ribos_bar_codes.module_name')
+                                ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                                ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                                ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
+                                ->where('ribos_bar_codes.module_name', $moduleNamePV)
+                                ->whereBetween('ribos_bar_payment_vouchers.created_at', [$uri0, $uri1])
+                                ->where('ribos_bar_payment_vouchers.method_of_payment', $cash)
+                                ->orderBy('ribos_bar_payment_vouchers.id', 'desc')
+                                ->sum('ribos_bar_payment_vouchers.amount_due');
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                            'ribos_bar_payment_vouchers')
+                            ->select( 
+                            'ribos_bar_payment_vouchers.id',
+                            'ribos_bar_payment_vouchers.user_id',
+                            'ribos_bar_payment_vouchers.pv_id',
+                            'ribos_bar_payment_vouchers.date',
+                            'ribos_bar_payment_vouchers.paid_to',
+                            'ribos_bar_payment_vouchers.account_no',
+                            'ribos_bar_payment_vouchers.account_name',
+                            'ribos_bar_payment_vouchers.particulars',
+                            'ribos_bar_payment_vouchers.amount',
+                            'ribos_bar_payment_vouchers.method_of_payment',
+                            'ribos_bar_payment_vouchers.prepared_by',
+                            'ribos_bar_payment_vouchers.approved_by',
+                            'ribos_bar_payment_vouchers.date_apprroved',
+                            'ribos_bar_payment_vouchers.received_by_date',
+                            'ribos_bar_payment_vouchers.created_by',
+                            'ribos_bar_payment_vouchers.created_at',
+                            'ribos_bar_payment_vouchers.invoice_number',
+                            'ribos_bar_payment_vouchers.voucher_ref_number',
+                            'ribos_bar_payment_vouchers.issued_date',
+                            'ribos_bar_payment_vouchers.category',
+                            'ribos_bar_payment_vouchers.amount_due',
+                            'ribos_bar_payment_vouchers.delivered_date',
+                            'ribos_bar_payment_vouchers.status',
+                            'ribos_bar_payment_vouchers.cheque_number',
+                            'ribos_bar_payment_vouchers.cheque_amount',
+                            'ribos_bar_payment_vouchers.cheque_total_amount',
+                            'ribos_bar_payment_vouchers.sub_category',
+                            'ribos_bar_payment_vouchers.sub_category_account_id',
+                            'ribos_bar_payment_vouchers.deleted_at',
+                            'ribos_bar_codes.ribos_bar_code',
+                            'ribos_bar_codes.module_id',
+                            'ribos_bar_codes.module_code',
+                            'ribos_bar_codes.module_name')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                            ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                            ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
+                            ->where('ribos_bar_codes.module_name', $moduleNamePV)
+                            ->whereBetween('ribos_bar_payment_vouchers.created_at', [$uri0, $uri1])
+                            ->where('ribos_bar_payment_vouchers.method_of_payment', $check)
+                            ->orderBy('ribos_bar_payment_vouchers.id', 'desc')
+                            ->get()->toArray();
+
+        $status = "FULLY PAID AND RELEASED";    
+        $totalAmountCheck = DB::table(
+                            'ribos_bar_payment_vouchers')
+                            ->select( 
+                            'ribos_bar_payment_vouchers.id',
+                            'ribos_bar_payment_vouchers.user_id',
+                            'ribos_bar_payment_vouchers.pv_id',
+                            'ribos_bar_payment_vouchers.date',
+                            'ribos_bar_payment_vouchers.paid_to',
+                            'ribos_bar_payment_vouchers.account_no',
+                            'ribos_bar_payment_vouchers.account_name',
+                            'ribos_bar_payment_vouchers.particulars',
+                            'ribos_bar_payment_vouchers.amount',
+                            'ribos_bar_payment_vouchers.method_of_payment',
+                            'ribos_bar_payment_vouchers.prepared_by',
+                            'ribos_bar_payment_vouchers.approved_by',
+                            'ribos_bar_payment_vouchers.date_apprroved',
+                            'ribos_bar_payment_vouchers.received_by_date',
+                            'ribos_bar_payment_vouchers.created_by',
+                            'ribos_bar_payment_vouchers.created_at',
+                            'ribos_bar_payment_vouchers.invoice_number',
+                            'ribos_bar_payment_vouchers.voucher_ref_number',
+                            'ribos_bar_payment_vouchers.issued_date',
+                            'ribos_bar_payment_vouchers.category',
+                            'ribos_bar_payment_vouchers.amount_due',
+                            'ribos_bar_payment_vouchers.delivered_date',
+                            'ribos_bar_payment_vouchers.status',
+                            'ribos_bar_payment_vouchers.cheque_number',
+                            'ribos_bar_payment_vouchers.cheque_amount',
+                            'ribos_bar_payment_vouchers.sub_category',
+                            'ribos_bar_payment_vouchers.sub_category_account_id',
+                            'ribos_bar_payment_vouchers.deleted_at',
+                            'ribos_bar_codes.ribos_bar_code',
+                            'ribos_bar_codes.module_id',
+                            'ribos_bar_codes.module_code',
+                            'ribos_bar_codes.module_name')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                            ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                            ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
+                            ->where('ribos_bar_codes.module_name', $moduleNamePV)
+                            ->whereBetween('ribos_bar_payment_vouchers.created_at', [$uri0, $uri1])
+                            ->where('ribos_bar_payment_vouchers.method_of_payment', $check)
+                            ->where('ribos_bar_payment_vouchers.status', '!=', $status)
+                            ->sum('ribos_bar_payment_vouchers.amount_due');
+            
+        
+        $totalPaidAmountCheck = DB::table(
+                                'ribos_bar_payment_vouchers')
+                                ->select( 
+                                'ribos_bar_payment_vouchers.id',
+                                'ribos_bar_payment_vouchers.user_id',
+                                'ribos_bar_payment_vouchers.pv_id',
+                                'ribos_bar_payment_vouchers.date',
+                                'ribos_bar_payment_vouchers.paid_to',
+                                'ribos_bar_payment_vouchers.account_no',
+                                'ribos_bar_payment_vouchers.account_name',
+                                'ribos_bar_payment_vouchers.particulars',
+                                'ribos_bar_payment_vouchers.amount',
+                                'ribos_bar_payment_vouchers.method_of_payment',
+                                'ribos_bar_payment_vouchers.prepared_by',
+                                'ribos_bar_payment_vouchers.approved_by',
+                                'ribos_bar_payment_vouchers.date_apprroved',
+                                'ribos_bar_payment_vouchers.received_by_date',
+                                'ribos_bar_payment_vouchers.created_by',
+                                'ribos_bar_payment_vouchers.created_at',
+                                'ribos_bar_payment_vouchers.invoice_number',
+                                'ribos_bar_payment_vouchers.voucher_ref_number',
+                                'ribos_bar_payment_vouchers.issued_date',
+                                'ribos_bar_payment_vouchers.category',
+                                'ribos_bar_payment_vouchers.amount_due',
+                                'ribos_bar_payment_vouchers.delivered_date',
+                                'ribos_bar_payment_vouchers.status',
+                                'ribos_bar_payment_vouchers.cheque_number',
+                                'ribos_bar_payment_vouchers.cheque_amount',
+                                'ribos_bar_payment_vouchers.cheque_total_amount',
+                                'ribos_bar_payment_vouchers.sub_category',
+                                'ribos_bar_payment_vouchers.sub_category_account_id',
+                                'ribos_bar_payment_vouchers.deleted_at',
+                                'ribos_bar_codes.ribos_bar_code',
+                                'ribos_bar_codes.module_id',
+                                'ribos_bar_codes.module_code',
+                                'ribos_bar_codes.module_name')
+                                ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                                ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                                ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
+                                ->where('ribos_bar_codes.module_name', $moduleNamePV)
+                                ->whereBetween('ribos_bar_payment_vouchers.created_at', [$uri0, $uri1])
+                                ->where('ribos_bar_payment_vouchers.method_of_payment', $check)
+                                ->where('ribos_bar_payment_vouchers.status', $status)
+                                ->sum('ribos_bar_payment_vouchers.cheque_total_amount');
+
+            
+        $getDateToday = "";
+        $pdf = PDF::loadView('printSummaryRibosBar', compact('date', 'uri0', 'uri1', 'getDateToday', 'getAllSalesInvoices', 
+        'totalSalesInvoice', 'purchaseOrders', 'totalPOrder','pettyCashLists', 
+        'getTransactionLists', 'getTransactionListCashes', 
+        'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck', 'totalPaidAmountCheck'));
+        
+        return $pdf->download('ribos-bar-summary-report.pdf');
+        
+        
+    }
+
+    public function getSummaryReportMultiple(Request $request){
+        $startDate = date("Y-m-d",strtotime($request->input('startDate')));
+        $endDate = date("Y-m-d",strtotime($request->input('endDate')."+1 day"));
+
+        $moduleName = "Sales Invoice";
+        $getAllSalesInvoices = DB::table(
+                        'ribos_bar_sales_invoices')
+                        ->select(
+                            'ribos_bar_sales_invoices.id',
+                            'ribos_bar_sales_invoices.user_id',
+                            'ribos_bar_sales_invoices.si_id',
+                            'ribos_bar_sales_invoices.invoice_number',
+                            'ribos_bar_sales_invoices.date',
+                            'ribos_bar_sales_invoices.ordered_by',
+                            'ribos_bar_sales_invoices.address',
+                            'ribos_bar_sales_invoices.qty',
+                            'ribos_bar_sales_invoices.total_kls',
+                            'ribos_bar_sales_invoices.item_description',
+                            'ribos_bar_sales_invoices.unit_price',
+                            'ribos_bar_sales_invoices.amount',
+                            'ribos_bar_sales_invoices.total_amount', 
+                            'ribos_bar_sales_invoices.created_by', 
+                            'ribos_bar_sales_invoices.created_at', 
+                            'ribos_bar_sales_invoices.deleted_at',                     
+                            'ribos_bar_codes.ribos_bar_code',
+                            'ribos_bar_codes.module_id',
+                            'ribos_bar_codes.module_code',
+                            'ribos_bar_codes.module_name')
+                        ->leftJoin('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
+                        ->where('ribos_bar_sales_invoices.si_id', NULL)
+                        ->where('ribos_bar_sales_invoices.deleted_at', NULL)
+                        ->where('ribos_bar_codes.module_name', $moduleName)
+                        ->whereBetween('ribos_bar_sales_invoices.created_at', [$startDate, $endDate]) 
+                        ->orderBy('ribos_bar_sales_invoices.id', 'desc')
+                        ->get()->toArray();
+
+        $totalSalesInvoice = DB::table(
+                            'ribos_bar_sales_invoices')
+                            ->select(
+                                'ribos_bar_sales_invoices.id',
+                                'ribos_bar_sales_invoices.user_id',
+                                'ribos_bar_sales_invoices.si_id',
+                                'ribos_bar_sales_invoices.invoice_number',
+                                'ribos_bar_sales_invoices.date',
+                                'ribos_bar_sales_invoices.ordered_by',
+                                'ribos_bar_sales_invoices.address',
+                                'ribos_bar_sales_invoices.qty',
+                                'ribos_bar_sales_invoices.total_kls',
+                                'ribos_bar_sales_invoices.item_description',
+                                'ribos_bar_sales_invoices.unit_price',
+                                'ribos_bar_sales_invoices.amount',
+                                'ribos_bar_sales_invoices.total_amount', 
+                                'ribos_bar_sales_invoices.created_by', 
+                                'ribos_bar_sales_invoices.created_at',  
+                                'ribos_bar_sales_invoices.deleted_at',                     
+                                'ribos_bar_codes.ribos_bar_code',
+                                'ribos_bar_codes.module_id',
+                                'ribos_bar_codes.module_code',
+                                'ribos_bar_codes.module_name')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
+                            ->where('ribos_bar_sales_invoices.si_id', NULL)
+                            ->where('ribos_bar_sales_invoices.deleted_at', NULL)
+                            ->where('ribos_bar_codes.module_name', $moduleName)
+                            ->whereBetween('ribos_bar_sales_invoices.created_at', [$startDate, $endDate]) 
+                           ->sum('ribos_bar_sales_invoices.total_amount');
+        
+
+        $moduleNamePO = "Purchase Order";
+        $purchaseOrders = DB::table(
+                        'ribos_bar_purchase_orders')
+                        ->select(
+                            'ribos_bar_purchase_orders.id',
+                            'ribos_bar_purchase_orders.user_id',
+                            'ribos_bar_purchase_orders.po_id',
+                            'ribos_bar_purchase_orders.paid_to',
+                            'ribos_bar_purchase_orders.address',
+                            'ribos_bar_purchase_orders.branch_location',
+                            'ribos_bar_purchase_orders.date',
+                            'ribos_bar_purchase_orders.quantity',
+                            'ribos_bar_purchase_orders.description',
+                            'ribos_bar_purchase_orders.unit_price',
+                            'ribos_bar_purchase_orders.amount',
+                            'ribos_bar_purchase_orders.total_price',
+                            'ribos_bar_purchase_orders.requested_by',
+                            'ribos_bar_purchase_orders.prepared_by',
+                            'ribos_bar_purchase_orders.checked_by',
+                            'ribos_bar_purchase_orders.created_by',
+                            'ribos_bar_purchase_orders.created_at',
+                            'ribos_bar_purchase_orders.deleted_at',
+                            'ribos_bar_codes.ribos_bar_code',
+                            'ribos_bar_codes.module_id',
+                            'ribos_bar_codes.module_code',
+                            'ribos_bar_codes.module_name')
+                        ->leftJoin('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
+                        ->where('ribos_bar_purchase_orders.po_id', NULL)
+                        ->where('ribos_bar_purchase_orders.deleted_at', NULL)
+                        ->where('ribos_bar_codes.module_name', $moduleNamePO)
+                        ->whereBetween('ribos_bar_purchase_orders.created_at', [$startDate, $endDate]) 
+                        ->orderBy('ribos_bar_purchase_orders.id', 'desc')
+                        ->get()->toArray();
+        
+        $totalPOrder = DB::table(
+                            'ribos_bar_purchase_orders')
+                            ->select(
+                                'ribos_bar_purchase_orders.id',
+                                'ribos_bar_purchase_orders.user_id',
+                                'ribos_bar_purchase_orders.po_id',
+                                'ribos_bar_purchase_orders.paid_to',
+                                'ribos_bar_purchase_orders.address',
+                                'ribos_bar_purchase_orders.branch_location',
+                                'ribos_bar_purchase_orders.date',
+                                'ribos_bar_purchase_orders.quantity',
+                                'ribos_bar_purchase_orders.description',
+                                'ribos_bar_purchase_orders.unit_price',
+                                'ribos_bar_purchase_orders.amount',
+                                'ribos_bar_purchase_orders.total_price',
+                                'ribos_bar_purchase_orders.requested_by',
+                                'ribos_bar_purchase_orders.prepared_by',
+                                'ribos_bar_purchase_orders.checked_by',
+                                'ribos_bar_purchase_orders.created_by',
+                                'ribos_bar_purchase_orders.created_at',
+                                'ribos_bar_purchase_orders.deleted_at',
+                                'ribos_bar_codes.ribos_bar_code',
+                                'ribos_bar_codes.module_id',
+                                'ribos_bar_codes.module_code',
+                                'ribos_bar_codes.module_name')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
+                            ->where('ribos_bar_purchase_orders.po_id', NULL)
+                            ->where('ribos_bar_purchase_orders.deleted_at', NULL)
+                            ->where('ribos_bar_codes.module_name', $moduleNamePO)
+                            ->whereBetween('ribos_bar_purchase_orders.created_at', [$startDate, $endDate]) 
+                            ->sum('ribos_bar_purchase_orders.total_price');
+            
+        $moduleNamePetty = "Petty Cash";
+        $pettyCashLists = DB::table(
+                                'ribos_bar_petty_cashes')
+                                ->select( 
+                                'ribos_bar_petty_cashes.id',
+                                'ribos_bar_petty_cashes.user_id',
+                                'ribos_bar_petty_cashes.pc_id',
+                                'ribos_bar_petty_cashes.date',
+                                'ribos_bar_petty_cashes.petty_cash_name',
+                                'ribos_bar_petty_cashes.petty_cash_summary',
+                                'ribos_bar_petty_cashes.amount',
+                                'ribos_bar_petty_cashes.created_by',
+                                'ribos_bar_petty_cashes.deleted_at',
+                                'ribos_bar_codes.ribos_bar_code',
+                                'ribos_bar_codes.module_id',
+                                'ribos_bar_codes.module_code',
+                                'ribos_bar_codes.module_name')
+                                ->leftJoin('ribos_bar_codes', 'ribos_bar_petty_cashes.id', '=', 'ribos_bar_codes.module_id')
+                                ->where('ribos_bar_petty_cashes.pc_id', NULL)
+                                ->where('ribos_bar_petty_cashes.deleted_at', NULL)
+                                ->where('ribos_bar_codes.module_name', $moduleNamePetty)
+                                ->whereBetween('ribos_bar_petty_cashes.created_at', [$startDate, $endDate]) 
+                                ->orderBy('ribos_bar_petty_cashes.id', 'desc')
+                                ->get()->toArray();
+
+
+        $moduleNamePV = "Payment Voucher";
+        $getTransactionLists = DB::table(
+                                'ribos_bar_payment_vouchers')
+                                ->select( 
+                                'ribos_bar_payment_vouchers.id',
+                                'ribos_bar_payment_vouchers.user_id',
+                                'ribos_bar_payment_vouchers.pv_id',
+                                'ribos_bar_payment_vouchers.date',
+                                'ribos_bar_payment_vouchers.paid_to',
+                                'ribos_bar_payment_vouchers.account_no',
+                                'ribos_bar_payment_vouchers.account_name',
+                                'ribos_bar_payment_vouchers.particulars',
+                                'ribos_bar_payment_vouchers.amount',
+                                'ribos_bar_payment_vouchers.method_of_payment',
+                                'ribos_bar_payment_vouchers.prepared_by',
+                                'ribos_bar_payment_vouchers.approved_by',
+                                'ribos_bar_payment_vouchers.date_apprroved',
+                                'ribos_bar_payment_vouchers.received_by_date',
+                                'ribos_bar_payment_vouchers.created_by',
+                                'ribos_bar_payment_vouchers.created_at',
+                                'ribos_bar_payment_vouchers.invoice_number',
+                                'ribos_bar_payment_vouchers.voucher_ref_number',
+                                'ribos_bar_payment_vouchers.issued_date',
+                                'ribos_bar_payment_vouchers.category',
+                                'ribos_bar_payment_vouchers.amount_due',
+                                'ribos_bar_payment_vouchers.delivered_date',
+                                'ribos_bar_payment_vouchers.status',
+                                'ribos_bar_payment_vouchers.cheque_number',
+                                'ribos_bar_payment_vouchers.cheque_amount',
+                                'ribos_bar_payment_vouchers.sub_category',
+                                'ribos_bar_payment_vouchers.sub_category_account_id',
+                                'ribos_bar_payment_vouchers.deleted_at',
+                                'ribos_bar_codes.ribos_bar_code',
+                                'ribos_bar_codes.module_id',
+                                'ribos_bar_codes.module_code',
+                                'ribos_bar_codes.module_name')
+                                ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                                ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                                ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
+                                ->where('ribos_bar_codes.module_name', $moduleNamePV)
+                                ->whereBetween('ribos_bar_payment_vouchers.created_at', [$startDate, $endDate]) 
+                                ->orderBy('ribos_bar_payment_vouchers.id', 'desc')
+                                ->get()->toArray();
+
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                            'ribos_bar_payment_vouchers')
+                            ->select( 
+                            'ribos_bar_payment_vouchers.id',
+                            'ribos_bar_payment_vouchers.user_id',
+                            'ribos_bar_payment_vouchers.pv_id',
+                            'ribos_bar_payment_vouchers.date',
+                            'ribos_bar_payment_vouchers.paid_to',
+                            'ribos_bar_payment_vouchers.account_no',
+                            'ribos_bar_payment_vouchers.account_name',
+                            'ribos_bar_payment_vouchers.particulars',
+                            'ribos_bar_payment_vouchers.amount',
+                            'ribos_bar_payment_vouchers.method_of_payment',
+                            'ribos_bar_payment_vouchers.prepared_by',
+                            'ribos_bar_payment_vouchers.approved_by',
+                            'ribos_bar_payment_vouchers.date_apprroved',
+                            'ribos_bar_payment_vouchers.received_by_date',
+                            'ribos_bar_payment_vouchers.created_by',
+                            'ribos_bar_payment_vouchers.created_at',
+                            'ribos_bar_payment_vouchers.invoice_number',
+                            'ribos_bar_payment_vouchers.voucher_ref_number',
+                            'ribos_bar_payment_vouchers.issued_date',
+                            'ribos_bar_payment_vouchers.category',
+                            'ribos_bar_payment_vouchers.amount_due',
+                            'ribos_bar_payment_vouchers.delivered_date',
+                            'ribos_bar_payment_vouchers.status',
+                            'ribos_bar_payment_vouchers.cheque_number',
+                            'ribos_bar_payment_vouchers.cheque_amount',
+                            'ribos_bar_payment_vouchers.sub_category',
+                            'ribos_bar_payment_vouchers.sub_category_account_id',
+                            'ribos_bar_payment_vouchers.deleted_at',
+                            'ribos_bar_codes.ribos_bar_code',
+                            'ribos_bar_codes.module_id',
+                            'ribos_bar_codes.module_code',
+                            'ribos_bar_codes.module_name')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                            ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                            ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
+                            ->where('ribos_bar_codes.module_name', $moduleNamePV)
+                            ->whereBetween('ribos_bar_payment_vouchers.created_at', [$startDate, $endDate]) 
+                            ->where('ribos_bar_payment_vouchers.method_of_payment', $cash)
+                            ->orderBy('ribos_bar_payment_vouchers.id', 'desc')
+                            ->get()->toArray();
+    
+        $totalAmountCashes = DB::table(
+                                'ribos_bar_payment_vouchers')
+                                ->select( 
+                                'ribos_bar_payment_vouchers.id',
+                                'ribos_bar_payment_vouchers.user_id',
+                                'ribos_bar_payment_vouchers.pv_id',
+                                'ribos_bar_payment_vouchers.date',
+                                'ribos_bar_payment_vouchers.paid_to',
+                                'ribos_bar_payment_vouchers.account_no',
+                                'ribos_bar_payment_vouchers.account_name',
+                                'ribos_bar_payment_vouchers.particulars',
+                                'ribos_bar_payment_vouchers.amount',
+                                'ribos_bar_payment_vouchers.method_of_payment',
+                                'ribos_bar_payment_vouchers.prepared_by',
+                                'ribos_bar_payment_vouchers.approved_by',
+                                'ribos_bar_payment_vouchers.date_apprroved',
+                                'ribos_bar_payment_vouchers.received_by_date',
+                                'ribos_bar_payment_vouchers.created_by',
+                                'ribos_bar_payment_vouchers.created_at',
+                                'ribos_bar_payment_vouchers.invoice_number',
+                                'ribos_bar_payment_vouchers.voucher_ref_number',
+                                'ribos_bar_payment_vouchers.issued_date',
+                                'ribos_bar_payment_vouchers.category',
+                                'ribos_bar_payment_vouchers.amount_due',
+                                'ribos_bar_payment_vouchers.delivered_date',
+                                'ribos_bar_payment_vouchers.status',
+                                'ribos_bar_payment_vouchers.cheque_number',
+                                'ribos_bar_payment_vouchers.cheque_amount',
+                                'ribos_bar_payment_vouchers.sub_category',
+                                'ribos_bar_payment_vouchers.sub_category_account_id',
+                                'ribos_bar_payment_vouchers.deleted_at',
+                                'ribos_bar_codes.ribos_bar_code',
+                                'ribos_bar_codes.module_id',
+                                'ribos_bar_codes.module_code',
+                                'ribos_bar_codes.module_name')
+                                ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                                ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                                ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
+                                ->where('ribos_bar_codes.module_name', $moduleNamePV)
+                                ->whereBetween('ribos_bar_payment_vouchers.created_at', [$startDate, $endDate]) 
+                                ->where('ribos_bar_payment_vouchers.method_of_payment', $cash)
+                                ->orderBy('ribos_bar_payment_vouchers.id', 'desc')
+                               ->sum('ribos_bar_payment_vouchers.amount_due');
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                            'ribos_bar_payment_vouchers')
+                            ->select( 
+                            'ribos_bar_payment_vouchers.id',
+                            'ribos_bar_payment_vouchers.user_id',
+                            'ribos_bar_payment_vouchers.pv_id',
+                            'ribos_bar_payment_vouchers.date',
+                            'ribos_bar_payment_vouchers.paid_to',
+                            'ribos_bar_payment_vouchers.account_no',
+                            'ribos_bar_payment_vouchers.account_name',
+                            'ribos_bar_payment_vouchers.particulars',
+                            'ribos_bar_payment_vouchers.amount',
+                            'ribos_bar_payment_vouchers.method_of_payment',
+                            'ribos_bar_payment_vouchers.prepared_by',
+                            'ribos_bar_payment_vouchers.approved_by',
+                            'ribos_bar_payment_vouchers.date_apprroved',
+                            'ribos_bar_payment_vouchers.received_by_date',
+                            'ribos_bar_payment_vouchers.created_by',
+                            'ribos_bar_payment_vouchers.created_at',
+                            'ribos_bar_payment_vouchers.invoice_number',
+                            'ribos_bar_payment_vouchers.voucher_ref_number',
+                            'ribos_bar_payment_vouchers.issued_date',
+                            'ribos_bar_payment_vouchers.category',
+                            'ribos_bar_payment_vouchers.amount_due',
+                            'ribos_bar_payment_vouchers.delivered_date',
+                            'ribos_bar_payment_vouchers.status',
+                            'ribos_bar_payment_vouchers.cheque_number',
+                            'ribos_bar_payment_vouchers.cheque_amount',
+                            'ribos_bar_payment_vouchers.cheque_total_amount',
+                            'ribos_bar_payment_vouchers.sub_category',
+                            'ribos_bar_payment_vouchers.sub_category_account_id',
+                            'ribos_bar_payment_vouchers.deleted_at',
+                            'ribos_bar_codes.ribos_bar_code',
+                            'ribos_bar_codes.module_id',
+                            'ribos_bar_codes.module_code',
+                            'ribos_bar_codes.module_name')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                            ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                            ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
+                            ->where('ribos_bar_codes.module_name', $moduleNamePV)
+                            ->whereBetween('ribos_bar_payment_vouchers.created_at', [$startDate, $endDate]) 
+                            ->where('ribos_bar_payment_vouchers.method_of_payment', $check)
+                            ->orderBy('ribos_bar_payment_vouchers.id', 'desc')
+                            ->get()->toArray();
+
+        $status = "FULLY PAID AND RELEASED";
+        $totalAmountCheck = DB::table(
+                            'ribos_bar_payment_vouchers')
+                            ->select( 
+                            'ribos_bar_payment_vouchers.id',
+                            'ribos_bar_payment_vouchers.user_id',
+                            'ribos_bar_payment_vouchers.pv_id',
+                            'ribos_bar_payment_vouchers.date',
+                            'ribos_bar_payment_vouchers.paid_to',
+                            'ribos_bar_payment_vouchers.account_no',
+                            'ribos_bar_payment_vouchers.account_name',
+                            'ribos_bar_payment_vouchers.particulars',
+                            'ribos_bar_payment_vouchers.amount',
+                            'ribos_bar_payment_vouchers.method_of_payment',
+                            'ribos_bar_payment_vouchers.prepared_by',
+                            'ribos_bar_payment_vouchers.approved_by',
+                            'ribos_bar_payment_vouchers.date_apprroved',
+                            'ribos_bar_payment_vouchers.received_by_date',
+                            'ribos_bar_payment_vouchers.created_by',
+                            'ribos_bar_payment_vouchers.created_at',
+                            'ribos_bar_payment_vouchers.invoice_number',
+                            'ribos_bar_payment_vouchers.voucher_ref_number',
+                            'ribos_bar_payment_vouchers.issued_date',
+                            'ribos_bar_payment_vouchers.category',
+                            'ribos_bar_payment_vouchers.amount_due',
+                            'ribos_bar_payment_vouchers.delivered_date',
+                            'ribos_bar_payment_vouchers.status',
+                            'ribos_bar_payment_vouchers.cheque_number',
+                            'ribos_bar_payment_vouchers.cheque_amount',
+                            'ribos_bar_payment_vouchers.sub_category',
+                            'ribos_bar_payment_vouchers.sub_category_account_id',
+                            'ribos_bar_payment_vouchers.deleted_at',
+                            'ribos_bar_codes.ribos_bar_code',
+                            'ribos_bar_codes.module_id',
+                            'ribos_bar_codes.module_code',
+                            'ribos_bar_codes.module_name')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                            ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                            ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
+                            ->where('ribos_bar_codes.module_name', $moduleNamePV)
+                            ->whereBetween('ribos_bar_payment_vouchers.created_at', [$startDate, $endDate]) 
+                            ->where('ribos_bar_payment_vouchers.method_of_payment', $check)
+                            ->where('ribos_bar_payment_vouchers.status', '!=', $status)
+                            ->sum('ribos_bar_payment_vouchers.amount_due');
+
+        return view('ribos-bar-multiple-summary-report', compact('getAllSalesInvoices', 'startDate', 'endDate',
+        'totalSalesInvoice', 'purchaseOrders', 'totalPOrder','pettyCashLists', 
+        'getTransactionLists', 'getTransactionListCashes', 
+        'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck'));
+        
+
+    }
+
     public function search(Request $request){
         $getSearchResults =RibosBarCode::where('ribos_bar_code', $request->get('searchCode'))->get();
         if($getSearchResults[0]->module_name === "Sales Invoice"){
@@ -199,13 +964,15 @@ class RibosBarController extends Controller
                             'ribos_bar_sales_invoices.amount',
                             'ribos_bar_sales_invoices.total_amount', 
                             'ribos_bar_sales_invoices.created_by', 
-                            'ribos_bar_sales_invoices.created_at',                     
+                            'ribos_bar_sales_invoices.created_at',   
+                            'ribos_bar_sales_invoices.deleted_at',                      
                             'ribos_bar_codes.ribos_bar_code',
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
                         ->leftJoin('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
                         ->where('ribos_bar_sales_invoices.si_id', NULL)
+                        ->where('ribos_bar_sales_invoices.deleted_at', NULL)
                         ->where('ribos_bar_codes.module_name', $moduleName)
                         ->whereDate('ribos_bar_sales_invoices.created_at', '=', date($date))
                         ->orderBy('ribos_bar_sales_invoices.id', 'desc')
@@ -228,13 +995,15 @@ class RibosBarController extends Controller
                                 'ribos_bar_sales_invoices.amount',
                                 'ribos_bar_sales_invoices.total_amount', 
                                 'ribos_bar_sales_invoices.created_by', 
-                                'ribos_bar_sales_invoices.created_at',                     
+                                'ribos_bar_sales_invoices.created_at',  
+                                'ribos_bar_sales_invoices.deleted_at',                     
                                 'ribos_bar_codes.ribos_bar_code',
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
                             ->leftJoin('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_sales_invoices.si_id', NULL)
+                            ->where('ribos_bar_sales_invoices.deleted_at', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleName)
                             ->whereDate('ribos_bar_sales_invoices.created_at', '=', date($date))
                            ->sum('ribos_bar_sales_invoices.total_amount');
@@ -261,12 +1030,14 @@ class RibosBarController extends Controller
                             'ribos_bar_purchase_orders.checked_by',
                             'ribos_bar_purchase_orders.created_by',
                             'ribos_bar_purchase_orders.created_at',
+                            'ribos_bar_purchase_orders.deleted_at',
                             'ribos_bar_codes.ribos_bar_code',
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
                         ->leftJoin('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
                         ->where('ribos_bar_purchase_orders.po_id', NULL)
+                        ->where('ribos_bar_purchase_orders.deleted_at', NULL)
                         ->where('ribos_bar_codes.module_name', $moduleNamePO)
                         ->whereDate('ribos_bar_purchase_orders.created_at', '=', date($date))
                         ->orderBy('ribos_bar_purchase_orders.id', 'desc')
@@ -292,12 +1063,14 @@ class RibosBarController extends Controller
                                 'ribos_bar_purchase_orders.checked_by',
                                 'ribos_bar_purchase_orders.created_by',
                                 'ribos_bar_purchase_orders.created_at',
+                                'ribos_bar_purchase_orders.deleted_at',
                                 'ribos_bar_codes.ribos_bar_code',
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
                             ->leftJoin('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_purchase_orders.po_id', NULL)
+                            ->where('ribos_bar_purchase_orders.deleted_at', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleNamePO)
                             ->whereDate('ribos_bar_purchase_orders.created_at', '=', date($date))
                             ->sum('ribos_bar_purchase_orders.total_price');
@@ -334,12 +1107,14 @@ class RibosBarController extends Controller
                             'ribos_bar_payment_vouchers.cheque_amount',
                             'ribos_bar_payment_vouchers.sub_category',
                             'ribos_bar_payment_vouchers.sub_category_account_id',
+                            'ribos_bar_payment_vouchers.deleted_at',
                             'ribos_bar_codes.ribos_bar_code',
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
                             ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                            ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleNamePV)
                             ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($date))
                             ->where('ribos_bar_payment_vouchers.method_of_payment', $cash)
@@ -376,12 +1151,14 @@ class RibosBarController extends Controller
                                 'ribos_bar_payment_vouchers.cheque_amount',
                                 'ribos_bar_payment_vouchers.sub_category',
                                 'ribos_bar_payment_vouchers.sub_category_account_id',
+                                'ribos_bar_payment_vouchers.deleted_at',
                                 'ribos_bar_codes.ribos_bar_code',
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
                                 ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                                 ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                                ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
                                 ->where('ribos_bar_codes.module_name', $moduleNamePV)
                                 ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($date))
                                 ->where('ribos_bar_payment_vouchers.method_of_payment', $cash)
@@ -420,12 +1197,14 @@ class RibosBarController extends Controller
                             'ribos_bar_payment_vouchers.cheque_total_amount',
                             'ribos_bar_payment_vouchers.sub_category',
                             'ribos_bar_payment_vouchers.sub_category_account_id',
+                            'ribos_bar_payment_vouchers.deleted_at',
                             'ribos_bar_codes.ribos_bar_code',
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
                             ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                            ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleNamePV)
                             ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($date))
                             ->where('ribos_bar_payment_vouchers.method_of_payment', $check)
@@ -463,12 +1242,14 @@ class RibosBarController extends Controller
                             'ribos_bar_payment_vouchers.cheque_amount',
                             'ribos_bar_payment_vouchers.sub_category',
                             'ribos_bar_payment_vouchers.sub_category_account_id',
+                            'ribos_bar_payment_vouchers.deleted_at',
                             'ribos_bar_codes.ribos_bar_code',
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
                             ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                            ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleNamePV)
                             ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($date))
                             ->where('ribos_bar_payment_vouchers.method_of_payment', $check)
@@ -505,12 +1286,14 @@ class RibosBarController extends Controller
                                 'ribos_bar_payment_vouchers.cheque_amount',
                                 'ribos_bar_payment_vouchers.sub_category',
                                 'ribos_bar_payment_vouchers.sub_category_account_id',
+                                'ribos_bar_payment_vouchers.deleted_at',
                                 'ribos_bar_codes.ribos_bar_code',
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
                                 ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                                 ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                                ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
                                 ->where('ribos_bar_codes.module_name', $moduleNamePV)
                                 ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($date))
                                 ->where('ribos_bar_payment_vouchers.method_of_payment', $check)
@@ -519,8 +1302,9 @@ class RibosBarController extends Controller
     
                     
         $getDateToday = "";
-
-        $pdf = PDF::loadView('printSummaryRibosBar', compact('date', 'getDateToday', 'getAllSalesInvoices', 
+        $uri0 = "";
+        $uri1 = "";
+        $pdf = PDF::loadView('printSummaryRibosBar', compact('date', 'uri0', 'uri1', 'getDateToday', 'getAllSalesInvoices', 
         'totalSalesInvoice', 'purchaseOrders', 'totalPOrder','pettyCashLists', 
         'getTransactionLists', 'getTransactionListCashes', 
         'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck', 'totalPaidAmountCheck'));
@@ -550,13 +1334,15 @@ class RibosBarController extends Controller
                             'ribos_bar_sales_invoices.amount',
                             'ribos_bar_sales_invoices.total_amount', 
                             'ribos_bar_sales_invoices.created_by', 
-                            'ribos_bar_sales_invoices.created_at',                     
+                            'ribos_bar_sales_invoices.created_at',   
+                            'ribos_bar_sales_invoices.deleted_at',                     
                             'ribos_bar_codes.ribos_bar_code',
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
-                        ->join('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
+                        ->leftJoin('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
                         ->where('ribos_bar_sales_invoices.si_id', NULL)
+                        ->where('ribos_bar_sales_invoices.deleted_at', NULL)
                         ->where('ribos_bar_codes.module_name', $moduleName)
                         ->whereDate('ribos_bar_sales_invoices.created_at', '=', date($getDate))
                         ->orderBy('ribos_bar_sales_invoices.id', 'desc')
@@ -579,13 +1365,15 @@ class RibosBarController extends Controller
                                 'ribos_bar_sales_invoices.amount',
                                 'ribos_bar_sales_invoices.total_amount', 
                                 'ribos_bar_sales_invoices.created_by', 
-                                'ribos_bar_sales_invoices.created_at',                     
+                                'ribos_bar_sales_invoices.created_at',  
+                                'ribos_bar_sales_invoices.deleted_at',                     
                                 'ribos_bar_codes.ribos_bar_code',
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
-                            ->join('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_sales_invoices.si_id', NULL)
+                            ->where('ribos_bar_sales_invoices.deleted_at', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleName)
                             ->whereDate('ribos_bar_sales_invoices.created_at', '=', date($getDate))
                            ->sum('ribos_bar_sales_invoices.total_amount');
@@ -612,12 +1400,14 @@ class RibosBarController extends Controller
                             'ribos_bar_purchase_orders.checked_by',
                             'ribos_bar_purchase_orders.created_by',
                             'ribos_bar_purchase_orders.created_at',
+                            'ribos_bar_purchase_orders.deleted_at',
                             'ribos_bar_codes.ribos_bar_code',
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
-                        ->join('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
+                        ->leftJoin('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
                         ->where('ribos_bar_purchase_orders.po_id', NULL)
+                        ->where('ribos_bar_purchase_orders.deleted_at', NULL)
                         ->where('ribos_bar_codes.module_name', $moduleNamePO)
                         ->whereDate('ribos_bar_purchase_orders.created_at', '=', date($getDate))
                         ->orderBy('ribos_bar_purchase_orders.id', 'desc')
@@ -643,12 +1433,14 @@ class RibosBarController extends Controller
                                 'ribos_bar_purchase_orders.checked_by',
                                 'ribos_bar_purchase_orders.created_by',
                                 'ribos_bar_purchase_orders.created_at',
+                                'ribos_bar_purchase_orders.deleted_at',
                                 'ribos_bar_codes.ribos_bar_code',
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
-                            ->join('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_purchase_orders.po_id', NULL)
+                            ->where('ribos_bar_purchase_orders.deleted_at', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleNamePO)
                             ->whereDate('ribos_bar_purchase_orders.created_at', '=', date($getDate))
                             ->sum('ribos_bar_purchase_orders.total_price');
@@ -665,12 +1457,14 @@ class RibosBarController extends Controller
                                 'ribos_bar_petty_cashes.petty_cash_summary',
                                 'ribos_bar_petty_cashes.amount',
                                 'ribos_bar_petty_cashes.created_by',
+                                'ribos_bar_petty_cashes.deleted_at',
                                 'ribos_bar_codes.ribos_bar_code',
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
-                                ->join('ribos_bar_codes', 'ribos_bar_petty_cashes.id', '=', 'ribos_bar_codes.module_id')
+                                ->leftJoin('ribos_bar_codes', 'ribos_bar_petty_cashes.id', '=', 'ribos_bar_codes.module_id')
                                 ->where('ribos_bar_petty_cashes.pc_id', NULL)
+                                ->where('ribos_bar_petty_cashes.deleted_at', NULL)
                                 ->where('ribos_bar_codes.module_name', $moduleNamePetty)
                                 ->whereDate('ribos_bar_petty_cashes.created_at', '=', date($getDate))
                                 ->orderBy('ribos_bar_petty_cashes.id', 'desc')
@@ -708,12 +1502,14 @@ class RibosBarController extends Controller
                                 'ribos_bar_payment_vouchers.cheque_amount',
                                 'ribos_bar_payment_vouchers.sub_category',
                                 'ribos_bar_payment_vouchers.sub_category_account_id',
+                                'ribos_bar_payment_vouchers.deleted_at',
                                 'ribos_bar_codes.ribos_bar_code',
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
-                                ->join('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                                ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                                 ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                                ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
                                 ->where('ribos_bar_codes.module_name', $moduleNamePV)
                                 ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($getDate))
                                 ->orderBy('ribos_bar_payment_vouchers.id', 'desc')
@@ -750,12 +1546,14 @@ class RibosBarController extends Controller
                             'ribos_bar_payment_vouchers.cheque_amount',
                             'ribos_bar_payment_vouchers.sub_category',
                             'ribos_bar_payment_vouchers.sub_category_account_id',
+                            'ribos_bar_payment_vouchers.deleted_at',
                             'ribos_bar_codes.ribos_bar_code',
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
-                            ->join('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                            ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleNamePV)
                             ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($getDate))
                             ->where('ribos_bar_payment_vouchers.method_of_payment', $cash)
@@ -792,12 +1590,14 @@ class RibosBarController extends Controller
                                 'ribos_bar_payment_vouchers.cheque_amount',
                                 'ribos_bar_payment_vouchers.sub_category',
                                 'ribos_bar_payment_vouchers.sub_category_account_id',
+                                'ribos_bar_payment_vouchers.deleted_at',
                                 'ribos_bar_codes.ribos_bar_code',
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
-                                ->join('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                                ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                                 ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                                ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
                                 ->where('ribos_bar_codes.module_name', $moduleNamePV)
                                 ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($getDate))
                                 ->where('ribos_bar_payment_vouchers.method_of_payment', $cash)
@@ -836,12 +1636,14 @@ class RibosBarController extends Controller
                             'ribos_bar_payment_vouchers.cheque_total_amount',
                             'ribos_bar_payment_vouchers.sub_category',
                             'ribos_bar_payment_vouchers.sub_category_account_id',
+                            'ribos_bar_payment_vouchers.deleted_at',
                             'ribos_bar_codes.ribos_bar_code',
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
-                            ->join('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                            ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleNamePV)
                             ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($getDate))
                             ->where('ribos_bar_payment_vouchers.method_of_payment', $check)
@@ -879,12 +1681,14 @@ class RibosBarController extends Controller
                             'ribos_bar_payment_vouchers.cheque_amount',
                             'ribos_bar_payment_vouchers.sub_category',
                             'ribos_bar_payment_vouchers.sub_category_account_id',
+                            'ribos_bar_payment_vouchers.deleted_at',
                             'ribos_bar_codes.ribos_bar_code',
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
                             ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                            ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleNamePV)
                             ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($getDate))
                             ->where('ribos_bar_payment_vouchers.method_of_payment', $check)
@@ -920,13 +1724,15 @@ class RibosBarController extends Controller
                             'ribos_bar_sales_invoices.amount',
                             'ribos_bar_sales_invoices.total_amount', 
                             'ribos_bar_sales_invoices.created_by', 
-                            'ribos_bar_sales_invoices.created_at',                     
+                            'ribos_bar_sales_invoices.created_at',
+                            'ribos_bar_sales_invoices.deleted_at',                     
                             'ribos_bar_codes.ribos_bar_code',
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
-                        ->join('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
+                        ->leftJoin('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
                         ->where('ribos_bar_sales_invoices.si_id', NULL)
+                        ->where('ribos_bar_sales_invoices.deleted_at', NULL)
                         ->where('ribos_bar_codes.module_name', $moduleName)
                         ->whereDate('ribos_bar_sales_invoices.created_at', '=', date($getDateToday))
                         ->orderBy('ribos_bar_sales_invoices.id', 'desc')
@@ -949,13 +1755,15 @@ class RibosBarController extends Controller
                                 'ribos_bar_sales_invoices.amount',
                                 'ribos_bar_sales_invoices.total_amount', 
                                 'ribos_bar_sales_invoices.created_by', 
-                                'ribos_bar_sales_invoices.created_at',                     
+                                'ribos_bar_sales_invoices.created_at', 
+                                'ribos_bar_sales_invoices.deleted_at', 
                                 'ribos_bar_codes.ribos_bar_code',
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
-                            ->join('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_sales_invoices.si_id', NULL)
+                            ->where('ribos_bar_sales_invoices.deleted_at', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleName)
                             ->whereDate('ribos_bar_sales_invoices.created_at', '=', date($getDateToday))
                            ->sum('ribos_bar_sales_invoices.total_amount');
@@ -982,12 +1790,14 @@ class RibosBarController extends Controller
                             'ribos_bar_purchase_orders.checked_by',
                             'ribos_bar_purchase_orders.created_by',
                             'ribos_bar_purchase_orders.created_at',
+                            'ribos_bar_purchase_orders.deleted_at',
                             'ribos_bar_codes.ribos_bar_code',
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
-                        ->join('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
+                        ->leftJoin('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
                         ->where('ribos_bar_purchase_orders.po_id', NULL)
+                        ->where('ribos_bar_purchase_orders.deleted_at', NULL)
                         ->where('ribos_bar_codes.module_name', $moduleNamePO)
                         ->whereDate('ribos_bar_purchase_orders.created_at', '=', date($getDateToday))
                         ->orderBy('ribos_bar_purchase_orders.id', 'desc')
@@ -1013,12 +1823,14 @@ class RibosBarController extends Controller
                                 'ribos_bar_purchase_orders.checked_by',
                                 'ribos_bar_purchase_orders.created_by',
                                 'ribos_bar_purchase_orders.created_at',
+                                'ribos_bar_purchase_orders.deleted_at',
                                 'ribos_bar_codes.ribos_bar_code',
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
-                            ->join('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_purchase_orders.po_id', NULL)
+                            ->where('ribos_bar_purchase_orders.deleted_at', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleNamePO)
                             ->whereDate('ribos_bar_purchase_orders.created_at', '=', date($getDateToday))
                             ->sum('ribos_bar_purchase_orders.total_price');
@@ -1055,12 +1867,14 @@ class RibosBarController extends Controller
                             'ribos_bar_payment_vouchers.cheque_amount',
                             'ribos_bar_payment_vouchers.sub_category',
                             'ribos_bar_payment_vouchers.sub_category_account_id',
+                            'ribos_bar_payment_vouchers.deleted_at',
                             'ribos_bar_codes.ribos_bar_code',
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
-                            ->join('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                            ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleNamePV)
                             ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($getDateToday))
                             ->where('ribos_bar_payment_vouchers.method_of_payment', $cash)
@@ -1097,12 +1911,14 @@ class RibosBarController extends Controller
                                 'ribos_bar_payment_vouchers.cheque_amount',
                                 'ribos_bar_payment_vouchers.sub_category',
                                 'ribos_bar_payment_vouchers.sub_category_account_id',
+                                'ribos_bar_payment_vouchers.deleted_at',
                                 'ribos_bar_codes.ribos_bar_code',
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
-                                ->join('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                                ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                                 ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                                ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
                                 ->where('ribos_bar_codes.module_name', $moduleNamePV)
                                 ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('ribos_bar_payment_vouchers.method_of_payment', $cash)
@@ -1141,12 +1957,14 @@ class RibosBarController extends Controller
                             'ribos_bar_payment_vouchers.cheque_total_amount',
                             'ribos_bar_payment_vouchers.sub_category',
                             'ribos_bar_payment_vouchers.sub_category_account_id',
+                            'ribos_bar_payment_vouchers.deleted_at',
                             'ribos_bar_codes.ribos_bar_code',
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
-                            ->join('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                            ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleNamePV)
                             ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($getDateToday))
                             ->where('ribos_bar_payment_vouchers.method_of_payment', $check)
@@ -1184,12 +2002,14 @@ class RibosBarController extends Controller
                             'ribos_bar_payment_vouchers.cheque_amount',
                             'ribos_bar_payment_vouchers.sub_category',
                             'ribos_bar_payment_vouchers.sub_category_account_id',
+                            'ribos_bar_payment_vouchers.deleted_at',
                             'ribos_bar_codes.ribos_bar_code',
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
-                            ->join('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                            ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleNamePV)
                             ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($getDateToday))
                             ->where('ribos_bar_payment_vouchers.method_of_payment', $check)
@@ -1228,12 +2048,14 @@ class RibosBarController extends Controller
                                 'ribos_bar_payment_vouchers.cheque_total_amount',
                                 'ribos_bar_payment_vouchers.sub_category',
                                 'ribos_bar_payment_vouchers.sub_category_account_id',
+                                'ribos_bar_payment_vouchers.deleted_at',
                                 'ribos_bar_codes.ribos_bar_code',
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
-                                ->join('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                                ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                                 ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                                ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
                                 ->where('ribos_bar_codes.module_name', $moduleNamePV)
                                 ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('ribos_bar_payment_vouchers.method_of_payment', $check)
@@ -1270,13 +2092,15 @@ class RibosBarController extends Controller
                             'ribos_bar_sales_invoices.amount',
                             'ribos_bar_sales_invoices.total_amount', 
                             'ribos_bar_sales_invoices.created_by', 
-                            'ribos_bar_sales_invoices.created_at',                     
+                            'ribos_bar_sales_invoices.created_at', 
+                            'ribos_bar_sales_invoices.deleted_at',                     
                             'ribos_bar_codes.ribos_bar_code',
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
-                        ->join('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
+                        ->leftJoin('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
                         ->where('ribos_bar_sales_invoices.si_id', NULL)
+                        ->where('ribos_bar_sales_invoices.deleted_at', NULL)
                         ->where('ribos_bar_codes.module_name', $moduleName)
                         ->whereDate('ribos_bar_sales_invoices.created_at', '=', date($getDateToday))
                         ->orderBy('ribos_bar_sales_invoices.id', 'desc')
@@ -1299,13 +2123,15 @@ class RibosBarController extends Controller
                                 'ribos_bar_sales_invoices.amount',
                                 'ribos_bar_sales_invoices.total_amount', 
                                 'ribos_bar_sales_invoices.created_by', 
-                                'ribos_bar_sales_invoices.created_at',                     
+                                'ribos_bar_sales_invoices.created_at',  
+                                'ribos_bar_sales_invoices.deleted_at',                     
                                 'ribos_bar_codes.ribos_bar_code',
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
-                            ->join('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_sales_invoices.si_id', NULL)
+                            ->where('ribos_bar_sales_invoices.deleted_at', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleName)
                             ->whereDate('ribos_bar_sales_invoices.created_at', '=', date($getDateToday))
                            ->sum('ribos_bar_sales_invoices.total_amount');
@@ -1332,12 +2158,14 @@ class RibosBarController extends Controller
                             'ribos_bar_purchase_orders.checked_by',
                             'ribos_bar_purchase_orders.created_by',
                             'ribos_bar_purchase_orders.created_at',
+                            'ribos_bar_purchase_orders.deleted_at',
                             'ribos_bar_codes.ribos_bar_code',
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
-                        ->join('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
+                        ->leftJoin('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
                         ->where('ribos_bar_purchase_orders.po_id', NULL)
+                        ->where('ribos_bar_purchase_orders.deleted_at', NULL)
                         ->where('ribos_bar_codes.module_name', $moduleNamePO)
                         ->whereDate('ribos_bar_purchase_orders.created_at', '=', date($getDateToday))
                         ->orderBy('ribos_bar_purchase_orders.id', 'desc')
@@ -1363,12 +2191,14 @@ class RibosBarController extends Controller
                                 'ribos_bar_purchase_orders.checked_by',
                                 'ribos_bar_purchase_orders.created_by',
                                 'ribos_bar_purchase_orders.created_at',
+                                'ribos_bar_purchase_orders.deleted_at',
                                 'ribos_bar_codes.ribos_bar_code',
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
-                            ->join('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_purchase_orders.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_purchase_orders.po_id', NULL)
+                            ->where('ribos_bar_purchase_orders.deleted_at', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleNamePO)
                             ->whereDate('ribos_bar_purchase_orders.created_at', '=', date($getDateToday))
                             ->sum('ribos_bar_purchase_orders.total_price');
@@ -1385,12 +2215,14 @@ class RibosBarController extends Controller
                                 'ribos_bar_petty_cashes.petty_cash_summary',
                                 'ribos_bar_petty_cashes.amount',
                                 'ribos_bar_petty_cashes.created_by',
+                                'ribos_bar_petty_cashes.deleted_at',
                                 'ribos_bar_codes.ribos_bar_code',
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
-                                ->join('ribos_bar_codes', 'ribos_bar_petty_cashes.id', '=', 'ribos_bar_codes.module_id')
+                                ->leftJoin('ribos_bar_codes', 'ribos_bar_petty_cashes.id', '=', 'ribos_bar_codes.module_id')
                                 ->where('ribos_bar_petty_cashes.pc_id', NULL)
+                                ->where('ribos_bar_petty_cashes.deleted_at', NULL)
                                 ->where('ribos_bar_codes.module_name', $moduleNamePetty)
                                 ->whereDate('ribos_bar_petty_cashes.created_at', '=', date($getDateToday))
                                 ->orderBy('ribos_bar_petty_cashes.id', 'desc')
@@ -1428,12 +2260,14 @@ class RibosBarController extends Controller
                                 'ribos_bar_payment_vouchers.cheque_amount',
                                 'ribos_bar_payment_vouchers.sub_category',
                                 'ribos_bar_payment_vouchers.sub_category_account_id',
+                                'ribos_bar_payment_vouchers.deleted_at',
                                 'ribos_bar_codes.ribos_bar_code',
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
-                                ->join('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                                ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                                 ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                                ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
                                 ->where('ribos_bar_codes.module_name', $moduleNamePV)
                                 ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->orderBy('ribos_bar_payment_vouchers.id', 'desc')
@@ -1470,12 +2304,14 @@ class RibosBarController extends Controller
                             'ribos_bar_payment_vouchers.cheque_amount',
                             'ribos_bar_payment_vouchers.sub_category',
                             'ribos_bar_payment_vouchers.sub_category_account_id',
+                            'ribos_bar_payment_vouchers.deleted_at',
                             'ribos_bar_codes.ribos_bar_code',
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
-                            ->join('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                            ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleNamePV)
                             ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($getDateToday))
                             ->where('ribos_bar_payment_vouchers.method_of_payment', $cash)
@@ -1512,12 +2348,14 @@ class RibosBarController extends Controller
                                 'ribos_bar_payment_vouchers.cheque_amount',
                                 'ribos_bar_payment_vouchers.sub_category',
                                 'ribos_bar_payment_vouchers.sub_category_account_id',
+                                'ribos_bar_payment_vouchers.deleted_at',
                                 'ribos_bar_codes.ribos_bar_code',
                                 'ribos_bar_codes.module_id',
                                 'ribos_bar_codes.module_code',
                                 'ribos_bar_codes.module_name')
-                                ->join('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                                ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                                 ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                                ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
                                 ->where('ribos_bar_codes.module_name', $moduleNamePV)
                                 ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('ribos_bar_payment_vouchers.method_of_payment', $cash)
@@ -1556,12 +2394,14 @@ class RibosBarController extends Controller
                             'ribos_bar_payment_vouchers.cheque_total_amount',
                             'ribos_bar_payment_vouchers.sub_category',
                             'ribos_bar_payment_vouchers.sub_category_account_id',
+                            'ribos_bar_payment_vouchers.deleted_at',
                             'ribos_bar_codes.ribos_bar_code',
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
-                            ->join('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                            ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleNamePV)
                             ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($getDateToday))
                             ->where('ribos_bar_payment_vouchers.method_of_payment', $check)
@@ -1599,12 +2439,14 @@ class RibosBarController extends Controller
                             'ribos_bar_payment_vouchers.cheque_amount',
                             'ribos_bar_payment_vouchers.sub_category',
                             'ribos_bar_payment_vouchers.sub_category_account_id',
+                            'ribos_bar_payment_vouchers.deleted_at',
                             'ribos_bar_codes.ribos_bar_code',
                             'ribos_bar_codes.module_id',
                             'ribos_bar_codes.module_code',
                             'ribos_bar_codes.module_name')
-                            ->join('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
+                            ->leftJoin('ribos_bar_codes', 'ribos_bar_payment_vouchers.id', '=', 'ribos_bar_codes.module_id')
                             ->where('ribos_bar_payment_vouchers.pv_id', NULL)
+                            ->where('ribos_bar_payment_vouchers.deleted_at', NULL)
                             ->where('ribos_bar_codes.module_name', $moduleNamePV)
                             ->whereDate('ribos_bar_payment_vouchers.created_at', '=', date($getDateToday))
                             ->where('ribos_bar_payment_vouchers.method_of_payment', $check)

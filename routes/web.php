@@ -55,6 +55,17 @@ Route::group(['middleware' =>['user']], function(){
 		->name('summaryReportPerDay');
 
 	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/search-multiple-date',
+		'LoloPinoyLechonDeCebuController@getSummaryReportMultiple')
+		->name('getSummaryReportMultiple');
+
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/printMultipleSummary/{date}',
+		'LoloPinoyLechonDeCebuController@printMultipleSummary')
+		->name('printMultipleSummary');
+
+
+	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/printSummary',
 		'LoloPinoyLechonDeCebuController@printSummary')
 		->name('printSummary');
@@ -428,6 +439,16 @@ Route::group(['middleware' =>['user']], function(){
 		->name('summaryReportLpGrillComm');
 
 	Route::get(
+		'/lolo-pinoy-grill-commissary/search-mutiple-date',
+		'LoloPinoyGrillCommissaryController@getSummaryReportMultiple')
+		->name('getSummaryReportMultiple');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/printMultipleSummary/{date}',
+		'LoloPinoyGrillCommissaryController@printMultipleSummary')
+		->name('printMultipleSummary');
+
+	Route::get(
 		'/lolo-pinoy-grill-commissary/summary-report/search-number-code',
 		'LoloPinoyGrillCommissaryController@searchNumberCode')
 		->name('searchNumberCode');
@@ -604,6 +625,16 @@ Route::group(['middleware' =>['user']], function(){
 		'/mr-potato/summary-report',
 		'MrPotatoController@summaryReport')
 		->name('summaryReport');
+
+	Route::get(
+		'/mr-potato/search-multiple-date',
+		'MrPotatoController@getSummaryReportMultiple')
+		->name('getSummaryReportMultiple');
+
+	Route::get(
+		'/mr-potato/printMultipleSummary/{date}',
+		'MrPotatoController@printMultipleSummary')
+		->name('printMultipleSummary');
 
 	Route::get(
 		'/mr-potato/summary-report/search-number-code',
@@ -1865,6 +1896,16 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('summaryReport');
 
 	Route::get(
+		'/lolo-pinoy-grill-branches/search-multiple-date',
+		'LoloPinoyGrillBranchesController@getSummaryReportMultiple')
+		->name('getSummaryReportMultiple');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/printMultipleSummary/{date}',
+		'LoloPinoyGrillBranchesController@printMultipleSummary')
+		->name('printMultipleSummary');
+
+	Route::get(
 		'/lolo-pinoy-grill-branches/summary-report/search-number-code',
 		'LoloPinoyGrillBranchesController@searchNumberCode')
 		->name('searchNumberCode');
@@ -2406,6 +2447,16 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('summaryReportRB');
 
 	Route::get(
+		'/ribos-bar/search-multiple-date',
+		'RibosBarController@getSummaryReportMultiple')
+		->name('getSummaryReportMultiple');
+
+	Route::get(
+		'/ribos-bar/printMultipleSummary/{date}',
+		'RibosBarController@printMultipleSummary')
+		->name('printMultipleSummary');
+
+	Route::get(
 		'/ribos-bar/summary-report/search-number-code',
 		'RibosBarController@searchNumberCode')
 		->name('searchNumberCode');
@@ -2746,9 +2797,19 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('getSummaryReport');
 
 	Route::get(
+		'/dno-personal/search-multiple-date',
+		'DnoPersonalController@getSummaryReportMultiple')
+		->name('getSummaryReportMultiple');
+
+	Route::get(
 		'/dno-personal/printGetSummary/{date}',
 		'DnoPersonalController@printGetSummary')
 		->name('printGetSummary');
+
+	Route::get(
+		'/dno-personal/printMultipleSummary/{date}',
+		'DnoPersonalController@printMultipleSummary')
+		->name('printMultipleSummary');
 
 	Route::get(
 		'/dno-personal/summary-report/search-number-code',
@@ -3188,6 +3249,16 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('summaryReport');
 
 	Route::get(
+		'/dno-food-ventures/search-multiple-date',
+		'DnoFoodVenturesController@getSummaryReportMultiple')
+		->name('getSummaryReportMultiple');
+
+	Route::get(
+		'/dno-food-ventures/printMultipleSummary/{date}',
+		'DnoFoodVenturesController@printMultipleSummary')
+		->name('printMultipleSummary');
+
+	Route::get(
 		'/dno-food-ventures/summary-report/search-number-code',
 		'DnoFoodVenturesController@searchNumberCode')
 		->name('searchNumberCode');
@@ -3253,6 +3324,16 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dno-resources-development/summary-report',
 		'DnoResourcesDevelopmentController@summaryReport')
 		->name('summaryReport');
+
+	Route::get(
+		'/dno-resources-development/search-multiple-date',
+		'DnoResourcesDevelopmentController@getSummaryReportMultiple')
+		->name('getSummaryReportMultiple');
+
+	Route::get(
+		'/dno-resources-development/printMultipleSummary/{date}',
+		'DnoResourcesDevelopmentController@printMultipleSummary')
+		->name('printMultipleSummary');
 
 	
 	Route::get(
@@ -3402,6 +3483,16 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dong-fang-corporation/summary-report',
 		'DongFangCorporationController@summaryReport')
 		->name('summaryReport');
+
+	Route::get(
+		'/dong-fang-corporation/search-multiple-date',
+		'DongFangCorporationController@getSummaryReportMultiple')
+		->name('getSummaryReportMultiple');
+
+	Route::get(
+		'/dong-fang-corporation/printMultipleSummary/{date}',
+		'DongFangCorporationController@printMultipleSummary')
+		->name('printMultipleSummary');
 
 	Route::get(
 		'/dong-fang-corporation/summary-report/search-number-code',
@@ -3598,6 +3689,16 @@ Route::group(['middleware' => ['auth']], function(){
 		'/wlg-corporation/summary-report',
 		'WlgCorporationController@summaryReport')
 		->name('summaryReport');
+
+	Route::get(
+		'/wlg-corporation/search-multiple-date',
+		'WlgCorporationController@getSummaryReportMultiple')
+		->name('getSummaryReportMultiple');
+
+	Route::get(
+		'/wlg-corporation/printMultipleSummary/{date}',
+		'WlgCorporationController@printMultipleSummary')
+		->name('printMultipleSummary');
 
 	Route::get(
 		'/wlg-corporation/summary-report/search-number-code',
@@ -3871,6 +3972,16 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dino-industrial-corporation/summary-report',
 		'DinoIndustrialCorporationController@summaryReport')
 		->name('summaryReport');
+
+	Route::get(
+		'/dino-industrial-corporation/search-multiple-date',
+		'DinoIndustrialCorporationController@getSummaryReportMultiple')
+		->name('getSummaryReportMultiple');
+
+	Route::get(
+		'/dino-industrial-corporation/printMultipleSummary/{date}',
+		'DinoIndustrialCorporationController@printMultipleSummary')
+		->name('printMultipleSummary');
 
 	Route::get(
 		'/dino-industrial-corporation/summary-report/search-number-code',

@@ -32,10 +32,14 @@
                         Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
                         </p>
                         <h4 ><u>SUMMARY REPORT FOR 
-                        <?php if($getDateToday): ?>
-                            {{ $getDateToday}}
-                        <?php elseif($date != ""):?>
-                        {{ $date}}
+                        <?php if($uri0 != "" || $uri1 != ""): ?>
+                        {{ $uri0 }} To {{ $uri1 }}
+                        <?php else: ?>
+                            <?php if($getDateToday): ?>
+                                    {{ $getDateToday}}
+                            <?php elseif($date != ""):?>
+                                {{ $date}}
+                            <?php endif; ?>
                         <?php endif; ?>
                         </u><br>Lolo Pinoy Grill Branches</h4>
             </div>

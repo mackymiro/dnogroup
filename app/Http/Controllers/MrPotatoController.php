@@ -20,6 +20,838 @@ use App\MrPotatoBillingStatement;
 
 class MrPotatoController extends Controller
 {     
+
+    public function printMultipleSummary(Request $request, $date){
+        $urlSegment = \Request::segment(3);
+        $uri = explode("TO", $urlSegment);
+        $uri0 = $uri[0];
+        $uri1 = $uri[1];
+
+        $moduleName = "Sales Invoice";
+        $getAllSalesInvoices = DB::table(
+                                'mr_potato_sales_invoices')
+                                ->select(
+                                    'mr_potato_sales_invoices.id',
+                                    'mr_potato_sales_invoices.user_id',
+                                    'mr_potato_sales_invoices.si_id',
+                                    'mr_potato_sales_invoices.invoice_number',
+                                    'mr_potato_sales_invoices.date',
+                                    'mr_potato_sales_invoices.ordered_by',
+                                    'mr_potato_sales_invoices.address',
+                                    'mr_potato_sales_invoices.qty',
+                                    'mr_potato_sales_invoices.total_kls',
+                                    'mr_potato_sales_invoices.item_description',
+                                    'mr_potato_sales_invoices.unit_price',
+                                    'mr_potato_sales_invoices.amount',
+                                    'mr_potato_sales_invoices.total_amount',
+                                    'mr_potato_sales_invoices.created_by',
+                                    'mr_potato_sales_invoices.deleted_at',
+                                    'mr_potato_codes.mr_potato_code',
+                                    'mr_potato_codes.module_id',
+                                    'mr_potato_codes.module_code',
+                                    'mr_potato_codes.module_name')
+                                ->leftJoin('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
+                                ->where('mr_potato_sales_invoices.si_id', NULL)
+                                ->where('mr_potato_sales_invoices.deleted_at', NULL)
+                                ->where('mr_potato_codes.module_name', $moduleName)
+                                ->whereBetween('mr_potato_sales_invoices.created_at', [$uri0, $uri1])
+                                ->orderBy('mr_potato_sales_invoices.id', 'desc')
+                                ->get()->toArray();
+      
+          $totalSalesInvoice = DB::table(
+                                  'mr_potato_sales_invoices')
+                                  ->select(
+                                      'mr_potato_sales_invoices.id',
+                                      'mr_potato_sales_invoices.user_id',
+                                      'mr_potato_sales_invoices.si_id',
+                                      'mr_potato_sales_invoices.invoice_number',
+                                      'mr_potato_sales_invoices.date',
+                                      'mr_potato_sales_invoices.ordered_by',
+                                      'mr_potato_sales_invoices.address',
+                                      'mr_potato_sales_invoices.qty',
+                                      'mr_potato_sales_invoices.total_kls',
+                                      'mr_potato_sales_invoices.item_description',
+                                      'mr_potato_sales_invoices.unit_price',
+                                      'mr_potato_sales_invoices.amount',
+                                      'mr_potato_sales_invoices.total_amount',
+                                      'mr_potato_sales_invoices.created_by',
+                                      'mr_potato_sales_invoices.deleted_at',
+                                      'mr_potato_codes.mr_potato_code',
+                                      'mr_potato_codes.module_id',
+                                      'mr_potato_codes.module_code',
+                                      'mr_potato_codes.module_name')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
+                                  ->where('mr_potato_sales_invoices.si_id', NULL)
+                                  ->where('mr_potato_sales_invoices.deleted_at', NULL)
+                                  ->where('mr_potato_codes.module_name', $moduleName)
+                                  ->whereBetween('mr_potato_sales_invoices.created_at', [$uri0, $uri1])
+                                  ->sum('mr_potato_sales_invoices.total_amount');
+      
+          $moduleNameDR = "Delivery Receipt";
+          $getAllDeliveryReceipts = DB::table(
+                                  'mr_potato_delivery_receipts')
+                                  ->select( 
+                                  'mr_potato_delivery_receipts.id',
+                                  'mr_potato_delivery_receipts.user_id',
+                                  'mr_potato_delivery_receipts.dr_id',
+                                  'mr_potato_delivery_receipts.delivered_to',
+                                  'mr_potato_delivery_receipts.date',
+                                  'mr_potato_delivery_receipts.address',
+                                  'mr_potato_delivery_receipts.product_id',
+                                  'mr_potato_delivery_receipts.unit',
+                                  'mr_potato_delivery_receipts.item_description',
+                                  'mr_potato_delivery_receipts.unit_price',
+                                  'mr_potato_delivery_receipts.amount',
+                                  'mr_potato_delivery_receipts.total_amount',
+                                  'mr_potato_delivery_receipts.qty',
+                                  'mr_potato_delivery_receipts.prepared_by',
+                                  'mr_potato_delivery_receipts.checked_by',
+                                  'mr_potato_delivery_receipts.received_by',
+                                  'mr_potato_delivery_receipts.created_by',
+                                  'mr_potato_delivery_receipts.created_at',
+                                  'mr_potato_delivery_receipts.deleted_at',
+                                  'mr_potato_codes.mr_potato_code',
+                                  'mr_potato_codes.module_id',
+                                  'mr_potato_codes.module_code',
+                                  'mr_potato_codes.module_name')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
+                                  ->where('mr_potato_delivery_receipts.dr_id', NULL)
+                                  ->where('mr_potato_delivery_receipts.deleted_at', NULL)
+                                  ->where('mr_potato_codes.module_name', $moduleNameDR)
+                                  ->whereBetween('mr_potato_delivery_receipts.created_at', [$uri0, $uri1])
+                                  ->orderBy('mr_potato_delivery_receipts.id', 'desc')
+                                  ->get()->toArray();
+                                
+          $totalDeliveryReceipt = DB::table(
+                                      'mr_potato_delivery_receipts')
+                                      ->select( 
+                                      'mr_potato_delivery_receipts.id',
+                                      'mr_potato_delivery_receipts.user_id',
+                                      'mr_potato_delivery_receipts.dr_id',
+                                      'mr_potato_delivery_receipts.delivered_to',
+                                      'mr_potato_delivery_receipts.date',
+                                      'mr_potato_delivery_receipts.address',
+                                      'mr_potato_delivery_receipts.product_id',
+                                      'mr_potato_delivery_receipts.unit',
+                                      'mr_potato_delivery_receipts.item_description',
+                                      'mr_potato_delivery_receipts.unit_price',
+                                      'mr_potato_delivery_receipts.amount',
+                                      'mr_potato_delivery_receipts.total_amount',
+                                      'mr_potato_delivery_receipts.qty',
+                                      'mr_potato_delivery_receipts.prepared_by',
+                                      'mr_potato_delivery_receipts.checked_by',
+                                      'mr_potato_delivery_receipts.received_by',
+                                      'mr_potato_delivery_receipts.created_by',
+                                      'mr_potato_delivery_receipts.created_at',
+                                      'mr_potato_delivery_receipts.deleted_at',
+                                      'mr_potato_codes.mr_potato_code',
+                                      'mr_potato_codes.module_id',
+                                      'mr_potato_codes.module_code',
+                                      'mr_potato_codes.module_name')
+                                      ->leftJoin('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
+                                      ->where('mr_potato_delivery_receipts.dr_id', NULL)
+                                      ->where('mr_potato_delivery_receipts.deleted_at', NULL)
+                                      ->where('mr_potato_codes.module_name', $moduleNameDR)
+                                      ->whereBetween('mr_potato_delivery_receipts.created_at', [$uri0, $uri1])
+                                     ->sum('mr_potato_delivery_receipts.total_amount');
+
+      $moduleNamePurchase = "Purchase Order";
+      $purchaseOrders = DB::table(
+                              'mr_potato_purchase_orders')
+                              ->select(
+                                  'mr_potato_purchase_orders.id',
+                                  'mr_potato_purchase_orders.user_id',
+                                  'mr_potato_purchase_orders.po_id',
+                                  'mr_potato_purchase_orders.paid_to',
+                                  'mr_potato_purchase_orders.branch_location',
+                                  'mr_potato_purchase_orders.address',
+                                  'mr_potato_purchase_orders.date',
+                                  'mr_potato_purchase_orders.quantity',
+                                  'mr_potato_purchase_orders.description',
+                                  'mr_potato_purchase_orders.unit_price',
+                                  'mr_potato_purchase_orders.amount',
+                                  'mr_potato_purchase_orders.total_price',
+                                  'mr_potato_purchase_orders.requested_by',
+                                  'mr_potato_purchase_orders.prepared_by',
+                                  'mr_potato_purchase_orders.checked_by',
+                                  'mr_potato_purchase_orders.created_by',
+                                  'mr_potato_purchase_orders.created_at',
+                                  'mr_potato_purchase_orders.requesting_branch',
+                                  'mr_potato_purchase_orders.deleted_at',
+                                  'mr_potato_codes.mr_potato_code',
+                                  'mr_potato_codes.module_id',
+                                  'mr_potato_codes.module_code',
+                                  'mr_potato_codes.module_name')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_purchase_orders.id', '=', 'mr_potato_codes.module_id')
+                                  ->where('mr_potato_purchase_orders.po_id', NULL)
+                                  ->where('mr_potato_purchase_orders.deleted_at', NULL)
+                                  ->where('mr_potato_codes.module_name', $moduleNamePurchase)   
+                                  ->whereBetween('mr_potato_purchase_orders.created_at', [$uri0, $uri1])
+                                  ->orderBy('mr_potato_purchase_orders.id', 'desc')
+                                  ->get()->toArray();
+
+
+        $moduleNamePV = "Payment Voucher";
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                            'mr_potato_payment_vouchers')
+                            ->select( 
+                            'mr_potato_payment_vouchers.id',
+                            'mr_potato_payment_vouchers.user_id',
+                            'mr_potato_payment_vouchers.pv_id',
+                            'mr_potato_payment_vouchers.date',
+                            'mr_potato_payment_vouchers.paid_to',
+                            'mr_potato_payment_vouchers.account_no',
+                            'mr_potato_payment_vouchers.account_name',
+                            'mr_potato_payment_vouchers.particulars',
+                            'mr_potato_payment_vouchers.amount',
+                            'mr_potato_payment_vouchers.method_of_payment',
+                            'mr_potato_payment_vouchers.prepared_by',
+                            'mr_potato_payment_vouchers.approved_by',
+                            'mr_potato_payment_vouchers.date_apprroved',
+                            'mr_potato_payment_vouchers.received_by_date',
+                            'mr_potato_payment_vouchers.created_by',
+                            'mr_potato_payment_vouchers.created_at',
+                            'mr_potato_payment_vouchers.invoice_number',
+                            'mr_potato_payment_vouchers.voucher_ref_number',
+                            'mr_potato_payment_vouchers.issued_date',
+                            'mr_potato_payment_vouchers.category',
+                            'mr_potato_payment_vouchers.amount_due',
+                            'mr_potato_payment_vouchers.delivered_date',
+                            'mr_potato_payment_vouchers.status',
+                            'mr_potato_payment_vouchers.cheque_number',
+                            'mr_potato_payment_vouchers.cheque_amount',
+                            'mr_potato_payment_vouchers.sub_category',
+                            'mr_potato_payment_vouchers.sub_category_account_id',
+                            'mr_potato_payment_vouchers.deleted_at',
+                            'mr_potato_codes.mr_potato_code',
+                            'mr_potato_codes.module_id',
+                            'mr_potato_codes.module_code',
+                            'mr_potato_codes.module_name')
+                            ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                            ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                            ->where('mr_potato_payment_vouchers.deleted_at', NULL)
+                            ->where('mr_potato_codes.module_name', $moduleNamePV)
+                            ->whereBetween('mr_potato_payment_vouchers.created_at', [$uri0, $uri1])
+                            ->where('mr_potato_payment_vouchers.method_of_payment', $cash)
+                            ->orderBy('mr_potato_payment_vouchers.id', 'desc')
+                            ->get()->toArray();
+
+    $status = "FULLY PAID AND RELEASED";
+    $totalAmountCash = DB::table(
+                                'mr_potato_payment_vouchers')
+                                ->select( 
+                                'mr_potato_payment_vouchers.id',
+                                'mr_potato_payment_vouchers.user_id',
+                                'mr_potato_payment_vouchers.pv_id',
+                                'mr_potato_payment_vouchers.date',
+                                'mr_potato_payment_vouchers.paid_to',
+                                'mr_potato_payment_vouchers.account_no',
+                                'mr_potato_payment_vouchers.account_name',
+                                'mr_potato_payment_vouchers.particulars',
+                                'mr_potato_payment_vouchers.amount',
+                                'mr_potato_payment_vouchers.method_of_payment',
+                                'mr_potato_payment_vouchers.prepared_by',
+                                'mr_potato_payment_vouchers.approved_by',
+                                'mr_potato_payment_vouchers.date_apprroved',
+                                'mr_potato_payment_vouchers.received_by_date',
+                                'mr_potato_payment_vouchers.created_by',
+                                'mr_potato_payment_vouchers.created_at',
+                                'mr_potato_payment_vouchers.invoice_number',
+                                'mr_potato_payment_vouchers.voucher_ref_number',
+                                'mr_potato_payment_vouchers.issued_date',
+                                'mr_potato_payment_vouchers.category',
+                                'mr_potato_payment_vouchers.amount_due',
+                                'mr_potato_payment_vouchers.delivered_date',
+                                'mr_potato_payment_vouchers.status',
+                                'mr_potato_payment_vouchers.cheque_number',
+                                'mr_potato_payment_vouchers.cheque_amount',
+                                'mr_potato_payment_vouchers.sub_category',
+                                'mr_potato_payment_vouchers.sub_category_account_id',
+                                'mr_potato_payment_vouchers.deleted_at',
+                                'mr_potato_codes.mr_potato_code',
+                                'mr_potato_codes.module_id',
+                                'mr_potato_codes.module_code',
+                                'mr_potato_codes.module_name')
+                                ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                                ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                                ->where('mr_potato_payment_vouchers.deleted_at', NULL)
+                                ->where('mr_potato_codes.module_name', $moduleNamePV)
+                                ->whereBetween('mr_potato_payment_vouchers.created_at', [$uri0, $uri1])
+                                ->where('mr_potato_payment_vouchers.method_of_payment', $cash)
+                                ->orderBy('mr_potato_payment_vouchers.id', 'desc')
+                                ->sum('mr_potato_payment_vouchers.amount_due');
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                            'mr_potato_payment_vouchers')
+                            ->select( 
+                            'mr_potato_payment_vouchers.id',
+                            'mr_potato_payment_vouchers.user_id',
+                            'mr_potato_payment_vouchers.pv_id',
+                            'mr_potato_payment_vouchers.date',
+                            'mr_potato_payment_vouchers.paid_to',
+                            'mr_potato_payment_vouchers.account_no',
+                            'mr_potato_payment_vouchers.account_name',
+                            'mr_potato_payment_vouchers.particulars',
+                            'mr_potato_payment_vouchers.amount',
+                            'mr_potato_payment_vouchers.method_of_payment',
+                            'mr_potato_payment_vouchers.prepared_by',
+                            'mr_potato_payment_vouchers.approved_by',
+                            'mr_potato_payment_vouchers.date_apprroved',
+                            'mr_potato_payment_vouchers.received_by_date',
+                            'mr_potato_payment_vouchers.created_by',
+                            'mr_potato_payment_vouchers.created_at',
+                            'mr_potato_payment_vouchers.invoice_number',
+                            'mr_potato_payment_vouchers.voucher_ref_number',
+                            'mr_potato_payment_vouchers.issued_date',
+                            'mr_potato_payment_vouchers.category',
+                            'mr_potato_payment_vouchers.amount_due',
+                            'mr_potato_payment_vouchers.delivered_date',
+                            'mr_potato_payment_vouchers.status',
+                            'mr_potato_payment_vouchers.cheque_number',
+                            'mr_potato_payment_vouchers.cheque_amount',
+                            'mr_potato_payment_vouchers.cheque_total_amount',
+                            'mr_potato_payment_vouchers.sub_category',
+                            'mr_potato_payment_vouchers.sub_category_account_id',
+                            'mr_potato_payment_vouchers.deleted_at',
+                            'mr_potato_codes.mr_potato_code',
+                            'mr_potato_codes.module_id',
+                            'mr_potato_codes.module_code',
+                            'mr_potato_codes.module_name')
+                            ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                            ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                            ->where('mr_potato_payment_vouchers.deleted_at', NULL)
+                            ->where('mr_potato_codes.module_name', $moduleNamePV)
+                            ->whereBetween('mr_potato_payment_vouchers.created_at', [$uri0, $uri1])
+                            ->where('mr_potato_payment_vouchers.method_of_payment', $check)
+                            ->orderBy('mr_potato_payment_vouchers.id', 'desc')
+                            ->get()->toArray();
+                
+    $totalAmountCheck = DB::table(
+                                'mr_potato_payment_vouchers')
+                                ->select( 
+                                'mr_potato_payment_vouchers.id',
+                                'mr_potato_payment_vouchers.user_id',
+                                'mr_potato_payment_vouchers.pv_id',
+                                'mr_potato_payment_vouchers.date',
+                                'mr_potato_payment_vouchers.paid_to',
+                                'mr_potato_payment_vouchers.account_no',
+                                'mr_potato_payment_vouchers.account_name',
+                                'mr_potato_payment_vouchers.particulars',
+                                'mr_potato_payment_vouchers.amount',
+                                'mr_potato_payment_vouchers.method_of_payment',
+                                'mr_potato_payment_vouchers.prepared_by',
+                                'mr_potato_payment_vouchers.approved_by',
+                                'mr_potato_payment_vouchers.date_apprroved',
+                                'mr_potato_payment_vouchers.received_by_date',
+                                'mr_potato_payment_vouchers.created_by',
+                                'mr_potato_payment_vouchers.created_at',
+                                'mr_potato_payment_vouchers.invoice_number',
+                                'mr_potato_payment_vouchers.voucher_ref_number',
+                                'mr_potato_payment_vouchers.issued_date',
+                                'mr_potato_payment_vouchers.category',
+                                'mr_potato_payment_vouchers.amount_due',
+                                'mr_potato_payment_vouchers.delivered_date',
+                                'mr_potato_payment_vouchers.status',
+                                'mr_potato_payment_vouchers.cheque_number',
+                                'mr_potato_payment_vouchers.cheque_amount',
+                                'mr_potato_payment_vouchers.sub_category',
+                                'mr_potato_payment_vouchers.sub_category_account_id',
+                                'mr_potato_payment_vouchers.deleted_at',
+                                'mr_potato_codes.mr_potato_code',
+                                'mr_potato_codes.module_id',
+                                'mr_potato_codes.module_code',
+                                'mr_potato_codes.module_name')
+                                ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                                ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                                ->where('mr_potato_payment_vouchers.deleted_at', NULL)
+                                ->where('mr_potato_codes.module_name', $moduleNamePV)
+                                ->whereBetween('mr_potato_payment_vouchers.created_at', [$uri0, $uri1])
+                                ->where('mr_potato_payment_vouchers.method_of_payment', $check)
+                                ->where('mr_potato_payment_vouchers.status', '!=', $status)
+                                ->sum('mr_potato_payment_vouchers.amount_due');
+
+        $totalPaidAmountCheck = DB::table(
+                                    'mr_potato_payment_vouchers')
+                                    ->select( 
+                                    'mr_potato_payment_vouchers.id',
+                                    'mr_potato_payment_vouchers.user_id',
+                                    'mr_potato_payment_vouchers.pv_id',
+                                    'mr_potato_payment_vouchers.date',
+                                    'mr_potato_payment_vouchers.paid_to',
+                                    'mr_potato_payment_vouchers.account_no',
+                                    'mr_potato_payment_vouchers.account_name',
+                                    'mr_potato_payment_vouchers.particulars',
+                                    'mr_potato_payment_vouchers.amount',
+                                    'mr_potato_payment_vouchers.method_of_payment',
+                                    'mr_potato_payment_vouchers.prepared_by',
+                                    'mr_potato_payment_vouchers.approved_by',
+                                    'mr_potato_payment_vouchers.date_apprroved',
+                                    'mr_potato_payment_vouchers.received_by_date',
+                                    'mr_potato_payment_vouchers.created_by',
+                                    'mr_potato_payment_vouchers.created_at',
+                                    'mr_potato_payment_vouchers.invoice_number',
+                                    'mr_potato_payment_vouchers.voucher_ref_number',
+                                    'mr_potato_payment_vouchers.issued_date',
+                                    'mr_potato_payment_vouchers.category',
+                                    'mr_potato_payment_vouchers.amount_due',
+                                    'mr_potato_payment_vouchers.delivered_date',
+                                    'mr_potato_payment_vouchers.status',
+                                    'mr_potato_payment_vouchers.cheque_number',
+                                    'mr_potato_payment_vouchers.cheque_amount',
+                                    'mr_potato_payment_vouchers.cheque_total_amount',
+                                    'mr_potato_payment_vouchers.sub_category',
+                                    'mr_potato_payment_vouchers.sub_category_account_id',
+                                    'mr_potato_payment_vouchers.deleted_at',
+                                    'mr_potato_codes.mr_potato_code',
+                                    'mr_potato_codes.module_id',
+                                    'mr_potato_codes.module_code',
+                                    'mr_potato_codes.module_name')
+                                    ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                                    ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                                    ->where('mr_potato_payment_vouchers.deleted_at', NULL)
+                                    ->where('mr_potato_codes.module_name', $moduleNamePV)
+                                    ->whereBetween('mr_potato_payment_vouchers.created_at', [$uri0, $uri1])
+                                    ->where('mr_potato_payment_vouchers.method_of_payment', $check)
+                                    ->where('mr_potato_payment_vouchers.status', $status)
+                                    ->sum('mr_potato_payment_vouchers.cheque_total_amount');
+                      
+        $getDateToday = "";
+        $pdf = PDF::loadView('printSummaryMrPotato',  compact('date', 'uri0', 'uri1', 'getDateToday', 'getAllSalesInvoices', 
+        'getAllDeliveryReceipts', 'purchaseOrders', 'statementOfAccounts', 'billingStatements', 
+        'pettyCashLists',  'getTransactionLists', 'getTransactionListCashes', 'getTransactionListChecks', 'totalSalesInvoice', 'totalDeliveryReceipt', 'totalPOrder', 'totalBStatement', 
+        'totalAmountCash','totalAmountCheck', 'totalPaidAmountCheck'));
+        
+        return $pdf->download('mr-potato-summary-report.pdf');
+
+
+    }
+
+    public function getSummaryReportMultiple(Request $request){
+        $startDate = date("Y-m-d",strtotime($request->input('startDate')));
+        $endDate = date("Y-m-d",strtotime($request->input('endDate')."+1 day"));
+        
+        $moduleName = "Sales Invoice";
+        $getAllSalesInvoices = DB::table(
+                                'mr_potato_sales_invoices')
+                                ->select(
+                                    'mr_potato_sales_invoices.id',
+                                    'mr_potato_sales_invoices.user_id',
+                                    'mr_potato_sales_invoices.si_id',
+                                    'mr_potato_sales_invoices.invoice_number',
+                                    'mr_potato_sales_invoices.date',
+                                    'mr_potato_sales_invoices.ordered_by',
+                                    'mr_potato_sales_invoices.address',
+                                    'mr_potato_sales_invoices.qty',
+                                    'mr_potato_sales_invoices.total_kls',
+                                    'mr_potato_sales_invoices.item_description',
+                                    'mr_potato_sales_invoices.unit_price',
+                                    'mr_potato_sales_invoices.amount',
+                                    'mr_potato_sales_invoices.total_amount',
+                                    'mr_potato_sales_invoices.created_by',
+                                    'mr_potato_sales_invoices.deleted_at',
+                                    'mr_potato_codes.mr_potato_code',
+                                    'mr_potato_codes.module_id',
+                                    'mr_potato_codes.module_code',
+                                    'mr_potato_codes.module_name')
+                                ->leftJoin('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
+                                ->where('mr_potato_sales_invoices.si_id', NULL)
+                                ->where('mr_potato_sales_invoices.deleted_at', NULL)
+                                ->where('mr_potato_codes.module_name', $moduleName)
+                                ->whereBetween('mr_potato_sales_invoices.created_at', [$startDate, $endDate]) 
+                                ->orderBy('mr_potato_sales_invoices.id', 'desc')
+                                ->get()->toArray();
+      
+          $totalSalesInvoice = DB::table(
+                                  'mr_potato_sales_invoices')
+                                  ->select(
+                                      'mr_potato_sales_invoices.id',
+                                      'mr_potato_sales_invoices.user_id',
+                                      'mr_potato_sales_invoices.si_id',
+                                      'mr_potato_sales_invoices.invoice_number',
+                                      'mr_potato_sales_invoices.date',
+                                      'mr_potato_sales_invoices.ordered_by',
+                                      'mr_potato_sales_invoices.address',
+                                      'mr_potato_sales_invoices.qty',
+                                      'mr_potato_sales_invoices.total_kls',
+                                      'mr_potato_sales_invoices.item_description',
+                                      'mr_potato_sales_invoices.unit_price',
+                                      'mr_potato_sales_invoices.amount',
+                                      'mr_potato_sales_invoices.total_amount',
+                                      'mr_potato_sales_invoices.created_by',
+                                      'mr_potato_sales_invoices.deleted_at',
+                                      'mr_potato_codes.mr_potato_code',
+                                      'mr_potato_codes.module_id',
+                                      'mr_potato_codes.module_code',
+                                      'mr_potato_codes.module_name')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
+                                  ->where('mr_potato_sales_invoices.si_id', NULL)
+                                  ->where('mr_potato_sales_invoices.deleted_at', NULL)
+                                  ->where('mr_potato_codes.module_name', $moduleName)
+                                  ->whereBetween('mr_potato_sales_invoices.created_at', [$startDate, $endDate]) 
+                                  ->sum('mr_potato_sales_invoices.total_amount');
+      
+          $moduleNameDR = "Delivery Receipt";
+          $getAllDeliveryReceipts = DB::table(
+                                  'mr_potato_delivery_receipts')
+                                  ->select( 
+                                  'mr_potato_delivery_receipts.id',
+                                  'mr_potato_delivery_receipts.user_id',
+                                  'mr_potato_delivery_receipts.dr_id',
+                                  'mr_potato_delivery_receipts.delivered_to',
+                                  'mr_potato_delivery_receipts.date',
+                                  'mr_potato_delivery_receipts.address',
+                                  'mr_potato_delivery_receipts.product_id',
+                                  'mr_potato_delivery_receipts.unit',
+                                  'mr_potato_delivery_receipts.item_description',
+                                  'mr_potato_delivery_receipts.unit_price',
+                                  'mr_potato_delivery_receipts.amount',
+                                  'mr_potato_delivery_receipts.total_amount',
+                                  'mr_potato_delivery_receipts.qty',
+                                  'mr_potato_delivery_receipts.prepared_by',
+                                  'mr_potato_delivery_receipts.checked_by',
+                                  'mr_potato_delivery_receipts.received_by',
+                                  'mr_potato_delivery_receipts.created_by',
+                                  'mr_potato_delivery_receipts.created_at',
+                                  'mr_potato_delivery_receipts.deleted_at',
+                                  'mr_potato_codes.mr_potato_code',
+                                  'mr_potato_codes.module_id',
+                                  'mr_potato_codes.module_code',
+                                  'mr_potato_codes.module_name')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
+                                  ->where('mr_potato_delivery_receipts.dr_id', NULL)
+                                  ->where('mr_potato_delivery_receipts.deleted_at', NULL)
+                                  ->where('mr_potato_codes.module_name', $moduleNameDR)
+                                  ->whereBetween('mr_potato_delivery_receipts.created_at', [$startDate, $endDate]) 
+                                  ->orderBy('mr_potato_delivery_receipts.id', 'desc')
+                                  ->get()->toArray();
+                                
+          $totalDeliveryReceipt = DB::table(
+                                      'mr_potato_delivery_receipts')
+                                      ->select( 
+                                      'mr_potato_delivery_receipts.id',
+                                      'mr_potato_delivery_receipts.user_id',
+                                      'mr_potato_delivery_receipts.dr_id',
+                                      'mr_potato_delivery_receipts.delivered_to',
+                                      'mr_potato_delivery_receipts.date',
+                                      'mr_potato_delivery_receipts.address',
+                                      'mr_potato_delivery_receipts.product_id',
+                                      'mr_potato_delivery_receipts.unit',
+                                      'mr_potato_delivery_receipts.item_description',
+                                      'mr_potato_delivery_receipts.unit_price',
+                                      'mr_potato_delivery_receipts.amount',
+                                      'mr_potato_delivery_receipts.total_amount',
+                                      'mr_potato_delivery_receipts.qty',
+                                      'mr_potato_delivery_receipts.prepared_by',
+                                      'mr_potato_delivery_receipts.checked_by',
+                                      'mr_potato_delivery_receipts.received_by',
+                                      'mr_potato_delivery_receipts.created_by',
+                                      'mr_potato_delivery_receipts.created_at',
+                                      'mr_potato_delivery_receipts.deleted_at',
+                                      'mr_potato_codes.mr_potato_code',
+                                      'mr_potato_codes.module_id',
+                                      'mr_potato_codes.module_code',
+                                      'mr_potato_codes.module_name')
+                                      ->leftJoin('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
+                                      ->where('mr_potato_delivery_receipts.dr_id', NULL)
+                                      ->where('mr_potato_delivery_receipts.deleted_at', NULL)
+                                      ->where('mr_potato_codes.module_name', $moduleNameDR)
+                                      ->whereBetween('mr_potato_delivery_receipts.created_at', [$startDate, $endDate]) 
+                                     ->sum('mr_potato_delivery_receipts.total_amount');
+
+      $moduleNamePurchase = "Purchase Order";
+      $purchaseOrders = DB::table(
+                              'mr_potato_purchase_orders')
+                              ->select(
+                                  'mr_potato_purchase_orders.id',
+                                  'mr_potato_purchase_orders.user_id',
+                                  'mr_potato_purchase_orders.po_id',
+                                  'mr_potato_purchase_orders.paid_to',
+                                  'mr_potato_purchase_orders.branch_location',
+                                  'mr_potato_purchase_orders.address',
+                                  'mr_potato_purchase_orders.date',
+                                  'mr_potato_purchase_orders.quantity',
+                                  'mr_potato_purchase_orders.description',
+                                  'mr_potato_purchase_orders.unit_price',
+                                  'mr_potato_purchase_orders.amount',
+                                  'mr_potato_purchase_orders.total_price',
+                                  'mr_potato_purchase_orders.requested_by',
+                                  'mr_potato_purchase_orders.prepared_by',
+                                  'mr_potato_purchase_orders.checked_by',
+                                  'mr_potato_purchase_orders.created_by',
+                                  'mr_potato_purchase_orders.created_at',
+                                  'mr_potato_purchase_orders.requesting_branch',
+                                  'mr_potato_purchase_orders.deleted_at',
+                                  'mr_potato_codes.mr_potato_code',
+                                  'mr_potato_codes.module_id',
+                                  'mr_potato_codes.module_code',
+                                  'mr_potato_codes.module_name')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_purchase_orders.id', '=', 'mr_potato_codes.module_id')
+                                  ->where('mr_potato_purchase_orders.po_id', NULL)
+                                  ->where('mr_potato_purchase_orders.deleted_at', NULL)
+                                  ->where('mr_potato_codes.module_name', $moduleNamePurchase)   
+                                  ->whereBetween('mr_potato_purchase_orders.created_at', [$startDate, $endDate])
+                                  ->orderBy('mr_potato_purchase_orders.id', 'desc')
+                                  ->get()->toArray();
+
+          $moduleNamePC = "Petty Cash";
+          $pettyCashLists = DB::table(
+                                  'mr_potato_petty_cashes')
+                                  ->select( 
+                                  'mr_potato_petty_cashes.id',
+                                  'mr_potato_petty_cashes.user_id',
+                                  'mr_potato_petty_cashes.pc_id',
+                                  'mr_potato_petty_cashes.date',
+                                  'mr_potato_petty_cashes.petty_cash_name',
+                                  'mr_potato_petty_cashes.petty_cash_summary',
+                                  'mr_potato_petty_cashes.amount',
+                                  'mr_potato_petty_cashes.created_by',
+                                  'mr_potato_petty_cashes.deleted_at',
+                                  'mr_potato_codes.mr_potato_code',
+                                  'mr_potato_codes.module_id',
+                                  'mr_potato_codes.module_code',
+                                  'mr_potato_codes.module_name')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_petty_cashes.id', '=', 'mr_potato_codes.module_id')
+                                  ->where('mr_potato_petty_cashes.pc_id', NULL)
+                                  ->where('mr_potato_petty_cashes.deleted_at', NULL)
+                                  ->where('mr_potato_codes.module_name', $moduleNamePC)
+                                  ->whereBetween('mr_potato_petty_cashes.created_at', [$startDate, $endDate])
+                                  ->orderBy('mr_potato_petty_cashes.id', 'desc')
+                                  ->get()->toArray();
+  
+          $moduleNamePV = "Payment Voucher";
+          $getTransactionLists = DB::table(
+                              'mr_potato_payment_vouchers')
+                              ->select( 
+                              'mr_potato_payment_vouchers.id',
+                              'mr_potato_payment_vouchers.user_id',
+                              'mr_potato_payment_vouchers.pv_id',
+                              'mr_potato_payment_vouchers.date',
+                              'mr_potato_payment_vouchers.paid_to',
+                              'mr_potato_payment_vouchers.account_no',
+                              'mr_potato_payment_vouchers.account_name',
+                              'mr_potato_payment_vouchers.particulars',
+                              'mr_potato_payment_vouchers.amount',
+                              'mr_potato_payment_vouchers.method_of_payment',
+                              'mr_potato_payment_vouchers.prepared_by',
+                              'mr_potato_payment_vouchers.approved_by',
+                              'mr_potato_payment_vouchers.date_apprroved',
+                              'mr_potato_payment_vouchers.received_by_date',
+                              'mr_potato_payment_vouchers.created_by',
+                              'mr_potato_payment_vouchers.created_at',
+                              'mr_potato_payment_vouchers.invoice_number',
+                              'mr_potato_payment_vouchers.voucher_ref_number',
+                              'mr_potato_payment_vouchers.issued_date',
+                              'mr_potato_payment_vouchers.category',
+                              'mr_potato_payment_vouchers.amount_due',
+                              'mr_potato_payment_vouchers.delivered_date',
+                              'mr_potato_payment_vouchers.status',
+                              'mr_potato_payment_vouchers.cheque_number',
+                              'mr_potato_payment_vouchers.cheque_amount',
+                              'mr_potato_payment_vouchers.cheque_total_amount',
+                              'mr_potato_payment_vouchers.sub_category',
+                              'mr_potato_payment_vouchers.sub_category_account_id',
+                              'mr_potato_payment_vouchers.deleted_at',
+                              'mr_potato_codes.mr_potato_code',
+                              'mr_potato_codes.module_id',
+                              'mr_potato_codes.module_code',
+                              'mr_potato_codes.module_name')
+                              ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                              ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                              ->where('mr_potato_payment_vouchers.deleted_at', NULL)
+                              ->where('mr_potato_codes.module_name', $moduleNamePV)
+                              ->whereBetween('mr_potato_payment_vouchers.created_at', [$startDate, $endDate])    
+                              ->orderBy('mr_potato_payment_vouchers.id', 'desc')
+                              ->get()->toArray();
+                  
+          $cash = "CASH";
+          $getTransactionListCashes = DB::table(
+                              'mr_potato_payment_vouchers')
+                              ->select( 
+                              'mr_potato_payment_vouchers.id',
+                              'mr_potato_payment_vouchers.user_id',
+                              'mr_potato_payment_vouchers.pv_id',
+                              'mr_potato_payment_vouchers.date',
+                              'mr_potato_payment_vouchers.paid_to',
+                              'mr_potato_payment_vouchers.account_no',
+                              'mr_potato_payment_vouchers.account_name',
+                              'mr_potato_payment_vouchers.particulars',
+                              'mr_potato_payment_vouchers.amount',
+                              'mr_potato_payment_vouchers.method_of_payment',
+                              'mr_potato_payment_vouchers.prepared_by',
+                              'mr_potato_payment_vouchers.approved_by',
+                              'mr_potato_payment_vouchers.date_apprroved',
+                              'mr_potato_payment_vouchers.received_by_date',
+                              'mr_potato_payment_vouchers.created_by',
+                              'mr_potato_payment_vouchers.created_at',
+                              'mr_potato_payment_vouchers.invoice_number',
+                              'mr_potato_payment_vouchers.voucher_ref_number',
+                              'mr_potato_payment_vouchers.issued_date',
+                              'mr_potato_payment_vouchers.category',
+                              'mr_potato_payment_vouchers.amount_due',
+                              'mr_potato_payment_vouchers.delivered_date',
+                              'mr_potato_payment_vouchers.status',
+                              'mr_potato_payment_vouchers.cheque_number',
+                              'mr_potato_payment_vouchers.cheque_amount',
+                              'mr_potato_payment_vouchers.sub_category',
+                              'mr_potato_payment_vouchers.sub_category_account_id',
+                              'mr_potato_payment_vouchers.deleted_at',
+                              'mr_potato_codes.mr_potato_code',
+                              'mr_potato_codes.module_id',
+                              'mr_potato_codes.module_code',
+                              'mr_potato_codes.module_name')
+                              ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                              ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                              ->where('mr_potato_payment_vouchers.deleted_at', NULL)
+                              ->where('mr_potato_codes.module_name', $moduleNamePV)
+                              ->whereBetween('mr_potato_payment_vouchers.created_at', [$startDate, $endDate])
+                              ->where('mr_potato_payment_vouchers.method_of_payment', $cash)
+                              ->orderBy('mr_potato_payment_vouchers.id', 'desc')
+                              ->get()->toArray();
+
+      $status = "FULLY PAID AND RELEASED";
+      $totalAmountCashes = DB::table(
+                                  'mr_potato_payment_vouchers')
+                                  ->select( 
+                                  'mr_potato_payment_vouchers.id',
+                                  'mr_potato_payment_vouchers.user_id',
+                                  'mr_potato_payment_vouchers.pv_id',
+                                  'mr_potato_payment_vouchers.date',
+                                  'mr_potato_payment_vouchers.paid_to',
+                                  'mr_potato_payment_vouchers.account_no',
+                                  'mr_potato_payment_vouchers.account_name',
+                                  'mr_potato_payment_vouchers.particulars',
+                                  'mr_potato_payment_vouchers.amount',
+                                  'mr_potato_payment_vouchers.method_of_payment',
+                                  'mr_potato_payment_vouchers.prepared_by',
+                                  'mr_potato_payment_vouchers.approved_by',
+                                  'mr_potato_payment_vouchers.date_apprroved',
+                                  'mr_potato_payment_vouchers.received_by_date',
+                                  'mr_potato_payment_vouchers.created_by',
+                                  'mr_potato_payment_vouchers.created_at',
+                                  'mr_potato_payment_vouchers.invoice_number',
+                                  'mr_potato_payment_vouchers.voucher_ref_number',
+                                  'mr_potato_payment_vouchers.issued_date',
+                                  'mr_potato_payment_vouchers.category',
+                                  'mr_potato_payment_vouchers.amount_due',
+                                  'mr_potato_payment_vouchers.delivered_date',
+                                  'mr_potato_payment_vouchers.status',
+                                  'mr_potato_payment_vouchers.cheque_number',
+                                  'mr_potato_payment_vouchers.cheque_amount',
+                                  'mr_potato_payment_vouchers.sub_category',
+                                  'mr_potato_payment_vouchers.sub_category_account_id',
+                                  'mr_potato_payment_vouchers.deleted_at',
+                                  'mr_potato_codes.mr_potato_code',
+                                  'mr_potato_codes.module_id',
+                                  'mr_potato_codes.module_code',
+                                  'mr_potato_codes.module_name')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                                  ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                                  ->where('mr_potato_payment_vouchers.deleted_at', NULL)
+                                  ->where('mr_potato_codes.module_name', $moduleNamePV)
+                                  ->whereBetween('mr_potato_payment_vouchers.created_at', [$startDate, $endDate])
+                                  ->where('mr_potato_payment_vouchers.method_of_payment', $cash)
+                                  ->orderBy('mr_potato_payment_vouchers.id', 'desc')
+                                 ->sum('mr_potato_payment_vouchers.amount_due');
+
+          $check = "CHECK";
+          $getTransactionListChecks = DB::table(
+                              'mr_potato_payment_vouchers')
+                              ->select( 
+                              'mr_potato_payment_vouchers.id',
+                              'mr_potato_payment_vouchers.user_id',
+                              'mr_potato_payment_vouchers.pv_id',
+                              'mr_potato_payment_vouchers.date',
+                              'mr_potato_payment_vouchers.paid_to',
+                              'mr_potato_payment_vouchers.account_no',
+                              'mr_potato_payment_vouchers.account_name',
+                              'mr_potato_payment_vouchers.particulars',
+                              'mr_potato_payment_vouchers.amount',
+                              'mr_potato_payment_vouchers.method_of_payment',
+                              'mr_potato_payment_vouchers.prepared_by',
+                              'mr_potato_payment_vouchers.approved_by',
+                              'mr_potato_payment_vouchers.date_apprroved',
+                              'mr_potato_payment_vouchers.received_by_date',
+                              'mr_potato_payment_vouchers.created_by',
+                              'mr_potato_payment_vouchers.created_at',
+                              'mr_potato_payment_vouchers.invoice_number',
+                              'mr_potato_payment_vouchers.voucher_ref_number',
+                              'mr_potato_payment_vouchers.issued_date',
+                              'mr_potato_payment_vouchers.category',
+                              'mr_potato_payment_vouchers.amount_due',
+                              'mr_potato_payment_vouchers.delivered_date',
+                              'mr_potato_payment_vouchers.status',
+                              'mr_potato_payment_vouchers.cheque_number',
+                              'mr_potato_payment_vouchers.cheque_amount',
+                              'mr_potato_payment_vouchers.cheque_total_amount',
+                              'mr_potato_payment_vouchers.sub_category',
+                              'mr_potato_payment_vouchers.sub_category_account_id',
+                              'mr_potato_payment_vouchers.deleted_at',
+                              'mr_potato_codes.mr_potato_code',
+                              'mr_potato_codes.module_id',
+                              'mr_potato_codes.module_code',
+                              'mr_potato_codes.module_name')
+                              ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                              ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                              ->where('mr_potato_payment_vouchers.deleted_at', NULL)
+                              ->where('mr_potato_codes.module_name', $moduleNamePV)
+                              ->whereBetween('mr_potato_payment_vouchers.created_at', [$startDate, $endDate])
+                              ->where('mr_potato_payment_vouchers.method_of_payment', $check)
+                              ->orderBy('mr_potato_payment_vouchers.id', 'desc')
+                              ->get()->toArray();
+                  
+      $totalAmountCheck = DB::table(
+                                  'mr_potato_payment_vouchers')
+                                  ->select( 
+                                  'mr_potato_payment_vouchers.id',
+                                  'mr_potato_payment_vouchers.user_id',
+                                  'mr_potato_payment_vouchers.pv_id',
+                                  'mr_potato_payment_vouchers.date',
+                                  'mr_potato_payment_vouchers.paid_to',
+                                  'mr_potato_payment_vouchers.account_no',
+                                  'mr_potato_payment_vouchers.account_name',
+                                  'mr_potato_payment_vouchers.particulars',
+                                  'mr_potato_payment_vouchers.amount',
+                                  'mr_potato_payment_vouchers.method_of_payment',
+                                  'mr_potato_payment_vouchers.prepared_by',
+                                  'mr_potato_payment_vouchers.approved_by',
+                                  'mr_potato_payment_vouchers.date_apprroved',
+                                  'mr_potato_payment_vouchers.received_by_date',
+                                  'mr_potato_payment_vouchers.created_by',
+                                  'mr_potato_payment_vouchers.created_at',
+                                  'mr_potato_payment_vouchers.invoice_number',
+                                  'mr_potato_payment_vouchers.voucher_ref_number',
+                                  'mr_potato_payment_vouchers.issued_date',
+                                  'mr_potato_payment_vouchers.category',
+                                  'mr_potato_payment_vouchers.amount_due',
+                                  'mr_potato_payment_vouchers.delivered_date',
+                                  'mr_potato_payment_vouchers.status',
+                                  'mr_potato_payment_vouchers.cheque_number',
+                                  'mr_potato_payment_vouchers.cheque_amount',
+                                  'mr_potato_payment_vouchers.sub_category',
+                                  'mr_potato_payment_vouchers.sub_category_account_id',
+                                  'mr_potato_payment_vouchers.deleted_at',
+                                  'mr_potato_codes.mr_potato_code',
+                                  'mr_potato_codes.module_id',
+                                  'mr_potato_codes.module_code',
+                                  'mr_potato_codes.module_name')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                                  ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                                  ->where('mr_potato_payment_vouchers.deleted_at', NULL)
+                                  ->where('mr_potato_codes.module_name', $moduleNamePV)
+                                  ->whereBetween('mr_potato_payment_vouchers.created_at', [$startDate, $endDate])
+                                  ->where('mr_potato_payment_vouchers.method_of_payment', $check)
+                                  ->where('mr_potato_payment_vouchers.status', '!=', $status)
+                                  ->sum('mr_potato_payment_vouchers.amount_due');
+
+        return view('mr-potato-multiple-summary-report', compact('getAllSalesInvoices', 'startDate', 'endDate',
+        'totalSalesInvoice', 'getAllDeliveryReceipts', 'totalDeliveryReceipt','purchaseOrders', 'pettyCashLists', 
+        'getTransactionLists', 'getTransactionListCashes', 'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck'));
+                            
+
+    }
+
     public function search(Request $request){   
         $getSearchResults =MrPotatoCode::where('mr_potato_code', $request->get('searchCode'))->get();
         if($getSearchResults[0]->module_name === "Sales Invoice"){
@@ -233,12 +1065,14 @@ class MrPotatoController extends Controller
                                     'mr_potato_sales_invoices.amount',
                                     'mr_potato_sales_invoices.total_amount',
                                     'mr_potato_sales_invoices.created_by',
+                                    'mr_potato_sales_invoices.deleted_at',
                                     'mr_potato_codes.mr_potato_code',
                                     'mr_potato_codes.module_id',
                                     'mr_potato_codes.module_code',
                                     'mr_potato_codes.module_name')
-                                ->join('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
+                                ->leftJoin('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
                                 ->where('mr_potato_sales_invoices.si_id', NULL)
+                                ->where('mr_potato_sales_invoices.deleted_at', NULL)
                                 ->where('mr_potato_codes.module_name', $moduleName)
                                 ->whereDate('mr_potato_sales_invoices.created_at', '=', date($date))
                                 ->orderBy('mr_potato_sales_invoices.id', 'desc')
@@ -261,12 +1095,14 @@ class MrPotatoController extends Controller
                                       'mr_potato_sales_invoices.amount',
                                       'mr_potato_sales_invoices.total_amount',
                                       'mr_potato_sales_invoices.created_by',
+                                      'mr_potato_sales_invoices.deleted_at',
                                       'mr_potato_codes.mr_potato_code',
                                       'mr_potato_codes.module_id',
                                       'mr_potato_codes.module_code',
                                       'mr_potato_codes.module_name')
-                                  ->join('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
                                   ->where('mr_potato_sales_invoices.si_id', NULL)
+                                  ->where('mr_potato_sales_invoices.deleted_at', NULL)
                                   ->where('mr_potato_codes.module_name', $moduleName)
                                   ->whereDate('mr_potato_sales_invoices.created_at', '=', date($date))
                                   ->sum('mr_potato_sales_invoices.total_amount');
@@ -293,12 +1129,14 @@ class MrPotatoController extends Controller
                                   'mr_potato_delivery_receipts.received_by',
                                   'mr_potato_delivery_receipts.created_by',
                                   'mr_potato_delivery_receipts.created_at',
+                                  'mr_potato_delivery_receipts.deleted_at',
                                   'mr_potato_codes.mr_potato_code',
                                   'mr_potato_codes.module_id',
                                   'mr_potato_codes.module_code',
                                   'mr_potato_codes.module_name')
                                   ->leftJoin('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
                                   ->where('mr_potato_delivery_receipts.dr_id', NULL)
+                                  ->where('mr_potato_delivery_receipts.deleted_at', NULL)
                                   ->where('mr_potato_codes.module_name', $moduleNameDR)
                                   ->whereDate('mr_potato_delivery_receipts.created_at', '=', date($date))
                                   ->orderBy('mr_potato_delivery_receipts.id', 'desc')
@@ -325,12 +1163,14 @@ class MrPotatoController extends Controller
                                       'mr_potato_delivery_receipts.received_by',
                                       'mr_potato_delivery_receipts.created_by',
                                       'mr_potato_delivery_receipts.created_at',
+                                      'mr_potato_delivery_receipts.deleted_at',
                                       'mr_potato_codes.mr_potato_code',
                                       'mr_potato_codes.module_id',
                                       'mr_potato_codes.module_code',
                                       'mr_potato_codes.module_name')
-                                      ->join('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
+                                      ->leftJoin('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
                                       ->where('mr_potato_delivery_receipts.dr_id', NULL)
+                                      ->where('mr_potato_delivery_receipts.deleted_at', NULL)
                                       ->where('mr_potato_codes.module_name', $moduleNameDR)
                                       ->whereDate('mr_potato_delivery_receipts.created_at', '=', date($date))
                                      ->sum('mr_potato_delivery_receipts.total_amount');
@@ -357,12 +1197,14 @@ class MrPotatoController extends Controller
                                   'mr_potato_purchase_orders.created_by',
                                   'mr_potato_purchase_orders.created_at',
                                   'mr_potato_purchase_orders.requesting_branch',
+                                  'mr_potato_purchase_orders.deleted_at',
                                   'mr_potato_codes.mr_potato_code',
                                   'mr_potato_codes.module_id',
                                   'mr_potato_codes.module_code',
                                   'mr_potato_codes.module_name')
-                                  ->join('mr_potato_codes', 'mr_potato_purchase_orders.id', '=', 'mr_potato_codes.module_id')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_purchase_orders.id', '=', 'mr_potato_codes.module_id')
                                   ->where('mr_potato_purchase_orders.po_id', NULL)
+                                  ->where('mr_potato_purchase_orders.deleted_at', NULL)
                                   ->where('mr_potato_codes.module_name', $moduleNamePurchase)   
                                   ->whereDate('mr_potato_purchase_orders.created_at', '=', date($date))
                                                                      
@@ -402,12 +1244,14 @@ class MrPotatoController extends Controller
                             'mr_potato_payment_vouchers.cheque_amount',
                             'mr_potato_payment_vouchers.sub_category',
                             'mr_potato_payment_vouchers.sub_category_account_id',
+                            'mr_potato_payment_vouchers.deleted_at',
                             'mr_potato_codes.mr_potato_code',
                             'mr_potato_codes.module_id',
                             'mr_potato_codes.module_code',
                             'mr_potato_codes.module_name')
-                            ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                            ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                             ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                            ->where('mr_potato_payment_vouchers.deleted_at', NULL)
                             ->where('mr_potato_codes.module_name', $moduleNamePV)
                             ->whereDate('mr_potato_payment_vouchers.created_at', '=', date($date))
                             ->where('mr_potato_payment_vouchers.method_of_payment', $cash)
@@ -445,12 +1289,14 @@ class MrPotatoController extends Controller
                                 'mr_potato_payment_vouchers.cheque_amount',
                                 'mr_potato_payment_vouchers.sub_category',
                                 'mr_potato_payment_vouchers.sub_category_account_id',
+                                'mr_potato_payment_vouchers.deleted_at',
                                 'mr_potato_codes.mr_potato_code',
                                 'mr_potato_codes.module_id',
                                 'mr_potato_codes.module_code',
                                 'mr_potato_codes.module_name')
-                                ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                                ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                                 ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                                ->where('mr_potato_payment_vouchers.deleted_at', NULL)
                                 ->where('mr_potato_codes.module_name', $moduleNamePV)
                                 ->whereDate('mr_potato_payment_vouchers.created_at', '=', date($date))
                                 ->where('mr_potato_payment_vouchers.method_of_payment', $cash)
@@ -489,12 +1335,14 @@ class MrPotatoController extends Controller
                             'mr_potato_payment_vouchers.cheque_total_amount',
                             'mr_potato_payment_vouchers.sub_category',
                             'mr_potato_payment_vouchers.sub_category_account_id',
+                            'mr_potato_payment_vouchers.deleted_at',
                             'mr_potato_codes.mr_potato_code',
                             'mr_potato_codes.module_id',
                             'mr_potato_codes.module_code',
                             'mr_potato_codes.module_name')
-                            ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                            ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                             ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                            ->where('mr_potato_payment_vouchers.deleted_at', NULL)
                             ->where('mr_potato_codes.module_name', $moduleNamePV)
                             ->whereDate('mr_potato_payment_vouchers.created_at', '=', date($date))
                             ->where('mr_potato_payment_vouchers.method_of_payment', $check)
@@ -531,12 +1379,14 @@ class MrPotatoController extends Controller
                                 'mr_potato_payment_vouchers.cheque_amount',
                                 'mr_potato_payment_vouchers.sub_category',
                                 'mr_potato_payment_vouchers.sub_category_account_id',
+                                'mr_potato_payment_vouchers.deleted_at',
                                 'mr_potato_codes.mr_potato_code',
                                 'mr_potato_codes.module_id',
                                 'mr_potato_codes.module_code',
                                 'mr_potato_codes.module_name')
-                                ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                                ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                                 ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                                ->where('mr_potato_payment_vouchers.deleted_at', NULL)
                                 ->where('mr_potato_codes.module_name', $moduleNamePV)
                                 ->whereDate('mr_potato_payment_vouchers.created_at', '=', date($date))
                                 ->where('mr_potato_payment_vouchers.method_of_payment', $check)
@@ -574,19 +1424,23 @@ class MrPotatoController extends Controller
                                 'mr_potato_payment_vouchers.cheque_total_amount',
                                 'mr_potato_payment_vouchers.sub_category',
                                 'mr_potato_payment_vouchers.sub_category_account_id',
+                                'mr_potato_payment_vouchers.deleted_at',
                                 'mr_potato_codes.mr_potato_code',
                                 'mr_potato_codes.module_id',
                                 'mr_potato_codes.module_code',
                                 'mr_potato_codes.module_name')
-                                ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                                ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                                 ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                                ->where('mr_potato_payment_vouchers.deleted_at', NULL)
                                 ->where('mr_potato_codes.module_name', $moduleNamePV)
                                 ->whereDate('mr_potato_payment_vouchers.created_at', '=', date($date))
                                 ->where('mr_potato_payment_vouchers.method_of_payment', $check)
                                 ->where('mr_potato_payment_vouchers.status', $status)
                                 ->sum('mr_potato_payment_vouchers.cheque_total_amount');
         $getDateToday = "";
-        $pdf = PDF::loadView('printSummaryMrPotato',  compact('date', 'getDateToday', 'getAllSalesInvoices', 
+        $uri0 = "";
+        $uri1 = "";
+        $pdf = PDF::loadView('printSummaryMrPotato',  compact('date', 'uri0', 'uri1', 'getDateToday', 'getAllSalesInvoices', 
         'getAllDeliveryReceipts', 'purchaseOrders', 'statementOfAccounts', 'billingStatements', 
         'pettyCashLists',  'getTransactionLists', 'getTransactionListCashes', 'getTransactionListChecks', 'totalSalesInvoice', 'totalDeliveryReceipt', 'totalPOrder', 'totalBStatement', 
         'totalAmountCash','totalAmountCheck', 'totalPaidAmountCheck'));
@@ -617,12 +1471,14 @@ class MrPotatoController extends Controller
                                     'mr_potato_sales_invoices.amount',
                                     'mr_potato_sales_invoices.total_amount',
                                     'mr_potato_sales_invoices.created_by',
+                                    'mr_potato_sales_invoices.deleted_at',
                                     'mr_potato_codes.mr_potato_code',
                                     'mr_potato_codes.module_id',
                                     'mr_potato_codes.module_code',
                                     'mr_potato_codes.module_name')
-                                ->join('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
+                                ->leftJoin('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
                                 ->where('mr_potato_sales_invoices.si_id', NULL)
+                                ->where('mr_potato_sales_invoices.deleted_at', NULL)
                                 ->where('mr_potato_codes.module_name', $moduleName)
                                 ->whereDate('mr_potato_sales_invoices.created_at', '=', date($getDate))
                                 ->orderBy('mr_potato_sales_invoices.id', 'desc')
@@ -645,12 +1501,14 @@ class MrPotatoController extends Controller
                                       'mr_potato_sales_invoices.amount',
                                       'mr_potato_sales_invoices.total_amount',
                                       'mr_potato_sales_invoices.created_by',
+                                      'mr_potato_sales_invoices.deleted_at',
                                       'mr_potato_codes.mr_potato_code',
                                       'mr_potato_codes.module_id',
                                       'mr_potato_codes.module_code',
                                       'mr_potato_codes.module_name')
-                                  ->join('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
                                   ->where('mr_potato_sales_invoices.si_id', NULL)
+                                  ->where('mr_potato_sales_invoices.deleted_at', NULL)
                                   ->where('mr_potato_codes.module_name', $moduleName)
                                   ->whereDate('mr_potato_sales_invoices.created_at', '=', date($getDate))
                                   ->sum('mr_potato_sales_invoices.total_amount');
@@ -677,12 +1535,14 @@ class MrPotatoController extends Controller
                                   'mr_potato_delivery_receipts.received_by',
                                   'mr_potato_delivery_receipts.created_by',
                                   'mr_potato_delivery_receipts.created_at',
+                                  'mr_potato_delivery_receipts.deleted_at',
                                   'mr_potato_codes.mr_potato_code',
                                   'mr_potato_codes.module_id',
                                   'mr_potato_codes.module_code',
                                   'mr_potato_codes.module_name')
-                                  ->join('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
                                   ->where('mr_potato_delivery_receipts.dr_id', NULL)
+                                  ->where('mr_potato_delivery_receipts.deleted_at', NULL)
                                   ->where('mr_potato_codes.module_name', $moduleNameDR)
                                   ->whereDate('mr_potato_delivery_receipts.created_at', '=', date($getDate))
                                   ->orderBy('mr_potato_delivery_receipts.id', 'desc')
@@ -709,12 +1569,14 @@ class MrPotatoController extends Controller
                                       'mr_potato_delivery_receipts.received_by',
                                       'mr_potato_delivery_receipts.created_by',
                                       'mr_potato_delivery_receipts.created_at',
+                                      'mr_potato_delivery_receipts.deleted_at',
                                       'mr_potato_codes.mr_potato_code',
                                       'mr_potato_codes.module_id',
                                       'mr_potato_codes.module_code',
                                       'mr_potato_codes.module_name')
-                                      ->join('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
+                                      ->leftJoin('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
                                       ->where('mr_potato_delivery_receipts.dr_id', NULL)
+                                      ->where('mr_potato_delivery_receipts.deleted_at', NULL)
                                       ->where('mr_potato_codes.module_name', $moduleNameDR)
                                       ->whereDate('mr_potato_delivery_receipts.created_at', '=', date($getDate))
                                      ->sum('mr_potato_delivery_receipts.total_amount');
@@ -741,12 +1603,14 @@ class MrPotatoController extends Controller
                                   'mr_potato_purchase_orders.created_by',
                                   'mr_potato_purchase_orders.created_at',
                                   'mr_potato_purchase_orders.requesting_branch',
+                                  'mr_potato_purchase_orders.deleted_at',
                                   'mr_potato_codes.mr_potato_code',
                                   'mr_potato_codes.module_id',
                                   'mr_potato_codes.module_code',
                                   'mr_potato_codes.module_name')
-                                  ->join('mr_potato_codes', 'mr_potato_purchase_orders.id', '=', 'mr_potato_codes.module_id')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_purchase_orders.id', '=', 'mr_potato_codes.module_id')
                                   ->where('mr_potato_purchase_orders.po_id', NULL)
+                                  ->where('mr_potato_purchase_orders.deleted_at', NULL)
                                   ->where('mr_potato_codes.module_name', $moduleNamePurchase)   
                                   ->whereDate('mr_potato_purchase_orders.created_at', '=', date($getDate))
                                                                      
@@ -766,12 +1630,14 @@ class MrPotatoController extends Controller
                                   'mr_potato_petty_cashes.amount',
                                   'mr_potato_petty_cashes.created_by',
                                   'mr_potato_petty_cashes.created_at',
+                                  'mr_potato_petty_cashes.deleted_at',
                                   'mr_potato_codes.mr_potato_code',
                                   'mr_potato_codes.module_id',
                                   'mr_potato_codes.module_code',
                                   'mr_potato_codes.module_name')
-                                  ->join('mr_potato_codes', 'mr_potato_petty_cashes.id', '=', 'mr_potato_codes.module_id')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_petty_cashes.id', '=', 'mr_potato_codes.module_id')
                                   ->where('mr_potato_petty_cashes.pc_id', NULL)
+                                  ->where('mr_potato_petty_cashes.deleted_at', NULL)
                                   ->where('mr_potato_codes.module_name', $moduleNamePC)
                                   ->whereDate('mr_potato_petty_cashes.created_at', '=', date($getDate))
                                 
@@ -809,12 +1675,14 @@ class MrPotatoController extends Controller
                               'mr_potato_payment_vouchers.cheque_amount',
                               'mr_potato_payment_vouchers.sub_category',
                               'mr_potato_payment_vouchers.sub_category_account_id',
+                              'mr_potato_payment_vouchers.deleted_at',
                               'mr_potato_codes.mr_potato_code',
                               'mr_potato_codes.module_id',
                               'mr_potato_codes.module_code',
                               'mr_potato_codes.module_name')
-                              ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                              ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                               ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                              ->where('mr_potato_payment_vouchers.deleted_at', NULL)
                               ->where('mr_potato_codes.module_name', $moduleNamePV)
                               ->whereDate('mr_potato_payment_vouchers.created_at', '=', date($getDate))
                                 
@@ -852,12 +1720,14 @@ class MrPotatoController extends Controller
                               'mr_potato_payment_vouchers.cheque_amount',
                               'mr_potato_payment_vouchers.sub_category',
                               'mr_potato_payment_vouchers.sub_category_account_id',
+                              'mr_potato_payment_vouchers.deleted_at',
                               'mr_potato_codes.mr_potato_code',
                               'mr_potato_codes.module_id',
                               'mr_potato_codes.module_code',
                               'mr_potato_codes.module_name')
-                              ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                              ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                               ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                              ->where('mr_potato_payment_vouchers.deleted_at', NULL)
                               ->where('mr_potato_codes.module_name', $moduleNamePV)
                               ->whereDate('mr_potato_payment_vouchers.created_at', '=', date($getDate))
                               ->where('mr_potato_payment_vouchers.method_of_payment', $cash)
@@ -895,12 +1765,14 @@ class MrPotatoController extends Controller
                                   'mr_potato_payment_vouchers.cheque_amount',
                                   'mr_potato_payment_vouchers.sub_category',
                                   'mr_potato_payment_vouchers.sub_category_account_id',
+                                  'mr_potato_payment_vouchers.deleted_at',
                                   'mr_potato_codes.mr_potato_code',
                                   'mr_potato_codes.module_id',
                                   'mr_potato_codes.module_code',
                                   'mr_potato_codes.module_name')
-                                  ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                                   ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                                  ->where('mr_potato_payment_vouchers.deleted_at', NULL)
                                   ->where('mr_potato_codes.module_name', $moduleNamePV)
                                   ->whereDate('mr_potato_payment_vouchers.created_at', '=', date($getDate))
                                   ->where('mr_potato_payment_vouchers.method_of_payment', $cash)
@@ -939,12 +1811,14 @@ class MrPotatoController extends Controller
                               'mr_potato_payment_vouchers.cheque_total_amount',
                               'mr_potato_payment_vouchers.sub_category',
                               'mr_potato_payment_vouchers.sub_category_account_id',
+                              'mr_potato_payment_vouchers.deleted_at',
                               'mr_potato_codes.mr_potato_code',
                               'mr_potato_codes.module_id',
                               'mr_potato_codes.module_code',
                               'mr_potato_codes.module_name')
-                              ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                              ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                               ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                              ->where('mr_potato_payment_vouchers.deleted_at', NULL)
                               ->where('mr_potato_codes.module_name', $moduleNamePV)
                               ->whereDate('mr_potato_payment_vouchers.created_at', '=', date($getDate))
                               ->where('mr_potato_payment_vouchers.method_of_payment', $check)
@@ -981,12 +1855,14 @@ class MrPotatoController extends Controller
                                   'mr_potato_payment_vouchers.cheque_amount',
                                   'mr_potato_payment_vouchers.sub_category',
                                   'mr_potato_payment_vouchers.sub_category_account_id',
+                                  'mr_potato_payment_vouchers.deleted_at',
                                   'mr_potato_codes.mr_potato_code',
                                   'mr_potato_codes.module_id',
                                   'mr_potato_codes.module_code',
                                   'mr_potato_codes.module_name')
-                                  ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                                   ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                                  ->where('mr_potato_payment_vouchers.deleted_at', NULL)
                                   ->where('mr_potato_codes.module_name', $moduleNamePV)
                                   ->whereDate('mr_potato_payment_vouchers.created_at', '=', date($getDate))
                                   ->where('mr_potato_payment_vouchers.method_of_payment', $check)
@@ -1021,12 +1897,14 @@ class MrPotatoController extends Controller
                                     'mr_potato_sales_invoices.amount',
                                     'mr_potato_sales_invoices.total_amount',
                                     'mr_potato_sales_invoices.created_by',
+                                    'mr_potato_sales_invoices.deleted_at',
                                     'mr_potato_codes.mr_potato_code',
                                     'mr_potato_codes.module_id',
                                     'mr_potato_codes.module_code',
                                     'mr_potato_codes.module_name')
-                                ->join('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
+                                ->leftJoin('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
                                 ->where('mr_potato_sales_invoices.si_id', NULL)
+                                ->where('mr_potato_sales_invoices.deleted_at', NULL)
                                 ->where('mr_potato_codes.module_name', $moduleName)
                                 ->whereDate('mr_potato_sales_invoices.created_at', '=', date($getDateToday))
                                 ->orderBy('mr_potato_sales_invoices.id', 'desc')
@@ -1049,12 +1927,14 @@ class MrPotatoController extends Controller
                                       'mr_potato_sales_invoices.amount',
                                       'mr_potato_sales_invoices.total_amount',
                                       'mr_potato_sales_invoices.created_by',
+                                      'mr_potato_sales_invoices.deleted_at',
                                       'mr_potato_codes.mr_potato_code',
                                       'mr_potato_codes.module_id',
                                       'mr_potato_codes.module_code',
                                       'mr_potato_codes.module_name')
-                                  ->join('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
                                   ->where('mr_potato_sales_invoices.si_id', NULL)
+                                  ->where('mr_potato_sales_invoices.deleted_at', NULL)
                                   ->where('mr_potato_codes.module_name', $moduleName)
                                   ->whereDate('mr_potato_sales_invoices.created_at', '=', date($getDateToday))
                                   ->sum('mr_potato_sales_invoices.total_amount');
@@ -1081,12 +1961,14 @@ class MrPotatoController extends Controller
                                   'mr_potato_delivery_receipts.received_by',
                                   'mr_potato_delivery_receipts.created_by',
                                   'mr_potato_delivery_receipts.created_at',
+                                  'mr_potato_delivery_receipts.deleted_at',
                                   'mr_potato_codes.mr_potato_code',
                                   'mr_potato_codes.module_id',
                                   'mr_potato_codes.module_code',
                                   'mr_potato_codes.module_name')
-                                  ->join('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
                                   ->where('mr_potato_delivery_receipts.dr_id', NULL)
+                                  ->where('mr_potato_delivery_receipts.deleted_at', NULL)
                                   ->where('mr_potato_codes.module_name', $moduleNameDR)
                                   ->whereDate('mr_potato_delivery_receipts.created_at', '=', date($getDateToday))
                                   ->orderBy('mr_potato_delivery_receipts.id', 'desc')
@@ -1113,12 +1995,14 @@ class MrPotatoController extends Controller
                                       'mr_potato_delivery_receipts.received_by',
                                       'mr_potato_delivery_receipts.created_by',
                                       'mr_potato_delivery_receipts.created_at',
+                                      'mr_potato_delivery_receipts.deleted_at',
                                       'mr_potato_codes.mr_potato_code',
                                       'mr_potato_codes.module_id',
                                       'mr_potato_codes.module_code',
                                       'mr_potato_codes.module_name')
-                                      ->join('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
+                                      ->leftJoin('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
                                       ->where('mr_potato_delivery_receipts.dr_id', NULL)
+                                      ->where('mr_potato_delivery_receipts.deleted_at', NULL)
                                       ->where('mr_potato_codes.module_name', $moduleNameDR)
                                       ->whereDate('mr_potato_delivery_receipts.created_at', '=', date($getDateToday))
                                      ->sum('mr_potato_delivery_receipts.total_amount');
@@ -1145,12 +2029,14 @@ class MrPotatoController extends Controller
                                   'mr_potato_purchase_orders.created_by',
                                   'mr_potato_purchase_orders.created_at',
                                   'mr_potato_purchase_orders.requesting_branch',
+                                  'mr_potato_purchase_orders.deleted_at',
                                   'mr_potato_codes.mr_potato_code',
                                   'mr_potato_codes.module_id',
                                   'mr_potato_codes.module_code',
                                   'mr_potato_codes.module_name')
-                                  ->join('mr_potato_codes', 'mr_potato_purchase_orders.id', '=', 'mr_potato_codes.module_id')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_purchase_orders.id', '=', 'mr_potato_codes.module_id')
                                   ->where('mr_potato_purchase_orders.po_id', NULL)
+                                  ->where('mr_potato_purchase_orders.deleted_at', NULL)
                                   ->where('mr_potato_codes.module_name', $moduleNamePurchase)   
                                   ->whereDate('mr_potato_purchase_orders.created_at', '=', date($getDateToday))
                                                                      
@@ -1190,12 +2076,14 @@ class MrPotatoController extends Controller
                             'mr_potato_payment_vouchers.cheque_amount',
                             'mr_potato_payment_vouchers.sub_category',
                             'mr_potato_payment_vouchers.sub_category_account_id',
+                            'mr_potato_payment_vouchers.deleted_at',
                             'mr_potato_codes.mr_potato_code',
                             'mr_potato_codes.module_id',
                             'mr_potato_codes.module_code',
                             'mr_potato_codes.module_name')
-                            ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                            ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                             ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                            ->where('mr_potato_payment_vouchers.deleted_at', NULL)
                             ->where('mr_potato_codes.module_name', $moduleNamePV)
                             ->whereDate('mr_potato_payment_vouchers.created_at', '=', date($getDateToday))
                             ->where('mr_potato_payment_vouchers.method_of_payment', $cash)
@@ -1233,12 +2121,14 @@ class MrPotatoController extends Controller
                                 'mr_potato_payment_vouchers.cheque_amount',
                                 'mr_potato_payment_vouchers.sub_category',
                                 'mr_potato_payment_vouchers.sub_category_account_id',
+                                'mr_potato_payment_vouchers.deleted_at',
                                 'mr_potato_codes.mr_potato_code',
                                 'mr_potato_codes.module_id',
                                 'mr_potato_codes.module_code',
                                 'mr_potato_codes.module_name')
-                                ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                                ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                                 ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                                ->where('mr_potato_payment_vouchers.deleted_at', NULL)
                                 ->where('mr_potato_codes.module_name', $moduleNamePV)
                                 ->whereDate('mr_potato_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('mr_potato_payment_vouchers.method_of_payment', $cash)
@@ -1277,12 +2167,14 @@ class MrPotatoController extends Controller
                             'mr_potato_payment_vouchers.cheque_total_amount',
                             'mr_potato_payment_vouchers.sub_category',
                             'mr_potato_payment_vouchers.sub_category_account_id',
+                            'mr_potato_payment_vouchers.deleted_at',
                             'mr_potato_codes.mr_potato_code',
                             'mr_potato_codes.module_id',
                             'mr_potato_codes.module_code',
                             'mr_potato_codes.module_name')
-                            ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                            ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                             ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                            ->where('mr_potato_payment_vouchers.deleted_at', NULL)
                             ->where('mr_potato_codes.module_name', $moduleNamePV)
                             ->whereDate('mr_potato_payment_vouchers.created_at', '=', date($getDateToday))
                             ->where('mr_potato_payment_vouchers.method_of_payment', $check)
@@ -1319,12 +2211,14 @@ class MrPotatoController extends Controller
                                 'mr_potato_payment_vouchers.cheque_amount',
                                 'mr_potato_payment_vouchers.sub_category',
                                 'mr_potato_payment_vouchers.sub_category_account_id',
+                                'mr_potato_payment_vouchers.deleted_at',
                                 'mr_potato_codes.mr_potato_code',
                                 'mr_potato_codes.module_id',
                                 'mr_potato_codes.module_code',
                                 'mr_potato_codes.module_name')
-                                ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                                ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                                 ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                                ->where('mr_potato_payment_vouchers.deleted_at', NULL)
                                 ->where('mr_potato_codes.module_name', $moduleNamePV)
                                 ->whereDate('mr_potato_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('mr_potato_payment_vouchers.method_of_payment', $check)
@@ -1362,12 +2256,14 @@ class MrPotatoController extends Controller
                                     'mr_potato_payment_vouchers.cheque_total_amount',
                                     'mr_potato_payment_vouchers.sub_category',
                                     'mr_potato_payment_vouchers.sub_category_account_id',
+                                    'mr_potato_payment_vouchers.deleted_at',
                                     'mr_potato_codes.mr_potato_code',
                                     'mr_potato_codes.module_id',
                                     'mr_potato_codes.module_code',
                                     'mr_potato_codes.module_name')
-                                    ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                                    ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                                     ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                                    ->where('mr_potato_payment_vouchers.deleted_at', NULL)
                                     ->where('mr_potato_codes.module_name', $moduleNamePV)
                                     ->whereDate('mr_potato_payment_vouchers.created_at', '=', date($getDateToday))
                                     ->where('mr_potato_payment_vouchers.method_of_payment', $check)
@@ -1406,12 +2302,14 @@ class MrPotatoController extends Controller
                                       'mr_potato_sales_invoices.amount',
                                       'mr_potato_sales_invoices.total_amount',
                                       'mr_potato_sales_invoices.created_by',
+                                      'mr_potato_sales_invoices.deleted_at',
                                       'mr_potato_codes.mr_potato_code',
                                       'mr_potato_codes.module_id',
                                       'mr_potato_codes.module_code',
                                       'mr_potato_codes.module_name')
-                                  ->join('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
+                                  ->leftJoin('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
                                   ->where('mr_potato_sales_invoices.si_id', NULL)
+                                  ->where('mr_potato_sales_invoices.deleted_at', NULL)
                                   ->where('mr_potato_codes.module_name', $moduleName)
                                   ->whereDate('mr_potato_sales_invoices.created_at', '=', date($getDateToday))
                                   ->orderBy('mr_potato_sales_invoices.id', 'desc')
@@ -1434,12 +2332,14 @@ class MrPotatoController extends Controller
                                         'mr_potato_sales_invoices.amount',
                                         'mr_potato_sales_invoices.total_amount',
                                         'mr_potato_sales_invoices.created_by',
+                                        'mr_potato_sales_invoices.deleted_at',
                                         'mr_potato_codes.mr_potato_code',
                                         'mr_potato_codes.module_id',
                                         'mr_potato_codes.module_code',
                                         'mr_potato_codes.module_name')
-                                    ->join('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
+                                    ->leftJoin('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
                                     ->where('mr_potato_sales_invoices.si_id', NULL)
+                                    ->where('mr_potato_sales_invoices.deleted_at', NULL)
                                     ->where('mr_potato_codes.module_name', $moduleName)
                                     ->whereDate('mr_potato_sales_invoices.created_at', '=', date($getDateToday))
                                     ->sum('mr_potato_sales_invoices.total_amount');
@@ -1466,12 +2366,14 @@ class MrPotatoController extends Controller
                                     'mr_potato_delivery_receipts.received_by',
                                     'mr_potato_delivery_receipts.created_by',
                                     'mr_potato_delivery_receipts.created_at',
+                                    'mr_potato_delivery_receipts.deleted_at',
                                     'mr_potato_codes.mr_potato_code',
                                     'mr_potato_codes.module_id',
                                     'mr_potato_codes.module_code',
                                     'mr_potato_codes.module_name')
-                                    ->join('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
+                                    ->leftJoin('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
                                     ->where('mr_potato_delivery_receipts.dr_id', NULL)
+                                    ->where('mr_potato_delivery_receipts.deleted_at', NULL)
                                     ->where('mr_potato_codes.module_name', $moduleNameDR)
                                     ->whereDate('mr_potato_delivery_receipts.created_at', '=', date($getDateToday))
                                     ->orderBy('mr_potato_delivery_receipts.id', 'desc')
@@ -1498,12 +2400,14 @@ class MrPotatoController extends Controller
                                         'mr_potato_delivery_receipts.received_by',
                                         'mr_potato_delivery_receipts.created_by',
                                         'mr_potato_delivery_receipts.created_at',
+                                        'mr_potato_delivery_receipts.deleted_at',
                                         'mr_potato_codes.mr_potato_code',
                                         'mr_potato_codes.module_id',
                                         'mr_potato_codes.module_code',
                                         'mr_potato_codes.module_name')
-                                        ->join('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
+                                        ->leftJoin('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
                                         ->where('mr_potato_delivery_receipts.dr_id', NULL)
+                                        ->where('mr_potato_delivery_receipts.deleted_at', NULL)
                                         ->where('mr_potato_codes.module_name', $moduleNameDR)
                                         ->whereDate('mr_potato_delivery_receipts.created_at', '=', date($getDateToday))
                                        ->sum('mr_potato_delivery_receipts.total_amount');
@@ -1530,12 +2434,14 @@ class MrPotatoController extends Controller
                                     'mr_potato_purchase_orders.created_by',
                                     'mr_potato_purchase_orders.created_at',
                                     'mr_potato_purchase_orders.requesting_branch',
+                                    'mr_potato_purchase_orders.deleted_at',
                                     'mr_potato_codes.mr_potato_code',
                                     'mr_potato_codes.module_id',
                                     'mr_potato_codes.module_code',
                                     'mr_potato_codes.module_name')
-                                    ->join('mr_potato_codes', 'mr_potato_purchase_orders.id', '=', 'mr_potato_codes.module_id')
+                                    ->leftJoin('mr_potato_codes', 'mr_potato_purchase_orders.id', '=', 'mr_potato_codes.module_id')
                                     ->where('mr_potato_purchase_orders.po_id', NULL)
+                                    ->where('mr_potato_purchase_orders.deleted_at', NULL)
                                     ->where('mr_potato_codes.module_name', $moduleNamePurchase)   
                                     ->whereDate('mr_potato_purchase_orders.created_at', '=', date($getDateToday))
                                                                        
@@ -1554,12 +2460,14 @@ class MrPotatoController extends Controller
                                     'mr_potato_petty_cashes.petty_cash_summary',
                                     'mr_potato_petty_cashes.amount',
                                     'mr_potato_petty_cashes.created_by',
+                                    'mr_potato_petty_cashes.deleted_at',
                                     'mr_potato_codes.mr_potato_code',
                                     'mr_potato_codes.module_id',
                                     'mr_potato_codes.module_code',
                                     'mr_potato_codes.module_name')
-                                    ->join('mr_potato_codes', 'mr_potato_petty_cashes.id', '=', 'mr_potato_codes.module_id')
+                                    ->leftJoin('mr_potato_codes', 'mr_potato_petty_cashes.id', '=', 'mr_potato_codes.module_id')
                                     ->where('mr_potato_petty_cashes.pc_id', NULL)
+                                    ->where('mr_potato_petty_cashes.deleted_at', NULL)
                                     ->where('mr_potato_codes.module_name', $moduleNamePC)
                                     ->orderBy('mr_potato_petty_cashes.id', 'desc')
                                     ->get()->toArray();
@@ -1596,12 +2504,14 @@ class MrPotatoController extends Controller
                                 'mr_potato_payment_vouchers.cheque_total_amount',
                                 'mr_potato_payment_vouchers.sub_category',
                                 'mr_potato_payment_vouchers.sub_category_account_id',
+                                'mr_potato_payment_vouchers.deleted_at',
                                 'mr_potato_codes.mr_potato_code',
                                 'mr_potato_codes.module_id',
                                 'mr_potato_codes.module_code',
                                 'mr_potato_codes.module_name')
-                                ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                                ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                                 ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                                ->where('mr_potato_payment_vouchers.deleted_at', NULL)
                                 ->where('mr_potato_codes.module_name', $moduleNamePV)
                                 ->whereDate('mr_potato_payment_vouchers.created_at', '=', date($getDateToday))
                                   
@@ -1639,12 +2549,14 @@ class MrPotatoController extends Controller
                                 'mr_potato_payment_vouchers.cheque_amount',
                                 'mr_potato_payment_vouchers.sub_category',
                                 'mr_potato_payment_vouchers.sub_category_account_id',
+                                'mr_potato_payment_vouchers.deleted_at',
                                 'mr_potato_codes.mr_potato_code',
                                 'mr_potato_codes.module_id',
                                 'mr_potato_codes.module_code',
                                 'mr_potato_codes.module_name')
-                                ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                                ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                                 ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                                ->where('mr_potato_payment_vouchers.deleted_at', NULL)
                                 ->where('mr_potato_codes.module_name', $moduleNamePV)
                                 ->whereDate('mr_potato_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('mr_potato_payment_vouchers.method_of_payment', $cash)
@@ -1682,12 +2594,14 @@ class MrPotatoController extends Controller
                                     'mr_potato_payment_vouchers.cheque_amount',
                                     'mr_potato_payment_vouchers.sub_category',
                                     'mr_potato_payment_vouchers.sub_category_account_id',
+                                    'mr_potato_payment_vouchers.deleted_at',
                                     'mr_potato_codes.mr_potato_code',
                                     'mr_potato_codes.module_id',
                                     'mr_potato_codes.module_code',
                                     'mr_potato_codes.module_name')
-                                    ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                                    ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                                     ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                                    ->where('mr_potato_payment_vouchers.deleted_at', NULL)
                                     ->where('mr_potato_codes.module_name', $moduleNamePV)
                                     ->whereDate('mr_potato_payment_vouchers.created_at', '=', date($getDateToday))
                                     ->where('mr_potato_payment_vouchers.method_of_payment', $cash)
@@ -1726,12 +2640,14 @@ class MrPotatoController extends Controller
                                 'mr_potato_payment_vouchers.cheque_total_amount',
                                 'mr_potato_payment_vouchers.sub_category',
                                 'mr_potato_payment_vouchers.sub_category_account_id',
+                                'mr_potato_payment_vouchers.deleted_at',
                                 'mr_potato_codes.mr_potato_code',
                                 'mr_potato_codes.module_id',
                                 'mr_potato_codes.module_code',
                                 'mr_potato_codes.module_name')
-                                ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                                ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                                 ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                                ->where('mr_potato_payment_vouchers.deleted_at', NULL)
                                 ->where('mr_potato_codes.module_name', $moduleNamePV)
                                 ->whereDate('mr_potato_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('mr_potato_payment_vouchers.method_of_payment', $check)
@@ -1768,12 +2684,14 @@ class MrPotatoController extends Controller
                                     'mr_potato_payment_vouchers.cheque_amount',
                                     'mr_potato_payment_vouchers.sub_category',
                                     'mr_potato_payment_vouchers.sub_category_account_id',
+                                    'mr_potato_payment_vouchers.deleted_at',
                                     'mr_potato_codes.mr_potato_code',
                                     'mr_potato_codes.module_id',
                                     'mr_potato_codes.module_code',
                                     'mr_potato_codes.module_name')
-                                    ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                                    ->leftJoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                                     ->where('mr_potato_payment_vouchers.pv_id', NULL)
+                                    ->where('mr_potato_payment_vouchers.deleted_at', NULL)
                                     ->where('mr_potato_codes.module_name', $moduleNamePV)
                                     ->whereDate('mr_potato_payment_vouchers.created_at', '=', date($getDateToday))
                                     ->where('mr_potato_payment_vouchers.method_of_payment', $check)
