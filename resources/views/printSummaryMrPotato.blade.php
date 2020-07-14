@@ -242,6 +242,7 @@
 										<th style="height: 1%; text-align: center;">PV NO</th>
                                         <th style="height: 1%; text-align: center;">ISSUED DATE</th>
                                         <th style="height: 1%; text-align: center;">PAID TO</th>
+                                        <th style="height: 1%; text-align: center; width:130px;">Account Name/No</th>
                                         <th style="height: 1%; text-align: center;">BANK NAME/CHECK NO</th>
                                         <th style="height: 1%; text-align: center;">PAID AMOUNT</th>
                                         <th style="height: 1%; text-align: center;">BALANCE</th>
@@ -278,6 +279,11 @@
 										<td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->module_code}}{{ $getTransactionListCheck->mr_potato_code}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->issued_date}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->paid_to}}</td>
+                                        <td style="text-align:center; border: 1px solid black; width:130px;">
+                                            <?php foreach($getChecks as $getCheck): ?>
+                                                        <?php echo $getCheck->account_name_no; ?>
+                                            <?php endforeach; ?>
+                                        </td> 
                                         <td style="text-align:center; border: 1px solid black;">
                                             <?php foreach($getChecks as $getCheck): ?>
                                                 <?php echo $getCheck->cheque_number; ?>

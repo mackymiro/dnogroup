@@ -779,6 +779,21 @@ Route::group(['middleware' =>['user']], function(){
 		'DnoPersonalController@editPayablesDetail')
 		->name('editPayablesDetailDnoPersonal');
 
+	Route::patch(
+		'/dno-personal/payables/update-particulars/{id}',
+		'DnoPersonalController@updateParticulars')
+		->name('updateParticulars');
+
+	Route::patch(
+		'/dno-personal/payables/updateP/{id}',
+		'DnoPersonalController@updateP')
+		->name('updateP');
+
+	Route::patch(
+		'/dno-personal/payables/update-check/{id}',
+		'DnoPersonalController@updateCheck')
+		->name('updateCheck');
+
 	Route::post(
 		'/dno-personal/add-particulars/{id}',
 		'DnoPersonalController@addParticulars')
@@ -4022,6 +4037,92 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dino-industrial-corporation/accept/{id}',
 		'DinoIndustrialCorporationController@accept')
 		->name('acceptDinoIndustrial');
+
+
+	/*********************************************
+	 * LOCAL GROUND
+	 * 
+	 */
+	Route::get(
+		'/local-ground',
+		'LocalGroundController@index')
+		->name('index');
+
+	Route::get(
+		'/local-ground/payment-voucher-form',
+		'LocalGroundController@paymentVoucherForm')
+		->name('paymentVoucherForm');
+
+	Route::post(
+		'/local-ground/payment-voucher-store',
+		'LocalGroundController@paymentVoucherStore')
+		->name('paymentVoucherStoreLocalGround');
+
+	Route::get(
+		'/local-ground/edit-local-ground-payables-details/{id}',
+		'LocalGroundController@editPayablesDetail')
+		->name('editPayablesDetailLocalGround');
+
+	Route::post(
+		'/local-ground/add-payment/{id}',
+		'LocalGroundController@addPayment')
+		->name('addPaymentLocalGround');
+
+	Route::post(
+		'/local-ground/add-particulars/{id}',
+		'LocalGroundController@addParticulars')
+		->name('addParticularsLocalGround');
+
+	Route::patch(
+		'/local-ground/accept/{id}',
+		'LocalGroundController@accept')
+		->name('acceptLocalGround');
+
+	Route::get(
+		'/local-ground/payables/transaction-list',
+		'LocalGroundController@transactionList')
+		->name('transactionList');
+
+	Route::get(
+		'/local-ground/view-local-ground-payables-details/{id}',
+		'LocalGroundController@viewPayableDetails')
+		->name('viewPayableDetailsLocalGround');
+
+	Route::get(
+		'/local-ground/printPayables/{id}',
+		'LocalGroundController@printPayables')
+		->name('printPayablesLocalGround');
+
+	Route::get(
+		'/local-ground/summary-report',
+		'LocalGroundController@summaryReport')
+		->name('summaryReport');
+
+	Route::get(
+		'/local-ground/search-date',
+		'LocalGroundController@getSummaryReport')
+		->name('getSummaryReport');
+
+	Route::get(
+		'/local-ground/printSummary',
+		'LocalGroundController@printSummary')
+		->name('printSummary');
+
+	Route::get(
+		'/local-ground/search-multiple-date',
+		'LocalGroundController@getSummaryReportMultiple')
+		->name('getSummaryReportMultiple');
+
+	Route::get(
+		'/local-ground/printMultipleSummary/{date}',
+		'LocalGroundController@printMultipleSummary')
+		->name('printMultipleSummary');
+
+	Route::get(
+		'/local-ground/printGetSummary/{date}',
+		'LocalGroundController@printGetSummary')
+		->name('printGetSummary');
+
 });
 
 

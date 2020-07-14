@@ -36,6 +36,7 @@ class LoloPinoyGrillBranchesPaymentVoucher extends Model
         'amount_due',
         'delivered_date',
         'status',
+        'account_name_no',
         'cheque_number',
         'cheque_amount',
         'cheque_total_amount',

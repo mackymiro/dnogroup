@@ -1631,7 +1631,8 @@ class DinoIndustrialCorporationController extends Controller
          $addPayment = new DinoIndustrialCorporationPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
-            'voucher_ref_number'=>$paymentData['voucher_ref_number'],
+            'date'=>$request->get('date'),
+            'account_name_no'=>$request->get('accountNameNo'),
             'cheque_number'=>$request->get('chequeNumber'),
             'cheque_amount'=>$request->get('chequeAmount'),
             'created_by'=>$name,
@@ -1660,17 +1661,14 @@ class DinoIndustrialCorporationController extends Controller
         $particulars = DinoIndustrialCorporationPaymentVoucher::find($id);
 
         //add current amount
-         $add = $particulars['amount_due'] + $request->get('amount');
+        $add = $particulars['amount_due'] + $request->get('amount');
 
-        //get current voucher ref number
-        $voucherRef = $particulars['voucher_ref_number'];
 
         $addParticulars = new DinoIndustrialCorporationPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
             'particulars'=>$request->get('particulars'),
             'amount'=>$request->get('amount'),
-            'voucher_ref_number'=>$voucherRef,
             'date'=>$request->get('date'),
             'created_by'=>$name,
         ]);
@@ -1808,7 +1806,7 @@ class DinoIndustrialCorporationController extends Controller
 
         $name  = $firstName." ".$lastName;
 
-        //get the latest insert id query in table payment voucher ref number
+        //get the latest insert id query in table dino industrial code
         $dataVoucherRef = DB::select('SELECT id, dic_code FROM dino_industrial_corporation_codes ORDER BY id DESC LIMIT 1');
         
         //if code is not zero add plus 1 reference number

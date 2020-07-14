@@ -21,6 +21,61 @@ use App\DnoPersonalCode;
 class DnoPersonalController extends Controller
 {   
 
+    public function updateCheck(Request $request){
+        $updateCheck = DnoPersonalPaymentVoucher::find($request->id);
+
+        $updateCheck->account_name_no = $request->accountNameNo;
+        $updateCheck->cheque_number = $request->checkNumber;
+        $updateCheck->cheque_amount = $request->checkAmount;
+        $updateCheck->save();
+
+        return response()->json('Success: successfully updated.');
+
+    }
+
+    public function updateP(Request $request){
+        //main id 
+        $updateParticular = DnoPersonalPaymentVoucher::find($request->transId);
+
+        //particular id
+        $uIdParticular = DnoPersonalPaymentVoucher::find($request->id);
+
+        $amount = $request->amount; 
+
+        $updateAmount =  $updateParticular->amount; 
+       
+        $uParticular = DnoPersonalPaymentVoucher::where('pv_id', $request->transId)->sum('amount');
+        
+        $tot = $updateAmount + $uParticular; 
+       
+      
+        $uIdParticular->date  = $request->date;
+        $uIdParticular->particulars = $request->particulars;
+        $uIdParticular->amount = $amount; 
+        $uIdParticular->save();
+
+        $updateParticular->amount_due = $tot;
+        $updateParticular->save();
+        
+        return response()->json('Success: successfully updated.');
+    }
+
+    public function updateParticulars(Request $request){    
+       $updateParticular =  DnoPersonalPaymentVoucher::find($request->id);
+
+       $amount = $request->amount; 
+    
+       $tot = DnoPersonalPaymentVoucher::where('pv_id', $request->id)->sum('amount');
+
+       $sum = $amount + $tot; 
+
+       $updateParticular->amount = $amount;
+       $updateParticular->amount_due = $sum;
+       $updateParticular->save();
+
+       return response()->json('Success: successfully updated.');
+    }
+
     public function printMultipleSummary(Request $request, $date){
         $urlSegment = \Request::segment(3);
         $uri = explode("TO", $urlSegment);

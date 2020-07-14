@@ -779,6 +779,7 @@
                                                         <th>PV No</th>
                                                         <th>Issued Date</th>
                                                         <th>Paid To</th>
+                                                        <th>Account Name/No</th>
                                                         <th>Bank Name/Check No</th>
                                                         <th>Payment Method</th>
                                                         <th class="bg-success" style="color:white;">Paid Amount</th>
@@ -793,6 +794,7 @@
                                                         <th>PV No</th>
                                                         <th>Issued Date</th>
                                                         <th>Paid To</th>
+                                                        <th>Account Name/No</th>
                                                         <th>Bank Name/Check No</th>
                                                         <th>Payment Method</th>
                                                         <th class="bg-success" style="color:white;">Paid Amount</th>
@@ -835,6 +837,11 @@
                                                         <td><p style="width:130px;">{{ $getTransactionListCheck->issued_date}}</p></td>
                 
                                                         <td><p style="width:200px;">{{ $getTransactionListCheck->paid_to}}</p></td>
+                                                        <td>
+                                                              <?php foreach($getChecks as $getCheck): ?>
+                                                                     <?php echo $getCheck->account_name_no; ?>
+                                                            <?php endforeach; ?>
+                                                        </td>
                                                         <td>
                                                               <p style="width:190px;">
                                                                 <?php foreach($getChecks as $getCheck): ?>

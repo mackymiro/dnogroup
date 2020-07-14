@@ -1910,6 +1910,8 @@ class DnoResourcesDevelopmentController extends Controller
         $addPayment = new DnoResourcesDevelopmentCorpPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
+            'date'=>$request->get('date'),
+            'account_name_no'=>$request->get('accountNameNo'),
             'cheque_number'=>$request->get('chequeNumber'),
             'cheque_amount'=>$request->get('chequeAmount'),
             'created_by'=>$name,
