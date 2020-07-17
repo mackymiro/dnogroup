@@ -15,6 +15,74 @@ use App\DnoFoodVenturesCode;
 
 class DnoFoodVenturesController extends Controller
 {
+    public function updateDetails(Request $request){
+        $updateDetail = DnoFoodVenturesPaymentVoucher::find($request->id);
+
+        $updateDetail->paid_to = $request->paidTo;
+        $updateDetail->invoice_number = $request->invoiceNo;
+        $updateDetail->account_name = $request->accountName;
+        $updateDetail->save();
+
+        return response()->json('Success: successfully updated.');
+    }
+
+    public function updateCheck(Request $request){
+        $updateCheck = DnoFoodVenturesPaymentVoucher::find($request->id);
+
+        $updateCheck->account_name_no = $request->accountNameNo;
+        $updateCheck->cheque_number = $request->checkNumber;
+        $updateCheck->cheque_amount = $request->checkAmount;
+        $updateCheck->save();
+
+        return response()->json('Success: successfully updated.');
+    }
+
+    public function updateP(Request $request){      
+         //main id 
+         $updateParticular = DnoFoodVenturesPaymentVoucher::find($request->transId);
+
+         //particular id
+         $uIdParticular = DnoFoodVenturesPaymentVoucher::find($request->id);
+
+         $amount = $request->amount; 
+
+         $updateAmount =  $updateParticular->amount; 
+        
+         $uParticular = DnoFoodVenturesPaymentVoucher::where('pv_id', $request->transId)->sum('amount');
+         
+         $tot = $updateAmount + $uParticular; 
+        
+       
+         $uIdParticular->date  = $request->date;
+         $uIdParticular->particulars = $request->particulars;
+         $uIdParticular->amount = $amount; 
+         $uIdParticular->save();
+ 
+         $updateParticular->amount_due = $tot;
+         $updateParticular->save();
+         
+         return response()->json('Success: successfully updated.');
+
+    }
+
+    public function updateParticulars(Request $request){
+        $updateParticular =  DnoFoodVenturesPaymentVoucher::find($request->id);
+
+        $amount = $request->amount; 
+    
+        $tot = DnoFoodVenturesPaymentVoucher::where('pv_id', $request->id)->sum('amount');
+ 
+        $sum = $amount + $tot; 
+ 
+        $updateParticular->date = $request->date;
+        $updateParticular->particulars = $request->particulars;
+        $updateParticular->amount = $amount;
+        $updateParticular->amount_due = $sum;
+        $updateParticular->save();
+ 
+        return response()->json('Success: successfully updated.');
+ 
+    }
 
     public function printMultipleSummary(Request $request, $date){
         $urlSegment = \Request::segment(3);

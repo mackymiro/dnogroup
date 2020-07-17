@@ -20,6 +20,74 @@ use App\MrPotatoBillingStatement;
 
 class MrPotatoController extends Controller
 {     
+    public function updateDetails(Request $request){
+        $updateDetail = MrPotatoPaymentVoucher::find($request->id);
+
+        $updateDetail->paid_to = $request->paidTo;
+        $updateDetail->invoice_number = $request->invoiceNo;
+        $updateDetail->account_name = $request->accountName;
+        $updateDetail->save();
+
+        return response()->json('Success: successfully updated.');
+    }
+
+    public function updateCheck(Request $request){
+        $updateCheck = MrPotatoPaymentVoucher::find($request->id);
+
+        $updateCheck->account_name_no = $request->accountNameNo;
+        $updateCheck->cheque_number = $request->checkNumber;
+        $updateCheck->cheque_amount = $request->checkAmount;
+        $updateCheck->save();
+
+        return response()->json('Success: successfully updated.');
+    }
+
+    public function updateP(Request $request){
+         //main id 
+         $updateParticular = MrPotatoPaymentVoucher::find($request->transId);
+
+         //particular id
+         $uIdParticular = MrPotatoPaymentVoucher::find($request->id);
+
+         $amount = $request->amount; 
+
+         $updateAmount =  $updateParticular->amount; 
+        
+         $uParticular = MrPotatoPaymentVoucher::where('pv_id', $request->transId)->sum('amount');
+         
+         $tot = $updateAmount + $uParticular; 
+        
+       
+         $uIdParticular->date  = $request->date;
+         $uIdParticular->particulars = $request->particulars;
+         $uIdParticular->amount = $amount; 
+         $uIdParticular->save();
+ 
+         $updateParticular->amount_due = $tot;
+         $updateParticular->save();
+         
+         return response()->json('Success: successfully updated.');
+
+    }
+
+    public function updateParticulars(Request $request){
+        $updateParticular =  MrPotatoPaymentVoucher::find($request->id);
+
+        $amount = $request->amount; 
+    
+        $tot = MrPotatoPaymentVoucher::where('pv_id', $request->id)->sum('amount');
+ 
+        $sum = $amount + $tot; 
+ 
+        $updateParticular->date = $request->date;
+        $updateParticular->particulars = $request->particulars;
+        $updateParticular->amount = $amount;
+        $updateParticular->amount_due = $sum;
+        $updateParticular->save();
+ 
+        return response()->json('Success: successfully updated.');
+ 
+    }
 
     public function printMultipleSummary(Request $request, $date){
         $urlSegment = \Request::segment(3);
@@ -3514,7 +3582,7 @@ class MrPotatoController extends Controller
                             'mr_potato_codes.module_id',
                             'mr_potato_codes.module_code',
                             'mr_potato_codes.module_name')
-                            ->join('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
+                            ->leftjoin('mr_potato_codes', 'mr_potato_payment_vouchers.id', '=', 'mr_potato_codes.module_id')
                             ->where('mr_potato_payment_vouchers.id', $id)
                             ->where('mr_potato_codes.module_name', $moduleName)
                             ->get();

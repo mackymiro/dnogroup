@@ -20,6 +20,34 @@ use App\DnoPersonalCode;
 
 class DnoPersonalController extends Controller
 {   
+    public function updateDetailsCC(Request $request){
+        $updateCC = DnoPersonalPaymentVoucher::find($request->id);
+
+
+        $updateCC->paid_to = $request->paidTo;
+        $updateCC->invoice_number = $request->invoiceNo;
+        $updateCC->bank_card = $request->bankName;
+        $updateCC->account_no = $request->acctNum;
+        $updateCC->account_name = $request->actName; 
+        $updateCC->type_of_card = $request->typeCC;
+
+        $updateCC->save();
+
+        return response()->json('Success: successfully updated.');
+    }
+
+    public function updateDetails(Request $request){
+       $updateDetails = DnoPersonalPaymentVoucher::find($request->id);
+
+       $updateDetails->paid_to =  $request->paidTo;
+       $updateDetails->invoice_number = $request->invoiceNo;
+       $updateDetails->account_name = $request->accountName;
+
+       $updateDetails->save();
+
+       return response()->json('Success: successfully updated.');
+        
+    }
 
     public function updateCheck(Request $request){
         $updateCheck = DnoPersonalPaymentVoucher::find($request->id);
@@ -69,6 +97,8 @@ class DnoPersonalController extends Controller
 
        $sum = $amount + $tot; 
 
+       $updateParticular->date = $request->date;
+       $updateParticular->particulars = $request->particulars;
        $updateParticular->amount = $amount;
        $updateParticular->amount_due = $sum;
        $updateParticular->save();
@@ -211,6 +241,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.cheque_total_amount',
                                 'dno_personal_payment_vouchers.sub_category',
                                 'dno_personal_payment_vouchers.sub_category_account_id',
+                                'dno_personal_payment_vouchers.account_name_no',
                                 'dno_personal_payment_vouchers.deleted_at',
                                 'dno_personal_codes.dno_personal_code',
                                 'dno_personal_codes.module_id',
@@ -643,6 +674,7 @@ class DnoPersonalController extends Controller
                             'dno_personal_payment_vouchers.cheque_amount',
                             'dno_personal_payment_vouchers.sub_category',
                             'dno_personal_payment_vouchers.sub_category_account_id',
+                            'dno_personal_payment_vouchers.account_name_no',
                             'dno_personal_payment_vouchers.deleted_at',
                             'dno_personal_codes.dno_personal_code',
                             'dno_personal_codes.module_id',
@@ -1342,6 +1374,7 @@ class DnoPersonalController extends Controller
                                 'dno_personal_payment_vouchers.cheque_total_amount',
                                 'dno_personal_payment_vouchers.sub_category',
                                 'dno_personal_payment_vouchers.sub_category_account_id',
+                                'dno_personal_payment_vouchers.account_name_no',
                                 'dno_personal_payment_vouchers.deleted_at',
                                 'dno_personal_codes.dno_personal_code',
                                 'dno_personal_codes.module_id',
@@ -3243,6 +3276,9 @@ class DnoPersonalController extends Controller
 
     //
     public function editPayablesDetail(Request $request, $id){
+         //getCreditCards
+         $getCreditCards = DnoPersonalCreditCard::get()->toArray();
+
         $moduleName = "Payment Voucher";
         $transactionList = DB::table(
                             'dno_personal_payment_vouchers')
@@ -3304,7 +3340,7 @@ class DnoPersonalController extends Controller
         
         $sumCheque = $chequeAmount1 + $chequeAmount2;
 
-         return view('dno-personal-payables-detail', compact('user', 'transactionList', 'getChequeNumbers','sum'
+         return view('dno-personal-payables-detail', compact('getCreditCards', 'transactionList', 'getChequeNumbers','sum'
         , 'getParticulars', 'sumCheque'));
     }
 

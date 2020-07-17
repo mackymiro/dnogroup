@@ -136,7 +136,7 @@
                                           <div  class="col-md-4">
                                               <label>Category</label>
                                               <select  name="category" class="category selcls form-control" > 
-                                                <option value="0">--Pleas Select--</option>
+                                                <option value="0">--Please Select--</option>
                                                 <optgroup label="Personal Expenses">
                                                   <option value="ALD Accounts">ALD Accounts</option>
                                                   <option value="MOD Accounts">MOD Accounts</option>
@@ -463,6 +463,7 @@
 
                   <?php foreach($getCreditCards as $getCreditCard): ?>
                         var paidTo =  $(this).children("option:selected").val();
+                      
                         var paidToSplit = paidTo.split("-");
                         var paidToSplitArr = paidToSplit[0];
 

@@ -221,6 +221,14 @@
     					  		<form action="{{ action('LoloPinoyGrillBranchesController@accept', $transactionList[0]->id)}}" method="post">
     					  			{{ csrf_field() }}
     					  			 <input name="_method" type="hidden" value="PATCH">
+									@if($transactionList[0]->status != "FULLY PAID AND RELEASED")
+										<!-- Button trigger modal -->
+										<a  data-toggle="modal" data-target="#payableFormModal" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
+									@else
+									<i class="fas fa-edit" style="font-size:24px"></i>
+									@endif
+									<br>
+									<br>
 				  				 <table class="table table-bordered">
 				  			 		<thead>
 				  			 			<tr>
@@ -271,6 +279,7 @@
 								  <table class="table table-striped">
   									<thead>
   										<tr>
+  											<th>ACTION</th>
   											<th>DATE</th>
   											<th>PARTICULARS</th>
 											<th>AMOUNT</th>
@@ -279,12 +288,33 @@
 									<tbody>
   										
 										<tr>	
+  											<td>
+											  @if($transactionList[0]->status != "FULLY PAID AND RELEASED")
+											   <!-- Button trigger modal -->
+											   <a  data-toggle="modal" data-target="#editParticulars<?php echo $transactionList[0]->id ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
+  											  @else
+  												  <!-- Button trigger modal -->
+												<i class="fas fa-edit" style="font-size:24px"></i>
+  											 
+
+											  @endif
+											</td>
   											<td>{{ $transactionList[0]->issued_date}}</td>
   											<td>{{ $transactionList[0]->particulars}}</td>
 											<td><?php echo number_format($transactionList[0]->amount, 2); ?></td>
 										</tr>
 										@foreach($getParticulars as $getParticular)
 										<tr>
+  											<td>
+											 @if($transactionList[0]->status != "FULLY PAID AND RELEASED")
+											  <!-- Button trigger modal -->
+											  <a data-toggle="modal" data-target="#editP<?php echo $getParticular['id'] ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
+											 @else
+											   
+												<i class="fas fa-edit" style="font-size:24px"></i>
+  											 
+											 @endif
+											</td>
   											<td>{{ $getParticular['date']}}</td>
   											<td>{{ $getParticular['particulars']}}</td>
 											<td><?php echo number_format($getParticular['amount'], 2); ?></td>
@@ -298,6 +328,8 @@
 										  @if($transactionList[0]->method_of_payment === "CASH")
 											<th>PAYMENT CASH NUMBER</th>
 											@else
+											<th>ACTON</th>
+											<th>ACCOUNT NAME/NO</th>
 											<th>PAYMENT CHECK NUMBER</th>
 											@endif
 											@if($transactionList[0]->method_of_payment === "CASH")
@@ -310,12 +342,24 @@
 				  					<tbody>
 				  						@foreach($getChequeNumbers as $getChequeNumber)
 				  						<tr>
+  											 <td>
+											  @if($transactionList[0]->status != "FULLY PAID AND RELEASED")
+												<!-- Button trigger modal -->
+												<a  data-toggle="modal" data-target="#editCheck<?php echo $getChequeNumber['id'] ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
+  											  @else
+  												
+												<i class="fas fa-edit" style="font-size:24px"></i>
+											  @endif	
+											</td>
+											<td>{{ $getChequeNumber['account_name_no']}}</td>
 				  							<td>{{ $getChequeNumber['cheque_number']}}</td>
 				  							<td><?php echo number_format($getChequeNumber['cheque_amount'], 2); ?></td>
 				  						</tr>
 				  						@endforeach
 				  						<tr>
 				  							<td class="bg-info" style="color:white;">Total</td>
+											<td class="bg-info" style="color:white;"></td>
+											<td class="bg-info" style="color:white;"></td>
 				  							<td class="bg-success" style="color:white;"><?php echo number_format($sumCheque, 2); ?></td>
 				  						</tr>
 				  					</tbody>
@@ -342,6 +386,169 @@
                </div>
 		</div>
      </div>
+	  <!-- Modal -->
+	 
+	  <div class="modal fade" id="payableFormModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Edit Details</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+			<div class="form-group">
+					<div id="editDetails" class="col-lg-12"></div>
+					
+					<div class="form-row">
+						<div class="col-lg-4">
+							<label>Paid To </label>
+							<input type="text" id="paidTo" name="paidTo" class="form-control" value="{{ $transactionList[0]->paid_to }}" />
+						</div>
+						<div class="col-lg-4">
+							<label>Invoice # </label>
+							<input type="text" id="invoiceNo" name="invoiceNo" class="form-control" value="{{ $transactionList[0]->invoice_number }}" />
+						</div>
+						<div class="col-lg-4">
+							<label>Account Name </label>
+							<input type="text" id="accountName" name="accountName" class="form-control" value="{{ $transactionList[0]->account_name}}" />
+						</div>
+						
+						
+					</div>
+				
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				
+					<button type="button" onclick="updateDetailsPayable(<?php echo $transactionList[0]->id; ?>)" class="btn btn-success">Update changes</button>
+			
+				
+			</div>
+			</div>
+		</div>
+	  </div>
+	<!-- Modal -->
+	@foreach($getChequeNumbers as $getChequeNumber)
+	<div class="modal fade" id="editCheck<?php echo $getChequeNumber['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Edit Check Number</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<div class="form-row">
+						<div id="editCheck" class="col-lg-12"></div>
+						<div class="col-lg-4">
+							<label>Account Name/No</label>
+							<input type="text" id="accountNameNo<?php echo $getChequeNumber['id']?>" name="accountNameNo" class="form-control"  value="{{ $getChequeNumber['account_name_no']}}" />
+						</div>
+						<div class="col-lg-4">
+							<label>Payment Check Number</label>
+							<input type="text" id="checkNumber<?php echo $getChequeNumber['id']?>" name="checkNumber" class="form-control"  value="{{ $getChequeNumber['cheque_number']}}" />
+						
+						</div>
+						<div class="col-lg-4">
+							<label>Check Amount</label>
+							<input type="text" id="checkAmount<?php echo $getChequeNumber['id']?>" name="amount" class="form-control" value="{{ $getChequeNumber['cheque_amount']}}" />
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				<button type="button" onclick="updateCheck(<?php echo $getChequeNumber['id']; ?>)" class="btn btn-success">Update check</button>
+			</div>
+			</div>
+		</div>
+	</div>
+	@endforeach
+
+	 <!-- Modal -->
+	 @foreach($getParticulars as $getParticular)
+	 <div class="modal fade" id="editP<?php echo $getParticular['id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Edit Particulars</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<div class="form-row">
+						<div id="editParticularP" class="col-lg-12"></div>
+						<div class="col-lg-4">
+							<label>Date</label>
+							<input type="text" id="dateP<?php echo $getParticular['id']?>" name="date" class="datepicker form-control"  value="{{ $getParticular['date']}}" />
+						</div>
+						<div class="col-lg-4">
+							<label>Particulars</label>
+							<textarea id="particularsP<?php echo $getParticular['id']?>" name="particulars" class="form-control">{{ $getParticular['particulars'] }}</textarea>
+						</div>
+						<div class="col-lg-4">
+							<label>Amount</label>
+							<input type="text" id="amountP<?php echo $getParticular['id']?>" name="amount" class="form-control" value="{{ $getParticular['amount'] }}" />
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				<input type="hidden" id="transId<?php echo $getParticular['id']?>" value="{{ $transactionList[0]->id }}" />
+				<button type="button" onclick="updateP(<?php echo $getParticular['id'];?>)" class="btn btn-success">Update changes</button>
+			</div>
+			</div>
+		</div>
+	</div>
+	@endforeach
+
+	   <!-- Modal -->
+	   <div class="modal fade" id="editParticulars<?php echo $transactionList[0]->id ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Edit Particulars</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<div class="form-row">
+						<div id="succEditParticular" class="col-lg-12"></div>
+						<div class="col-lg-4">
+							<label>Date</label>
+							<input type="text" id="date" name="date" class="datepicker form-control"  value="{{ $transactionList[0]->issued_date}}" />
+						</div>
+						<div class="col-lg-4">
+							<label>Particulars</label>
+							<textarea id="particulars" name="particulars" class="form-control">{{ $transactionList[0]->particulars}}</textarea>
+						</div>
+						<div class="col-lg-4">
+							<label>Amount</label>
+							<input type="text" id="amount" name="amount" class="form-control" value="{{ $transactionList[0]->amount }}" />
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				<button type="button" onclick="updateParticular(<?php echo $transactionList[0]->id; ?>)" class="btn btn-success">Update changes</button>
+			</div>
+			</div>
+		</div>
+	</div>
       <!-- Sticky Footer -->
       <footer class="sticky-footer">
         <div class="container my-auto">
@@ -365,5 +572,166 @@
 			]
 		}
 	})
+</script>
+<script type="text/javascript">
+
+	const updateDetailsPayable = (id) =>{
+		const paidTo = $("#paidTo").val();
+		const invoiceNo = $("#invoiceNo").val();
+		const accountName = $("#accountName").val();
+
+		//make ajax call
+		$.ajax({
+			type:"PATCH",
+            url:'/lolo-pinoy-grill-branches/payables/update-details/' + id,
+			data:{
+                _method:'patch',
+                "_token":"{{ csrf_token() }}",
+                "id":id,
+                "paidTo":paidTo,
+                "invoiceNo":invoiceNo,
+				"accountName":accountName,
+            },
+			success:function(data){
+				console.log(data);
+
+				const getData = data;
+                const succData = getData.split(":");
+                const succDataArr = succData[0];
+
+				if(succDataArr == "Success"){
+					$("#editDetails").fadeIn().delay(3000).fadeOut();
+                    $("#editDetails").html(`<p class="alert alert-success"> ${data}</p>`);
+                    
+                    setTimeout(function(){
+                        document.location.reload();
+                    }, 3000);
+				}
+
+			
+			},
+			error:function(data){
+				console.log('Error:', data);
+			}
+
+		});
+	}
+
+	const updateCheck = (id) =>{
+		const accountNameNo = $("#accountNameNo"+id).val();
+		const checkNumber = $("#checkNumber"+id).val();
+		const checkAmount = $("#checkAmount"+id).val();
+
+		//make ajax call
+		$.ajax({
+				type:"PATCH",
+				url:'/lolo-pinoy-grill-branches/payables/update-check/' + id,
+				data:{
+					_method:'patch',
+					"_token":"{{ csrf_token() }}",
+					"id":id,
+					"accountNameNo":accountNameNo,
+					"checkNumber":checkNumber,
+					"checkAmount":checkAmount,
+				},
+				success:function(data){
+					console.log(data);
+
+					const getData = data;
+					const succData = getData.split(":");
+					const succDataArr = succData[0];
+					if(succDataArr == "Success"){
+						$("#editCheck").fadeIn().delay(3000).fadeOut();
+						$("#editCheck").html(`<p class="alert alert-success"> ${data}</p>`);
+						
+						setTimeout(function(){
+							document.location.reload();
+						}, 3000);
+					}
+				},
+				error:function(data){
+					console.log('Error:', data);
+				}
+
+			});
+
+	}
+
+	const updateP = (id) =>{
+		const dateP = $("#dateP"+id).val();
+		const particularsP = $("#particularsP"+id).val();
+		const amountP = $("#amountP"+id).val();
+		const transId = $("#transId"+id).val();
+
+		//make ajax call
+		$.ajax({
+			type:"PATCH",
+            url:'/lolo-pinoy-grill-branches/payables/updateP/' + id,
+			data:{
+                _method:'patch',
+                "_token":"{{ csrf_token() }}",
+                "id":id,
+                "date":dateP,
+                "particulars":particularsP,
+				"amount":amountP,
+				"transId":transId,
+            },
+			success:function(data){
+				console.log(data);
+				const getData = data;
+                const succData = getData.split(":");
+                const succDataArr = succData[0];
+				if(succDataArr == "Success"){
+					$("#editParticularP").fadeIn().delay(3000).fadeOut();
+                    $("#editParticularP").html(`<p class="alert alert-success"> ${data}</p>`);
+                    
+                    setTimeout(function(){
+                        document.location.reload();
+                    }, 3000);
+				}
+			},
+			error:function(data){
+				console.log('Error:', data)
+			}
+		});
+	}
+
+	const updateParticular = (id) =>{
+		const date = $("#date").val();
+		const particulars = $("#particulars").val();
+		const amount = $("#amount").val();
+
+		 //make ajax call
+		 $.ajax({
+			type:"PATCH",
+            url:'/lolo-pinoy-grill-branches/payables/update-particulars/' + id,
+			data:{
+                _method:'patch',
+                "_token":"{{ csrf_token() }}",
+                "id":id,
+                "date":date,
+                "particulars":particulars,
+				"amount":amount,
+            },
+			success:function(data){
+				console.log(data);
+				const getData = data;
+                const succData = getData.split(":");
+                const succDataArr = succData[0];
+				if(succDataArr == "Success"){
+					$("#succEditParticular").fadeIn().delay(3000).fadeOut();
+                    $("#succEditParticular").html(`<p class="alert alert-success"> ${data}</p>`);
+                    
+                    setTimeout(function(){
+                        document.location.reload();
+                    }, 3000);
+				}
+			},
+			error:function(data){
+				console.log('Error:', data)
+			}
+		});
+
+	}
 </script>
 @endsection

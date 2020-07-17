@@ -19,7 +19,75 @@ use Hash;
 use App\LoloPinoyGrillBranchesCode;
 
 class LoloPinoyGrillBranchesController extends Controller
-{
+{   
+    public function updateDetails(Request $request){
+        $updateDetail = LoloPinoyGrillBranchesPaymentVoucher::find($request->id);
+
+        $updateDetail->paid_to = $request->paidTo;
+        $updateDetail->invoice_number = $request->invoiceNo;
+        $updateDetail->account_name = $request->accountName;
+        $updateDetail->save();
+
+        return response()->json('Success: successfully updated.');
+    }
+
+    public function updateCheck(Request $request){
+        $updateCheck = LoloPinoyGrillBranchesPaymentVoucher::find($request->id);
+
+        $updateCheck->account_name_no = $request->accountNameNo;
+        $updateCheck->cheque_number = $request->checkNumber;
+        $updateCheck->cheque_amount = $request->checkAmount;
+        $updateCheck->save();
+
+        return response()->json('Success: successfully updated.');
+    }
+
+    public function updateP(Request $request){
+          //main id 
+          $updateParticular = LoloPinoyGrillBranchesPaymentVoucher::find($request->transId);
+
+          //particular id
+          $uIdParticular = LoloPinoyGrillBranchesPaymentVoucher::find($request->id);
+ 
+          $amount = $request->amount; 
+ 
+          $updateAmount =  $updateParticular->amount; 
+         
+          $uParticular = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $request->transId)->sum('amount');
+          
+          $tot = $updateAmount + $uParticular; 
+         
+        
+          $uIdParticular->date  = $request->date;
+          $uIdParticular->particulars = $request->particulars;
+          $uIdParticular->amount = $amount; 
+          $uIdParticular->save();
+  
+          $updateParticular->amount_due = $tot;
+          $updateParticular->save();
+          
+          return response()->json('Success: successfully updated.');
+ 
+    }
+
+    public function updateParticulars(Request $request){
+        $updateParticular =  LoloPinoyGrillBranchesPaymentVoucher::find($request->id);
+
+        $amount = $request->amount; 
+    
+        $tot = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $request->id)->sum('amount');
+ 
+        $sum = $amount + $tot; 
+ 
+        $updateParticular->date = $request->date;
+        $updateParticular->particulars = $request->particulars;
+        $updateParticular->amount = $amount;
+        $updateParticular->amount_due = $sum;
+        $updateParticular->save();
+ 
+        return response()->json('Success: successfully updated.');
+ 
+    }
 
     public function printMultipleSummary(Request $request, $date){  
         $urlSegment = \Request::segment(3);
@@ -2791,7 +2859,7 @@ class LoloPinoyGrillBranchesController extends Controller
                                 'lolo_pinoy_grill_branches_codes.module_id',
                                 'lolo_pinoy_grill_branches_codes.module_code',
                                 'lolo_pinoy_grill_branches_codes.module_name')
-                                ->join('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
+                                ->leftjoin('lolo_pinoy_grill_branches_codes', 'lolo_pinoy_grill_branches_payment_vouchers.id', '=', 'lolo_pinoy_grill_branches_codes.module_id')
                                 ->where('lolo_pinoy_grill_branches_payment_vouchers.id', $id)
                                 ->where('lolo_pinoy_grill_branches_codes.module_name', $moduleName)
                                 ->get();

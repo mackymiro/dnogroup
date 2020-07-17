@@ -6,6 +6,9 @@
 	}
 	table, td, th{
 		font-size:12px;
+        table-layout: fixed;
+        padding: 5px;
+        overflow: hidden;
 	}
 	
 	p{
@@ -103,18 +106,17 @@
                             <br>
                             <br>
                             <h1>Payment Check Voucher</h1>
-                            <table style="border:1px solid black;">
+                            <table class="table table-bordered" style="border:1px solid black;">
 								<thead>
 									<tr>
 										<th style="height: 1%; text-align: center;">INVOICE NO</th>
 										<th style="height: 1%; text-align: center;">PV NO</th>
                                         <th style="height: 1%; text-align: center;">ISSUED DATE</th>
                                         <th style="height: 1%; text-align: center;">PAID TO</th>
-                                        <th style="height: 1%; text-align: center; width:130px;">Account Name/No</th>
+                                        <th style="height: 1%; text-align: center;">ACCOUNT <br>NAME/NO</th>
                                         <th style="height: 1%; text-align: center;">BANK NAME/CHECK NO</th>
                                         <th style="height: 1%; text-align: center;">PAID AMOUNT</th>
                                         <th style="height: 1%; text-align: center;">BALANCE</th>
-                                       
                                         <th style="height: 1%; text-align: center;">STATUS</th>
                                         <th style="height: 1%; text-align: center;">CREATED BY</th>
 									</tr>
@@ -138,27 +140,29 @@
                                                 ->select('*')
                                                 ->where('pv_id', $id)
                                                 ->get()->toArray();
+
                                 ?>
                         
 									<tr style="border:1px solid black;">
-                                        <td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->invoice_number }}</td>
+                                        <td style="text-align:center; border: 1px solid black; font-size:10px;">{{ $getTransactionListCheck->invoice_number }}</td>
 										
-										<td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->module_code}}{{ $getTransactionListCheck->dno_personal_code}}</td>
-										<td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->issued_date}}</td>
-                                        <td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->paid_to}}</td>
-                                        <td style="text-align:center; border: 1px solid black; width:130px;">
-                                        <?php foreach($getChecks as $getCheck): ?>
-                                                    <?php echo $getCheck->account_name_no; ?>
-                                        <?php endforeach; ?>
+										<td style="text-align:center; border: 1px solid black; font-size:10px;">{{ $getTransactionListCheck->module_code}}{{ $getTransactionListCheck->dno_personal_code}}</td>
+										<td style="text-align:center; border: 1px solid black; font-size:10px;">{{ $getTransactionListCheck->issued_date}}</td>
+                                        <td style="text-align:center; border: 1px solid black; font-size:10px;">{{ $getTransactionListCheck->paid_to}}</td>
+                                        <td style="text-align:center; border: 1px solid black; width:">
+                                          <?php foreach($getChecks as $getCheck): ?>
+                                           <span style="font-size:10px;"> <?php echo $getCheck->account_name_no; ?><?php echo "<br>"; ?></span>
+                                          <?php endforeach; ?>
+                                            
                                         </td>
-                                        <td style="text-align:center; border: 1px solid black;">
+                                        <td style="text-align:center; border: 1px solid black; font-size:10px;">
                                             <?php foreach($getChecks as $getCheck): ?>
                                                 <?php echo $getCheck->cheque_number; ?>
                                             <?php endforeach; ?>
                                         </td>
-                                        <td style="text-align:center; border: 1px solid black;"><?php echo number_format($getTransactionListCheck->cheque_total_amount, 2); ?></td>
+                                        <td style="text-align:center; border: 1px solid black; font-size:10px;"><?php echo number_format($getTransactionListCheck->cheque_total_amount, 2); ?></td>
                                       
-                                        <td style="text-align:center; border: 1px solid black;">
+                                        <td style="text-align:center; border: 1px solid black; font-size:10px;">
                                              @if($getTransactionListCheck->status === "FULLY PAID AND RELEASED")
                                              <p >0</p>
                                              @else
@@ -167,13 +171,17 @@
                                             
                                         </td>
                                       
-                                        <td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->status }}</td>
-                                        <td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->created_by }}</td>
+                                        <td style="text-align:center; border: 1px solid black; font-size:10px">{{ $getTransactionListCheck->status }}</td>
+                                        <td style="text-align:center; border: 1px solid black; font-size:10px;">{{ $getTransactionListCheck->created_by }}</td>
 									</tr>
 									@endforeach
+                                   
 								</tbody>	
 						    </table>
                             <br>
+                            <br>
+                           
+                            <div style="clear:both;"></div>
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>

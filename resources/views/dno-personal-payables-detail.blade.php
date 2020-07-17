@@ -29,6 +29,12 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css" >
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+
 <div id="wrapper">
 	 @include('sidebar.sidebar-dno-personal')
      <div id="content-wrapper">
@@ -244,8 +250,17 @@
     					  		<form action="{{ action('DnoPersonalController@accept', $transactionList[0]->id)}}" method="post">
     					  			{{ csrf_field() }}
     					  			 <input name="_method" type="hidden" value="PATCH">
+									@if($transactionList[0]->status != "FULLY PAID AND RELEASED")
+										<!-- Button trigger modal -->
+										<a  data-toggle="modal" data-target="#payableFormModal" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
+									@else
+									<i class="fas fa-edit" style="font-size:24px"></i>
+									@endif
+									<br>
+									<br>
 					  			 <table class="table table-bordered">
 				  			 		<thead>
+
 				  			 			<tr>
 				  			 				<th width="15%">Paid To</th>
 										
@@ -260,7 +275,7 @@
 			  						<div class="form-row">
 			  							<div class="col-lg-4">
 		  									<label>Invoice #</label>
-		  									<input type="text" name="invoiceNumber" class="selcls form-control" value="{{ $transactionList[0]->invoice_number}}" disabled="disabled" />
+		  									<input type="text" name="invoiceNumber" class=" form-control" value="{{ $transactionList[0]->invoice_number}}" disabled="disabled" />
 			  							</div>
 			  							<div class="col-lg-2">
 		  									<label>Amount Due</label>
@@ -268,39 +283,39 @@
 			  							</div>
 			  							<div class="col-lg-2">
 		  									<label>PV No</label>
-		  									<input type="text" name="voucherRef" class="selcls form-control" value="{{ $transactionList[0]->module_code}}{{ $transactionList[0]->dno_personal_code}}" disabled="disabled" />
+		  									<input type="text" name="voucherRef" class="form-control" value="{{ $transactionList[0]->module_code}}{{ $transactionList[0]->dno_personal_code}}" disabled="disabled" />
 			  							</div>
 										
 									
 										<div class="col-lg-6">
 											<label>Account Name</label>
-											<input type="text" name="accountName" class="selcls form-control" value="{{ $transactionList[0]->account_name }}" disabled="disabled" />
+											<input type="text" name="accountName" class="form-control" value="{{ $transactionList[0]->account_name }}" disabled="disabled" />
 										</div>
 										
 										<div class="col-lg-2">
 		  									<label>Payment Method</label>
-		  									<input type="text" name="paymentMethod" class="selcls form-control" value="{{ $transactionList[0]->method_of_payment}}" disabled="disabled" />
+		  									<input type="text" name="paymentMethod" class="form-control" value="{{ $transactionList[0]->method_of_payment}}" disabled="disabled" />
 			  							</div>
 										<div class="col-lg-4">
 		  									<label>Category</label>
-		  									<input type="text" name="category" class="selcls form-control" value="{{ $transactionList[0]->category }}" disabled="disabled" />
+		  									<input type="text" name="category" class="form-control" value="{{ $transactionList[0]->category }}" disabled="disabled" />
 			  							</div>
 										@if($transactionList[0]->sub_category_name != "NULL")
 										<div class="col-lg-4">
 		  									<label>&nbsp;</label>
-		  									<input type="text" name="subCateogry" class="selcls form-control" value="{{ $transactionList[0]->sub_category_name }}" disabled="disabled" />
+		  									<input type="text" name="subCateogry" class="form-control" value="{{ $transactionList[0]->sub_category_name }}" disabled="disabled" />
 			  							</div>
 										@endif
 										@if($transactionList[0]->sub_category_bill_name != "NULL")
 										<div class="col-lg-4">
 		  									<label>&nbsp;</label>
-		  									<input type="text" name="subCateogryBillBName" class="selcls form-control" value="{{ $transactionList[0]->sub_category_bill_name }}" disabled="disabled" />
+		  									<input type="text" name="subCateogryBillBName" class="form-control" value="{{ $transactionList[0]->sub_category_bill_name }}" disabled="disabled" />
 			  							</div>
 										@endif
 			  							<div class="col-lg-4">
 		  									<label>Status</label>
 		  									<div id="app-status">
-	  											<select name="status" class="selcls form-control">
+	  											<select name="status" class="form-control">
 	  												<option value="0">--Please Select--</option>
 													<option v-for="status in statuses" v-bind:value="status.value"
 													:selected="status.value=={{json_encode($transactionList[0]->status)}}?true : false">
@@ -317,7 +332,7 @@
 			  						<div class="form-row">
 			  							<div class="col-lg-4">
 		  									<label>Invoice #</label>
-		  									<input type="text" name="invoiceNumber" class="selcls form-control" value="{{ $transactionList[0]->invoice_number}}" disabled="disabled" />
+		  									<input type="text" name="invoiceNumber" class="form-control" value="{{ $transactionList[0]->invoice_number}}" disabled="disabled" />
 			  							</div>
 			  							<div class="col-lg-2">
 		  									<label>Amount Due</label>
@@ -325,57 +340,48 @@
 			  							</div>
 			  							<div class="col-lg-2">
 		  									<label>PV No</label>
-		  									<input type="text" name="voucherRef" class="selcls form-control" value="{{ $transactionList[0]->module_code}}{{ $transactionList[0]->dno_personal_code}}" disabled="disabled" />
+		  									<input type="text" name="voucherRef" class="form-control" value="{{ $transactionList[0]->module_code}}{{ $transactionList[0]->dno_personal_code}}" disabled="disabled" />
 			  							</div>
-  										@if($transactionList[0]->use_credit_card == "No")
-										  
-										<div class="col-lg-4">
-											<label>Bank Name</label>
-											<?php
-												$bankCard = explode("-", $transactionList[0]->bank_card);
-												$bank = isset($bankCard);
-											?>
-											<input type="text" name="bankName" class="selcls form-control" value="{{ $bank[1] }}" disabled="disabled" />
-										</div>
-										@elseif($transactionList[0]->use_credit_card == "Use Card")
+  										
+										@if($transactionList[0]->use_credit_card == "Use Card")
 										<div class="col-lg-4">
 											<label>Bank Name</label>
 											<?php
 												$bankCard = explode("-", $transactionList[0]->bank_card);
 												$bank = $bankCard;
 											?>
-											<input type="text" name="bankName" class="selcls form-control" value="{{ $bank[1] }}" disabled="disabled" />
+											<input type="text" name="bankName" class="form-control" value="{{ $bank[1] }}" disabled="disabled" />
 										</div>
   										@endif
 
 										@if($transactionList[0]->use_credit_card != "No")
 										<div class="col-lg-4">
 		  									<label>Account #</label>
-		  									<input type="text" name="accountNum" class="selcls form-control" value="{{ $transactionList[0]->account_no }}" disabled="disabled" />
+		  									<input type="text" name="accountNum" class="form-control" value="{{ $transactionList[0]->account_no }}" disabled="disabled" />
 			  							</div>
 										@endif
 										<div class="col-lg-6">
 		  									<label>Account Name</label>
-		  									<input type="text" name="accountName" class="selcls form-control" value="{{ $transactionList[0]->account_name }}" disabled="disabled" />
+		  									<input type="text" name="accountName" class="form-control" value="{{ $transactionList[0]->account_name }}" disabled="disabled" />
 			  							</div>
 										@if($transactionList[0]->use_credit_card != "No")
 										<div class="col-lg-4">
 		  									<label>Type Of Card</label>
-		  									<input type="text" name="typeOfCard" class="selcls form-control" value="{{ $transactionList[0]->type_of_card }}" disabled="disabled" />
+		  									<input type="text" name="typeOfCard" class="form-control" value="{{ $transactionList[0]->type_of_card }}" disabled="disabled" />
 			  							</div>
 										@endif
 										<div class="col-lg-2">
 		  									<label>Payment Method</label>
-		  									<input type="text" name="paymentMethod" class="selcls form-control" value="{{ $transactionList[0]->method_of_payment }}" disabled="disabled" />
+		  									<input type="text" name="paymentMethod" class="form-control" value="{{ $transactionList[0]->method_of_payment }}" disabled="disabled" />
 			  							</div>
 										<div class="col-lg-4">
 		  									<label>Category</label>
-		  									<input type="text" name="category" class="selcls form-control" value="{{ $transactionList[0]->category }}" disabled="disabled" />
+		  									<input type="text" name="category" class="form-control" value="{{ $transactionList[0]->category }}" disabled="disabled" />
 			  							</div>
 			  							<div class="col-lg-4">
 		  									<label>Status</label>
 		  									<div id="app-status">
-	  											<select name="status" class="selcls form-control">
+	  											<select name="status" class="form-control">
 	  												<option value="0">--Please Select--</option>
 													<option v-for="status in statuses" v-bind:value="status.value"
 													:selected="status.value=={{json_encode($transactionList[0]->status)}}?true : false">
@@ -423,7 +429,7 @@
 											  <!-- Button trigger modal -->
 											  <a data-toggle="modal" data-target="#editP<?php echo $getParticular['id'] ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
 											 @else
-											    <!-- Button trigger modal -->
+											   
 												<i class="fas fa-edit" style="font-size:24px"></i>
   											 
 											 @endif
@@ -456,9 +462,13 @@
 				  						@foreach($getChequeNumbers as $getChequeNumber)
 				  						<tr>
   										    <td>
-											 <!-- Button trigger modal -->
-											 <a  data-toggle="modal" data-target="#editCheck<?php echo $getChequeNumber['id'] ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
-  											   
+											  @if($transactionList[0]->status != "FULLY PAID AND RELEASED")
+												<!-- Button trigger modal -->
+												<a  data-toggle="modal" data-target="#editCheck<?php echo $getChequeNumber['id'] ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
+  											  @else
+  												
+												<i class="fas fa-edit" style="font-size:24px"></i>
+											  @endif	
 											</td>
 										    <td>{{ $getChequeNumber['account_name_no']}}</td>
 				  							<td>{{ $getChequeNumber['cheque_number']}}</td>
@@ -495,6 +505,121 @@
                </div>
 		</div>
      </div>
+	 <!-- Modal -->
+	 
+	<div class="modal fade" id="payableFormModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Edit Details</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+			<div class="form-group">
+					<div id="editDetails" class="col-lg-12"></div>
+					<div id="editCC" class="col-lg-12"></div>
+					@if($transactionList[0]->method_of_payment === "CASH")
+					<div class="form-row">
+						<div class="col-lg-4">
+							<label>Paid To </label>
+							<input type="text" id="paidTo" name="paidTo" class="form-control" value="{{ $transactionList[0]->paid_to }}" />
+						</div>
+						<div class="col-lg-4">
+							<label>Invoice # </label>
+							<input type="text" id="invoiceNo" name="invoiceNo" class="form-control" value="{{ $transactionList[0]->invoice_number }}" />
+						</div>
+						<div class="col-lg-4">
+							<label>Account Name </label>
+							<input type="text" id="accountName" name="accountName" class="form-control" value="{{ $transactionList[0]->account_name}}" />
+						</div>
+						
+						
+					</div>
+					@else
+						@if($transactionList[0]->use_credit_card === "No")
+						<div class="form-row">
+							<div class="col-lg-4">
+								<label>Paid To </label>
+								<input type="text" id="paidTo" name="paidTo" class="form-control" value="{{ $transactionList[0]->paid_to }}" />
+							</div>
+							<div class="col-lg-4">
+								<label>Invoice # </label>
+								<input type="text" id="invoiceNo" name="invoiceNo" class="form-control" value="{{ $transactionList[0]->invoice_number }}" />
+							</div>
+							<div class="col-lg-4">
+								<label>Account Name </label>
+								<input type="text" id="accountName" name="accountName" class="form-control" value="{{ $transactionList[0]->account_name}}" />
+							</div>
+							
+							
+						</div>
+						@else	
+						<div class="form-row">
+							<div class="col-lg-4">
+								<label>Paid To </label>
+								<input type="text" id="paidTo" name="paidTo" class="form-control" value="{{ $transactionList[0]->paid_to }}" />
+							</div>
+							<div class="col-lg-4">
+								<label>Invoice # </label>
+								<input type="text" id="invoiceNo" name="invoiceNo" class="form-control" value="{{ $transactionList[0]->invoice_number }}" />
+							</div>
+							<div class="col-lg-4">
+								<label>Bank Name </label>
+								<?php
+									$bankCard = explode("-", $transactionList[0]->bank_card);
+									$bank = $bankCard;
+								?>
+								<select  data-live-search="true" id="bankName" name="bankName" class="change selectpicker form-control">
+								<option value="0">--Please Select--</option>
+								@foreach($getCreditCards as $getCreditCard)
+								<option value="{{ $getCreditCard['id'] }}-{{ $getCreditCard['bank_name']}}" {{ ( $getCreditCard['bank_name'] == $bank[1]) ? 'selected' : '' }}>{{ $getCreditCard['bank_name'] }}</option>
+								@endforeach
+							</select>
+							</div>
+							<div class="col-lg-4">
+								<label>Account # </label>
+								<div id="accountNoHide">
+									<input type="text" id="accountNum" name="accountNum" class="form-control" disabled value="{{ $transactionList[0]->account_no}}" />
+								</div>
+								<div id="accountNo"></div> 
+							</div>
+							<div class="col-lg-4">
+								<label>Account Name </label>
+								<div id="accountNameHide">
+									<input type="text" id="accountName" name="accountName" class="form-control" disabled value="{{ $transactionList[0]->account_name }}" />
+								</div>
+								<div id="accountName1"></div>
+							</div>
+							<div class="col-lg-4">
+								<label>Type Of Card </label>
+								<div id="typeOfCardHide">
+									<input type="text" id="typeOfCard" name="typeOfCard" class="form-control" disabled value="{{ $transactionList[0]->type_of_card}}" />
+								</div>
+								<div id="typeOfCard1"></div>
+							</div>
+							
+						</div>
+
+						@endif
+
+					@endif
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				@if($transactionList[0]->use_credit_card === "No")
+					<button type="button" onclick="updateDetailsPayable(<?php echo $transactionList[0]->id; ?>)" class="btn btn-success">Update changes</button>
+			
+				@else
+					<button type="button" onclick="updateDetailsPayableCard(<?php echo $transactionList[0]->id; ?>)" class="btn btn-success">Update changes</button>
+			
+				@endif
+			</div>
+			</div>
+		</div>
+		</div>
 	 <!-- Modal -->
 		<div class="modal fade" id="editParticulars<?php echo $transactionList[0]->id ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -638,6 +763,147 @@
 	})
 </script>
 <script type="text/javascript">
+
+$(".change").change(function(){
+             
+             const bankName =   $(this).children("option:selected").val();
+             const bankNameSplit  = bankName.split("-");
+             const bankNameSplitArr = bankNameSplit[0];
+			
+             if(bankNameSplitArr != 0 ){
+                  <?php
+                    $getCreditCards = DB::table(
+                                      'dno_personal_credit_cards')
+                                      ->get();  ?>
+
+                  <?php foreach($getCreditCards as $getCreditCard): ?>
+                        var paidTo =  $(this).children("option:selected").val();
+						var paidToSplit = paidTo.split("-");
+                        var paidToSplitArr = paidToSplit[0];
+						
+                        if(paidToSplitArr === "<?php echo $getCreditCard->id ?>"){
+                          <?php
+                                $getId = DB::table(
+                                              'dno_personal_credit_cards')
+                                            ->where('id', $getCreditCard->id)
+                                            ->get();
+                            ?>
+                          
+                            $("#accountNo").html('<input type="text" id="acct" name="accountNo" class=" form-control" value="<?php echo $getId[0]->account_no?>" readonly="readonly">');
+                            $("#accountNoHide").hide();
+
+            
+                            $("#accountName1").html('<input type="text" id="actName" name="accountName" class="form-control" value="<?php echo $getId[0]->account_name; ?>" readonly="readonly"> ');
+                            $("#accountNameHide").hide();
+
+                            $("#typeOfCard1").html('<input type="text" id="typeCC" name="typeOfCard" class="form-control" value="<?php echo $getId[0]->type_of_card?>" readonly="readonly">');
+                            $("#typeOfCardHide").hide();
+                        }
+
+                  <?php endforeach; ?>
+
+             }else{
+                  $("#acct").val('');
+                  $("#actName").val('');
+                  $("#typeCC").val('');
+             }
+             
+             
+        });
+
+	const updateDetailsPayableCard = (id) =>{
+		const paidTo = $("#paidTo").val();
+		const invoiceNo = $("#invoiceNo").val();
+
+		const bankName = $("#bankName").val();
+
+		const acctNum  = $("#acct").val();
+		const actName = $("#actName").val();
+		const typeCC = $("#typeCC").val();
+
+		//make ajax call
+		$.ajax({
+			type:"PATCH",
+            url:'/dno-personal/payables/update-details-cc/' + id,
+			data:{
+                _method:'patch',
+                "_token":"{{ csrf_token() }}",
+                "id":id,
+                "paidTo":paidTo,
+                "invoiceNo":invoiceNo,
+				"bankName":bankName,
+				"acctNum":acctNum,
+				"actName":actName,
+				"typeCC":typeCC,
+            },
+			success:function(data){
+				console.log(data);
+
+				const getData = data;
+                const succData = getData.split(":");
+                const succDataArr = succData[0];
+
+				if(succDataArr == "Success"){
+					$("#editCC").fadeIn().delay(3000).fadeOut();
+                    $("#editCC").html(`<p class="alert alert-success"> ${data}</p>`);
+                    
+                    setTimeout(function(){
+                        document.location.reload();
+                    }, 3000);
+				}
+
+
+			
+			},
+			error:function(data){
+				console.log('Error:', data);
+			}
+
+		});
+		
+	}
+
+	const updateDetailsPayable = (id) =>{
+		const paidTo = $("#paidTo").val();
+		const invoiceNo = $("#invoiceNo").val();
+		const accountName = $("#accountName").val();
+
+		//make ajax call
+		$.ajax({
+			type:"PATCH",
+            url:'/dno-personal/payables/update-details/' + id,
+			data:{
+                _method:'patch',
+                "_token":"{{ csrf_token() }}",
+                "id":id,
+                "paidTo":paidTo,
+                "invoiceNo":invoiceNo,
+				"accountName":accountName,
+            },
+			success:function(data){
+				console.log(data);
+
+				const getData = data;
+                const succData = getData.split(":");
+                const succDataArr = succData[0];
+
+				if(succDataArr == "Success"){
+					$("#editDetails").fadeIn().delay(3000).fadeOut();
+                    $("#editDetails").html(`<p class="alert alert-success"> ${data}</p>`);
+                    
+                    setTimeout(function(){
+                        document.location.reload();
+                    }, 3000);
+				}
+
+			
+			},
+			error:function(data){
+				console.log('Error:', data);
+			}
+
+		});
+	}
 
 	const updateCheck = (id) => {
 		const accountNameNo = $("#accountNameNo"+id).val();

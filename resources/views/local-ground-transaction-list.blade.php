@@ -157,6 +157,7 @@
         $(document).ready(function () {
           doRefresh(); 
         });
+		
 	 function confirmDelete(id){
         var x = confirm("Do you want to delete this?");
         if(x){

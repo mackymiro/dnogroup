@@ -99,7 +99,7 @@
 									<tr style="border:1px solid black;">
 										<td style="text-align:center; border: 1px solid black;">{{ $getAllDeliveryReceipt->module_code}}{{ $getAllDeliveryReceipt->lolo_pinoy_grill_code}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $getAllDeliveryReceipt->date}}</td>
-                                        <td style="text-align:center; border: 1px solid black;"><?php echo number_format($getAllDeliveryReceipt->amount, 2);?></td>
+                                        <td style="text-align:center; border: 1px solid black;"><?php echo number_format($getAllDeliveryReceipt->total_amount, 2);?></td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getAllDeliveryReceipt->created_by }}</td>
 									</tr>
 									@endforeach
