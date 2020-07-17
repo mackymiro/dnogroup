@@ -239,10 +239,14 @@ Route::group(['middleware' =>['user']], function(){
 		->name('updateCheck');
 
 	Route::patch(
+		'/lolo-pinoy-lechon-de-cebu/payables/update-cash/{id}',
+		'LoloPinoyLechonDeCebuController@updateCash')
+		->name('updateCash');
+
+	Route::patch(
 		'/lechon-de-cebu/payables/update-details/{id}',
 		'LoloPinoyLechonDeCebuController@updateDetails')
 		->name('updateDetails');
-
 	
 	Route::delete(
 		'/lolo-pinoy-lechon-de-cebu/delete-transaction-list/{id}',
@@ -534,6 +538,11 @@ Route::group(['middleware' =>['user']], function(){
 		->name('updateCheck');
 
 	Route::patch(
+		'/lolo-pinoy-grill-commissary/payables/update-cash/{id}',
+		'LoloPinoyGrillCommissaryController@updateCash')
+		->name('updateCash');
+
+	Route::patch(
 		'/lolo-pinoy-grill-commissary/payables/update-details/{id}',
 		'LoloPinoyGrillCommissaryController@updateDetails')
 		->name('updateDetails');
@@ -607,6 +616,11 @@ Route::group(['middleware' =>['user']], function(){
 		->name('updateCheck');
 
 	Route::patch(
+		'/lolo-pinoy-grill-branches/payables/update-cash/{id}',
+		'LoloPinoyGrillBranchesController@updateCash')
+		->name('updateCash');
+
+	Route::patch(
 		'/lolo-pinoy-grill-branches/payables/update-details/{id}',
 		'LoloPinoyGrillBranchesController@updateDetails')
 		->name('updateDetails');
@@ -671,6 +685,11 @@ Route::group(['middleware' =>['user']], function(){
 		'/mr-potato/payables/update-check/{id}',
 		'MrPotatoController@updateCheck')
 		->name('updateCheck');
+
+	Route::patch(
+		'/mr-potato/payables/update-cash/{id}',
+		'MrPotatoController@updateCash')
+		->name('updateCash');
 
 	Route::patch(
 		'/mr-potato/payables/update-details/{id}',
@@ -804,6 +823,11 @@ Route::group(['middleware' =>['user']], function(){
 		->name('updateCheck');
 
 	Route::patch(
+		'/ribos-bar/payables/update-cash/{id}',
+		'RibosBarController@updateCash')
+		->name('updateCash');
+
+	Route::patch(
 		'/ribos-bar/payables/update-details/{id}',
 		'RibosBarController@updateDetails')
 		->name('updateDetails');
@@ -866,6 +890,21 @@ Route::group(['middleware' =>['user']], function(){
 		->name('dno-personal.paymentVoucherStore');
 
 	Route::get(
+		'/dno-personal/suppliers',
+		'DnoPersonalController@supplier')
+		->name('supplier');
+
+	Route::post(
+		'/dno-personal/supplier/add',
+		'DnoPersonalController@addSupplier')
+		->name('addSupplier');
+
+	Route::get(
+		'/dno-personal/suppliers/view/{id}',
+		'DnoPersonalController@viewSupplier')
+		->name('viewSupplier');
+
+	Route::get(
 			'/dno-personal/payment-voucher-form',
 			'DnoPersonalController@paymentVoucherForm')
 		->name('paymentVoucherFormDNOPersonal');
@@ -894,6 +933,11 @@ Route::group(['middleware' =>['user']], function(){
 		'/dno-personal/payables/update-check/{id}',
 		'DnoPersonalController@updateCheck')
 		->name('updateCheck');
+
+	Route::patch(
+		'/dno-personal/payables/update-cash/{id}',
+		'DnoPersonalController@updateCash')
+		->name('updateCash');
 
 	Route::patch(
 		'/dno-personal/payables/update-details-cc/{id}',
@@ -959,6 +1003,11 @@ Route::group(['middleware' =>['user']], function(){
 		'/dno-resources-development/payables/update-check/{id}',
 		'DnoResourcesDevelopmentController@updateCheck')
 		->name('updateCheck');
+
+	Route::patch(
+		'/dno-resources-development/payables/update-cash/{id}',
+		'DnoResourcesDevelopmentController@updateCash')
+		->name('updateCash');
 
 	Route::patch(
 		'/dno-resources-development/payables/update-details/{id}',
@@ -3400,6 +3449,11 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('updateCheck');
 
 	Route::patch(
+		'/dno-food-ventures/payables/update-cash/{id}',
+		'DnoFoodVenturesController@updateCash')
+		->name('updateCash');
+
+	Route::patch(
 		'/dno-food-ventures/payables/update-details/{id}',
 		'DnoFoodVenturesController@updateDetails')
 		->name('updateDetails');
@@ -3631,6 +3685,11 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('updateCheck');
 
 	Route::patch(
+		'/dong-fang-corporation/payables/update-cash/{id}',
+		'DongFangCorporationController@updateCash')
+		->name('updateCash');
+
+	Route::patch(
 		'/dong-fang-corporation/payables/update-details/{id}',
 		'DongFangCorporationController@updateDetails')
 		->name('updateDetails');
@@ -3850,6 +3909,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'/wlg-corporation/payables/update-check/{id}',
 		'WlgCorporationController@updateCheck')
 		->name('updateCheck');
+
+	Route::patch(
+		'/wlg-corporation/payables/update-cash/{id}',
+		'WlgCorporationController@updateCash')
+		->name('updateCash');
 
 	Route::patch(
 		'/wlg-corporation/payables/update-details/{id}',
@@ -4170,6 +4234,11 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('updateCheck');
 
 	Route::patch(
+		'/dino-industrial-corporation/payables/update-cash/{id}',
+		'DinoIndustrialCorporationController@updateCash')
+		->name('updateCash');
+
+	Route::patch(
 		'/dino-industrial-corporation/payables/update-details/{id}',
 		'DinoIndustrialCorporationController@updateDetails')
 		->name('updateDetails');
@@ -4288,6 +4357,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'/local-ground/payables/update-check/{id}',
 		'LocalGroundController@updateCheck')
 		->name('updateCheck');
+
+	Route::patch(
+		'/local-ground/payables/update-cash/{id}',
+		'LocalGroundController@updateCash')
+		->name('updateCash');
 
 	Route::patch(
 		'/local-ground/payables/update-details/{id}',

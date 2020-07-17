@@ -52,15 +52,7 @@
 
     					  				</div>
 	    					  		</div>
-	    					  		<div class="form-group">
-    					  				<div class="form-row">
-					  						<div class="col-lg-12">
-				  								<label>Payment Cash Number</label>
-				  								<input type="text" name="chequeNumber" class="form-control" />
-					  						</div> 
-
-    					  				</div>
-	    					  		</div>
+	    					  		
 	    					  		<div class="form-group">
     					  				<div class="form-row">
 					  						<div class="col-lg-12">
@@ -315,7 +307,7 @@
                                 <thead>
                                     <tr>
                                         @if($transactionList[0]->method_of_payment === "CASH")
-                                        <th>PAYMENT CASH NUMBER</th>
+                                        <th>ACTON</th>
                                         @else
                                         <th>ACTON</th>
                                         <th>ACCOUNT NAME/NO</th>
@@ -329,6 +321,28 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+  										@if($transactionList[0]->method_of_payment === "CASH")
+  											@foreach($getCashAmounts as $getCashAmount)
+  											<tr>
+  												<td>
+												@if($transactionList[0]->status != "FULLY PAID AND RELEASED")
+													<!-- Button trigger modal -->
+													<a  data-toggle="modal" data-target="#editCash<?php echo $getCashAmount['id'] ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
+												@else
+													
+													<i class="fas fa-edit" style="font-size:24px"></i>
+												@endif	
+												</td>
+												<td><?php echo number_format($getCashAmount['cheque_amount'], 2); ?></td>
+											</tr>
+											@endforeach
+											<tr>
+												<td class="bg-info" style="color:white;">Total</td>
+											
+												
+												<td class="bg-success" style="color:white;"><?php echo number_format($sumCheque, 2);?></td>
+											</tr>
+										@else
                                     	@foreach($getChequeNumbers as $getChequeNumber)
 				  						<tr>
                                              <td>
@@ -351,6 +365,7 @@
 											<td class="bg-info" style="color:white;"></td>
 				  							<td class="bg-success" style="color:white;"><?php echo number_format($sumCheque, 2);?></td>
 				  						</tr>
+										@endif
                                 </tbody>
                             </table>
                             <br>
@@ -420,6 +435,39 @@
 			</div>
 		</div>
 	  </div>
+
+	<!-- Modal -->
+	@foreach($getCashAmounts as $getCashAmount)
+	<div class="modal fade" id="editCash<?php echo $getCashAmount['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+		<div class="modal-dialog modal-dialog-centered " role="document">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Edit Cash Amount</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<div class="form-group">
+					<div class="form-row">
+						<div id="editCashSucc<?php echo $getCashAmount['id']?>" class="col-lg-12"></div>
+						
+						<div class="col-lg-4">
+							<label>Cash Amount</label>
+							<input type="text" id="cashAmount<?php echo $getCashAmount['id']?>" name="cashAmount" class="form-control" value="{{ $getCashAmount['cheque_amount']}}" />
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				<button type="button" onclick="updateCash(<?php echo $getCashAmount['id']; ?>)" class="btn btn-success">Update cash</button>
+			</div>
+			</div>
+		</div>
+	</div>
+	@endforeach
 
     <!-- Modal -->
 	@foreach($getChequeNumbers as $getChequeNumber)
@@ -607,6 +655,42 @@
 
 		});
 	}
+
+	const updateCash = (id) => {
+		const cashAmount = $("#cashAmount"+id).val();
+		
+		//make ajax call
+		$.ajax({
+			type:"PATCH",
+            url:'/wlg-corporation/payables/update-cash/' + id,
+			data:{
+                _method:'patch',
+                "_token":"{{ csrf_token() }}",
+                "id":id,
+                "cashAmount":cashAmount,      
+            },
+			success:function(data){
+				console.log(data);
+
+				const getData = data;
+                const succData = getData.split(":");
+                const succDataArr = succData[0];
+				if(succDataArr == "Success"){
+					$("#editCashSucc"+id).fadeIn().delay(3000).fadeOut();
+                    $("#editCashSucc"+id).html(`<p class="alert alert-success"> ${data}</p>`);
+                    
+                    setTimeout(function(){
+                        document.location.reload();
+                    }, 3000);
+				}
+			},
+			error:function(data){
+				console.log('Error:', data);
+			}
+
+		});
+	}
+	
 
     const updateCheck = (id) =>{
 		const accountNameNo = $("#accountNameNo"+id).val();

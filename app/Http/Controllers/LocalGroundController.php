@@ -26,6 +26,15 @@ class LocalGroundController extends Controller
 
         return response()->json('Success: successfully updated.');
     }
+
+    public function updateCash(Request $request){
+        $updateCash = LocalGroundPaymentVoucher::find($request->id);
+
+        $updateCash->cheque_amount = $request->cashAmount;
+        $updateCash->save();
+
+        return response()->json('Success: successfully updated.');
+    }
     
     public function updateCheck(Request $request){
         $updateCheck = LocalGroundPaymentVoucher::find($request->id);
@@ -2073,6 +2082,9 @@ class LocalGroundController extends Controller
 
         $getChequeNumbers = LocalGroundPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
+        
+        $getCashAmounts = LocalGroundPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
+      
         //getParticular details
         $getParticulars = LocalGroundPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
         
@@ -2088,7 +2100,7 @@ class LocalGroundController extends Controller
         $sumCheque = $chequeAmount1 + $chequeAmount2;
 
         return view('local-ground-payables-detail', compact('transactionList', 'getParticulars', 'sum' , 
-        'getChequeNumbers', 'sumCheque'));
+        'getChequeNumbers', 'sumCheque', 'getCashAmounts'));
                 
 
     }

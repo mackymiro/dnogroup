@@ -26,6 +26,15 @@ class DinoIndustrialCorporationController extends Controller
         return response()->json('Success: successfully updated.');
     }
 
+    public function updateCash(Request $request){
+        $updateCash = DinoIndustrialCorporationPaymentVoucher::find($request->id);
+
+        $updateCash->cheque_amount = $request->cashAmount;
+        $updateCash->save();
+
+        return response()->json('Success: successfully updated.');
+    }
+
     public function updateCheck(Request $request){
         $updateCheck = DinoIndustrialCorporationPaymentVoucher::find($request->id);
 
@@ -1849,6 +1858,8 @@ class DinoIndustrialCorporationController extends Controller
 
         $getChequeNumbers = DinoIndustrialCorporationPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
+        $getCashAmounts = DinoIndustrialCorporationPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
+      
         //getParticular details
         $getParticulars = DinoIndustrialCorporationPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
         
@@ -1864,7 +1875,7 @@ class DinoIndustrialCorporationController extends Controller
         $sumCheque = $chequeAmount1 + $chequeAmount2;
 
         return view('dino-industrial-payables-detail', compact('transactionList', 'getParticulars', 'sum' , 
-        'getChequeNumbers', 'sumCheque'));
+        'getChequeNumbers', 'sumCheque', 'getCashAmounts'));
     }
 
     public function paymentVoucherStore(Request $request){

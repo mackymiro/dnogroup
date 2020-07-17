@@ -31,6 +31,15 @@ class MrPotatoController extends Controller
         return response()->json('Success: successfully updated.');
     }
 
+    public function updateCash(Request $request){
+        $updateCash = MrPotatoPaymentVoucher::find($request->id);
+
+        $updateCash->cheque_amount = $request->cashAmount;
+        $updateCash->save();
+
+        return response()->json('Success: successfully updated.');
+    }
+
     public function updateCheck(Request $request){
         $updateCheck = MrPotatoPaymentVoucher::find($request->id);
 
@@ -3590,6 +3599,8 @@ class MrPotatoController extends Controller
           //
         $getChequeNumbers = MrPotatoPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
+        $getCashAmounts = MrPotatoPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
+      
         //getParticular details
         $getParticulars = MrPotatoPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
         
@@ -3606,7 +3617,7 @@ class MrPotatoController extends Controller
         $sumCheque = $chequeAmount1 + $chequeAmount2;
 
         return view('mr-potato-payables-detail', compact('transactionList', 'getChequeNumbers',
-            'getParticulars', 'sum', 'sumCheque'));
+            'getParticulars', 'sum', 'sumCheque', 'getCashAmounts'));
     }
 
     //

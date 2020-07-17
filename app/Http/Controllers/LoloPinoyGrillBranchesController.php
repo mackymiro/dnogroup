@@ -31,6 +31,15 @@ class LoloPinoyGrillBranchesController extends Controller
         return response()->json('Success: successfully updated.');
     }
 
+    public function updateCash(Request $request){
+        $updateCash = LoloPinoyGrillBranchesPaymentVoucher::find($request->id);
+
+        $updateCash->cheque_amount = $request->cashAmount;
+        $updateCash->save();
+
+        return response()->json('Success: successfully updated.');
+    }
+
     public function updateCheck(Request $request){
         $updateCheck = LoloPinoyGrillBranchesPaymentVoucher::find($request->id);
 
@@ -2867,7 +2876,9 @@ class LoloPinoyGrillBranchesController extends Controller
 
           //
         $getChequeNumbers = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
-
+        
+        $getCashAmounts = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
+      
         
         //getParticular details
         $getParticulars = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
@@ -2885,7 +2896,7 @@ class LoloPinoyGrillBranchesController extends Controller
       
 
          return view('lolo-pinoy-grill-branches-payables-detail', compact('transactionList', 
-            'getChequeNumbers','sum', 'getParticulars', 'sumCheque'));
+            'getChequeNumbers','sum', 'getParticulars', 'sumCheque', 'getCashAmounts'));
     }
 
     //

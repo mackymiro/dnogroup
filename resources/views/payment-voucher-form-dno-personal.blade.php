@@ -155,6 +155,7 @@
                                                 </optgroup>
                                                 <option value="Petty Cash">Petty Cash</option>
                                                 <option value="Payroll">Payroll</option>
+                                                <option value="Supplier">Supplier</option>
                                               </select>
                                           </div>
                                           <div id="cebuProp" class="col-lg-4">
@@ -207,8 +208,17 @@
                                           </div>
                                           <div id="documentList" class="col-lg-2">
                                               <label>Document List</label>
-                                              <select id="docu" name="documentList" class="selcls form-control">
+                                              <select id="docu" name="documentList" class="form-control">
                                               </select>
+                                          </div>
+                                          <div id="supplierData" class="col-lg-4">
+                                             <label>Supplier Name</label>
+                                             <select id="supplierName" name="supplierName"  data-live-search="true"  name="bankName" class="change selectpicker form-control">
+                                                  @foreach($suppliers as $supplier)
+                                                    <option value="{{ $supplier['id']}}">{{ $supplier['supplier_name']}}</option>
+                                                
+                                                  @endforeach
+                                             </select>
                                           </div>
                                           
                                       </div>
@@ -350,6 +360,7 @@
               $("#utility").hide();
               $("#documentList").hide();
               $("#selectAccountID").hide();
+              $("#supplierData").hide();
 
               $("#documentList").val('');
           }else if(cat === "Manila Properties"){
@@ -360,6 +371,7 @@
               $("#documentList").hide();
               $(".bills").show();
               $("#selectAccountID").hide();
+              $("#supplierData").hide();
 
               $("#documentList").val('');
           }else if(cat === "Vehicles"){
@@ -370,7 +382,10 @@
               $(".bills").hide();
               $("#manilaProp").hide();
               $("#selectAccountID").hide();
+              $("#supplierData").hide();
                
+          }else if(cat === "Supplier"){
+              
           }else{
             $("#cebuProp").hide();
             $(".bills").hide();

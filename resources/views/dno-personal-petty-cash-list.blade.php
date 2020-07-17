@@ -39,7 +39,7 @@
                                     <div class="form-row">
                                         <div class="col-lg-12">
                                              <!-- Button trigger modal -->
-                                             <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#addPettyCash"><i class="fas fa-plus"></i> Add Petty Cash</a>
+                                             <a class="btn btn-primary btn-lg" href="#" data-toggle="modal" data-target="#addPettyCash"><i class="fas fa-plus"></i> Add Petty Cash</a>
                                       
                                         </div>
                                     </div>
@@ -93,7 +93,7 @@
         </div>  
      </div>
      <!-- Modal -->
-        <div class="modal fade" id="addPettyCash" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal fade" id="addPettyCash" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
             <div class="modal-header">

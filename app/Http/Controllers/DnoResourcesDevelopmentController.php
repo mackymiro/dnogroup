@@ -28,6 +28,15 @@ class DnoResourcesDevelopmentController extends Controller
         return response()->json('Success: successfully updated.');
     }
 
+    public function updateCash(Request $request){
+        $updateCash = DnoResourcesDevelopmentCorpPaymentVoucher::find($request->id);
+
+        $updateCash->cheque_amount = $request->cashAmount;
+        $updateCash->save();
+
+        return response()->json('Success: successfully updated.');
+    }
+
     public function updateCheck(Request $request){
         $updateCheck = DnoResourcesDevelopmentCorpPaymentVoucher::find($request->id);
 
@@ -2042,6 +2051,8 @@ class DnoResourcesDevelopmentController extends Controller
           //
         $getChequeNumbers = DnoResourcesDevelopmentCorpPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
+        $getCashAmounts = DnoResourcesDevelopmentCorpPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
+      
          //getParticular details
          $getParticulars = DnoResourcesDevelopmentCorpPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
         
@@ -2059,7 +2070,7 @@ class DnoResourcesDevelopmentController extends Controller
          $sumCheque = $chequeAmount1 + $chequeAmount2;
 
          return view('dno-resources-payables-detail', compact('user', 'transactionList', 'getChequeNumbers','sum', 
-            'getParticulars', 'sumCheque'));
+            'getParticulars', 'sumCheque', 'getCashAmounts'));
     }
 
     //

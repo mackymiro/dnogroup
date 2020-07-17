@@ -16,10 +16,52 @@ use App\DnoPersonalUtility;
 use App\DnoPersonalPettyCash;
 use App\DnoPersonalReceivable;
 use App\DnoPersonalCode;
-
+use App\DnoPersonalSupplier;
 
 class DnoPersonalController extends Controller
 {   
+
+    public function viewSupplier($id){
+        
+    }
+
+    public function addSupplier(Request $request){
+
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+          //check if supplier name exits
+        $target = DB::table(
+                'dno_personal_suppliers')
+                ->where('supplier_name', $request->supplierName)
+                ->get()->first();
+
+        if($target === NULL){
+            $supplier = new DnoPersonalSupplier([
+                'user_id'=>$user->id,
+                'date'=>$request->date,
+                'supplier_name'=>$request->supplierName, 
+                'created_by'=>$name,
+            ]);
+    
+            $supplier->save();
+            return response()->json('Success: successfully updated.');      
+        }else{
+            return response()->json('Failed: Already exist.');
+        }
+      
+    }
+
+    public function supplier(){
+        $suppliers = DnoPersonalSupplier::get()->toArray();
+        return view('dno-personal-supplier', compact('suppliers'));
+    }
+
     public function updateDetailsCC(Request $request){
         $updateCC = DnoPersonalPaymentVoucher::find($request->id);
 
@@ -47,6 +89,15 @@ class DnoPersonalController extends Controller
 
        return response()->json('Success: successfully updated.');
         
+    }
+
+    public function updateCash(Request $request){
+        $updateCash = DnoPersonalPaymentVoucher::find($request->id);
+
+        $updateCash->cheque_amount = $request->cashAmount;
+        $updateCash->save();
+
+        return response()->json('Success: successfully updated.');
     }
 
     public function updateCheck(Request $request){
@@ -3249,6 +3300,7 @@ class DnoPersonalController extends Controller
         $totalChequeAmount = $paymentData->cheque_total_amount + $request->get('chequeAmount');
  
 
+
         //save payment cheque num and cheque amount
         $addPayment = new DnoPersonalPaymentVoucher([
             'user_id'=>$user->id,
@@ -3322,8 +3374,13 @@ class DnoPersonalController extends Controller
                             ->where('dno_personal_codes.module_name', $moduleName)
                             ->get();
 
+
+
         $getChequeNumbers = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
+        
+        $getCashAmounts = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
+       
         //getParticular details
         $getParticulars = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
         
@@ -3341,7 +3398,7 @@ class DnoPersonalController extends Controller
         $sumCheque = $chequeAmount1 + $chequeAmount2;
 
          return view('dno-personal-payables-detail', compact('getCreditCards', 'transactionList', 'getChequeNumbers','sum'
-        , 'getParticulars', 'sumCheque'));
+        , 'getParticulars', 'sumCheque', 'getCashAmounts'));
     }
 
     
@@ -3577,9 +3634,11 @@ class DnoPersonalController extends Controller
         //get all flag expect cebu and manila properties
         $getAllFlags = DnoPersonalProperty::where('flag', '!=', $flag)->where('flag', '!=', $flagM)->get()->toArray();
        
+        //get suppliers
+        $suppliers = DnoPersonalSupplier::get()->toArray();
 
         return view('payment-voucher-form-dno-personal', compact('getCreditCards', 
-        'getCebuProperties', 'getManilaProperties', 'getUtilities', 'getAllFlags'));
+        'getCebuProperties', 'getManilaProperties', 'getUtilities', 'getAllFlags', 'suppliers'));
     }
 
     /**

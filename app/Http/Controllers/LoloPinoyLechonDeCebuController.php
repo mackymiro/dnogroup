@@ -36,6 +36,15 @@ class LoloPinoyLechonDeCebuController extends Controller
         return response()->json('Success: successfully updated.');
     }
 
+    public function updateCash(Request $request){
+        $updateCash = LechonDeCebuPaymentVoucher::find($request->id);
+
+        $updateCash->cheque_amount = $request->cashAmount;
+        $updateCash->save();
+
+        return response()->json('Success: successfully updated.');
+    }
+
     public function updateCheck(Request $request){  
         $updateCheck = LechonDeCebuPaymentVoucher::find($request->id);
 
@@ -4687,6 +4696,9 @@ class LoloPinoyLechonDeCebuController extends Controller
         
         $getChequeNumbers = LechonDeCebuPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
+        
+        $getCashAmounts = LechonDeCebuPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
+       
         //getParticular details
         $getParticulars = LechonDeCebuPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
       
@@ -4704,7 +4716,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         
 
         return view('lechon-de-cebu-payables-detail', compact('transactionList', 
-        'getChequeNumbers', 'getParticulars', 'sum', 'sumCheque'));
+        'getChequeNumbers', 'getParticulars', 'sum', 'sumCheque', 'getCashAmounts'));
 
     }
 

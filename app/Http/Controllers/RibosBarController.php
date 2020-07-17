@@ -35,6 +35,15 @@ class RibosBarController extends Controller
         return response()->json('Success: successfully updated.');
     }
 
+    public function updateCash(Request $request){
+        $updateCash = RibosBarPaymentVoucher::find($request->id);
+
+        $updateCash->cheque_amount = $request->cashAmount;
+        $updateCash->save();
+
+        return response()->json('Success: successfully updated.');
+    }
+
     public function updateCheck(Request $request){
         $updateCheck = RibosBarPaymentVoucher::find($request->id);
 
@@ -3571,6 +3580,10 @@ class RibosBarController extends Controller
         
         $getChequeNumbers = RibosBarPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
+
+        $getCashAmounts = RibosBarPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
+       
+
         //getParticular details
         $getParticulars = RibosBarPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
         
@@ -3586,7 +3599,7 @@ class RibosBarController extends Controller
          $sumCheque = $chequeAmount1 + $chequeAmount2;
 
          return view('ribos-bar-payables-detail', compact('transactionList', 'getChequeNumbers','sum'
-            , 'getParticulars', 'sumCheque'));
+            , 'getParticulars', 'sumCheque', 'getCashAmounts'));
     }
 
     //

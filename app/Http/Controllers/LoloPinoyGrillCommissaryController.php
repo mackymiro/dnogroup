@@ -33,6 +33,15 @@ class LoloPinoyGrillCommissaryController extends Controller
         return response()->json('Success: successfully updated.');
     }   
 
+    public function updateCash(Request $request){
+        $updateCash = LoloPinoyGrillCommissaryPaymentVoucher::find($request->id);
+
+        $updateCash->cheque_amount = $request->cashAmount;
+        $updateCash->save();
+
+        return response()->json('Success: successfully updated.');
+    }
+
     public function updateCheck(Request $request){
         $updateCheck = LoloPinoyGrillCommissaryPaymentVoucher::find($request->id);
 
@@ -4057,13 +4066,16 @@ class LoloPinoyGrillCommissaryController extends Controller
                             'lolo_pinoy_grill_commissary_codes.module_id',
                             'lolo_pinoy_grill_commissary_codes.module_code',
                             'lolo_pinoy_grill_commissary_codes.module_name')
-                            ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                            ->leftJoin('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_payment_vouchers.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
                             ->where('lolo_pinoy_grill_commissary_payment_vouchers.id', $id)
                             ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
                             ->get();
 
         //
         $getChequeNumbers = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
+
+        $getCashAmounts = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
+      
 
         //getParticular details
         $getParticulars = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
@@ -4081,7 +4093,7 @@ class LoloPinoyGrillCommissaryController extends Controller
         $sumCheque = $chequeAmount1 + $chequeAmount2;
           
          return view('lolo-pinoy-grill-payables-detail', compact('transactionList', 'getChequeNumbers',
-             'getParticulars', 'sum', 'sumCheque'));
+             'getParticulars', 'sum', 'sumCheque', 'getCashAmounts'));
     }
 
     //

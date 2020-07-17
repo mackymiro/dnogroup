@@ -27,6 +27,15 @@ class DongFangCorporationController extends Controller
         return response()->json('Success: successfully updated.');
     }
 
+    public function updateCash(Request $request){
+        $updateCash = DongFangCorporationPaymentVoucher::find($request->id);
+
+        $updateCash->cheque_amount = $request->cashAmount;
+        $updateCash->save();
+
+        return response()->json('Success: successfully updated.');
+    }
+
     public function updateCheck(Request $request){
         $updateCheck = DongFangCorporationPaymentVoucher::find($request->id);
 
@@ -2334,16 +2343,16 @@ class DongFangCorporationController extends Controller
                             'dong_fang_corporation_codes.module_id',
                             'dong_fang_corporation_codes.module_code',
                             'dong_fang_corporation_codes.module_name')
-                            ->join('dong_fang_corporation_codes', 'dong_fang_corporation_payment_vouchers.id', '=', 'dong_fang_corporation_codes.module_id')
+                            ->leftJoin('dong_fang_corporation_codes', 'dong_fang_corporation_payment_vouchers.id', '=', 'dong_fang_corporation_codes.module_id')
                             ->where('dong_fang_corporation_payment_vouchers.id', $id)
                             ->where('dong_fang_corporation_codes.module_name', $moduleName)
                             ->get();
-        
-
-
+    
 
         $getChequeNumbers = DongFangCorporationPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
+        $getCashAmounts = DongFangCorporationPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
+      
 
         //getParticular details
         $getParticulars = DongFangCorporationPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
@@ -2360,7 +2369,7 @@ class DongFangCorporationController extends Controller
         $sumCheque = $chequeAmount1 + $chequeAmount2;
 
         return view('dong-fang-corporation-payables-detail', compact('transactionList', 'getParticulars', 'sum', 
-        'getChequeNumbers', 'sumCheque'));
+        'getChequeNumbers', 'sumCheque', 'getCashAmounts'));
     }
 
     public function paymentVoucherStore(Request $request){
