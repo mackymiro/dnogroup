@@ -106,16 +106,17 @@
                             <table style="border:1px solid black;">
 								<thead>
 									<tr>
-										<th style="height: 1%; text-align: center;">INVOICE NO</th>
-										<th style="height: 1%; text-align: center;">PV NO</th>
-                                        <th style="height: 1%; text-align: center;">ISSUED DATE</th>
-                                        <th style="height: 1%; text-align: center;">PAID TO</th>
-                                        <th style="height: 1%; text-align: center; width:130px;">Account Name/No</th>
-                                        <th style="height: 1%; text-align: center;">BANK NAME/CHECK NO</th>
-                                        <th style="height: 1%; text-align: center;">PAID AMOUNT</th>
-                                        <th style="height: 1%; text-align: center;">BALANCE</th>
-                                        <th style="height: 1%; text-align: center;">STATUS</th>
-                                        <th style="height: 1%; text-align: center;">CREATED BY</th>
+									    <th style="height: 1%; text-align: center; border: 1px solid black;">INVOICE NO</th>
+										<th style="height: 1%; text-align: center; border: 1px solid black;">PV NO</th>
+                                        <th style="height: 1%; text-align: center; border: 1px solid black;">ISSUED DATE</th>
+                                        <th style="height: 1%; text-align: center; border: 1px solid black;">PAID TO</th>
+                                        <th style="height: 1%; text-align: center; border: 1px solid black; width:130px;">Account Name/No</th>
+                                        <th style="height: 1%; text-align: center; border: 1px solid black;">BANK NAME/CHECK NO</th>
+                                        <th style="height: 1%; text-align: center; border: 1px solid black;">CURRENCY</th>
+                                        <th style="height: 1%; text-align: center; border: 1px solid black;">PAID AMOUNT</th>
+                                        <th style="height: 1%; text-align: center; border: 1px solid black;">BALANCE</th>
+                                        <th style="height: 1%; text-align: center; border: 1px solid black;">STATUS</th>
+                                        <th style="height: 1%; text-align: center; border: 1px solid black;">CREATED BY</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -157,6 +158,8 @@
                                                 <?php echo $getCheck->cheque_number; ?>
                                             <?php endforeach; ?>
                                         </td>
+                                        <td style="text-align:center; border: 1px solid black; font-size:10px;">{{ $getTransactionListCheck->currency }}</td>
+                                      
                                         <td style="text-align:center; border: 1px solid black;"><?php echo number_format($getTransactionListCheck->cheque_total_amount, 2); ?></td>
                                     
                                         <td style="text-align:center; border: 1px solid black;">
@@ -184,6 +187,14 @@
                                       <tr>
                                         <th width="15%"  style="text-align:center; border: 1px solid black;">Total Paid Amount:</th>
                                         <th  style="text-align:center; border: 1px solid black;"><?php echo number_format($totalPaidAmountCheck, 2);?></th>
+                                    </tr>
+                                    <tr>
+                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Remaining Balance (USD):</th>
+                                        <th  style="text-align:center; border: 1px solid black;"><?php echo number_format($totalAmountCheckInUSD, 2);?></th>
+                                    </tr>
+                                    <tr>
+                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Total Paid Amount (USD):</th>
+                                        <th  style="text-align:center; border: 1px solid black;"><?php echo number_format($totalPaidAmountCheckInUSD, 2);?></th>
                                     </tr>
                                 </tbody>
                             </table>

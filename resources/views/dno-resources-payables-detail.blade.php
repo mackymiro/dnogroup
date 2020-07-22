@@ -289,7 +289,14 @@
 											</td>
 											<td>{{ $transactionList[0]->issued_date }}</td>
   											<td>{{ $transactionList[0]->particulars}}</td>
-											<td><?php echo number_format($transactionList[0]->amount, 2); ?></td>
+											<td>
+  												@if($transactionList[0]->currency === "PHP")
+												 ₱ 
+												@elseif($transactionList[0]->currency === "USD")
+												$
+
+												@endif
+												<?php echo number_format($transactionList[0]->amount, 2); ?></td>
 										</tr>
 										@foreach($getParticulars as $getParticular)
 										<tr>
@@ -363,7 +370,14 @@
 											</td>
 											<td>{{ $getChequeNumber['account_name_no']}}</td>
 				  							<td>{{ $getChequeNumber['cheque_number']}}</td>
-				  							<td><?php echo number_format($getChequeNumber['cheque_amount'], 2); ?></td>
+				  							<td>
+											    @if($transactionList[0]->currency === "PHP")
+												 ₱ 
+												@elseif($transactionList[0]->currency === "USD")
+												$
+
+												@endif 
+											  <?php echo number_format($getChequeNumber['cheque_amount'], 2); ?></td>
 				  						</tr>
 				  						@endforeach
 				  						<tr>

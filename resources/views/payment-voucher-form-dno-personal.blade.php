@@ -155,7 +155,7 @@
                                                 </optgroup>
                                                 <option value="Petty Cash">Petty Cash</option>
                                                 <option value="Payroll">Payroll</option>
-                                                <option value="Supplier">Supplier</option>
+                                               
                                               </select>
                                           </div>
                                           <div id="cebuProp" class="col-lg-4">
@@ -211,14 +211,13 @@
                                               <select id="docu" name="documentList" class="form-control">
                                               </select>
                                           </div>
-                                          <div id="supplierData" class="col-lg-4">
-                                             <label>Supplier Name</label>
-                                             <select id="supplierName" name="supplierName"  data-live-search="true"  name="bankName" class="change selectpicker form-control">
+                                          <div id="supplierList" class="col-lg-2">
+                                              <label>Supplier Name</label>
+                                              <select data-live-search="true" id="supplierName" name="supplierName" class="form-control selectpicker">
                                                   @foreach($suppliers as $supplier)
-                                                    <option value="{{ $supplier['id']}}">{{ $supplier['supplier_name']}}</option>
-                                                
+                                                    <option value="{{ $supplier['id']}}-{{ $supplier['supplier_name']}}">{{ $supplier['supplier_name']}}</option>
                                                   @endforeach
-                                             </select>
+                                              </select>
                                           </div>
                                           
                                       </div>
@@ -228,11 +227,21 @@
                                       <div class="form-row">
                                           <div class="col-lg-4">
                                               <label>Particulars</label>
-                                              <input type="text" name="particulars" class="selcls form-control" required="required"/>
+                                              <input type="text" name="particulars" class=" form-control" required="required"/>
+                                          </div>
+                                          <div class="col-lg-2">
+                                              <label>Currency</label>
+                                              <div id="app-currency">
+                                                  <select name="currency" class=" form-control"> 
+                                                      <option v-for="currency in currencies" v-bind:value="currency.value">
+                                                        @{{ currency.text }}
+                                                      </option>
+                                                  </select>
+                                              </div>
                                           </div>
                                           <div class="col-lg-2">
                                               <label>Amount</label>
-                                              <input type="text" name="amount" class="selcls form-control"  required="required"/>
+                                              <input type="text" name="amount" class=" form-control"  required="required"/>
                                           </div>
                                       </div>
                                   </div>
@@ -271,6 +280,7 @@
       $("#acctName").hide();
       $("#documentList").hide();
       $(".bills").hide();
+      $("#supplierList").hide();
   
       $("#selectAccountID").hide();
 
@@ -306,17 +316,26 @@
          const bills = $(this).children("option:selected").val();
          if(bills == "Veco"){
              $("#selectAccountID").show();
+             $("#supplierList").hide();
          }else if(bills == "Meralco"){
              $("#selectAccountID").show();
+             $("#supplierList").hide();
          }else if(bills == "MCWD"){
              $("#selectAccountID").show();
+             $("#supplierList").hide();
          }else if(bills == "PLDT"){
              $("#selectAccountID").show();
+             $("#supplierList").hide();
          }else if(bills == "SKYCABLE"){
              $("#selectAccountID").show();
+             $("#supplierList").hide();
+         }else if(bills == "Service Provider"){
+            $("#supplierList").show();
+
+            $("#selectAccountID").hide();
          }else{
             $("#selectAccountID").hide();
-
+            $("#supplierList").hide();
          }
       });
 
@@ -360,7 +379,7 @@
               $("#utility").hide();
               $("#documentList").hide();
               $("#selectAccountID").hide();
-              $("#supplierData").hide();
+              
 
               $("#documentList").val('');
           }else if(cat === "Manila Properties"){
@@ -371,7 +390,7 @@
               $("#documentList").hide();
               $(".bills").show();
               $("#selectAccountID").hide();
-              $("#supplierData").hide();
+             
 
               $("#documentList").val('');
           }else if(cat === "Vehicles"){
@@ -382,10 +401,8 @@
               $(".bills").hide();
               $("#manilaProp").hide();
               $("#selectAccountID").hide();
-              $("#supplierData").hide();
+            
                
-          }else if(cat === "Supplier"){
-              
           }else{
             $("#cebuProp").hide();
             $(".bills").hide();
@@ -536,6 +553,17 @@
         {text: 'Use Card', value: 'Use Card'}
       ]
     }
+  })
+
+  //currency 
+  new Vue({
+    el: '#app-currency',
+      data:{
+        currencies:[
+          {text: '₱-PHP', value:"PHP"},
+          {text: '$-USD', value:'USD'}
+        ]
+      }
   })
 
 </script>

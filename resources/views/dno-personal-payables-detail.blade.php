@@ -292,6 +292,7 @@
 		  									<label>Category</label>
 		  									<input type="text" name="category" class="form-control" value="{{ $transactionList[0]->category }}" disabled="disabled" />
 			  							</div>
+										
 										@if($transactionList[0]->sub_category_name != "NULL")
 										<div class="col-lg-4">
 		  									<label>&nbsp;</label>
@@ -370,6 +371,12 @@
 		  									<label>Category</label>
 		  									<input type="text" name="category" class="form-control" value="{{ $transactionList[0]->category }}" disabled="disabled" />
 			  							</div>
+										@if($transactionList[0]->sub_category_name != "NULL")
+										<div class="col-lg-4">
+		  									<label>Property</label>
+		  									<input type="text" name="subCateogry" class="form-control" value="{{ $transactionList[0]->sub_category_name }}" disabled="disabled" />
+			  							</div>
+										@endif
 			  							<div class="col-lg-4">
 		  									<label>Status</label>
 		  									<div id="app-status">
@@ -412,7 +419,14 @@
 											</td>
   											<td>{{ $transactionList[0]->issued_date}}</td>
   											<td>{{ $transactionList[0]->particulars}}</td>
-											<td><?php echo number_format($transactionList[0]->amount, 2); ?></td>
+											<td>
+												@if($transactionList[0]->currency === "PHP")
+												 ₱ 
+												@elseif($transactionList[0]->currency === "USD")
+												$
+
+												@endif
+												<?php echo number_format($transactionList[0]->amount, 2); ?></td>
 										</tr>
 										@foreach($getParticulars as $getParticular)
 										<tr>
@@ -488,7 +502,14 @@
 												<td>{{ $getChequeNumber['account_name_no']}}</td>
 												<td>{{ $getChequeNumber['cheque_number']}}</td>
 											
-												<td><?php echo number_format($getChequeNumber['cheque_amount'], 2); ?></td>
+												<td>
+												@if($transactionList[0]->currency === "PHP")
+												 ₱ 
+												@elseif($transactionList[0]->currency === "USD")
+												$
+
+												@endif 	
+													<?php echo number_format($getChequeNumber['cheque_amount'], 2); ?></td>
 											</tr>
 											@endforeach
 											<tr>

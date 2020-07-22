@@ -905,6 +905,11 @@ Route::group(['middleware' =>['user']], function(){
 		->name('viewSupplier');
 
 	Route::get(
+		'/dno-personal/supplier/print/{id}',
+		'DnoPersonalController@printSupplier')
+		->name('printSupplier');
+
+	Route::get(
 			'/dno-personal/payment-voucher-form',
 			'DnoPersonalController@paymentVoucherForm')
 		->name('paymentVoucherFormDNOPersonal');

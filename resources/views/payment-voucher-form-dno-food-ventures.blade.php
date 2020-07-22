@@ -110,6 +110,16 @@
                                     <input type="text" name="particulars" class="form-control" required="required"/>
                                 </div>
                                 <div class="col-lg-2">
+                                      <label>Currency</label>
+                                      <div id="app-currency">
+                                          <select name="currency" class=" form-control"> 
+                                              <option v-for="currency in currencies" v-bind:value="currency.value">
+                                                @{{ currency.text }}
+                                              </option>
+                                          </select>
+                                      </div>
+                                  </div>
+                                <div class="col-lg-2">
                                     <label>Amount</label>
                                     <input type="text" name="amount" class="form-control"  required="required" autocomplete="off"/>
                                 </div>
@@ -193,6 +203,17 @@
 				{ text:'Internet', value: 'Internet'}
 			]
 		}
+  })
+
+   //currency 
+   new Vue({
+    el: '#app-currency',
+      data:{
+        currencies:[
+          {text: '₱-PHP', value:"PHP"},
+          {text: '$-USD', value:'USD'}
+        ]
+      }
   })
 </script>
 @endsection	

@@ -17,6 +17,7 @@ class LocalGroundPaymentVoucher extends Model
         'account_name',
         'particulars',
         'amount',
+        'currency',
         'method_of_payment',
         'prepared_by',
         'approved_by',

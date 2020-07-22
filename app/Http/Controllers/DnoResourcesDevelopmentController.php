@@ -199,6 +199,7 @@ class DnoResourcesDevelopmentController extends Controller
                             'dno_resources_development_corp_payment_vouchers.account_name',
                             'dno_resources_development_corp_payment_vouchers.particulars',
                             'dno_resources_development_corp_payment_vouchers.amount',
+                            'dno_resources_development_corp_payment_vouchers.currency',
                             'dno_resources_development_corp_payment_vouchers.method_of_payment',
                             'dno_resources_development_corp_payment_vouchers.prepared_by',
                             'dno_resources_development_corp_payment_vouchers.approved_by',
@@ -230,6 +231,7 @@ class DnoResourcesDevelopmentController extends Controller
                             ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
                             ->get();
         
+        $currency = "USD";
         $status = "FULLY PAID AND RELEASED";    
         $totalAmountCheck = DB::table(
                                 'dno_resources_development_corp_payment_vouchers')
@@ -243,6 +245,7 @@ class DnoResourcesDevelopmentController extends Controller
                                 'dno_resources_development_corp_payment_vouchers.account_name',
                                 'dno_resources_development_corp_payment_vouchers.particulars',
                                 'dno_resources_development_corp_payment_vouchers.amount',
+                                'dno_resources_development_corp_payment_vouchers.currency',
                                 'dno_resources_development_corp_payment_vouchers.method_of_payment',
                                 'dno_resources_development_corp_payment_vouchers.prepared_by',
                                 'dno_resources_development_corp_payment_vouchers.approved_by',
@@ -272,6 +275,7 @@ class DnoResourcesDevelopmentController extends Controller
                                 ->whereBetween('dno_resources_development_corp_payment_vouchers.created_at', [$uri0, $uri1])
                                 ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
                                 ->where('dno_resources_development_corp_payment_vouchers.status', '!=', $status)
+                                ->where('dno_resources_development_corp_payment_vouchers.currency', '!=', $currency)
                                 ->sum('dno_resources_development_corp_payment_vouchers.amount_due');
                             
         $totalPaidAmountCheck = DB::table(
@@ -286,6 +290,7 @@ class DnoResourcesDevelopmentController extends Controller
                                     'dno_resources_development_corp_payment_vouchers.account_name',
                                     'dno_resources_development_corp_payment_vouchers.particulars',
                                     'dno_resources_development_corp_payment_vouchers.amount',
+                                    'dno_resources_development_corp_payment_vouchers.currency',
                                     'dno_resources_development_corp_payment_vouchers.method_of_payment',
                                     'dno_resources_development_corp_payment_vouchers.prepared_by',
                                     'dno_resources_development_corp_payment_vouchers.approved_by',
@@ -301,6 +306,7 @@ class DnoResourcesDevelopmentController extends Controller
                                     'dno_resources_development_corp_payment_vouchers.status',
                                     'dno_resources_development_corp_payment_vouchers.cheque_number',
                                     'dno_resources_development_corp_payment_vouchers.cheque_amount',
+                                    'dno_resources_development_corp_payment_vouchers.cheque_total_amount',
                                     'dno_resources_development_corp_payment_vouchers.sub_category',
                                     'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
                                     'dno_resources_development_corp_payment_vouchers.deleted_at',
@@ -315,12 +321,105 @@ class DnoResourcesDevelopmentController extends Controller
                                     ->whereBetween('dno_resources_development_corp_payment_vouchers.created_at', [$uri0, $uri1])
                                     ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
                                     ->where('dno_resources_development_corp_payment_vouchers.status', $status)
-                                    ->sum('dno_resources_development_corp_payment_vouchers.amount_due');
+                                    ->where('dno_resources_development_corp_payment_vouchers.currency', '!=', $currency)
+                                    ->sum('dno_resources_development_corp_payment_vouchers.cheque_total_amount');
+
+        $totalAmountCheckInUSD = DB::table(
+                                        'dno_resources_development_corp_payment_vouchers')
+                                        ->select( 
+                                        'dno_resources_development_corp_payment_vouchers.id',
+                                        'dno_resources_development_corp_payment_vouchers.user_id',
+                                        'dno_resources_development_corp_payment_vouchers.pv_id',
+                                        'dno_resources_development_corp_payment_vouchers.date',
+                                        'dno_resources_development_corp_payment_vouchers.paid_to',
+                                        'dno_resources_development_corp_payment_vouchers.account_no',
+                                        'dno_resources_development_corp_payment_vouchers.account_name',
+                                        'dno_resources_development_corp_payment_vouchers.particulars',
+                                        'dno_resources_development_corp_payment_vouchers.amount',
+                                        'dno_resources_development_corp_payment_vouchers.currency',
+                                        'dno_resources_development_corp_payment_vouchers.method_of_payment',
+                                        'dno_resources_development_corp_payment_vouchers.prepared_by',
+                                        'dno_resources_development_corp_payment_vouchers.approved_by',
+                                        'dno_resources_development_corp_payment_vouchers.date_apprroved',
+                                        'dno_resources_development_corp_payment_vouchers.received_by_date',
+                                        'dno_resources_development_corp_payment_vouchers.created_by',
+                                        'dno_resources_development_corp_payment_vouchers.created_at',
+                                        'dno_resources_development_corp_payment_vouchers.invoice_number',
+                                        'dno_resources_development_corp_payment_vouchers.issued_date',
+                                        'dno_resources_development_corp_payment_vouchers.category',
+                                        'dno_resources_development_corp_payment_vouchers.amount_due',
+                                        'dno_resources_development_corp_payment_vouchers.delivered_date',
+                                        'dno_resources_development_corp_payment_vouchers.status',
+                                        'dno_resources_development_corp_payment_vouchers.cheque_number',
+                                        'dno_resources_development_corp_payment_vouchers.cheque_amount',
+                                        'dno_resources_development_corp_payment_vouchers.sub_category',
+                                        'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
+                                        'dno_resources_development_corp_payment_vouchers.deleted_at',
+                                        'dno_resources_development_codes.dno_resources_code',
+                                        'dno_resources_development_codes.module_id',
+                                        'dno_resources_development_codes.module_code',
+                                        'dno_resources_development_codes.module_name')
+                                        ->leftJoin('dno_resources_development_codes', 'dno_resources_development_corp_payment_vouchers.id', '=', 'dno_resources_development_codes.module_id')
+                                        ->where('dno_resources_development_corp_payment_vouchers.pv_id', NULL)
+                                        ->where('dno_resources_development_corp_payment_vouchers.deleted_at', NULL)
+                                        ->where('dno_resources_development_codes.module_name', $moduleName)
+                                        ->whereBetween('dno_resources_development_corp_payment_vouchers.created_at', [$uri0, $uri1])
+                                        ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
+                                        ->where('dno_resources_development_corp_payment_vouchers.status', '!=', $status)
+                                        ->where('dno_resources_development_corp_payment_vouchers.currency', $currency)
+                                        ->sum('dno_resources_development_corp_payment_vouchers.amount_due');
+
+        $totalPaidAmountCheckInUSD = DB::table(
+                                            'dno_resources_development_corp_payment_vouchers')
+                                            ->select( 
+                                            'dno_resources_development_corp_payment_vouchers.id',
+                                            'dno_resources_development_corp_payment_vouchers.user_id',
+                                            'dno_resources_development_corp_payment_vouchers.pv_id',
+                                            'dno_resources_development_corp_payment_vouchers.date',
+                                            'dno_resources_development_corp_payment_vouchers.paid_to',
+                                            'dno_resources_development_corp_payment_vouchers.account_no',
+                                            'dno_resources_development_corp_payment_vouchers.account_name',
+                                            'dno_resources_development_corp_payment_vouchers.particulars',
+                                            'dno_resources_development_corp_payment_vouchers.amount',
+                                            'dno_resources_development_corp_payment_vouchers.currency',
+                                            'dno_resources_development_corp_payment_vouchers.method_of_payment',
+                                            'dno_resources_development_corp_payment_vouchers.prepared_by',
+                                            'dno_resources_development_corp_payment_vouchers.approved_by',
+                                            'dno_resources_development_corp_payment_vouchers.date_apprroved',
+                                            'dno_resources_development_corp_payment_vouchers.received_by_date',
+                                            'dno_resources_development_corp_payment_vouchers.created_by',
+                                            'dno_resources_development_corp_payment_vouchers.created_at',
+                                            'dno_resources_development_corp_payment_vouchers.invoice_number',
+                                            'dno_resources_development_corp_payment_vouchers.issued_date',
+                                            'dno_resources_development_corp_payment_vouchers.category',
+                                            'dno_resources_development_corp_payment_vouchers.amount_due',
+                                            'dno_resources_development_corp_payment_vouchers.delivered_date',
+                                            'dno_resources_development_corp_payment_vouchers.status',
+                                            'dno_resources_development_corp_payment_vouchers.cheque_number',
+                                            'dno_resources_development_corp_payment_vouchers.cheque_amount',
+                                            'dno_resources_development_corp_payment_vouchers.cheque_total_amount',
+                                            'dno_resources_development_corp_payment_vouchers.sub_category',
+                                            'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
+                                            'dno_resources_development_corp_payment_vouchers.deleted_at',
+                                            'dno_resources_development_codes.dno_resources_code',
+                                            'dno_resources_development_codes.module_id',
+                                            'dno_resources_development_codes.module_code',
+                                            'dno_resources_development_codes.module_name')
+                                            ->leftJoin('dno_resources_development_codes', 'dno_resources_development_corp_payment_vouchers.id', '=', 'dno_resources_development_codes.module_id')
+                                            ->where('dno_resources_development_corp_payment_vouchers.pv_id', NULL)
+                                            ->where('dno_resources_development_corp_payment_vouchers.deleted_at', NULL)
+                                            ->where('dno_resources_development_codes.module_name', $moduleName)
+                                            ->whereBetween('dno_resources_development_corp_payment_vouchers.created_at', [$uri0, $uri1])
+                                            ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
+                                            ->where('dno_resources_development_corp_payment_vouchers.status', $status)
+                                            ->where('dno_resources_development_corp_payment_vouchers.currency', $currency)
+                                            ->sum('dno_resources_development_corp_payment_vouchers.cheque_total_amount');
+                                    
 
         $getDateToday = "";
         $pdf = PDF::loadView('printSummaryDnoResoures',  compact('date', 'getDateToday', 'uri0', 'uri1',
         'getTransactionListCashes', 'getTransactionListChecks',  
-        'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck'));
+        'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck', 'totalAmountCheckInUSD', 'totalPaidAmountCheckInUSD'));
         
         return $pdf->download('dno-resources-summary-report.pdf');
 
@@ -470,6 +569,7 @@ class DnoResourcesDevelopmentController extends Controller
                             'dno_resources_development_corp_payment_vouchers.account_name',
                             'dno_resources_development_corp_payment_vouchers.particulars',
                             'dno_resources_development_corp_payment_vouchers.amount',
+                            'dno_resources_development_corp_payment_vouchers.currency',
                             'dno_resources_development_corp_payment_vouchers.method_of_payment',
                             'dno_resources_development_corp_payment_vouchers.prepared_by',
                             'dno_resources_development_corp_payment_vouchers.approved_by',
@@ -501,6 +601,7 @@ class DnoResourcesDevelopmentController extends Controller
                             ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
                             ->get();
 
+        $currency = "USD";
         $status = "FULLY PAID AND RELEASED";
         $totalAmountCheck = DB::table(
                                 'dno_resources_development_corp_payment_vouchers')
@@ -514,6 +615,7 @@ class DnoResourcesDevelopmentController extends Controller
                                 'dno_resources_development_corp_payment_vouchers.account_name',
                                 'dno_resources_development_corp_payment_vouchers.particulars',
                                 'dno_resources_development_corp_payment_vouchers.amount',
+                                'dno_resources_development_corp_payment_vouchers.currency',
                                 'dno_resources_development_corp_payment_vouchers.method_of_payment',
                                 'dno_resources_development_corp_payment_vouchers.prepared_by',
                                 'dno_resources_development_corp_payment_vouchers.approved_by',
@@ -543,10 +645,57 @@ class DnoResourcesDevelopmentController extends Controller
                                 ->whereBetween('dno_resources_development_corp_payment_vouchers.created_at', [$startDate, $endDate])
                                 ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
                                 ->where('dno_resources_development_corp_payment_vouchers.status', '!=', $status)
+                                ->where('dno_resources_development_corp_payment_vouchers.currency', '!=', $currency)
                                 ->sum('dno_resources_development_corp_payment_vouchers.amount_due');
 
+
+        $totalAmountCheckInUSD = DB::table(
+                                    'dno_resources_development_corp_payment_vouchers')
+                                    ->select( 
+                                    'dno_resources_development_corp_payment_vouchers.id',
+                                    'dno_resources_development_corp_payment_vouchers.user_id',
+                                    'dno_resources_development_corp_payment_vouchers.pv_id',
+                                    'dno_resources_development_corp_payment_vouchers.date',
+                                    'dno_resources_development_corp_payment_vouchers.paid_to',
+                                    'dno_resources_development_corp_payment_vouchers.account_no',
+                                    'dno_resources_development_corp_payment_vouchers.account_name',
+                                    'dno_resources_development_corp_payment_vouchers.particulars',
+                                    'dno_resources_development_corp_payment_vouchers.amount',
+                                    'dno_resources_development_corp_payment_vouchers.currency',
+                                    'dno_resources_development_corp_payment_vouchers.method_of_payment',
+                                    'dno_resources_development_corp_payment_vouchers.prepared_by',
+                                    'dno_resources_development_corp_payment_vouchers.approved_by',
+                                    'dno_resources_development_corp_payment_vouchers.date_apprroved',
+                                    'dno_resources_development_corp_payment_vouchers.received_by_date',
+                                    'dno_resources_development_corp_payment_vouchers.created_by',
+                                    'dno_resources_development_corp_payment_vouchers.created_at',
+                                    'dno_resources_development_corp_payment_vouchers.invoice_number',
+                                    'dno_resources_development_corp_payment_vouchers.issued_date',
+                                    'dno_resources_development_corp_payment_vouchers.category',
+                                    'dno_resources_development_corp_payment_vouchers.amount_due',
+                                    'dno_resources_development_corp_payment_vouchers.delivered_date',
+                                    'dno_resources_development_corp_payment_vouchers.status',
+                                    'dno_resources_development_corp_payment_vouchers.cheque_number',
+                                    'dno_resources_development_corp_payment_vouchers.cheque_amount',
+                                    'dno_resources_development_corp_payment_vouchers.sub_category',
+                                    'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
+                                    'dno_resources_development_corp_payment_vouchers.deleted_at',
+                                    'dno_resources_development_codes.dno_resources_code',
+                                    'dno_resources_development_codes.module_id',
+                                    'dno_resources_development_codes.module_code',
+                                    'dno_resources_development_codes.module_name')
+                                    ->leftJoin('dno_resources_development_codes', 'dno_resources_development_corp_payment_vouchers.id', '=', 'dno_resources_development_codes.module_id')
+                                    ->where('dno_resources_development_corp_payment_vouchers.pv_id', NULL)
+                                    ->where('dno_resources_development_corp_payment_vouchers.deleted_at', NULL)
+                                    ->where('dno_resources_development_codes.module_name', $moduleName)
+                                    ->whereBetween('dno_resources_development_corp_payment_vouchers.created_at', [$startDate, $endDate])
+                                    ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
+                                    ->where('dno_resources_development_corp_payment_vouchers.status', '!=', $status)
+                                    ->where('dno_resources_development_corp_payment_vouchers.currency', $currency)
+                                    ->sum('dno_resources_development_corp_payment_vouchers.amount_due');
+    
         return view('dno-resources-multiple-summary-report', compact('getTransactionLists', 'startDate', 'endDate', 'getTransactionListCashes', 'totalAmountCashes', 'getTransactionListChecks', 
-        'totalAmountCheck'));
+        'totalAmountCheck', 'totalAmountCheckInUSD'));
     
     }
 
@@ -742,6 +891,7 @@ class DnoResourcesDevelopmentController extends Controller
                             'dno_resources_development_corp_payment_vouchers.account_name',
                             'dno_resources_development_corp_payment_vouchers.particulars',
                             'dno_resources_development_corp_payment_vouchers.amount',
+                            'dno_resources_development_corp_payment_vouchers.currency',
                             'dno_resources_development_corp_payment_vouchers.method_of_payment',
                             'dno_resources_development_corp_payment_vouchers.prepared_by',
                             'dno_resources_development_corp_payment_vouchers.approved_by',
@@ -773,6 +923,7 @@ class DnoResourcesDevelopmentController extends Controller
                             ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
                             ->get();
 
+        $currency = "USD";
         $status = "FULLY PAID AND RELEASED";
         $totalAmountCheck = DB::table(
                                 'dno_resources_development_corp_payment_vouchers')
@@ -786,6 +937,7 @@ class DnoResourcesDevelopmentController extends Controller
                                 'dno_resources_development_corp_payment_vouchers.account_name',
                                 'dno_resources_development_corp_payment_vouchers.particulars',
                                 'dno_resources_development_corp_payment_vouchers.amount',
+                                'dno_resources_development_corp_payment_vouchers.currency',
                                 'dno_resources_development_corp_payment_vouchers.method_of_payment',
                                 'dno_resources_development_corp_payment_vouchers.prepared_by',
                                 'dno_resources_development_corp_payment_vouchers.approved_by',
@@ -815,6 +967,7 @@ class DnoResourcesDevelopmentController extends Controller
                                 ->whereDate('dno_resources_development_corp_payment_vouchers.created_at', '=', date($date))
                                 ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
                                 ->where('dno_resources_development_corp_payment_vouchers.status', '!=', $status)
+                                ->where('dno_resources_development_corp_payment_vouchers.currency', '!=', $currency)
                                 ->sum('dno_resources_development_corp_payment_vouchers.amount_due');
 
                             
@@ -860,15 +1013,105 @@ class DnoResourcesDevelopmentController extends Controller
                                     ->whereDate('dno_resources_development_corp_payment_vouchers.created_at', '=', date($date))
                                     ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
                                     ->where('dno_resources_development_corp_payment_vouchers.status', $status)
+                                    ->where('dno_resources_development_corp_payment_vouchers.currency', '!=', $currency)
                                     ->sum('dno_resources_development_corp_payment_vouchers.cheque_total_amount');
     
+        $totalAmountCheckInUSD = DB::table(
+                                        'dno_resources_development_corp_payment_vouchers')
+                                        ->select( 
+                                        'dno_resources_development_corp_payment_vouchers.id',
+                                        'dno_resources_development_corp_payment_vouchers.user_id',
+                                        'dno_resources_development_corp_payment_vouchers.pv_id',
+                                        'dno_resources_development_corp_payment_vouchers.date',
+                                        'dno_resources_development_corp_payment_vouchers.paid_to',
+                                        'dno_resources_development_corp_payment_vouchers.account_no',
+                                        'dno_resources_development_corp_payment_vouchers.account_name',
+                                        'dno_resources_development_corp_payment_vouchers.particulars',
+                                        'dno_resources_development_corp_payment_vouchers.amount',
+                                        'dno_resources_development_corp_payment_vouchers.currency',
+                                        'dno_resources_development_corp_payment_vouchers.method_of_payment',
+                                        'dno_resources_development_corp_payment_vouchers.prepared_by',
+                                        'dno_resources_development_corp_payment_vouchers.approved_by',
+                                        'dno_resources_development_corp_payment_vouchers.date_apprroved',
+                                        'dno_resources_development_corp_payment_vouchers.received_by_date',
+                                        'dno_resources_development_corp_payment_vouchers.created_by',
+                                        'dno_resources_development_corp_payment_vouchers.created_at',
+                                        'dno_resources_development_corp_payment_vouchers.invoice_number',
+                                        'dno_resources_development_corp_payment_vouchers.issued_date',
+                                        'dno_resources_development_corp_payment_vouchers.category',
+                                        'dno_resources_development_corp_payment_vouchers.amount_due',
+                                        'dno_resources_development_corp_payment_vouchers.delivered_date',
+                                        'dno_resources_development_corp_payment_vouchers.status',
+                                        'dno_resources_development_corp_payment_vouchers.cheque_number',
+                                        'dno_resources_development_corp_payment_vouchers.cheque_amount',
+                                        'dno_resources_development_corp_payment_vouchers.sub_category',
+                                        'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
+                                        'dno_resources_development_corp_payment_vouchers.deleted_at',
+                                        'dno_resources_development_codes.dno_resources_code',
+                                        'dno_resources_development_codes.module_id',
+                                        'dno_resources_development_codes.module_code',
+                                        'dno_resources_development_codes.module_name')
+                                        ->leftJoin('dno_resources_development_codes', 'dno_resources_development_corp_payment_vouchers.id', '=', 'dno_resources_development_codes.module_id')
+                                        ->where('dno_resources_development_corp_payment_vouchers.pv_id', NULL)
+                                        ->where('dno_resources_development_corp_payment_vouchers.deleted_at', NULL)
+                                        ->where('dno_resources_development_codes.module_name', $moduleName)
+                                        ->whereDate('dno_resources_development_corp_payment_vouchers.created_at', '=', date($date))
+                                        ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
+                                        ->where('dno_resources_development_corp_payment_vouchers.status', '!=', $status)
+                                        ->where('dno_resources_development_corp_payment_vouchers.currency', $currency)
+                                        ->sum('dno_resources_development_corp_payment_vouchers.amount_due');
+
+        $totalPaidAmountCheckInUSD = DB::table(
+                                            'dno_resources_development_corp_payment_vouchers')
+                                            ->select( 
+                                            'dno_resources_development_corp_payment_vouchers.id',
+                                            'dno_resources_development_corp_payment_vouchers.user_id',
+                                            'dno_resources_development_corp_payment_vouchers.pv_id',
+                                            'dno_resources_development_corp_payment_vouchers.date',
+                                            'dno_resources_development_corp_payment_vouchers.paid_to',
+                                            'dno_resources_development_corp_payment_vouchers.account_no',
+                                            'dno_resources_development_corp_payment_vouchers.account_name',
+                                            'dno_resources_development_corp_payment_vouchers.particulars',
+                                            'dno_resources_development_corp_payment_vouchers.amount',
+                                            'dno_resources_development_corp_payment_vouchers.method_of_payment',
+                                            'dno_resources_development_corp_payment_vouchers.prepared_by',
+                                            'dno_resources_development_corp_payment_vouchers.approved_by',
+                                            'dno_resources_development_corp_payment_vouchers.date_apprroved',
+                                            'dno_resources_development_corp_payment_vouchers.received_by_date',
+                                            'dno_resources_development_corp_payment_vouchers.created_by',
+                                            'dno_resources_development_corp_payment_vouchers.created_at',
+                                            'dno_resources_development_corp_payment_vouchers.invoice_number',
+                                            'dno_resources_development_corp_payment_vouchers.issued_date',
+                                            'dno_resources_development_corp_payment_vouchers.category',
+                                            'dno_resources_development_corp_payment_vouchers.amount_due',
+                                            'dno_resources_development_corp_payment_vouchers.delivered_date',
+                                            'dno_resources_development_corp_payment_vouchers.status',
+                                            'dno_resources_development_corp_payment_vouchers.cheque_number',
+                                            'dno_resources_development_corp_payment_vouchers.cheque_amount',
+                                            'dno_resources_development_corp_payment_vouchers.cheque_total_amount',
+                                            'dno_resources_development_corp_payment_vouchers.sub_category',
+                                            'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
+                                            'dno_resources_development_corp_payment_vouchers.deleted_at',
+                                            'dno_resources_development_codes.dno_resources_code',
+                                            'dno_resources_development_codes.module_id',
+                                            'dno_resources_development_codes.module_code',
+                                            'dno_resources_development_codes.module_name')
+                                            ->leftJoin('dno_resources_development_codes', 'dno_resources_development_corp_payment_vouchers.id', '=', 'dno_resources_development_codes.module_id')
+                                            ->where('dno_resources_development_corp_payment_vouchers.pv_id', NULL)
+                                            ->where('dno_resources_development_corp_payment_vouchers.deleted_at', NULL)
+                                            ->where('dno_resources_development_codes.module_name', $moduleName)
+                                            ->whereDate('dno_resources_development_corp_payment_vouchers.created_at', '=', date($date))
+                                            ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
+                                            ->where('dno_resources_development_corp_payment_vouchers.status', $status)
+                                            ->where('dno_resources_development_corp_payment_vouchers.currency', $currency)
+                                            ->sum('dno_resources_development_corp_payment_vouchers.cheque_total_amount');
                                 
         $getDateToday = "";
         $uri0  = "";
         $uri1 = "";
         $pdf = PDF::loadView('printSummaryDnoResoures',  compact('date', 'getDateToday', 'uri0', 'uri1',
         'getTransactionListCashes', 'getTransactionListChecks',  
-        'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck'));
+        'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck', 'totalAmountCheck', 'totalPaidAmountCheckInUSD'));
         
         return $pdf->download('dno-resources-summary-report.pdf');
     
@@ -1016,6 +1259,7 @@ class DnoResourcesDevelopmentController extends Controller
                             'dno_resources_development_corp_payment_vouchers.account_name',
                             'dno_resources_development_corp_payment_vouchers.particulars',
                             'dno_resources_development_corp_payment_vouchers.amount',
+                            'dno_resources_development_corp_payment_vouchers.currency',
                             'dno_resources_development_corp_payment_vouchers.method_of_payment',
                             'dno_resources_development_corp_payment_vouchers.prepared_by',
                             'dno_resources_development_corp_payment_vouchers.approved_by',
@@ -1047,6 +1291,7 @@ class DnoResourcesDevelopmentController extends Controller
                             ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
                             ->get();
 
+        $currency = "USD";
         $status = "FULLY PAID AND RELEASED";
         $totalAmountCheck = DB::table(
                                 'dno_resources_development_corp_payment_vouchers')
@@ -1060,6 +1305,7 @@ class DnoResourcesDevelopmentController extends Controller
                                 'dno_resources_development_corp_payment_vouchers.account_name',
                                 'dno_resources_development_corp_payment_vouchers.particulars',
                                 'dno_resources_development_corp_payment_vouchers.amount',
+                                'dno_resources_development_corp_payment_vouchers.currency',
                                 'dno_resources_development_corp_payment_vouchers.method_of_payment',
                                 'dno_resources_development_corp_payment_vouchers.prepared_by',
                                 'dno_resources_development_corp_payment_vouchers.approved_by',
@@ -1089,11 +1335,57 @@ class DnoResourcesDevelopmentController extends Controller
                                 ->whereDate('dno_resources_development_corp_payment_vouchers.created_at', '=', date($getDate))
                                 ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
                                 ->where('dno_resources_development_corp_payment_vouchers.status', '!=', $status)
+                                ->where('dno_resources_development_corp_payment_vouchers.currency', '!=', $currency)
                                 ->sum('dno_resources_development_corp_payment_vouchers.amount_due');
     
+        $totalAmountCheckInUSD = DB::table(
+                                    'dno_resources_development_corp_payment_vouchers')
+                                    ->select( 
+                                    'dno_resources_development_corp_payment_vouchers.id',
+                                    'dno_resources_development_corp_payment_vouchers.user_id',
+                                    'dno_resources_development_corp_payment_vouchers.pv_id',
+                                    'dno_resources_development_corp_payment_vouchers.date',
+                                    'dno_resources_development_corp_payment_vouchers.paid_to',
+                                    'dno_resources_development_corp_payment_vouchers.account_no',
+                                    'dno_resources_development_corp_payment_vouchers.account_name',
+                                    'dno_resources_development_corp_payment_vouchers.particulars',
+                                    'dno_resources_development_corp_payment_vouchers.amount',
+                                    'dno_resources_development_corp_payment_vouchers.currency',
+                                    'dno_resources_development_corp_payment_vouchers.method_of_payment',
+                                    'dno_resources_development_corp_payment_vouchers.prepared_by',
+                                    'dno_resources_development_corp_payment_vouchers.approved_by',
+                                    'dno_resources_development_corp_payment_vouchers.date_apprroved',
+                                    'dno_resources_development_corp_payment_vouchers.received_by_date',
+                                    'dno_resources_development_corp_payment_vouchers.created_by',
+                                    'dno_resources_development_corp_payment_vouchers.created_at',
+                                    'dno_resources_development_corp_payment_vouchers.invoice_number',
+                                    'dno_resources_development_corp_payment_vouchers.issued_date',
+                                    'dno_resources_development_corp_payment_vouchers.category',
+                                    'dno_resources_development_corp_payment_vouchers.amount_due',
+                                    'dno_resources_development_corp_payment_vouchers.delivered_date',
+                                    'dno_resources_development_corp_payment_vouchers.status',
+                                    'dno_resources_development_corp_payment_vouchers.cheque_number',
+                                    'dno_resources_development_corp_payment_vouchers.cheque_amount',
+                                    'dno_resources_development_corp_payment_vouchers.sub_category',
+                                    'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
+                                    'dno_resources_development_corp_payment_vouchers.deleted_at',
+                                    'dno_resources_development_codes.dno_resources_code',
+                                    'dno_resources_development_codes.module_id',
+                                    'dno_resources_development_codes.module_code',
+                                    'dno_resources_development_codes.module_name')
+                                    ->leftJoin('dno_resources_development_codes', 'dno_resources_development_corp_payment_vouchers.id', '=', 'dno_resources_development_codes.module_id')
+                                    ->where('dno_resources_development_corp_payment_vouchers.pv_id', NULL)
+                                    ->where('dno_resources_development_corp_payment_vouchers.deleted_at', NULL)
+                                    ->where('dno_resources_development_codes.module_name', $moduleName)
+                                    ->whereDate('dno_resources_development_corp_payment_vouchers.created_at', '=', date($getDate))
+                                    ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
+                                    ->where('dno_resources_development_corp_payment_vouchers.status', '!=', $status)
+                                    ->where('dno_resources_development_corp_payment_vouchers.currency',  $currency)
+                                    ->sum('dno_resources_development_corp_payment_vouchers.amount_due');
+        
         return view('dno-resources-get-summary-report', compact('getDate', 'getTransactionLists', 
         'getTransactionListCashes', 'totalAmountCashes', 'getTransactionListChecks', 
-        'totalAmountCheck'));
+        'totalAmountCheck', 'totalAmountCheckInUSD'));
         
                 
     }
@@ -1198,6 +1490,7 @@ class DnoResourcesDevelopmentController extends Controller
                             'dno_resources_development_corp_payment_vouchers.account_name',
                             'dno_resources_development_corp_payment_vouchers.particulars',
                             'dno_resources_development_corp_payment_vouchers.amount',
+                            'dno_resources_development_corp_payment_vouchers.currency',
                             'dno_resources_development_corp_payment_vouchers.method_of_payment',
                             'dno_resources_development_corp_payment_vouchers.prepared_by',
                             'dno_resources_development_corp_payment_vouchers.approved_by',
@@ -1229,6 +1522,7 @@ class DnoResourcesDevelopmentController extends Controller
                             ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
                             ->get();
         
+        $currency = "USD";
         $status = "FULLY PAID AND RELEASED";    
         $totalAmountCheck = DB::table(
                                 'dno_resources_development_corp_payment_vouchers')
@@ -1242,6 +1536,7 @@ class DnoResourcesDevelopmentController extends Controller
                                 'dno_resources_development_corp_payment_vouchers.account_name',
                                 'dno_resources_development_corp_payment_vouchers.particulars',
                                 'dno_resources_development_corp_payment_vouchers.amount',
+                                'dno_resources_development_corp_payment_vouchers.currency',
                                 'dno_resources_development_corp_payment_vouchers.method_of_payment',
                                 'dno_resources_development_corp_payment_vouchers.prepared_by',
                                 'dno_resources_development_corp_payment_vouchers.approved_by',
@@ -1271,6 +1566,7 @@ class DnoResourcesDevelopmentController extends Controller
                                 ->whereDate('dno_resources_development_corp_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
                                 ->where('dno_resources_development_corp_payment_vouchers.status', '!=', $status)
+                                ->where('dno_resources_development_corp_payment_vouchers.currency', '!=', $currency)
                                 ->sum('dno_resources_development_corp_payment_vouchers.amount_due');
                             
         $totalPaidAmountCheck = DB::table(
@@ -1285,6 +1581,7 @@ class DnoResourcesDevelopmentController extends Controller
                                     'dno_resources_development_corp_payment_vouchers.account_name',
                                     'dno_resources_development_corp_payment_vouchers.particulars',
                                     'dno_resources_development_corp_payment_vouchers.amount',
+                                    'dno_resources_development_corp_payment_vouchers.currency',
                                     'dno_resources_development_corp_payment_vouchers.method_of_payment',
                                     'dno_resources_development_corp_payment_vouchers.prepared_by',
                                     'dno_resources_development_corp_payment_vouchers.approved_by',
@@ -1300,6 +1597,7 @@ class DnoResourcesDevelopmentController extends Controller
                                     'dno_resources_development_corp_payment_vouchers.status',
                                     'dno_resources_development_corp_payment_vouchers.cheque_number',
                                     'dno_resources_development_corp_payment_vouchers.cheque_amount',
+                                    'dno_resources_development_corp_payment_vouchers.cheque_total_amount',
                                     'dno_resources_development_corp_payment_vouchers.sub_category',
                                     'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
                                     'dno_resources_development_corp_payment_vouchers.deleted_at',
@@ -1314,11 +1612,104 @@ class DnoResourcesDevelopmentController extends Controller
                                     ->whereDate('dno_resources_development_corp_payment_vouchers.created_at', '=', date($getDateToday))
                                     ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
                                     ->where('dno_resources_development_corp_payment_vouchers.status', $status)
-                                    ->sum('dno_resources_development_corp_payment_vouchers.amount_due');
+                                    ->where('dno_resources_development_corp_payment_vouchers.currency', '!=', $currency)
+                                    ->sum('dno_resources_development_corp_payment_vouchers.cheque_total_amount');
+
+        $totalAmountCheckInUSD = DB::table(
+                                'dno_resources_development_corp_payment_vouchers')
+                                ->select( 
+                                'dno_resources_development_corp_payment_vouchers.id',
+                                'dno_resources_development_corp_payment_vouchers.user_id',
+                                'dno_resources_development_corp_payment_vouchers.pv_id',
+                                'dno_resources_development_corp_payment_vouchers.date',
+                                'dno_resources_development_corp_payment_vouchers.paid_to',
+                                'dno_resources_development_corp_payment_vouchers.account_no',
+                                'dno_resources_development_corp_payment_vouchers.account_name',
+                                'dno_resources_development_corp_payment_vouchers.particulars',
+                                'dno_resources_development_corp_payment_vouchers.amount',
+                                'dno_resources_development_corp_payment_vouchers.currency',
+                                'dno_resources_development_corp_payment_vouchers.method_of_payment',
+                                'dno_resources_development_corp_payment_vouchers.prepared_by',
+                                'dno_resources_development_corp_payment_vouchers.approved_by',
+                                'dno_resources_development_corp_payment_vouchers.date_apprroved',
+                                'dno_resources_development_corp_payment_vouchers.received_by_date',
+                                'dno_resources_development_corp_payment_vouchers.created_by',
+                                'dno_resources_development_corp_payment_vouchers.created_at',
+                                'dno_resources_development_corp_payment_vouchers.invoice_number',
+                                'dno_resources_development_corp_payment_vouchers.issued_date',
+                                'dno_resources_development_corp_payment_vouchers.category',
+                                'dno_resources_development_corp_payment_vouchers.amount_due',
+                                'dno_resources_development_corp_payment_vouchers.delivered_date',
+                                'dno_resources_development_corp_payment_vouchers.status',
+                                'dno_resources_development_corp_payment_vouchers.cheque_number',
+                                'dno_resources_development_corp_payment_vouchers.cheque_amount',
+                                'dno_resources_development_corp_payment_vouchers.sub_category',
+                                'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
+                                'dno_resources_development_corp_payment_vouchers.deleted_at',
+                                'dno_resources_development_codes.dno_resources_code',
+                                'dno_resources_development_codes.module_id',
+                                'dno_resources_development_codes.module_code',
+                                'dno_resources_development_codes.module_name')
+                                ->leftJoin('dno_resources_development_codes', 'dno_resources_development_corp_payment_vouchers.id', '=', 'dno_resources_development_codes.module_id')
+                                ->where('dno_resources_development_corp_payment_vouchers.pv_id', NULL)
+                                ->where('dno_resources_development_corp_payment_vouchers.deleted_at', NULL)
+                                ->where('dno_resources_development_codes.module_name', $moduleName)
+                                ->whereDate('dno_resources_development_corp_payment_vouchers.created_at', '=', date($getDateToday))
+                                ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
+                                ->where('dno_resources_development_corp_payment_vouchers.status', '!=', $status)
+                                ->where('dno_resources_development_corp_payment_vouchers.currency', $currency)
+                                ->sum('dno_resources_development_corp_payment_vouchers.amount_due');
+
+        $totalPaidAmountCheckInUSD = DB::table(
+                                    'dno_resources_development_corp_payment_vouchers')
+                                    ->select( 
+                                    'dno_resources_development_corp_payment_vouchers.id',
+                                    'dno_resources_development_corp_payment_vouchers.user_id',
+                                    'dno_resources_development_corp_payment_vouchers.pv_id',
+                                    'dno_resources_development_corp_payment_vouchers.date',
+                                    'dno_resources_development_corp_payment_vouchers.paid_to',
+                                    'dno_resources_development_corp_payment_vouchers.account_no',
+                                    'dno_resources_development_corp_payment_vouchers.account_name',
+                                    'dno_resources_development_corp_payment_vouchers.particulars',
+                                    'dno_resources_development_corp_payment_vouchers.amount',
+                                    'dno_resources_development_corp_payment_vouchers.currency',
+                                    'dno_resources_development_corp_payment_vouchers.method_of_payment',
+                                    'dno_resources_development_corp_payment_vouchers.prepared_by',
+                                    'dno_resources_development_corp_payment_vouchers.approved_by',
+                                    'dno_resources_development_corp_payment_vouchers.date_apprroved',
+                                    'dno_resources_development_corp_payment_vouchers.received_by_date',
+                                    'dno_resources_development_corp_payment_vouchers.created_by',
+                                    'dno_resources_development_corp_payment_vouchers.created_at',
+                                    'dno_resources_development_corp_payment_vouchers.invoice_number',
+                                    'dno_resources_development_corp_payment_vouchers.issued_date',
+                                    'dno_resources_development_corp_payment_vouchers.category',
+                                    'dno_resources_development_corp_payment_vouchers.amount_due',
+                                    'dno_resources_development_corp_payment_vouchers.delivered_date',
+                                    'dno_resources_development_corp_payment_vouchers.status',
+                                    'dno_resources_development_corp_payment_vouchers.cheque_number',
+                                    'dno_resources_development_corp_payment_vouchers.cheque_amount',
+                                    'dno_resources_development_corp_payment_vouchers.cheque_total_amount',
+                                    'dno_resources_development_corp_payment_vouchers.sub_category',
+                                    'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
+                                    'dno_resources_development_corp_payment_vouchers.deleted_at',
+                                    'dno_resources_development_codes.dno_resources_code',
+                                    'dno_resources_development_codes.module_id',
+                                    'dno_resources_development_codes.module_code',
+                                    'dno_resources_development_codes.module_name')
+                                    ->leftJoin('dno_resources_development_codes', 'dno_resources_development_corp_payment_vouchers.id', '=', 'dno_resources_development_codes.module_id')
+                                    ->where('dno_resources_development_corp_payment_vouchers.pv_id', NULL)
+                                    ->where('dno_resources_development_corp_payment_vouchers.deleted_at', NULL)
+                                    ->where('dno_resources_development_codes.module_name', $moduleName)
+                                    ->whereDate('dno_resources_development_corp_payment_vouchers.created_at', '=', date($getDateToday))
+                                    ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
+                                    ->where('dno_resources_development_corp_payment_vouchers.status', $status)
+                                    ->where('dno_resources_development_corp_payment_vouchers.currency', $currency)
+                                    ->sum('dno_resources_development_corp_payment_vouchers.cheque_total_amount');
+                            
                                 
         $pdf = PDF::loadView('printSummaryDnoResoures',  compact('date', 'getDateToday', 
         'getTransactionListCashes', 'getTransactionListChecks',  
-        'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck'));
+        'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck', 'totalAmountCheckInUSD', 'totalPaidAmountCheckInUSD'));
         
         return $pdf->download('dno-resources-summary-report.pdf');
     }
@@ -1465,6 +1856,7 @@ class DnoResourcesDevelopmentController extends Controller
                             'dno_resources_development_corp_payment_vouchers.account_name',
                             'dno_resources_development_corp_payment_vouchers.particulars',
                             'dno_resources_development_corp_payment_vouchers.amount',
+                            'dno_resources_development_corp_payment_vouchers.currency',
                             'dno_resources_development_corp_payment_vouchers.method_of_payment',
                             'dno_resources_development_corp_payment_vouchers.prepared_by',
                             'dno_resources_development_corp_payment_vouchers.approved_by',
@@ -1496,6 +1888,7 @@ class DnoResourcesDevelopmentController extends Controller
                             ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
                             ->get();
 
+        $currency = "USD";
         $status = "FULLY PAID AND RELEASED";
         $totalAmountCheck = DB::table(
                                 'dno_resources_development_corp_payment_vouchers')
@@ -1509,6 +1902,7 @@ class DnoResourcesDevelopmentController extends Controller
                                 'dno_resources_development_corp_payment_vouchers.account_name',
                                 'dno_resources_development_corp_payment_vouchers.particulars',
                                 'dno_resources_development_corp_payment_vouchers.amount',
+                                'dno_resources_development_corp_payment_vouchers.currency',
                                 'dno_resources_development_corp_payment_vouchers.method_of_payment',
                                 'dno_resources_development_corp_payment_vouchers.prepared_by',
                                 'dno_resources_development_corp_payment_vouchers.approved_by',
@@ -1538,11 +1932,58 @@ class DnoResourcesDevelopmentController extends Controller
                                 ->whereDate('dno_resources_development_corp_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
                                 ->where('dno_resources_development_corp_payment_vouchers.status', '!=', $status)
+                                ->where('dno_resources_development_corp_payment_vouchers.currency', '!=', $currency)
                                 ->sum('dno_resources_development_corp_payment_vouchers.amount_due');
+            
+        $totalAmountCheckInUSD = DB::table(
+                                    'dno_resources_development_corp_payment_vouchers')
+                                    ->select( 
+                                    'dno_resources_development_corp_payment_vouchers.id',
+                                    'dno_resources_development_corp_payment_vouchers.user_id',
+                                    'dno_resources_development_corp_payment_vouchers.pv_id',
+                                    'dno_resources_development_corp_payment_vouchers.date',
+                                    'dno_resources_development_corp_payment_vouchers.paid_to',
+                                    'dno_resources_development_corp_payment_vouchers.account_no',
+                                    'dno_resources_development_corp_payment_vouchers.account_name',
+                                    'dno_resources_development_corp_payment_vouchers.particulars',
+                                    'dno_resources_development_corp_payment_vouchers.amount',
+                                    'dno_resources_development_corp_payment_vouchers.currency',
+                                    'dno_resources_development_corp_payment_vouchers.method_of_payment',
+                                    'dno_resources_development_corp_payment_vouchers.prepared_by',
+                                    'dno_resources_development_corp_payment_vouchers.approved_by',
+                                    'dno_resources_development_corp_payment_vouchers.date_apprroved',
+                                    'dno_resources_development_corp_payment_vouchers.received_by_date',
+                                    'dno_resources_development_corp_payment_vouchers.created_by',
+                                    'dno_resources_development_corp_payment_vouchers.created_at',
+                                    'dno_resources_development_corp_payment_vouchers.invoice_number',
+                                    'dno_resources_development_corp_payment_vouchers.issued_date',
+                                    'dno_resources_development_corp_payment_vouchers.category',
+                                    'dno_resources_development_corp_payment_vouchers.amount_due',
+                                    'dno_resources_development_corp_payment_vouchers.delivered_date',
+                                    'dno_resources_development_corp_payment_vouchers.status',
+                                    'dno_resources_development_corp_payment_vouchers.cheque_number',
+                                    'dno_resources_development_corp_payment_vouchers.cheque_amount',
+                                    'dno_resources_development_corp_payment_vouchers.sub_category',
+                                    'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
+                                    'dno_resources_development_corp_payment_vouchers.deleted_at',
+                                    'dno_resources_development_codes.dno_resources_code',
+                                    'dno_resources_development_codes.module_id',
+                                    'dno_resources_development_codes.module_code',
+                                    'dno_resources_development_codes.module_name')
+                                    ->leftJoin('dno_resources_development_codes', 'dno_resources_development_corp_payment_vouchers.id', '=', 'dno_resources_development_codes.module_id')
+                                    ->where('dno_resources_development_corp_payment_vouchers.pv_id', NULL)
+                                    ->where('dno_resources_development_corp_payment_vouchers.deleted_at', NULL)
+                                    ->where('dno_resources_development_codes.module_name', $moduleName)
+                                    ->whereDate('dno_resources_development_corp_payment_vouchers.created_at', '=', date($getDateToday))
+                                    ->where('dno_resources_development_corp_payment_vouchers.method_of_payment', $check)
+                                    ->where('dno_resources_development_corp_payment_vouchers.status', '!=', $status)
+                                    ->where('dno_resources_development_corp_payment_vouchers.currency', $currency)
+                                    ->sum('dno_resources_development_corp_payment_vouchers.amount_due');
+                            
     
                 
         return view('dno-resources-summary-report', compact('getTransactionLists', 'getTransactionListCashes', 'totalAmountCashes', 'getTransactionListChecks', 
-        'totalAmountCheck'));
+        'totalAmountCheck', 'totalAmountCheckInUSD'));
     }
    
    
@@ -2023,6 +2464,7 @@ class DnoResourcesDevelopmentController extends Controller
                             'dno_resources_development_corp_payment_vouchers.account_name',
                             'dno_resources_development_corp_payment_vouchers.particulars',
                             'dno_resources_development_corp_payment_vouchers.amount',
+                            'dno_resources_development_corp_payment_vouchers.currency',
                             'dno_resources_development_corp_payment_vouchers.method_of_payment',
                             'dno_resources_development_corp_payment_vouchers.prepared_by',
                             'dno_resources_development_corp_payment_vouchers.approved_by',
@@ -2174,6 +2616,7 @@ class DnoResourcesDevelopmentController extends Controller
                     'issued_date'=>$request->get('issuedDate'),
                     'delivered_date'=>$request->get('deliveredDate'),
                     'amount'=>$request->get('amount'),
+                    'currency'=>$request->get('currency'),
                     'amount_due'=>$request->get('amount'),
                     'particulars'=>$request->get('particulars'),
                     'category'=>$request->get('category'),

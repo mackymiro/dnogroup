@@ -239,6 +239,7 @@ class LocalGroundController extends Controller
                         'local_ground_payment_vouchers.account_name',
                         'local_ground_payment_vouchers.particulars',
                         'local_ground_payment_vouchers.amount',
+                        'local_ground_payment_vouchers.currency',
                         'local_ground_payment_vouchers.method_of_payment',
                         'local_ground_payment_vouchers.prepared_by',
                         'local_ground_payment_vouchers.approved_by',
@@ -271,6 +272,8 @@ class LocalGroundController extends Controller
                         ->orderBy('local_ground_payment_vouchers.id', 'desc')
                         ->get()->toArray();
 
+        $currency = "USD";
+        $status = "FULLY PAID AND RELEASED";
         $totalAmountCheck = DB::table(
                                 'local_ground_payment_vouchers')
                             ->select( 
@@ -312,6 +315,7 @@ class LocalGroundController extends Controller
                             ->where('local_ground_payment_vouchers.deleted_at', NULL)
                             ->where('local_ground_payment_vouchers.method_of_payment', $check)
                             ->where('local_ground_payment_vouchers.status', '!=', $status)
+                            ->where('local_ground_payment_vouchers.currency', '!=', $currency)
                             ->sum('local_ground_payment_vouchers.amount_due');
 
         
@@ -327,6 +331,7 @@ class LocalGroundController extends Controller
                             'local_ground_payment_vouchers.account_name',
                             'local_ground_payment_vouchers.particulars',
                             'local_ground_payment_vouchers.amount',
+                            'local_ground_payment_vouchers.currency',
                             'local_ground_payment_vouchers.method_of_payment',
                             'local_ground_payment_vouchers.prepared_by',
                             'local_ground_payment_vouchers.approved_by',
@@ -357,6 +362,97 @@ class LocalGroundController extends Controller
                             ->where('local_ground_payment_vouchers.deleted_at', NULL)
                             ->where('local_ground_payment_vouchers.method_of_payment', $check)
                             ->where('local_ground_payment_vouchers.status', $status)
+                            ->where('local_ground_payment_vouchers.currency', '!=', $currency)
+                            ->sum('local_ground_payment_vouchers.cheque_total_amount');
+
+    $totalAmountCheckInUSD = DB::table(
+                                'local_ground_payment_vouchers')
+                            ->select( 
+                            'local_ground_payment_vouchers.id',
+                            'local_ground_payment_vouchers.user_id',
+                            'local_ground_payment_vouchers.pv_id',
+                            'local_ground_payment_vouchers.date',
+                            'local_ground_payment_vouchers.paid_to',
+                            'local_ground_payment_vouchers.account_no',
+                            'local_ground_payment_vouchers.account_name',
+                            'local_ground_payment_vouchers.particulars',
+                            'local_ground_payment_vouchers.amount',
+                            'local_ground_payment_vouchers.method_of_payment',
+                            'local_ground_payment_vouchers.prepared_by',
+                            'local_ground_payment_vouchers.approved_by',
+                            'local_ground_payment_vouchers.date_approved',
+                            'local_ground_payment_vouchers.received_by_date',
+                            'local_ground_payment_vouchers.created_by',
+                            'local_ground_payment_vouchers.invoice_number',
+                            'local_ground_payment_vouchers.issued_date',
+                            'local_ground_payment_vouchers.category',
+                            'local_ground_payment_vouchers.amount_due',
+                            'local_ground_payment_vouchers.delivered_date',
+                            'local_ground_payment_vouchers.status',
+                            'local_ground_payment_vouchers.cheque_number',
+                            'local_ground_payment_vouchers.cheque_amount',
+                            'local_ground_payment_vouchers.sub_category',
+                            'local_ground_payment_vouchers.sub_category_account_id',
+                            'local_ground_payment_vouchers.created_at',
+                            'local_ground_payment_vouchers.deleted_at',
+                            'local_ground_codes.local_ground_code',
+                            'local_ground_codes.module_id',
+                            'local_ground_codes.module_code',
+                            'local_ground_codes.module_name')
+                            ->leftJoin('local_ground_codes', 'local_ground_payment_vouchers.id', '=', 'local_ground_codes.module_id')
+                            ->where('local_ground_payment_vouchers.pv_id', NULL)
+                            ->whereDate('local_ground_payment_vouchers.created_at', '=', date($date))
+                            ->where('local_ground_codes.module_name', $moduleNameVoucher)
+                            ->where('local_ground_payment_vouchers.deleted_at', NULL)
+                            ->where('local_ground_payment_vouchers.method_of_payment', $check)
+                            ->where('local_ground_payment_vouchers.status', '!=', $status)
+                            ->where('local_ground_payment_vouchers.currency',  $currency)
+                            ->sum('local_ground_payment_vouchers.amount_due');
+
+        $totalPaidAmountCheckInUSD = DB::table(
+                                'local_ground_payment_vouchers')
+                            ->select( 
+                            'local_ground_payment_vouchers.id',
+                            'local_ground_payment_vouchers.user_id',
+                            'local_ground_payment_vouchers.pv_id',
+                            'local_ground_payment_vouchers.date',
+                            'local_ground_payment_vouchers.paid_to',
+                            'local_ground_payment_vouchers.account_no',
+                            'local_ground_payment_vouchers.account_name',
+                            'local_ground_payment_vouchers.particulars',
+                            'local_ground_payment_vouchers.amount',
+                            'local_ground_payment_vouchers.currency',
+                            'local_ground_payment_vouchers.method_of_payment',
+                            'local_ground_payment_vouchers.prepared_by',
+                            'local_ground_payment_vouchers.approved_by',
+                            'local_ground_payment_vouchers.date_approved',
+                            'local_ground_payment_vouchers.received_by_date',
+                            'local_ground_payment_vouchers.created_by',
+                            'local_ground_payment_vouchers.invoice_number',
+                            'local_ground_payment_vouchers.issued_date',
+                            'local_ground_payment_vouchers.category',
+                            'local_ground_payment_vouchers.amount_due',
+                            'local_ground_payment_vouchers.delivered_date',
+                            'local_ground_payment_vouchers.status',
+                            'local_ground_payment_vouchers.cheque_number',
+                            'local_ground_payment_vouchers.cheque_amount',
+                            'local_ground_payment_vouchers.cheque_total_amount',
+                            'local_ground_payment_vouchers.sub_category',
+                            'local_ground_payment_vouchers.sub_category_account_id',
+                            'local_ground_payment_vouchers.created_at',
+                            'local_ground_payment_vouchers.deleted_at',
+                            'local_ground_codes.local_ground_code',
+                            'local_ground_codes.module_id',
+                            'local_ground_codes.module_code',
+                            'local_ground_codes.module_name')
+                            ->leftJoin('local_ground_codes', 'local_ground_payment_vouchers.id', '=', 'local_ground_codes.module_id')
+                            ->where('local_ground_payment_vouchers.pv_id', NULL)
+                            ->whereDate('local_ground_payment_vouchers.created_at', '=', date($date))
+                            ->where('local_ground_codes.module_name', $moduleNameVoucher)
+                            ->where('local_ground_payment_vouchers.deleted_at', NULL)
+                            ->where('local_ground_payment_vouchers.method_of_payment', $check)
+                            ->where('local_ground_payment_vouchers.status', $status)
+                            ->where('local_ground_payment_vouchers.currency', $currency)
                             ->sum('local_ground_payment_vouchers.cheque_total_amount');
 
         $getDateToday = "";
@@ -364,7 +460,7 @@ class LocalGroundController extends Controller
         $uri1 = "";
         $pdf = PDF::loadView('printSummaryLocalGround',  compact('date', 'uri0', 'uri1', 'getDateToday', 
         'getTransactionLists', 'getTransactionListCashes', 'getTransactionListChecks',         
-        'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck'));
+        'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck' , 'totalAmountCheck', 'totalPaidAmountCheckInUSD'));
                             
         return $pdf->download('local-ground-summary-report.pdf');
 
@@ -521,6 +617,7 @@ class LocalGroundController extends Controller
                         'local_ground_payment_vouchers.account_name',
                         'local_ground_payment_vouchers.particulars',
                         'local_ground_payment_vouchers.amount',
+                        'local_ground_payment_vouchers.currency',
                         'local_ground_payment_vouchers.method_of_payment',
                         'local_ground_payment_vouchers.prepared_by',
                         'local_ground_payment_vouchers.approved_by',
@@ -553,6 +650,8 @@ class LocalGroundController extends Controller
                         ->orderBy('local_ground_payment_vouchers.id', 'desc')
                         ->get()->toArray();
 
+        $currency = "USD";
+        $status = "FULLY PAID AND RELEASED";
         $totalAmountCheck = DB::table(
                                 'local_ground_payment_vouchers')
                             ->select( 
@@ -594,6 +693,7 @@ class LocalGroundController extends Controller
                             ->where('local_ground_payment_vouchers.deleted_at', NULL)
                             ->where('local_ground_payment_vouchers.method_of_payment', $check)
                             ->where('local_ground_payment_vouchers.status', '!=', $status)
+                            ->where('local_ground_payment_vouchers.currency', '!=', $currency)
                             ->sum('local_ground_payment_vouchers.amount_due');
 
         
@@ -609,6 +709,7 @@ class LocalGroundController extends Controller
                             'local_ground_payment_vouchers.account_name',
                             'local_ground_payment_vouchers.particulars',
                             'local_ground_payment_vouchers.amount',
+                            'local_ground_payment_vouchers.currency',
                             'local_ground_payment_vouchers.method_of_payment',
                             'local_ground_payment_vouchers.prepared_by',
                             'local_ground_payment_vouchers.approved_by',
@@ -639,11 +740,104 @@ class LocalGroundController extends Controller
                             ->where('local_ground_payment_vouchers.deleted_at', NULL)
                             ->where('local_ground_payment_vouchers.method_of_payment', $check)
                             ->where('local_ground_payment_vouchers.status', $status)
+                            ->where('local_ground_payment_vouchers.currency', '!=',$currency)
                             ->sum('local_ground_payment_vouchers.cheque_total_amount');
+
+
+        $totalAmountCheckInUSD = DB::table(
+                                'local_ground_payment_vouchers')
+                            ->select( 
+                            'local_ground_payment_vouchers.id',
+                            'local_ground_payment_vouchers.user_id',
+                            'local_ground_payment_vouchers.pv_id',
+                            'local_ground_payment_vouchers.date',
+                            'local_ground_payment_vouchers.paid_to',
+                            'local_ground_payment_vouchers.account_no',
+                            'local_ground_payment_vouchers.account_name',
+                            'local_ground_payment_vouchers.particulars',
+                            'local_ground_payment_vouchers.amount',
+                            'local_ground_payment_vouchers.method_of_payment',
+                            'local_ground_payment_vouchers.prepared_by',
+                            'local_ground_payment_vouchers.approved_by',
+                            'local_ground_payment_vouchers.date_approved',
+                            'local_ground_payment_vouchers.received_by_date',
+                            'local_ground_payment_vouchers.created_by',
+                            'local_ground_payment_vouchers.invoice_number',
+                            'local_ground_payment_vouchers.issued_date',
+                            'local_ground_payment_vouchers.category',
+                            'local_ground_payment_vouchers.amount_due',
+                            'local_ground_payment_vouchers.delivered_date',
+                            'local_ground_payment_vouchers.status',
+                            'local_ground_payment_vouchers.cheque_number',
+                            'local_ground_payment_vouchers.cheque_amount',
+                            'local_ground_payment_vouchers.sub_category',
+                            'local_ground_payment_vouchers.sub_category_account_id',
+                            'local_ground_payment_vouchers.created_at',
+                            'local_ground_payment_vouchers.deleted_at',
+                            'local_ground_codes.local_ground_code',
+                            'local_ground_codes.module_id',
+                            'local_ground_codes.module_code',
+                            'local_ground_codes.module_name')
+                            ->leftJoin('local_ground_codes', 'local_ground_payment_vouchers.id', '=', 'local_ground_codes.module_id')
+                            ->where('local_ground_payment_vouchers.pv_id', NULL)
+                            ->whereBetween('local_ground_payment_vouchers.created_at', [$uri0, $uri1])
+                            ->where('local_ground_codes.module_name', $moduleNameVoucher)
+                            ->where('local_ground_payment_vouchers.deleted_at', NULL)
+                            ->where('local_ground_payment_vouchers.method_of_payment', $check)
+                            ->where('local_ground_payment_vouchers.status', '!=', $status)
+                            ->where('local_ground_payment_vouchers.currency', $currency)
+                            ->sum('local_ground_payment_vouchers.amount_due');
+
+        $totalPaidAmountCheckInUSD = DB::table(
+                                'local_ground_payment_vouchers')
+                            ->select( 
+                            'local_ground_payment_vouchers.id',
+                            'local_ground_payment_vouchers.user_id',
+                            'local_ground_payment_vouchers.pv_id',
+                            'local_ground_payment_vouchers.date',
+                            'local_ground_payment_vouchers.paid_to',
+                            'local_ground_payment_vouchers.account_no',
+                            'local_ground_payment_vouchers.account_name',
+                            'local_ground_payment_vouchers.particulars',
+                            'local_ground_payment_vouchers.amount',
+                            'local_ground_payment_vouchers.currency',
+                            'local_ground_payment_vouchers.method_of_payment',
+                            'local_ground_payment_vouchers.prepared_by',
+                            'local_ground_payment_vouchers.approved_by',
+                            'local_ground_payment_vouchers.date_approved',
+                            'local_ground_payment_vouchers.received_by_date',
+                            'local_ground_payment_vouchers.created_by',
+                            'local_ground_payment_vouchers.invoice_number',
+                            'local_ground_payment_vouchers.issued_date',
+                            'local_ground_payment_vouchers.category',
+                            'local_ground_payment_vouchers.amount_due',
+                            'local_ground_payment_vouchers.delivered_date',
+                            'local_ground_payment_vouchers.status',
+                            'local_ground_payment_vouchers.cheque_number',
+                            'local_ground_payment_vouchers.cheque_amount',
+                            'local_ground_payment_vouchers.cheque_total_amount',
+                            'local_ground_payment_vouchers.sub_category',
+                            'local_ground_payment_vouchers.sub_category_account_id',
+                            'local_ground_payment_vouchers.created_at',
+                            'local_ground_payment_vouchers.deleted_at',
+                            'local_ground_codes.local_ground_code',
+                            'local_ground_codes.module_id',
+                            'local_ground_codes.module_code',
+                            'local_ground_codes.module_name')
+                            ->leftJoin('local_ground_codes', 'local_ground_payment_vouchers.id', '=', 'local_ground_codes.module_id')
+                            ->where('local_ground_payment_vouchers.pv_id', NULL)
+                            ->whereBetween('local_ground_payment_vouchers.created_at', [$uri0, $uri1])
+                            ->where('local_ground_codes.module_name', $moduleNameVoucher)
+                            ->where('local_ground_payment_vouchers.deleted_at', NULL)
+                            ->where('local_ground_payment_vouchers.method_of_payment', $check)
+                            ->where('local_ground_payment_vouchers.status', $status)
+                            ->where('local_ground_payment_vouchers.currency', $currency)
+                            ->sum('local_ground_payment_vouchers.cheque_total_amount');
+
 
         $pdf = PDF::loadView('printSummaryLocalGround',  compact('date', 'uri0', 'uri1', 
         'getTransactionLists', 'getTransactionListCashes', 'getTransactionListChecks',         
-        'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck'));
+        'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck', 'totalAmountCheckInUSD', 'totalPaidAmountCheckInUSD'));
                             
         return $pdf->download('local-ground-summary-report.pdf');
                    
@@ -799,6 +993,7 @@ class LocalGroundController extends Controller
                         'local_ground_payment_vouchers.account_name',
                         'local_ground_payment_vouchers.particulars',
                         'local_ground_payment_vouchers.amount',
+                        'local_ground_payment_vouchers.currency',
                         'local_ground_payment_vouchers.method_of_payment',
                         'local_ground_payment_vouchers.prepared_by',
                         'local_ground_payment_vouchers.approved_by',
@@ -831,6 +1026,8 @@ class LocalGroundController extends Controller
                         ->orderBy('local_ground_payment_vouchers.id', 'desc')
                         ->get()->toArray();
 
+        $currency = "USD";
+        $status = "FULLY PAID AND RELEASED";
         $totalAmountCheck = DB::table(
                                 'local_ground_payment_vouchers')
                             ->select( 
@@ -843,6 +1040,7 @@ class LocalGroundController extends Controller
                             'local_ground_payment_vouchers.account_name',
                             'local_ground_payment_vouchers.particulars',
                             'local_ground_payment_vouchers.amount',
+                            'local_ground_payment_vouchers.currency',
                             'local_ground_payment_vouchers.method_of_payment',
                             'local_ground_payment_vouchers.prepared_by',
                             'local_ground_payment_vouchers.approved_by',
@@ -872,10 +1070,11 @@ class LocalGroundController extends Controller
                             ->where('local_ground_payment_vouchers.deleted_at', NULL)
                             ->where('local_ground_payment_vouchers.method_of_payment', $check)
                             ->where('local_ground_payment_vouchers.status', '!=', $status)
+                            ->where('local_ground_payment_vouchers.currency', '!=', $currency)
                             ->sum('local_ground_payment_vouchers.amount_due');
 
         
-        $totalPaymentVoucher = DB::table(
+    $totalAmountCheckInUSD = DB::table(
                                 'local_ground_payment_vouchers')
                             ->select( 
                             'local_ground_payment_vouchers.id',
@@ -887,6 +1086,7 @@ class LocalGroundController extends Controller
                             'local_ground_payment_vouchers.account_name',
                             'local_ground_payment_vouchers.particulars',
                             'local_ground_payment_vouchers.amount',
+                            'local_ground_payment_vouchers.currency',
                             'local_ground_payment_vouchers.method_of_payment',
                             'local_ground_payment_vouchers.prepared_by',
                             'local_ground_payment_vouchers.approved_by',
@@ -915,11 +1115,12 @@ class LocalGroundController extends Controller
                             ->where('local_ground_codes.module_name', $moduleNameVoucher)
                             ->where('local_ground_payment_vouchers.deleted_at', NULL)
                             ->where('local_ground_payment_vouchers.method_of_payment', $check)
+                            ->where('local_ground_payment_vouchers.status', '!=', $status)
+                            ->where('local_ground_payment_vouchers.currency', $currency)
                             ->sum('local_ground_payment_vouchers.amount_due');
-
         return view('local-ground-multiple-summary-report', compact('getTransactionLists', 
         'startDate', 'endDate', 'getTransactionListCashes', 
-        'getTransactionListChecks', 'totalPaymentVoucher', 'totalAmountCashes', 'totalAmountCheck'));
+        'getTransactionListChecks', 'totalPaymentVoucher', 'totalAmountCashes', 'totalAmountCheck', 'totalAmountCheckInUSD'));
 
 
 
@@ -1072,6 +1273,8 @@ class LocalGroundController extends Controller
                         'local_ground_payment_vouchers.account_name',
                         'local_ground_payment_vouchers.particulars',
                         'local_ground_payment_vouchers.amount',
+                        'local_ground_payment_vouchers.currency',
+                        'local_ground_payment_vouchers.currency',
                         'local_ground_payment_vouchers.method_of_payment',
                         'local_ground_payment_vouchers.prepared_by',
                         'local_ground_payment_vouchers.approved_by',
@@ -1104,6 +1307,8 @@ class LocalGroundController extends Controller
                         ->orderBy('local_ground_payment_vouchers.id', 'desc')
                         ->get()->toArray();
 
+        $currency = "USD";
+        $status = "FULLY PAID AND RELEASED";
         $totalAmountCheck = DB::table(
                                 'local_ground_payment_vouchers')
                             ->select( 
@@ -1116,6 +1321,7 @@ class LocalGroundController extends Controller
                             'local_ground_payment_vouchers.account_name',
                             'local_ground_payment_vouchers.particulars',
                             'local_ground_payment_vouchers.amount',
+                            'local_ground_payment_vouchers.currency',
                             'local_ground_payment_vouchers.method_of_payment',
                             'local_ground_payment_vouchers.prepared_by',
                             'local_ground_payment_vouchers.approved_by',
@@ -1145,6 +1351,7 @@ class LocalGroundController extends Controller
                             ->where('local_ground_payment_vouchers.deleted_at', NULL)
                             ->where('local_ground_payment_vouchers.method_of_payment', $check)
                             ->where('local_ground_payment_vouchers.status', '!=', $status)
+                            ->where('local_ground_payment_vouchers.currency', '!=', $currency)
                             ->sum('local_ground_payment_vouchers.amount_due');
 
         
@@ -1160,6 +1367,7 @@ class LocalGroundController extends Controller
                             'local_ground_payment_vouchers.account_name',
                             'local_ground_payment_vouchers.particulars',
                             'local_ground_payment_vouchers.amount',
+                            'local_ground_payment_vouchers.currency',
                             'local_ground_payment_vouchers.method_of_payment',
                             'local_ground_payment_vouchers.prepared_by',
                             'local_ground_payment_vouchers.approved_by',
@@ -1190,13 +1398,106 @@ class LocalGroundController extends Controller
                             ->where('local_ground_payment_vouchers.deleted_at', NULL)
                             ->where('local_ground_payment_vouchers.method_of_payment', $check)
                             ->where('local_ground_payment_vouchers.status', $status)
+                            ->where('local_ground_payment_vouchers.currency', '!=', $currency)
+                            ->sum('local_ground_payment_vouchers.cheque_total_amount');
+
+    $totalAmountCheckInUSD = DB::table(
+                                'local_ground_payment_vouchers')
+                            ->select( 
+                            'local_ground_payment_vouchers.id',
+                            'local_ground_payment_vouchers.user_id',
+                            'local_ground_payment_vouchers.pv_id',
+                            'local_ground_payment_vouchers.date',
+                            'local_ground_payment_vouchers.paid_to',
+                            'local_ground_payment_vouchers.account_no',
+                            'local_ground_payment_vouchers.account_name',
+                            'local_ground_payment_vouchers.particulars',
+                            'local_ground_payment_vouchers.amount',
+                            'local_ground_payment_vouchers.currency',
+                            'local_ground_payment_vouchers.method_of_payment',
+                            'local_ground_payment_vouchers.prepared_by',
+                            'local_ground_payment_vouchers.approved_by',
+                            'local_ground_payment_vouchers.date_approved',
+                            'local_ground_payment_vouchers.received_by_date',
+                            'local_ground_payment_vouchers.created_by',
+                            'local_ground_payment_vouchers.invoice_number',
+                            'local_ground_payment_vouchers.issued_date',
+                            'local_ground_payment_vouchers.category',
+                            'local_ground_payment_vouchers.amount_due',
+                            'local_ground_payment_vouchers.delivered_date',
+                            'local_ground_payment_vouchers.status',
+                            'local_ground_payment_vouchers.cheque_number',
+                            'local_ground_payment_vouchers.cheque_amount',
+                            'local_ground_payment_vouchers.sub_category',
+                            'local_ground_payment_vouchers.sub_category_account_id',
+                            'local_ground_payment_vouchers.created_at',
+                            'local_ground_payment_vouchers.deleted_at',
+                            'local_ground_codes.local_ground_code',
+                            'local_ground_codes.module_id',
+                            'local_ground_codes.module_code',
+                            'local_ground_codes.module_name')
+                            ->leftJoin('local_ground_codes', 'local_ground_payment_vouchers.id', '=', 'local_ground_codes.module_id')
+                            ->where('local_ground_payment_vouchers.pv_id', NULL)
+                            ->whereDate('local_ground_payment_vouchers.created_at', '=', date($getDateToday))
+                            ->where('local_ground_codes.module_name', $moduleNameVoucher)
+                            ->where('local_ground_payment_vouchers.deleted_at', NULL)
+                            ->where('local_ground_payment_vouchers.method_of_payment', $check)
+                            ->where('local_ground_payment_vouchers.status', '!=', $status)
+                            ->where('local_ground_payment_vouchers.currency', $currency)
+                            ->sum('local_ground_payment_vouchers.amount_due');
+
+        
+    $totalPaidAmountCheckInUSD = DB::table(
+                                'local_ground_payment_vouchers')
+                            ->select( 
+                            'local_ground_payment_vouchers.id',
+                            'local_ground_payment_vouchers.user_id',
+                            'local_ground_payment_vouchers.pv_id',
+                            'local_ground_payment_vouchers.date',
+                            'local_ground_payment_vouchers.paid_to',
+                            'local_ground_payment_vouchers.account_no',
+                            'local_ground_payment_vouchers.account_name',
+                            'local_ground_payment_vouchers.particulars',
+                            'local_ground_payment_vouchers.amount',
+                            'local_ground_payment_vouchers.currency',
+                            'local_ground_payment_vouchers.method_of_payment',
+                            'local_ground_payment_vouchers.prepared_by',
+                            'local_ground_payment_vouchers.approved_by',
+                            'local_ground_payment_vouchers.date_approved',
+                            'local_ground_payment_vouchers.received_by_date',
+                            'local_ground_payment_vouchers.created_by',
+                            'local_ground_payment_vouchers.invoice_number',
+                            'local_ground_payment_vouchers.issued_date',
+                            'local_ground_payment_vouchers.category',
+                            'local_ground_payment_vouchers.amount_due',
+                            'local_ground_payment_vouchers.delivered_date',
+                            'local_ground_payment_vouchers.status',
+                            'local_ground_payment_vouchers.cheque_number',
+                            'local_ground_payment_vouchers.cheque_amount',
+                            'local_ground_payment_vouchers.cheque_total_amount',
+                            'local_ground_payment_vouchers.sub_category',
+                            'local_ground_payment_vouchers.sub_category_account_id',
+                            'local_ground_payment_vouchers.created_at',
+                            'local_ground_payment_vouchers.deleted_at',
+                            'local_ground_codes.local_ground_code',
+                            'local_ground_codes.module_id',
+                            'local_ground_codes.module_code',
+                            'local_ground_codes.module_name')
+                            ->leftJoin('local_ground_codes', 'local_ground_payment_vouchers.id', '=', 'local_ground_codes.module_id')
+                            ->where('local_ground_payment_vouchers.pv_id', NULL)
+                            ->whereDate('local_ground_payment_vouchers.created_at', '=', date($getDateToday))
+                            ->where('local_ground_codes.module_name', $moduleNameVoucher)
+                            ->where('local_ground_payment_vouchers.deleted_at', NULL)
+                            ->where('local_ground_payment_vouchers.method_of_payment', $check)
+                            ->where('local_ground_payment_vouchers.status', $status)
+                            ->where('local_ground_payment_vouchers.currency', $currency)
                             ->sum('local_ground_payment_vouchers.cheque_total_amount');
 
         $uri0 = "";
         $uri1 = "";
         $pdf = PDF::loadView('printSummaryLocalGround',  compact('date', 'getDateToday', 'uri0', 'uri1',
          'getTransactionLists', 'getTransactionListCashes', 'getTransactionListChecks',         
-         'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck'));
+         'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck', 'totalAmountCheckInUSD', 'totalPaidAmountCheckInUSD'));
                             
         return $pdf->download('local-ground-summary-report.pdf');
 
@@ -1349,6 +1650,7 @@ class LocalGroundController extends Controller
                         'local_ground_payment_vouchers.account_name',
                         'local_ground_payment_vouchers.particulars',
                         'local_ground_payment_vouchers.amount',
+                        'local_ground_payment_vouchers.currency',
                         'local_ground_payment_vouchers.method_of_payment',
                         'local_ground_payment_vouchers.prepared_by',
                         'local_ground_payment_vouchers.approved_by',
@@ -1381,6 +1683,8 @@ class LocalGroundController extends Controller
                         ->orderBy('local_ground_payment_vouchers.id', 'desc')
                         ->get()->toArray();
 
+        $currency = "USD";
+        $status = "FULLY PAID AND RELEASED";
         $totalAmountCheck = DB::table(
                                 'local_ground_payment_vouchers')
                             ->select( 
@@ -1393,6 +1697,7 @@ class LocalGroundController extends Controller
                             'local_ground_payment_vouchers.account_name',
                             'local_ground_payment_vouchers.particulars',
                             'local_ground_payment_vouchers.amount',
+                            'local_ground_payment_vouchers.currency',
                             'local_ground_payment_vouchers.method_of_payment',
                             'local_ground_payment_vouchers.prepared_by',
                             'local_ground_payment_vouchers.approved_by',
@@ -1422,10 +1727,11 @@ class LocalGroundController extends Controller
                             ->where('local_ground_payment_vouchers.deleted_at', NULL)
                             ->where('local_ground_payment_vouchers.method_of_payment', $check)
                             ->where('local_ground_payment_vouchers.status', '!=', $status)
+                            ->where('local_ground_payment_vouchers.currency', '!=', $currency)
                             ->sum('local_ground_payment_vouchers.amount_due');
 
-        
-        $totalPaymentVoucher = DB::table(
+
+        $totalAmountCheckInUSD = DB::table(
                                 'local_ground_payment_vouchers')
                             ->select( 
                             'local_ground_payment_vouchers.id',
@@ -1437,6 +1743,7 @@ class LocalGroundController extends Controller
                             'local_ground_payment_vouchers.account_name',
                             'local_ground_payment_vouchers.particulars',
                             'local_ground_payment_vouchers.amount',
+                            'local_ground_payment_vouchers.currency',
                             'local_ground_payment_vouchers.method_of_payment',
                             'local_ground_payment_vouchers.prepared_by',
                             'local_ground_payment_vouchers.approved_by',
@@ -1465,10 +1772,12 @@ class LocalGroundController extends Controller
                             ->where('local_ground_codes.module_name', $moduleNameVoucher)
                             ->where('local_ground_payment_vouchers.deleted_at', NULL)
                             ->where('local_ground_payment_vouchers.method_of_payment', $check)
+                            ->where('local_ground_payment_vouchers.status', '!=', $status)
+                            ->where('local_ground_payment_vouchers.currency', $currency)
                             ->sum('local_ground_payment_vouchers.amount_due');
         
         return view('local-ground-get-summary-report', compact('getDate','getTransactionLists', 'getTransactionListCashes', 
-        'getTransactionListChecks', 'totalPaymentVoucher', 'totalAmountCashes', 'totalAmountCheck'));
+        'getTransactionListChecks', 'totalPaymentVoucher', 'totalAmountCashes', 'totalAmountCheck', 'totalAmountCheckInUSD'));
                     
 
     }
@@ -1620,6 +1929,7 @@ class LocalGroundController extends Controller
                         'local_ground_payment_vouchers.account_name',
                         'local_ground_payment_vouchers.particulars',
                         'local_ground_payment_vouchers.amount',
+                        'local_ground_payment_vouchers.currency',
                         'local_ground_payment_vouchers.method_of_payment',
                         'local_ground_payment_vouchers.prepared_by',
                         'local_ground_payment_vouchers.approved_by',
@@ -1652,6 +1962,8 @@ class LocalGroundController extends Controller
                         ->orderBy('local_ground_payment_vouchers.id', 'desc')
                         ->get()->toArray();
 
+        $currency = "USD";
+        $status = "FULLY PAID AND RELEASED";
         $totalAmountCheck = DB::table(
                                 'local_ground_payment_vouchers')
                             ->select( 
@@ -1693,10 +2005,11 @@ class LocalGroundController extends Controller
                             ->where('local_ground_payment_vouchers.deleted_at', NULL)
                             ->where('local_ground_payment_vouchers.method_of_payment', $check)
                             ->where('local_ground_payment_vouchers.status', '!=', $status)
+                            ->where('local_ground_payment_vouchers.currency', '!=', $currency)
                             ->sum('local_ground_payment_vouchers.amount_due');
 
         
-        $totalPaymentVoucher = DB::table(
+        $totalAmountCheckInUSD = DB::table(
                                 'local_ground_payment_vouchers')
                             ->select( 
                             'local_ground_payment_vouchers.id',
@@ -1708,6 +2021,7 @@ class LocalGroundController extends Controller
                             'local_ground_payment_vouchers.account_name',
                             'local_ground_payment_vouchers.particulars',
                             'local_ground_payment_vouchers.amount',
+                            'local_ground_payment_vouchers.currency',
                             'local_ground_payment_vouchers.method_of_payment',
                             'local_ground_payment_vouchers.prepared_by',
                             'local_ground_payment_vouchers.approved_by',
@@ -1736,10 +2050,11 @@ class LocalGroundController extends Controller
                             ->where('local_ground_codes.module_name', $moduleNameVoucher)
                             ->where('local_ground_payment_vouchers.deleted_at', NULL)
                             ->where('local_ground_payment_vouchers.method_of_payment', $check)
+                            ->where('local_ground_payment_vouchers.currency', $currency)
                             ->sum('local_ground_payment_vouchers.amount_due');
 
         return view('local-ground-summary-report', compact('getTransactionLists', 'getTransactionListCashes', 
-        'getTransactionListChecks', 'totalPaymentVoucher', 'totalAmountCashes', 'totalAmountCheck'));
+        'getTransactionListChecks', 'totalPaymentVoucher', 'totalAmountCashes', 'totalAmountCheck', 'totalAmountCheckInUSD'));
 
     }
 
@@ -2055,6 +2370,7 @@ class LocalGroundController extends Controller
                             'local_ground_payment_vouchers.account_name',
                             'local_ground_payment_vouchers.particulars',
                             'local_ground_payment_vouchers.amount',
+                            'local_ground_payment_vouchers.currency',
                             'local_ground_payment_vouchers.method_of_payment',
                             'local_ground_payment_vouchers.prepared_by',
                             'local_ground_payment_vouchers.approved_by',
@@ -2145,6 +2461,7 @@ class LocalGroundController extends Controller
                 'issued_date'=>$request->get('issuedDate'),
                 'delivered_date'=>$request->get('deliveredDate'),
                 'amount'=>$request->get('amount'),
+                'currency'=>$request->get('currency'),
                 'amount_due'=>$request->get('amount'),
                 'particulars'=>$request->get('particulars'),
                 'category'=>$request->get('category'),

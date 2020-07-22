@@ -313,6 +313,7 @@
                                                         <th>Account Name/No</th>  
                                                         <th>Bank Name/Check No</th>
                                                         <th>Payment Method</th>
+                                                        <th>Currency</th>
                                                         <th class="bg-success" style="color:white;">Paid Amount</th>
                                                         <th class="bg-danger" style="color:white;">Balance</th>
                                                         <th class="bg-success" style="color:white;">Status</th>
@@ -328,6 +329,7 @@
                                                         <th>Account Name/No</th>
                                                         <th>Bank Name/Check No</th>
                                                         <th>Payment Method</th>
+                                                        <th>Currency</th>
                                                         <th class="bg-success" style="color:white;">Paid Amount</th>
                                                         <th class="bg-danger" style="color:white;">Balance</th>
                                                         <th class="bg-success" style="color:white;">Status</th>
@@ -383,6 +385,8 @@
                                                                 </p>
                                                             </td>
                                                             <td><p style="width:190px;">{{ $getTransactionListCheck->method_of_payment }}</p></td>
+                                                            <td><p style="width:190px;">{{ $getTransactionListCheck->currency }}</p></td>
+                                                           
                                                             <td class="bg-success" style="color:white"><p style="width:170px;"><?php echo number_format($getTransactionListCheck->cheque_total_amount, 2); ?></p></td>
                                                             @if($getTransactionListCheck->status === "FULLY PAID AND RELEASED")
                                                                 <td class="bg-danger" style="color:white;"> <p style="width:170px;">0</p></td>
@@ -404,6 +408,12 @@
                                                         <th class="bg-success" style="color:white"><?php echo number_format($totalAmountCheck, 2);?></th>
                                                     </tr>
                                                 </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <th width="15%" class="bg-info" style="color:white;">Total (USD):</th>
+                                                        <th class="bg-success" style="color:white"><?php echo number_format($totalAmountCheckInUSD, 2);?></th>
+                                                    </tr>
+                                                </tbody>
                                             </table>
                                         </div>
                                     </div>

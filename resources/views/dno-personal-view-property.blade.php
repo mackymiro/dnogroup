@@ -1527,7 +1527,7 @@
                                 <label>Account Name</label>
                                 <input type="text" id="skyAccountNameUpdate<?php echo $skyDocument['id']?>" name="skyAccountNameUpdate" class="selcls form-control"  value="{{ $skyDocument['account_name'] }}" />
                                 
-                            </div>
+                            </div>  
                         </div>
                     </div>
                 </div>

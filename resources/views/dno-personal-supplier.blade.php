@@ -48,26 +48,27 @@
                                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
 					  						<tr>
-				  								<th width="10%">Action</th>
+				  								
+                                                <th>Supplier Name/Service Provider</th>
                                                 <th>Date</th>
-                                                <th>Supplier Name</th>
+                                                
 												<th>Created By</th>
 					  						</tr>
 				  						</thead>
                                         <tfoot>
 					  						<tr>
-				  								<th>Action</th>
+				  								
+                                                <th>Supplier Name/Service Provider</th>
                                                 <th>Date</th>
-                                                <th>Supplier Name</th>
+                                               
 												<th>Created By</th>
 					  						</tr>
 				  						</tfoot>
                                         <tbody>
                                             @foreach($suppliers as $supplier)
                                             <tr>
-                                                <td></td>
-                                                <td>{{ $supplier['date']}}</td>
                                                 <td><a href="{{ url('dno-personal/suppliers/view/'.$supplier['id']) }}">{{ $supplier['supplier_name']}}</a></td>
+                                                <td>{{ $supplier['date']}}</td>
                                                 <td>{{ $supplier['created_by']}}</td>
                                             </tr>
                                             @endforeach
