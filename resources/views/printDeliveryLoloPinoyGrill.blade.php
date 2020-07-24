@@ -120,33 +120,28 @@
                                   </tbody>
                           </table>
                            <div style="margin-top:100px;">
-                           		<table  >
-                           			<thead>
-                           				<tr>
-                       						<th style="width:30%;">Prepared By</th>
-                       						<th>Checked By</th>
-                       						<th>Received By</th>
-                           				</tr>
-                           			</thead>
-                           			<tbody>
-                           				<tr>
-                           					<td>
-                           						________________________<br>
-                           						{{ $deliveryId['created_by']}}
-
-                           					</td>
-                           					<td>
-                           						________________________<br>
-                           						Aprilane Q Maturan<br>
-                           						Finance Officer
-                           					</td>
-                           					<td>
-                           						________________________<br>
-                           						
-                           					</td>
-                           				</tr>
-                           			</tbody>
-                           		</table>
+						   <table >
+								<thead>
+									<tr >
+										<th style="font-size:16px; height: 1%; width: 30%; ">Prepared By:</th>
+										<th style="font-size:16px; height: 1%; ">_____________________</th>
+									</tr>
+									<tr  >
+										<th style="font-size:16px; height: 1%; ">&nbsp;</th>
+										<th style="font-size:16px;">{{ $deliveryId[0]->created_by }}</th>
+									</tr>
+									<tr >
+										<th style="font-size:16px; height: 1%; ">Checked By:</th>
+										<th style="font-size:16px; height: 1%; ">_____________________</th>
+									</tr>
+									<tr  >
+										<th style="font-size:16px; height: 1%; ">&nbsp;</th>
+										<th style="font-size:16px;">Aprilane Q Maturan</th>
+									</tr>
+								
+								</thead>
+								
+							</table>   
                            	
                            </div>
 

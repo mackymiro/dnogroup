@@ -12,10 +12,229 @@ use App\WlgCorporationPaymentVoucher;
 use App\WlgCorporationPurchaseOrder;
 use App\WlgCorporationInvoice;
 use App\WlgCorporationCode;
+use App\WlgCorporationPettyCash;
 
 
 class WlgCorporationController extends Controller
 {
+    public function printPettyCash($id){
+        $moduleName = "Petty Cash";
+        $getPettyCash = DB::table(
+                            'wlg_corporation_petty_cashes')
+                            ->select( 
+                            'wlg_corporation_petty_cashes.id',
+                            'wlg_corporation_petty_cashes.user_id',
+                            'wlg_corporation_petty_cashes.pc_id',
+                            'wlg_corporation_petty_cashes.date',
+                            'wlg_corporation_petty_cashes.petty_cash_name',
+                            'wlg_corporation_petty_cashes.petty_cash_summary',
+                            'wlg_corporation_petty_cashes.amount',
+                            'wlg_corporation_petty_cashes.created_by',
+                            'wlg_corporation_petty_cashes.deleted_at',
+                            'wlg_corporation_codes.wlg_code',
+                            'wlg_corporation_codes.module_id',
+                            'wlg_corporation_codes.module_code',
+                            'wlg_corporation_codes.module_name')
+                            ->leftJoin('wlg_corporation_codes', 'wlg_corporation_petty_cashes.id', '=', 'wlg_corporation_codes.module_id')
+                            ->where('wlg_corporation_petty_cashes.id', $id)
+                            ->where('wlg_corporation_codes.module_name', $moduleName)
+                            ->get();
+
+        $getPettyCashSummaries = WlgCorporationPettyCash::where('pc_id', $id)->get()->toArray();
+
+        //total
+        $totalPettyCash = WlgCorporationPettyCash::where('id', $id)->where('pc_id', NULL)->sum('amount');
+
+        $pettyCashSummaryTotal = WlgCorporationPettyCash::where('pc_id', $id)->sum('amount');
+
+        $sum = $totalPettyCash + $pettyCashSummaryTotal;
+
+        $pdf = PDF::loadView('printPettyCashWLG', compact('getPettyCash', 'getPettyCashSummaries', 'sum'));
+        return $pdf->download('wlg-corporation-petty-cash.pdf');
+    }
+
+    public function viewPettyCash($id){
+        $moduleName = "Petty Cash";
+        $getPettyCash = DB::table(
+                        'wlg_corporation_petty_cashes')
+                        ->select( 
+                        'wlg_corporation_petty_cashes.id',
+                        'wlg_corporation_petty_cashes.user_id',
+                        'wlg_corporation_petty_cashes.pc_id',
+                        'wlg_corporation_petty_cashes.date',
+                        'wlg_corporation_petty_cashes.petty_cash_name',
+                        'wlg_corporation_petty_cashes.petty_cash_summary',
+                        'wlg_corporation_petty_cashes.amount',
+                        'wlg_corporation_petty_cashes.created_by',
+                        'wlg_corporation_petty_cashes.deleted_at',
+                        'wlg_corporation_codes.wlg_code',
+                        'wlg_corporation_codes.module_id',
+                        'wlg_corporation_codes.module_code',
+                        'wlg_corporation_codes.module_name')
+                        ->leftJoin('wlg_corporation_codes', 'wlg_corporation_petty_cashes.id', '=', 'wlg_corporation_codes.module_id')
+                        ->where('wlg_corporation_petty_cashes.id', $id)
+                        ->where('wlg_corporation_codes.module_name', $moduleName)
+                        ->get();
+
+
+        $getPettyCashSummaries = WlgCorporationPettyCash::where('pc_id', $id)->get()->toArray();
+
+        //total
+        $totalPettyCash = WlgCorporationPettyCash::where('id', $id)->where('pc_id', NULL)->sum('amount');
+
+        $pettyCashSummaryTotal = WlgCorporationPettyCash::where('pc_id', $id)->sum('amount');
+
+        $sum = $totalPettyCash + $pettyCashSummaryTotal;
+
+        return view('wlg-corporation-view-petty-cash', compact('getPettyCash', 'getPettyCashSummaries', 'sum'));
+
+    }
+
+    public function addNewPettyCash(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+
+        $addNew = new WlgCorporationPettyCash([
+            'user_id'=>$user->id,
+            'pc_id'=>$id,
+            'date'=>$request->get('date'),
+            'petty_cash_summary'=>$request->get('pettyCashSummary'),
+            'amount'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]); 
+        $addNew->save();
+
+        Session::flash('addNewSuccess', 'Successfully added.');
+
+        return redirect()->route('editPettyCashWLG', ['id'=>$id]);
+    }
+
+    public function updatePettyCash(Request $request, $id){
+        $update = WlgCorporationPettyCash::find($id);
+        $update->date = $request->get('date');
+        $update->petty_cash_name = $request->get('pettyCashName');
+        $update->petty_cash_summary = $request->get('pettyCashSummary');
+        $update->amount = $request->get('amount');
+
+        $update->save();
+        Session::flash('editSuccess', 'Successfully updated.'); 
+
+        return redirect()->route('editPettyCashWLG', ['id'=>$id]);
+    }
+
+    public function editPettyCash($id){
+        $moduleName = "Petty Cash";
+        $pettyCash = DB::table(
+                        'wlg_corporation_petty_cashes')
+                        ->select( 
+                        'wlg_corporation_petty_cashes.id',
+                        'wlg_corporation_petty_cashes.user_id',
+                        'wlg_corporation_petty_cashes.pc_id',
+                        'wlg_corporation_petty_cashes.date',
+                        'wlg_corporation_petty_cashes.petty_cash_name',
+                        'wlg_corporation_petty_cashes.petty_cash_summary',
+                        'wlg_corporation_petty_cashes.amount',
+                        'wlg_corporation_petty_cashes.created_by',
+                        'wlg_corporation_codes.wlg_code',
+                        'wlg_corporation_codes.module_id',
+                        'wlg_corporation_codes.module_code',
+                        'wlg_corporation_codes.module_name')
+                        ->leftJoin('wlg_corporation_codes', 'wlg_corporation_petty_cashes.id', '=', 'wlg_corporation_codes.module_id')
+                        ->where('wlg_corporation_petty_cashes.id', $id)
+                        ->where('wlg_corporation_codes.module_name', $moduleName)
+                        ->get();
+
+        $pettyCashSummaries = WlgCorporationPettyCash::where('pc_id', $id)->get()->toArray();
+
+        return view('edit-wlg-corporation-petty-cash',  compact('pettyCash','pettyCashSummaries'));
+    }
+
+    public function addPettyCash(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //get the latest insert id query in table dong fang corporation codes
+         $dataCashNo = DB::select('SELECT id, wlg_code FROM wlg_corporation_codes ORDER BY id DESC LIMIT 1');
+
+         //if code is not zero add plus 1 petty cash no
+         if(isset($dataCashNo[0]->wlg_code) != 0){
+             //if code is not 0
+             $newProd = $dataCashNo[0]->wlg_code +1;
+             $uPetty = sprintf("%06d",$newProd);   
+ 
+         }else{
+             //if code is 0 
+             $newProd = 1;
+             $uPetty = sprintf("%06d",$newProd);
+         } 
+
+         $addPettyCash = new WlgCorporationPettyCash([
+            'user_id'=>$user->id,
+            'date'=>$request->date,
+            'petty_cash_name'=>$request->pettyCashName,
+            'petty_cash_summary'=>$request->pettyCashSummary,
+            'created_by'=>$name,          
+         ]);
+
+         $addPettyCash->save();
+         $insertId = $addPettyCash->id;
+
+         $moduleCode = "PC-";
+         $moduleName = "Petty Cash";
+
+         $wlgCode = new WlgCorporationCode([
+            'user_id'=>$user->id,
+            'wlg_code'=>$uPetty,
+            'module_id'=>$insertId,
+            'module_code'=>$moduleCode,
+            'module_name'=>$moduleName,
+         ]);
+
+         $wlgCode->save();
+
+         return response()->json($insertId);
+    }
+
+    public function pettyCashList(){
+        $moduleName = "Petty Cash";
+        $pettyCashLists = DB::table(
+                        'wlg_corporation_petty_cashes')
+                        ->select( 
+                        'wlg_corporation_petty_cashes.id',
+                        'wlg_corporation_petty_cashes.user_id',
+                        'wlg_corporation_petty_cashes.pc_id',
+                        'wlg_corporation_petty_cashes.date',
+                        'wlg_corporation_petty_cashes.petty_cash_name',
+                        'wlg_corporation_petty_cashes.petty_cash_summary',
+                        'wlg_corporation_petty_cashes.amount',
+                        'wlg_corporation_petty_cashes.created_by',
+                        'wlg_corporation_petty_cashes.deleted_at',
+                        'wlg_corporation_codes.wlg_code',
+                        'wlg_corporation_codes.module_id',
+                        'wlg_corporation_codes.module_code',
+                        'wlg_corporation_codes.module_name')
+                        ->leftJoin('wlg_corporation_codes', 'wlg_corporation_petty_cashes.id', '=', 'wlg_corporation_codes.module_id')
+                        ->where('wlg_corporation_petty_cashes.pc_id', NULL)
+                        ->where('wlg_corporation_codes.module_name', $moduleName)
+                        ->where('wlg_corporation_petty_cashes.deleted_at', NULL)
+                        ->orderBy('wlg_corporation_petty_cashes.id',  'desc')
+                        ->get()->toArray();
+
+
+        return view('wlg-corporation-petty-cash-list', compact('pettyCashLists'));
+    }
+
     public function updateDetails(Request $request){
         $updateDetail = WlgCorporationPaymentVoucher::find($request->id);
 
@@ -2919,6 +3138,11 @@ class WlgCorporationController extends Controller
         //
     }
 
+
+    public function destroyPettyCash(){
+        $pettyCash  = WlgCorporationPettyCash::find($id);
+        $pettyCash->delete();
+    }
 
     public function destroyInvoice($id){
         $invoice = WlgCorporationInvoice::find($id);

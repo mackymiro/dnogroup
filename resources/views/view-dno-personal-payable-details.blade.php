@@ -128,6 +128,10 @@
                                                       <th width="35%">PV No</th>
                                                       <th>{{ $viewPaymentDetail[0]->module_code}}{{ $viewPaymentDetail[0]->dno_personal_code}}</th>
                                                   </tr>
+                                                  <tr>
+                                                      <th width="35%">Currency</th>
+                                                      <th>{{ $viewPaymentDetail[0]->currency}}</th>
+                                                  </tr>
                                                  
                                               </thead>
                                           </table>
@@ -147,13 +151,27 @@
                                          <tr>	
   											<td>{{ $viewPaymentDetail[0]->issued_date}}</td>
   											<td>{{ $viewPaymentDetail[0]->particulars}}</td>
-											<td><?php echo number_format($viewPaymentDetail[0]->amount, 2); ?></td>
+											<td>
+                                            @if($viewPaymentDetail[0]->currency === "PHP")
+                                                ₱ 
+                                            @elseif($viewPaymentDetail[0]->currency === "USD")
+                                            $
+
+                                            @endif 	
+                                            <?php echo number_format($viewPaymentDetail[0]->amount, 2); ?></td>
 										</tr>
                                         @foreach($getParticulars as $getParticular)
                                         <tr>
                                             <td>{{ $getParticular['date']}}</td>
                                             <td>{{ $getParticular['particulars']}}</td>
-                                            <td><?php echo number_format($getParticular['amount'], 2) ?></td>
+                                            <td>
+                                            @if($getParticular['currency'] === "PHP")
+                                                ₱ 
+                                            @elseif($getParticular['currency'] === "USD")
+                                            $
+
+                                            @endif 	
+                                            <?php echo number_format($getParticular['amount'], 2) ?></td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -188,7 +206,14 @@
                                         @foreach($getViewPaymentDetails as $getViewPaymentDetail)
                                         <tr>
                                            <td>{{ $getViewPaymentDetail['cheque_number']}}</td>
-                                           <td><?php echo number_format($getViewPaymentDetail['cheque_amount'], 2)?></td>
+                                           <td>
+                                           @if($getViewPaymentDetail['currency'] === "PHP")
+                                                ₱ 
+                                            @elseif($getViewPaymentDetail['currency'] === "USD")
+                                            $
+
+                                            @endif 	
+                                           <?php echo number_format($getViewPaymentDetail['cheque_amount'], 2)?></td>
                                         </tr>
                                         @endforeach
                                     </tbody>

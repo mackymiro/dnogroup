@@ -51,8 +51,8 @@
                                             </tr>
 											@if($payableId[0]->method_of_payment  === "CHECK")
 											<tr>
-                                                <th width="30%">Invoice No</th>
-                                                <th> {{ $payableId[0]->invoice_number }}</th>
+                                                <th width="30%">Account Name</th>
+                                                <th> {{ $payableId[0]->account_name }}</th>
                                             </tr>
 											@endif
 											@if($payableId[0]->method_of_payment === "CASH")

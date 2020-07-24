@@ -60,6 +60,10 @@
                         <th style="font-size:16px; height: 1%; ">Address: </th>
                         <th style="font-size:16px; height: 1%; ">{{ $deliveryId->address }}</th>
                     </tr>
+                    <tr  > 
+                        <th style="font-size:16px; height: 1%; ">Charge To: </th>
+                        <th style="font-size:16px; height: 1%; ">{{ $deliveryId->charge_to }}</th>
+                    </tr>
                    
                    
                 </thead>
@@ -73,7 +77,7 @@
                   <thead>
                      <tr >
                           <th style="font-size:16px; height: 1%; width: 25%;">DR No: </th>
-                          <th style="font-size:16px; height: 1%; ">{{ $deliveryId->dr_no }}</th>
+                          <th style="font-size:30px; height: 1%; ">{{ $deliveryId->dr_no }}</th>
                        </tr>
                      
                       <tr >
@@ -122,19 +126,26 @@
           </table>
           </div>
           
-          <div style="border-style: groove; margin-top:-1px;  width:700px; height: 50px;">
+          <div style="border-style: groove; margin-top:-1px;  width:700px; height: 90px;">
           <div style="float:left; width:50%; margin-left: 10px;">
-             <table >
+          <table >
                 <thead>
                     <tr >
                         <th style="font-size:16px; height: 1%; width: 30%; ">Prepared By:</th>
-                        <th style="font-size:16px; height: 1%; ">{{ $deliveryId['created_by'] }}</th>
+                        <th style="font-size:16px; height: 1%; ">_____________________</th>
                     </tr>
                     <tr  >
-                        <th style="font-size:16px; height: 1%; ">Checked By:</th>
-                        <th style="font-size:16px;"></th>
+                        <th style="font-size:16px; height: 1%; ">&nbsp;</th>
+                        <th style="font-size:16px;">{{ $deliveryId->created_by }}</th>
                     </tr>
-                   
+                    <tr >
+                        <th style="font-size:16px; height: 1%; ">Checked By:</th>
+                        <th style="font-size:16px; height: 1%; ">_____________________</th>
+                    </tr>
+                    <tr  >
+                        <th style="font-size:16px; height: 1%; ">&nbsp;</th>
+                        <th style="font-size:16px;">Aprilane Q Maturan</th>
+                    </tr>
                    
                 </thead>
                 
@@ -156,11 +167,11 @@
           <br>
           <br>
         <br>
-        <div style="float:left; width:50%; margin-top:10px; ">
+        <div style="float:left; width:50%; margin-top:-40px; ">
             <p style="font-size: 16px;">MAKE CHECK PAYMENTS PAYABLE TO  <u>RIBO'S FOOD CORPORATION</u></p>
         </div>
-        <div style="float:right; width:50%;">
-            <p style="font-size: 16px;">Received the above merchandise in good order and condition<br>
+        <div style="float:right; width:50%; margin-top:15px;">
+            <p style="font-size: 14px; margin-top:-30px;">Received the above merchandise in good order and condition<br>
             ___________________________<br>
             Print Name and Signature/Date</p>
         </div>

@@ -132,6 +132,10 @@
                                             <tr>
                                                 <th>Date Issued:</th>
                                                 <th> {{ $payableId[0]->issued_date }} </th>
+                                            </tr> 
+											<tr>
+                                                <th>Currency:</th>
+                                                <th> {{ $payableId[0]->currency }} </th>
                                             </tr>  
                                         </thead>
 	                              </table>
@@ -156,14 +160,27 @@
 									<tr style="border: 1px solid black;">
 										<td style="text-align:center; border: 1px solid black;">{{ $payableId[0]->issued_date}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $payableId[0]->particulars}}</td>
-										<td style="text-align:center; border: 1px solid black; font-size:18px;"><?php echo number_format($payableId[0]->amount, 2); ?></td>
+										<td style="text-align:center; border: 1px solid black; font-size:18px;">
+										
+                                            @if($payableId[0]->currency === "USD")
+                                            $
+
+                                            @endif 	
+										<?php echo number_format($payableId[0]->amount, 2); ?></td>
 									</tr>
 
 									@foreach($getParticulars as $getParticular)
 									<tr style="border:1px solid black;">
 										<td style="text-align:center; border: 1px solid black;">{{ $getParticular['date']}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $getParticular['particulars']}}</td>
-										<td style="text-align:center; border: 1px solid black; font-size:18px;"><?php echo number_format($getParticular['amount'], 2); ?></td>
+										<td style="text-align:center; border: 1px solid black; font-size:18px;">
+									
+                                            @if($getParticular['currency'] === "USD")
+                                            $
+
+                                            @endif 	
+										<?php echo number_format($getParticular['amount'], 2); ?>
+										</td>
 									</tr>
 									@endforeach
 								</tbody>
@@ -212,7 +229,13 @@
                                         <tr style="border:1px solid black;">
                                           <td style="text-align:center; border: 1px solid black;">{{ $payablesVoucher['cheque_number'] }}</td>
                                          
-                                          <td style="text-align:center; border: 1px solid black; font-size:18px;" ><?php echo number_format($payablesVoucher['cheque_amount'], 2);?></td>
+                                          <td style="text-align:center; border: 1px solid black; font-size:18px;" >
+										
+                                            @if($payablesVoucher['currency'] === "USD")
+                                            $
+
+                                            @endif 	
+										  <?php echo number_format($payablesVoucher['cheque_amount'], 2);?></td>
                                         </tr> 
                                         @endforeach
                                       
@@ -220,7 +243,13 @@
 	                                       <tr style="border:1px solid black;">
 	                                       
 	                                        <td style=" text-align:center; border: 1px solid black;"><strong>Total</strong></td>
-	                                        <td style=" text-align:center; border: 1px solid black; font-size:18px;"> <?php echo number_format($sum, 2)?></td>
+	                                        <td style=" text-align:center; border: 1px solid black; font-size:18px;"> 
+											
+                                            @if($payableId[0]->currency === "USD")
+                                            $
+
+                                            @endif 	
+											<?php echo number_format($sum, 2)?></td>
 	                                      </tr>
                                   </tbody>
                           </table>

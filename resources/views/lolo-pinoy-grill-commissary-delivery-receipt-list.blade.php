@@ -92,7 +92,8 @@
     					  	</div>
               			</div>	
               		</div>
-              </div>	
+              </div>
+			 	
 	 	</div>
 	 </div>
 	  <!-- Sticky Footer -->

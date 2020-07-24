@@ -1,4 +1,4 @@
-@extends('layouts.dno-personal-app')
+@extends('layouts.lolo-pinoy-grill-commissary-app')
 @section('title', 'Suppliers |')
 @section('content')
 <script>
@@ -10,27 +10,26 @@
     $( ".datepicker" ).datepicker();
   });
 </script>
-
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="/resources/demos/style.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="wrapper">
-     @include('sidebar.sidebar-dno-personal')
+     @include('sidebar.sidebar-lolo-pinoy-grill')
      <div id="content-wrapper">
         <div class="container-fluid">
-            <!-- Breadcrumbs-->
-            <ol class="breadcrumb">
+             <!-- Breadcrumbs-->
+             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                <a href="#">DNO Personal</a>
+                <a href="#">Lolo Pinoy Grill Commissary</a>
                 </li>
                 <li class="breadcrumb-item active">Supplier</li>
                 <li class="breadcrumb-item ">Supplier's  List</li>
             </ol>
             <div class="row">
                 <div class="col-lg-12">
-                     <div class="card mb-3">
-                        <div class="card-header">
+                    <div class="card mb-3">
+                         <div class="card-header">
                              <i class="fa fa-industry" aria-hidden="true"></i>
 	    					 Supplier's List
                         </div>
@@ -46,7 +45,7 @@
                             </div>
                             <div class="table-responsive">
                                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                        <thead>
+                                          <thead>
 					  						<tr>
 				  								
                                                 <th>Supplier Name/Service Provider</th>
@@ -65,9 +64,9 @@
 					  						</tr>
 				  						</tfoot>
                                         <tbody>
-                                            @foreach($suppliers as $supplier)
+                                           @foreach($suppliers as $supplier)
                                             <tr>
-                                                <td><a href="{{ url('dno-personal/suppliers/view/'.$supplier['id']) }}">{{ $supplier['supplier_name']}}</a></td>
+                                                <td><a href="{{ url('lolo-pinoy-grill-commissary/suppliers/view/'.$supplier['id']) }}">{{ $supplier['supplier_name']}}</a></td>
                                                 <td>{{ $supplier['date']}}</td>
                                                 <td>{{ $supplier['created_by']}}</td>
                                             </tr>
@@ -75,8 +74,8 @@
                                         </tbody>
                                  </table>
                             </div>
-                        </div>
-                     </div>
+                        </div>      
+                    </div>
                 </div>
             </div>
         </div>
@@ -120,8 +119,8 @@
             </div>
         </div>
      </div>
-      <!-- Sticky Footer -->
-      <footer class="sticky-footer">
+       <!-- Sticky Footer -->
+       <footer class="sticky-footer">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
             <span>Copyright © Ribos Food Corporation 2019</span>
@@ -131,11 +130,11 @@
           </div>
         </div>
       </footer>
-</div>
+</div> 
 <script type="text/javascript">
-    $("#validate").hide();
+     $("#validate").hide();
 
-    const saveSupplier = () =>{
+     const saveSupplier = () =>{
         const date = $("#date").val();
         const supplierName = $("#supplierName").val();
 
@@ -145,7 +144,7 @@
             //make ajax call
             $.ajax({
                 type:"POST",
-                url:'/dno-personal/supplier/add',
+                url:'/lolo-pinoy-grill-commissary/supplier/add',
                 data:{
                     _method:'post',
                     "_token":"{{ csrf_token() }}",
@@ -175,7 +174,7 @@
                 }
             });
         }
-    }
-    
+
+     }
 </script>
 @endsection

@@ -24,8 +24,9 @@
 	 <div id="content-wrapper">
  		<div class="container-fluid">
  				<div  style="margin-top:60px;">
-            	 <img style="margin-left: 240px;" src="{{ asset('images/pdf/lolo-pinoy-grill.jpg')}}"  alt="Lechon de Cebu">
-            	 	 <p >
+            	 <img style="margin-left: 270px;" src="{{ asset('images/wlg-corporation.png')}}"  alt="WLG Corporation">
+            	 
+                 	 <p >
 		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
 						Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
 
@@ -45,7 +46,7 @@
                                         <thead>
                                            <tr>
                                                 <th width="30%">Petty Cash No:</th>
-                                                <th>{{ $getPettyCash[0]->module_code}}{{ $getPettyCash[0]->lolo_pinoy_grill_code}}</th>
+                                                <th>{{ $getPettyCash[0]->module_code}}{{ $getPettyCash[0]->wlg_code}}</th>
                                             </tr>
                                             <tr>
                                                 <th>Date:</th>
@@ -105,8 +106,8 @@
                                   </tbody>
                           </table>
                          
-                           <div style="margin-top:25px;">
-                           		<table style="margin-top:-20px;">
+                           <div style="margin-top:30px;">
+                           		<table  >
                            			<thead>
                            				<tr>
                        						<th style="width:30%;">Prepared By</th>

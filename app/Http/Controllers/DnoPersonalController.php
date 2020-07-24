@@ -207,7 +207,7 @@ class DnoPersonalController extends Controller
                             ->leftJoin('dno_personal_suppliers', 'dno_personal_payment_vouchers.supplier_id', '=', 'dno_personal_suppliers.id')
                             ->where('dno_personal_suppliers.id', $id)
                             ->where('dno_personal_payment_vouchers.status', '!=', $status)
-                            ->sum('amount_due');
+                            ->sum('dno_personal_payment_vouchers.amount_due');
       
     
         return view('view-dno-personal-supplier', compact('viewSupplier', 'supplierLists', 'totalAmountDue'));
@@ -3698,6 +3698,7 @@ class DnoPersonalController extends Controller
                             'dno_personal_payment_vouchers.account_name',
                             'dno_personal_payment_vouchers.particulars',
                             'dno_personal_payment_vouchers.amount',
+                            'dno_personal_payment_vouchers.currency',
                             'dno_personal_payment_vouchers.method_of_payment',
                             'dno_personal_payment_vouchers.prepared_by',
                             'dno_personal_payment_vouchers.approved_by',
@@ -3767,6 +3768,7 @@ class DnoPersonalController extends Controller
                             'dno_personal_payment_vouchers.account_name',
                             'dno_personal_payment_vouchers.particulars',
                             'dno_personal_payment_vouchers.amount',
+                            'dno_personal_payment_vouchers.currency',
                             'dno_personal_payment_vouchers.method_of_payment',
                             'dno_personal_payment_vouchers.prepared_by',
                             'dno_personal_payment_vouchers.approved_by',
@@ -3906,7 +3908,7 @@ class DnoPersonalController extends Controller
 
         } else if($particulars['category'] == "Vehicles"){
             $subCatId = $particulars['utility_sub_category'];
-
+            $util = "NULL";
         }else{
             $util = "NULL";
             $subCatId = "NULL";

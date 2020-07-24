@@ -20,11 +20,229 @@ use App\CommissaryRawMaterial;
 use App\LechonDeCebuPettyCash;
 use App\LechonDeCebuUtility;
 use App\LechonDeCebuCode;
+use App\LechonDeCebuSupplier;
 use Session;
 
 
 class LoloPinoyLechonDeCebuController extends Controller
 {   
+   
+    public function printSupplier($id){
+        $viewSupplier = LechonDeCebuSupplier::where('id', $id)->get();
+
+        $printSuppliers = DB::table(
+                    'lechon_de_cebu_payment_vouchers')
+                    ->select( 
+                    'lechon_de_cebu_payment_vouchers.id',
+                    'lechon_de_cebu_payment_vouchers.user_id',
+                    'lechon_de_cebu_payment_vouchers.pv_id',
+                    'lechon_de_cebu_payment_vouchers.date',
+                    'lechon_de_cebu_payment_vouchers.paid_to',
+                    'lechon_de_cebu_payment_vouchers.account_no',
+                    'lechon_de_cebu_payment_vouchers.account_name',
+                    'lechon_de_cebu_payment_vouchers.particulars',
+                    'lechon_de_cebu_payment_vouchers.amount',
+                    'lechon_de_cebu_payment_vouchers.method_of_payment',
+                    'lechon_de_cebu_payment_vouchers.prepared_by',
+                    'lechon_de_cebu_payment_vouchers.approved_by',
+                    'lechon_de_cebu_payment_vouchers.date_apprroved',
+                    'lechon_de_cebu_payment_vouchers.received_by_date',
+                    'lechon_de_cebu_payment_vouchers.created_by',
+                    'lechon_de_cebu_payment_vouchers.invoice_number',
+                    'lechon_de_cebu_payment_vouchers.voucher_ref_number',
+                    'lechon_de_cebu_payment_vouchers.issued_date',
+                    'lechon_de_cebu_payment_vouchers.category',
+                    'lechon_de_cebu_payment_vouchers.amount_due',
+                    'lechon_de_cebu_payment_vouchers.delivered_date',
+                    'lechon_de_cebu_payment_vouchers.status',
+                    'lechon_de_cebu_payment_vouchers.cheque_number',
+                    'lechon_de_cebu_payment_vouchers.cheque_amount',
+                    'lechon_de_cebu_payment_vouchers.cheque_total_amount',
+                    'lechon_de_cebu_payment_vouchers.sub_category',
+                    'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                    'lechon_de_cebu_payment_vouchers.supplier_name',
+                    'lechon_de_cebu_payment_vouchers.deleted_at',
+                    'lechon_de_cebu_suppliers.id',
+                    'lechon_de_cebu_suppliers.date',
+                    'lechon_de_cebu_suppliers.supplier_name')
+                    ->leftJoin('lechon_de_cebu_suppliers', 'lechon_de_cebu_payment_vouchers.supplier_id', '=', 'lechon_de_cebu_suppliers.id')
+                    ->where('lechon_de_cebu_suppliers.id', $id)
+                    ->get()->toArray();
+
+    $status = "FULLY PAID AND RELEASED";
+    $totalAmountDue = DB::table(
+                        'lechon_de_cebu_payment_vouchers')
+                        ->select( 
+                        'lechon_de_cebu_payment_vouchers.id',
+                        'lechon_de_cebu_payment_vouchers.user_id',
+                        'lechon_de_cebu_payment_vouchers.pv_id',
+                        'lechon_de_cebu_payment_vouchers.date',
+                        'lechon_de_cebu_payment_vouchers.paid_to',
+                        'lechon_de_cebu_payment_vouchers.account_no',
+                        'lechon_de_cebu_payment_vouchers.account_name',
+                        'lechon_de_cebu_payment_vouchers.particulars',
+                        'lechon_de_cebu_payment_vouchers.amount',
+                        'lechon_de_cebu_payment_vouchers.method_of_payment',
+                        'lechon_de_cebu_payment_vouchers.prepared_by',
+                        'lechon_de_cebu_payment_vouchers.approved_by',
+                        'lechon_de_cebu_payment_vouchers.date_apprroved',
+                        'lechon_de_cebu_payment_vouchers.received_by_date',
+                        'lechon_de_cebu_payment_vouchers.created_by',
+                        'lechon_de_cebu_payment_vouchers.invoice_number',
+                        'lechon_de_cebu_payment_vouchers.voucher_ref_number',
+                        'lechon_de_cebu_payment_vouchers.issued_date',
+                        'lechon_de_cebu_payment_vouchers.category',
+                        'lechon_de_cebu_payment_vouchers.amount_due',
+                        'lechon_de_cebu_payment_vouchers.delivered_date',
+                        'lechon_de_cebu_payment_vouchers.status',
+                        'lechon_de_cebu_payment_vouchers.cheque_number',
+                        'lechon_de_cebu_payment_vouchers.cheque_amount',
+                        'lechon_de_cebu_payment_vouchers.cheque_total_amount',
+                        'lechon_de_cebu_payment_vouchers.sub_category',
+                        'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                        'lechon_de_cebu_payment_vouchers.supplier_id',
+                        'lechon_de_cebu_payment_vouchers.supplier_name',
+                        'lechon_de_cebu_payment_vouchers.deleted_at',
+                        'lechon_de_cebu_suppliers.id',
+                        'lechon_de_cebu_suppliers.date',
+                        'lechon_de_cebu_suppliers.supplier_name')
+                        ->leftJoin('lechon_de_cebu_suppliers', 'lechon_de_cebu_payment_vouchers.supplier_id', '=', 'lechon_de_cebu_suppliers.id')
+                        ->where('lechon_de_cebu_suppliers.id', $id)
+                        ->where('lechon_de_cebu_payment_vouchers.status', '!=', $status)
+                        ->sum('lechon_de_cebu_payment_vouchers.amount_due');
+
+        $pdf = PDF::loadView('printSupplierLechonDeCebu', compact('viewSupplier', 'printSuppliers', 'totalAmountDue'));
+
+        return $pdf->download('lechon-de-cebu-supplier.pdf');
+
+    }
+    
+    public function viewSupplier($id){
+        $viewSupplier = LechonDeCebuSupplier::where('id', $id)->get();
+        
+        $supplierLists = DB::table(
+                            'lechon_de_cebu_payment_vouchers')
+                            ->select( 
+                            'lechon_de_cebu_payment_vouchers.id',
+                            'lechon_de_cebu_payment_vouchers.user_id',
+                            'lechon_de_cebu_payment_vouchers.pv_id',
+                            'lechon_de_cebu_payment_vouchers.date',
+                            'lechon_de_cebu_payment_vouchers.paid_to',
+                            'lechon_de_cebu_payment_vouchers.account_no',
+                            'lechon_de_cebu_payment_vouchers.account_name',
+                            'lechon_de_cebu_payment_vouchers.particulars',
+                            'lechon_de_cebu_payment_vouchers.amount',
+                            'lechon_de_cebu_payment_vouchers.method_of_payment',
+                            'lechon_de_cebu_payment_vouchers.prepared_by',
+                            'lechon_de_cebu_payment_vouchers.approved_by',
+                            'lechon_de_cebu_payment_vouchers.date_apprroved',
+                            'lechon_de_cebu_payment_vouchers.received_by_date',
+                            'lechon_de_cebu_payment_vouchers.created_by',
+                            'lechon_de_cebu_payment_vouchers.invoice_number',
+                            'lechon_de_cebu_payment_vouchers.voucher_ref_number',
+                            'lechon_de_cebu_payment_vouchers.issued_date',
+                            'lechon_de_cebu_payment_vouchers.category',
+                            'lechon_de_cebu_payment_vouchers.amount_due',
+                            'lechon_de_cebu_payment_vouchers.delivered_date',
+                            'lechon_de_cebu_payment_vouchers.status',
+                            'lechon_de_cebu_payment_vouchers.cheque_number',
+                            'lechon_de_cebu_payment_vouchers.cheque_amount',
+                            'lechon_de_cebu_payment_vouchers.cheque_total_amount',
+                            'lechon_de_cebu_payment_vouchers.sub_category',
+                            'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                            'lechon_de_cebu_payment_vouchers.supplier_name',
+                            'lechon_de_cebu_payment_vouchers.deleted_at',
+                            'lechon_de_cebu_suppliers.id',
+                            'lechon_de_cebu_suppliers.date',
+                            'lechon_de_cebu_suppliers.supplier_name')
+                            ->leftJoin('lechon_de_cebu_suppliers', 'lechon_de_cebu_payment_vouchers.supplier_id', '=', 'lechon_de_cebu_suppliers.id')
+                            ->where('lechon_de_cebu_suppliers.id', $id)
+                            ->get()->toArray();
+
+        $status = "FULLY PAID AND RELEASED";
+        $totalAmountDue = DB::table(
+                                'lechon_de_cebu_payment_vouchers')
+                                ->select( 
+                                'lechon_de_cebu_payment_vouchers.id',
+                                'lechon_de_cebu_payment_vouchers.user_id',
+                                'lechon_de_cebu_payment_vouchers.pv_id',
+                                'lechon_de_cebu_payment_vouchers.date',
+                                'lechon_de_cebu_payment_vouchers.paid_to',
+                                'lechon_de_cebu_payment_vouchers.account_no',
+                                'lechon_de_cebu_payment_vouchers.account_name',
+                                'lechon_de_cebu_payment_vouchers.particulars',
+                                'lechon_de_cebu_payment_vouchers.amount',
+                                'lechon_de_cebu_payment_vouchers.method_of_payment',
+                                'lechon_de_cebu_payment_vouchers.prepared_by',
+                                'lechon_de_cebu_payment_vouchers.approved_by',
+                                'lechon_de_cebu_payment_vouchers.date_apprroved',
+                                'lechon_de_cebu_payment_vouchers.received_by_date',
+                                'lechon_de_cebu_payment_vouchers.created_by',
+                                'lechon_de_cebu_payment_vouchers.invoice_number',
+                                'lechon_de_cebu_payment_vouchers.voucher_ref_number',
+                                'lechon_de_cebu_payment_vouchers.issued_date',
+                                'lechon_de_cebu_payment_vouchers.category',
+                                'lechon_de_cebu_payment_vouchers.amount_due',
+                                'lechon_de_cebu_payment_vouchers.delivered_date',
+                                'lechon_de_cebu_payment_vouchers.status',
+                                'lechon_de_cebu_payment_vouchers.cheque_number',
+                                'lechon_de_cebu_payment_vouchers.cheque_amount',
+                                'lechon_de_cebu_payment_vouchers.cheque_total_amount',
+                                'lechon_de_cebu_payment_vouchers.sub_category',
+                                'lechon_de_cebu_payment_vouchers.sub_category_account_id',
+                                'lechon_de_cebu_payment_vouchers.supplier_id',
+                                'lechon_de_cebu_payment_vouchers.supplier_name',
+                                'lechon_de_cebu_payment_vouchers.deleted_at',
+                                'lechon_de_cebu_suppliers.id',
+                                'lechon_de_cebu_suppliers.date',
+                                'lechon_de_cebu_suppliers.supplier_name')
+                                ->leftJoin('lechon_de_cebu_suppliers', 'lechon_de_cebu_payment_vouchers.supplier_id', '=', 'lechon_de_cebu_suppliers.id')
+                                ->where('lechon_de_cebu_suppliers.id', $id)
+                                ->where('lechon_de_cebu_payment_vouchers.status', '!=', $status)
+                                ->sum('lechon_de_cebu_payment_vouchers.amount_due');
+    
+        return view('view-lechon-de-cebu-supplier', compact('viewSupplier', 'supplierLists', 'totalAmountDue'));
+    }
+
+    public function addSupplier(Request $request){
+
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+
+        //check if supplier name exits
+        $target = DB::table(
+                'lechon_de_cebu_suppliers')
+                ->where('supplier_name', $request->supplierName)
+                ->get()->first();
+
+        if($target === NULL){
+            $supplier = new LechonDeCebuSupplier([
+                'user_id'=>$user->id,
+                'date'=>$request->date,
+                'supplier_name'=>$request->supplierName, 
+                'created_by'=>$name,
+            ]);
+    
+            $supplier->save();
+            return response()->json('Success: successfully updated.');        
+        }else{
+            return response()->json('Failed: Already exist.');
+        }
+      
+    }
+
+    public function supplier(){
+        $suppliers = LechonDeCebuSupplier::orderBy('id', 'desc')->get()->toArray();
+
+        return view('lechon-de-cebu-supplier', compact('suppliers'));
+    }
+
     public function updateDetails(Request $request){
         $updateDetail = LechonDeCebuPaymentVoucher::find($request->id);
 
@@ -6421,11 +6639,21 @@ class LoloPinoyLechonDeCebuController extends Controller
             $subCat = $request->get('pettyCashNo');
             $subCatAccountId = NULL;
 
+            $supplierExp = NULL;
         }else if($request->get('category') === "Utility"){
             $subCat = $request->get('utility');
             $subCatAccountId = $request->get('accountId');
 
+            $supplierExp = NULL;
         }else if($request->get('category') === "Payroll"){  
+            $subCat = NULL;
+            $subCatAccountId = NULL;
+            $supplierExp = NULL;
+        }else if($request->get('category') === "Supplier"){
+            
+            $supplier = $request->get('supplierName');
+            $supplierExp = explode("-", $supplier);
+
             $subCat = NULL;
             $subCatAccountId = NULL;
         }
@@ -6451,6 +6679,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                 'category'=>$request->get('category'),
                 'sub_category'=>$subCat,
                 'sub_category_account_id'=>$subCatAccountId,
+                'supplier_id'=>$supplierExp[0],
+                'supplier_name'=>$supplierExp[1],
                 'prepared_by'=>$name,
                 'created_by'=>$name,
 
@@ -6509,8 +6739,10 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $getAllFlags = LechonDeCebuUtility::get()->toArray();
        
+         //get suppliers
+         $suppliers = LechonDeCebuSupplier::get()->toArray();
 
-        return view('payment-voucher-form',compact('pettyCashes', 'getAllFlags'));
+        return view('payment-voucher-form',compact('pettyCashes', 'getAllFlags', 'suppliers'));
         
     }
 

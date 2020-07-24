@@ -93,11 +93,12 @@
                             <div class="form-row">
                                 <div  class="col-md-2">
                                     <label>Category</label>
-                                    <select  name="category" class="category selcls form-control" > 
+                                    <select  name="category" class="category form-control" > 
                                         <option value="None">None</option>
                                         <option value="Petty Cash">Petty Cash</option>
                                         <option value="Utility">Utility</option>
                                         <option value="Payroll">Payroll</option>
+                                        <option value="Supplier">Supplier</option>
                                       </select>
                                 </div> 
                                 <div id="pettyCashNo" class="col-md-2">
@@ -126,7 +127,15 @@
                                       <option value="{{ $getAllFlag['id']}}">{{ $getAllFlag['account_id']}}</option>
                                       @endforeach
                                     </select>
-                                </div>     
+                                </div> 
+                                <div id="supplierList" class="col-lg-2">
+                                      <label>Supplier Name</label>
+                                      <select data-live-search="true" id="supplierName" name="supplierName" class="form-control selectpicker">
+                                          @foreach($suppliers as $supplier)
+                                            <option value="{{ $supplier['id']}}-{{ $supplier['supplier_name']}}">{{ $supplier['supplier_name']}}</option>
+                                          @endforeach
+                                      </select>
+                                  </div>    
                             </div>
                          </div>
                         
@@ -174,6 +183,7 @@
     $("#pettyCashNo").hide();
     $("#utility").hide();
     $("#accountId").hide();
+    $("#supplierList").hide();
 
     const bills = () =>{
       $("#accountId").show();
@@ -186,18 +196,28 @@
             $("#pettyCashNo").hide();
             $("#utility").hide();
             $("#accountId").hide();
+            $("#supplierList").hide();
         }else if(cat === "Petty Cash"){
             $("#pettyCashNo").show();
             $("#utility").hide();
             $("#accountId").hide();
+            $("#supplierList").hide();
         }else if(cat === "Utility"){  
             $("#pettyCashNo").hide();
+            $("#supplierList").hide();
             $("#utility").show();
             bills();
+        }else if(cat === "Supplier"){
+            $("#supplierList").show();
+
+            $("#pettyCashNo").hide();
+            $("#utility").hide();
+            $("#accountId").hide();
         }else if(cat  === "Payroll"){
             $("#pettyCashNo").hide();
             $("#utility").hide();
             $("#accountId").hide();
+            $("#supplierList").hide();
         }
     });
 </script>

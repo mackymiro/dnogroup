@@ -106,6 +106,25 @@ Route::group(['middleware' =>['user']], function(){
 		'LoloPinoyLechonDeCebuController@pettyCashList')
 		->name('pettyCashListLechonDeCebu');
 
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/suppliers',
+		'LoloPinoyLechonDeCebuController@supplier')
+		->name('supplier');
+
+	Route::post(
+		'/lolo-pinoy-lechon-de-cebu/supplier/add',
+		'LoloPinoyLechonDeCebuController@addSupplier')
+		->name('addSupplier');
+
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/suppliers/view/{id}',
+		'LoloPinoyLechonDeCebuController@viewSupplier')
+		->name('viewSupplier');
+
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/supplier/print/{id}',
+		'LoloPinoyLechonDeCebuController@printSupplier')
+		->name('printSupplier');
 
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/utilities',
@@ -894,6 +913,7 @@ Route::group(['middleware' =>['user']], function(){
 		'DnoPersonalController@supplier')
 		->name('supplier');
 
+
 	Route::post(
 		'/dno-personal/supplier/add',
 		'DnoPersonalController@addSupplier')
@@ -1155,6 +1175,16 @@ Route::group(['middleware' =>['sales']], function(){
 		'LoloPinoyLechonDeCebuController@destroySI')
 		->name('destroySI');
 
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/suppliers',
+		'LoloPinoyLechonDeCebuController@supplier')
+		->name('supplier');
+
+	Route::post(
+		'/lolo-pinoy-lechon-de-cebu/supplier/add',
+		'LoloPinoyLechonDeCebuController@addSupplier')
+		->name('addSupplier');
+
 	//delete comissary RAW materials
 	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-raw-materials/{id}', 'LoloPinoyLechonDeCebuController@destroyRawMaterial')->name('lolo-pinoy-lechon-de-cebu.destroyRawMaterial');
 	
@@ -1283,6 +1313,14 @@ Route::group(['middleware' =>['sales']], function(){
 	
 });
 
+/************************************************
+ * 
+ * 
+ * 
+ * 
+ * 
+ * ***********************************************
+ */
 
 Route::group(['middleware' => ['auth']], function(){
 	
@@ -1561,6 +1599,17 @@ Route::group(['middleware' => ['auth']], function(){
 		'LoloPinoyLechonDeCebuController@privateOrders')
 		->name('lolo-pinoy-lechon-de-cebu.privateOrders');
 
+
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/suppliers',
+		'LoloPinoyLechonDeCebuController@supplier')
+		->name('supplier');
+
+	Route::post(
+		'/lolo-pinoy-lechon-de-cebu/supplier/add',
+		'LoloPinoyLechonDeCebuController@addSupplier')
+		->name('addSupplier');
+
 	//route for add sales invoice lechon de cebu
 	Route::post('/lolo-pinoy-lechon-de-cebu/store-sales-invoice', 'LoloPinoyLechonDeCebuController@storeSalesInvoice')->name('lolo-pinoy-lechon-de-cebu.storeSalesInvoice');
 
@@ -1688,11 +1737,33 @@ Route::group(['middleware' => ['auth']], function(){
 	//delivery receipt lists
 	Route::get('/lolo-pinoy-grill-commissary/delivery-receipt/lists', 'LoloPinoyGrillCommissaryController@deliveryReceiptList')->name('lolo-pinoy-grill-commissary.deliveryReceiptList');
 
+	
 	//view 
 	Route::get(
 		'/lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-commissary-delivery-receipt/{id}', 
 		'LoloPinoyGrillCommissaryController@viewDeliveryReceipt')
 		->name('lolo-pinoy-grill-commissary.viewDeliveryReceipt');
+
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/delivery-receipt/view-per-branch',
+		'LoloPinoyGrillCommissaryController@viewPerBranch')
+		->name('viewPerBranch');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/suppliers',
+		'LoloPinoyGrillCommissaryController@supplier')
+		->name('supplier');
+
+	Route::post(
+			'/lolo-pinoy-grill-commissary/supplier/add',
+			'LoloPinoyGrillCommissaryController@addSupplier')
+			->name('addSupplier');
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/suppliers/view/{id}',
+		'LoloPinoyGrillCommissaryController@viewSupplier')
+		->name('viewSupplier');
 
 	Route::get(
 		'/lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-commissary-purchase-order/{id}',
@@ -4045,6 +4116,46 @@ Route::group(['middleware' => ['auth']], function(){
 		'WlgCorporationController@printPO')
 		->name('printPOWlg');
 
+	Route::get(
+		'/wlg-corporation/petty-cash-list',
+		'WlgCorporationController@pettyCashList')
+		->name('pettyCashList');
+
+	Route::post(
+		'/wlg-corporation/petty-cash/add',
+		'WlgCorporationController@addPettyCash')
+		->name('addPettyCashWlg');
+
+	Route::get(
+		'/wlg-corporation/edit-petty-cash/{id}',
+		'WlgCorporationController@editPettyCash')
+		->name('editPettyCashWLG');
+
+	Route::patch(
+		'/wlg-corporation/update-petty-cash/{id}',
+		'WlgCorporationController@updatePettyCash')
+		->name('updatePettyCashWLG');
+
+	Route::post(
+		'/wlg-corporation/add-new-petty-cash/{id}',
+		'WlgCorporationController@addNewPettyCash')
+		->name('addNewPettyCashWLG');
+
+	Route::delete(
+		'/wlg-corporation/petty-cash/delete/{id}',
+		'WlgCorporationController@destroyPettyCash')
+		->name('destroyPettyCash');
+
+	Route::get(
+		'/wlg-corporation/petty-cash/view/{id}',
+		'WlgCorporationController@viewPettyCash')
+		->name('viewPettyCashWLG');
+
+	Route::get(
+		'/wlg-corporaton/printPettyCash/{id}',
+		'WlgCorporationController@printPettyCash')
+		->name('printPettyCash');
+		
 	Route::get(
 		'/wlg-corporation/invoice-form',
 		'WlgCorporationController@invoiceForm')
