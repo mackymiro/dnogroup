@@ -5312,6 +5312,9 @@ class LoloPinoyGrillCommissaryController extends Controller
        }else if($request->get('category') == "None"){
             $subCat = "NULL";
             $subCatAcctId = "NULL";
+
+            $supplierExp = NULL;
+            
        }else if($request->get('category') == "Payroll"){
             $subCat = "NULL";
             $subCatAcctId = "NULL";

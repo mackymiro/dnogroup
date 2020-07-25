@@ -22,6 +22,8 @@ class DnoResourcesDevelopmentCorpPaymentVoucher extends Model
         'category',
         'sub_category',
         'sub_category_account_id',
+        'supplier_id',
+        'supplier_name',
         'particulars',
         'amount',
         'currency',

@@ -6634,6 +6634,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             $subCat = NULL;
             $subCatAccountId = NULL;
 
+            $supplierExp = NULL;
         }elseif($request->get('category') === "Petty Cash"){
 
             $subCat = $request->get('pettyCashNo');

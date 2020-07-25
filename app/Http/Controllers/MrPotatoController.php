@@ -17,9 +17,226 @@ use App\MrPotatoUtility;
 use App\MrPotatoPettyCash;
 use App\MrPotatoCode;
 use App\MrPotatoBillingStatement; 
+use App\MrPotatoSupplier;
 
 class MrPotatoController extends Controller
-{     
+{   
+
+    public function printSupplier($id){
+        $viewSupplier = MrPotatoSupplier::where('id', $id)->get();
+
+        $printSuppliers = DB::table(
+                        'mr_potato_payment_vouchers')
+                        ->select( 
+                        'mr_potato_payment_vouchers.id',
+                        'mr_potato_payment_vouchers.user_id',
+                        'mr_potato_payment_vouchers.pv_id',
+                        'mr_potato_payment_vouchers.date',
+                        'mr_potato_payment_vouchers.paid_to',
+                        'mr_potato_payment_vouchers.account_no',
+                        'mr_potato_payment_vouchers.account_name',
+                        'mr_potato_payment_vouchers.particulars',
+                        'mr_potato_payment_vouchers.amount',
+                        'mr_potato_payment_vouchers.method_of_payment',
+                        'mr_potato_payment_vouchers.prepared_by',
+                        'mr_potato_payment_vouchers.approved_by',
+                        'mr_potato_payment_vouchers.date_apprroved',
+                        'mr_potato_payment_vouchers.received_by_date',
+                        'mr_potato_payment_vouchers.created_by',
+                        'mr_potato_payment_vouchers.created_at',
+                        'mr_potato_payment_vouchers.invoice_number',
+                        'mr_potato_payment_vouchers.voucher_ref_number',
+                        'mr_potato_payment_vouchers.issued_date',
+                        'mr_potato_payment_vouchers.category',
+                        'mr_potato_payment_vouchers.amount_due',
+                        'mr_potato_payment_vouchers.delivered_date',
+                        'mr_potato_payment_vouchers.status',
+                        'mr_potato_payment_vouchers.cheque_number',
+                        'mr_potato_payment_vouchers.cheque_amount',
+                        'mr_potato_payment_vouchers.sub_category',
+                        'mr_potato_payment_vouchers.sub_category_account_id',
+                        'mr_potato_payment_vouchers.supplier_name',
+                        'mr_potato_payment_vouchers.deleted_at',
+                        'mr_potato_suppliers.id',
+                        'mr_potato_suppliers.date',
+                        'mr_potato_suppliers.supplier_name')
+                        ->leftJoin('mr_potato_suppliers', 'mr_potato_payment_vouchers.supplier_id', '=', 'mr_potato_suppliers.id')
+                        ->where('mr_potato_suppliers.id', $id)  
+                        ->get();
+
+        $status = "FULLY PAID AND RELEASED";
+        $totalAmountDue = DB::table(
+                        'mr_potato_payment_vouchers')
+                        ->select( 
+                        'mr_potato_payment_vouchers.id',
+                        'mr_potato_payment_vouchers.user_id',
+                        'mr_potato_payment_vouchers.pv_id',
+                        'mr_potato_payment_vouchers.date',
+                        'mr_potato_payment_vouchers.paid_to',
+                        'mr_potato_payment_vouchers.account_no',
+                        'mr_potato_payment_vouchers.account_name',
+                        'mr_potato_payment_vouchers.particulars',
+                        'mr_potato_payment_vouchers.amount',
+                        'mr_potato_payment_vouchers.method_of_payment',
+                        'mr_potato_payment_vouchers.prepared_by',
+                        'mr_potato_payment_vouchers.approved_by',
+                        'mr_potato_payment_vouchers.date_apprroved',
+                        'mr_potato_payment_vouchers.received_by_date',
+                        'mr_potato_payment_vouchers.created_by',
+                        'mr_potato_payment_vouchers.created_at',
+                        'mr_potato_payment_vouchers.invoice_number',
+                        'mr_potato_payment_vouchers.voucher_ref_number',
+                        'mr_potato_payment_vouchers.issued_date',
+                        'mr_potato_payment_vouchers.category',
+                        'mr_potato_payment_vouchers.amount_due',
+                        'mr_potato_payment_vouchers.delivered_date',
+                        'mr_potato_payment_vouchers.status',
+                        'mr_potato_payment_vouchers.cheque_number',
+                        'mr_potato_payment_vouchers.cheque_amount',
+                        'mr_potato_payment_vouchers.sub_category',
+                        'mr_potato_payment_vouchers.sub_category_account_id',
+                        'mr_potato_payment_vouchers.supplier_id',
+                        'mr_potato_payment_vouchers.supplier_name',
+                        'mr_potato_payment_vouchers.deleted_at',
+                        'mr_potato_suppliers.id',
+                        'mr_potato_suppliers.date',
+                        'mr_potato_suppliers.supplier_name')
+                        ->leftJoin('mr_potato_suppliers', 'mr_potato_payment_vouchers.supplier_id', '=', 'mr_potato_suppliers.id')
+                        ->where('mr_potato_suppliers.id', $id)  
+                        ->where('mr_potato_payment_vouchers.status', '!=',  $status)  
+                        ->sum('mr_potato_payment_vouchers.amount_due');
+
+        $pdf = PDF::loadView('printSupplierMrPotato', compact('viewSupplier', 'printSuppliers', 'totalAmountDue'));
+
+        return $pdf->download('mr-potato-supplier.pdf');
+    }
+
+
+    public function viewSupplier($id){
+        $viewSupplier = MrPotatoSupplier::where('id', $id)->get();
+
+        $supplierLists = DB::table(
+                            'mr_potato_payment_vouchers')
+                            ->select( 
+                            'mr_potato_payment_vouchers.id',
+                            'mr_potato_payment_vouchers.user_id',
+                            'mr_potato_payment_vouchers.pv_id',
+                            'mr_potato_payment_vouchers.date',
+                            'mr_potato_payment_vouchers.paid_to',
+                            'mr_potato_payment_vouchers.account_no',
+                            'mr_potato_payment_vouchers.account_name',
+                            'mr_potato_payment_vouchers.particulars',
+                            'mr_potato_payment_vouchers.amount',
+                            'mr_potato_payment_vouchers.method_of_payment',
+                            'mr_potato_payment_vouchers.prepared_by',
+                            'mr_potato_payment_vouchers.approved_by',
+                            'mr_potato_payment_vouchers.date_apprroved',
+                            'mr_potato_payment_vouchers.received_by_date',
+                            'mr_potato_payment_vouchers.created_by',
+                            'mr_potato_payment_vouchers.created_at',
+                            'mr_potato_payment_vouchers.invoice_number',
+                            'mr_potato_payment_vouchers.voucher_ref_number',
+                            'mr_potato_payment_vouchers.issued_date',
+                            'mr_potato_payment_vouchers.category',
+                            'mr_potato_payment_vouchers.amount_due',
+                            'mr_potato_payment_vouchers.delivered_date',
+                            'mr_potato_payment_vouchers.status',
+                            'mr_potato_payment_vouchers.cheque_number',
+                            'mr_potato_payment_vouchers.cheque_amount',
+                            'mr_potato_payment_vouchers.sub_category',
+                            'mr_potato_payment_vouchers.sub_category_account_id',
+                            'mr_potato_payment_vouchers.supplier_name',
+                            'mr_potato_payment_vouchers.deleted_at',
+                            'mr_potato_suppliers.id',
+                            'mr_potato_suppliers.date',
+                            'mr_potato_suppliers.supplier_name')
+                            ->leftJoin('mr_potato_suppliers', 'mr_potato_payment_vouchers.supplier_id', '=', 'mr_potato_suppliers.id')
+                            ->where('mr_potato_suppliers.id', $id)  
+                            ->get();
+
+        $status = "FULLY PAID AND RELEASED";
+        $totalAmountDue = DB::table(
+                        'mr_potato_payment_vouchers')
+                        ->select( 
+                        'mr_potato_payment_vouchers.id',
+                        'mr_potato_payment_vouchers.user_id',
+                        'mr_potato_payment_vouchers.pv_id',
+                        'mr_potato_payment_vouchers.date',
+                        'mr_potato_payment_vouchers.paid_to',
+                        'mr_potato_payment_vouchers.account_no',
+                        'mr_potato_payment_vouchers.account_name',
+                        'mr_potato_payment_vouchers.particulars',
+                        'mr_potato_payment_vouchers.amount',
+                        'mr_potato_payment_vouchers.method_of_payment',
+                        'mr_potato_payment_vouchers.prepared_by',
+                        'mr_potato_payment_vouchers.approved_by',
+                        'mr_potato_payment_vouchers.date_apprroved',
+                        'mr_potato_payment_vouchers.received_by_date',
+                        'mr_potato_payment_vouchers.created_by',
+                        'mr_potato_payment_vouchers.created_at',
+                        'mr_potato_payment_vouchers.invoice_number',
+                        'mr_potato_payment_vouchers.voucher_ref_number',
+                        'mr_potato_payment_vouchers.issued_date',
+                        'mr_potato_payment_vouchers.category',
+                        'mr_potato_payment_vouchers.amount_due',
+                        'mr_potato_payment_vouchers.delivered_date',
+                        'mr_potato_payment_vouchers.status',
+                        'mr_potato_payment_vouchers.cheque_number',
+                        'mr_potato_payment_vouchers.cheque_amount',
+                        'mr_potato_payment_vouchers.sub_category',
+                        'mr_potato_payment_vouchers.sub_category_account_id',
+                        'mr_potato_payment_vouchers.supplier_id',
+                        'mr_potato_payment_vouchers.supplier_name',
+                        'mr_potato_payment_vouchers.deleted_at',
+                        'mr_potato_suppliers.id',
+                        'mr_potato_suppliers.date',
+                        'mr_potato_suppliers.supplier_name')
+                        ->leftJoin('mr_potato_suppliers', 'mr_potato_payment_vouchers.supplier_id', '=', 'mr_potato_suppliers.id')
+                        ->where('mr_potato_suppliers.id', $id)  
+                        ->where('mr_potato_payment_vouchers.status', '!=',  $status)  
+                        ->sum('mr_potato_payment_vouchers.amount_due');
+
+        return view('view-mr-potato-supplier', compact('viewSupplier', 'supplierLists', 'totalAmountDue'));
+
+    }
+
+    public function addSupplier(Request $request){  
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+          //check if supplier name exits
+        $target = DB::table(
+                'mr_potato_suppliers')
+                ->where('supplier_name', $request->supplierName)
+                ->get()->first();
+
+        if($target === NULL){
+            $supplier = new MrPotatoSupplier([
+                'user_id'=>$user->id,
+                'date'=>$request->date,
+                'supplier_name'=>$request->supplierName, 
+                'created_by'=>$name,
+            ]);
+    
+            $supplier->save();
+            return response()->json('Success: successfully updated.');        
+        }else{
+            return response()->json('Failed: Already exist.');
+        }
+    }
+
+
+    public function supplier(){
+        $suppliers = MrPotatoSupplier::orderBy('id', 'desc')->get()->toArray();
+
+        return view('mr-potato-supplier', compact('suppliers'));
+    }
+
     public function updateDetails(Request $request){
         $updateDetail = MrPotatoPaymentVoucher::find($request->id);
 
@@ -4122,18 +4339,27 @@ class MrPotatoController extends Controller
        if($request->get('category') == "Petty Cash"){
              $subCat = NULL;
              $subCatAcctId = NULL;
-
+             
+             $supplierExp = NULL;
         }else if($request->get('category') == "Utilities"){
             $subCat = $request->get('bills');
             $subCatAcctId = $request->get('selectAccountID');
-
+            $supplierExp = NULL;
         }else if($request->get('category') == "None"){
             $subCat = NULL;
             $subCatAcctId = NULL;
+            $supplierExp = NULL;
         }else if($request->get('category') == "Payroll"){
             $subCat = NULL;
             $subCatAcctId = NULL;
-        }
+            $supplierExp = NULL;
+        }else if($request->get('category') == "Supplier"){
+            $supplier = $request->get('supplierName');
+            $supplierExp = explode("-", $supplier);
+
+            $subCat = "NULL";
+            $subCatAcctId = "NULL";
+       }
 
          //check if invoice number already exists
         $target = DB::table(
@@ -4157,6 +4383,8 @@ class MrPotatoController extends Controller
                     'category'=>$request->get('category'),
                     'sub_category'=>$subCat,
                     'sub_category_account_id'=>$subCatAcctId,
+                    'supplier_id'=>$supplierExp[0],
+                    'supplier_name'=>$supplierExp[1],  
                     'prepared_by'=>$name,
                     'created_by'=>$name,
                 ]);
@@ -4189,7 +4417,11 @@ class MrPotatoController extends Controller
     //
     public function paymentVoucherForm(){
         $getAllFlags = MrPotatoUtility::where('u_id', NULL)->get()->toArray();
-        return view('payment-voucher-form-mr-potato', compact('getAllFlags'));
+
+         //get suppliers
+         $suppliers = MrPotatoSupplier::get()->toArray();
+
+        return view('payment-voucher-form-mr-potato', compact('getAllFlags', 'suppliers'));
     }
 
     //

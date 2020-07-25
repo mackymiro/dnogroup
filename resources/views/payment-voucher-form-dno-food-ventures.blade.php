@@ -98,8 +98,17 @@
                                         <option value="Petty Cash">Petty Cash</option>
                                         <option value="Utility">Utility</option>
                                         <option value="Payroll">Payroll</option>
+                                        <option value="Supplier">Supplier</option>
                                       </select>
-                                </div>       
+                                </div>  
+                                <div id="supplierList" class="col-lg-2">
+                                    <label>Supplier Name</label>
+                                    <select data-live-search="true" id="supplierName" name="supplierName" class="form-control selectpicker">
+                                      @foreach($suppliers as $supplier)
+                                        <option value="{{ $supplier['id']}}-{{ $supplier['supplier_name']}}">{{ $supplier['supplier_name']}}</option>
+                                      @endforeach
+                                    </select>
+                                  </div>       
                             </div>
                          </div>
                         
@@ -157,6 +166,7 @@
     $("#pettyCashNo").hide();
     $("#utility").hide();
     $("#accountId").hide();
+    $("#supplierList").hide();
 
     const bills = () =>{
       $("#accountId").show();
@@ -169,18 +179,25 @@
             $("#pettyCashNo").hide();
             $("#utility").hide();
             $("#accountId").hide();
+            $("#supplierList").hide();
         }else if(cat === "Petty Cash"){
             $("#pettyCashNo").show();
             $("#utility").hide();
             $("#accountId").hide();
+            $("#supplierList").hide();
         }else if(cat === "Utility"){  
             $("#pettyCashNo").hide();
             $("#utility").show();
+            $("#supplierList").hide();
             bills();
         }else if(cat  === "Payroll"){
             $("#pettyCashNo").hide();
             $("#utility").hide();
             $("#accountId").hide();
+
+            $("#supplierList").hide();
+        }else if(cat === "Supplier"){
+            $("#supplierList").show();
         }
     });
 </script>

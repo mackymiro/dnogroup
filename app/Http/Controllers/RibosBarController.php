@@ -20,9 +20,225 @@ use App\RibosBarUtility;
 use App\RibosBarRawMaterial;
 use App\RibosBarPettyCash;
 use App\RibosBarCode;
+use App\RibosBarSupplier;
 
 class RibosBarController extends Controller
 {
+
+    public function printSupplier($id){
+        $viewSupplier = RibosBarSupplier::where('id', $id)->get();
+        
+        $printSuppliers = DB::table(
+                        'ribos_bar_payment_vouchers')
+                        ->select( 
+                        'ribos_bar_payment_vouchers.id',
+                        'ribos_bar_payment_vouchers.user_id',
+                        'ribos_bar_payment_vouchers.pv_id',
+                        'ribos_bar_payment_vouchers.date',
+                        'ribos_bar_payment_vouchers.paid_to',
+                        'ribos_bar_payment_vouchers.account_no',
+                        'ribos_bar_payment_vouchers.account_name',
+                        'ribos_bar_payment_vouchers.particulars',
+                        'ribos_bar_payment_vouchers.amount',
+                        'ribos_bar_payment_vouchers.method_of_payment',
+                        'ribos_bar_payment_vouchers.prepared_by',
+                        'ribos_bar_payment_vouchers.approved_by',
+                        'ribos_bar_payment_vouchers.date_apprroved',
+                        'ribos_bar_payment_vouchers.received_by_date',
+                        'ribos_bar_payment_vouchers.created_by',
+                        'ribos_bar_payment_vouchers.created_at',
+                        'ribos_bar_payment_vouchers.invoice_number',
+                        'ribos_bar_payment_vouchers.voucher_ref_number',
+                        'ribos_bar_payment_vouchers.issued_date',
+                        'ribos_bar_payment_vouchers.category',
+                        'ribos_bar_payment_vouchers.amount_due',
+                        'ribos_bar_payment_vouchers.delivered_date',
+                        'ribos_bar_payment_vouchers.status',
+                        'ribos_bar_payment_vouchers.cheque_number',
+                        'ribos_bar_payment_vouchers.cheque_amount',
+                        'ribos_bar_payment_vouchers.sub_category',
+                        'ribos_bar_payment_vouchers.sub_category_account_id',
+                        'ribos_bar_payment_vouchers.supplier_name',
+                        'ribos_bar_payment_vouchers.deleted_at',
+                        'ribos_bar_suppliers.id',
+                        'ribos_bar_suppliers.date',
+                        'ribos_bar_suppliers.supplier_name')
+                        ->leftJoin('ribos_bar_suppliers', 'ribos_bar_payment_vouchers.supplier_id', '=', 'ribos_bar_suppliers.id')
+                        ->where('ribos_bar_suppliers.id', $id)
+                        ->get();
+
+        $status = "FULLY PAID AND RELEASED";
+        $totalAmountDue = DB::table(
+                                'ribos_bar_payment_vouchers')
+                                ->select( 
+                                'ribos_bar_payment_vouchers.id',
+                                'ribos_bar_payment_vouchers.user_id',
+                                'ribos_bar_payment_vouchers.pv_id',
+                                'ribos_bar_payment_vouchers.date',
+                                'ribos_bar_payment_vouchers.paid_to',
+                                'ribos_bar_payment_vouchers.account_no',
+                                'ribos_bar_payment_vouchers.account_name',
+                                'ribos_bar_payment_vouchers.particulars',
+                                'ribos_bar_payment_vouchers.amount',
+                                'ribos_bar_payment_vouchers.method_of_payment',
+                                'ribos_bar_payment_vouchers.prepared_by',
+                                'ribos_bar_payment_vouchers.approved_by',
+                                'ribos_bar_payment_vouchers.date_apprroved',
+                                'ribos_bar_payment_vouchers.received_by_date',
+                                'ribos_bar_payment_vouchers.created_by',
+                                'ribos_bar_payment_vouchers.created_at',
+                                'ribos_bar_payment_vouchers.invoice_number',
+                                'ribos_bar_payment_vouchers.voucher_ref_number',
+                                'ribos_bar_payment_vouchers.issued_date',
+                                'ribos_bar_payment_vouchers.category',
+                                'ribos_bar_payment_vouchers.amount_due',
+                                'ribos_bar_payment_vouchers.delivered_date',
+                                'ribos_bar_payment_vouchers.status',
+                                'ribos_bar_payment_vouchers.cheque_number',
+                                'ribos_bar_payment_vouchers.cheque_amount',
+                                'ribos_bar_payment_vouchers.sub_category',
+                                'ribos_bar_payment_vouchers.sub_category_account_id',
+                                'ribos_bar_payment_vouchers.supplier_name',
+                                'ribos_bar_payment_vouchers.deleted_at',
+                                'ribos_bar_suppliers.id',
+                                'ribos_bar_suppliers.date',
+                                'ribos_bar_suppliers.supplier_name')
+                                ->leftJoin('ribos_bar_suppliers', 'ribos_bar_payment_vouchers.supplier_id', '=', 'ribos_bar_suppliers.id')
+                                ->where('ribos_bar_suppliers.id', $id)
+                                ->where('ribos_bar_payment_vouchers.status', '!=', $status)
+                                ->sum('ribos_bar_payment_vouchers.amount_due');
+                    
+
+        $pdf = PDF::loadView('printSupplierRibosBar', compact('viewSupplier', 'printSuppliers', 'totalAmountDue'));
+
+        return $pdf->download('ribos-bar-supplier.pdf');
+
+    }
+
+    public function viewSupplier($id){
+        $viewSupplier = RibosBarSupplier::where('id', $id)->get();
+
+        $supplierLists = DB::table(
+                        'ribos_bar_payment_vouchers')
+                        ->select( 
+                        'ribos_bar_payment_vouchers.id',
+                        'ribos_bar_payment_vouchers.user_id',
+                        'ribos_bar_payment_vouchers.pv_id',
+                        'ribos_bar_payment_vouchers.date',
+                        'ribos_bar_payment_vouchers.paid_to',
+                        'ribos_bar_payment_vouchers.account_no',
+                        'ribos_bar_payment_vouchers.account_name',
+                        'ribos_bar_payment_vouchers.particulars',
+                        'ribos_bar_payment_vouchers.amount',
+                        'ribos_bar_payment_vouchers.method_of_payment',
+                        'ribos_bar_payment_vouchers.prepared_by',
+                        'ribos_bar_payment_vouchers.approved_by',
+                        'ribos_bar_payment_vouchers.date_apprroved',
+                        'ribos_bar_payment_vouchers.received_by_date',
+                        'ribos_bar_payment_vouchers.created_by',
+                        'ribos_bar_payment_vouchers.created_at',
+                        'ribos_bar_payment_vouchers.invoice_number',
+                        'ribos_bar_payment_vouchers.voucher_ref_number',
+                        'ribos_bar_payment_vouchers.issued_date',
+                        'ribos_bar_payment_vouchers.category',
+                        'ribos_bar_payment_vouchers.amount_due',
+                        'ribos_bar_payment_vouchers.delivered_date',
+                        'ribos_bar_payment_vouchers.status',
+                        'ribos_bar_payment_vouchers.cheque_number',
+                        'ribos_bar_payment_vouchers.cheque_amount',
+                        'ribos_bar_payment_vouchers.sub_category',
+                        'ribos_bar_payment_vouchers.sub_category_account_id',
+                        'ribos_bar_payment_vouchers.supplier_name',
+                        'ribos_bar_payment_vouchers.deleted_at',
+                        'ribos_bar_suppliers.id',
+                        'ribos_bar_suppliers.date',
+                        'ribos_bar_suppliers.supplier_name')
+                        ->leftJoin('ribos_bar_suppliers', 'ribos_bar_payment_vouchers.supplier_id', '=', 'ribos_bar_suppliers.id')
+                        ->where('ribos_bar_suppliers.id', $id)
+                        ->get();
+
+    $status = "FULLY PAID AND RELEASED";
+    $totalAmountDue = DB::table(
+                            'ribos_bar_payment_vouchers')
+                            ->select( 
+                            'ribos_bar_payment_vouchers.id',
+                            'ribos_bar_payment_vouchers.user_id',
+                            'ribos_bar_payment_vouchers.pv_id',
+                            'ribos_bar_payment_vouchers.date',
+                            'ribos_bar_payment_vouchers.paid_to',
+                            'ribos_bar_payment_vouchers.account_no',
+                            'ribos_bar_payment_vouchers.account_name',
+                            'ribos_bar_payment_vouchers.particulars',
+                            'ribos_bar_payment_vouchers.amount',
+                            'ribos_bar_payment_vouchers.method_of_payment',
+                            'ribos_bar_payment_vouchers.prepared_by',
+                            'ribos_bar_payment_vouchers.approved_by',
+                            'ribos_bar_payment_vouchers.date_apprroved',
+                            'ribos_bar_payment_vouchers.received_by_date',
+                            'ribos_bar_payment_vouchers.created_by',
+                            'ribos_bar_payment_vouchers.created_at',
+                            'ribos_bar_payment_vouchers.invoice_number',
+                            'ribos_bar_payment_vouchers.voucher_ref_number',
+                            'ribos_bar_payment_vouchers.issued_date',
+                            'ribos_bar_payment_vouchers.category',
+                            'ribos_bar_payment_vouchers.amount_due',
+                            'ribos_bar_payment_vouchers.delivered_date',
+                            'ribos_bar_payment_vouchers.status',
+                            'ribos_bar_payment_vouchers.cheque_number',
+                            'ribos_bar_payment_vouchers.cheque_amount',
+                            'ribos_bar_payment_vouchers.sub_category',
+                            'ribos_bar_payment_vouchers.sub_category_account_id',
+                            'ribos_bar_payment_vouchers.supplier_name',
+                            'ribos_bar_payment_vouchers.deleted_at',
+                            'ribos_bar_suppliers.id',
+                            'ribos_bar_suppliers.date',
+                            'ribos_bar_suppliers.supplier_name')
+                            ->leftJoin('ribos_bar_suppliers', 'ribos_bar_payment_vouchers.supplier_id', '=', 'ribos_bar_suppliers.id')
+                            ->where('ribos_bar_suppliers.id', $id)
+                            ->where('ribos_bar_payment_vouchers.status', '!=', $status)
+                            ->sum('ribos_bar_payment_vouchers.amount_due');
+
+        return view('view-ribos-bar-supplier', compact('viewSupplier', 'supplierLists', 'totalAmountDue')); 
+                    
+
+    }
+
+    public function addSupplier(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+          //check if supplier name exits
+        $target = DB::table(
+                    'ribos_bar_suppliers')
+                    ->where('supplier_name', $request->supplierName)
+                    ->get()->first();
+
+        if($target === NULL){
+            $supplier = new RibosBarSupplier([
+                'user_id'=>$user->id,
+                'date'=>$request->date,
+                'supplier_name'=>$request->supplierName, 
+                'created_by'=>$name,
+            ]);
+
+            $supplier->save();
+            return response()->json('Success: successfully updated.');        
+        }else{
+            return response()->json('Failed: Already exist.');
+        }
+
+    }
+    
+    public function supplier(){
+        $suppliers = RibosBarSupplier::orderBy('id', 'desc')->get()->toArray();
+
+        return view('ribos-bar-supplier', compact('suppliers'));
+    }
 
     public function updateDetails(Request $request){
         $updateDetail = RibosBarPaymentVoucher::find($request->id);
@@ -4401,17 +4617,27 @@ class RibosBarController extends Controller
              $subCat = NULL;
              $subCatAcctId = NULL;
 
+             $supplierExp = NULL;
         }else if($request->get('category') == "Utilities"){
             $subCat = $request->get('bills');
             $subCatAcctId = $request->get('selectAccountID');
 
+            $supplierExp = NULL;
         }else if($request->get('category') == "None"){
             $subCat = NULL;
             $subCatAcctId = NULL;
+            $supplierExp = NULL;
         }else if($request->get('category') === "Payroll"){  
             $subCat = NULL;
             $subCatAcctId = NULL;
-        }
+            $supplierExp = NULL;
+        }else if($request->get('category') == "Supplier"){
+            $supplier = $request->get('supplierName');
+            $supplierExp = explode("-", $supplier);
+
+            $subCat = "NULL";
+            $subCatAcctId = "NULL";
+       }
 
         //check if invoice number already exists
         $target = DB::table(
@@ -4435,6 +4661,8 @@ class RibosBarController extends Controller
                     'category'=>$request->get('category'),
                     'sub_category'=>$subCat,
                     'sub_category_account_id'=>$subCatAcctId,
+                    'supplier_id'=>$supplierExp[0],
+                    'supplier_name'=>$supplierExp[1],  
                     'prepared_by'=>$name,
                     'created_by'=>$name,
             ]);
@@ -4490,7 +4718,11 @@ class RibosBarController extends Controller
 
 
         $getAllFlags = RibosBarUtility::get()->toArray();
-        return view('payment-voucher-form-ribos-bar', compact('getAllFlags', 'pettyCashes'));
+
+         //get suppliers
+         $suppliers = RibosBarSupplier::get()->toArray();
+
+        return view('payment-voucher-form-ribos-bar', compact('getAllFlags', 'pettyCashes', 'suppliers'));
     }
 
     //

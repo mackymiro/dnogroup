@@ -741,6 +741,26 @@ Route::group(['middleware' =>['user']], function(){
 		->name('mr-potato.viewPayableDetails');
 
 	Route::get(
+		'/mr-potato/suppliers',
+		'MrPotatoController@supplier')
+		->name('supplier');
+
+	Route::post(
+		'/mr-potato/supplier/add',
+		'MrPotatoController@addSupplier')
+		->name('addSupplier');
+
+	Route::get(
+		'/mr-potato/suppliers/view/{id}',
+		'MrPotatoController@viewSupplier')
+		->name('viweSupplier');
+
+	Route::get(
+		'/mr-potato/supplier/print/{id}',
+		'MrPotatoController@printSupplier')
+		->name('printSupplier');
+
+	Route::get(
 		'/mr-potato/summary-report',
 		'MrPotatoController@summaryReport')
 		->name('summaryReport');
@@ -804,6 +824,26 @@ Route::group(['middleware' =>['user']], function(){
 		'/mr-potato/update-pv/{id}',
 		'MrPotatoController@updatePV')
 		->name('mr-potato.updatePV');
+
+	Route::get(
+		'/ribos-bar/suppliers',
+		'RibosBarController@supplier')
+		->name('supplier');
+
+	Route::post(
+		'/ribos-bar/supplier/add',
+		'RibosBarController@addSupplier')
+		->name('addSupplier');
+
+	Route::get(
+		'/ribos-bar/suppliers/view/{id}',
+		'RibosBarController@viewSupplier')
+		->name('viewSupplier');
+
+	Route::get(
+		'/ribos-bar/supplier/print/{id}',
+		'RibosBarController@printSupplier')
+		->name('printSupplier');
 	
 	Route::get(
 			'/ribos-bar/payment-voucher-form',
@@ -2341,6 +2381,21 @@ Route::group(['middleware' => ['auth']], function(){
 		'LoloPinoyGrillBranchesController@viewStockInventory')
 		->name('viewStockInventory');
 
+	Route::get(
+		'/lolo-pinoy-grill-branches/suppliers',
+		'LoloPinoyGrillBranchesController@supplier')
+		->name('supplier');
+
+	Route::post(
+		'/lolo-pinoy-grill-branches/supplier/add',
+		'LoloPinoyGrillBranchesController@addSupplier')
+		->name('addSupplier');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/suppliers/view/{id}',
+		'LoloPinoyGrillBranchesController@viewSupplier')
+		->name('viewSupplier');
+
 	//Mr Potato
 	Route::get('/mr-potato', 'MrPotatoController@index')->name('mr-potato.index');
 
@@ -3608,7 +3663,27 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dno-food-ventures/delete-transaction-list/{id}',
 		'DnoFoodVenturesController@destroyTransactionList')
 		->name('destroyTransactionList');
+
+
+	Route::get(
+		'/dno-food-ventures/suppliers',
+		'DnoFoodVenturesController@supplier')
+		->name('supplier');
 	
+	Route::post(
+		'/dno-food-ventures/supplier/add',
+		'DnoFoodVenturesController@addSupplier')
+		->name('addSupplier');
+
+	Route::get(
+		'/dno-food-ventures/suppliers/view/{id}',
+		'DnoFoodVenturesController@viewSupplier')
+		->name('viewSupplier');
+
+	Route::get(
+		'/dno-food-ventures/supplier/print/{id}',
+		'DnoFoodVenturesController@printSupplier')
+		->name('printSupplier');
 
 	//DNO resources and devlopment corp
 	Route::get(
@@ -3723,6 +3798,26 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dno-resources-development/view-dno-resources-delivery-transaction/{id}',
 		'DnoResourcesDevelopmentController@viewDeliveryTransaction')
 		->name('viewDeliveryTransaction');
+
+	Route::get(
+		'/dno-resources-development/suppliers',
+		'DnoResourcesDevelopmentController@supplier')
+		->name('supplier');
+
+	Route::post(
+		'/dno-resources-development/supplier/add',
+		'DnoResourcesDevelopmentController@addSupplier')
+		->name('addSupplier');
+
+	Route::get(
+		'/dno-resources-development/suppliers/view/{id}',
+		'DnoResourcesDevelopmentController@viewSupplier')
+		->name('viewSupplier');
+
+	Route::get(
+		'/dno-resources-development/supplier/print/{id}',
+		'DnoResourcesDevelopmentController@printSupplier')
+		->name('printSupplier');
 
 	//Dong Fang Corporation
 	Route::get(
