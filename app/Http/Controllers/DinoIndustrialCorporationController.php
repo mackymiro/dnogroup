@@ -10,10 +10,220 @@ use PDF;
 use App\User;
 use App\DinoIndustrialCorporationPaymentVoucher; 
 use App\DinoIndustrialCorporationCode;
+use App\DinoIndustrialCorporationSupplier;
 
 
 class DinoIndustrialCorporationController extends Controller
 {
+
+    public function printSupplier($id){
+        $viewSupplier = DinoIndustrialCorporationSupplier::where('id', $id)->get();
+
+        $printSuppliers = DB::table(
+            'dino_industrial_corporation_payment_vouchers')
+            ->select( 
+            'dino_industrial_corporation_payment_vouchers.id',
+            'dino_industrial_corporation_payment_vouchers.user_id',
+            'dino_industrial_corporation_payment_vouchers.pv_id',
+            'dino_industrial_corporation_payment_vouchers.date',
+            'dino_industrial_corporation_payment_vouchers.paid_to',
+            'dino_industrial_corporation_payment_vouchers.account_no',
+            'dino_industrial_corporation_payment_vouchers.account_name',
+            'dino_industrial_corporation_payment_vouchers.particulars',
+            'dino_industrial_corporation_payment_vouchers.amount',
+            'dino_industrial_corporation_payment_vouchers.method_of_payment',
+            'dino_industrial_corporation_payment_vouchers.prepared_by',
+            'dino_industrial_corporation_payment_vouchers.approved_by',
+            'dino_industrial_corporation_payment_vouchers.date_approved',
+            'dino_industrial_corporation_payment_vouchers.received_by_date',
+            'dino_industrial_corporation_payment_vouchers.created_by',
+            'dino_industrial_corporation_payment_vouchers.created_at',
+            'dino_industrial_corporation_payment_vouchers.invoice_number',
+            'dino_industrial_corporation_payment_vouchers.issued_date',
+            'dino_industrial_corporation_payment_vouchers.category',
+            'dino_industrial_corporation_payment_vouchers.amount_due',
+            'dino_industrial_corporation_payment_vouchers.delivered_date',
+            'dino_industrial_corporation_payment_vouchers.status',
+            'dino_industrial_corporation_payment_vouchers.cheque_number',
+            'dino_industrial_corporation_payment_vouchers.cheque_amount',
+            'dino_industrial_corporation_payment_vouchers.sub_category',
+            'dino_industrial_corporation_payment_vouchers.sub_category_account_id',
+            'dino_industrial_corporation_payment_vouchers.supplier_name',
+            'dino_industrial_corporation_payment_vouchers.deleted_at', 
+            'dino_industrial_corporation_suppliers.id',
+            'dino_industrial_corporation_suppliers.date',
+            'dino_industrial_corporation_suppliers.supplier_name')
+            ->leftJoin('dino_industrial_corporation_suppliers', 'dino_industrial_corporation_payment_vouchers.supplier_id', '=', 'dino_industrial_corporation_suppliers.id')
+            ->where('dino_industrial_corporation_suppliers.id', $id)     
+            ->get();
+
+    $status = "FULLY PAID AND RELEASED"; 
+    $totalAmountDue = DB::table(
+                'dino_industrial_corporation_payment_vouchers')
+                ->select( 
+                'dino_industrial_corporation_payment_vouchers.id',
+                'dino_industrial_corporation_payment_vouchers.user_id',
+                'dino_industrial_corporation_payment_vouchers.pv_id',
+                'dino_industrial_corporation_payment_vouchers.date',
+                'dino_industrial_corporation_payment_vouchers.paid_to',
+                'dino_industrial_corporation_payment_vouchers.account_no',
+                'dino_industrial_corporation_payment_vouchers.account_name',
+                'dino_industrial_corporation_payment_vouchers.particulars',
+                'dino_industrial_corporation_payment_vouchers.amount',
+                'dino_industrial_corporation_payment_vouchers.method_of_payment',
+                'dino_industrial_corporation_payment_vouchers.prepared_by',
+                'dino_industrial_corporation_payment_vouchers.approved_by',
+                'dino_industrial_corporation_payment_vouchers.date_approved',
+                'dino_industrial_corporation_payment_vouchers.received_by_date',
+                'dino_industrial_corporation_payment_vouchers.created_by',
+                'dino_industrial_corporation_payment_vouchers.created_at',
+                'dino_industrial_corporation_payment_vouchers.invoice_number',
+                'dino_industrial_corporation_payment_vouchers.issued_date',
+                'dino_industrial_corporation_payment_vouchers.category',
+                'dino_industrial_corporation_payment_vouchers.amount_due',
+                'dino_industrial_corporation_payment_vouchers.delivered_date',
+                'dino_industrial_corporation_payment_vouchers.status',
+                'dino_industrial_corporation_payment_vouchers.cheque_number',
+                'dino_industrial_corporation_payment_vouchers.cheque_amount',
+                'dino_industrial_corporation_payment_vouchers.sub_category',
+                'dino_industrial_corporation_payment_vouchers.sub_category_account_id',
+                'dino_industrial_corporation_payment_vouchers.supplier_name',
+                'dino_industrial_corporation_payment_vouchers.deleted_at', 
+                'dino_industrial_corporation_suppliers.id',
+                'dino_industrial_corporation_suppliers.date',
+                'dino_industrial_corporation_suppliers.supplier_name')
+                ->leftJoin('dino_industrial_corporation_suppliers', 'dino_industrial_corporation_payment_vouchers.supplier_id', '=', 'dino_industrial_corporation_suppliers.id')
+                ->where('dino_industrial_corporation_suppliers.id', $id)     
+                ->where('dino_industrial_corporation_payment_vouchers.status', '!=', $status)
+                ->sum('dino_industrial_corporation_payment_vouchers.amount_due');
+
+        $pdf = PDF::loadView('printSupplierDIC', compact('viewSupplier', 'printSuppliers', 'totalAmountDue'));
+
+        return $pdf->download('dino-industrial-corporation-supplier.pdf');
+
+    }
+
+    public function viewSupplier($id){
+        $viewSupplier = DinoIndustrialCorporationSupplier::where('id', $id)->get();
+
+        $supplierLists = DB::table(
+                    'dino_industrial_corporation_payment_vouchers')
+                    ->select( 
+                    'dino_industrial_corporation_payment_vouchers.id',
+                    'dino_industrial_corporation_payment_vouchers.user_id',
+                    'dino_industrial_corporation_payment_vouchers.pv_id',
+                    'dino_industrial_corporation_payment_vouchers.date',
+                    'dino_industrial_corporation_payment_vouchers.paid_to',
+                    'dino_industrial_corporation_payment_vouchers.account_no',
+                    'dino_industrial_corporation_payment_vouchers.account_name',
+                    'dino_industrial_corporation_payment_vouchers.particulars',
+                    'dino_industrial_corporation_payment_vouchers.amount',
+                    'dino_industrial_corporation_payment_vouchers.method_of_payment',
+                    'dino_industrial_corporation_payment_vouchers.prepared_by',
+                    'dino_industrial_corporation_payment_vouchers.approved_by',
+                    'dino_industrial_corporation_payment_vouchers.date_approved',
+                    'dino_industrial_corporation_payment_vouchers.received_by_date',
+                    'dino_industrial_corporation_payment_vouchers.created_by',
+                    'dino_industrial_corporation_payment_vouchers.created_at',
+                    'dino_industrial_corporation_payment_vouchers.invoice_number',
+                    'dino_industrial_corporation_payment_vouchers.issued_date',
+                    'dino_industrial_corporation_payment_vouchers.category',
+                    'dino_industrial_corporation_payment_vouchers.amount_due',
+                    'dino_industrial_corporation_payment_vouchers.delivered_date',
+                    'dino_industrial_corporation_payment_vouchers.status',
+                    'dino_industrial_corporation_payment_vouchers.cheque_number',
+                    'dino_industrial_corporation_payment_vouchers.cheque_amount',
+                    'dino_industrial_corporation_payment_vouchers.sub_category',
+                    'dino_industrial_corporation_payment_vouchers.sub_category_account_id',
+                    'dino_industrial_corporation_payment_vouchers.supplier_name',
+                    'dino_industrial_corporation_payment_vouchers.deleted_at', 
+                    'dino_industrial_corporation_suppliers.id',
+                    'dino_industrial_corporation_suppliers.date',
+                    'dino_industrial_corporation_suppliers.supplier_name')
+                    ->leftJoin('dino_industrial_corporation_suppliers', 'dino_industrial_corporation_payment_vouchers.supplier_id', '=', 'dino_industrial_corporation_suppliers.id')
+                    ->where('dino_industrial_corporation_suppliers.id', $id)     
+                    ->get();
+
+        $status = "FULLY PAID AND RELEASED"; 
+        $totalAmountDue = DB::table(
+                        'dino_industrial_corporation_payment_vouchers')
+                        ->select( 
+                        'dino_industrial_corporation_payment_vouchers.id',
+                        'dino_industrial_corporation_payment_vouchers.user_id',
+                        'dino_industrial_corporation_payment_vouchers.pv_id',
+                        'dino_industrial_corporation_payment_vouchers.date',
+                        'dino_industrial_corporation_payment_vouchers.paid_to',
+                        'dino_industrial_corporation_payment_vouchers.account_no',
+                        'dino_industrial_corporation_payment_vouchers.account_name',
+                        'dino_industrial_corporation_payment_vouchers.particulars',
+                        'dino_industrial_corporation_payment_vouchers.amount',
+                        'dino_industrial_corporation_payment_vouchers.method_of_payment',
+                        'dino_industrial_corporation_payment_vouchers.prepared_by',
+                        'dino_industrial_corporation_payment_vouchers.approved_by',
+                        'dino_industrial_corporation_payment_vouchers.date_approved',
+                        'dino_industrial_corporation_payment_vouchers.received_by_date',
+                        'dino_industrial_corporation_payment_vouchers.created_by',
+                        'dino_industrial_corporation_payment_vouchers.created_at',
+                        'dino_industrial_corporation_payment_vouchers.invoice_number',
+                        'dino_industrial_corporation_payment_vouchers.issued_date',
+                        'dino_industrial_corporation_payment_vouchers.category',
+                        'dino_industrial_corporation_payment_vouchers.amount_due',
+                        'dino_industrial_corporation_payment_vouchers.delivered_date',
+                        'dino_industrial_corporation_payment_vouchers.status',
+                        'dino_industrial_corporation_payment_vouchers.cheque_number',
+                        'dino_industrial_corporation_payment_vouchers.cheque_amount',
+                        'dino_industrial_corporation_payment_vouchers.sub_category',
+                        'dino_industrial_corporation_payment_vouchers.sub_category_account_id',
+                        'dino_industrial_corporation_payment_vouchers.supplier_name',
+                        'dino_industrial_corporation_payment_vouchers.deleted_at', 
+                        'dino_industrial_corporation_suppliers.id',
+                        'dino_industrial_corporation_suppliers.date',
+                        'dino_industrial_corporation_suppliers.supplier_name')
+                        ->leftJoin('dino_industrial_corporation_suppliers', 'dino_industrial_corporation_payment_vouchers.supplier_id', '=', 'dino_industrial_corporation_suppliers.id')
+                        ->where('dino_industrial_corporation_suppliers.id', $id)     
+                        ->where('dino_industrial_corporation_payment_vouchers.status', '!=', $status)
+                        ->sum('dino_industrial_corporation_payment_vouchers.amount_due');
+
+        return view('view-dino-industrial-corporation-supplier', compact('viewSupplier', 'supplierLists', 'totalAmountDue')); 
+
+    }
+
+    public function addSupplier(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        //check if supplier name exits
+        $target = DB::table(
+            'dino_industrial_corporation_suppliers')
+            ->where('supplier_name', $request->supplierName)
+            ->get()->first();
+
+        if($target === NULL){
+            $supplier = new DinoIndustrialCorporationSupplier([
+                'user_id'=>$user->id,
+                'date'=>$request->date,
+                'supplier_name'=>$request->supplierName, 
+                'created_by'=>$name,
+            ]);
+
+            $supplier->save();
+            return response()->json('Success: successfully updated.');        
+        }else{
+            return response()->json('Failed: Already exist.');
+        }
+
+    }
+
+    public function supplier(){
+        $suppliers = DinoIndustrialCorporationSupplier::orderBy('id', 'desc')->get()->toArray();
+
+        return view('dino-industrial-corporation-supplier', compact('suppliers'));
+    }
 
     public function updateDetails(Request $request){
         $updateDetail = DinoIndustrialCorporationPaymentVoucher::find($request->id);
@@ -1902,6 +2112,25 @@ class DinoIndustrialCorporationController extends Controller
             $uVoucher = sprintf("%06d",$newVoucherRef);
         } 
 
+        if($request->get('category') == "Petty Cash"){
+            $subCat = $request->get('pettyCashNo');
+            $supplierExp = NULL;
+        }else if($request->get('category') == "Payroll"){
+            $subCat = NULL;
+            $supplierExp = NULL;
+        }else if($request->get('category') == "None"){
+            $subCat = NULL;
+            $supplierExp = NULL;
+        }else if($request->get('category') == "Supplier"){
+            $supplier = $request->get('supplierName');
+            $supplierExp = explode("-", $supplier);
+
+            $subCat = "NULL";
+       }else if($request->get('category') == "Utility"){
+            $subCat = NULL;
+            $supplierExp = NULL;
+       }
+
            //check if invoice number already exists
            $target = DB::table(
             'dino_industrial_corporation_payment_vouchers')
@@ -1921,6 +2150,9 @@ class DinoIndustrialCorporationController extends Controller
                 'amount_due'=>$request->get('amount'),
                 'particulars'=>$request->get('particulars'),
                 'category'=>$request->get('category'),
+                'sub_category'=>$subCat,
+                'supplier_id'=>$supplierExp[0],
+                'supplier_name'=>$supplierExp[1],  
                 'prepared_by'=>$name,
                 'created_by'=>$name,
             ]);
@@ -1949,8 +2181,10 @@ class DinoIndustrialCorporationController extends Controller
     }
 
     public function paymentVoucherForm(){
-        
-        return view('payment-voucher-form-dino-industrial-corp');
+          //get suppliers
+        $suppliers = DinoIndustrialCorporationSupplier::get()->toArray(); 
+
+        return view('payment-voucher-form-dino-industrial-corp', compact('suppliers'));
     }
 
     /**

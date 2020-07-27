@@ -32,6 +32,8 @@ class WlgCorporationPaymentVoucher extends Model
         'category',
         'sub_category',
         'sub_category_account_id',
+        'supplier_id',
+        'supplier_name',
         'amount_due',
         'delivered_date',
         'status',

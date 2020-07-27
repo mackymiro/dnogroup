@@ -4025,6 +4025,27 @@ Route::group(['middleware' => ['auth']], function(){
 		'DongFangCorporationController@printPettyCash')
 		->name('printPettyCash');
 
+
+	Route::get(
+		'/dong-fang-corporation/suppliers',
+		'DongFangCorporationController@supplier')
+		->name('supplier');
+
+	Route::post(
+		'/dong-fang-corporation/supplier/add',
+		'DongFangCorporationController@addSupplier')
+		->name('addSupplier');
+
+	Route::get(
+		'/dong-fang-corporation/suppliers/view/{id}',
+		'DongFangCorporationController@viewSupplier')
+		->name('viewSupplier');
+
+	Route::get(
+		'/dong-fang-corporation/supplier/print/{id}',
+		'DongFangCorporationController@printSupplier')
+		->name('printSupplier');
+
 	//WLG Corporation
 	Route::get(
 		'/wlg-corporation',
@@ -4408,6 +4429,27 @@ Route::group(['middleware' => ['auth']], function(){
 		'WlgCorporationController@viewInvoice')
 		->name('viewInvoicePackingList');
 
+
+	Route::get(
+		'/wlg-corporation/suppliers',
+		'WlgCorporationController@supplier')
+		->name('supplier');
+
+	Route::post(
+		'/wlg-corporation/supplier/add',
+		'WlgCorporationController@addSupplier')
+		->name('addSupplier');
+
+	Route::get(
+		'/wlg-corporation/suppliers/view/{id}',
+		'WlgCorporationController@viewSupplier')
+		->name('viewSupplier');
+
+	Route::get(
+		'/wlg-corporation/supplier/print/{id}',
+		'WlgCorporationController@printSupplier')
+		->name('printSupplier');
+
 	//DINO Industrial Corporation
 	Route::get(
 		'/dino-industrial-corporation',
@@ -4529,6 +4571,25 @@ Route::group(['middleware' => ['auth']], function(){
 		'DinoIndustrialCorporationController@accept')
 		->name('acceptDinoIndustrial');
 
+	Route::get(
+		'/dino-industrial-corporation/suppliers',
+		'DinoIndustrialCorporationController@supplier')
+		->name('supplier');
+
+	Route::post(
+		'/dino-industrial-corporation/supplier/add',
+		'DinoIndustrialCorporationController@addSupplier')
+		->name('addSupplier');
+
+	Route::get(
+		'/dino-industrial-corporation/suppliers/view/{id}',
+		'DinoIndustrialCorporationController@viewSupplier')
+		->name('viewSupplier');
+
+	Route::get(
+		'/dino-industrial-corporation/supplier/print/{id}',
+		'DinoIndustrialCorporationController@printSupplier')
+		->name('printSupplier');
 
 	/*********************************************
 	 * LOCAL GROUND
@@ -4643,6 +4704,28 @@ Route::group(['middleware' => ['auth']], function(){
 		'/local-ground/printGetSummary/{date}',
 		'LocalGroundController@printGetSummary')
 		->name('printGetSummary');
+
+
+	Route::get(
+		'/local-ground/suppliers',
+		'LocalGroundController@supplier')
+		->name('supplier');
+
+	Route::post(
+		'/local-ground/supplier/add',
+		'LocalGroundController@addSupplier')
+		->name('addSupplier');
+
+	Route::get(
+		'/local-ground/suppliers/view/{id}',
+		'LocalGroundController@viewSupplier')
+		->name('viewSupplier');
+
+	Route::get(
+		'/local-ground/supplier/print/{id}',
+		'LocalGroundController@printSupplier')
+		->name('printSupplier');
+
 
 });
 

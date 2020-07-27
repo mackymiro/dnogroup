@@ -98,6 +98,7 @@
                                             <option value="None">None</option>
                                             <option value="Petty Cash">Petty Cash</option>
                                             <option value="Payroll">Payroll</option>
+                                            <option value="Supplier">Supplier</option>
                                         </select>
                                     </div> 
                                     <div id="pettyCashNo" class="col-md-2">
@@ -107,7 +108,15 @@
                                             <option value="{{ $pettyCash->dong_fang_code}}">{{ $pettyCash->dong_fang_code}}</option>
                                             @endforeach
                                         </select>
-                                    </div> 
+                                    </div>
+                                    <div id="supplierList" class="col-lg-2">
+                                        <label>Supplier Name</label>
+                                        <select data-live-search="true" id="supplierName" name="supplierName" class="form-control selectpicker">
+                                            @foreach($suppliers as $supplier)
+                                            <option value="{{ $supplier['id']}}-{{ $supplier['supplier_name']}}">{{ $supplier['supplier_name']}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>   
                                 </div>
                             </div>
                           
@@ -149,14 +158,20 @@
 </div>
 <script type="text/javascript">
       $("#pettyCashNo").hide();
+      $("#supplierList").hide();
       $(".category").change(function(){
             const cat = $(this.options[this.selectedIndex]).closest('option:selected').val();
             if(cat === "None"){
                 $("#pettyCashNo").hide();
+                $("#supplierList").hide();
             }else if(cat === "Petty Cash"){
                 $("#pettyCashNo").show();
+                $("#supplierList").hide();
             }else if(cat === "Payroll"){
                 $("#pettyCashNo").hide();
+                $("#supplierList").hide();
+            }else if(cat === "Supplier"){
+                $("#supplierList").show();
             }
       });
 </script>

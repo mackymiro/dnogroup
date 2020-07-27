@@ -11,10 +11,221 @@ use Session;
 use App\User;
 use App\LocalGroundPaymentVoucher;
 use App\LocalGroundCode;
+use App\LocalGroundSupplier;
 
 
 class LocalGroundController extends Controller
 {
+
+    public function printSupplier($id){
+        $viewSupplier = LocalGroundSupplier::where('id', $id)->get();
+
+        $printSuppliers = DB::table(
+            'local_ground_payment_vouchers')
+            ->select( 
+            'local_ground_payment_vouchers.id',
+            'local_ground_payment_vouchers.user_id',
+            'local_ground_payment_vouchers.pv_id',
+            'local_ground_payment_vouchers.date',
+            'local_ground_payment_vouchers.paid_to',
+            'local_ground_payment_vouchers.account_no',
+            'local_ground_payment_vouchers.account_name',
+            'local_ground_payment_vouchers.particulars',
+            'local_ground_payment_vouchers.amount',
+            'local_ground_payment_vouchers.method_of_payment',
+            'local_ground_payment_vouchers.prepared_by',
+            'local_ground_payment_vouchers.approved_by',
+            'local_ground_payment_vouchers.date_approved',
+            'local_ground_payment_vouchers.received_by_date',
+            'local_ground_payment_vouchers.created_by',
+            'local_ground_payment_vouchers.invoice_number',
+            'local_ground_payment_vouchers.issued_date',
+            'local_ground_payment_vouchers.category',
+            'local_ground_payment_vouchers.amount_due',
+            'local_ground_payment_vouchers.delivered_date',
+            'local_ground_payment_vouchers.status',
+            'local_ground_payment_vouchers.cheque_number',
+            'local_ground_payment_vouchers.cheque_amount',
+            'local_ground_payment_vouchers.sub_category',
+            'local_ground_payment_vouchers.sub_category_account_id',
+            'local_ground_payment_vouchers.supplier_name',
+            'local_ground_payment_vouchers.created_at',
+            'local_ground_payment_vouchers.deleted_at',
+            'local_ground_suppliers.id',
+            'local_ground_suppliers.date',
+            'local_ground_suppliers.supplier_name')
+            ->leftJoin('local_ground_suppliers', 'local_ground_payment_vouchers.supplier_id', '=', 'local_ground_suppliers.id')
+            ->where('local_ground_suppliers.id', $id)
+            ->get();
+
+    $status = "FULLY PAID AND RELEASED"; 
+    $totalAmountDue = DB::table(
+                'local_ground_payment_vouchers')
+                ->select( 
+                'local_ground_payment_vouchers.id',
+                'local_ground_payment_vouchers.user_id',
+                'local_ground_payment_vouchers.pv_id',
+                'local_ground_payment_vouchers.date',
+                'local_ground_payment_vouchers.paid_to',
+                'local_ground_payment_vouchers.account_no',
+                'local_ground_payment_vouchers.account_name',
+                'local_ground_payment_vouchers.particulars',
+                'local_ground_payment_vouchers.amount',
+                'local_ground_payment_vouchers.method_of_payment',
+                'local_ground_payment_vouchers.prepared_by',
+                'local_ground_payment_vouchers.approved_by',
+                'local_ground_payment_vouchers.date_approved',
+                'local_ground_payment_vouchers.received_by_date',
+                'local_ground_payment_vouchers.created_by',
+                'local_ground_payment_vouchers.invoice_number',
+                'local_ground_payment_vouchers.issued_date',
+                'local_ground_payment_vouchers.category',
+                'local_ground_payment_vouchers.amount_due',
+                'local_ground_payment_vouchers.delivered_date',
+                'local_ground_payment_vouchers.status',
+                'local_ground_payment_vouchers.cheque_number',
+                'local_ground_payment_vouchers.cheque_amount',
+                'local_ground_payment_vouchers.sub_category',
+                'local_ground_payment_vouchers.sub_category_account_id',
+                'local_ground_payment_vouchers.supplier_name',
+                'local_ground_payment_vouchers.created_at',
+                'local_ground_payment_vouchers.deleted_at',
+                'local_ground_suppliers.id',
+                'local_ground_suppliers.date',
+                'local_ground_suppliers.supplier_name')
+                ->leftJoin('local_ground_suppliers', 'local_ground_payment_vouchers.supplier_id', '=', 'local_ground_suppliers.id')
+                ->where('local_ground_suppliers.id', $id)
+                ->where('local_ground_payment_vouchers.status', '!=', $status)
+                ->sum('local_ground_payment_vouchers.amount_due');
+
+        $pdf = PDF::loadView('printSupplierLocalGround', compact('viewSupplier', 'printSuppliers', 'totalAmountDue'));
+
+        return $pdf->download('dino-industrial-corporation-supplier.pdf');
+
+    }
+
+    public function viewSupplier($id){
+        $viewSupplier = LocalGroundSupplier::where('id', $id)->get();
+
+        $supplierLists = DB::table(
+                    'local_ground_payment_vouchers')
+                    ->select( 
+                    'local_ground_payment_vouchers.id',
+                    'local_ground_payment_vouchers.user_id',
+                    'local_ground_payment_vouchers.pv_id',
+                    'local_ground_payment_vouchers.date',
+                    'local_ground_payment_vouchers.paid_to',
+                    'local_ground_payment_vouchers.account_no',
+                    'local_ground_payment_vouchers.account_name',
+                    'local_ground_payment_vouchers.particulars',
+                    'local_ground_payment_vouchers.amount',
+                    'local_ground_payment_vouchers.method_of_payment',
+                    'local_ground_payment_vouchers.prepared_by',
+                    'local_ground_payment_vouchers.approved_by',
+                    'local_ground_payment_vouchers.date_approved',
+                    'local_ground_payment_vouchers.received_by_date',
+                    'local_ground_payment_vouchers.created_by',
+                    'local_ground_payment_vouchers.invoice_number',
+                    'local_ground_payment_vouchers.issued_date',
+                    'local_ground_payment_vouchers.category',
+                    'local_ground_payment_vouchers.amount_due',
+                    'local_ground_payment_vouchers.delivered_date',
+                    'local_ground_payment_vouchers.status',
+                    'local_ground_payment_vouchers.cheque_number',
+                    'local_ground_payment_vouchers.cheque_amount',
+                    'local_ground_payment_vouchers.sub_category',
+                    'local_ground_payment_vouchers.sub_category_account_id',
+                    'local_ground_payment_vouchers.supplier_name',
+                    'local_ground_payment_vouchers.created_at',
+                    'local_ground_payment_vouchers.deleted_at',
+                    'local_ground_suppliers.id',
+                    'local_ground_suppliers.date',
+                    'local_ground_suppliers.supplier_name')
+                    ->leftJoin('local_ground_suppliers', 'local_ground_payment_vouchers.supplier_id', '=', 'local_ground_suppliers.id')
+                    ->where('local_ground_suppliers.id', $id)
+                    ->get();
+
+    $status = "FULLY PAID AND RELEASED"; 
+    $totalAmountDue = DB::table(
+                        'local_ground_payment_vouchers')
+                        ->select( 
+                        'local_ground_payment_vouchers.id',
+                        'local_ground_payment_vouchers.user_id',
+                        'local_ground_payment_vouchers.pv_id',
+                        'local_ground_payment_vouchers.date',
+                        'local_ground_payment_vouchers.paid_to',
+                        'local_ground_payment_vouchers.account_no',
+                        'local_ground_payment_vouchers.account_name',
+                        'local_ground_payment_vouchers.particulars',
+                        'local_ground_payment_vouchers.amount',
+                        'local_ground_payment_vouchers.method_of_payment',
+                        'local_ground_payment_vouchers.prepared_by',
+                        'local_ground_payment_vouchers.approved_by',
+                        'local_ground_payment_vouchers.date_approved',
+                        'local_ground_payment_vouchers.received_by_date',
+                        'local_ground_payment_vouchers.created_by',
+                        'local_ground_payment_vouchers.invoice_number',
+                        'local_ground_payment_vouchers.issued_date',
+                        'local_ground_payment_vouchers.category',
+                        'local_ground_payment_vouchers.amount_due',
+                        'local_ground_payment_vouchers.delivered_date',
+                        'local_ground_payment_vouchers.status',
+                        'local_ground_payment_vouchers.cheque_number',
+                        'local_ground_payment_vouchers.cheque_amount',
+                        'local_ground_payment_vouchers.sub_category',
+                        'local_ground_payment_vouchers.sub_category_account_id',
+                        'local_ground_payment_vouchers.supplier_name',
+                        'local_ground_payment_vouchers.created_at',
+                        'local_ground_payment_vouchers.deleted_at',
+                        'local_ground_suppliers.id',
+                        'local_ground_suppliers.date',
+                        'local_ground_suppliers.supplier_name')
+                        ->leftJoin('local_ground_suppliers', 'local_ground_payment_vouchers.supplier_id', '=', 'local_ground_suppliers.id')
+                        ->where('local_ground_suppliers.id', $id)
+                        ->where('local_ground_payment_vouchers.status', '!=', $status)
+                        ->sum('local_ground_payment_vouchers.amount_due');
+
+        return view('view-local-ground-supplier', compact('viewSupplier', 'supplierLists', 'totalAmountDue')); 
+
+
+    }
+
+    public function addSupplier(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        //check if supplier name exits
+        $target = DB::table(
+            'local_ground_suppliers')
+            ->where('supplier_name', $request->supplierName)
+            ->get()->first();
+
+        if($target === NULL){
+            $supplier = new LocalGroundSupplier([
+                'user_id'=>$user->id,
+                'date'=>$request->date,
+                'supplier_name'=>$request->supplierName, 
+                'created_by'=>$name,
+            ]);
+
+            $supplier->save();
+            return response()->json('Success: successfully updated.');        
+        }else{
+            return response()->json('Failed: Already exist.');
+        }
+
+    }
+
+    public function supplier(){
+        $suppliers = LocalGroundSupplier::orderBy('id', 'desc')->get()->toArray();
+
+        return view('local-ground-supplier', compact('suppliers'));
+    }
 
     public function updateDetails(Request $request){    
         $updateDetail = LocalGroundPaymentVoucher::find($request->id);
@@ -2445,6 +2656,20 @@ class LocalGroundController extends Controller
               $uVoucher = sprintf("%06d",$newVoucherRef);
           } 
 
+
+        if($request->get('category') == "Payroll"){
+            $subCat = NULL;
+            $supplierExp = NULL;
+        }else if($request->get('category') == "None"){
+            $subCat = NULL;
+            $supplierExp = NULL;
+        }else if($request->get('category') == "Supplier"){
+            $supplier = $request->get('supplierName');
+            $supplierExp = explode("-", $supplier);
+
+            $subCat = "NULL";
+       }
+
            //check if invoice number already exists
            $target = DB::table(
             'local_ground_payment_vouchers')
@@ -2465,6 +2690,9 @@ class LocalGroundController extends Controller
                 'amount_due'=>$request->get('amount'),
                 'particulars'=>$request->get('particulars'),
                 'category'=>$request->get('category'),
+                'sub_category'=>$subCat,
+                'supplier_id'=>$supplierExp[0],
+                'supplier_name'=>$supplierExp[1],  
                 'prepared_by'=>$name,
                 'created_by'=>$name,
             ]);
@@ -2494,8 +2722,10 @@ class LocalGroundController extends Controller
     }
 
     public function paymentVoucherForm(){
+        //get suppliers
+        $suppliers = LocalGroundSupplier::get()->toArray(); 
 
-        return view('payment-voucher-form-local-ground');
+        return view('payment-voucher-form-local-ground', compact('suppliers'));
     }
 
     /**

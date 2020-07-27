@@ -14,6 +14,12 @@
 <link rel="stylesheet" href="/resources/demos/style.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css" >
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
 <div id="wrapper">
     <!-- Sidebar -->
     @include('sidebar.sidebar-dino-industrial-corporation')
@@ -91,6 +97,15 @@
                                             <option value="Petty Cash">Petty Cash</option>
                                             <option value="Utility">Utility</option>
                                             <option value="Payroll">Payroll</option>
+                                            <option value="Supplier">Supplier</option>
+                                        </select>
+                                    </div>  
+                                    <div id="supplierList" class="col-lg-2">
+                                        <label>Supplier Name</label>
+                                        <select data-live-search="true" id="supplierName" name="supplierName" class="form-control selectpicker">
+                                            @foreach($suppliers as $supplier)
+                                            <option value="{{ $supplier['id']}}-{{ $supplier['supplier_name']}}">{{ $supplier['supplier_name']}}</option>
+                                            @endforeach
                                         </select>
                                     </div>       
                                 </div>
@@ -150,5 +165,24 @@
 			]
 		}
   })
+</script>
+<script type="text/javascript">
+      $("#pettyCashNo").hide();
+      $("#supplierList").hide();
+      $(".category").change(function(){
+            const cat = $(this.options[this.selectedIndex]).closest('option:selected').val();
+            if(cat === "None"){
+                $("#pettyCashNo").hide();
+                $("#supplierList").hide();
+            }else if(cat === "Petty Cash"){
+                $("#pettyCashNo").show();
+                $("#supplierList").hide();
+            }else if(cat === "Payroll"){
+                $("#pettyCashNo").hide();
+                $("#supplierList").hide();
+            }else if(cat === "Supplier"){
+                $("#supplierList").show();
+            }
+      });
 </script>
 @endsection
