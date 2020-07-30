@@ -87,33 +87,41 @@
                                   <select data-live-search="true" name="productId" class="selectpicker form-control">
                                       <option value="0">--Please Select--</option>
                                       @foreach($getRawMaterials as $getRawMaterial)
-                                        <option value="{{ $getRawMaterial['id']}}-{{ $getRawMaterial['product_id_no']}}">{{ $getRawMaterial['product_id_no']}}</option>
+                                        <option value="{{ $getRawMaterial->id}}-{{ $getRawMaterial->product_id_no}}">{{ $getRawMaterial->product_id_no}}</option>
                                       @endforeach
                                   </select>
                                 </div>
+                                 
                                   <div class="col-md-1">
                                     <label>QTY</label>
-                                    <input type="text" name="qty" class="form-control" required="required" />
+                                    <input type="text" name="qty" class="form-control"  onkeypress="return isNumber(event)"/>
                                     
+                                  </div>
+                                  <div class="col-md-4">
+                                     <label>Remaining Stock</label>
+                                    <div id="availableClose">
+                                      <input type="text" name="available" class="form-control" disabled />
+                                    </div>
+                                    <div id="available"></div>
                                   </div>
                                   <div class="col-md-1">
                                     <label>Unit</label>
                                     <div id="unitClose">
-                                        <input type="text" name="unit" class="form-control"/>
+                                        <input type="text" name="unit" class="form-control" disabled/>
                                     </div>
                                     <div id="unit"></div>
                                   </div>
                                   <div class="col-md-4">
                                     <label>Item Description</label>
                                     <div id="itemDescClose">
-                                      <input type="text" name="itemDescription" class="form-control" />
+                                      <input type="text" name="itemDescription" class="form-control" disabled />
                                     </div>
                                     <div id="itemDesc"></div>
                                   </div>
                                   <div class="col-md-2">
                                     <label>Unit Price</label>
                                     <div id="unitPriceClose">
-                                      <input type="text" name="unitPrice" class="form-control"  />
+                                      <input type="text" name="unitPrice" class="form-control"  disabled />
                                     </div>
                                     <div id="unitPrice"></div>
                                   </div>
@@ -141,7 +149,16 @@
         </div>
       </footer>
 </div>
-<script type="text/javascript">
+<script type="text/javascript"> 
+  const isNumber =(evt) => {
+		evt = (evt) ? evt : window.event;
+		var charCode = (evt.which) ? evt.which : evt.keyCode;
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	}
+
   $(document).ready(function(){
       $("select").change(function(){
           <?php
@@ -163,6 +180,8 @@
                                   ->where('id', $getRawMaterial->id)
                                   ->get();
                     ?>
+                     $("#available").html('<input type="text" name="available" value="<?php echo $getId[0]->remaining_stock?>" class="form-control" readonly="readonly" /> ');
+                     $("#availableClose").hide(); 
                      $("#unit").html('<input type="text" name="unit" value="<?php echo $getId[0]->unit?>" class="form-control" readonly="readonly" /> ');
                      $("#unitClose").hide();
                      $("#itemDesc").html('<input type="text" name="itemDescription" value="<?php echo $getId[0]->product_name; ?>" class="form-control" readonly="readonly">')

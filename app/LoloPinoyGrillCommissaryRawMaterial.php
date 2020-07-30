@@ -10,8 +10,6 @@ class LoloPinoyGrillCommissaryRawMaterial extends Model
      protected $fillable = [
 		'user_id',
 		'rm_id',
-		'branch',
-		'product_id_no',
 		'product_name',
 		'unit_price',
 		'unit',

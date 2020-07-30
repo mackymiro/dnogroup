@@ -6,6 +6,11 @@
       $('.alert-success').fadeIn().delay(3000).fadeOut();
   });
 </script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css" >
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
 <div id="wrapper">
 	 @include('sidebar.sidebar-lolo-pinoy-grill')
 	 <div id="content-wrapper">
@@ -27,14 +32,14 @@
 			  		<div class="col-lg-12">
 			  			<div class="card mb-3">
 			  				<div class="card-header">
-                              <i class="fas fa-receipt" aria-hidden="true"></i>
-                            Edit Delivery Receipt</div>
-                            <br>
-                            <br>
-                             @if(session('updateSuccessfull'))
-                             	<p class="alert alert-success">{{ Session::get('updateSuccessfull') }}</p>
-                             @endif 
-                             <form action="{{ action('LoloPinoyGrillCommissaryController@updateDeliveryReceipt', $getDeliveryReceipt['id'])}}" method="post">
+                      <i class="fas fa-receipt" aria-hidden="true"></i>
+                    Edit Delivery Receipt</div>
+                    <br>
+                    <br>
+                      @if(session('updateSuccessfull'))
+                      <p class="alert alert-success">{{ Session::get('updateSuccessfull') }}</p>
+                      @endif 
+                    <form action="{{ action('LoloPinoyGrillCommissaryController@updateDeliveryReceipt', $getDeliveryReceipt['id'])}}" method="post">
                              	{{csrf_field()}}
                              <input name="_method" type="hidden" value="PATCH">
                              <div class="card-body">
@@ -63,7 +68,7 @@
                                 </div>
                                 <div class="col-lg-4">
                                     <label>Address To</label>
-                                    <input type="text" name="chargeTo" class="form-control" value="{{ $getDeliveryReceipt['address_to'] }}" />
+                                    <input type="text" name="addressTo" class="form-control" value="{{ $getDeliveryReceipt['address_to'] }}" />
                                 </div>
                             </div>
                         </div>
@@ -71,40 +76,41 @@
                     			<div class="form-row">
                     				<div class="col-md-2">
                 						<label>Product Id</label>
-                						  <select name="productId" id="prod" class="form-control">
+                						  <select  data-live-search="true" id="prod" name="productId" class="selectpicker form-control">
                                   <?php
                                       $prodArr = $getDeliveryReceipt['product_id'];
                                       $prodExp = explode("-", $prodArr);
                                   ?>
                                   <option value="0">--Please Select--</option>
                                   @foreach($getRawMaterials as $getRawMaterial)
-                                  <option value="{{ $getRawMaterial['id']}}-{{ $getRawMaterial['product_id_no']}}" <?php echo ($prodExp[1] == $getRawMaterial['product_id_no']) ? 'selected="selected"' : '' ?>>{{ $getRawMaterial['product_id_no']}}</option>
+                                  <option value="{{ $getRawMaterial->id}}-{{ $getRawMaterial->product_id_no}}" <?php echo ($prodExp[1] == $getRawMaterial->product_id_no) ? 'selected="selected"' : '' ?>>{{ $getRawMaterial->product_id_no}}</option>
                                   @endforeach
                               </select>
                     				</div>
                     				<div class="col-md-1">
-                						<label>QTY</label>
-                						<input type="text" name="qty" class="form-control"  value="{{ $getDeliveryReceipt['qty']}}" />
+                              <label>QTY</label>
+                              <input type="text" name="qty" class="form-control"  value="{{ $getDeliveryReceipt['qty']}}" />
                     				</div>
-                    				<div class="col-md-1">
+                         
+                    				<div class="col-md-2">
                   						<label>Unit</label>
                               <div id="unitClose">
-                  						    <input type="text" name="unit" class="form-control"  value="{{ $getDeliveryReceipt['unit']}}" disabled="disabled" />
+                  						    <input type="text" name="unit" class="form-control"  value="{{ $getDeliveryReceipt['unit']}}" readonly="readonly" />
                               </div>
-                            <div id="unit"></div>
+                              <div id="unit"></div>
                     				</div>
                             
                     				<div class="col-md-4">
                     					<label>Item Description</label>
                               <div id="itemDescClose">
-                    					   <input type="text" name="itemDescription" class="form-control"  value="{{ $getDeliveryReceipt['item_description']}}" disabled="disabled" />
+                    					   <input type="text" name="itemDescription" class="form-control"  value="{{ $getDeliveryReceipt['item_description']}}" readonly="readonly" />
                               </div>
                               <div id="itemDesc"></div>
                     				</div>
                     				<div class="col-md-2">
                     					<label>Unit Price</label>
                               <div id="unitPriceClose">
-                    					   <input type="text" name="unitPrice" class="form-control"  value="{{ $getDeliveryReceipt['unit_price']}}" disabled="disabled" />
+                    					   <input type="text" name="unitPrice" class="form-control"  value="{{ $getDeliveryReceipt['unit_price']}}"   readonly="readonly"/>
                               </div>
                               <div id="unitPrice"></div>
                     				</div>
@@ -127,32 +133,100 @@
       					  	 			</div>
       					  	 		</div>
 					  	 	      </div>
-                             </div>
-                         </form>
+                      </div>
+                  </form>
 			  			</div>
 			  		</div>
 			  </div>
 
 			  <div class="row">
-			  		<div class="col-lg-12">
+			  		<div class="col-lg-4">
 			  			<div class="card mb-3">
-			  				 <div class="card-header">
-	                              <i class="fas fa-receipt" aria-hidden="true"></i>
-	                            Edit Delivery Receipt</div>
-                            <div class="card-body">
-                                 @if(session('SuccessEdit'))
-                                     <p class="alert alert-success">{{ Session::get('SuccessEdit') }}</p>
-                                  @endif 
+                      <div class="card-header">
+                            <i class="fas fa-plus" aria-hidden="true"></i>
+                          Add Delivery Receipt</div>
+                        <div class="card-body">
+                            <form action="{{ action('LoloPinoyGrillCommissaryController@addNewDeliveryReceiptData', $id)}}  " method="post">
+                            {{csrf_field()}}
+                            <div class="form-group">
+                                <div class="form-row">
+                                    <div class="col-md-12">
+                                        <label>Product Id</label>
+                                        <select data-live-search="true" id="productIdAdd" name="productId" class="form-control selectpicker">
+                                            <option value="0">--Please Select--</option>
+                                            @foreach($getRawMaterials as $getRawMaterial)
+                                            <option value="{{ $getRawMaterial->id}}-{{ $getRawMaterial->product_id_no}}">{{ $getRawMaterial->product_id_no}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label>QTY</label>
+                                        <input type="text" name="qty" class="form-control" required="required" />
+                                    </div>
+                                    <div class="col-md-12">
+                                      <label>Remaining Stock</label>
+                                      <div id="availableCloseAdd">
+                                        <input type="text" name="available" class="form-control" disabled />
+                                      </div>
+                                      <div id="availableAdd"></div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label>Unit</label>
+                                        <div id="unitCloseAdd">
+                                            <input type="text" name="unit" class="form-control" disabled/>
+                                        </div>
+                                        <div id="unitAdd"></div>
+                                     </div>
+                                     <div class="col-md-12">
+                                        <label>Item Description</label>
+                                        <div id="itemDescCloseAdd">
+                                            <input type="text" name="itemDescription" class="form-control" disabled />
+                                          </div>
+                                        <div id="itemDescAdd"></div>
+                                      </div>
+                                      <div class="col-md-12">
+                                        <label>Unit Price</label>
+                                        <div id="unitPriceCloseAdd">
+                                            <input type="text" name="unitPrice" class="form-control" disabled />
+                                        </div>
+                                        <div id="unitPriceAdd"></div>
+                                      </div>
+                                    
+                                </div>
+                            </div>
+                            <div>
+                              @if(Auth::user()['role_type'] == 1)
+                              <button type="submit" class="btn btn-primary">Add New</button>
+                              @endif
+                            </div>
+                            </form>
+                        </div>
+			  			    </div>
+			  		</div>
+            <div class="col-lg-8">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <i class="fas fa-receipt" aria-hidden="true"></i>
+                        Delivery Receipt Details
+                    </div>
+                      <div class="card-body">
+                         @if(session('SuccessEdit'))
+                            <p class="alert alert-success">{{ Session::get('SuccessEdit') }}</p>
+                        @endif 
+                        <div class="form-group">
+                            <div class="form-row">
+                                  
                                    @foreach($dReceipts as $dReceipt)
-                                   <form action="{{ action('LoloPinoyGrillCommissaryController@updateDeliveryReceipt', $dReceipt['id'])}}" method="post">
+                                   <form action="{{ action('LoloPinoyGrillCommissaryController@updateDr', $dReceipt['id'])}}" method="post">
                                      {{csrf_field()}}
                                     <input name="_method" type="hidden" value="PATCH">
                                     <div id="deletedId{{ $dReceipt['id']}}">
                                     <div class="form-group">
                                         <div  class="form-row">
+                                         
                                             <div class="col-md-2">
                                                 <label>Product Id</label>
-                                                 <select name="productId" class="product-{{ $dReceipt['id']}} form-control">
+                                                 <select data-live-search="true" name="productId" class="product-{{ $dReceipt['id']}} form-control selectpicker">
                                                     <?php
                                                         $prodArr = $dReceipt['product_id'];
                                                         $prodExp = explode("-", $prodArr);
@@ -160,7 +234,7 @@
                                                     ?>
                                                     <option value="0">--Please Select--</option>
                                                    @foreach($getRawMaterials as $getRawMaterial)
-                                                       <option value="{{ $getRawMaterial['id']}}-{{ $getRawMaterial['product_id_no']}}" <?php echo ($prodExp[1] == $getRawMaterial['product_id_no']) ? 'selected="selected"' : '' ?>>{{ $getRawMaterial['product_id_no']}}</option>
+                                                       <option value="{{ $getRawMaterial->id}}-{{ $getRawMaterial->product_id_no}}" <?php echo ($prodExp[1] == $getRawMaterial->product_id_no) ? 'selected="selected"' : '' ?>>{{ $getRawMaterial->product_id_no}}</option>
                                                     @endforeach
                                                 </select>
 
@@ -169,24 +243,25 @@
                                                 <label>QTY</label>
                                                 <input type="text" name="qty" class="form-control"  value="{{ $dReceipt['qty']}}" />
                                             </div>
-                                            <div class="col-md-1">
+                                            <div class="col-md-2">
                                                 <label>Unit</label>
                                                 <div id="unitClose2-{{ $dReceipt['id']}}">
-                                                <input type="text" name="unit" class="form-control"  value="{{ $dReceipt['unit']}}" />
+                                                <input type="text" name="unit" class="form-control"  value="{{ $dReceipt['unit']}}" disabled />
                                                 </div>
                                                 <div id="unit2-{{ $dReceipt['id']}}"></div>
                                             </div>
+                                           
                                             <div class="col-md-4">
                                                 <label>Item Description</label>
                                                 <div id="itemDescClose2-{{ $dReceipt['id']}}">
-                                                  <input type="text" name="itemDescription" class="form-control"  value="{{ $dReceipt['item_description']}}"/>
+                                                  <input type="text" name="itemDescription" class="form-control"  value="{{ $dReceipt['item_description']}}" disabled/>
                                                 </div>
                                                  <div id="itemDesc2-{{ $dReceipt['id']}}"></div>
                                             </div>
                                             <div class="col-md-2">
                                                 <label>Unit Price</label>
                                                 <div id="unitPrice2-{{ $dReceipt['id']}}">
-                                                 <input type="text" name="unitPrice" class="form-control"  value="{{ $dReceipt['unit_price']}}"/>
+                                                 <input type="text" name="unitPrice" class="form-control"  value="{{ $dReceipt['unit_price']}}" disabled/>
                                                 </div>
                                                 <div id="unitPrice2-{{ $dReceipt['id']}}"></div>
                                             </div>
@@ -199,10 +274,10 @@
                                     </div>
                                     <div  class="form-group">
                                         <div class="form-row">
-                                             <div class="col-lg-2">
+                                             <div class="col-lg-4">
                                               <br>
                                               <input type="hidden" id="drId" name="drId" value="{{ $getDeliveryReceipt['id'] }}" />
-                                              <input type="submit" class="btn btn-success" value="Update" />
+                                              <!--<input type="submit" class="btn btn-success" value="Update" />-->
                                               @if(Auth::user()['role_type'] == 1)
                                               <a id="delete" onClick="confirmDelete('{{ $dReceipt['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
                                               @endif
@@ -212,14 +287,12 @@
                                     </div>
                                     </form>
                                    @endforeach
-                            	 <div>
-                                  @if(Auth::user()['role_type'] == 1)
-                                  <a href="{{ url('lolo-pinoy-grill-commissary/add-new-lolo-pinoy-grill-delivery-receipt/'.$getDeliveryReceipt['id'] ) }}" class="btn btn-primary">Add New</a>
-                                  @endif
-                                </div>
+                            	
                             </div>
-			  			</div>
-			  		</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 			  </div>
 	 	</div>
 	 </div>
@@ -235,9 +308,8 @@
         </div>
       </footer>
 </div>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
-     function confirmDelete(id){
+     const confirmDelete = (id) => {
         var x = confirm("Do you want to delete this?");
         const drId = $("#drId").val();
         
@@ -265,8 +337,39 @@
             return false;
         }
      }
-</script>
-<script type="text/javascript">
+
+     $("#productIdAdd").change(function(){
+             <?php
+                   $getRawMaterials = DB::table(
+                                  'lolo_pinoy_grill_commissary_raw_materials')
+                                  ->where('rm_id', NULL)
+                                  ->get(); ?>
+              <?php foreach($getRawMaterials as $key=>$getRawMaterial): ?>
+
+                  var prodId = $(this).children("option:selected").val();
+                  var prodIdSplit = prodId.split("-");
+                  var prodArr = prodIdSplit[0];
+                  if(prodArr  == "<?php echo $getRawMaterial->id;?>"){
+                    <?php 
+                        $getId = DB::table(
+                                  'lolo_pinoy_grill_commissary_raw_materials')
+                                  ->where('id', $getRawMaterial->id)
+                                  ->get();
+                    ?>
+                     $("#availableAdd").html('<input type="text" name="available" value="<?php echo $getId[0]->remaining_stock?>" class="form-control" readonly="readonly" /> ');
+                     $("#availableCloseAdd").hide(); 
+                     $("#unitAdd").html('<input type="text" name="unit" value="<?php echo $getId[0]->unit?>" class="form-control" readonly="readonly" /> ');
+                     $("#unitCloseAdd").hide();
+                     $("#itemDescAdd").html('<input type="text" name="itemDescription" value="<?php echo $getId[0]->product_name; ?>" class="form-control" readonly="readonly">')
+                     $("#itemDescCloseAdd").hide();
+                     $("#unitPriceAdd").html('<input type="text" name="unitPrice" value="<?php echo $getId[0]->unit_price; ?>" class="form-control" readonly="readonly" >');
+                     $("#unitPriceCloseAdd").hide();
+                                
+              }
+  
+              <?php endforeach; ?>
+        }); 
+
     $(document).ready(function(){
         $("#prod").change(function(){
              <?php
@@ -286,17 +389,16 @@
                                   ->where('id', $getRawMaterial->id)
                                   ->get();
                     ?>
+                 
                      $("#unit").html('<input type="text" name="unit" value="<?php echo $getId[0]->unit?>" class="form-control" readonly="readonly" /> ');
                      $("#unitClose").hide();
                      $("#itemDesc").html('<input type="text" name="itemDescription" value="<?php echo $getId[0]->product_name; ?>" class="form-control" readonly="readonly">')
                      $("#itemDescClose").hide();
                      $("#unitPrice").html('<input type="text" name="unitPrice" value="<?php echo $getId[0]->unit_price; ?>" class="form-control" readonly="readonly" >');
                      $("#unitPriceClose").hide();
-                    
-                  
+                                
               }
   
-
               <?php endforeach; ?>
         }); 
 
@@ -319,21 +421,15 @@
                                   ->where('id', $getRawMaterial->id)
                                   ->get();
                     ?>
+                   
                      $("#unit2-<?php echo $dReceipt['id']?>").html('<input type="text" name="unit" value="<?php echo $getId[0]->unit?>" class="form-control" readonly="readonly" /> ');
-
                      $("#unitClose2-<?php echo $dReceipt['id']?>").hide();
-
                      $("#itemDesc2-<?php echo $dReceipt['id'];?>").html('<input type="text" name="itemDescription" value="<?php echo $getId[0]->product_name; ?>" class="form-control" readonly="readonly">')
-
                      $("#itemDescClose2-<?php echo $dReceipt['id'];?>").hide();
-
                      $("#unitPrice2-<?php echo $dReceipt['id'];?>").html('<input type="text" name="unitPrice" value="<?php echo $getId[0]->unit_price; ?>" class="form-control" readonly="readonly" >');
-
-                     $("#unitPriceClose2-<?php echo $dReceipt['id'];?>").hide();
-                    
+                     $("#unitPriceClose2-<?php echo $dReceipt['id'];?>").hide();                    
                   
               }
-  
 
               <?php endforeach; ?>
         }); 
