@@ -4110,26 +4110,34 @@ class LoloPinoyGrillCommissaryController extends Controller
     }
 
     //
-    public function inventoryStockUpdate(Request $request, $id){
-        $updateInventoryStock = LoloPinoyGrillCommissaryRawMaterial::find($id);
+    public function inventoryStockUpdate(Request $request){
 
-        $updateInventoryStock->date = $request->get('date');
-        $updateInventoryStock->reference_no = $request->get('referenceNumber');
-        $updateInventoryStock->description  =$request->get('description');
-        $updateInventoryStock->item = $request->get('item');
-        $updateInventoryStock->qty = $request->get('qty');
-        $updateInventoryStock->unit = $request->get('unit');
-        $updateInventoryStock->amount = $request->get('amount');
-        $updateInventoryStock->status = $request->get('status');
-        $updateInventoryStock->requesting_branch = $request->get('requestingBranch');
-        $updateInventoryStock->cheque_no_issued = $request->get('chequeNoIssued');
-        $updateInventoryStock->remarks = $request->get('remarks');
+        $updateInventoryStock = LoloPinoyGrillCommissaryRawMaterial::find($request->id);
+        $qty = $request->qty;
+
+        $updateInventoryStock->date = $request->date;
+        $updateInventoryStock->qty = $qty;
+        $updateInventoryStock->unit = $request->unit;
+        $updateInventoryStock->status = $request->status;
+        $updateInventoryStock->requesting_branch = $request->requestingBranch;
+        $updateInventoryStock->cheque_no_issued = $request->chequeNoIssued;
+        $updateInventoryStock->remarks = $request->remarks;
 
         $updateInventoryStock->save();
 
-        Session::flash('viewInventoryOfStocks', 'Successfully updated.');
+        $updateRawMaterial = LoloPinoyGrillCommissaryRawMaterial::find($request->mainId);
+        $unitPrice = $updateRawMaterial->unit_price; 
+      
+        $add  = $qty + $updateRawMaterial->in; 
 
-        return redirect('lolo-pinoy-grill-commissary/view-inventory-of-stocks/'.$request->get('iSId'));
+        $compute = $unitPrice * $add; 
+
+        $updateRawMaterial->in = $add;
+        $updateRawMaterial->amount = $compute;
+        $updateRawMaterial->save();
+
+        return response()->json('Success: successfully updated.');
+       
     }
 
     
@@ -4147,7 +4155,38 @@ class LoloPinoyGrillCommissaryController extends Controller
 
     public function inventoryOfStocks(){
         //getRawMaterial
-        $getRawMaterials = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', NULL)->get()->toArray();
+         $getRawMaterials = DB::table(
+                        'lolo_pinoy_grill_commissary_raw_materials')
+                        ->select(
+                            'lolo_pinoy_grill_commissary_raw_materials.id',
+                            'lolo_pinoy_grill_commissary_raw_materials.user_id',
+                            'lolo_pinoy_grill_commissary_raw_materials.rm_id',
+                            'lolo_pinoy_grill_commissary_raw_materials.product_name',
+                            'lolo_pinoy_grill_commissary_raw_materials.unit_price',
+                            'lolo_pinoy_grill_commissary_raw_materials.unit',
+                            'lolo_pinoy_grill_commissary_raw_materials.in',
+                            'lolo_pinoy_grill_commissary_raw_materials.out',
+                            'lolo_pinoy_grill_commissary_raw_materials.stock_amount',
+                            'lolo_pinoy_grill_commissary_raw_materials.remaining_stock',
+                            'lolo_pinoy_grill_commissary_raw_materials.amount',
+                            'lolo_pinoy_grill_commissary_raw_materials.supplier',
+                            'lolo_pinoy_grill_commissary_raw_materials.date',
+                            'lolo_pinoy_grill_commissary_raw_materials.item',
+                            'lolo_pinoy_grill_commissary_raw_materials.description',
+                            'lolo_pinoy_grill_commissary_raw_materials.reference_no',
+                            'lolo_pinoy_grill_commissary_raw_materials.qty',
+                            'lolo_pinoy_grill_commissary_raw_materials.requesting_branch',
+                            'lolo_pinoy_grill_commissary_raw_materials.cheque_no_issued',
+                            'lolo_pinoy_grill_commissary_raw_materials.status',
+                            'lolo_pinoy_grill_commissary_raw_materials.created_by',
+                            'lolo_pinoy_grill_commissary_raw_material_products.raw_materials_id',
+                            'lolo_pinoy_grill_commissary_raw_material_products.branch',
+                            'lolo_pinoy_grill_commissary_raw_material_products.product_id_no')
+                        ->join('lolo_pinoy_grill_commissary_raw_material_products', 'lolo_pinoy_grill_commissary_raw_materials.id', '=', 'lolo_pinoy_grill_commissary_raw_material_products.raw_materials_id')
+                        ->where('lolo_pinoy_grill_commissary_raw_materials.rm_id', NULL)
+                        ->orderBy('lolo_pinoy_grill_commissary_raw_materials.id', 'desc')
+                        ->get()->toArray();
+
 
         //count the total stock out amount value
         $countStockAmount = LoloPinoyGrillCommissaryRawMaterial::all()->sum('stock_amount');
@@ -4453,9 +4492,14 @@ class LoloPinoyGrillCommissaryController extends Controller
 
     
     public function commissaryDeliveryOutlet(){
-        $getDeliveryOutlets = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', '!=', NULL)->get()->toArray();
+        $descriptionDIn = "DELIVERY IN";
+        $descriptionDOut = "DELIVERY OUT";
 
-        return view('commissary-delivery-outlet-lolo-pinoy-grill', compact('getDeliveryOutlets'));
+        $getDeliveryOutlets = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', '!=', NULL)->where('description', $descriptionDIn)->get()->toArray();
+        $getDeliveryOutletsOuts = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', '!=', NULL)->where('description', $descriptionDOut)->get()->toArray();
+        
+
+        return view('commissary-delivery-outlet-lolo-pinoy-grill', compact('getDeliveryOutlets', 'getDeliveryOutletsOuts'));
     }
 
     
@@ -4554,11 +4598,39 @@ class LoloPinoyGrillCommissaryController extends Controller
     }
 
     //
-    public function stocksInventory(){
-    
-    
-        //getRawMaterial
-        $getRawMaterials = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', NULL)->get()->toArray();
+    public function stocksInventory(){    
+        $getRawMaterials = DB::table(
+                    'lolo_pinoy_grill_commissary_raw_materials')
+                    ->select(
+                        'lolo_pinoy_grill_commissary_raw_materials.id',
+                        'lolo_pinoy_grill_commissary_raw_materials.user_id',
+                        'lolo_pinoy_grill_commissary_raw_materials.rm_id',
+                        'lolo_pinoy_grill_commissary_raw_materials.product_name',
+                        'lolo_pinoy_grill_commissary_raw_materials.unit_price',
+                        'lolo_pinoy_grill_commissary_raw_materials.unit',
+                        'lolo_pinoy_grill_commissary_raw_materials.in',
+                        'lolo_pinoy_grill_commissary_raw_materials.out',
+                        'lolo_pinoy_grill_commissary_raw_materials.stock_amount',
+                        'lolo_pinoy_grill_commissary_raw_materials.remaining_stock',
+                        'lolo_pinoy_grill_commissary_raw_materials.amount',
+                        'lolo_pinoy_grill_commissary_raw_materials.supplier',
+                        'lolo_pinoy_grill_commissary_raw_materials.date',
+                        'lolo_pinoy_grill_commissary_raw_materials.item',
+                        'lolo_pinoy_grill_commissary_raw_materials.description',
+                        'lolo_pinoy_grill_commissary_raw_materials.reference_no',
+                        'lolo_pinoy_grill_commissary_raw_materials.qty',
+                        'lolo_pinoy_grill_commissary_raw_materials.requesting_branch',
+                        'lolo_pinoy_grill_commissary_raw_materials.cheque_no_issued',
+                        'lolo_pinoy_grill_commissary_raw_materials.status',
+                        'lolo_pinoy_grill_commissary_raw_materials.created_by',
+                        'lolo_pinoy_grill_commissary_raw_material_products.raw_materials_id',
+                        'lolo_pinoy_grill_commissary_raw_material_products.branch',
+                        'lolo_pinoy_grill_commissary_raw_material_products.product_id_no')
+                    ->join('lolo_pinoy_grill_commissary_raw_material_products', 'lolo_pinoy_grill_commissary_raw_materials.id', '=', 'lolo_pinoy_grill_commissary_raw_material_products.raw_materials_id')
+                    ->where('lolo_pinoy_grill_commissary_raw_materials.rm_id', NULL)
+                    ->orderBy('lolo_pinoy_grill_commissary_raw_materials.id', 'desc')
+                    ->get()->toArray();
+
 
         //count the total stock out amount value
         $countStockAmount = LoloPinoyGrillCommissaryRawMaterial::all()->sum('stock_amount');

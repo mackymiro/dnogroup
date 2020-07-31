@@ -1987,7 +1987,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/lolo-pinoy-grill-commissary/commissary/stocks-inventory',
 		'LoloPinoyGrillCommissaryController@stocksInventory')
-		->name('lolo-pinoy-grill-commissary.stocksInventory');
+		->name('stocksInventory');
 
 	Route::get(
 		'/lolo-pinoy-grill-commissary/view-raw-material-details/{id}',
@@ -2009,23 +2009,23 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/lolo-pinoy-grill-commissary/commissary/delivery-outlets',
 		'LoloPinoyGrillCommissaryController@commissaryDeliveryOutlet')
-		->name('lolo-pinoy-grill-commissary.commissaryDeliveryOutlet');
+		->name('commissaryDeliveryOutlet');
 
 
 	Route::get(
 		'/lolo-pinoy-grill-commissary/commissary/inventory-of-stocks',
 		'LoloPinoyGrillCommissaryController@inventoryOfStocks')
-		->name('lolo-pinoy-grill-commissary.inventoryOfStocks');
+		->name('inventoryOfStocks');
 
 	Route::get(
 		'/lolo-pinoy-grill-commissary/view-inventory-of-stocks/{id}',
 		'LoloPinoyGrillCommissaryController@viewInventoryOfStocks')
-		->name('lolo-pinoy-grill-commissary.viewInventoryOfStocks');
+		->name('viewInventoryOfStocks');
 
 	Route::patch(
 		'/lolo-pinoy-grill-commissary/inventory-stock-update/{id}',
 		'LoloPinoyGrillCommissaryController@inventoryStockUpdate')
-		->name('lolo-pinoy-grill-commissary.inventoryStockUpdate');
+		->name('inventoryStockUpdate');
 
 	Route::get(
 		'/lolo-pinoy-grill-commissary/commissary/production',

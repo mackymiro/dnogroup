@@ -1,7 +1,12 @@
 @extends('layouts.lolo-pinoy-grill-commissary-app')
 @section('title', 'Delivery Outlet |')
 @section('content')
-
+<script>
+  $(document).ready(function(){
+     
+      $('table.display').DataTable( {} );
+  });   
+</script>
 <div id="wrapper">
 	 @include('sidebar.sidebar-lolo-pinoy-grill')
 	 <div id="content-wrapper">
@@ -19,10 +24,10 @@
                     <div class="card mb-3">
                         <div class="card-header">
                           <i class="fa fa-tasks" aria-hidden="true"></i>
-                          All Lists</div>
+                          All Lists - DELIVERY IN</div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                 <table class="table table-bordered display"  width="100%" cellspacing="0">
                                     <thead>
                                       <tr>
                                         <th>Date</th>
@@ -77,6 +82,72 @@
                             </div>
                         </div>
                     </div>  
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card mb-3">
+                       <div class="card-header">
+                          <i class="fa fa-tasks" aria-hidden="true"></i>
+                          All Lists - DELIVERY OUT
+                        </div>
+                        <div class="card-body">
+                          <div class="table-responsive">
+                                 <table class="table table-bordered display" width="100%" cellspacing="0">
+                                    <thead>
+                                      <tr>
+                                        <th>Date</th>
+                                        <th>Reference </th>
+                                        <th>Description</th>
+                                        <th>Item</th>
+                                        <th>Qty</th>
+                                        <th>Unit</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Requesting Branch</th>
+                                        <th>Cheque No Issued</th>
+                                      </tr>
+                                     </thead>
+                                     <tfoot>
+                                        <tr>
+                                          <th>Date</th>
+                                          <th>Reference </th>
+
+                                          <th>Description</th>
+                                          <th>Item</th>
+                                          <th>Qty</th>
+                                          <th>Unit</th>
+                                          <th>Amount</th>
+                                          <th>Status</th>
+                                          <th>Requesting Branch</th>
+                                          <th>Cheque No Issued</th>
+                                        </tr>
+                                     </tfoot>
+                                     <tbody>
+                                        @foreach($getDeliveryOutletsOuts as $getDeliveryOutletsOut)
+                                        <tr>
+                                          <td>{{ $getDeliveryOutletsOut['date'] }}</td>
+                                          <td>{{ $getDeliveryOutletsOut['reference_no']}}</td>
+                                          @if($getDeliveryOutletsOut['description'] == "DELIVERY IN")
+                                             <td class="bg-success" style="color:white;">{{ $getDeliveryOutletsOut['description']}}</td>
+                                          @else
+                                             <td class="bg-danger" style="color:white;">{{ $getDeliveryOutletsOut['description']}}</td>
+
+                                          @endif
+                                          <td>{{ $getDeliveryOutletsOut['item']}}</td>
+                                          <td>{{ $getDeliveryOutletsOut['qty']}}</td>
+                                          <td>{{ $getDeliveryOutletsOut['unit']}}</td>
+                                          <td>{{ $getDeliveryOutletsOut['amount']}}</td>
+                                          <td>{{ $getDeliveryOutletsOut['status']}}</td>
+                                          <td>{{ $getDeliveryOutletsOut['requesting_branch']}}</td>
+                                          <td>{{ $getDeliveryOutletsOut['cheque_no_issued']}}</td>
+                                        </tr>
+                                        @endforeach
+                                     </tbody>
+                                 </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 	 	</div>
