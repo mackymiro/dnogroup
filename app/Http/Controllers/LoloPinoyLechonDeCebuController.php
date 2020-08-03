@@ -17,6 +17,7 @@ use App\LechonDeCebuDeliveryReceipt;
 use App\LechonDeCebuDeliveryReceiptDuplicateCopy;
 use App\LechonDeCebuSalesInvoice;
 use App\CommissaryRawMaterial;
+use App\LechonDeCebuRawMaterialProduct;
 use App\LechonDeCebuPettyCash;
 use App\LechonDeCebuUtility;
 use App\LechonDeCebuCode;
@@ -4467,33 +4468,37 @@ class LoloPinoyLechonDeCebuController extends Controller
         return view('lechon-de-cebu-petty-cash-list', compact('pettyCashLists'));
     }
 
-    public function inventoryStockUpdate(Request $request, $id){
-        $updateInventoryStock = CommissaryRawMaterial::find($id);
+    public function inventoryStockUpdate(Request $request){
+        $updateInventoryStock = CommissaryRawMaterial::find($request->id);
+        $qty = $request->qty;
 
-        $updateInventoryStock->date = $request->get('date');
-        $updateInventoryStock->reference_no = $request->get('referenceNumber');
-        $updateInventoryStock->description  =$request->get('description');
-        $updateInventoryStock->item = $request->get('item');
-        $updateInventoryStock->qty = $request->get('qty');
-        $updateInventoryStock->unit = $request->get('unit');
-        $updateInventoryStock->amount = $request->get('amount');
-        $updateInventoryStock->status = $request->get('status');
-        $updateInventoryStock->requesting_branch = $request->get('requestingBranch');
-        $updateInventoryStock->cheque_no_issued = $request->get('chequeNoIssued');
-        $updateInventoryStock->remarks = $request->get('remarks');
+        $updateInventoryStock->date = $request->date;
+        $updateInventoryStock->qty = $qty;
+        $updateInventoryStock->unit = $request->unit;
+        $updateInventoryStock->status = $request->status;
+        $updateInventoryStock->requesting_branch = $request->requestingBranch;
+        $updateInventoryStock->cheque_no_issued = $request->chequeNoIssued;
+        $updateInventoryStock->remarks = $request->remarks;
 
         $updateInventoryStock->save();
 
-        Session::flash('viewInventoryOfStocks', 'Successfully updated.');
+        $updateRawMaterial = CommissaryRawMaterial::find($request->mainId);
+        $unitPrice = $updateRawMaterial->unit_price; 
+      
+        $add  = $qty + $updateRawMaterial->in; 
 
-        return redirect('lolo-pinoy-lechon-de-cebu/view-inventory-of-stocks/'.$request->get('iSId'));
+        $compute = $unitPrice * $add; 
+
+        $updateRawMaterial->in = $add;
+        $updateRawMaterial->amount = $compute;
+        $updateRawMaterial->save();
+
+        return response()->json('Success: successfully updated.');
     }
 
     //
     public function viewInventoryOfStocks($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+      
         //
         $viewStockDetail = CommissaryRawMaterial::find($id);
 
@@ -4502,7 +4507,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
       
 
-        return view('view-lechon-de-cebu-inventory-stock', compact('user', 'viewStockDetail', 'getViewStockDetails'));
+        return view('view-lechon-de-cebu-inventory-stock', compact('viewStockDetail', 'getViewStockDetails'));
     }
 
     //
@@ -5452,11 +5457,37 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     //inventory of stocksInventory
     public function inventoryOfStocks(){
-        $ids = Auth::user()->id;    
-        $user = User::find($ids);
-
-         //getRawMaterial
-        $getRawMaterials = CommissaryRawMaterial::where('rm_id', NULL)->get()->toArray();
+        $getRawMaterials = DB::table(
+                        'commissary_raw_materials')
+                        ->select(
+                            'commissary_raw_materials.id',
+                            'commissary_raw_materials.user_id',
+                            'commissary_raw_materials.rm_id',
+                            'commissary_raw_materials.product_name',
+                            'commissary_raw_materials.unit_price',
+                            'commissary_raw_materials.unit',
+                            'commissary_raw_materials.in',
+                            'commissary_raw_materials.out',
+                            'commissary_raw_materials.stock_amount',
+                            'commissary_raw_materials.remaining_stock',
+                            'commissary_raw_materials.amount',
+                            'commissary_raw_materials.supplier',
+                            'commissary_raw_materials.date',
+                            'commissary_raw_materials.item',
+                            'commissary_raw_materials.description',
+                            'commissary_raw_materials.reference_no',
+                            'commissary_raw_materials.qty',
+                            'commissary_raw_materials.requesting_branch',
+                            'commissary_raw_materials.cheque_no_issued',
+                            'commissary_raw_materials.status',
+                            'commissary_raw_materials.created_by',
+                            'lechon_de_cebu_raw_material_products.raw_materials_id',
+                            'lechon_de_cebu_raw_material_products.branch',
+                            'lechon_de_cebu_raw_material_products.product_id_no')
+                        ->join('lechon_de_cebu_raw_material_products', 'commissary_raw_materials.id', '=', 'lechon_de_cebu_raw_material_products.raw_materials_id')
+                        ->where('commissary_raw_materials.rm_id', NULL)
+                        ->orderBy('commissary_raw_materials.id', 'desc')
+                        ->get()->toArray();
 
         //count the total stock out amount value
         $countStockAmount = CommissaryRawMaterial::all()->sum('stock_amount');
@@ -5464,7 +5495,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         //count the total amount 
         $countTotalAmount = CommissaryRawMaterial::where('rm_id', NULL)->sum('amount');
         
-        return view('commissary-inventory-of-stocks', compact('user', 'getRawMaterials', 'countStockAmount', 'countTotalAmount'));
+        return view('commissary-inventory-of-stocks', compact('getRawMaterials', 'countStockAmount', 'countTotalAmount'));
     }
 
     //view stock inventory 
@@ -5533,18 +5564,8 @@ class LoloPinoyLechonDeCebuController extends Controller
     }
 
 
-    //request stock out RAW material
-    public function rawMaterialRequestStockOut($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        $getRequestStock = CommissaryRawMaterial::find($id);
-
-        return view('request-stock-out-raw-material', compact('user', 'getRequestStock', 'id'));
-    }
-
     //save delivery in RAW material
-    public function addDeliveryInRawMaterial(Request $request, $id){
+    public function addDIRST(Request $request){
         $ids = Auth::user()->id;
         $user = User::find($ids);
 
@@ -5553,101 +5574,107 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $name  = $firstName." ".$lastName;
 
-        $rawMaterial = CommissaryRawMaterial::find($id);
+        $rawMaterial = CommissaryRawMaterial::find($request->id);
 
-        $qty = $request->get('qty');
+        $qty = $request->qty;
 
         //compute qty times unit price
         $compute  = $qty * $rawMaterial->unit_price;
         $sum = $compute;
 
-          //get date today
-        $getDateToday =  date('Y-m-d');
+        if($request->requestingBranch === NULL){
+            $reqBranch = NULL;
+        }else{
+            $reqBranch = $request->requestingBranch;
+        }
 
         $addDeliveryIn = new CommissaryRawMaterial([
             'user_id'=>$user->id,
-            'rm_id'=>$id,
-            'product_id_no'=>$request->get('productId'),
-            'description'=>$request->get('description'),
-            'date'=>$getDateToday,
+            'rm_id'=>$request->id,
+            'description'=>$request->description,
+            'date'=>$request->date,
             'item'=>$rawMaterial->product_name,
-            'reference_no'=>$request->get('referenceNum'),
+            'reference_no'=>$request->referenceNum,
             'qty'=>$qty,
             'unit'=>$rawMaterial->unit,
             'amount'=>$sum,
-            'status'=>$request->get('status'),
-            'cheque_no_issued'=>$request->get('chequeNo'),
+            'status'=>$request->status,
+            'cheque_no_issued'=>$request->chequeNo,
+            'requesting_branch'=>$reqBranch,
             'created_by'=>$name,
         ]);
 
         $addDeliveryIn->save();
 
-         Session::flash('addDeliveryIn', 'Delivery In Successfully Added');
-
-         return redirect('lolo-pinoy-lechon-de-cebu/raw-material/add-delivery-in/'.$id);
+        return response()->json('Success: Delivery In/Request Stock Out Successfully Added.'); 
 
     }
-
-    //add delivery in RAW material
-    public function rawMaterialAddDeliveryIn($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        $getRawMaterial = CommissaryRawMaterial::find($id);
-
-        return view('add-delivery-in-raw-material', compact('user', 'getRawMaterial', 'id'));
-    }
-
 
     //view RAW material details
     public function viewRawMaterialDetails($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
+        $viewRawDetail = DB::table(
+                        'commissary_raw_materials')
+                        ->select(
+                            'commissary_raw_materials.id',
+                            'commissary_raw_materials.user_id',
+                            'commissary_raw_materials.rm_id',
+                            'commissary_raw_materials.product_name',
+                            'commissary_raw_materials.unit_price',
+                            'commissary_raw_materials.unit',
+                            'commissary_raw_materials.in',
+                            'commissary_raw_materials.out',
+                            'commissary_raw_materials.stock_amount',
+                            'commissary_raw_materials.remaining_stock',
+                            'commissary_raw_materials.amount',
+                            'commissary_raw_materials.supplier',
+                            'commissary_raw_materials.date',
+                            'commissary_raw_materials.item',
+                            'commissary_raw_materials.description',
+                            'commissary_raw_materials.reference_no',
+                            'commissary_raw_materials.qty',
+                            'commissary_raw_materials.requesting_branch',
+                            'commissary_raw_materials.cheque_no_issued',
+                            'commissary_raw_materials.status',
+                            'commissary_raw_materials.created_by',
+                            'lechon_de_cebu_raw_material_products.raw_materials_id',
+                            'lechon_de_cebu_raw_material_products.branch',
+                            'lechon_de_cebu_raw_material_products.product_id_no')
+                        ->join('lechon_de_cebu_raw_material_products', 'commissary_raw_materials.id', '=', 'lechon_de_cebu_raw_material_products.raw_materials_id')
+                        ->where('commissary_raw_materials.id', $id)
+                        ->get();
 
-        //
-        $viewRawDetail = CommissaryRawMaterial::find($id);
 
         //transaction table
         $getViewRawDetails = CommissaryRawMaterial::where('rm_id', $id)->get()->toArray();
         
-        return view('view-lechon-de-cebu-raw-material-details', compact('user', 'viewRawDetail', 'getViewRawDetails'));
+        return view('view-lechon-de-cebu-raw-material-details', compact('viewRawDetail', 'getViewRawDetails'));
     }
 
     //update RAW material
-    public function updateRawMaterial(Request $request, $id){
+    public function updateRawMaterial(Request $request){
 
-        $updateRawMaterial = CommissaryRawMaterial::find($id);
+        $updateRawMaterial = CommissaryRawMaterial::find($request->id);
 
-        $updateRawMaterial->branch = $request->get('branch');
-        $updateRawMaterial->product_name = $request->get('productName');
-        $updateRawMaterial->unit_price = $request->get('unitPrice');
-        $updateRawMaterial->unit = $request->get('unit');
-        $updateRawMaterial->in = $request->get('in');
-        $updateRawMaterial->out = $request->get('out');
-        $updateRawMaterial->stock_amount = $request->get('stockAmount');
-        $updateRawMaterial->remaining_stock = $request->get('remainingStock');
-        $updateRawMaterial->amount = $request->get('amount');
-        $updateRawMaterial->supplier = $request->get('supplier');
+         //unit price times number of IN products
+        $unitPrice = $request->unitPrice1 * $request->stockIn1;
+
+        $amount = $unitPrice;
+
+        $updateRawMaterial->product_name = $request->productName1;
+        $updateRawMaterial->unit_price = $request->unitPrice1;
+        $updateRawMaterial->unit = $request->unit1;
+        $updateRawMaterial->in = $request->stockIn1;
+        $updateRawMaterial->remaining_stock = $request->stockIn1;
+        $updateRawMaterial->amount = $amount;
+        $updateRawMaterial->supplier = $request->supplier1;
 
         $updateRawMaterial->save();
 
-         Session::flash('successRawMaterial', 'Successfully updated');
-
-        return redirect('lolo-pinoy-lechon-de-cebu/commissary/edit-raw-materials/'.$id);
+        return response()->json('Success: successfully updated.');   
 
     }
 
-    //edit RAW materials
-    public function editRawMaterial($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        $getRawMaterial = CommissaryRawMaterial::find($id);
-
-        return view('edit-commissary-raw-material', compact('user', 'getRawMaterial'));
-    }
-
-
+  
     //add RAW materials
     public function addRawMaterial(Request $request){
         $ids = Auth::user()->id;
@@ -5664,7 +5691,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         ]);
 
          //get the latest insert id query in table commissary RAW material product id no
-        $dataProductId = DB::select('SELECT id, product_id_no FROM commissary_raw_materials ORDER BY id DESC LIMIT 1');
+        $dataProductId = DB::select('SELECT id, product_id_no FROM lechon_de_cebu_raw_material_products ORDER BY id DESC LIMIT 1');
 
         //if code is not zero add plus 1 product id no
         if(isset($dataProductId[0]->product_id_no) != 0){
@@ -5678,50 +5705,84 @@ class LoloPinoyLechonDeCebuController extends Controller
             $uProd = sprintf("%06d",$newProd);
         } 
 
-        $addNewRawMaterial = new CommissaryRawMaterial([
-            'user_id'=>$user->id,
-            'branch'=>$request->get('branch'),
-            'product_id_no'=>$uProd,
-            'product_name'=>$request->get('productName'),
-            'unit_price'=>$request->get('unitPrice'),
-            'unit'=>$request->get('unit'),
-            'in'=>$request->get('in'),
-            'out'=>$request->get('out'),
-            'stock_amount'=>$request->get('stockAmount'),
-            'remaining_stock'=>$request->get('remainingStock'),
-            'amount'=>$request->get('amount'),
-            'supplier'=>$request->get('supplier'),
-            'created_by'=>$name,
+         //unit price times number of IN products
+        $unitPrice = $request->unitPrice * $request->stockIn;
 
-        ]);
+        $amount = $unitPrice;
 
-        $addNewRawMaterial->save();
+        //check if product name name exits
+        $target = DB::table(
+                'commissary_raw_materials')
+                ->where('product_name', $request->productName)
+                ->get()->first();
 
-        Session::flash('addRawMaterial', 'Successfully added.');
+        if($target === NULL){
+            $addNewRawMaterial = new CommissaryRawMaterial([
+                'user_id'=>$user->id,
+                'product_name'=>$request->productName,
+                'unit_price'=>$request->unitPrice,
+                'unit'=>$request->unit,
+                'in'=>$request->stockIn,
+                'remaining_stock'=>$request->stockIn,
+                'amount'=>$amount,
+                'supplier'=>$request->get('supplier'),
+                'created_by'=>$name,
+    
+            ]);
+    
+            $addNewRawMaterial->save();
+            $insertedId = $addNewRawMaterial->id;
 
-        return redirect('lolo-pinoy-lechon-de-cebu/commissary/create-raw-materials');
+            //save to table lechon_de_cebu_raw_material_products
+            $addNewProd = new LechonDeCebuRawMaterialProduct([
+                'raw_materials_id'=>$insertedId,
+                'branch'=>$request->branch,
+                'product_id_no'=>$uProd,
+            ]);
+            $addNewProd->save();
 
+            return response()->json('Success: successfully add RAW material.'); 
+        }else{
+            return response()->json('Failed: Already exist.');
+        }
 
-
-
-    }
-
-    //create RAW materials
-    public function createRawMaterials(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        return view('commissary-add-raw-materials', compact('user'));
     }
 
     //RAW materials
     public function rawMaterials(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
+        $getRawMaterials = DB::table(
+                    'commissary_raw_materials')
+                    ->select(
+                        'commissary_raw_materials.id',
+                        'commissary_raw_materials.user_id',
+                        'commissary_raw_materials.rm_id',
+                        'commissary_raw_materials.product_name',
+                        'commissary_raw_materials.unit_price',
+                        'commissary_raw_materials.unit',
+                        'commissary_raw_materials.in',
+                        'commissary_raw_materials.out',
+                        'commissary_raw_materials.stock_amount',
+                        'commissary_raw_materials.remaining_stock',
+                        'commissary_raw_materials.amount',
+                        'commissary_raw_materials.supplier',
+                        'commissary_raw_materials.date',
+                        'commissary_raw_materials.item',
+                        'commissary_raw_materials.description',
+                        'commissary_raw_materials.reference_no',
+                        'commissary_raw_materials.qty',
+                        'commissary_raw_materials.requesting_branch',
+                        'commissary_raw_materials.cheque_no_issued',
+                        'commissary_raw_materials.status',
+                        'commissary_raw_materials.created_by',
+                        'lechon_de_cebu_raw_material_products.raw_materials_id',
+                        'lechon_de_cebu_raw_material_products.branch',
+                        'lechon_de_cebu_raw_material_products.product_id_no')
+                    ->join('lechon_de_cebu_raw_material_products', 'commissary_raw_materials.id', '=', 'lechon_de_cebu_raw_material_products.raw_materials_id')
+                    ->where('commissary_raw_materials.rm_id', NULL)
+                    ->orderBy('commissary_raw_materials.id', 'desc')
+                    ->get()->toArray();
 
-        $getRawMaterials = CommissaryRawMaterial::where('rm_id', NULL)->get()->toArray();
-
-        return view('commissary-raw-materials', compact('user', 'getRawMaterials'));
+        return view('commissary-raw-materials', compact('getRawMaterials'));
     }
 
     //view sales invoice
@@ -6300,6 +6361,57 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $tot = $deliveryReceipt->total + $request->get('price');
         
+        //calculate the small live hog 
+        if($request->get('description') === "SPECIAL LOLO PINOY LECHON DE CEBU"){
+            //query raw material minus the small live hog
+            $productName = "SMALL LIVE HOG";
+            $getRawMaterial = DB::table(
+                        'commissary_raw_materials')
+                        ->select(
+                            'commissary_raw_materials.id',
+                            'commissary_raw_materials.user_id',
+                            'commissary_raw_materials.rm_id',
+                            'commissary_raw_materials.product_name',
+                            'commissary_raw_materials.unit_price',
+                            'commissary_raw_materials.unit',
+                            'commissary_raw_materials.in',
+                            'commissary_raw_materials.out',
+                            'commissary_raw_materials.stock_amount',
+                            'commissary_raw_materials.remaining_stock',
+                            'commissary_raw_materials.amount',
+                            'commissary_raw_materials.supplier',
+                            'commissary_raw_materials.date',
+                            'commissary_raw_materials.item',
+                            'commissary_raw_materials.description',
+                            'commissary_raw_materials.reference_no',
+                            'commissary_raw_materials.qty',
+                            'commissary_raw_materials.requesting_branch',
+                            'commissary_raw_materials.cheque_no_issued',
+                            'commissary_raw_materials.status',
+                            'commissary_raw_materials.created_by',
+                            'lechon_de_cebu_raw_material_products.raw_materials_id',
+                            'lechon_de_cebu_raw_material_products.branch',
+                            'lechon_de_cebu_raw_material_products.product_id_no')
+                        ->join('lechon_de_cebu_raw_material_products', 'commissary_raw_materials.id', '=', 'lechon_de_cebu_raw_material_products.raw_materials_id')
+                        ->where('commissary_raw_materials.product_name', $productName)
+                        ->get();
+
+            $addOutOne = $getRawMaterial[0]->out + 1;
+
+            $minusOne = $getRawMaterial[0]->in - $addOutOne;
+
+            $stockOutAmt = $getRawMaterial[0]->unit_price * $addOutOne; 
+
+            $updateSmallHog = CommissaryRawMaterial::find($getRawMaterial[0]->id);
+            $updateSmallHog->out = $addOutOne;
+            $updateSmallHog->stock_amount = $stockOutAmt;
+            $updateSmallHog->remaining_stock = $minusOne; 
+            $updateSmallHog->save();
+            
+            $description = $request->get('description');
+        }else{
+            $description = $request->get('description');
+        }
 
         $addNewDeliveryReceipt = new LechonDeCebuDeliveryReceipt([
             'user_id'=>$user->id,
@@ -6320,20 +6432,13 @@ class LoloPinoyLechonDeCebuController extends Controller
         $deliveryReceipt->total = $tot; 
         $deliveryReceipt->save();
 
-         Session::flash('addDeliveryReceiptSuccess', 'Successfully added.');
+        Session::flash('addDeliveryReceiptSuccess', 'Successfully added.');
 
-        return redirect('lolo-pinoy-lechon-de-cebu/add-new-delivery-receipt/'.$id);
-
+        return redirect()->route('editDeliveryReceiptLechonDeCebu', ['id'=>$id]);
 
     }
 
-    //add new delivery receipt
-    public function addNewDeliveryReceipt($id){
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        return view('add-new-lechon-de-cebu-delivery-receipt', compact('user', 'id'));
-    }
+  
 
     //update delivery receipt
     public function updateDeliveryReceipt(Request $request, $id){
@@ -6362,16 +6467,14 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     //edit delivery receipt
     public function editDeliveryReceipt($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
+     
         //getDeliveryReceipt
         $getDeliveryReceipt = LechonDeCebuDeliveryReceipt::find($id);
 
         //dReceipts
         $dReceipts = LechonDeCebuDeliveryReceipt::where('dr_id', $id)->get()->toArray();
 
-        return view('edit-lechon-de-cebu-delivery-receipt', compact('user','getDeliveryReceipt', 'dReceipts'));
+        return view('edit-lechon-de-cebu-delivery-receipt', compact('id','getDeliveryReceipt', 'dReceipts'));
     }
 
     //store delivery receipt
@@ -6405,8 +6508,57 @@ class LoloPinoyLechonDeCebuController extends Controller
             $uDr = sprintf("%06d",$newDr);
         } 
 
+        //calculate the small live hog 
+        if($request->get('description') === "SPECIAL LOLO PINOY LECHON DE CEBU"){
+            //query raw material minus the small live hog
+            $productName = "SMALL LIVE HOG";
+            $getRawMaterial = DB::table(
+                        'commissary_raw_materials')
+                        ->select(
+                            'commissary_raw_materials.id',
+                            'commissary_raw_materials.user_id',
+                            'commissary_raw_materials.rm_id',
+                            'commissary_raw_materials.product_name',
+                            'commissary_raw_materials.unit_price',
+                            'commissary_raw_materials.unit',
+                            'commissary_raw_materials.in',
+                            'commissary_raw_materials.out',
+                            'commissary_raw_materials.stock_amount',
+                            'commissary_raw_materials.remaining_stock',
+                            'commissary_raw_materials.amount',
+                            'commissary_raw_materials.supplier',
+                            'commissary_raw_materials.date',
+                            'commissary_raw_materials.item',
+                            'commissary_raw_materials.description',
+                            'commissary_raw_materials.reference_no',
+                            'commissary_raw_materials.qty',
+                            'commissary_raw_materials.requesting_branch',
+                            'commissary_raw_materials.cheque_no_issued',
+                            'commissary_raw_materials.status',
+                            'commissary_raw_materials.created_by',
+                            'lechon_de_cebu_raw_material_products.raw_materials_id',
+                            'lechon_de_cebu_raw_material_products.branch',
+                            'lechon_de_cebu_raw_material_products.product_id_no')
+                        ->join('lechon_de_cebu_raw_material_products', 'commissary_raw_materials.id', '=', 'lechon_de_cebu_raw_material_products.raw_materials_id')
+                        ->where('commissary_raw_materials.product_name', $productName)
+                        ->get();
 
+            $minusOne = $getRawMaterial[0]->in - $getRawMaterial[0]->out;
+            $addOutOne = $getRawMaterial[0]->out + 1;
 
+            $stockOutAmt = $getRawMaterial[0]->unit_price * $addOutOne; 
+
+            $updateSmallHog = CommissaryRawMaterial::find($getRawMaterial[0]->id);
+            $updateSmallHog->out = $addOutOne;
+            $updateSmallHog->stock_amount = $stockOutAmt;
+            $updateSmallHog->remaining_stock = $minusOne; 
+            $updateSmallHog->save();
+            
+            $description = $request->get('description');
+        }else{
+            $description = $request->get('description');
+        }
+        
         $storeDeliveryReceipt = new LechonDeCebuDeliveryReceipt([
             'user_id'=>$user->id,
             'sold_to'=>$request->get('soldTo'),
@@ -6422,7 +6574,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'consignee_contact_num'=>$request->get('consigneeContact'),
             'qty'=>$request->get('qty'),
             'unit'=>$request->get('unit'),
-            'description'=>$request->get('description'),
+            'description'=>$description,
             'price'=>$request->get('price'),
             'total'=>$request->get('price'),
             'prepared_by'=>$name,
@@ -6759,12 +6911,39 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     //stocks inventory
     public function stocksInventory(){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
 
-    
-        //getRawMaterial
-        $getRawMaterials = CommissaryRawMaterial::where('rm_id', NULL)->get()->toArray();
+        $getRawMaterials = DB::table(
+                    'commissary_raw_materials')
+                    ->select(
+                        'commissary_raw_materials.id',
+                        'commissary_raw_materials.user_id',
+                        'commissary_raw_materials.rm_id',
+                        'commissary_raw_materials.product_name',
+                        'commissary_raw_materials.unit_price',
+                        'commissary_raw_materials.unit',
+                        'commissary_raw_materials.in',
+                        'commissary_raw_materials.out',
+                        'commissary_raw_materials.stock_amount',
+                        'commissary_raw_materials.remaining_stock',
+                        'commissary_raw_materials.amount',
+                        'commissary_raw_materials.supplier',
+                        'commissary_raw_materials.date',
+                        'commissary_raw_materials.item',
+                        'commissary_raw_materials.description',
+                        'commissary_raw_materials.reference_no',
+                        'commissary_raw_materials.qty',
+                        'commissary_raw_materials.requesting_branch',
+                        'commissary_raw_materials.cheque_no_issued',
+                        'commissary_raw_materials.status',
+                        'commissary_raw_materials.created_by',
+                        'lechon_de_cebu_raw_material_products.raw_materials_id',
+                        'lechon_de_cebu_raw_material_products.branch',
+                        'lechon_de_cebu_raw_material_products.product_id_no')
+                    ->join('lechon_de_cebu_raw_material_products', 'commissary_raw_materials.id', '=', 'lechon_de_cebu_raw_material_products.raw_materials_id')
+                    ->where('commissary_raw_materials.rm_id', NULL)
+                    ->orderBy('commissary_raw_materials.id', 'desc')
+                    ->get()->toArray();
+                    
 
         //count the total stock out amount value
         $countStockAmount = CommissaryRawMaterial::all()->sum('stock_amount');

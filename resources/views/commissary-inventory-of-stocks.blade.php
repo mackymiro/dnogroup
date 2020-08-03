@@ -58,17 +58,17 @@
                                   @foreach($getRawMaterials as $getRawMaterial)
                                   <tr >
                                     
-                                    <td>{{ $getRawMaterial['product_id_no'] }}</td>
-                                    <td><a href="{{ url('lolo-pinoy-lechon-de-cebu/view-inventory-of-stocks/'.$getRawMaterial['id'])}}">{{ $getRawMaterial['product_name'] }}</a></td>
-                                    <td>{{ $getRawMaterial['unit_price'] }}</td>
-                                    <td>{{ $getRawMaterial['unit'] }}</td>
-                                    <td class="bg-danger" style="color:white;">{{ $getRawMaterial['in'] }}</td>
-                                    <td>{{ $getRawMaterial['out'] }}</td>
-                                    <td>{{ $getRawMaterial['stock_amount']}}</td>
-                                    <td>{{ $getRawMaterial['remaining_stock']}}</td>
-                                    <td><?php echo number_format($getRawMaterial['amount'], 2);?></td>
-                                    <td>{{ $getRawMaterial['supplier']}}</td>
-                                    <td>{{ $getRawMaterial['created_by'] }}</td>
+                                    <td>{{ $getRawMaterial->product_id_no }}</td>
+                                    <td><a href="{{ url('lolo-pinoy-lechon-de-cebu/view-inventory-of-stocks/'.$getRawMaterial->id)}}">{{ $getRawMaterial->product_name }}</a></td>
+                                    <td>{{ $getRawMaterial->unit_price }}</td>
+                                    <td>{{ $getRawMaterial->unit }}</td>
+                                    <td class="bg-danger" style="color:white;">{{ $getRawMaterial->in }}</td>
+                                    <td>{{ $getRawMaterial->out }}</td>
+                                    <td>{{ $getRawMaterial->stock_amount}}</td>
+                                    <td>{{ $getRawMaterial->remaining_stock}}</td>
+                                    <td><?php echo number_format($getRawMaterial->amount, 2);?></td>
+                                    <td>{{ $getRawMaterial->supplier}}</td>
+                                    <td>{{ $getRawMaterial->created_by }}</td>
                                     
                                   </tr>
                                   @endforeach

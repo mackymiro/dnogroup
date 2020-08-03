@@ -112,7 +112,7 @@
                         	<table class="table table-bordered">
                         		<thead>
 		            	 			<tr>
-		            	 				<th colspan="112" class="bg-info" style="color:white;">TRANSACTION</th>
+		            	 				<th colspan="12" class="bg-info" style="color:white;">TRANSACTION</th>
 		            	 			</tr>
 		            	 		</thead>
 		            	 		<tbody>
@@ -229,7 +229,7 @@
 					@endif
 					<div class="col-lg-4">
   						<label>Status</label>
-						<select id="status" name="status" class=" form-control"> 
+						<select id="status<?php echo $getViewStockDetail['id']?>" name="status" class=" form-control"> 
   							<option value="0">--Select Status--</option>
 							<option value="Paid" {{ ( "Paid" == $getViewStockDetail['status']) ? 'selected' : '' }}>Paid</option>
 							<option value="Unpaid" {{ ( "Unpaid" == $getViewStockDetail['status']) ? 'selected' : '' }}>Unpaid</option>
@@ -292,10 +292,6 @@
         </div>
       </footer>
 </div>
-<script>
-	
-
-</script>
 <script type="text/javascript">
 	
 	const addRemarks = (id) =>{

@@ -27,7 +27,7 @@
           </ol>
           <a href="{{ url('lolo-pinoy-lechon-de-cebu/delivery-receipt/lists') }}">Back to Lists</a>
           <div class="col-lg-12">
-        	 <img src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
+        	 <img src="{{ asset('images/digitized-logos/lolo-pinoy-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
         	 
         	 <h4 class="text-center"><u>DELIVERY RECEIPT</u></h4>
 			  </div>
@@ -140,59 +140,96 @@
 			  		</div>
 			  </div>
 			  <div class="row">
-			  		<div class="col-lg-12">
+			  		<div class="col-lg-4">
 			  			 <div class="card mb-3">
-			  			 	 <div class="card-header">
-	                              <i class="fas fa-receipt" aria-hidden="true"></i>
-	                            Edit Delivery Receipt</div>
-	                            <div class="card-body">
-                                  @if(session('SuccessEdit'))
-                                     <p class="alert alert-success">{{ Session::get('SuccessEdit') }}</p>
-                                  @endif 
-                                  @foreach($dReceipts as $dReceipt)
-                                  <form action="{{ action('LoloPinoyLechonDeCebuController@updateDr', $dReceipt['id'])}}" method="post">
-                                     {{csrf_field()}}
-                                 <input name="_method" type="hidden" value="PATCH">
-	                            	  <div class="form-group">
-                                    <div id="deletedId{{ $dReceipt['id'] }}" class="form-row">
-                                         <div class="col-md-1">
-                                          <label>QTY</label>
-                                          <input type="text" name="qty" class="form-control" value="{{ $dReceipt['qty']}}" />
-                                        </div>
-                                        <div class="col-md-1">
-                                          <label>Unit</label>
-                                          <input type="text" name="unit" class="form-control" value="{{ $dReceipt['unit']}}" />
-                                        </div>
-                                        <div class="col-md-4">
-                                          <label>Description</label>
-                                          <input type="text" name="description" class="form-control" value="{{ $dReceipt['description']}}" />
-                                        </div>
-                                        <div class="col-md-2">
-                                          <label>Price</label>
-                                          <input type="text" name="price" class="form-control" value="<?php echo number_format($dReceipt['price'], 2); ?>" />
-                                        </div>
-                                        <div class="col-lg-2">
-                                          <br>
-                                          <input type="hidden" id="drId" name="drId" value="{{ $getDeliveryReceipt['id'] }}" />
-                                          <input type="submit" class="btn btn-success" value="Update" />
-                                          @if($user->role_type == 1)
-                                          <a id="delete" onClick="confirmDelete('{{ $dReceipt['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
-                                          @endif
-                                        </div>
+                    <div class="card-header">
+                          <i class="fas fa-plus" aria-hidden="true"></i>
+                        Add Delivery Receipt</div>
+                        <div class="card-body">
+                            @if(session('addDeliveryReceiptSuccess'))
+                                <p class="alert alert-success">{{ Session::get('addDeliveryReceiptSuccess') }}</p>
+                            @endif 
+                            <form action="{{ action('LoloPinoyLechonDeCebuController@addNewDeliveryReceiptData', $id) }}" method="post"> 
+                            {{csrf_field()}}
+                            <div class="form-group">
+                                <div class="form-row">
+                                     <div class="col-md-12">
+                                        <label>QTY</label>
+                                        <input type="text" name="qty" class="form-control" required="required" />
                                     </div>
-                                    
-                                  </div>
-                                  </form>
-                                  @endforeach
-	                            	  <div>
-		                                  @if($user->role_type == 1)
-		                                  <a href="{{ url('lolo-pinoy-lechon-de-cebu/add-new-delivery-receipt/'.$getDeliveryReceipt['id'] ) }}" class="btn btn-primary">Add New</a>
-		                                  @endif
-		                                </div>
-	                            </div>
+                                    <div class="col-md-12">
+                                      <label>Unit</label>
+                                      <input type="text" name="unit" class="form-control" />
+                                    </div>
+                                    <div class="col-md-12">
+                                      <label>Description</label>
+                                      <input type="text" name="description" class="form-control" required="required" />
+                                    </div>
+                                    <div class="col-md-12">
+                                      <label>Price</label>
+                                      <input type="text" name="price" class="form-control" required="required" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button type="submit" class="btn btn-primary">Add New</button>
+                               
+                            </div>
+                            </form>
+                      </div>
 			  			 </div>
 			  		</div>
+            <div class="col-lg-8">
+                  <div class="card mb-3">
+                     <div class="card-header">
+                        <i class="fas fa-receipt" aria-hidden="true"></i>
+                         Delivery Receipt
+                      </div>
+                      <div class="card-body">
+                      @if(session('SuccessEdit'))
+                                <p class="alert alert-success">{{ Session::get('SuccessEdit') }}</p>
+                            @endif 
+                            @foreach($dReceipts as $dReceipt)
+                            <form action="{{ action('LoloPinoyLechonDeCebuController@updateDr', $dReceipt['id'])}}" method="post">
+                                {{csrf_field()}}
+                            <input name="_method" type="hidden" value="PATCH">
+                            <div class="form-group">
+                              <div id="deletedId{{ $dReceipt['id'] }}" class="form-row">
+                                    <div class="col-md-1">
+                                    <label>QTY</label>
+                                    <input type="text" name="qty" class="form-control" value="{{ $dReceipt['qty']}}" />
+                                  </div>
+                                  <div class="col-md-2">
+                                    <label>Unit</label>
+                                    <input type="text" name="unit" class="form-control" value="{{ $dReceipt['unit']}}" />
+                                  </div>
+                                  <div class="col-md-4">
+                                    <label>Description</label>
+                                    <input type="text" name="description" class="form-control" value="{{ $dReceipt['description']}}" />
+                                  </div>
+                                  <div class="col-md-2">
+                                    <label>Price</label>
+                                    <input type="text" name="price" class="form-control" value="<?php echo number_format($dReceipt['price'], 2); ?>" />
+                                  </div>
+                                  <div class="col-lg-4">
+                                    <br>
+                                    <input type="hidden" id="drId" name="drId" value="{{ $getDeliveryReceipt['id'] }}" />
+                                    <input type="submit" class="btn btn-success" value="Update" />
+                                    @if(Auth::user()['role_type'] == 1)
+                                    <a id="delete" onClick="confirmDelete('{{ $dReceipt['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
+                                    @endif
+                                  </div>
+                              </div>
+                              
+                            </div>
+                            </form>
+                            @endforeach
+                           
+                      </div>
+                  </div>
+              </div>
 			  </div>
+       
 	</div>
 </div>
  <!-- Sticky Footer -->

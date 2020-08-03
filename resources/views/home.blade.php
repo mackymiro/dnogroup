@@ -107,7 +107,7 @@
             <div class="card text-white bg-primary o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                   <img src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
+                   <img src="{{ asset('images/digitized-logos/transparent/lolo-pinoy-lechon-de-cebu(1).png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
 
                 </div>
                 <div class="mr-5">Lolo Pinoy Lechon de Cebu</div>
@@ -124,7 +124,7 @@
             <div class="card text-white bg-warning o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                  <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="200" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
+                  <img src="{{ asset('images/digitized-logos/transparent/lolo-pinoy-grill(1).png')}}" width="200" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill Commssary">
 
                 </div>
                 <div class="mr-5">Lolo Pinoy Grill Commissary</div>
@@ -141,7 +141,7 @@
             <div class="card text-white bg-success o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                   <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="200" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
+                   <img src="{{ asset('images/digitized-logos/transparent/lolo-pinoy-grill(1).png')}}" width="200" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill Branches">
                 </div>
                 <div class="mr-5">Lolo Pinoy Grill Branches</div>
               </div>
@@ -157,7 +157,7 @@
             <div class="card text-white bg-danger o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                  <img src="{{ asset('images/mr-potato.png')}}" width="200" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
+                  <img src="{{ asset('images/digitized-logos/transparent/mr-potato(1).png')}}" width="200" height="178" class="img-responsive mx-auto d-block" alt="Mr Potato">
                 </div>
                 <div class="mr-5">Mr Potato</div>
               </div>
@@ -173,7 +173,7 @@
             <div class="card text-white bg-secondary o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                  <img src="{{ asset('images/digitized-logos/ribos-food-corp.png')}}" width="200" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
+                  <img src="{{ asset('images/digitized-logos/transparent/ribos-food-corp(1).png')}}" width="200" height="178" class="img-responsive mx-auto d-block" alt="Ribo's Bar">
                 </div>
                 <div class="mr-5">Ribo's Bar</div>
               </div>
@@ -189,7 +189,7 @@
             <div class="card text-white bg-info o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                     <img src="{{ asset('images/digitized-logos/dno-personal1.png')}}" width="250" height="160" class="img-responsive mx-auto d-block" alt="DNO Personal ">
+                     <img src="{{ asset('images/digitized-logos/transparent/dno-personal1(1).png')}}" width="250" height="160" class="img-responsive mx-auto d-block" alt="DNO Personal ">
                 </div>
                 <div class="mr-5">DNO Personal</div>
               </div>
@@ -205,7 +205,7 @@
             <div class="card text-white bg-primary o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                     <img src="{{ asset('images/DNO_Food_Ventures.jpg')}}" width="255" height="172" class="img-responsive mx-auto d-block" alt="DIC ">
+                     <img src="{{ asset('images/digitized-logos/transparent/dno-food-ventures.png')}}" width="255" height="172" class="img-responsive mx-auto d-block" alt="DNO Food Ventures ">
                 </div>
                 <div class="mr-5">DNO Food Ventures</div>
               </div>
@@ -219,10 +219,10 @@
 
           </div>
           <div class="col-xl-3 col-sm-6 mb-3">
-            <div class="card text-white bg-info o-hidden h-100">
+            <div class="card text-white bg-secondary o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                  <img src="{{ asset('images/dno-resources.jpg')}}" width="200" height="178" class="img-responsive mx-auto d-block" alt="DNO Resources and Development Corp">
+                  <img src="{{ asset('images/digitized-logos/transparent/dno-resources(1).png')}}" width="200" height="130" class="img-responsive mx-auto d-block" alt="DNO Resources and Development Corp">
                 </div>
                 <div class="mr-5">DNO Resources and Development Corp</div>
               </div>
@@ -270,7 +270,7 @@
             <div class="card text-white bg-success o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                  <img src="{{ asset('images/DIC-LOGO.png') }}" width="255" height="172" class="img-responsive mx-auto d-block" alt="WLG Corporation">
+                  <img src="{{ asset('images/DIC-LOGO.png') }}" width="255" height="172" class="img-responsive mx-auto d-block" alt="DIC">
                 </div>
                 <div class="mr-5">DINO Industrial Corporation</div>
               </div>
@@ -283,10 +283,10 @@
             </div>
           </div>
           <div class="col-xl-3 col-sm-6 mb-3">
-            <div class="card text-white bg-danger o-hidden h-100">
+            <div class="card text-white bg-secondary o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                  <img src="{{ asset('images/local-ground.jpg')}}" width="200" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
+                  <img src="{{ asset('images/digitized-logos/transparent/local-ground(1).png')}}" width="200" height="178" class="img-responsive mx-auto d-block" alt="Local Ground">
                 </div>
                 <div class="mr-5">Local Ground</div>
               </div>
