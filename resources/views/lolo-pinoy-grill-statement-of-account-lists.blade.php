@@ -43,21 +43,21 @@
                           </tfoot>
                           <tbody>
                             @foreach($statementOfAccounts as $statementOfAccount)
-                            <tr id="deletedId{{ $statementOfAccount['id']}}">
+                            <tr id="deletedId{{ $statementOfAccount->id}}">
                               <td>
                                  @if(Auth::user()['role_type'] !== 3)
-                                  <a href="{{ url('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-statement-of-account/'.$statementOfAccount['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                  <a href="{{ url('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-statement-of-account/'.$statementOfAccount->id ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                   @endif
                                 
-                                  <a href="{{ url('lolo-pinoy-grill-commissary/view-statement-account/'.$statementOfAccount['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
+                                  <a href="{{ url('lolo-pinoy-grill-commissary/view-statement-account/'.$statementOfAccount->id) }}" title="View"><i class="fas fa-low-vision"></i></a>
 
                               </td>
-                              <td>{{ $statementOfAccount['date'] }}</td>
-                              <td>{{ $statementOfAccount['bill_to' ]}}</td>
-                              <td>{{ $statementOfAccount['reference_number' ]}}</td>
-                              <td>{{ $statementOfAccount['invoice_number' ]}}</td>
-                              <td class="bg-info" style="color:white;">{{ $statementOfAccount['period_cover']}}</td>
-                              <td>{{ $statementOfAccount['created_by' ]}}</td>
+                              <td>{{ $statementOfAccount->date }}</td>
+                              <td>{{ $statementOfAccount->bill_to}}</td>
+                              <td></td>
+                              <td>{{ $statementOfAccount->invoice_number}}</td>
+                              <td class="bg-info" style="color:white;">{{ $statementOfAccount->period_cover}}</td>
+                              <td>{{ $statementOfAccount->created_by}}</td>
                             </tr>
                             @endforeach
                           </tbody>

@@ -27,7 +27,7 @@
                               <i class="fas fa-receipt" aria-hidden="true"></i>
                             View Statement Of Account 
                               <div class="float-right">
-                               <a href="{{ action('LoloPinoyGrillCommissaryController@printSOA', $viewStatementAccount[0]['id']) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                               <a href="{{ action('LoloPinoyGrillCommissaryController@printSOA', $viewStatementAccount[0]->id) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                              </div>
                         </div>
                         <div class="card-body">
@@ -38,19 +38,19 @@
                                         <thead>
                                             <tr>
                                                 <th width="30%">Bill To</th>
-                                                <th> {{ $viewStatementAccount[0]['bill_to'] }}</th>
+                                                <th> {{ $viewStatementAccount[0]->bill_to}}</th>
                                             </tr>
                                             <tr>
                                                 <th>Address</th>
-                                                <th>{{ $viewStatementAccount[0]['address'] }}</th>
+                                                <th>{{ $viewStatementAccount[0]->address }}</th>
                                             </tr>
                                             <tr>
                                                 <th>Period Covered</th>
-                                                <th> {{ $viewStatementAccount[0]['period_cover'] }} </th>
+                                                <th> {{ $viewStatementAccount[0]->period_cover }} </th>
                                             </tr>
                                             <tr>
                                                 <th>Date</th>
-                                                <th>{{ $viewStatementAccount[0]['date'] }}</th>
+                                                <th>{{ $viewStatementAccount[0]->date }}</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -60,16 +60,13 @@
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th width="20%">Reference #</th>
-                                                <th>{{ $viewStatementAccount[0]['reference_number'] }}</th>
+                                                <th width="20%">SOA No</th>
+                                                <th>{{ $viewStatementAccount[0]->module_code }} {{ $viewStatementAccount[0]->lolo_pinoy_grill_code}}</th>
                                             </tr>
-                                            <tr>
-                                                <th>PO Number</th>
-                                                <th> {{ $viewStatementAccount[0]['p_o_number'] }}</th>
-                                            </tr>
+                            
                                             <tr>
                                                 <th>Terms</th>
-                                                <th>{{ $viewStatementAccount[0]['terms'] }}</th>
+                                                <th>{{ $viewStatementAccount[0]->terms }}</th>
                                             </tr>
                                         </thead>
 
@@ -85,11 +82,11 @@
                                                 <thead>
                                                     <tr>
                                                         <th width="30%">Branch</th>
-                                                        <th>{{ $viewStatementAccount[0]['branch'] }}</th>
+                                                        <th>{{ $viewStatementAccount[0]->branch }}</th>
                                                     </tr>
                                                     <tr>
                                                         <th>Payment Method</th>
-                                                        <th> {{ $viewStatementAccount[0]['payment_method'] }}</th>
+                                                        <th> {{ $viewStatementAccount[0]->payment_method }}</th>
                                                     </tr>
                                                     <tr>
                                                         <th class="bg-success" style="color:white;">Total Amount</th>
@@ -110,16 +107,16 @@
                                                  <thead>
                                                     <tr>
                                                         <th width="30%">Collection Date</th>
-                                                        <th>{{ $viewStatementAccount[0]['collection_date'] }}</th>
+                                                        <th>{{ $viewStatementAccount[0]->collection_date }}</th>
                                                     </tr>
                                                     <tr>
                                                         <th>Cheque Number</th>
-                                                        <th> {{ $viewStatementAccount[0]['check_number'] }}</th>
+                                                        <th> {{ $viewStatementAccount[0]->check_number }}</th>
                                                     </tr>
                                                   
                                                     <tr>
                                                         <th >OR Number</th>
-                                                        <th >{{ $viewStatementAccount[0]['or_number'] }}</th>
+                                                        <th >{{ $viewStatementAccount[0]->or_number }}</th>
                                                     </tr>
                                                    
                                                 </thead>
@@ -132,7 +129,6 @@
                                         <tr>
                                           <th class="bg-info" style="color:white;">DATE</th>
                                           <th class="bg-info" style="color:white;">INVOICE #</th>
-                                          <th class="bg-info" style="color:white;">WHOLE LECHON 500/KL</th>
                                           <th class="bg-info" style="color:white;">DESCRIPTION</th>
                                           <th class="bg-info" style="color:white;">AMOUNT</th>
                                           <th class="bg-info" style="color:white;">STATUS</th>
@@ -140,18 +136,16 @@
                                       </thead>
                                       <tbody>
                                           <tr>
-                                          <td>{{ $viewStatementAccount[0]['date_of_transaction'] }}</td>
-                                          <td>{{ $viewStatementAccount[0]['invoice_number'] }}</td>
-                                          <td>{{ $viewStatementAccount[0]['whole_lechon'] }}</td>
-                                          <td>{{ $viewStatementAccount[0]['description'] }}</td>
-                                          <td><?php echo number_format($viewStatementAccount[0]['amount'], 2); ?></td>
-                                          <td>{{ $viewStatementAccount[0]['status'] }}</td>
+                                          <td>{{ $viewStatementAccount[0]->date_of_transaction }}</td>
+                                          <td>{{ $viewStatementAccount[0]->invoice_number }}</td>
+                                          <td>{{ $viewStatementAccount[0]->description }}</td>
+                                          <td><?php echo number_format($viewStatementAccount[0]->amount, 2); ?></td>
+                                          <td>{{ $viewStatementAccount[0]->status }}</td>
                                           </tr>
                                           @foreach($statementAccounts as $statementAccount)
                                           <tr>
                                             <td>{{ $statementAccount['transaction_date'] }}</td>
                                             <td>{{ $statementAccount['invoice_number'] }}</td>
-                                            <td>{{ $statementAccount['whole_lechon'] }}</td>
                                             <td>{{ $statementAccount['description'] }}</td>
                                             <td><?php echo number_format($statementAccount['amount'], 2);?></td>
                                             <td>{{ $statementAccount['status']}}</td>
@@ -159,9 +153,9 @@
                                           @endforeach
                                             <td></td>
                                             <td></td>
-                                            <td></td>
                                             <td><strong>Total</strong></td>
                                             <td><strong>₱ <?php echo number_format($sum, 2)?></strong></td>
+                                            <td></td>
                                           </tr>
                                         </tbody>
                                 </table>

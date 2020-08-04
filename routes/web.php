@@ -1027,7 +1027,7 @@ Route::group(['middleware' =>['user']], function(){
 	Route::get(
 		'/dno-personal/view-dno-personal-payables-details/{id}',
 		'DnoPersonalController@viewPayableDetails')
-		->name('dno-personal.viewPayableDetails');
+		->name('viewPayableDetails');
 
 	Route::get(
 		'/dno-personal/printPayables/{id}',
@@ -1241,6 +1241,11 @@ Route::group(['middleware' =>['sales']], function(){
 	//destroy billing statement
 	Route::delete('/lolo-pinoy-grill-commissary/delete-billing-statement/{id}', 'LoloPinoyGrillCommissaryController@destroyBillingStatement')->name('lolo-pinoy-grill-commissary.destroyBillingStatement');
 	
+	Route::delete(
+		'/lolo-pinoy-grill-commissary/delete-data-billing-statement/{id}',
+		'LoloPinoyGrillCommissaryController@destroyBillingDataStatement')
+		->name('destroyBillingDataStatement');
+		
 	Route::delete(
 		'/lolo-pinoy-grill-commissary/delete-transaction-list/{id}',
 		'LoloPinoyGrillCommissaryController@destroyTransactionList')
@@ -1878,11 +1883,13 @@ Route::group(['middleware' => ['auth']], function(){
 
 
 	//edit billing statement form lolo pinoy grill commissary
-	Route::get('/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-billing-statement/{id}', 'LoloPinoyGrillCommissaryController@editBillingStatement')->name('lolo-pinoy-grill-commissary.editBillingStatement');
+	Route::get(
+		'/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-billing-statement/{id}', 
+		'LoloPinoyGrillCommissaryController@editBillingStatement')
+		->name('editBillingStatementLpGrillComm');
 
 	Route::patch('/lolo-pinoy-grill-commissary/update-billing-info/{id}', 'LoloPinoyGrillCommissaryController@updateBillingInfo')->name('lolo-pinoy-grill-commissary.updateBillingInfo');
 
-	Route::get('/lolo-pinoy-grill-commissary/add-new-lolo-pinoy-grill-billing-statement/{id}', 'LoloPinoyGrillCommissaryController@addNewBillingStatement')->name('lolo-pinoy-grill-commissary.addNewBillingStatement');
 
 	Route::post('/lolo-pinoy-grill-commissary/add-new-billing-data/{id}', 'LoloPinoyGrillCommissaryController@addNewBillingData')->name('lolo-pinoy-grill-commissary.addNewBillingData');
 
@@ -1894,7 +1901,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/lolo-pinoy-grill-commissary/billing-statement-lists', 
 		'LoloPinoyGrillCommissaryController@billingStatementLists')
-		->name('lolo-pinoy-grill-commissary.billingStatementLists');
+		->name('billingStatementLists');
 
 	//view billing statement
 	Route::get(
@@ -1953,7 +1960,10 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('/lolo-pinoy-grill-commissary/store-statement-account', 'LoloPinoyGrillCommissaryController@storeStatementAccount')->name('lolo-pinoy-grill-commissary.storeStatementAccount');
 
 	//edit
-	Route::get('/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-statement-of-account/{id}', 'LoloPinoyGrillCommissaryController@editStatementOfAccount')->name('lolo-pinoy-grill-commissary.editStatementOfAccount');
+	Route::get(
+		'/lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-statement-of-account/{id}', 
+		'LoloPinoyGrillCommissaryController@editStatementOfAccount')
+		->name('editStatementOfAccount');
 
 
 	Route::get('/lolo-pinoy-grill-commissary/statement-of-account-lists', 'LoloPinoyGrillCommissaryController@statementOfAccountList')->name('lolo-pinoy-grill-commissary.statementOfAccountList');
@@ -1966,12 +1976,12 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/lolo-pinoy-grill-commissary/view-statement-account/{id}',
 		'LoloPinoyGrillCommissaryController@viewStatementAccount')
-		->name('lolo-pinoy-grill-commissary.viewStatementAccount');
+		->name('viewStatementAccount');
 
 	Route::get(
 		'/lolo-pinoy-grill-commissary/printSOA/{id}',
 		'LoloPinoyGrillCommissaryController@printSOA')
-		->name('lolo-pinoy-grill-commissary.printSOA');
+		->name('printSOA');
 
 	//
 	Route::get('/lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-statement-account/{id}', 'LoloPinoyGrillCommissaryController@viewStatementAccount')->name('lolo-pinoy-grill-commissary.viewStatementAccount');

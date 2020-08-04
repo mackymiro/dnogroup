@@ -27,7 +27,7 @@
 		                              View Billing Statement
 		                         <div class="float-right">
                                
-                                 	<a href="{{ action('LoloPinoyGrillCommissaryController@printBillingStatement', $viewBillingStatement['id']) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                                 	<a href="{{ action('LoloPinoyGrillCommissaryController@printBillingStatement', $viewBillingStatement[0]->id) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                                
                              	 </div>
 		                    </div>
@@ -39,19 +39,19 @@
 		                                        <thead>
 		                                            <tr>
 		                                                <th width="30%">Bill To</th>
-		                                                <th> {{ $viewBillingStatement['bill_to'] }}</th>
+		                                                <th> {{ $viewBillingStatement[0]->bill_to }}</th>
 		                                            </tr>
 		                                            <tr>
 		                                                <th>Address</th>
-		                                                <th>{{ $viewBillingStatement['address'] }}</th>
+		                                                <th>{{ $viewBillingStatement[0]->address }}</th>
 		                                            </tr>
 		                                            <tr>
 		                                                <th>Period Covered</th>
-		                                                <th> {{ $viewBillingStatement['period_cover'] }} </th>
+		                                                <th> {{ $viewBillingStatement[0]->period_cover }} </th>
 		                                            </tr>
 		                                            <tr>
 		                                                <th>Date</th>
-		                                                <th>{{ $viewBillingStatement['date'] }}</th>
+		                                                <th>{{ $viewBillingStatement[0]->date }}</th>
 		                                            </tr>
 		                                        </thead>
 		                                    </table>
@@ -60,16 +60,13 @@
 		                                    <table class="table table-bordered">
 		                                        <thead>
 		                                            <tr>
-		                                                <th width="20%">Reference #</th>
-		                                                <th>{{ $viewBillingStatement['reference_number'] }}</th>
+		                                                <th width="20%">BS No</th>
+		                                                <th>{{ $viewBillingStatement[0]->module_code }} {{ $viewBillingStatement[0]->lolo_pinoy_grill_code }}</th>
 		                                            </tr>
-		                                            <tr>
-		                                                <th>PO Number</th>
-		                                                <th> {{ $viewBillingStatement['p_o_number'] }}</th>
-		                                            </tr>
+		                                          
 		                                            <tr>
 		                                                <th>Terms</th>
-		                                                <th>{{ $viewBillingStatement['terms'] }}</th>
+		                                                <th>{{ $viewBillingStatement[0]->terms }}</th>
 		                                            </tr>
 		                                        </thead>
 
@@ -83,24 +80,21 @@
                                       <tr>
                                         <th class="bg-info" style="color:white;">DATE</th>
                                         <th class="bg-info" style="color:white;">INVOICE #</th>
-                                        <th class="bg-info" style="color:white;">WHOLE LECHON 500/KL</th>
                                         <th class="bg-info" style="color:white;">DESCRIPTION</th>
                                         <th class="bg-info" style="color:white;">AMOUNT</th>
                                       </tr>
                                     </thead>
                                      <tbody>
                                       <tr>
-	                                      <td>{{ $viewBillingStatement['date_of_transaction'] }}</td>
-	                                      <td>{{ $viewBillingStatement['invoice_number'] }}</td>
-	                                      <td>{{ $viewBillingStatement['whole_lechon'] }}</td>
-	                                      <td>{{ $viewBillingStatement['description'] }}</td>
-	                                      <td><?php echo number_format($viewBillingStatement['amount'], 2); ?></td>
+	                                      <td>{{ $viewBillingStatement[0]->date_of_transaction }}</td>
+	                                      <td>{{ $viewBillingStatement[0]->invoice_number }}</td>
+	                                      <td>{{ $viewBillingStatement[0]->description }}</td>
+	                                      <td><?php echo number_format($viewBillingStatement[0]->amount, 2); ?></td>
                                       </tr>
                                       @foreach($billingStatements as $billingStatement)
                                       <tr>
 	                                        <td>{{ $billingStatement['date_of_transaction'] }}</td>
 	                                        <td>{{ $billingStatement['invoice_number'] }}</td>
-	                                        <td>{{ $billingStatement['whole_lechon'] }}</td>
 	                                        <td>{{ $billingStatement['description'] }}</td>
 	                                        <td><?php echo number_format($billingStatement['amount'], 2);?></td>
                                       </tr>
@@ -108,7 +102,7 @@
                                       <tr>
 	                                        <td></td>
 	                                        <td></td>
-	                                        <td></td>
+	                                      
 	                                        <td><strong>Total</strong></td>
 	                                        <td>₱ <?php echo number_format($sum, 2)?></td>
                                       </tr>
@@ -126,7 +120,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td>{{ $viewBillingStatement['created_by'] }}</td>
+                                                        <td>{{ $viewBillingStatement[0]->created_by }}</td>
                                                         <td></td>
                                                     </tr>
                                                 </tbody>

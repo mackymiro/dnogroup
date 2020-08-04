@@ -6957,9 +6957,6 @@ class LoloPinoyLechonDeCebuController extends Controller
     //view statement of account
     public function viewStatementAccount($id){
        
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
         //viewStatementAccount
         $moduleName = "Statement Of Account";
         $viewStatementAccount = DB::table(
@@ -7023,8 +7020,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         //minus the total balance to paid amounts
         $computeAll  = $sum - $compute;
     
-
-        return view('view-lechon-de-cebu-statement-account', compact('user','viewStatementAccount', 'statementAccounts', 'sum', 'computeAll'));
+        return view('view-lechon-de-cebu-statement-account', compact('viewStatementAccount', 'statementAccounts', 'sum', 'computeAll'));
     }
 
     //updateAddStatement
@@ -7168,7 +7164,6 @@ class LoloPinoyLechonDeCebuController extends Controller
 
        $allAccountsPaids = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->where('status', $stat)->get()->toArray();  
 
-        //$sAccounts = LechonDeCebuStatementOfAccount::where('soa_id', $id)->get()->toArray();
 
           //count the total amount 
         $countTotalAmount = LechonDeCebuBillingStatement::where('id', $id)->sum('amount');
@@ -7191,7 +7186,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $computeAll  = $sum - $compute;
 
 
-        return view('edit-statement-of-account', compact('user', 'getStatementOfAccount', 'computeAll','sAccounts', 'allAccounts', 'allAccountsPaids', 'sum'));
+        return view('edit-statement-of-account', compact('id', 'getStatementOfAccount', 'computeAll','sAccounts', 'allAccounts', 'allAccountsPaids', 'sum'));
     }
 
 
@@ -7227,10 +7222,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 ->where('lechon_de_cebu_statement_of_accounts.bill_to', '!=', NULL)
                                 ->where('lechon_de_cebu_codes.module_name', $moduleName)
                                 ->orderBy('lechon_de_cebu_statement_of_accounts.id', 'desc')
-
                                 ->get()->toArray();
            
-        //$statementOfAccountsPaids = LechonDeCebuStatementOfAccount::where('bill_to', '!=', NULL)->where('status', $paid)->get()->toArray();
       
         return view('lechon-de-cebu-statement-of-account-lists', compact('statementOfAccounts', 'statementOfAccountsPaids'));
     }
@@ -8004,10 +7997,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         ]);
         $statement->save();
-
-
         
-
         return redirect()->route('editBillingStatementLechonDeCebu', ['id'=>$insertedId]);
 
     }
@@ -8534,7 +8524,6 @@ class LoloPinoyLechonDeCebuController extends Controller
         $billStatement->save();
 
         $billingStatement->delete();
-
 
     }
    

@@ -115,7 +115,7 @@
 	                                   <thead>
                                             <tr>
                                                 <th width="20%">Amount Due:</th>
-                                                <th><?php echo number_format($payableId[0]->amount_due, 2);?></th>
+                                                <th><?php echo number_format($sum, 2);?></th>
                                             </tr>
                                             <tr>
                                                 <th>Invoice No:</th>
@@ -198,11 +198,11 @@
                                     </thead>
                                   <tbody>
                                   	
-                                  	 	 @foreach($payablesVouchers as $payablesVoucher)
+                                  	 	 @foreach($getChequeNumbers as $getChequeNumber)
                                         <tr style="border:1px solid black;">
-                                          <td style="text-align:center; border: 1px solid black;">{{ $payablesVoucher['cheque_number'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;">{{ $getChequeNumber['cheque_number'] }}</td>
                                          
-                                          <td style="text-align:center; border: 1px solid black; font-size:18px;"><?php echo number_format($payablesVoucher['cheque_amount'], 2);?></td>
+                                          <td style="text-align:center; border: 1px solid black; font-size:18px;"><?php echo number_format($getChequeNumber['cheque_amount'], 2);?></td>
                                         </tr> 
                                         @endforeach
                                       
@@ -225,17 +225,17 @@
                                     </thead>
                                   <tbody>
                                   	
-                                  	 	 @foreach($payablesVouchers as $payablesVoucher)
+                                  	 	 @foreach($getCashAmounts as $getCashAmount)
                                         <tr style="border:1px solid black;">
-                                          <td style="text-align:center; border: 1px solid black;">{{ $payablesVoucher['cheque_number'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;">{{ $getCashAmount['cheque_number'] }}</td>
                                          
                                           <td style="text-align:center; border: 1px solid black; font-size:18px;" >
 										
-                                            @if($payablesVoucher['currency'] === "USD")
+                                            @if($getCashAmount['currency'] === "USD")
                                             $
 
                                             @endif 	
-										  <?php echo number_format($payablesVoucher['cheque_amount'], 2);?></td>
+										  <?php echo number_format($getCashAmount['cheque_amount'], 2);?></td>
                                         </tr> 
                                         @endforeach
                                       

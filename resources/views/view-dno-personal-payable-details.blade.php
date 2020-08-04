@@ -114,7 +114,7 @@
                                               <thead>
                                                   <tr>
                                                       <th width="20%" class="bg-danger" style="color:#fff;">Amount Due</th>
-                                                      <th class="bg-danger" style="color:#fff;"><?php echo number_format($viewPaymentDetail[0]->amount_due, 2); ?></th>
+                                                      <th class="bg-danger" style="color:#fff;"><?php echo number_format($sum, 2); ?></th>
                                                   </tr>
                                                   <tr>  
                                                      <th width="35%" class="bg-danger" style="color:#fff;">Payment Method</th> 
@@ -186,10 +186,10 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($getViewPaymentDetails as $getViewPaymentDetail)
+                                        @foreach($getChequeNumbers as $getChequeNumber)
                                         <tr>
-                                           <td>{{ $getViewPaymentDetail['cheque_number']}}</td>
-                                           <td><?php echo number_format($getViewPaymentDetail['cheque_amount'], 2)?></td>
+                                           <td>{{ $getChequeNumber['cheque_number']}}</td>
+                                           <td><?php echo number_format($getChequeNumber['cheque_amount'], 2)?></td>
                                         </tr>
                                         @endforeach
                                     </tbody>
@@ -203,17 +203,17 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach($getViewPaymentDetails as $getViewPaymentDetail)
+                                        @foreach($getCashAmounts as $getCashAmount)
                                         <tr>
-                                           <td>{{ $getViewPaymentDetail['cheque_number']}}</td>
+                                           <td>{{ $getCashAmount['cheque_number']}}</td>
                                            <td>
-                                           @if($getViewPaymentDetail['currency'] === "PHP")
+                                           @if($getCashAmount['currency'] === "PHP")
                                                 ₱ 
-                                            @elseif($getViewPaymentDetail['currency'] === "USD")
+                                            @elseif($getCashAmount['currency'] === "USD")
                                             $
 
                                             @endif 	
-                                           <?php echo number_format($getViewPaymentDetail['cheque_amount'], 2)?></td>
+                                           <?php echo number_format($getCashAmount['cheque_amount'], 2)?></td>
                                         </tr>
                                         @endforeach
                                     </tbody>

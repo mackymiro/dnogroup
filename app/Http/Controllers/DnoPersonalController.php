@@ -3726,27 +3726,27 @@ class DnoPersonalController extends Controller
                             ->where('dno_personal_codes.module_name', $moduleName)
                             ->get();     
 
-
-
-
         //getParticular details
          $getParticulars = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
         
+         $getChequeNumbers = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
-        $payablesVouchers = DnoPersonalPaymentVoucher::where('pv_id', $id)->get()->toArray();
+        $getCashAmounts = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
         
-
-          //count the total amount 
-        $countTotalAmount = DnoPersonalPaymentVoucher::where('id', $id)->sum('amount_due');
-
-
-          //
-        $countAmount = DnoPersonalPaymentVoucher::where('pv_id', $id)->sum('amount_due');
-
-        $sum  = $countTotalAmount + $countAmount;
+         $amount1 = DnoPersonalPaymentVoucher::where('id', $id)->sum('amount');
+         $amount2 = DnoPersonalPaymentVoucher::where('pv_id', $id)->sum('amount');
+           
+         $sum = $amount1 + $amount2;
+         
+         //
+         $chequeAmount1 = DnoPersonalPaymentVoucher::where('id', $id)->sum('cheque_amount');
+         $chequeAmount2 = DnoPersonalPaymentVoucher::where('pv_id', $id)->sum('cheque_amount');
+         
+         $sumCheque = $chequeAmount1 + $chequeAmount2;
        
 
-        $pdf = PDF::loadView('printPayablesDnoPersonal', compact('payableId', 'user', 'payablesVouchers', 'sum', 'getParticulars'));
+        $pdf = PDF::loadView('printPayablesDnoPersonal', compact('payableId',  
+        'getChequeNumbers', 'getCashAmounts', 'sum', 'getParticulars'));
 
         return $pdf->download('dno-personal-payment-voucher.pdf');
     }
@@ -3797,13 +3797,30 @@ class DnoPersonalController extends Controller
                             ->where('dno_personal_codes.module_name', $moduleName)
                             ->get();     
 
-        $getViewPaymentDetails = DnoPersonalPaymentVoucher::where('pv_id', $id)->get()->toArray();
+       
+        $getChequeNumbers = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
+
+        
+        $getCashAmounts = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
+       
 
          //getParticular details
          $getParticulars = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
         
+         //amount
+         $amount1 = DnoPersonalPaymentVoucher::where('id', $id)->sum('amount');
+         $amount2 = DnoPersonalPaymentVoucher::where('pv_id', $id)->sum('amount');
+           
+         $sum = $amount1 + $amount2;
+         
+         //
+         $chequeAmount1 = DnoPersonalPaymentVoucher::where('id', $id)->sum('cheque_amount');
+         $chequeAmount2 = DnoPersonalPaymentVoucher::where('pv_id', $id)->sum('cheque_amount');
+         
+         $sumCheque = $chequeAmount1 + $chequeAmount2;
 
-        return view('view-dno-personal-payable-details', compact('user', 'viewPaymentDetail', 'getViewPaymentDetails', 'getParticulars'));
+        return view('view-dno-personal-payable-details', compact('viewPaymentDetail', 
+        'getChequeNumbers', 'getCashAmounts', 'getParticulars', 'sum', 'sumCheque'));
     }
 
     //

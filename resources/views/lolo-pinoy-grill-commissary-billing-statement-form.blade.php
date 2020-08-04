@@ -25,7 +25,7 @@
 	              <li class="breadcrumb-item active">Billing Statement Form</li>
 	            </ol>
 	            <div class="col-lg-12">
-            	  <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill ">
+            	  <img src="{{ asset('images/digitized-logos/lolo-pinoy-grill.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill ">
             	 
             	 <h4 class="text-center"><u>BILLING STATEMENT</u></h4>
             	</div>
@@ -101,51 +101,22 @@
 	                                            </span>
 	                                          @endif
             	 						</div>
-										 <div class="col-lg-2">
-											<label>Order</label>
-												<select name="choose" class="chooseOption form-control" >
-												<option value="Ssp">Ssp</option>
-												<option value="Private Order">Private Order</option>
-												</select>		
-										</div>
-            	 						<div  id="invoiceNo" class="col-lg-2">
+										
+            	 						<div  class="col-lg-2">
         	 								<label>Invoice #</label>
         	 								<input type="text" name="invoiceNumber" class="form-control" required="required" />
             	 						</div>
-										<div id="drNo" class="col-lg-2">
-											<label>DR #</label>
-											<select data-live-search="true" name="drNo" class="drSelect form-control selectpicker">
-												<option value="0">--Please Select--</option>
-												@foreach($drNos as $drNo)
-												<option value="{{ $drNo['dr_no']}}">{{ $drNo['dr_no']}}</option>
-												@endforeach
-											</select>	
-										</div>
-										<div id="drList" class="col-lg-2">
-											<label>DR Lists Id</label>
-											<select id="dataList" name="drList" class="chooseDr form-control "> 
-											</select>
-										</div>
-            	 						<div id="wholeLechon" class="col-lg-4">
-            	 							<label>Whole Lechon 500/KL</label>
-            	 							<input type="text" name="wholeLechon" class="form-control"  />
-            	 							
-            	 						</div>
-										<div id="wholeLechon6000" class="col-lg-4">
-											<label>Whole Lechon</label>
-											<input type="text" name="wholeLechon6000" class="form-control"  disabled />
-											
-										</div>
-            	 						<div id="description" class="col-lg-4">
+										 <div  class="col-lg-4">
         	 								<label>Description</label>
         	 								<input type="text" name="description" class="form-control"  />
         	 							
             	 						</div>
-										<div id="descriptionDrNo" class="col-lg-4">
-											<label>Description</label>
-											<input type="text" name="descriptionDrNo" class="form-control"  disabled />
-											
-										</div>
+            	 						<div  class="col-lg-2">
+            	 							<label>Amount</label>
+            	 							<input type="text" name="amount" class="form-control"  />
+            	 							
+            	 						</div>
+									
                 	 				</div>
                 	 				 <br>
 		                            <div>
@@ -172,34 +143,6 @@
       </footer>
 </div>
 <script type="text/javascript">
-	$("#drNo").hide();
-    $("#wholeLechon6000").hide();
-    $("#descriptionDrNo").hide();
-    $("#drList").hide();
-	$(".chooseOption").change(function(){
-         const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
-         if(cat === "Ssp"){
-             $("#invoiceNo").show();
-             $("#wholeLechon").show();
-             $("#description").show();
-
-             $("#drNo").hide();
-             $("#wholeLechon6000").hide();
-             $("#descriptionDrNo").hide();
-             $("#drList").hide();
-         }else if(cat === "Private Order"){
-             $("#drNo").show();
-             $("#wholeLechon6000").show();
-             $("#descriptionDrNo").show();
-             $("#drList").show();
-             $("#invoiceNo").hide();
-             $("#wholeLechon").hide();
-             $("#description").hide();
-         }  
-    });
-
-	$(".drSelect").change(function(){
-
-	});
+	
 </script>
 @endsection

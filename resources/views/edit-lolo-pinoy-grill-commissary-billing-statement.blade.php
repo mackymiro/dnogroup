@@ -5,7 +5,16 @@
   $(document).ready(function(){
       $('.alert-success').fadeIn().delay(3000).fadeOut();
   });
+
+  $(function() {
+        $( ".datepicker" ).datepicker();
+  });
 </script>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="wrapper">
 		@include('sidebar.sidebar-lolo-pinoy-grill')
 		<div id="content-wrapper"> 
@@ -19,7 +28,7 @@
 		            </ol>
 		             <a href="{{ url('lolo-pinoy-grill-commissary/billing-statement-lists') }}">Back to Lists</a>
 		             <div class="col-lg-12">
-		            	 <img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill ">
+		            	 <img src="{{ asset('images/digitized-logos/lolo-pinoy-grill.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill ">
 		            	 
 		            	 <h4 class="text-center"><u>BILLING STATEMENT/COLLECTION STATEMENT</u></h4>
 		            </div>
@@ -45,7 +54,7 @@
 	            	 						</div>
 	            	 						<div class="col-lg-2">
 	        	 								<label>Date</label>
-	        	 								<input type="text" name="date" class="form-control" value="{{ $billingStatement['date']}}" />
+	        	 								<input type="text" name="date" class="datepicker form-control" value="{{ $billingStatement['date']}}" />
 	    	 								 	
 	            	 						</div>
 	            	 						<div class="col-lg-4">
@@ -62,37 +71,24 @@
 	                            	</div>
 	                            	<div class="form-group">	
                             			<div class="form-row">
-                        					<div class="col-lg-2">
-	            	 							<label>PO Number</label>
-	            	 							<select name="poNumber" class="form-control">
-	    	 									  	 @foreach($getPurchaseOrders as $getPurchaseOrder)
-			                                            <option value="{{ $getPurchaseOrder['p_o_number'] }}" {{ ( $billingStatement['p_o_number'] == $getPurchaseOrder['p_o_number']) ? 'selected' : '' }}>{{ $getPurchaseOrder['p_o_number'] }}</option>
-		                                            @endforeach
-	            	 							</select>
-	            	 						</div>
 	            	 						<div class="col-lg-2">
 	            	 							<label>Terms</label>
 	            	 							<input type="text" name="terms" class="form-control" value="{{ $billingStatement['terms']}}" />
-	            	 							
 	            	 						</div>
                             			</div>
 	                            	</div>
 	                            	<div class="form-group">
 	                            		<div class="form-row">	
-                            				<div class="col-lg-1">
+                            				<div class="col-lg-2">
 	        	 								<label>Date</label>
-	        	 								<input type="text" name="transactionDate" class="form-control" value="{{ $billingStatement['date_of_transaction']}}" />
+	        	 								<input type="text" name="transactionDate" class="datepicker form-control" value="{{ $billingStatement['date_of_transaction']}}" />
 	        	 								
 	            	 						</div>
-	            	 						<div class="col-lg-1">
+	            	 						<div class="col-lg-2">
 	        	 								<label>Invoice #</label>
 	        	 								<input type="text" name="invoiceNumber" class="form-control" value="{{ $billingStatement['invoice_number']}}" />
 	            	 						</div>
-	            	 						<div class="col-lg-4">
-	            	 							<label>Whole Lechon 500/KL</label>
-	            	 							<input type="text" name="wholeLechon" class="form-control" value="{{ $billingStatement['whole_lechon'] }}" />
-	            	 							
-	            	 						</div>
+	            	 					
 	            	 						<div class="col-lg-4">
 	        	 								<label>Description</label>
 	        	 								<input type="text" name="description" class="form-control" value="{{ $billingStatement['description']}}" />
@@ -103,11 +99,11 @@
 	        	 								<input type="text" name="amount" class="form-control" value="<?php echo number_format($billingStatement['amount'], 2); ?>" disabled="disabled" />
 	        	 								
 	            	 						</div>
-	            	 						 <div class="col-lg-12 float-right">
-		                                        <br>
-		                                        <br>
-		                                        <input type="submit" class="btn btn-success"  value="Update Billing Statement" />
-		                                      </div>
+											 <div class="col-lg-12 float-right">
+												<br>
+												<br>
+												<input type="submit" class="btn btn-success float-right btn-lg"  value="Update Billing Statement" />
+                                      		</div>
 	                            		</div>                            		
 	                            	</div>
 	                            	</form>
@@ -116,13 +112,55 @@
 		            	 </div>
 		            </div>
 		            <div class="row">
-	            		 <div class="col-lg-12">
+	            		 <div class="col-lg-4">
             				<div class="card mb-3">
             					<div class="card-header">
-	                              <i class="fas fa-receipt" aria-hidden="true"></i>
-	                            Edit Billing Statement</div>
+	                              <i class="fas fa-plus" aria-hidden="true"></i>
+	                              Add </div>
 	                            <div class="card-body">
-	                            	 @if(session('SuccessEdit'))
+									<form action="{{ action('LoloPinoyGrillCommissaryController@addNewBillingData', $id) }}" method="post">
+									{{csrf_field()}}
+									<div class="form-group">
+	                            		<div class="form-row">	
+                            				<div class="col-lg-12">
+	        	 								<label>Date</label>
+	        	 								<input type="text" name="transactionDate" class="datepicker form-control" required />
+	        	 								
+	            	 						</div>
+	            	 						<div class="col-lg-12">
+	        	 								<label>Invoice #</label>
+	        	 								<input type="text" name="invoiceNumber" class="form-control"  />
+	            	 						</div>
+	            	 					
+	            	 						<div class="col-lg-12">
+	        	 								<label>Description</label>
+	        	 								<input type="text" name="description" class="form-control"/>
+	        	 								
+	            	 						</div>
+	            	 						<div class="col-lg-12">
+	        	 								<label>Amount</label>
+	        	 								<input type="text" name="amount" class="form-control" value="" />
+	        	 								
+	            	 						</div>
+	            	 					
+	                            		</div>                            		
+	                            	</div>
+									<div>
+  										<button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-plus"></i>Add</button>
+									</div>
+									</form>
+	                            </div>
+								
+            				</div>
+	            		</div>
+						<div class="col-lg-8">
+  							<div class="card mb-3">
+								<div class="card-header">
+	                              <i class="fas fa-receipt" aria-hidden="true"></i>
+	                            	Edit Billing Statement
+								</div>
+								<div class="card-body">
+								@if(session('SuccessEdit'))
 	                                   <p class="alert alert-success">{{ Session::get('SuccessEdit') }}</p>
 	                                  @endif 
 	                            	 @foreach($bStatements as $bStatement)
@@ -131,30 +169,26 @@
                                     <input name="_method" type="hidden" value="PATCH">
 	                            	<div class="form-group">
 	                            		<div id="deletedId{{ $bStatement['id'] }}" class="form-row">
-	                            			<div class="col-lg-1">
+	                            			<div class="col-lg-2">
 	                                            <label>Date</label>
 	                                            <input type="text" name="transactionDate" class="form-control" value="{{ $bStatement['date_of_transaction']}}" />
 		                                    </div>
-		                                    <div class="col-lg-1">
+		                                    <div class="col-lg-2">
 	        	 								<label>Invoice #</label>
 	        	 								<input type="text" name="invoiceNumber" class="form-control" value="{{ $bStatement['invoice_number']}}" />
 	            	 						</div>
-	            	 						<div class="col-lg-2">
-	            	 							<label>Whole Lechon 500/KL</label>
-	            	 							<input type="text" name="wholeLechon" class="form-control" value="{{ $bStatement['whole_lechon']}}" />
-	            	 							
-	            	 						</div>
+	            	 					
 	            	 						<div class="col-lg-4">
 	        	 								<label>Description</label>
 	        	 								<input type="text" name="description" class="form-control" value="{{ $bStatement['description']}}" />
 	        	 								
 	            	 						</div>
-	            	 						<div class="col-lg-1">
+	            	 						<div class="col-lg-2">
 	        	 								<label>Amount</label>
 	        	 								<input type="text" name="amount" class="form-control" value="<?php echo number_format($bStatement['amount'], 2); ?>" disabled="disabled" />
 	        	 								
 	            	 						</div>
-	            	 						<div class="col-lg-2">
+	            	 						<div class="col-lg-4">
 	                                          <br>
 	                                          <input type="hidden" name="billingStatementId" value="{{ $billingStatement['id'] }}" />
 	                                          <input type="submit" class="btn btn-success" value="Update" />
@@ -167,16 +201,12 @@
 	                            	</div>
 	                            	 </form>
 	                            	@endforeach
-	                            	 <div>
-	                                  @if(Auth::user()['role_type'] == 1)
-	                                  <a href="{{ url('lolo-pinoy-grill-commissary/add-new-lolo-pinoy-grill-billing-statement/'.$billingStatement['id'] ) }}" class="btn btn-primary">Add New</a>
-	                                  @endif
-	                                </div>
-
-	                            </div>
-            				</div>
-	            		</div>
+	                            	 
+								</div>	
+							</div>
+						</div>
 		            </div>
+				
 			</div>	
 		</div>
 		 <!-- Sticky Footer -->
@@ -191,32 +221,33 @@
         </div>
       </footer>
 </div>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
-	 function confirmDelete(id){
-      var x = confirm("Do you want to delete this?");
-        if(x){
-            $.ajax({
-              type: "DELETE",
-              url: '/lolo-pinoy-grill-commissary/delete-billing-statement/' + id,
-              data:{
-                _method: 'delete', 
-                "_token": "{{ csrf_token() }}",
-                "id": id
-              },
-              success: function(data){
-                console.log(data);
-                $("#deletedId"+id).fadeOut('slow');
-              },
-              error: function(data){
-                console.log('Error:', data);
-              }
+	 const confirmDelete = (id) =>{
+		const billingStatementId =  $("#billingStatementId").val();		
+		var x = confirm("Do you want to delete this?");
+			if(x){
+				$.ajax({
+				type: "DELETE",
+				url: '/lolo-pinoy-grill-commissary/delete-data-billing-statement/' + id,
+				data:{
+					_method: 'delete', 
+					"_token": "{{ csrf_token() }}",
+					"id": id,
+					"billingStatementId":billingStatementId
+				},
+				success: function(data){
+					console.log(data);
+					$("#deletedId"+id).fadeOut('slow');
+				},
+				error: function(data){
+					console.log('Error:', data);
+				}
 
-            });
+				});
 
-        }else{
-            return false;
-        }
+			}else{
+				return false;
+			}
    }
 </script>
 @endsection

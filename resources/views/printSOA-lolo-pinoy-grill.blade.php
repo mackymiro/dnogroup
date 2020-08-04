@@ -44,27 +44,27 @@
                                           <thead>
                                             <tr>
                                                 <th width="25%">Bill To</th>
-                                                <th> {{ $Soa['bill_to'] }}</th>
+                                                <th> {{ $Soa[0]->bill_to }}</th>
                                             </tr>
                                             <tr>
                                                 <th>Address</th>
-                                                <th>{{ $Soa['address'] }}</th>
+                                                <th>{{ $Soa[0]->address }}</th>
                                             </tr>
                                             <tr>
                                                 <th>Period Covered</th>
-                                                <th> {{ $Soa['period_cover'] }} </th>
+                                                <th> {{ $Soa[0]->period_cover }} </th>
                                             </tr>
                                             <tr>
                                                 <th>Date</th>
-                                                <th>{{ $Soa['date'] }}</th>
+                                                <th>{{ $Soa[0]->date }}</th>
                                             </tr>
                                              <tr>
                                                 <th>Branch</th>
-                                                <th>{{ $Soa['branch'] }}</th>
+                                                <th>{{ $Soa[0]->branch }}</th>
                                             </tr>
                                              <tr>
                                                 <th>Payment Method</th>
-                                                <th>{{ $Soa['payment_method'] }}</th>
+                                                <th>{{ $Soa[0]->payment_method }}</th>
                                             </tr>
                                             <tr>
                                                 <th>Total Amount</th>
@@ -80,20 +80,17 @@
 	                              <table >
 	                                   <thead>
                                             <tr>
-                                                <th width="20%">Reference #</th>
-                                                <th>{{ $Soa['reference_number'] }}</th>
+                                                <th width="20%">SOA No</th>
+                                                <th>{{ $Soa[0]->module_code }}{{ $Soa[0]->lolo_pinoy_grill_code }}</th>
                                             </tr>
-                                            <tr>
-                                                <th>PO Number</th>
-                                                <th> {{ $Soa['p_o_number'] }}</th>
-                                            </tr>
+                                          
                                             <tr>
                                                 <th>Terms</th>
-                                                <th>{{ $Soa['terms'] }}</th>
+                                                <th>{{ $Soa[0]->terms }}</th>
                                             </tr>
                                              <tr>
                                                 <th>Collection Date</th>
-                                                <th>{{ $Soa['collection_date'] }}</th>
+                                                <th>{{ $Soa[0]->collection_date }}</th>
                                             </tr>
                                         </thead>
 	                              </table>
@@ -112,7 +109,6 @@
                                       <tr>
                                         <th style="height: 1%; text-align: center;">DATE</th>
                                         <th style="height: 1%; text-align: center;">INVOICE #</th>
-                                        <th style="height: 1%; text-align: center;">WHOLE LECHON 500/KL</th>
                                         <th style="height: 1%; text-align: center;">DESCRIPTION</th>
                                         <th style="height: 1%; text-align: center;">AMOUNT</th>
                                         <th style="height: 1%; text-align: center;">STATUS</th>
@@ -120,12 +116,11 @@
                                     </thead>
                                   <tbody>
                                   		<tr style="border:1px solid black;">
-                                      <td style="text-align:center; border: 1px solid black;">{{ $Soa['date_of_transaction'] }}</td>
-                                      <td style="text-align:center; border: 1px solid black;">{{ $Soa['invoice_number'] }}</td>
-                                      <td style="text-align:center; border: 1px solid black;">{{ $Soa['whole_lechon'] }}</td>
-                                      <td style="text-align:center; border: 1px solid black;">{{ $Soa['description'] }}</td>
-                                      <td style="text-align:center; border: 1px solid black;"><?php echo number_format($Soa['amount'], 2); ?></td>
-                                       <td style="text-align:center; border: 1px solid black;">{{ $Soa['status'] }}</td>
+                                      <td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->date_of_transaction }}</td>
+                                      <td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->invoice_number }}</td>
+                                      <td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->description }}</td>
+                                      <td style="text-align:center; border: 1px solid black;"><?php echo number_format($Soa[0]->amount, 2); ?></td>
+                                       <td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->status }}</td>
                                   	 	</tr>
                                   	 	 @foreach($statementAccounts as $statementAccount)
                                         <tr style="border:1px solid black;">
@@ -139,14 +134,14 @@
                                         @endforeach
                                       
 	                                      
-	                                       <tr style="border:1px solid black;">
+                                        <tr style="border:1px solid black;">
 	                                        <td style=" border: 1px solid black;"></td>
 	                                        <td style=" border: 1px solid black;"></td>
-                                          <td style=" border: 1px solid black;"></td>
+                                            <td style=" border: 1px solid black;"></td>
 	                                        <td style="text-align:center; border: 1px solid black;"><strong>Total</strong></td>
 	                                        <td style=" text-align:center; border: 1px solid black;"> <?php echo number_format($sum, 2)?></td>
                                           <td  style=" border: 1px solid black;"></td>
-	                                      </tr>
+                                        </tr>
                                   </tbody>
                           </table>
                            <div style="margin-top:100px;">
@@ -161,7 +156,7 @@
                            				<tr>
                            					<td>
                            						________________________<br>
-                           						{{ $Soa['created_by']}}
+                           						{{ $Soa[0]->created_by }}
 
                            					</td>
                            					<td>

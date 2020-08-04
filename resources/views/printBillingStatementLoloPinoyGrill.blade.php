@@ -43,19 +43,19 @@
                                           <thead>
                                             <tr>
                                                 <th width="30%">Bill To</th>
-                                                <th> {{ $printBillingStatement['bill_to'] }}</th>
+                                                <th> {{ $printBillingStatement[0]->bill_to }}</th>
                                             </tr>
                                             <tr>
                                                 <th>Address</th>
-                                                <th>{{ $printBillingStatement['address'] }}</th>
+                                                <th>{{ $printBillingStatement[0]->address }}</th>
                                             </tr>
                                             <tr>
                                                 <th>Period Covered</th>
-                                                <th> {{ $printBillingStatement['period_cover'] }} </th>
+                                                <th> {{ $printBillingStatement[0]->period_cover }} </th>
                                             </tr>
                                             <tr>
                                                 <th>Date</th>
-                                                <th>{{ $printBillingStatement['date'] }}</th>
+                                                <th>{{ $printBillingStatement[0]->date }}</th>
                                             </tr>
                                         </thead>
                                       
@@ -65,16 +65,13 @@
 	                              <table >
 	                                   <thead>
                                             <tr>
-                                                <th width="20%">Reference #</th>
-                                                <th>{{ $printBillingStatement['reference_number'] }}</th>
+                                                <th width="20%">BS No</th>
+                                                <th>{{ $printBillingStatement[0]->module_code }}{{ $printBillingStatement[0]->lolo_pinoy_grill_code}}</th>
                                             </tr>
-                                            <tr>
-                                                <th>PO Number</th>
-                                                <th> {{ $printBillingStatement['p_o_number'] }}</th>
-                                            </tr>
+                                            
                                             <tr>
                                                 <th>Terms</th>
-                                                <th>{{ $printBillingStatement['terms'] }}</th>
+                                                <th>{{ $printBillingStatement[0]->terms }}</th>
                                             </tr>
                                         </thead>
 	                              </table>
@@ -92,24 +89,21 @@
                                       <tr>
                                         <th style="height: 1%; text-align: center;">DATE</th>
                                         <th style="height: 1%; text-align: center;">INVOICE #</th>
-                                        <th style="height: 1%; text-align: center;">WHOLE LECHON 500/KL</th>
                                         <th style="height: 1%; text-align: center;">DESCRIPTION</th>
                                         <th style="height: 1%; text-align: center;">AMOUNT</th>
                                       </tr>
                                     </thead>
                                   <tbody>
                                   		<tr style="border:1px solid black;">
-                                      <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement['date_of_transaction'] }}</td>
-                                      <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement['invoice_number'] }}</td>
-                                      <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement['whole_lechon'] }}</td>
-                                      <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement['description'] }}</td>
-                                      <td style="text-align:center; border: 1px solid black;"><?php echo number_format($printBillingStatement['amount'], 2); ?></td>
+                                      <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->date_of_transaction }}</td>
+                                      <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->invoice_number }}</td>
+                                      <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->description }}</td>
+                                      <td style="text-align:center; border: 1px solid black;"><?php echo number_format($printBillingStatement[0]->amount, 2); ?></td>
                                   	 	</tr>
                                   	 	 @foreach($billingStatements as $billingStatement)
                                         <tr style="border:1px solid black;">
                                           <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['date_of_transaction'] }}</td>
                                           <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['invoice_number'] }}</td>
-                                          <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['whole_lechon'] }}</td>
                                           <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['description'] }}</td>
                                           <td style="text-align:center; border: 1px solid black;"><?php echo number_format($billingStatement['amount'], 2);?></td>
                                         </tr> 
@@ -119,7 +113,6 @@
 	                                       <tr style="border:1px solid black;">
 	                                        <td style=" border: 1px solid black;"></td>
 	                                        <td style=" border: 1px solid black;"></td>
-                                          <td style=" border: 1px solid black;"></td>
 	                                        <td style=" border: 1px solid black;"><strong>Total</strong></td>
 	                                        <td style=" text-align:center; border: 1px solid black;"> <?php echo number_format($sum, 2)?></td>
 	                                      </tr>
@@ -137,7 +130,7 @@
                            				<tr>
                            					<td>
                            						________________________<br>
-                           						{{ $printBillingStatement['created_by']}}
+                           						{{ $printBillingStatement[0]->created_by}}
 
                            					</td>
                            					<td>
