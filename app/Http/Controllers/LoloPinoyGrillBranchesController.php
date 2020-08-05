@@ -22,6 +22,11 @@ use App\LoloPinoyGrillBranchesSupplier;
 class LoloPinoyGrillBranchesController extends Controller
 {   
 
+    public function deliveryInTransaction(){
+        
+        return view('lolo-pinoy-grill-branches-delivery-in-transaction');
+    }
+
     public function viewSupplier($id){
         $viewSupplier = LoloPinoyGrillBranchesSupplier::where('id', $id)->get();
 

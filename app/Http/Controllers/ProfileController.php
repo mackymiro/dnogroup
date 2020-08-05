@@ -8,10 +8,33 @@ use Illuminate\Support\Facades\DB;
 use Auth;
 use App\User;
 use Session; 
+use Hash; 
 
 
 class ProfileController extends Controller
 {
+
+    public function resetBranchPassword(Request $request){
+        $password = $request->get('password');   
+
+        $selectBranch = $request->get('selectBranch');
+
+        $branchPassword = User::where('select_branch', $selectBranch)->get()->first();
+       
+        if($branchPassword['select_branch'] === NULL){
+            return redirect()->route('createBranch')->with('errorBranch', 'Please create first a Branch Access for this.');
+        }else{
+           
+            $setPassword = User::find($branchPassword['id']);
+            $setPassword->password = Hash::make($password);
+            $setPassword->save();
+    
+            Session::flash('resetPassword', 'Successfully reset a branch password.');
+            return redirect()->route('createBranch');
+        }
+     
+    }
+
     public function storeCreateBranch(Request $request){
         $firstName = "NULL";
         $lastName = "NULL";
@@ -43,8 +66,7 @@ class ProfileController extends Controller
             return redirect()->route('createBranch')->with('error', 'You already created an access for this.');
         }
        
-        
-
+    
 
     }
 

@@ -107,6 +107,14 @@
                           Reset Branch Password
                         </div>
                         <div class="card-body">
+                            <form action="{{ action('ProfileController@resetBranchPassword') }}" method="post">
+                            {{ csrf_field() }}
+                            @if(session('resetPassword'))
+                                 <p class="alert alert-success">{{ Session::get('resetPassword') }}</p>
+                             @endif 
+                             @if(session('errorBranch'))
+                                 <p class="alert alert-danger">{{ Session::get('errorBranch') }}</p>
+                             @endif 
                             <div class="form-group">
                                  <div class="form-row">
                                     <div class="col-lg-4">
@@ -136,6 +144,7 @@
                                     </div>
                                 </div>
                             </div>
+                            </form>
                         </div>
                      </div>
                  </div>

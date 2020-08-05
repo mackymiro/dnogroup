@@ -48,6 +48,11 @@ Route::group(['middleware' =>['user']], function(){
 		'ProfileController@storeCreateBranch')
 		->name('storeCreateBranch');
 
+	Route::post(
+		'/profile/reset-password-branch',
+		'ProfileController@resetBranchPassword')
+		->name('resetBranchPassword');
+
 	//route for summary reports
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/summary-report/per-day',
@@ -1375,12 +1380,12 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::post('/profile/update/{id}', 'ProfileController@update')->name('profile.update');
 
 	//route for change password
-	Route::get('/change-password', 'ChangePasswordController@index')->name('change-password.index');
+	Route::get('/change-password', 'ChangePasswordController@index')->name('index');
 
-	Route::patch('/change-password/update/{id}', 'ChangePasswordController@update')->name('change-password.update');
+	Route::patch('/change-password/update/{id}', 'ChangePasswordController@update')->name('update');
 
 	//route for lolo pinoy lechon de cebu
-	Route::get('lolo-pinoy-lechon-de-cebu', 'LoloPinoyLechonDeCebuController@index')->name('lolo-pinoy-lechon-de-cebu.index');
+	Route::get('lolo-pinoy-lechon-de-cebu', 'LoloPinoyLechonDeCebuController@index')->name('index');
 
 	//route for summary reports
 	Route::get(
@@ -2393,6 +2398,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'/lolo-pinoy-grill-branches/suppliers/view/{id}',
 		'LoloPinoyGrillBranchesController@viewSupplier')
 		->name('viewSupplier');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/store-stock/delivery-in-transactions',
+		'LoloPinoyGrillBranchesController@deliveryInTransaction')
+		->name('deliveryInTransaction');
 
 	//Mr Potato
 	Route::get('/mr-potato', 'MrPotatoController@index')->name('mr-potato.index');
