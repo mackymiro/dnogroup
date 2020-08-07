@@ -210,7 +210,7 @@
 	                                       <tr style="border:1px solid black;">
 	                                       
 	                                        <td style=" text-align:center; border: 1px solid black;"><strong>Total</strong></td>
-	                                        <td style=" text-align:center; border: 1px solid black; font-size:18px;"> <?php echo number_format($sum, 2)?></td>
+	                                        <td style=" text-align:center; border: 1px solid black; font-size:18px;"> <?php echo number_format($sumCheque, 2)?></td>
 	                                      </tr>
                                   </tbody>
                           </table>

@@ -4763,6 +4763,7 @@ class LoloPinoyGrillCommissaryController extends Controller
                 ->where('product_name', $request->productName)
                 ->get()->first();
 
+                
         if($target  === NULL){
             $addNewRawMaterial = new LoloPinoyGrillCommissaryRawMaterial([
                 'user_id'=>$user->id,

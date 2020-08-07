@@ -3729,7 +3729,7 @@ class DnoPersonalController extends Controller
         //getParticular details
          $getParticulars = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
         
-         $getChequeNumbers = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
+        $getChequeNumbers = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
         $getCashAmounts = DnoPersonalPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
         
@@ -3746,7 +3746,7 @@ class DnoPersonalController extends Controller
        
 
         $pdf = PDF::loadView('printPayablesDnoPersonal', compact('payableId',  
-        'getChequeNumbers', 'getCashAmounts', 'sum', 'getParticulars'));
+        'getChequeNumbers', 'getCashAmounts', 'sum', 'getParticulars', 'sumCheque'));
 
         return $pdf->download('dno-personal-payment-voucher.pdf');
     }

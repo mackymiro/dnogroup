@@ -16,7 +16,7 @@
               <li class="breadcrumb-item active">Sales Invoice Form</li> 
             </ol>          
             <div class="col-lg-12">
-            	<img src="{{ asset('images/lolo-pinoy-grill.jpeg')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill ">
+            	<img src="{{ asset('images/digitized-logos/lolo-pinoy-grill.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill ">
             	 
             	 <h4 class="text-center"><u>SALES INVOICE FORM</u></h4>
                    

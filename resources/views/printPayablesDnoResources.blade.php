@@ -119,26 +119,23 @@
                           <br>
                           <br>
                           <br>
-                
+
+						  @if($payableId[0]->method_of_payment === "CHECK")
                           <table style="border:1px solid black;">
                           		  <thead>
                                       <tr>
-										@if($payableId[0]->method_of_payment === "CASH")
-                                        <th style="height: 1%; text-align: center;">CASH NO ISSUED</th>
-                                        <th style="height: 1%; text-align: center;">CASH AMOUNT</th>
-										@else
-                                        <th style="height: 1%; text-align: center;">CHECK NO ISSUED</th>
+										<th style="height: 1%; text-align: center;">CHECK NO ISSUED</th>
                                         <th style="height: 1%; text-align: center;">CHECK AMOUNT</th>
-                                        @endif
+                                       
                                       </tr>
                                     </thead>
                                   <tbody>
                                   	
-                                  	 	 @foreach($payablesVouchers as $payablesVoucher)
+										@foreach($getChequeNumbers as $getChequeNumber)
                                         <tr style="border:1px solid black;">
-                                          <td style="text-align:center; border: 1px solid black;">{{ $payablesVoucher['cheque_number'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;">{{ $getChequeNumber['cheque_number'] }}</td>
                                          
-                                          <td style="text-align:center; border: 1px solid black;"><?php echo number_format($payablesVoucher['cheque_amount'], 2);?></td>
+                                          <td style="text-align:center; border: 1px solid black; font-size:18px;"><?php echo number_format($getChequeNumber['cheque_amount'], 2);?></td>
                                         </tr> 
                                         @endforeach
                                       
@@ -146,10 +143,51 @@
 	                                       <tr style="border:1px solid black;">
 	                                       
 	                                        <td style=" text-align:center; border: 1px solid black;"><strong>Total</strong></td>
-	                                        <td style=" text-align:center; border: 1px solid black;"> <?php echo number_format($sum, 2)?></td>
+	                                        <td style=" text-align:center; border: 1px solid black; font-size:18px;"> <?php echo number_format($sumCheque, 2)?></td>
 	                                      </tr>
                                   </tbody>
                           </table>
+						  @else
+
+						  <table style="border:1px solid black;">
+                          		  <thead>
+                                      <tr>
+                                        <th style="height: 1%; text-align: center;">CASH NO ISSUED</th>
+                                        <th style="height: 1%; text-align: center;">CASH AMOUNT</th>
+                                       
+                                      </tr>
+                                    </thead>
+                                  <tbody>
+                                  	
+                                  	 	 @foreach($getCashAmounts as $getCashAmount)
+                                        <tr style="border:1px solid black;">
+                                          <td style="text-align:center; border: 1px solid black;">{{ $getCashAmount['cheque_number'] }}</td>
+                                         
+                                          <td style="text-align:center; border: 1px solid black; font-size:18px;" >
+										
+                                            @if($getCashAmount['currency'] === "USD")
+                                            $
+
+                                            @endif 	
+										  <?php echo number_format($getCashAmount['cheque_amount'], 2);?></td>
+                                        </tr> 
+                                        @endforeach
+                                      
+	                                      
+	                                       <tr style="border:1px solid black;">
+	                                       
+	                                        <td style=" text-align:center; border: 1px solid black;"><strong>Total</strong></td>
+	                                        <td style=" text-align:center; border: 1px solid black; font-size:18px;"> 
+											
+                                            @if($payableId[0]->currency === "USD")
+                                            $
+
+                                            @endif 	
+											<?php echo number_format($sum, 2)?></td>
+	                                      </tr>
+                                  </tbody>
+                          </table>
+						  @endif
 						  <br>
 						  <table style="border:1px solid black;">
 								<thead>

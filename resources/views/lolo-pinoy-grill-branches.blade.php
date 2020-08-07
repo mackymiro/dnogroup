@@ -2,9 +2,7 @@
 @section('content')
 <script>
   $(document).ready(function(){
-    
-
-      $('table.display').DataTable( {} );
+	$('table.display').DataTable( {} );
   });
 </script>
 <div id="wrapper">

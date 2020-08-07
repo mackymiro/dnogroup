@@ -1118,7 +1118,7 @@ Route::group(['middleware' =>['user']], function(){
 	Route::get(
 		'/dno-resources-development/view-dno-resources-payables-details/{id}',
 		'DnoResourcesDevelopmentController@viewPayableDetails')
-		->name('dno-resources-development.viewPayableDetails');
+		->name('viewPayableDetails');
 
 	Route::get(
 		'/dno-resources-development/printPayables/{id}',
@@ -2247,7 +2247,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/lolo-pinoy-grill-branches/sales-form',
 		'LoloPinoyGrillBranchesController@salesInvoiceForm')
-		->name('salesInvoiceForm');
+		->name('salesInvoiceFormLoloPinoyGrillBranches');
 
 	Route::get(
 		'/lolo-pinoy-grill-branches/{type}/sales-form',
@@ -2370,11 +2370,6 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('destroyUtility');
 
 	Route::get(
-		'/lolo-pinoy-grill-branches/store-stock/stock-status',
-		'LoloPinoyGrillBranchesController@stockStatus')
-		->name('stockStatus');
-
-	Route::get(
 		'/lolo-pinoy-grill-branches/store-stock/stock-inventory',
 		'LoloPinoyGrillBranchesController@stockInventory')
 		->name('stockInventory');
@@ -2400,9 +2395,39 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('viewSupplier');
 
 	Route::get(
-		'/lolo-pinoy-grill-branches/store-stock/delivery-in-transactions',
+		'/lolo-pinoy-grill-branches/store-stock/delivery-in-transaction',
 		'LoloPinoyGrillBranchesController@deliveryInTransaction')
-		->name('deliveryInTransaction');
+		->name('deliveryInTransactionLpGrillBranches');
+
+	Route::post(
+		'/lolo-pinoy-grill-branches/store-stock/login',
+		'LoloPinoyGrillBranchesController@loginDeliveryTransaction')
+		->name('loginDeliveryTransaction');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/{type}/delivery-in-transaction',
+		'LoloPinoyGrillBranchesController@deliveryInTransactionBranch')
+		->name('deliveryInTransactionBranch');
+
+	Route::post(
+		'/lolo-pinoy-grill-branches/store-delivery-in',
+		'LoloPinoyGrillBranchesController@storeDeliveryIn')
+		->name('storeDeliveryIn');
+
+	Route::post(
+		'/lolo-pinoy-grill-branches/store-stock/logout',
+		'LoloPinoyGrillBranchesController@logoutDeliveryIn')
+		->name('logoutDeliveryIn');
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/store-stock/stock-status',
+		'LoloPinoyGrillBranchesController@stockStatus')
+		->name('stockStatus');
+
+	Route::patch(
+		'/lolo-pinoy-grill-branches/update-store-delivery-in/{id}',
+		'LoloPinoyGrillBranchesController@updateDeliveryIn')
+		->name('updateDeliveryIn');
 
 	//Mr Potato
 	Route::get('/mr-potato', 'MrPotatoController@index')->name('mr-potato.index');

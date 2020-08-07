@@ -106,7 +106,7 @@
           <span>Store Stock</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-             <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/store-stock/delivery-in-transactions') }}">Delivery In Transactions</a>
+             <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/store-stock/delivery-in-transaction') }}">Delivery In Transactions</a>
       
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/store-stock/stock-status') }}">Stock Status</a>
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/store-stock/stock-inventory') }}">Stock Inventory</a>

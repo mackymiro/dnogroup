@@ -2430,23 +2430,28 @@ class DnoResourcesDevelopmentController extends Controller
                             ->where('dno_resources_development_codes.module_name', $moduleName)
                             ->get();
 
-        $payablesVouchers = DnoResourcesDevelopmentCorpPaymentVoucher::where('pv_id', $id)->get()->toArray();
-
         //getParticular details
         $getParticulars = DnoResourcesDevelopmentCorpPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
     
 
-          //count the total amount 
-        $countTotalAmount = DnoResourcesDevelopmentCorpPaymentVoucher::where('id', $id)->sum('amount_due');
+         $getChequeNumbers = DnoResourcesDevelopmentCorpPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
-
-          //
-        $countAmount = DnoResourcesDevelopmentCorpPaymentVoucher::where('pv_id', $id)->sum('amount_due');
-
-        $sum  = $countTotalAmount + $countAmount;
+        $getCashAmounts = DnoResourcesDevelopmentCorpPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
+        
+         $amount1 = DnoResourcesDevelopmentCorpPaymentVoucher::where('id', $id)->sum('amount');
+         $amount2 = DnoResourcesDevelopmentCorpPaymentVoucher::where('pv_id', $id)->sum('amount');
+           
+         $sum = $amount1 + $amount2;
+         
+         //
+         $chequeAmount1 = DnoResourcesDevelopmentCorpPaymentVoucher::where('id', $id)->sum('cheque_amount');
+         $chequeAmount2 = DnoResourcesDevelopmentCorpPaymentVoucher::where('pv_id', $id)->sum('cheque_amount');
+         
+         $sumCheque = $chequeAmount1 + $chequeAmount2;
        
 
-        $pdf = PDF::loadView('printPayablesDnoResources', compact('payableId', 'payablesVouchers', 'sum', 'getParticulars'));
+        $pdf = PDF::loadView('printPayablesDnoResources', compact('payableId', 
+        'getChequeNumbers', 'getCashAmounts', 'sum', 'getParticulars', 'sumCheque'));
 
         return $pdf->download('dno-resources-payment-voucher.pdf');
     }
@@ -2467,6 +2472,7 @@ class DnoResourcesDevelopmentController extends Controller
                             'dno_resources_development_corp_payment_vouchers.particulars',
                             'dno_resources_development_corp_payment_vouchers.amount',
                             'dno_resources_development_corp_payment_vouchers.method_of_payment',
+                            'dno_resources_development_corp_payment_vouchers.currency',
                             'dno_resources_development_corp_payment_vouchers.prepared_by',
                             'dno_resources_development_corp_payment_vouchers.approved_by',
                             'dno_resources_development_corp_payment_vouchers.date_apprroved',

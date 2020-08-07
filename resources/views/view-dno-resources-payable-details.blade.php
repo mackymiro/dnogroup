@@ -82,6 +82,10 @@
                                                       <th width="30%">Payment Method</th>
                                                       <th>{{ $viewPaymentDetail[0]->method_of_payment}}</th>
                                                   </tr>
+                                                  <tr>
+                                                      <th width="35%">Currency</th>
+                                                      <th>{{ $viewPaymentDetail[0]->currency}}</th>
+                                                  </tr>
                                                  
                                               </thead>
                                           </table>
