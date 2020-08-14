@@ -2913,11 +2913,7 @@ class DnoResourcesDevelopmentController extends Controller
     public function index()
     {
         //
-         $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-
-        return view('dno-resources', compact('user'));
+        return view('dno-resources');
 
     }
 

@@ -19,6 +19,17 @@
         </div>
       </li>
       @endif
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-cash-register"></i>
+          <span>Sales Invoice</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item" href="">Sales Invoice Form</a>
+          <a class="dropdown-item" href="{{ url('dno-resources-development') }}">Lists</a>
+          
+        </div>
+      </li>
       <li class="nav-item dropdown ">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fab fa-first-order"></i>
