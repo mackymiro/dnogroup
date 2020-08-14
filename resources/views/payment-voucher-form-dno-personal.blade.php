@@ -184,6 +184,7 @@
                                                   <option value="Meralco">Meralco</option>
                                                   <option value="MCWD">MCWD</option>
                                                   <option value="PLDT">PLDT</option>
+                                                  <option value="Globe">Globe</option>
                                                   <option value="SKYCABLE">SKYCABLE</option>
                                                   <option value="Service Provider">Service Provider</option>
                                               </select>
@@ -326,7 +327,10 @@
          }else if(bills == "PLDT"){
              $("#selectAccountID").show();
              $("#supplierList").hide();
-         }else if(bills == "SKYCABLE"){
+         }else if(bills == "Globe"){  
+            $("#selectAccountID").show();
+             $("#supplierList").hide();
+          }else if(bills == "SKYCABLE"){
              $("#selectAccountID").show();
              $("#supplierList").hide();
          }else if(bills == "Service Provider"){

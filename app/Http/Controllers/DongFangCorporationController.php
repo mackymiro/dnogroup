@@ -2133,20 +2133,24 @@ class DongFangCorporationController extends Controller
          $getParticulars = DongFangCorporationPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
         
 
-        $payablesVouchers = DongFangCorporationPaymentVoucher::where('pv_id', $id)->get()->toArray();
-        
+         $getChequeNumbers = DongFangCorporationPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
-          //count the total amount 
-        $countTotalAmount = DongFangCorporationPaymentVoucher::where('id', $id)->sum('amount_due');
-
-
+         $getCashAmounts = DongFangCorporationPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
+         
+          $amount1 = DongFangCorporationPaymentVoucher::where('id', $id)->sum('amount');
+          $amount2 = DongFangCorporationPaymentVoucher::where('pv_id', $id)->sum('amount');
+            
+          $sum = $amount1 + $amount2;
+          
           //
-        $countAmount = DongFangCorporationPaymentVoucher::where('pv_id', $id)->sum('amount_due');
-
-        $sum  = $countTotalAmount + $countAmount;
+          $chequeAmount1 = DongFangCorporationPaymentVoucher::where('id', $id)->sum('cheque_amount');
+          $chequeAmount2 = DongFangCorporationPaymentVoucher::where('pv_id', $id)->sum('cheque_amount');
+          
+          $sumCheque = $chequeAmount1 + $chequeAmount2;
        
 
-        $pdf = PDF::loadView('printPayablesDongFang', compact('payableId', 'user', 'payablesVouchers', 'sum', 'getParticulars'));
+        $pdf = PDF::loadView('printPayablesDongFang', compact('payableId', 
+        'getChequeNumbers', 'getCashAmounts', 'sum', 'getParticulars', 'sumCheque'));
 
         return $pdf->download('dong-fang-payment-voucher.pdf');
     }

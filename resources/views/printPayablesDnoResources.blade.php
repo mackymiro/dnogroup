@@ -23,9 +23,9 @@
 <div id="wrapper">
 	 <div id="content-wrapper">
  		<div class="container-fluid">
- 				<div  style="margin-top:60px;">
+ 				<div  style="margin-top:40px;">
             	 <img style="margin-left: 140px;" src="{{ asset('images/dno-resources.jpg')}}" width="420" height="250" alt="DNO Resources and Development Corp">
-            	 	 <p >
+            	 	 <p style="margin-top:-90px;">
 		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
 						Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
 
@@ -143,10 +143,35 @@
 	                                       <tr style="border:1px solid black;">
 	                                       
 	                                        <td style=" text-align:center; border: 1px solid black;"><strong>Total</strong></td>
-	                                        <td style=" text-align:center; border: 1px solid black; font-size:18px;"> <?php echo number_format($sumCheque, 2)?></td>
+	                                        <td style=" text-align:center; border: 1px solid black; font-size:18px;">
+												@if($sumCheque != 0.00)
+													<?php echo number_format($sumCheque, 2);?>
+												@else
+												<?php echo number_format($sum, 2); ?>
+												@endif	
+											</td>
 	                                      </tr>
                                   </tbody>
                           </table>
+						  <br>
+						  <br>
+						  <table style="border:1px solid black">
+								<thead>
+									<tr>
+										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%;"><strong>Total Remaining Balance</strong></td>
+										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%; font-size:18px;">
+											@if($sumCheque != 0.00)
+												<?php 
+													$sumTot = $sum - $sumCheque;
+												?>
+												<?php echo number_format($sumTot, 2);?>
+											@else
+											<?php echo number_format($sum, 2); ?>
+											@endif	
+										</td>
+									</tr>
+								</thead>
+						  </table>
 						  @else
 
 						  <table style="border:1px solid black;">
@@ -183,10 +208,34 @@
                                             $
 
                                             @endif 	
-											<?php echo number_format($sum, 2)?></td>
+											@if($sumCheque != 0.00)
+												<?php echo number_format($sumCheque, 2);?>
+											@else
+											<?php echo number_format($sum, 2); ?>
+											@endif
+											</td>
 	                                      </tr>
                                   </tbody>
                           </table>
+						  <br>
+							<br>
+							<table style="border:1px solid black">
+								<thead>
+									<tr>
+										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%;"><strong>Total Remaining Balance</strong></td>
+										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%; font-size:18px;">
+											@if($sumCheque != 0.00)
+												<?php 
+													$sumTot = $sum - $sumCheque;
+												?>
+												<?php echo number_format($sumTot, 2);?>
+											@else
+											<?php echo number_format($sum, 2); ?>
+											@endif	
+										</td>
+									</tr>
+								</thead>
+							</table>
 						  @endif
 						  <br>
 						  <table style="border:1px solid black;">

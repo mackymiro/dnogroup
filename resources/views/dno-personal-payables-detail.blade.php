@@ -484,7 +484,13 @@
 												<td class="bg-info" style="color:white;">Total</td>
 											
 												
-												<td class="bg-success" style="color:white;"><?php echo number_format($sumCheque, 2);?></td>
+												<td class="bg-success" style="color:white;">
+  													@if($sumCheque != 0.00)
+													<?php echo number_format($sumCheque, 2);?>
+													@else
+													<?php echo number_format($sum, 2); ?>
+													@endif
+												</td>
 											</tr>
 										@else
 											@foreach($getChequeNumbers as $getChequeNumber)
@@ -518,7 +524,14 @@
 												<td class="bg-info" style="color:white;"></td>
 												<td class="bg-info" style="color:white;"></td>
 												
-												<td class="bg-success" style="color:white;"><?php echo number_format($sumCheque, 2);?></td>
+												<td class="bg-success" style="color:white;">
+													
+													@if($sumCheque != 0.00)
+													<?php echo number_format($sumCheque, 2);?>
+													@else
+													<?php echo number_format($sum, 2); ?>
+													@endif
+												</td>
 											</tr>
 										@endif
 				  					</tbody>

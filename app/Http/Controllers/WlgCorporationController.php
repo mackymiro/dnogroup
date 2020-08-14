@@ -2113,6 +2113,7 @@ class WlgCorporationController extends Controller
                             'wlg_corporation_payment_vouchers.status',
                             'wlg_corporation_payment_vouchers.cheque_number',
                             'wlg_corporation_payment_vouchers.cheque_amount',
+                            'wlg_corporation_payment_vouchers.currency',
                             'wlg_corporation_payment_vouchers.sub_category',
                             'wlg_corporation_payment_vouchers.sub_category_account_id',
                             'wlg_corporation_codes.wlg_code',
@@ -2123,24 +2124,28 @@ class WlgCorporationController extends Controller
                             ->where('wlg_corporation_payment_vouchers.id', $id)
                             ->where('wlg_corporation_codes.module_name', $moduleName)
                             ->get();
-
-
-
-
         //getParticular details
          $getParticulars = WlgCorporationPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
         
-        $payablesVouchers = WlgCorporationPaymentVoucher::where('pv_id', $id)->get()->toArray();
+     
+         $getChequeNumbers = WlgCorporationPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
-          //count the total amount 
-        $countTotalAmount = WlgCorporationPaymentVoucher::where('id', $id)->sum('amount_due');
-
-        $countAmount = WlgCorporationPaymentVoucher::where('pv_id', $id)->sum('amount_due');
-
-        $sum  = $countTotalAmount + $countAmount;
+         $getCashAmounts = WlgCorporationPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
+         
+          $amount1 = WlgCorporationPaymentVoucher::where('id', $id)->sum('amount');
+          $amount2 = WlgCorporationPaymentVoucher::where('pv_id', $id)->sum('amount');
+            
+          $sum = $amount1 + $amount2;
+          
+          //
+          $chequeAmount1 = WlgCorporationPaymentVoucher::where('id', $id)->sum('cheque_amount');
+          $chequeAmount2 = WlgCorporationPaymentVoucher::where('pv_id', $id)->sum('cheque_amount');
+          
+          $sumCheque = $chequeAmount1 + $chequeAmount2;
        
 
-        $pdf = PDF::loadView('printPayablesWlg', compact('payableId', 'user', 'payablesVouchers', 'sum', 'getParticulars'));
+        $pdf = PDF::loadView('printPayablesWlg', compact('payableId', 
+            'getChequeNumbers', 'getCashAmounts', 'sum', 'getParticulars', 'sumCheque'));
 
         return $pdf->download('wlg-corporation-payment-voucher.pdf');
 

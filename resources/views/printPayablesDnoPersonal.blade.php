@@ -205,15 +205,39 @@
                                           <td style="text-align:center; border: 1px solid black; font-size:18px;"><?php echo number_format($getChequeNumber['cheque_amount'], 2);?></td>
                                         </tr> 
                                         @endforeach
-                                      
-	                                      
-	                                       <tr style="border:1px solid black;">
+                                      	<tr style="border:1px solid black;">
 	                                       
 	                                        <td style=" text-align:center; border: 1px solid black;"><strong>Total</strong></td>
-	                                        <td style=" text-align:center; border: 1px solid black; font-size:18px;"> <?php echo number_format($sumCheque, 2)?></td>
+	                                        <td style=" text-align:center; border: 1px solid black; font-size:18px;"> 
+												@if($sumCheque != 0.00)
+													<?php echo number_format($sumCheque, 2);?>
+												@else
+												<?php echo number_format($sum, 2); ?>
+												@endif	
+											</td>
 	                                      </tr>
+									
                                   </tbody>
                           </table>
+						  <br>
+						  <br>
+						  <table style="border:1px solid black">
+								<thead>
+									<tr>
+										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%;"><strong>Total Remaining Balance</strong></td>
+										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%; font-size:18px;">
+											@if($sumCheque != 0.00)
+												<?php 
+													$sumTot = $sum - $sumCheque;
+												?>
+												<?php echo number_format($sumTot, 2);?>
+											@else
+											<?php echo number_format($sum, 2); ?>
+											@endif	
+										</td>
+									</tr>
+								</thead>
+						  </table>
 						  @else
 						  <table style="border:1px solid black;">
                           		  <thead>
@@ -247,14 +271,38 @@
 											
                                             @if($payableId[0]->currency === "USD")
                                             $
-
-                                            @endif 	
-											<?php echo number_format($sum, 2)?></td>
+											@endif 	
+											@if($sumCheque != 0.00)
+												<?php echo number_format($sumCheque, 2);?>
+											@else
+											<?php echo number_format($sum, 2); ?>
+											@endif
+											</td>
 	                                      </tr>
+										
                                   </tbody>
                           </table>
-
+							<br>
+							<br>
+							<table style="border:1px solid black">
+								<thead>
+									<tr>
+										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%;"><strong>Total Remaining Balance</strong></td>
+										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%; font-size:18px;">
+											@if($sumCheque != 0.00)
+												<?php 
+													$sumTot = $sum - $sumCheque;
+												?>
+												<?php echo number_format($sumTot, 2);?>
+											@else
+											<?php echo number_format($sum, 2); ?>
+											@endif	
+										</td>
+									</tr>
+								</thead>
+							</table>
 						  @endif
+						  <br>
 						  <br>
 						  @if($payableId[0]->method_of_payment != "CASH")
 						  <table style="border:1px solid black;">

@@ -3515,18 +3515,26 @@ class RibosBarController extends Controller
         //getParticular details
         $getParticulars = RibosBarPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
       
+        $getChequeNumbers = RibosBarPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
-        $payablesVouchers = RibosBarPaymentVoucher::where('pv_id', $id)->get()->toArray();
-
-          //count the total amount 
-        $countTotalAmount = RibosBarPaymentVoucher::where('id', $id)->sum('amount_due');
-
-        $countAmount = RibosBarPaymentVoucher::where('pv_id', $id)->sum('amount_due');
-
-        $sum  = $countTotalAmount + $countAmount;
+        $getCashAmounts = RibosBarPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
+        
+         $amount1 = RibosBarPaymentVoucher::where('id', $id)->sum('amount');
+         $amount2 = RibosBarPaymentVoucher::where('pv_id', $id)->sum('amount');
+           
+         $sum = $amount1 + $amount2;
+         
+         //
+         $chequeAmount1 = RibosBarPaymentVoucher::where('id', $id)->sum('cheque_amount');
+         $chequeAmount2 = RibosBarPaymentVoucher::where('pv_id', $id)->sum('cheque_amount');
+         
+         $sumCheque = $chequeAmount1 + $chequeAmount2;
        
 
-        $pdf = PDF::loadView('printPayablesRibosBar', compact('payableId',  'payablesVouchers', 'sum', 'getParticulars'));
+       
+
+        $pdf = PDF::loadView('printPayablesRibosBar', compact('payableId',  
+        'getChequeNumbers', 'getCashAmounts', 'sum', 'getParticulars', 'sumCheque'));
 
         return $pdf->download('ribos-bar-payment-voucher.pdf');
     }

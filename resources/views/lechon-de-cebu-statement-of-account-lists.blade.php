@@ -16,8 +16,12 @@
               		<div class="col-lg-12">
               			<div class="card mb-3">
               			<div class="card-header">
-                    				 <i class="fa fa-tasks" aria-hidden="true"></i>
-          					  All Lists</div>
+                        <i class="fa fa-tasks" aria-hidden="true"></i>
+          					   All Lists
+                       <div class="float-right">
+                          <a href="{{ action('LoloPinoyLechonDeCebuController@printSOALists') }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                        </div>
+                    </div>
     					  <div class="card-body">
     					  		<div class="table-responsive">
       				  				<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -25,21 +29,25 @@
       			  							<th>Action</th>
       			  							<th>Date</th>
                             <th>SOA No</th>
-      			  							<th>Invoice#</th>
                             <th>Bill To</th>
-      			  							<th>Branch</th>
+                            <th>BS No</th>
                             <th  class="bg-info" style="color:white;">Period Covered</th>
+                            <th class="bg-success" style="color:white;">Status</th>
+                            <th>Total Amount</th>
+                            <th>Total Remaining Balance</th>
       			  							<th>Created By</th>
+
       				  					</thead>
       				  					<tfoot>
       			  							<th>Action</th>
                             <th>Date</th>
                             <th>SOA No</th>
-                            <th>Invoice#</th>
                             <th>Bill To</th>
-                            <th>Branch</th>
-                            
+                            <th>BS No</th>
                             <th  class="bg-info" style="color:white;">Period Covered</th>
+                            <th class="bg-success" style="color:white;">Status</th>
+                            <th>Total Amount</th>
+                            <th>Total Remaining Balance</th>
                             <th>Created By</th>
       				  					</tfoot>
       				  					<tbody>
@@ -55,17 +63,38 @@
                               </td>
                               <td>{{ $statementOfAccount->date }}</td>
                               <td>SOA-{{ $statementOfAccount->lechon_de_cebu_code}}</td>
-                              <td>{{ $statementOfAccount->invoice_number}}</td>
-                              <td>{{ $statementOfAccount->bill_to}}</td>
-                              <td>{{ $statementOfAccount->branch}}</td>
-                             
+                              <td>{{ $statementOfAccount->bill_to}}</td> 
+                              <td><p style="width:140px;">{{ $statementOfAccount->bs_no }}</p></td>
                               <td class="bg-info" style="color:white;">{{ $statementOfAccount->period_cover}}</td>
+                             
+                              <td class="bg-success" style="color:white;">
+                                 @if($statementOfAccount->total_remaining_balance == 0.00)
+                                    PAID
+                                 @endif
+                              </td>
+                              
+                              <td><?php echo number_format($statementOfAccount->total_amount, 2)?></td>
+                              <td><?php echo number_format($statementOfAccount->total_remaining_balance, 2)?></td>
                               <td>{{ $statementOfAccount->created_by}}</td>
                             </tr>
                             @endforeach
       				  					</tbody>
       				  				</table>
     					  		</div>
+                    <br>
+    					  		<table class="table table-bordered">
+					  				<thead>
+					  					<tr>
+					  						<th width="30%" class="bg-info" style="color:white; font-size:28px;">TOTAL PAID AMOUNT</th>
+					  						<th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?php echo number_format($totalAmount, 2);?></span></th>
+					  					</tr>
+                      <tr>
+					  						<th width="30%" class="bg-info" style="color:white; font-size:28px;">TOTAL UNPAID AMOUNT</th>
+					  						<th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?php echo number_format($totalRemainingBalance, 2);?></span></th>
+					  					</tr>
+
+					  				</thead>
+    					  		</table>	
     					  </div>
               			</div>
           			</div>

@@ -56,7 +56,7 @@
 									<tr style="border:1px solid black;">
 										<td style="text-align:center; border: 1px solid black;">{{ $printSupplier->invoice_number}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $printSupplier->paid_to}}</td>
-                                        <td style="text-align:center; border: 1px solid black;">{{ $printSupplier->sub_category_name}}</td>
+                                        <td style="text-align:center; border: 1px solid black;">{{ $printSupplier->supplier_name}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $printSupplier->issued_date}}</td>
                                         <td style="text-align:center; border: 1px solid black;">
                                              <?php if($printSupplier->status === "FOR APPROVAL"): ?>

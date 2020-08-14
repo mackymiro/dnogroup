@@ -15,6 +15,7 @@ class LoloPinoyGrillCommissarySalesInvoice extends Model
 		'user_id',
 		'si_id',
 		'invoice_number',
+		'sales_invoice_number',
 		'date',
 		'ordered_by',
 		'address',

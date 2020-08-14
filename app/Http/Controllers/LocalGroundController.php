@@ -2313,19 +2313,24 @@ class LocalGroundController extends Controller
         $getParticulars = LocalGroundPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
     
 
-        $payablesVouchers = LocalGroundPaymentVoucher::where('pv_id', $id)->get()->toArray();
+        $getChequeNumbers = LocalGroundPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
-        //count the total amount 
-        $countTotalAmount = LocalGroundPaymentVoucher::where('id', $id)->sum('amount_due');
+        $getCashAmounts = LocalGroundPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
+        
+         $amount1 = LocalGroundPaymentVoucher::where('id', $id)->sum('amount');
+         $amount2 = LocalGroundPaymentVoucher::where('pv_id', $id)->sum('amount');
+           
+         $sum = $amount1 + $amount2;
+         
+         //
+         $chequeAmount1 = LocalGroundPaymentVoucher::where('id', $id)->sum('cheque_amount');
+         $chequeAmount2 = LocalGroundPaymentVoucher::where('pv_id', $id)->sum('cheque_amount');
+         
+         $sumCheque = $chequeAmount1 + $chequeAmount2;
+      
 
-
-        //
-        $countAmount = LocalGroundPaymentVoucher::where('pv_id', $id)->sum('amount_due');
-
-        $sum  = $countTotalAmount + $countAmount;
-    
-
-        $pdf = PDF::loadView('printPayablesLocalGround', compact('payableId',  'payablesVouchers', 'sum', 'getParticulars'));
+        $pdf = PDF::loadView('printPayablesLocalGround', compact('payableId',  
+        'getChequeNumbers', 'getCashAmounts', 'sum', 'getParticulars', 'sumCheque'));
 
         return $pdf->download('local-ground-payment-voucher.pdf');
 

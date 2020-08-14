@@ -1768,22 +1768,29 @@ class DinoIndustrialCorporationController extends Controller
                             ->where('dino_industrial_corporation_codes.module_name', $moduleName)
                             ->get();
 
-            $payablesVouchers = DinoIndustrialCorporationPaymentVoucher::where('pv_id', $id)->get()->toArray();
 
             //getParticular details
             $getParticulars = DinoIndustrialCorporationPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
         
 
-                //count the total amount 
-            $countTotalAmount = DinoIndustrialCorporationPaymentVoucher::where('id', $id)->sum('amount_due');
+            $getChequeNumbers = DinoIndustrialCorporationPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
-            //
-            $countAmount = DinoIndustrialCorporationPaymentVoucher::where('pv_id', $id)->sum('amount_due');
-
-            $sum  = $countTotalAmount + $countAmount;
-
+            $getCashAmounts = DinoIndustrialCorporationPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
             
-            $pdf = PDF::loadView('printPayablesDINOIndustrial', compact('payableId', 'payablesVouchers', 'sum', 'getParticulars'));
+             $amount1 = DinoIndustrialCorporationPaymentVoucher::where('id', $id)->sum('amount');
+             $amount2 = DinoIndustrialCorporationPaymentVoucher::where('pv_id', $id)->sum('amount');
+               
+             $sum = $amount1 + $amount2;
+             
+             //
+             $chequeAmount1 = DinoIndustrialCorporationPaymentVoucher::where('id', $id)->sum('cheque_amount');
+             $chequeAmount2 = DinoIndustrialCorporationPaymentVoucher::where('pv_id', $id)->sum('cheque_amount');
+             
+             $sumCheque = $chequeAmount1 + $chequeAmount2;
+          
+            
+            $pdf = PDF::loadView('printPayablesDINOIndustrial', compact('payableId', 
+            'getChequeNumbers', 'getCashAmounts', 'sum', 'getParticulars', 'sumCheque'));
 
             return $pdf->download('dino-industrial-corporation-payment-voucher.pdf');
     }

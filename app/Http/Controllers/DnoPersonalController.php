@@ -3447,7 +3447,6 @@ class DnoPersonalController extends Controller
        
     }
 
-    //
     public function properties(){
         $ids = Auth::user()->id;
         $user = User::find($ids);

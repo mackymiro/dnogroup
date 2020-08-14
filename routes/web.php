@@ -1558,6 +1558,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'LoloPinoyLechonDeCebuController@printSOA')
 		->name('lolo-pinoy-lechon-de-cebu.printSOA');
 
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/printSOALists',
+		'LoloPinoyLechonDeCebuController@printSOALists')
+		->name('printSOALists');
+
 	//route for commissary stocks inventory
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/commissary/stocks-inventory', 
@@ -1764,7 +1769,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::patch(
 		'/lolo-pinoy-lechon-de-cebu/s-account/{id}',
 		'LoloPinoyLechonDeCebuController@sAccountUpdate')
-		->name('lolo-pinoy-lechon-de-cebu.sAccountUpdate');
+		->name('sAccountUpdate');
 
 	//Lolo Pinoy Grill Commissary
 	Route::get('/lolo-pinoy-grill-commissary', 'LoloPinoyGrillCommissaryController@index')->name('lolo-pinoy-grill-commissary.index');
@@ -1898,9 +1903,6 @@ Route::group(['middleware' => ['auth']], function(){
 
 	Route::post('/lolo-pinoy-grill-commissary/add-new-billing-data/{id}', 'LoloPinoyGrillCommissaryController@addNewBillingData')->name('lolo-pinoy-grill-commissary.addNewBillingData');
 
-	//update billing statement in add new
-	Route::patch('/lolo-pinoy-grill-commissary/update-billing-statement/{id}', 'LoloPinoyGrillCommissaryController@updateBillingStatement')->name('lolo-pinoy-grill-commissary.updateBillingStatement');
-
 
 	//billing statement lists
 	Route::get(
@@ -1973,10 +1975,15 @@ Route::group(['middleware' => ['auth']], function(){
 
 	Route::get('/lolo-pinoy-grill-commissary/statement-of-account-lists', 'LoloPinoyGrillCommissaryController@statementOfAccountList')->name('lolo-pinoy-grill-commissary.statementOfAccountList');
 
+	Route::get(
+		'/lolo-pinoy-grill-commissary/printSOALists',
+		'LoloPinoyGrillCommissaryController@printSOALists')
+		->name('printSOALists');
+
 	Route::patch(
 		'/lolo-pinoy-grill-commissary/s-account/{id}',
 		'LoloPinoyGrillCommissaryController@sAccountUpdate')
-		->name('lolo-pinoy-grill-commissary.sAccountUpdate');
+		->name('sAccountUpdateLoloPinoyGrillCommissary');
 
 	Route::get(
 		'/lolo-pinoy-grill-commissary/view-statement-account/{id}',

@@ -11,6 +11,7 @@ class LechonDeCebuStatementOfAccount extends Model
     protected $fillable = [
 		'user_id',
 		'billing_statement_id',
+		'bs_no',
 		'bill_to',
 		'date',
 		'address',
@@ -33,8 +34,15 @@ class LechonDeCebuStatementOfAccount extends Model
 		'or_number',
 		'created_by',
 		'amount',
+		'total_amount',
+		'total_remaining_balance',
 		'amount_statement_account',
+		'order',
+		'dr_no',
+		'qty',
+		'unit',
 		'body',
 		'head_and_feet',
+		'price',
     ];
 }
