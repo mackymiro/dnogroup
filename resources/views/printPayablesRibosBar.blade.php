@@ -189,10 +189,7 @@
                                          
                                           <td style="text-align:center; border: 1px solid black; font-size:18px;" >
 										
-                                            @if($getCashAmount['currency'] === "USD")
-                                            $
-
-                                            @endif 	
+                                           
 										  <?php echo number_format($getCashAmount['cheque_amount'], 2);?></td>
                                         </tr> 
                                         @endforeach
@@ -203,10 +200,7 @@
 	                                        <td style=" text-align:center; border: 1px solid black;"><strong>Total</strong></td>
 	                                        <td style=" text-align:center; border: 1px solid black; font-size:18px;"> 
 											
-                                            @if($payableId[0]->currency === "USD")
-                                            $
-
-                                            @endif 	
+                                         
 											@if($sumCheque != 0.00)
 												<?php echo number_format($sumCheque, 2);?>
 											@else
