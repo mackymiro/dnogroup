@@ -538,7 +538,7 @@
           </div>
           <div class="modal-body">
             <div id="succAdd"></div>
-				    <div id="succExists"></div>
+				  
 
             <div id="validate" class="col-lg-12">
               <p class="alert alert-danger">Please fill up field</p>
@@ -699,14 +699,11 @@
 
                 if(succDataArr == "Success"){
                   $("#succAdd").fadeIn().delay(3000).fadeOut();
-                  $("#succAdd").html(`<p class="alert alert-success">Succesfully added.</p>`);
+                  $("#succAdd").html(`<p class="alert alert-success">${data}</p>`);
                   
                   setTimeout(function(){
                     document.location.reload();
                   }, 3000);
-                }else{
-                  $("#succExists").fadeIn().delay(3000).fadeOut();
-                  $("#succExists").html(`<p class="alert alert-danger">Supplier already exists.</p>`);
                 }
               },
               error: function (data){

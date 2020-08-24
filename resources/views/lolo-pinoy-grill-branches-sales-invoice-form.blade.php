@@ -34,6 +34,17 @@
                                 </form>
                             </div>  
                         </div>
+                      
+                        <?php $branchesArray = array();?>
+                        <?php foreach($getBranches as $key=>$getBranch): ?>
+                            <?php $branchesArray[] = $getBranch; ?>
+                            
+                        <?php endforeach; ?>
+                       
+                        <?php for($x=0; $x <= 10 ; $x++): ?>
+                        <?php print_r($branchesArray[$x]->product_name); ?>
+                        <?php print_r($branchesArray[$x]->product_in); ?>
+                    
                           <div class="card-body">
                                 <div class="form-group">
                                   <div class="form-row">
@@ -86,7 +97,7 @@
                                 </div>
                                    
                             </div>
-                             
+                            <?php endfor; ?>
                           </div>  
                     </div>
             </div> <!-- end of row-->
@@ -248,6 +259,7 @@
         </div>
         <div class="modal-body">
             <h1 class="modal-title"></h1>
+            <h1>Available Pcs - </h1>
             <div class="form-group">
                 <div class="form-row">
                     <div class="col-lg-4">

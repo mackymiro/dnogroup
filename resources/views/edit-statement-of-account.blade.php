@@ -49,7 +49,7 @@
                                              
                                           </div>
                                            <div class="col-lg-4">
-                                              <label><strong style="font-size: 20px;">Total  Balance</strong></label>
+                                              <label><strong style="font-size: 20px;">Total Balance</strong></label>
                                               <p class="bg-success" style="color:white; border-radius: 3px; padding:5px;">₱ <?php echo number_format($sum, 2);?></p>
                                              
                                           </div>       

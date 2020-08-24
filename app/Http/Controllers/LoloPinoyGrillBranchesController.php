@@ -68,14 +68,8 @@ class LoloPinoyGrillBranchesController extends Controller
             $uProd = sprintf("%06d",$newProd);
         } 
 
-        //check if product name name exits
-        $target = DB::table(
-                    'lolo_pinoy_grill_branches_store_stocks')
-                    ->where('product_name', $request->productName)
-                    ->get()->first();
-
-  
-        if($target === NULL){
+        
+    
             $addDeliveryIn = new LoloPinoyGrillBranchesStoreStock([
                 'user_id'=>$user->id,
                 'date'=>$request->date,
@@ -102,9 +96,7 @@ class LoloPinoyGrillBranchesController extends Controller
 
             return response()->json('Success: successfuly added delivery in');
     
-        }else{
-            return response()->json('Failed: Already exist');
-        }
+       
    
     }
 
@@ -2417,7 +2409,32 @@ class LoloPinoyGrillBranchesController extends Controller
         if(empty($data)){
             return redirect()->route('salesInvoiceFormLoloPinoyGrillBranches');
         }else{
-            return view('lolo-pinoy-grill-branches-sales-invoice-form');
+            $branchUrgello = $request->session()->get('sessionBranch');
+            $getBranches = DB::table(
+                                    'lolo_pinoy_grill_branches_store_stocks')
+                                    ->select(
+                                    'lolo_pinoy_grill_branches_store_stocks.id',
+                                    'lolo_pinoy_grill_branches_store_stocks.user_id',
+                                    'lolo_pinoy_grill_branches_store_stocks.date',
+                                    'lolo_pinoy_grill_branches_store_stocks.dr_no',
+                                    'lolo_pinoy_grill_branches_store_stocks.supplier',
+                                    'lolo_pinoy_grill_branches_store_stocks.product_name',
+                                    'lolo_pinoy_grill_branches_store_stocks.qty',
+                                    'lolo_pinoy_grill_branches_store_stocks.unit',
+                                    'lolo_pinoy_grill_branches_store_stocks.product_in',
+                                    'lolo_pinoy_grill_branches_store_stocks.product_out',
+                                    'lolo_pinoy_grill_branches_store_stocks.amount',
+                                    'lolo_pinoy_grill_branches_store_stocks.branch',
+                                    'lolo_pinoy_grill_branches_store_stocks.created_by',
+                                    'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
+                                    'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
+                                    ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
+                                    ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branchUrgello)
+                                    ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'desc')
+                                    ->get()->toArray();
+           
+
+            return view('lolo-pinoy-grill-branches-sales-invoice-form', compact('getBranches'));
         }
         
     }

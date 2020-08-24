@@ -91,7 +91,7 @@
         </div>
         <br>
         <br>
-          <div style="border-style: groove; width: 700px; height: 300px; margin-top: 125px;">
+          <div style="border-style: groove; width: 700px;  margin-top: 125px;">
           <table  style="margin-top:20px;">
                <thead>
                   <tr>

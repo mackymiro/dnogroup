@@ -31,7 +31,7 @@
 
 						Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
             	 	 </p>
-	            	 <h4 ><u>STATEMENT OF ACCOUNT</u><br>SSP</h4>
+	            	 <h4 ><u>STATEMENT OF ACCOUNT</u><br> Private Orders</h4>
 	            </div>
 				<div class="row">
 					<div class="col-lg-12">

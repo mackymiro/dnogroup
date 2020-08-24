@@ -1559,9 +1559,14 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('lolo-pinoy-lechon-de-cebu.printSOA');
 
 	Route::get(
-		'/lolo-pinoy-lechon-de-cebu/printSOALists',
-		'LoloPinoyLechonDeCebuController@printSOALists')
-		->name('printSOALists');
+		'/lolo-pinoy-lechon-de-cebu/printSOAListsSsp',
+		'LoloPinoyLechonDeCebuController@printSOAListsSsp')
+		->name('printSOAListsSsp');
+
+	Route::get(
+			'/lolo-pinoy-lechon-de-cebu/printSOAListsPo',
+			'LoloPinoyLechonDeCebuController@printSOAListsPO')
+		->name('printSOAListsPO');
 
 	//route for commissary stocks inventory
 	Route::get(
