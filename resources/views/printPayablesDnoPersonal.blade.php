@@ -23,9 +23,9 @@
 <div id="wrapper">
 	 <div id="content-wrapper">
  		<div class="container-fluid">
- 				<div  style="margin-top:60px;">
-            	 <img style="margin-left: 270px;" src="{{ asset('images/pdf/dno-personal(4).png')}}"  alt="DNO Personal">
-            	 	 <p >
+ 				<div  style="margin-top:-10px;">
+            	 <img style="margin-left: 70px;" src="{{ asset('images/digitized-logos/dno-personal-pdf.png')}}"  alt="DNO Personal">
+            	 	 <p style="margin-top:-20px">
 		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
 						Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
 

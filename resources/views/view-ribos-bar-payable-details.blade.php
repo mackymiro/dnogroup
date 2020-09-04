@@ -16,7 +16,7 @@
               <li class="breadcrumb-item ">Payment Details</li>
             </ol>
              <div class="col-lg-12">
-             <img src="{{ asset('images/digitized-logos/ribos-food-corp.png')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
+             <img src="{{ asset('images/digitized-logos/ribos-food-corp.png') }}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
              
             	 
             	 <h4 class="text-center"><u>PAYMENT DETAILS (PAYMENT VOUCHER)</u></h4>

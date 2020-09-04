@@ -18,6 +18,55 @@ use App\DnoResourcesDevelopmentCorpSupplier;
 class DnoResourcesDevelopmentController extends Controller
 {
 
+    public function printPO($id){
+        $moduleName = "Purchase Order";
+        $purchaseOrder = DB::table(
+                            'dno_resources_development_corp_purchase_orders')
+                            ->select( 
+                            'dno_resources_development_corp_purchase_orders.id',
+                            'dno_resources_development_corp_purchase_orders.user_id',
+                            'dno_resources_development_corp_purchase_orders.po_id',
+                            'dno_resources_development_corp_purchase_orders.paid_to',
+                            'dno_resources_development_corp_purchase_orders.address',
+                            'dno_resources_development_corp_purchase_orders.date',
+                            'dno_resources_development_corp_purchase_orders.quantity',
+                            'dno_resources_development_corp_purchase_orders.description',
+                            'dno_resources_development_corp_purchase_orders.unit',
+                            'dno_resources_development_corp_purchase_orders.unit_price',
+                            'dno_resources_development_corp_purchase_orders.amount',
+                            'dno_resources_development_corp_purchase_orders.total_price',
+                            'dno_resources_development_corp_purchase_orders.prepared_by',
+                            'dno_resources_development_corp_purchase_orders.checked_by',
+                            'dno_resources_development_corp_purchase_orders.ordered_by',
+                            'dno_resources_development_corp_purchase_orders.particulars',
+                            'dno_resources_development_corp_purchase_orders.qty',
+                            'dno_resources_development_corp_purchase_orders.created_by',
+                            'dno_resources_development_corp_purchase_orders.deleted_at',
+                            'dno_resources_development_codes.dno_resources_code',
+                            'dno_resources_development_codes.module_id',
+                            'dno_resources_development_codes.module_code',
+                            'dno_resources_development_codes.module_name')
+                            ->leftJoin('dno_resources_development_codes', 'dno_resources_development_corp_purchase_orders.id', '=', 'dno_resources_development_codes.module_id')
+                            ->where('dno_resources_development_corp_purchase_orders.id', $id)
+                            ->where('dno_resources_development_codes.module_name', $moduleName)
+                            ->get()->toArray();
+        
+        $pOrders = DnoResourcesDevelopmentCorpPurchaseOrder::where('po_id', $id)->get()->toArray();
+
+        //count the total amount 
+        $countTotalAmount = DnoResourcesDevelopmentCorpPurchaseOrder::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = DnoResourcesDevelopmentCorpPurchaseOrder::where('po_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        $pdf = PDF::loadView('printDnoResourcesPO', compact('purchaseOrder', 'pOrders', 'sum'));
+
+        return $pdf->download('dno-resources-development-corp-purchase-order.pdf');
+
+    }
+
     public function printSupplier($id){
         $viewSupplier = DnoResourcesDevelopmentCorpSupplier::where('id', $id)->get();
         

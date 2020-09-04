@@ -29,7 +29,7 @@
                             Payment Details
                             @if($viewPaymentDetail[0]->deleted_at == NULL)
                              <div class="float-right">
-                               <a href="{{ action('DnoPersonalController@printPayablesDnoPersonal', $viewPaymentDetail[0]->id) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                               <a  href="{{ action('DnoPersonalController@printPayablesDnoPersonal', $viewPaymentDetail[0]->id) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                              </div>
                             @endif
                         </div>

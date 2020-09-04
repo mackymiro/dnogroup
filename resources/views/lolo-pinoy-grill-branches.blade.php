@@ -27,7 +27,7 @@
 					<div class="card mb-3">
 						<div class="card-header">
 							<i class="fa fa-file-invoice" aria-hidden="true"></i>
-							Transaction List
+							Transaction List (TODAY)
                          
 						</div>
 						<div class="card-body">
@@ -37,6 +37,7 @@
 									 <thead>
 										<tr>
 											<th>Date</th>
+											<th>Transaction ID</th>
 											<th>Branch</th>
 											<th class="bg-danger" style="color:#fff;">Total Amount Of Sales</th>
 											<th >Total Discounts (Seniors/PWD's)</th>
@@ -48,6 +49,7 @@
 									<tfoot>	
 										<tr>
 											<th>Date</th>
+											<th>Transaction ID</th>
 											<th>Branch</th>
 											<th class="bg-danger" style="color:#fff;">Total Amount Of Sales</th>
 											<th >Total Discounts (Seniors/PWD's)</th>
@@ -59,8 +61,10 @@
 									<tbody>	
 										@foreach($getTransactionBranches as $getTransactionBranch)
 										<tr>
-											<td>{{ $getTransactionBranch['date']}}</td>
+											<td><a href="{{ url('lolo-pinoy-grill-branches/transaction-list-details/'.$getTransactionBranch['id']) }}">{{ $getTransactionBranch['date']}}</a></td>
+											<td>{{ $getTransactionBranch['id']}}</td>
 											<td>{{ $getTransactionBranch['branch']}}</td>
+										
 											<td class="bg-danger" style="color:#fff;"><?php echo number_format($getTransactionBranch['total_amount_of_sales'], 2); ?></td>
 											<td><?php echo number_format($getTransactionBranch['total_discounts_seniors_pwds']); ?></td>
 											<td><?php echo number_format($getTransactionBranch['gift_cert'], 2)?></td>
@@ -85,6 +89,7 @@
 									 <thead>
 										<tr>
 											<th>Date</th>
+											<th>Transaction ID</th>
 											<th>Branch</th>
 											<th class="bg-danger" style="color:#fff;">Total Amount Of Sales</th>
 											<th >Total Discounts (Seniors/PWD's)</th>
@@ -96,6 +101,7 @@
 									<tfoot>	
 										<tr>
 											<th>Date</th>
+											<th>Transaction ID</th>
 											<th>Branch</th>
 											<th class="bg-danger" style="color:#fff;">Total Amount Of Sales</th>
 											<th >Total Discounts (Seniors/PWD's)</th>
@@ -108,6 +114,7 @@
 										@foreach($getTransactionBranches as $getTransactionBranch)
 										<tr>
 											<td>{{ $getTransactionBranch['date']}}</td>
+											<td>{{ $getTransactionBranch['id']}}</td>
 											<td>{{ $getTransactionBranch['branch']}}</td>
 											<td class="bg-danger" style="color:#fff;"><?php echo number_format($getTransactionBranch['total_amount_of_sales'], 2); ?></td>
 											<td><?php echo number_format($getTransactionBranch['total_discounts_seniors_pwds']); ?></td>
@@ -133,6 +140,7 @@
 									 <thead>
 										<tr>
 											<th>Date</th>
+											<th>Transaction ID</th>
 											<th>Branch</th>
 											<th class="bg-danger" style="color:#fff;">Total Amount Of Sales</th>
 											<th >Total Discounts (Seniors/PWD's)</th>
@@ -144,6 +152,7 @@
 									<tfoot>	
 										<tr>
 											<th>Date</th>
+											<th>Transaction ID</th>
 											<th>Branch</th>
 											<th class="bg-danger" style="color:#fff;">Total Amount Of Sales</th>
 											<th >Total Discounts (Seniors/PWD's)</th>
@@ -156,6 +165,7 @@
 										@foreach($getTransactionBranches as $getTransactionBranch)
 										<tr>
 											<td>{{ $getTransactionBranch['date']}}</td>
+											<td>{{ $getTransactionBranch['id'] }}</td>
 											<td>{{ $getTransactionBranch['branch']}}</td>
 											<td class="bg-danger" style="color:#fff;"><?php echo number_format($getTransactionBranch['total_amount_of_sales'], 2); ?></td>
 											<td><?php echo number_format($getTransactionBranch['total_discounts_seniors_pwds']); ?></td>
@@ -181,6 +191,7 @@
 									 <thead>
 										<tr>
 											<th>Date</th>
+											<th>Transaction ID</th>
 											<th>Branch</th>
 											<th class="bg-danger" style="color:#fff;">Total Amount Of Sales</th>
 											<th >Total Discounts (Seniors/PWD's)</th>
@@ -192,6 +203,7 @@
 									<tfoot>	
 										<tr>
 											<th>Date</th>
+											<th>Transaction ID</th>
 											<th>Branch</th>
 											<th class="bg-danger" style="color:#fff;">Total Amount Of Sales</th>
 											<th >Total Discounts (Seniors/PWD's)</th>
@@ -204,6 +216,7 @@
 										@foreach($getTransactionBranches as $getTransactionBranch)
 										<tr>
 											<td>{{ $getTransactionBranch['date']}}</td>
+											<td>{{ $getTransactionBranch['id']}}</td>
 											<td>{{ $getTransactionBranch['branch']}}</td>
 											<td class="bg-danger" style="color:#fff;"><?php echo number_format($getTransactionBranch['total_amount_of_sales'], 2); ?></td>
 											<td><?php echo number_format($getTransactionBranch['total_discounts_seniors_pwds']); ?></td>

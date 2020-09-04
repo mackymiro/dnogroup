@@ -3592,11 +3592,8 @@ class DnoPersonalController extends Controller
 
     //
     public function cardTransaction($id){
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
-        
-        //creditCardDetail
+     
+       //creditCardDetail
         $creditCardDetail = DnoPersonalCreditCard::find($id);
         
         //getTransaction
@@ -3609,7 +3606,7 @@ class DnoPersonalController extends Controller
         ->where('status' ,'!=', $status)->sum('amount_due');
 
             
-        return view('dno-personal-credit-card-transaction', compact('user', 'getTransactions', 'creditCardDetail', 
+        return view('dno-personal-credit-card-transaction', compact('getTransactions', 'creditCardDetail', 
         'totalAmountDue'));
     }
 

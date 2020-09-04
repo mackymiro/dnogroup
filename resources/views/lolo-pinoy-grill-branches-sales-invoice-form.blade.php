@@ -34,71 +34,22 @@
                                 </form>
                             </div>  
                         </div>
-                      
-                        <?php $branchesArray = array();?>
-                        <?php foreach($getBranches as $key=>$getBranch): ?>
-                            <?php $branchesArray[] = $getBranch; ?>
-                            
-                        <?php endforeach; ?>
-                       
-                        <?php for($x=0; $x <= 10 ; $x++): ?>
-                        <?php print_r($branchesArray[$x]->product_name); ?>
-                        <?php print_r($branchesArray[$x]->product_in); ?>
-                    
                           <div class="card-body">
                                 <div class="form-group">
                                   <div class="form-row">
+                                   <?php foreach($getBranches as $getBranch): ?>
                                      <div class="col-lg-4">
-                                        <button type="button" class="bbq btn btn-warning btn-lg" data-toggle="modal" data-target="#bbq" data-menu="PORK REGULAR BBQ" data-price="30.00">PORK REGULAR BBQ ₱ 30.00</button>
-                                     </div>
-                                     <div class="col-lg-4">
-                                         <button type="button" class="bbq btn btn-warning btn-lg" data-toggle="modal" data-target="#bbq" data-menu="BEEF BBQ" data-price="50.00">BEEF BBQ ₱ 50.00</button>
-                                     </div>
-                                     <div class="col-lg-4">
-                                         <button type="button" class="bbq btn btn-warning btn-lg" data-toggle="modal" data-target="#bbq"  data-menu="CHICKEN BBQ B&W" data-price="70.00">CHICKEN BBQ B&W ₱ 70.00</button>
-                                    </div>
+                                        <button type="button" class="bbq btn btn-warning btn-lg" data-toggle="modal" data-target="#bbq" data-id="<?php echo $getBranch->id ?>" data-menu="<?php echo $getBranch->product_name?>" data-price="<?php echo number_format($getBranch->price, 2) ?>" data-available="<?php echo $getBranch->product_in ?>" data-flag="<?php echo $getBranch->flag; ?>"><?php echo $getBranch->product_name?> ₱ <?php echo number_format($getBranch->price, 2) ?></button>
+                                        <br>
+                                        <br>
+                                     </div>                         
+                                     <?php endforeach ; ?>  
+                                     
                                   </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="form-row">
-                                        <div class="col-lg-4">
-                                            <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#bbq" data-menu="CHICKEN BBQ Q- LEG" data-price="70.00">CHICKEN BBQ Q- LEG ₱ 70.00</button>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#food" data-menu="CHICKEN PECHO" data-price="70.00">CHICKEN PECHO  ₱ 70.00</button>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#food" data-menu="CHORIZO" data-price="30.00">CHORIZO  ₱ 30.00</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="form-row">
-                                        <div class="col-lg-4">
-                                            <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#bbq" data-menu="PORK JUMBO BBQ" data-price="40.00">PORK JUMBO BBQ  ₱ 40.00</button>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#food" data-menu="DINUGUAN" data-price="77.00">DINUGUAN ₱ 77.00</button>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#food" data-menu="LECHON SISIG" data-price="177.00">LECHON SISIG ₱ 177.00</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="form-row">
-                                        <div class="col-lg-4">
-                                            <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#food" data-menu="ICE CREAM" data-price="20.00">ICE CREAM ₱ 20.00</button>
-                                        </div>
-                                        <div class="col-lg-4">
-                                            <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#food" data-menu="POSO" data-price="10.00">POSO ₱ 10.00</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                   
+                                </div>                      
                             </div>
-                            <?php endfor; ?>
-                          </div>  
+                            
+                        </div>  
                     </div>
             </div> <!-- end of row-->
             <div class="row">
@@ -111,37 +62,17 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <div class="form-row">
+                                    <?php foreach($getBranchDrinks as $getBranchDrink): ?>
                                     <div class="col-lg-2">
-                                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#softdrinks" data-menu="COKE" data-price="27.00">Coke ₱ 27.00</button>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <button type="button" class="btn btn-info btn-lg"  data-toggle="modal" data-target="#softdrinks" data-menu="MIRINDA" data-price="27.00">Mirinda ₱ 27.00</button>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <button type="button" class="btn btn-info btn-lg"  data-toggle="modal" data-target="#softdrinks" data-menu="SPRITE" data-price="27.00">Sprite ₱ 27.00</button>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <button type="button" class="btn btn-info btn-lg"  data-toggle="modal" data-target="#softdrinks" data-menu="7-UP" data-price="27.00">7-UP ₱ 27.00</button>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <button type="button" class="btn btn-info btn-lg"  data-toggle="modal" data-target="#softdrinks" data-menu="Mt.Dew" data-price="27.00">Mt.Dew ₱ 27.00</button>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <button type="button" class="btn btn-info btn-lg"  data-toggle="modal" data-target="#softdrinks" data-menu="Water" data-price="27.00">Water ₱ 27.00</button>
+                                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-id="<?php echo $getBranchDrink->id?>" data-target="#softdrinks" data-menu="<?php echo $getBranchDrink->product_name ?>" data-price="<?php echo number_format($getBranchDrink->price, 2)?>" data-available="<?php echo number_format($getBranchDrink->product_in, 2) ?>" data-flag="<?php echo $getBranchDrink->flag;?>"><?php echo $getBranchDrink->product_name?> ₱ <?php echo number_format($getBranchDrink->price, 2)?></button>
+                                        <br>
+                                        <br>
                                     </div>
                                   
+                                    <?php endforeach; ?>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="form-row">
-                                    <div class="col-lg-2">
-                                        <button type="button" class="btn btn-info btn-lg"  data-toggle="modal" data-target="#softdrinks" data-menu="ROYAL" data-price="27.00">Royal ₱ 27.00</button>
-                                    </div>
-                                    <div class="col-lg-2">
-                                        <button type="button" class="btn btn-info btn-lg"  data-toggle="modal" data-target="#softdrinks" data-menu="CALAMANSI JUICE" data-price="27.00">Calamansi Juice ₱ 27.00</button>
-                                    </div>
-                                </div>
-                            </div>
+                           
                         </div>
                     </div>
                 </div>
@@ -188,6 +119,7 @@
             </button>
         </div>
         <div class="modal-body">
+            <h1 >Available Pcs - <span id="availPcs"></span></h1>
             <h1 class="modal-title"></h1>
             <div class="form-group">
                 <div class="form-row">
@@ -198,9 +130,12 @@
                     </div>
                     <div class="col-lg-4">
                         <label>Price</label>
-                       <div id="priceDrinks"></div>
+                        <div id="priceDrinks"></div>
                        <input type="text" id="originalPriceDrinks" name="price" class=" form-control" readonly />
                        <input type="hidden" id="softDrinksName" />
+                       <input type="hidden" id="softDrinksPcs" />
+                       <input type="hidden" id="drinkId" />
+                      
                     </div>
                 </div>
             </div>
@@ -223,7 +158,9 @@
             </button>
         </div>
         <div class="modal-body">
+            <h1 >Available Pcs - <span id="availPcs"></span></h1>
             <h1 class="modal-title"></h1>
+            
             <div class="form-group">
                 <div class="form-row">
                    
@@ -236,6 +173,7 @@
                        <div id="priceFood"></div>
                        <input type="text" id="originalPriceFood" name="price" class=" form-control" readonly />
                        <input type="hidden" id="foodNameNotBbq" />
+                       <input type="hidden" id="pcsFood" />
                     </div>
                 </div>
             </div>
@@ -258,11 +196,11 @@
             </button>
         </div>
         <div class="modal-body">
+            <h1 >Available pcs - <span id="availPcs"></span></h1>
             <h1 class="modal-title"></h1>
-            <h1>Available Pcs - </h1>
             <div class="form-group">
                 <div class="form-row">
-                    <div class="col-lg-4">
+                    <div id="flavor" class="col-lg-4">
                         <label>Flavor</label>
                         <select id="flavor" name="flavor" class="form-control">
                             <option value="Regular">Regular</option>
@@ -271,19 +209,21 @@
                     </div>
                     <div class="col-lg-4">
                         <label>Quantity</label>
-                       <input type="number" name="quantity" class="quantityBBQ form-control" value="1" onchange="javascript:checkPrice()" />   
+                       <input type="number" name="quantity" class="quantityBBQ form-control" value="1" onchange="javascript:checkPrice()" onkeypress="return isNumber(event)" autocomplete="off" />   
                     </div>
                     <div class="col-lg-4">
                         <label>Price</label>
                        <div id="price"></div>
                        <input type="text" id="originalPrice" name="price" class=" form-control" readonly />
                        <input type="hidden" id="foodName" />
+                       <input type="hidden" id="pcsBbq" />
+                       <input type="hidden" id="foodId" />
+                       <input type="hidden" id="flag" />
                     </div>
                 </div>
             </div>
         </div>
-        <div class="modal-footer">
-           
+        <div class="modal-footer">  
             <button type="button" onclick="closeBBQ()" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
             <button type="button" onclick="addBBQ()" class="btn btn-success btn-lg">Add</button>
         </div>
@@ -310,22 +250,42 @@
         var button = $(event.relatedTarget) // Button that triggered the modal
         var recipient = button.data('menu') // Extract info from data-* attributes
         var price = button.data('price');
+        var available = button.data('available');
+        var foodId = button.data('id');
+        var flag = button.data('flag');
        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         var modal = $(this);
         modal.find('.modal-title').text(recipient);
+        if(recipient === "PORK REGULAR BBQ" || recipient === "PORK JUMBO BBQ" || recipient === "CHICKEN BBQ B&W"
+        || recipient === "CHICKEN BBQ Q- LEG"){
+            $("#flavor").show();
+        }else{
+            $("#flavor").hide();
+        }
+
+        modal.find('.modal-title').text(recipient);
+        modal.find('.modal-body #availPcs').text(available);
+        modal.find('.modal-body #flag').val(flag);
+        modal.find('.modal-body #pcsBbq').val(available);
+        modal.find('.modal-body #foodId').val(foodId);
         modal.find('.modal-body #originalPrice').val(price);
         modal.find('.modal-body #foodName').val(recipient);
+        
+        
     })
 
     $('#food').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var recipient = button.data('menu') // Extract info from data-* attributes
         var price = button.data('price');
+        var available = button.data('available');
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         var modal = $(this);
         modal.find('.modal-title').text(recipient);
+        modal.find('.modal-body #availPcs').text(available);
+        modal.find('.modal-body #pcsFood').val(available);
         modal.find('.modal-body #originalPriceFood').val(price);
         modal.find('.modal-body #foodNameNotBbq').val(recipient);
     
@@ -335,12 +295,20 @@
         var button = $(event.relatedTarget) // Button that triggered the modal
         var recipient = button.data('menu') // Extract info from data-* attributes
         var price = button.data('price');
+        var available = button.data('available');
+        var drinkId = button.data('id');
+        var flag = button.data('flag');
         // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
         // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
         var modal = $(this);
         modal.find('.modal-title').text(recipient);
+        modal.find('.modal-body #availPcs').text(available);
+        modal.find('.modal-body #softDrinksPcs').val(available);
+        modal.find('.modal-body #drinkId').val(drinkId);
         modal.find('.modal-body #originalPriceDrinks').val(price);
         modal.find('.modal-body #softDrinksName').val(recipient);
+        modal.find('.modal-body #flagDrink').val(flag);
+        
     })
 
     $("#originalPriceDrinks").show();
@@ -361,14 +329,32 @@
 
     }
 
+    const isNumber =(evt) => {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+          return false;
+        }
+        return true;
+    }
+
     const addDrinks = () =>{
         const quantityDrinks = $(".quantityDrinks").val();
         const originalPriceDrinks = $("#originalPriceDrinks").val();
         const softDrinksName = $("#softDrinksName").val();
         const newPriceDrinks = $("#newPriceDrinks").val();
         const branch = "{{ Session::get('sessionBranch') }}";
+
+        const softDrinksPcs = $("#softDrinksPcs").val();
+
+        const foodId = $("#drinkId").val();
+
+         //compute minus available pcs to quantity
+         const compute = softDrinksPcs - quantityDrinks;
+
+        const flagDrink = $("#flagDrink").val();
+
         if(quantityDrinks == "1"){
-        
             //make ajax call
             $.ajax({
                 type: 'POST',
@@ -380,6 +366,10 @@
                     "itemDescription":softDrinksName,
                     "branch":branch,
                     "amount":originalPriceDrinks,
+                    "softDrinksPcs":softDrinksPcs,
+                    "compute":compute,
+                    "foodId":foodId,
+                    "flag":flagDrink,
                 },
                 success:function(data){
                     console.log(data);
@@ -392,8 +382,6 @@
                     console.log('Error', data);
                 }
             });
-
-
 
             $('#softdrinks').modal('hide');
         }else{
@@ -409,6 +397,10 @@
                     "itemDescription":softDrinksName,
                     "branch":branch,
                     "amount":newPriceDrinks,
+                    "softDrinksPcs":softDrinksPcs,
+                    "compute":compute,
+                    "foodId":foodId,
+                    "flag":flagDrink,
                 },
                 success:function(data){
                     console.log(data);
@@ -451,7 +443,9 @@
         const newPriceFood = $("#newPriceFood").val();
         const foodNameNotBbq = $("#foodNameNotBbq").val();
         const branch = "{{ Session::get('sessionBranch') }}";
-      
+        const availPcs = $("#aPcs").val();
+        const foodId = $("#foodId").val();
+
         if(quantityFood == "1"){
             //make ajax call
             $.ajax({
@@ -555,10 +549,19 @@
         const originalPrice = $("#originalPrice").val();
         const flavor = $("#flavor").val();
         const foodName = $("#foodName").val();
-      
+
         const combineFoodName = `${foodName} - ${flavor}`;
         const branch = "{{ Session::get('sessionBranch') }}";
 
+        const availPcs = $("#pcsBbq").val();
+        
+        const foodId = $("#foodId").val();
+
+        //compute minus available pcs to quantity
+        const compute = availPcs - quantity;
+
+        const flag = $("#flag").val();
+    
         if(quantity == "1"){
             console.log(originalPrice);
             const table =  document.getElementById("output");
@@ -589,6 +592,9 @@
                     "itemDescription":combineFoodName,
                     "branch":branch,
                     "amount":originalPrice,
+                    "compute":compute,
+                    "foodId":foodId,
+                    "flag":flag,
                 },
                 success:function(data){
                     console.log(data);
@@ -635,6 +641,9 @@
                     "itemDescription":combineFoodName,
                     "branch":branch,
                     "amount":newPrice,
+                    "compute":compute,
+                    "foodId":foodId,
+                    "flag":flag,
                 },
                 success:function(data){
                     console.log(data);

@@ -35,6 +35,7 @@
                                           <th>DR No</th>
                                           <th>Supplier</th>
                                           <th>Product Name</th>
+                                          <th>Price</th>
                                           <th>Qty</th>
                                           <th>IN</th>
                                           <th>Unit</th>
@@ -47,6 +48,7 @@
                                           <th>DR No</th>
                                           <th>Supplier</th>
                                           <th>Product Name</th>
+                                          <th>Price</th>
                                           <th>Qty</th>
                                           <th>IN</th>
                                           <th>Unit</th>
@@ -61,6 +63,7 @@
                                             <td>{{ $getStockStatusUrgello->dr_no }}</td>
                                             <td>{{ $getStockStatusUrgello->supplier }}</td>
                                             <td>{{ $getStockStatusUrgello->product_name }}</td>
+                                            <td>₱ <?php echo number_format($getStockStatusUrgello->price, 2)?></td>
                                             <td>{{ $getStockStatusUrgello->qty }}</td>
                                             <td>{{ $getStockStatusUrgello->product_in }}</td>
                                             <td>{{ $getStockStatusUrgello->unit }}</td>
@@ -106,6 +109,7 @@
                                             <td>{{ $getStockStatusVelez->dr_no }}</td>
                                             <td>{{ $getStockStatusVelez->supplier }}</td>
                                             <td>{{ $getStockStatusVelez->product_name }}</td>
+                                            <td>₱ <?php echo number_format($getStockStatusVelez->price, 2)?></td>
                                             <td>{{ $getStockStatusVelez->qty }}</td>
                                             <td>{{ $getStockStatusVelez->product_in }}</td>
                                             <td>{{ $getStockStatusVelez->unit }}</td>
@@ -151,6 +155,7 @@
                                             <td>{{ $getStockStatusBanilad->dr_no }}</td>
                                             <td>{{ $getStockStatusBanilad->supplier }}</td>
                                             <td>{{ $getStockStatusBanilad->product_name }}</td>
+                                            <td>₱ <?php echo number_format($getStockStatusBanilad->price, 2)?></td>
                                             <td>{{ $getStockStatusBanilad->qty }}</td>
                                             <td>{{ $getStockStatusBanilad->product_in }}</td>
                                             <td>{{ $getStockStatusBanilad->unit }}</td>
@@ -196,6 +201,7 @@
                                             <td>{{ $getStockStatusGqs->dr_no }}</td>
                                             <td>{{ $getStockStatusGqs->supplier }}</td>
                                             <td>{{ $getStockStatusGqs->product_name }}</td>
+                                            <td>₱ <?php echo number_format($getStockStatusGqs->price, 2)?></td>
                                             <td>{{ $getStockStatusGqs->qty }}</td>
                                             <td>{{ $getStockStatusGqs->product_in }}</td>
                                             <td>{{ $getStockStatusGqs->unit }}</td>

@@ -14,12 +14,14 @@ class LoloPinoyGrillBranchesStoreStock extends Model
         'dr_no',
         'supplier',
         'product_name',
+        'price',
         'qty',
         'unit',
         'product_in',
         'product_out',
         'amount',
         'branch',
+        'flag',
         'created_by',
     ];
 }

@@ -178,7 +178,8 @@
       userTypes:[
         { text:'Admin', value: '1' },
         { text:'Sales', value: '2'},
-        { text:'User',  value:'3' }
+        { text:'User',  value:'3' },
+        { text:'Cashier', value:'4'}
       ]
     }
   })  

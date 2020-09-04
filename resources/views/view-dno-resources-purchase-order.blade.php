@@ -27,7 +27,7 @@
                             @if($purchaseOrder[0]->deleted_at == NULL)
                              <div class="float-right">
                                
-                                 <a href="{{ action('RibosBarController@printPO', $purchaseOrder[0]->id)}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                                 <a href="{{ action('DnoResourcesDevelopmentController@printPO', $purchaseOrder[0]->id)}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                                
                               </div>
                             @endif

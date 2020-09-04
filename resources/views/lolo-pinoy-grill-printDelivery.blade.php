@@ -23,12 +23,12 @@
 <div id="wrapper">
 	 <div id="content-wrapper">
  		<div class="container-fluid"">
- 				 <div style="width:50%; float:left;">
-             <div style="float:left;">
-               <img  src="{{ asset('images/pdf/lolo-pinoy-grill.jpg')}}"   alt="Lolo Pinoy Grill">    
-               <br> 
-               <span style="width: 200px;">A Subsidiary of Ribo's Food <br> Corporation</span>  
-            </div>
+            <div style="width:50%; float:left;">
+                <div style="float:left;">
+                <img  src="{{ asset('images/pdf/lolo-pinoy-grill.jpg')}}"   alt="Lolo Pinoy Grill">    
+                <br> 
+                <span style="width: 200px;">A Subsidiary of Ribo's Food <br> Corporation</span>  
+                </div>
             <div style="float:right; width:500px; margin-right:230px; margin-top:20px;">
                <p style="font-size:16px; text-align: left;">
                 Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>

@@ -30,6 +30,7 @@
           <span>Dashboard</span>
         </a>
       </li>
+      @if(Auth::user()['role_type'] != 4)
       <li class="nav-item">
         <a class="nav-link" href="{{ url('lolo-pinoy-lechon-de-cebu') }}">
           <i class="fas fa-book"></i>
@@ -42,12 +43,14 @@
           <span>Lolo Pinoy Grill Commissary</span>
         </a>
       </li>
+      @endif
        <li class="nav-item">
         <a class="nav-link" href="{{ url('lolo-pinoy-grill-branches') }}">
           <i class="fas fa-book"></i>
           <span>Lolo Pinoy Grill Branches</span>
         </a>
       </li>
+      @if(Auth::user()['role_type'] != 4)
        <li class="nav-item">
         <a class="nav-link" href="{{ url('mr-potato') }}">
           <i class="fas fa-book"></i>
@@ -90,6 +93,7 @@
           <span>WLG Corporation</span>
         </a>
       </li>
+      @endif
     </ul>
     <div id="content-wrapper">
         <div class="container-fluid">
@@ -103,6 +107,7 @@
 
              <!-- Icon Cards-->
         <div class="row">
+         @if(Auth::user()['role_type'] != 4)
           <div class="col-xl-3 col-sm-6 mb-3">
             <div class="card text-white bg-primary o-hidden h-100">
               <div class="card-body">
@@ -137,6 +142,7 @@
               </a>
             </div>
           </div>
+          @endif
           <div class="col-xl-3 col-sm-6 mb-3">
             <div class="card text-white bg-success o-hidden h-100">
               <div class="card-body">
@@ -153,6 +159,7 @@
               </a>
             </div>
           </div>
+          @if(Auth::user()['role_type'] != 4)
           <div class="col-xl-3 col-sm-6 mb-3">
             <div class="card text-white bg-danger o-hidden h-100">
               <div class="card-body">
@@ -298,6 +305,7 @@
               </a>
             </div>
           </div>
+          @endif 
         </div>
         </div>
 

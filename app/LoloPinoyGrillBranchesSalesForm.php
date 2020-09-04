@@ -3,9 +3,14 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class LoloPinoyGrillBranchesSalesForm extends Model
 {
+    use SoftDeletes;
+	
+    protected $dates = ['deleted_at'];
+
     //
     protected $fillable = [
         'user_id',
@@ -23,6 +28,7 @@ class LoloPinoyGrillBranchesSalesForm extends Model
         'gift_cert',
         'cash_amount',
         'change',
+        'flag',
         'created_by',
     ];
 }

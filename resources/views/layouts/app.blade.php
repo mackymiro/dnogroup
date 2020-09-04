@@ -37,7 +37,7 @@
  <div id="app">
         <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-    <a class="navbar-brand mr-1" href="{{ url('/') }}">Ribo's Food Corporation</a>
+    <a class="navbar-brand mr-1" href="{{ url('/') }}">DNO Holdings & Co</a>
 
     <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
       <i class="fas fa-bars"></i>
@@ -68,12 +68,14 @@
           <div class="dropdown-header text-center">
             <strong>
                   Account Type: 
-                  @if(Auth::user()['role_type'] == 1)
+                  @if(Auth::user()['role_type'] === 1)
                     Admin
-                  @elseif(Auth::user()['role_type'] == 2)
+                  @elseif(Auth::user()['role_type'] === 2)
                     Sales
-                  @elseif(Auth::user()['role_type'] == 3)
+                  @elseif(Auth::user()['role_type'] === 3)
                     User
+                  @elseif(Auth::user()['role_type'] === 4)
+                    Cashier
                   @endif                  
            </strong>
            </div>

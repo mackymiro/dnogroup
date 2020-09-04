@@ -3,10 +3,10 @@
        <li class="nav-item active">
         <a class="nav-link" href="{{ url('/') }}">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Ribo's Food Corporation</span>
+          <span>DNO Holdings & Co</span>
         </a>
       </li>
-      @if(Auth::user()['role_type'] != 3)
+      @if(Auth::user()['role_type'] != 3 && Auth::user()['role_type'] != 4)
        <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-flag"></i>
@@ -26,11 +26,12 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/sales-form')}}">Sales Form</a>
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/') }}">Transaction List</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/') }}">Transaction List (Today)</a>
+          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-branches/transaction-list-all') }}">Transaction List All</a>
          
         </div>
       </li>
-    
+      @if(Auth::user()['role_type'] != 4)
       <li class="nav-item dropdown ">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fab fa-first-order"></i>
@@ -100,6 +101,7 @@
         </div>
       </li>
       @endif 
+      @endif
        <li class="nav-item dropdown ">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fas fa-store"></i>

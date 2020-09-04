@@ -3531,8 +3531,6 @@ class RibosBarController extends Controller
          $sumCheque = $chequeAmount1 + $chequeAmount2;
        
 
-       
-
         $pdf = PDF::loadView('printPayablesRibosBar', compact('payableId',  
         'getChequeNumbers', 'getCashAmounts', 'sum', 'getParticulars', 'sumCheque'));
 

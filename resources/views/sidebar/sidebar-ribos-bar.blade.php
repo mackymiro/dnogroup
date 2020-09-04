@@ -3,7 +3,7 @@
        <li class="nav-item active">
         <a class="nav-link" href="{{ url('/') }}">
           <i class="fas fa-fw fa-tachometer-alt"></i>
-          <span>Ribo's Food Corporation</span>
+          <span>DNO Holdings & Co</span>
         </a>
       </li>
       @if(Auth::user()['role_type'] != 3)
