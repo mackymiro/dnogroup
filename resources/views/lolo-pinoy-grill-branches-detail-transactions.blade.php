@@ -51,27 +51,7 @@
                                                             @endif
                                                             <br>
                                                       </div>
-                                                      <div class="col-lg-2 ">
-                                                            <label><strong>SENIOR CITIZEN</strong></label>
-                                                           <div id="app-senior">
-                                                                  <select name="senior" class="selectSenior form-control form-control-lg">
-                                                                        <option v-for="senior in seniors" v-bind:value="senior.value">
-                                                                        @{{ senior.text }}
-                                                                        </option>
-                                                                  </select>
-                                                            </div>
-                                                            
-                                                      </div>
-                                                      <div id="seniorId" class="col-lg-2 ">
-                                                            <label><strong>SENIOR CITIZEN ID</strong></label>
-                                                            <input type="text" name="seniorCitizenId" class="form-control form-control-lg" />
-                                                            
-                                                      </div>
-                                                      <div id="seniorName" class="col-lg-2 ">
-                                                            <label><strong>SENIOR CITIZEN NAME</strong></label>
-                                                            <input type="text" name="seniorCitizenName" class="form-control form-control-lg" />
-                                                            
-                                                      </div>
+                                                   
                                                       <div class="col-lg-4 ">
                                                             <label><strong>GIFT CERT (optional)</strong></label>
                                                             <input type="text" name="giftCert" placeholder="ENTER GIFT CERT HERE ..." class="form-control form-control-lg" onkeypress="return isNumber(event)" />
@@ -99,6 +79,58 @@
                   <div class="row">
                         <div class="col-lg-12">
                               <div class="card mb-3">
+                                    <div class="card-header">
+                                          <i class="fas fa-user"></i>
+                                          Senior Citizen
+                                    </div>
+                                    <div class="card-body">
+                                          <form action="{{ action('LoloPinoyGrillBranchesController@addSenior', $transaction[0]->id) }}" method="post">
+                                          {{ csrf_field() }}
+                                         <div class="form-group">
+                                                <div class="form-row">
+                                                      <div class="col-lg-2">
+                                                            <label><strong>SENIOR CITIZEN</strong></label>
+                                                            <select name="senior" class="selectSenior form-control form-control-lg">
+                                                                  <option value="NO">No</option>
+                                                                  <option value="YES">YES</option>
+                                                            </select>
+                                                            
+                                                            
+                                                      </div>
+                                                      <div id="seniorId" class="col-lg-2 ">
+                                                            <label><strong>SENIOR CITIZEN ID</strong></label>
+                                                            <input type="text" name="seniorCitizenId" class="form-control form-control-lg" required />
+                                                            
+                                                      </div>
+                                                      <div id="seniorName" class="col-lg-2 ">
+                                                            <label><strong>SENIOR CITIZEN NAME</strong></label>
+                                                            <input type="text" name="seniorCitizenName" class="form-control form-control-lg" required />
+                                                            
+                                                      </div>
+                                                      <div id="seniorAmount" class="col-lg-2 ">
+                                                            <label><strong>SENIOR AMOUNT</strong></label>
+                                                            <input type="text" name="seniorAmount" class="form-control form-control-lg" onkeypress="return isNumber(event)"/>
+                                                            
+                                                      </div>
+                                                </div>
+                                         </div>
+                                           <div class="form-group">
+                                                <div class="form-row">
+                                                      <div class="col-lg-12 ">
+                                                            <input type="hidden" name="mainId" value="{{  $transaction[0]->id }}" />
+                                                           <button class="btn btn-success btn-lg">Add Senior</button>
+                                                      </div>
+                                                </div>
+                                          
+                                          </div>
+                                          </form>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                        <div class="col-lg-12">
+                              <div class="card mb-3">
                                      <div class="card-header">
                                           <i class="fas fa-chair"></i>
                                           Other Details
@@ -121,9 +153,9 @@
                                
                                      <tr>
                                           <th class="bg-info" style="color:#fff;" width="15%">SENIOR CITIZEN</th>
-                                          <th class="bg-success" style="color:#fff; font-size:35px;" ></th>
+                                          <th class="bg-success" style="color:#fff; font-size:35px;" >{{ $transaction[0]->senior_citizen_label }}</th>
                                           <th class="bg-info" style="color:#fff;" width="15%">SENIOR CITIZEN ID</th>
-                                          <th class="bg-success" style="color:#fff; font-size:35px;" ></th>
+                                          <th class="bg-success" style="color:#fff; font-size:35px;" >{{ $transaction[0]->senior_citizen_id }}</th>
                                      </tr>
                                     </table>
                                     </div>
@@ -173,7 +205,7 @@
                                                 <tr>
                                                       <td></td>
                                                       <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Senior</td>
-                                                      <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ </span></td>
+                                                      <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?php echo number_format($transaction[0]->senior_amount, 2)?></span></td>
                                                 </tr>
                                                 <tr>
                                                       <td></td>
@@ -215,6 +247,7 @@
 <script>
       $("#seniorId").hide();
       $("#seniorName").hide();
+      $("#seniorAmount").hide();
 
       const isNumber =(evt) => {
             evt = (evt) ? evt : window.event;
@@ -227,7 +260,15 @@
 
       $(".selectSenior").change(function(){
             const cat = $(this.options[this.selectedIndex]).closest('option:selected').val();
-            alert(cat);
+            if(cat  === "NO"){
+                  $("#seniorId").hide();
+                  $("#seniorName").hide();
+                  $("#seniorAmount").hide();
+            }else{
+                  $("#seniorId").show();
+                  $("#seniorName").show();
+                  $("#seniorAmount").show();
+            }
       });
 </script>
 <script>

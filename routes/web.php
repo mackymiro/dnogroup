@@ -2754,12 +2754,17 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/lolo-pinoy-grill-branches/sales-form/transaction/detail-transaction/{id}',
 		'LoloPinoyGrillBranchesController@detailTransactions')
-		->name('detailTransactions');
+		->name('detailTransactionsLpBranches');
 
 	Route::post(
 		'/lolo-pinoy-grill-branches/sales-form/transaction/pay/{id}',
 		'LoloPinoyGrillBranchesController@payCash')
 		->name('payCash');
+
+	Route::post(
+		'/lolo-pinoy-grill-branches/add-senior/{id}',
+		'LoloPinoyGrillBranchesController@addSenior')
+		->name('addSeniorLpBranches');
 
 	Route::get(
 		'/lolo-pinoy-grill-branches/printReceipt/{id}',

@@ -22,7 +22,35 @@ use App\LoloPinoyGrillBranchesStoreStock;
 use App\LoloPinoyGrillBranchesStoreStockProduct;
 
 class LoloPinoyGrillBranchesController extends Controller
-{ 
+{   
+    public function addSenior(Request $request, $id){    
+        $addSenior = LoloPinoyGrillBranchesSalesForm::withTrashed()->find($id);
+        
+        $totalAmountSales = $addSenior->total_amount_of_sales;
+
+        //compute vat exempt sales
+        $vat = $totalAmountSales / 1.12;
+        $vatExempt =  number_format($vat, 2);
+      
+        //Senior Citizen Discount = VAT Exempt Sale x 20%
+        $senior = $vatExempt * 0.20;
+        $seniorAmount = number_format($senior, 2);
+      
+        //compute the vat and senior 
+        $vatSenior = $vatExempt - $seniorAmount;
+        
+        $getTotalBill = $totalAmountSales - $vatSenior;
+
+
+        $addSenior->senior_citizen_label = $request->get('senior');
+        $addSenior->senior_citizen_id = $request->get('seniorCitizenId');
+        $addSenior->senior_citizen_name = $request->get('seniorCitizenName');
+        $addSenior->senior_amount = $getTotalBill; 
+        $addSenior->save();
+        
+        return redirect()->route('detailTransactionsLpBranches', ['id'=>$request->get('mainId')]);
+      
+    }
 
     public function printReceipt(Request $request, $id){
         $branch = $request->session()->get('sessionBranch');
@@ -2803,8 +2831,8 @@ class LoloPinoyGrillBranchesController extends Controller
         ]);
 
         $payCash = LoloPinoyGrillBranchesSalesForm::withTrashed()->find($id);
-       
 
+    
         $payTotal = $request->get('cash') - $payCash->total_amount_of_sales;
         
         $payCash->cash_amount = $request->get('cash');
@@ -2838,6 +2866,9 @@ class LoloPinoyGrillBranchesController extends Controller
                     'lolo_pinoy_grill_branches_sales_forms.amount',
                     'lolo_pinoy_grill_branches_sales_forms.total_discounts_seniors_pwds',
                     'lolo_pinoy_grill_branches_sales_forms.total_amount_of_sales',
+                    'lolo_pinoy_grill_branches_sales_forms.senior_citizen_label',
+                    'lolo_pinoy_grill_branches_sales_forms.senior_citizen_id',
+                    'lolo_pinoy_grill_branches_sales_forms.senior_amount',
                     'lolo_pinoy_grill_branches_sales_forms.gift_cert',
                     'lolo_pinoy_grill_branches_sales_forms.cash_amount',
                     'lolo_pinoy_grill_branches_sales_forms.change',
