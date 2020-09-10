@@ -24,7 +24,7 @@
 	 <div id="content-wrapper">
  		<div class="container-fluid">
  				<div  style="margin-top:60px;">
-            	 <img style="margin-left: 270px;" src="{{ asset('images/wlg-corporation.png')}}"  alt="WLG Corporation">
+            	 <img style="margin-left: 270px;" src="{{ asset('images/digitized-logos/WLG-LOGO.png')}}"  alt="WLG Corporation">
             	 
                  	 <p >
 		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>

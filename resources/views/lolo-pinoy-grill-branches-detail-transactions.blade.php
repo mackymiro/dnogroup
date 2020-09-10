@@ -51,11 +51,7 @@
                                                             @endif
                                                             <br>
                                                       </div>
-                                                   
-                                                      <div class="col-lg-4 ">
-                                                            <label><strong>GIFT CERT (optional)</strong></label>
-                                                            <input type="text" name="giftCert" placeholder="ENTER GIFT CERT HERE ..." class="form-control form-control-lg" onkeypress="return isNumber(event)" />
-                                                      </div>
+                                                
                                                 </div>
                                           
                                           </div>
@@ -107,8 +103,8 @@
                                                             <input type="text" name="seniorCitizenName" class="form-control form-control-lg" required />
                                                             
                                                       </div>
-                                                      <div id="seniorAmount" class="col-lg-2 ">
-                                                            <label><strong>SENIOR AMOUNT</strong></label>
+                                                      <div id="seniorAmount" class="col-lg-4">
+                                                            <label><strong>SENIOR AMOUNT (set to 300 pesos) </strong></label>
                                                             <input type="text" name="seniorAmount" class="form-control form-control-lg" onkeypress="return isNumber(event)"/>
                                                             
                                                       </div>
@@ -124,6 +120,27 @@
                                           
                                           </div>
                                           </form>
+                                    </div>
+                              </div>
+                        </div>
+                  </div>
+                  <div class="row">
+                        <div class="col-lg-12">
+                              <div class="card mb-3">
+                                    <div class="card-header">
+                                           <i class="fas fa-gift"></i>
+                                         Gift Cert
+                                    </div>
+                                    <div class="card-body">
+                                          <div class="form-group">
+                                                <div class="form-row">  
+                                                      <div class="col-lg-4 ">
+                                                            <label><strong>GIFT CERT (optional)</strong></label>
+                                                            <input type="text" name="giftCert" placeholder="ENTER GIFT CERT HERE ..." class="form-control form-control-lg" onkeypress="return isNumber(event)" />
+                                                      </div>
+                                                </div>
+                                          </div>
+                                         
                                     </div>
                               </div>
                         </div>
@@ -156,6 +173,11 @@
                                           <th class="bg-success" style="color:#fff; font-size:35px;" >{{ $transaction[0]->senior_citizen_label }}</th>
                                           <th class="bg-info" style="color:#fff;" width="15%">SENIOR CITIZEN ID</th>
                                           <th class="bg-success" style="color:#fff; font-size:35px;" >{{ $transaction[0]->senior_citizen_id }}</th>
+                                     </tr>
+                                     <tr>
+                                          <th class="bg-info" style="color:#fff;" width="15%">SENIOR CITIZEN NAME</th>
+                                          <th class="bg-success" style="color:#fff; font-size:35px;" >{{ $transaction[0]->senior_citizen_name }}</th>
+                                         
                                      </tr>
                                     </table>
                                     </div>
@@ -194,7 +216,7 @@
                                                 </tbody>
                                                 <tr>
                                                       <td></td>
-                                                      <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Total</td>
+                                                      <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Sub Total</td>
                                                       <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?php echo number_format($transaction[0]->total_amount_of_sales , 2); ?></span></td>
                                                 </tr>
                                                 <tr>
@@ -204,8 +226,13 @@
                                                 </tr>
                                                 <tr>
                                                       <td></td>
-                                                      <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Senior</td>
-                                                      <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?php echo number_format($transaction[0]->senior_amount, 2)?></span></td>
+                                                      <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Senior Discount</td>
+                                                      <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?php echo number_format($transaction[0]->senior_discount, 2)?></span></td>
+                                                </tr>
+                                                <tr>
+                                                      <td></td>
+                                                      <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Total</td>
+                                                      <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?php echo number_format($transaction[0]->total, 2)?></span></td>
                                                 </tr>
                                                 <tr>
                                                       <td></td>

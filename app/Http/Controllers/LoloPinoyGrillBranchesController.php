@@ -26,30 +26,71 @@ class LoloPinoyGrillBranchesController extends Controller
     public function addSenior(Request $request, $id){    
         $addSenior = LoloPinoyGrillBranchesSalesForm::withTrashed()->find($id);
         
-        $totalAmountSales = $addSenior->total_amount_of_sales;
+    
+        if(!empty($request->get('seniorAmount'))){
+            $totalAmountSales = $addSenior->total_amount_of_sales;
 
-        //compute vat exempt sales
-        $vat = $totalAmountSales / 1.12;
-        $vatExempt =  number_format($vat, 2);
-      
-        //Senior Citizen Discount = VAT Exempt Sale x 20%
-        $senior = $vatExempt * 0.20;
-        $seniorAmount = number_format($senior, 2);
-      
-        //compute the vat and senior 
-        $vatSenior = $vatExempt - $seniorAmount;
+            //compute vat exempt sales set to 300 pesos
+            $vat = 300 / 1.12;
+            $vatExempt = number_format($vat, 2);
+
+             //Senior Citizen Discount = VAT Exempt Sale x 20%
+             $senior = 300 * 0.20;
+             $seniorAmount = number_format($senior, 2);
+
+            //compute the vat and senior 
+            $vatSenior = $vatExempt - $seniorAmount;
+
+            $getTotalBill = $totalAmountSales - $vatSenior;
+
+            //get subtotal - senior discount
+            $getTotalAmount = $totalAmountSales - $getTotalBill;
+
+            $addSenior->senior_citizen_label = $request->get('senior');
+            $addSenior->senior_citizen_id = $request->get('seniorCitizenId');
+            $addSenior->senior_citizen_name = $request->get('seniorCitizenName');
+            $addSenior->senior_amount = $getTotalBill; 
+            $addSenior->senior_discount = $getTotalBill; 
+            $addSenior->total = $getTotalAmount; 
+            $addSenior->save();
+            
+            return redirect()->route('detailTransactions', ['id'=>$request->get('mainId')]);
+
+
+
+        }else{
+            $totalAmountSales = $addSenior->total_amount_of_sales;
+
+            //compute vat exempt sales
+            $vat = $totalAmountSales / 1.12;
+            $vatExempt =  number_format($vat, 2);
+          
+            //Senior Citizen Discount = VAT Exempt Sale x 20%
+            $senior = $vatExempt * 0.20;
+    
+            $seniorAmount = number_format($senior, 2);
+          
+            //compute the vat and senior 
+            $vatSenior = $vatExempt - $seniorAmount;
+            
+            $getTotalBill = $totalAmountSales - $vatSenior;
+
+            //get subtotal - senior discount
+            $getTotalAmount = $totalAmountSales - $getTotalBill;
         
-        $getTotalBill = $totalAmountSales - $vatSenior;
+            $addSenior->senior_citizen_label = $request->get('senior');
+            $addSenior->senior_citizen_id = $request->get('seniorCitizenId');
+            $addSenior->senior_citizen_name = $request->get('seniorCitizenName');
+            $addSenior->senior_amount = $getTotalBill; 
+            $addSenior->senior_discount = $getTotalBill; 
+            $addSenior->total = $getTotalAmount; 
+            $addSenior->save();
+            
+            return redirect()->route('detailTransactions', ['id'=>$request->get('mainId')]);
+          
+        }
 
-
-        $addSenior->senior_citizen_label = $request->get('senior');
-        $addSenior->senior_citizen_id = $request->get('seniorCitizenId');
-        $addSenior->senior_citizen_name = $request->get('seniorCitizenName');
-        $addSenior->senior_amount = $getTotalBill; 
-        $addSenior->save();
-        
-        return redirect()->route('detailTransactionsLpBranches', ['id'=>$request->get('mainId')]);
-      
+       
     }
 
     public function printReceipt(Request $request, $id){
@@ -70,6 +111,10 @@ class LoloPinoyGrillBranchesController extends Controller
                         'lolo_pinoy_grill_branches_sales_forms.amount',
                         'lolo_pinoy_grill_branches_sales_forms.total_discounts_seniors_pwds',
                         'lolo_pinoy_grill_branches_sales_forms.total_amount_of_sales',
+                        'lolo_pinoy_grill_branches_sales_forms.senior_citizen_id',
+                        'lolo_pinoy_grill_branches_sales_forms.senior_citizen_name',
+                        'lolo_pinoy_grill_branches_sales_forms.senior_citizen_label',
+                        'lolo_pinoy_grill_branches_sales_forms.senior_amount',
                         'lolo_pinoy_grill_branches_sales_forms.gift_cert',
                         'lolo_pinoy_grill_branches_sales_forms.cash_amount',
                         'lolo_pinoy_grill_branches_sales_forms.change',
@@ -98,6 +143,10 @@ class LoloPinoyGrillBranchesController extends Controller
                         'lolo_pinoy_grill_branches_sales_forms.amount',
                         'lolo_pinoy_grill_branches_sales_forms.total_discounts_seniors_pwds',
                         'lolo_pinoy_grill_branches_sales_forms.total_amount_of_sales',
+                        'lolo_pinoy_grill_branches_sales_forms.senior_citizen_id',
+                        'lolo_pinoy_grill_branches_sales_forms.senior_citizen_name',
+                        'lolo_pinoy_grill_branches_sales_forms.senior_citizen_label',
+                        'lolo_pinoy_grill_branches_sales_forms.senior_amount',
                         'lolo_pinoy_grill_branches_sales_forms.gift_cert',
                         'lolo_pinoy_grill_branches_sales_forms.cash_amount',
                         'lolo_pinoy_grill_branches_sales_forms.change',
@@ -345,6 +394,7 @@ class LoloPinoyGrillBranchesController extends Controller
                         'lolo_pinoy_grill_branches_sales_forms.amount',
                         'lolo_pinoy_grill_branches_sales_forms.total_discounts_seniors_pwds',
                         'lolo_pinoy_grill_branches_sales_forms.total_amount_of_sales',
+                        'lolo_pinoy_grill_branches_sales_forms.senior_amount',
                         'lolo_pinoy_grill_branches_sales_forms.gift_cert',
                         'lolo_pinoy_grill_branches_sales_forms.cash_amount',
                         'lolo_pinoy_grill_branches_sales_forms.change',
@@ -368,6 +418,7 @@ class LoloPinoyGrillBranchesController extends Controller
                             'lolo_pinoy_grill_branches_sales_forms.amount',
                             'lolo_pinoy_grill_branches_sales_forms.total_discounts_seniors_pwds',
                             'lolo_pinoy_grill_branches_sales_forms.total_amount_of_sales',
+                            'lolo_pinoy_grill_branches_sales_forms.senior_amount',
                             'lolo_pinoy_grill_branches_sales_forms.gift_cert',
                             'lolo_pinoy_grill_branches_sales_forms.cash_amount',
                             'lolo_pinoy_grill_branches_sales_forms.deleted_at',
@@ -2831,18 +2882,28 @@ class LoloPinoyGrillBranchesController extends Controller
         ]);
 
         $payCash = LoloPinoyGrillBranchesSalesForm::withTrashed()->find($id);
+               
+        if($payCash->senior_amount != NULL){
+            $payTotalSenior = $request->get('cash') - $payCash->total;
+            $payCash->cash_amount = $request->get('cash');
+            $payCash->change = $payTotalSenior;
+            $payCash->save();
 
-    
-        $payTotal = $request->get('cash') - $payCash->total_amount_of_sales;
+            Session::flash('successPay', 'Paid Successfully. Kindly click the OK button below.');
+            return redirect()->route('detailTransactions', ['id'=>$id]);
+
+        }else{
+            $payTotal = $request->get('cash') - $payCash->total;
         
-        $payCash->cash_amount = $request->get('cash');
-        $payCash->ordered_by = $request->get('orderedBy');
-        $payCash->gift_cert = $request->get('giftCert');
-        $payCash->change = $payTotal; 
-        $payCash->save();
+            $payCash->cash_amount = $request->get('cash');
+            $payCash->change = $payTotal; 
+            $payCash->save();
+    
+            Session::flash('successPay', 'Paid Successfully. Kindly click the OK button below.');
+            return redirect()->route('detailTransactions', ['id'=>$id]);
+           
+        }
 
-        Session::flash('successPay', 'Paid Successfully. Kindly click the OK button below.');
-        return redirect()->route('detailTransactions', ['id'=>$id]);
         
     }
 
@@ -2866,9 +2927,12 @@ class LoloPinoyGrillBranchesController extends Controller
                     'lolo_pinoy_grill_branches_sales_forms.amount',
                     'lolo_pinoy_grill_branches_sales_forms.total_discounts_seniors_pwds',
                     'lolo_pinoy_grill_branches_sales_forms.total_amount_of_sales',
+                    'lolo_pinoy_grill_branches_sales_forms.total',
                     'lolo_pinoy_grill_branches_sales_forms.senior_citizen_label',
                     'lolo_pinoy_grill_branches_sales_forms.senior_citizen_id',
                     'lolo_pinoy_grill_branches_sales_forms.senior_amount',
+                    'lolo_pinoy_grill_branches_sales_forms.senior_discount',
+                    'lolo_pinoy_grill_branches_sales_forms.senior_citizen_name',
                     'lolo_pinoy_grill_branches_sales_forms.gift_cert',
                     'lolo_pinoy_grill_branches_sales_forms.cash_amount',
                     'lolo_pinoy_grill_branches_sales_forms.change',
@@ -2916,6 +2980,7 @@ class LoloPinoyGrillBranchesController extends Controller
 
         //update
         $getTransId->total_amount_of_sales = $amt;
+        $getTransId->total = $amt;
         $getTransId->save();
 
         $addAdditional = new LoloPinoyGrillBranchesSalesForm([
@@ -3048,6 +3113,7 @@ class LoloPinoyGrillBranchesController extends Controller
             'item_description'=>$request->itemDescription,
             'amount'=>$request->amount,
             'total_amount_of_sales'=>$request->amount,
+            'total'=>$request->amount,
             'branch'=>$request->branch,
             'flag'=>$request->flag,
             'created_by'=>$name,

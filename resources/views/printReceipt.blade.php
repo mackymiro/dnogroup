@@ -37,9 +37,11 @@
 			<br>
 			Transaction ID: {{ $getBranchItem[0]->id }}
 			<br>
-			Senior Citizen: 
-			<br>
-			Senior Citizen Name: 
+			@if($getBranchItem[0]->senior_citizen_label != NULL)
+				Senior Citizen ID: {{ $getBranchItem[0]->senior_citizen_id }}
+				<br>
+				Senior Citizen Name: {{ $getBranchItem[0]->senior_citizen_name }}
+			@endif
 		</p>
 		<table style="margin-left:1px; font-size:5px;">
 			<tr style="border:1px solid black;">
@@ -59,37 +61,31 @@
 				<th style=" text-align:left; font-size:5px;"><?php echo number_format($getOtherItem->amount, 2); ?></th>
 			</tr>
 			@endforeach
-		</table>
-		<br>
-		<br>
-		<br>
-		<table style="width:80%; margin-left:1px; font-size:5px;">
 			<tr style="border:1px solid black;">
 				<th style="text-align:left; font-size:5px; " width="30%">Total</th>	
-				<th style="text-align:left; font-size:5px;"></th>
+				<th style="text-align:left; font-size:5px;"><? echo number_format($getBranchItem[0]->total_amount_of_sales, 2)?></th>
 				
 			</tr>
 			<tr style="border:1px solid black;">
 				<th style="text-align:left; font-size:5px; " width="30%">Cash</th>	
-				<th style="text-align:left; font-size:5px;"></th>
+				<th style="text-align:left; font-size:5px;"><?php echo number_format($getBranchItem[0]->cash_amount, 2)?></th>
 				
 			</tr>
 			<tr style="border:1px solid black;">
 				<th style="text-align:left; font-size:5px; " width="30%">Senior</th>	
-				<th style="text-align:left; font-size:5px;"></th>
+				<th style="text-align:left; font-size:5px;"><?php echo number_format($getBranchItem[0]->senior_amount, 2)?></th>
 				
 			</tr>
 			<tr style="border:1px solid black;">
 				<th style="text-align:left; font-size:5px;" width="30%">Gift Cert</th>	
-				<th style="text-align:left; font-size:5px;"></th>
+				<th style="text-align:left; font-size:5px;"><?php echo number_format($getBranchItem[0]->gift_cert, 2)?></th>
 				
 			</tr>
 			<tr style="border:1px solid black;">
 				<th style="text-align:left; font-size:5px; " width="30%">Change</th>	
-				<th style="text-align:left; font-size:5px;"></th>
+				<th style="text-align:left; font-size:5px;"><?php echo number_format($getBranchItem[0]->change, 2)?></th>
 				
 			</tr>
-		
 		</table>
 	
     </div>

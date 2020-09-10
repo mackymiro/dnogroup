@@ -2754,7 +2754,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/lolo-pinoy-grill-branches/sales-form/transaction/detail-transaction/{id}',
 		'LoloPinoyGrillBranchesController@detailTransactions')
-		->name('detailTransactionsLpBranches');
+		->name('detailTransactions');
 
 	Route::post(
 		'/lolo-pinoy-grill-branches/sales-form/transaction/pay/{id}',

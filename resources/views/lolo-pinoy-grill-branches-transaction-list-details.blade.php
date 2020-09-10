@@ -118,7 +118,7 @@
                                     @endif 
                                     <td></td>
                                     <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Senior</td>
-                                    <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ </span></td>
+                                    <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?php echo number_format($getOrder[0]->senior_amount, 2) ?> </span></td>
                                 </tr>
                                 <tr>
                                     @if(Auth::user()['role_type'] != 4)
