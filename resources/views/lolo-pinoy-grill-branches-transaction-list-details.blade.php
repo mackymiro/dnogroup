@@ -24,8 +24,8 @@
 							<i class="fa fa-file-invoice" aria-hidden="true"></i>
 							View Transaction Details
                             <div class="float-right">
-                               <a href=""><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
-                             </div>
+                                <a href="{{ action('LoloPinoyGrillBranchesController@printReceipt', $getOrder[0]->id)}}" ><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                            </div>
 						</div>
                         <div class="card-body">
                               <table class="table table-bordered"  width="100%" cellspacing="0">

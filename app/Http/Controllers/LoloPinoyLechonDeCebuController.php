@@ -8818,9 +8818,6 @@ class LoloPinoyLechonDeCebuController extends Controller
     public function edit($id)
     {
         //
-        $ids = Auth::user()->id;
-        $user = User::find($ids);
-
         $purchaseOrder = LechonDeCebuPurchaseOrder::find($id);
 
         $pOrders = LechonDeCebuPurchaseOrder::where('po_id', $id)->get()->toArray();
@@ -8829,7 +8826,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $getUsers = User::get()->toArray();
        
 
-        return view('edit-lechon-de-cebu-purchase-order', compact('user', 'purchaseOrder', 'pOrders', 'getUsers'));
+        return view('edit-lechon-de-cebu-purchase-order', compact('purchaseOrder', 'pOrders', 'getUsers'));
     }
 
     /**

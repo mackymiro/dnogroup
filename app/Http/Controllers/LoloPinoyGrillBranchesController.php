@@ -32,7 +32,7 @@ class LoloPinoyGrillBranchesController extends Controller
 
             //compute vat exempt sales set to 300 pesos
             $vat = 300 / 1.12;
-            $vatExempt = number_format($vat, 2);
+            $vatExempt = round($vat, 2);
 
              //Senior Citizen Discount = VAT Exempt Sale x 20%
              $senior = 300 * 0.20;
@@ -63,11 +63,11 @@ class LoloPinoyGrillBranchesController extends Controller
 
             //compute vat exempt sales
             $vat = $totalAmountSales / 1.12;
-            $vatExempt =  number_format($vat, 2);
-          
+            $vatExempt = round($vat, 2);  
+    
             //Senior Citizen Discount = VAT Exempt Sale x 20%
             $senior = $vatExempt * 0.20;
-    
+
             $seniorAmount = number_format($senior, 2);
           
             //compute the vat and senior 
@@ -2882,7 +2882,7 @@ class LoloPinoyGrillBranchesController extends Controller
         ]);
 
         $payCash = LoloPinoyGrillBranchesSalesForm::withTrashed()->find($id);
-               
+
         if($payCash->senior_amount != NULL){
             $payTotalSenior = $request->get('cash') - $payCash->total;
             $payCash->cash_amount = $request->get('cash');
@@ -4502,6 +4502,11 @@ class LoloPinoyGrillBranchesController extends Controller
            return redirect('lolo-pinoy-grill-branches/edit/'.$id);
 
 
+    }
+
+    public function destroyDeliveryInTransaction($id){
+        $destroyDeliveryTransaction  = LoloPinoyGrillBranchesStoreStock::find($id);
+        $destroyDeliveryTransaction->delete();
     }
 
     public function destroyUtility($id){

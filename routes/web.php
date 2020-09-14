@@ -2924,6 +2924,11 @@ Route::group(['middleware' => ['auth']], function(){
 		'LoloPinoyGrillBranchesController@deliveryInTransactionBranch')
 		->name('deliveryInTransactionBranch');
 
+	Route::delete(
+		'/lolo-pinoy-grill-branches/delivery-in-transaction/delete/{id}',
+		'LoloPinoyGrillBranchesController@destroyDeliveryInTransaction')
+		->name('destroyDeliveryInTransaction');
+
 	Route::post(
 		'/lolo-pinoy-grill-branches/store-delivery-in',
 		'LoloPinoyGrillBranchesController@storeDeliveryIn')
@@ -4801,6 +4806,71 @@ Route::group(['middleware' => ['auth']], function(){
 		'DongFangCorporationController@destroyTransaction')
 		->name('destroyTransaction')
 		->middleware(['cashier']);
+
+	Route::get(
+		'/dong-fang-corporation/purchase-order',
+		'DongFangCorporationController@purchaseOrder')
+		->name('purchaseOrderDongFang')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dong-fang-corporation/store',
+		'DongFangCorporationController@store')
+		->name('storeDongFang')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dong-fang-corporation/edit/{id}',
+		'DongFangCorporationController@edit')
+		->name('editDongFang')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dong-fang-corporation/add-new/{id}',
+		'DongFangCorporationController@addNew')
+		->name('addNewDongFang')
+		->middleware(['cashier']);
+
+	Route::patch(
+		'/dong-fang-corporation/update-po/{id}',
+		'DongFangCorporationController@updatePo')
+		->name('updatePoDongFang')
+		->middleware(['cashier']);
+
+	Route::patch(
+		'/dong-fang-corporation/update/po/{id}',
+		'DongFangCorporationController@update')
+		->name('updateDongFang')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dong-fang-corporation/delete/{id}',
+		'DongFangCorporationController@destroy')
+		->name('destroy')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dong-fang-corporation/delete/PO/{id}',
+		'DongFangCorporationController@destroyPO')
+		->name('destroyPO')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dong-fang-corporation/purchase-order-lists',
+		'DongFangCorporationController@purchaseOrderList')
+		->name('purchaseOrderListDongFang')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dong-fang-corporation/view-dong-fang-purchase-order/{id}',
+		'DongFangCorporationController@show')
+		->name('show')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dong-fang-corporation/printPO/{id}',
+		'DongFangCorporationController@printPO')
+		->name('printPODongFang');
 
 
 	Route::get(

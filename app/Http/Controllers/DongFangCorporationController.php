@@ -13,9 +13,146 @@ use App\DongFangCorporationBillingStatement;
 use App\DongFangCorporationPettyCash;
 use App\DongFangCorporationCode;
 use App\DongFangCorporationSupplier;
+use App\DongFangCorporationPurchaseOrder;
 
 class DongFangCorporationController extends Controller
 {
+
+    public function printPO($id){
+        $moduleName = "Purchase Order";
+        $purchaseOrder = DB::table(
+                    'dong_fang_corporation_purchase_orders')
+                    ->select(
+                        'dong_fang_corporation_purchase_orders.id',
+                        'dong_fang_corporation_purchase_orders.user_id',
+                        'dong_fang_corporation_purchase_orders.po_id',
+                        'dong_fang_corporation_purchase_orders.paid_to',
+                        'dong_fang_corporation_purchase_orders.address',
+                        'dong_fang_corporation_purchase_orders.date',
+                        'dong_fang_corporation_purchase_orders.quantity',
+                        'dong_fang_corporation_purchase_orders.description',
+                        'dong_fang_corporation_purchase_orders.unit_price',
+                        'dong_fang_corporation_purchase_orders.amount',
+                        'dong_fang_corporation_purchase_orders.total_price',
+                        'dong_fang_corporation_purchase_orders.created_by',
+                        'dong_fang_corporation_purchase_orders.deleted_at',
+                        'dong_fang_corporation_codes.dong_fang_code',
+                        'dong_fang_corporation_codes.module_id',
+                        'dong_fang_corporation_codes.module_code',
+                        'dong_fang_corporation_codes.module_name')
+                    ->join('dong_fang_corporation_codes', 'dong_fang_corporation_purchase_orders.id', '=', 'dong_fang_corporation_codes.module_id')
+                    ->where('dong_fang_corporation_purchase_orders.po_id', NULL)
+                    ->where('dong_fang_corporation_codes.module_name', $moduleName)
+                    ->where('dong_fang_corporation_purchase_orders.deleted_at', NULL)
+                    ->orderBy('dong_fang_corporation_purchase_orders.id', 'desc')
+                    ->get();
+
+
+        $pOrders = DongFangCorporationPurchaseOrder::where('po_id', $id)->get()->toArray();
+
+        //count the total amount 
+        $countTotalAmount = DongFangCorporationPurchaseOrder::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = DongFangCorporationPurchaseOrder::where('po_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        $pdf = PDF::loadView('printDongFangPO', compact('purchaseOrder', 'pOrders', 'sum'));
+
+        return $pdf->download('dong-fang-corporation-purchase-order.pdf');
+    }
+
+    public function purchaseOrderList(){
+        $moduleName = "Purchase Order";
+        $purchaseOrders = DB::table(
+                        'dong_fang_corporation_purchase_orders')
+                        ->select(
+                            'dong_fang_corporation_purchase_orders.id',
+                            'dong_fang_corporation_purchase_orders.user_id',
+                            'dong_fang_corporation_purchase_orders.po_id',
+                            'dong_fang_corporation_purchase_orders.paid_to',
+                            'dong_fang_corporation_purchase_orders.address',
+                            'dong_fang_corporation_purchase_orders.date',
+                            'dong_fang_corporation_purchase_orders.quantity',
+                            'dong_fang_corporation_purchase_orders.description',
+                            'dong_fang_corporation_purchase_orders.unit_price',
+                            'dong_fang_corporation_purchase_orders.amount',
+                            'dong_fang_corporation_purchase_orders.total_price',
+                            'dong_fang_corporation_purchase_orders.created_by',
+                            'dong_fang_corporation_purchase_orders.deleted_at',
+                            'dong_fang_corporation_codes.dong_fang_code',
+                            'dong_fang_corporation_codes.module_id',
+                            'dong_fang_corporation_codes.module_code',
+                            'dong_fang_corporation_codes.module_name')
+                        ->join('dong_fang_corporation_codes', 'dong_fang_corporation_purchase_orders.id', '=', 'dong_fang_corporation_codes.module_id')
+                        ->where('dong_fang_corporation_purchase_orders.po_id', NULL)
+                        ->where('dong_fang_corporation_codes.module_name', $moduleName)
+                        ->where('dong_fang_corporation_purchase_orders.deleted_at', NULL)
+                        ->orderBy('dong_fang_corporation_purchase_orders.id', 'desc')
+                        ->get();
+
+        return view('dong-fang-corporation-purchase-order-lists', compact('purchaseOrders'));
+        
+    }
+
+    public function updatePo(Request $request, $id){
+        $order = DongFangCorporationPurchaseOrder::find($id);
+        
+        $order->quantity = $request->get('quantity');
+        $order->description = $request->get('description');
+        $order->unit_price  = $request->get('unitPrice');
+        $order->amount = $request->get('amount');
+    
+        $order->save();
+
+        Session::flash('SuccessEdit', 'Successfully updated');
+
+        return redirect()->route('editDongFang', ['id'=>$request->get('poId')]);
+    }
+
+    public function addNew(Request $request, $id){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+        //
+          $this->validate($request, [
+            'amount'=>'required',
+        ]);
+
+        $pO = DongFangCorporationPurchaseOrder::find($id);
+        $amount = $pO->total_price + $request->get('amount');
+
+        $addNewParticulars = new DongFangCorporationPurchaseOrder([
+            'user_id'=>$user->id,
+            'po_id'=>$id,
+            'quantity'=>$request->get('quantity'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$request->get('unitPrice'),
+            'amount'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+        $addNewParticulars->save();
+        $pO->total_price = $amount; 
+        $pO->save();
+
+        Session::flash('addNewSuccess', 'Successfully added');
+
+        return redirect()->route('editDongFang', ['id'=>$id]);
+
+    }
+
+
+    public function purchaseOrder(){
+
+        return view('dong-fang-corporation-purchase-order');
+    }
+
     public function printSupplier($id){
         $viewSupplier = DongFangCorporationSupplier::where('id', $id)->get();
 
@@ -2737,6 +2874,70 @@ class DongFangCorporationController extends Controller
     public function store(Request $request)
     {
         //
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //
+         $this->validate($request, [
+            'paidTo' => 'required',
+            'address'=> 'required',
+            'quantity'=>'required',
+            'description'=>'required',
+            'unitPrice'=>'required',
+            'amount'=>'required',
+        ]);
+
+         //get the latest insert id query in table lechon_de_cebu_codes
+         $data = DB::select('SELECT id, dong_fang_code FROM dong_fang_corporation_codes ORDER BY id DESC LIMIT 1');
+
+         //if code is not zero add plus 1
+         if(isset($data[0]->dong_fang_code) != 0){
+            //if code is not 0
+            $newNum = $data[0]->dong_fang_code +1;
+            $uNum = sprintf("%06d",$newNum);    
+        }else{
+            //if code is 0 
+            $newNum = 1;
+            $uNum = sprintf("%06d",$newNum);
+        }
+
+        $purchaseOrder = new DongFangCorporationPurchaseOrder([
+            'user_id' =>$user->id,
+            'paid_to'=>$request->get('paidTo'),
+            'address'=>$request->get('address'),
+            'date'=>$request->get('date'),
+            'quantity'=>$request->get('quantity'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$request->get('unitPrice'),
+            'amount'=>$request->get('amount'),
+            'total_price'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+        $purchaseOrder->save();
+
+        $insertedId = $purchaseOrder->id;
+
+        $moduleCode = "PO-";
+        $moduleName = "Purchase Order";
+
+        //save to dong fang corp codes table
+        $dongFang = new DongFangCorporationCode([
+            'user_id'=>$user->id,
+            'dong_fang_code'=>$uNum,
+            'module_id'=>$insertedId,
+            'module_code'=>$moduleCode,
+            'module_name'=>$moduleName,
+        ]);
+        $dongFang->save();
+
+        return redirect()->route('editDongFang', ['id'=>$insertedId]);
+
+
     }
 
     /**
@@ -2748,6 +2949,45 @@ class DongFangCorporationController extends Controller
     public function show($id)
     {
         //
+        $moduleName = "Purchase Order";
+        $purchaseOrder = DB::table(
+                    'dong_fang_corporation_purchase_orders')
+                    ->select(
+                        'dong_fang_corporation_purchase_orders.id',
+                        'dong_fang_corporation_purchase_orders.user_id',
+                        'dong_fang_corporation_purchase_orders.po_id',
+                        'dong_fang_corporation_purchase_orders.paid_to',
+                        'dong_fang_corporation_purchase_orders.address',
+                        'dong_fang_corporation_purchase_orders.date',
+                        'dong_fang_corporation_purchase_orders.quantity',
+                        'dong_fang_corporation_purchase_orders.description',
+                        'dong_fang_corporation_purchase_orders.unit_price',
+                        'dong_fang_corporation_purchase_orders.amount',
+                        'dong_fang_corporation_purchase_orders.total_price',
+                        'dong_fang_corporation_purchase_orders.created_by',
+                        'dong_fang_corporation_purchase_orders.deleted_at',
+                        'dong_fang_corporation_codes.dong_fang_code',
+                        'dong_fang_corporation_codes.module_id',
+                        'dong_fang_corporation_codes.module_code',
+                        'dong_fang_corporation_codes.module_name')
+                    ->join('dong_fang_corporation_codes', 'dong_fang_corporation_purchase_orders.id', '=', 'dong_fang_corporation_codes.module_id')
+                    ->where('dong_fang_corporation_purchase_orders.id', $id)
+                    ->where('dong_fang_corporation_codes.module_name', $moduleName)
+                    ->orderBy('dong_fang_corporation_purchase_orders.id', 'desc')
+                    ->get();
+
+        $pOrders = DongFangCorporationPurchaseOrder::where('po_id', $id)->get()->toArray();
+
+        //count the total amount 
+        $countTotalAmount = DongFangCorporationPurchaseOrder::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = DongFangCorporationPurchaseOrder::where('po_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+            
+
+        return view('view-dong-fang-corporation-purchase-order', compact('purchaseOrder', 'pOrders', 'sum'));
     }
 
     /**
@@ -2759,6 +2999,14 @@ class DongFangCorporationController extends Controller
     public function edit($id)
     {
         //
+        $purchaseOrder = DongFangCorporationPurchaseOrder::find($id);
+
+        $pOrders = DongFangCorporationPurchaseOrder::where('po_id', $id)->get()->toArray();
+
+        //get users
+        $getUsers = User::get()->toArray();
+
+        return view('edit-dong-fang-corporation', compact('purchaseOrder', 'pOrders', 'getUsers'));
     }
 
     /**
@@ -2771,6 +3019,38 @@ class DongFangCorporationController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $paidTo = $request->get('paidTo');
+        $address = $request->get('address');
+        $quantity = $request->get('quantity');
+        $description = $request->get('description');
+        $date = $request->get('date');
+        $unitPrice = $request->get('unitPrice');
+        $amount = $request->get('amount');
+
+        $purchaseOrder = DongFangCorporationPurchaseOrder::find($id);
+        
+        $purchaseOrder->paid_to = $paidTo;
+        $purchaseOrder->address = $address;
+        $purchaseOrder->date = $date;
+        $purchaseOrder->description = $description;
+        $purchaseOrder->quantity = $quantity;
+        $purchaseOrder->unit_price = $unitPrice;
+        $purchaseOrder->amount = $amount;
+
+        $purchaseOrder->save();
+
+        Session::flash('SuccessE', 'Successfully updated');
+
+        return redirect()->route('editDongFang', ['id'=>$id]);
+
     }
 
     public function destroyPettyCash($id){
@@ -2788,14 +3068,28 @@ class DongFangCorporationController extends Controller
         $transactionList->delete();
     }
 
+    public function destroyPO($id){
+        $purchaseOrder = DongFangCorporationPurchaseOrder::find($id);
+        $purchaseOrder->delete();
+    }
+
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         //
+        $poId = DongFangCorporationPurchaseOrder::find($request->poId);
+
+        $purchaseOrder = DongFangCorporationPurchaseOrder::find($id);
+        $getAmount = $poId->total_price - $purchaseOrder->amount;
+        
+        $poId->total_price = $getAmount; 
+        $poId->save();
+
+        $purchaseOrder->delete();
     }
 }

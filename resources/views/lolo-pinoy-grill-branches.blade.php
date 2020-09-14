@@ -113,7 +113,7 @@
 									<tbody>	
 										@foreach($getTransactionBranches as $getTransactionBranch)
 										<tr>
-											<td>{{ $getTransactionBranch['date']}}</td>
+											<td><a href="{{ url('lolo-pinoy-grill-branches/transaction-list-details/'.$getTransactionBranch['id']) }}">{{ $getTransactionBranch['date']}}</a></td>
 											<td>{{ $getTransactionBranch['id']}}</td>
 											<td>{{ $getTransactionBranch['branch']}}</td>
 											<td class="bg-danger" style="color:#fff;"><?php echo number_format($getTransactionBranch['total_amount_of_sales'], 2); ?></td>
@@ -164,7 +164,7 @@
 									<tbody>	
 										@foreach($getTransactionBranches as $getTransactionBranch)
 										<tr>
-											<td>{{ $getTransactionBranch['date']}}</td>
+											<td><a href="{{ url('lolo-pinoy-grill-branches/transaction-list-details/'.$getTransactionBranch['id']) }}">{{ $getTransactionBranch['date']}}</a></td>
 											<td>{{ $getTransactionBranch['id'] }}</td>
 											<td>{{ $getTransactionBranch['branch']}}</td>
 											<td class="bg-danger" style="color:#fff;"><?php echo number_format($getTransactionBranch['total_amount_of_sales'], 2); ?></td>
@@ -215,7 +215,7 @@
 									<tbody>	
 										@foreach($getTransactionBranches as $getTransactionBranch)
 										<tr>
-											<td>{{ $getTransactionBranch['date']}}</td>
+											<td><a href="{{ url('lolo-pinoy-grill-branches/transaction-list-details/'.$getTransactionBranch['id']) }}">{{ $getTransactionBranch['date']}}</a></td>
 											<td>{{ $getTransactionBranch['id']}}</td>
 											<td>{{ $getTransactionBranch['branch']}}</td>
 											<td class="bg-danger" style="color:#fff;"><?php echo number_format($getTransactionBranch['total_amount_of_sales'], 2); ?></td>

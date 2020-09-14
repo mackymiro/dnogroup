@@ -53,7 +53,7 @@
                     			 <br>
                             @if($data === "Urgello")
                 			 	    <div class="table-responsive">
-                                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                  <table class="table table-bordered display"  width="100%" cellspacing="0">
                                       <thead>
                                           <th>Action</th>
                                           <th>Date</th>
@@ -84,7 +84,7 @@
                                       </tfoot>
                                       <tbody>
                                           @foreach($getDeliveryBranches as $getDeliveryBranchUrgello)
-                                          <tr id="{{ $getDeliveryBranchUrgello->id}}">
+                                          <tr id="deletedId{{ $getDeliveryBranchUrgello->id}}">
                                             <td>
                                             	<!-- Button trigger modal -->
 									                            <a data-toggle="modal" data-target="#deliveryBranch<?php echo $getDeliveryBranchUrgello->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
@@ -110,7 +110,7 @@
                             </div>
                             @elseif($data === "Velez")
                             <div class="table-responsive">
-                                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                  <table class="table table-bordered display"  width="100%" cellspacing="0">
                                       <thead>
                                           <th>Action</th>
                                           <th>Date</th>
@@ -141,7 +141,7 @@
                                       </tfoot>
                                       <tbody>
                                           @foreach($getDeliveryBranches as $getDeliveryBranchVelez)
-                                          <tr id="{{ $getDeliveryBranchVelez->id }}">
+                                          <tr id="deletedId{{ $getDeliveryBranchVelez->id }}">
                                             <td>
                                             	<!-- Button trigger modal -->
 									                            <a data-toggle="modal" data-target="#deliveryBranch<?php echo $getDeliveryBranchVelez->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
@@ -167,7 +167,7 @@
                             </div>
                             @elseif($data == "Banilad")
                             <div class="table-responsive">
-                                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                  <table class="table table-bordered display"  width="100%" cellspacing="0">
                                       <thead>
                                           <th>Action</th>
                                           <th>Date</th>
@@ -198,7 +198,7 @@
                                       </tfoot>
                                       <tbody>
                                           @foreach($getDeliveryBranches as $getDeliveryBranchBanilad)
-                                          <tr id="{{ $getDeliveryBranchBanilad->id }}">
+                                          <tr id="deletedId{{ $getDeliveryBranchBanilad->id }}">
                                             <td>
                                             	<!-- Button trigger modal -->
 									                            <a data-toggle="modal" data-target="#deliveryBranch<?php echo $getDeliveryBranchBanilad->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
@@ -224,7 +224,7 @@
                             </div>
                             @elseif($data  == "GQS")
                             <div class="table-responsive">
-                                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                  <table class="table table-bordered display"  width="100%" cellspacing="0">
                                       <thead>
                                           <th>Action</th>
                                           <th>Date</th>
@@ -255,7 +255,7 @@
                                       </tfoot>
                                       <tbody>
                                           @foreach($getDeliveryBranches as $getDeliveryBranchGqs)
-                                          <tr id="{{ $getDeliveryBranchGqs->id }}">
+                                          <tr id="deletedId{{ $getDeliveryBranchGqs->id }}">
                                             <td>
                                             	<!-- Button trigger modal -->
 									                            <a data-toggle="modal" data-target="#deliveryBranch<?php echo $getDeliveryBranchGqs->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
@@ -331,7 +331,7 @@
                                       </tfoot>
                                       <tbody>
                                           @foreach($getDeliveryBranchDrinks as $getDeliveryBranchUrgello)
-                                          <tr id="{{ $getDeliveryBranchUrgello->id}}">
+                                          <tr id="deletedId{{ $getDeliveryBranchUrgello->id}}">
                                             <td>
                                             	<!-- Button trigger modal -->
 									                            <a data-toggle="modal" data-target="#deliveryBranch<?php echo $getDeliveryBranchUrgello->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
@@ -357,7 +357,7 @@
                             </div>
                             @elseif($data === "Velez")
                             <div class="table-responsive">
-                                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                  <table class="table table-bordered display"  width="100%" cellspacing="0">
                                       <thead>
                                           <th>Action</th>
                                           <th>Date</th>
@@ -388,7 +388,7 @@
                                       </tfoot>
                                       <tbody>
                                           @foreach($getDeliveryBranchDrinks as $getDeliveryBranchVelez)
-                                          <tr id="{{ $getDeliveryBranchVelez->id }}">
+                                          <tr id="deletedId{{ $getDeliveryBranchVelez->id }}">
                                             <td>
                                             	<!-- Button trigger modal -->
 									                            <a data-toggle="modal" data-target="#deliveryBranch<?php echo $getDeliveryBranchVelez->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
@@ -414,7 +414,7 @@
                             </div>
                             @elseif($data == "Banilad")
                             <div class="table-responsive">
-                                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                  <table class="table table-bordered display"  width="100%" cellspacing="0">
                                       <thead>
                                           <th>Action</th>
                                           <th>Date</th>
@@ -445,7 +445,7 @@
                                       </tfoot>
                                       <tbody>
                                           @foreach($getDeliveryBranchDrinks as $getDeliveryBranchBanilad)
-                                          <tr id="{{ $getDeliveryBranchBanilad->id }}">
+                                          <tr id="deletedId{{ $getDeliveryBranchBanilad->id }}">
                                             <td>
                                             	<!-- Button trigger modal -->
 									                            <a data-toggle="modal" data-target="#deliveryBranch<?php echo $getDeliveryBranchBanilad->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
@@ -471,7 +471,7 @@
                             </div>
                             @elseif($data  == "GQS")
                             <div class="table-responsive">
-                                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                  <table class="table table-bordered display"  width="100%" cellspacing="0">
                                       <thead>
                                           <th>Action</th>
                                           <th>Date</th>
@@ -502,7 +502,7 @@
                                       </tfoot>
                                       <tbody>
                                           @foreach($getDeliveryBranchDrinks as $getDeliveryBranchGqs)
-                                          <tr id="{{ $getDeliveryBranchGqs->id }}">
+                                          <tr id="deletedId{{ $getDeliveryBranchGqs->id }}">
                                             <td>
                                             	<!-- Button trigger modal -->
 									                            <a data-toggle="modal" data-target="#deliveryBranch<?php echo $getDeliveryBranchGqs->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
@@ -815,7 +815,7 @@
           </div>
           <div class="modal-body">
             <div id="succAdd"></div>
-            <div id="validate" class="col-lg-12">
+            <div class="validate" class="col-lg-12">
               <p class="alert alert-danger">Please fill up field</p>
             </div>
             <div class="form-group">
@@ -948,6 +948,35 @@
 <script>
     $(".validate").hide();
 
+    const confirmDelete = (id) =>{
+        const  x = confirm("Do you want to delete this?");
+        if(x){
+              $.ajax({
+                type: "DELETE",
+                url: '/lolo-pinoy-grill-branches/delivery-in-transaction/delete/' + id,
+                data:{
+                  _method: 'delete', 
+                  "_token": "{{ csrf_token() }}",
+                  "id": id
+                },
+                success: function(data){
+                  console.log(data);
+                  $("#deletedId"+id).fadeOut('slow');
+                
+                },
+                error: function(data){
+                  console.log('Error:', data);
+                }
+
+              });
+
+          }else{
+              return false;
+          }
+
+
+    }
+
     const saveDeliveryInDrinks = () =>{
         const date = $("#date").val();
         const drNo = $("#drNo").val();
@@ -962,7 +991,7 @@
         const flag = $("#flag").val();
 
         if(date.length === 0 || supplier.length === 0){
-          $("#validate").fadeIn().delay(3000).fadeOut();
+          $(".validate").fadeIn().delay(3000).fadeOut();
         }else{
             //make ajax call
             $.ajax({

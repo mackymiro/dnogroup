@@ -1,115 +1,110 @@
-@extends('layouts.ribos-bar-app')
+@extends('layouts.dong-fang-corporation-app')
 @section('title', 'Edit Purchase Order |')
 @section('content')
-
 <script>
   $(document).ready(function(){
       $('.alert-success').fadeIn().delay(3000).fadeOut();
   });
 </script>
 <div id="wrapper">
-	 @include('sidebar.sidebar-ribos-bar')
-
-    <div id="content-wrapper">   
-     
-    	<div class="container-fluid">
-    		 <!-- Breadcrumbs-->
+  	<!-- Sidebar -->
+      @include('sidebar.sidebar-dong-fang-corporation')
+    <div id="content-wrapper">  
+        <div class="container-fluid">
+            <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">Ribo's Bar</a>
+                <a href="#">Dong Fang Corporation</a>
               </li>
               <li class="breadcrumb-item active">Update Purchase Order Form</li>
             </ol>
-            <a href="{{ url('ribos-bar/purchase-order-lists') }}">Back to Lists</a>
+            <a href="{{ url('dong-fang-corporation/purchase-order-lists') }}">Back to Lists</a>
             <div class="col-lg-12">
-            	 	<img src="{{ asset('images/digitized-logos/ribos-food-corp.png')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
-             
+            	 <img src="{{ asset('images/dong-fang-corporation.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Dong Fang Corporation">
+            	 
             	 <h4 class="text-center"><u>PURCHASE ORDER</u></h4>
             </div>
             <div class="row">
-                <div class="col-lg-12">
-                    <div class="card mb-3">
+                 <div class="col-lg-12">
+                     <div class="card mb-3">
                          <div class="card-header">
-                       <i class="fab fa-first-order" aria-hidden="true"></i>
-                         Edit Purchase Order</div>
-                         <div class="card-body">
-                               @if(session('SuccessE'))
-                                 <p class="alert alert-success">{{ Session::get('SuccessE') }}</p>
-                                @endif 
-                               <form action="{{ action('RibosBarController@update', $purchaseOrder['id']) }}" method="post">
-                                 {{csrf_field()}}
-                                <input name="_method" type="hidden" value="PATCH">
-                                <div class="form-group">
-	                            		<div class="form-row">
-                                      <div class="col-lg-4">
-                                          <label>Paid To</label>
-                                          <input type="text" name="paidTo" class="form-control" value="{{ $purchaseOrder['paid_to']}}" />
-                                          
-                                        </div>
-                                              
-                                      <div class="col-lg-2">
-                                        <label>Address</label>
-                                        <input type="text" name="address" class="form-control" value="{{ $purchaseOrder['address']}}" />
-                                      </div>
-                                 
-                                     <div class="col-lg-4">	
-                                        <label>Date</label>
-                                        <input type="text" name="date" class="form-control" value="{{ $purchaseOrder['date'] }}" />
-                                        
-                                      </div>
+                            <i class="fab fa-first-order" aria-hidden="true"></i>
+                            Edit Purchase Order
+                        </div>
+                        <div class="card-body">
+                            @if(session('SuccessE'))
+                                <p class="alert alert-success">{{ Session::get('SuccessE') }}</p>
+                            @endif 
+                            <form action="{{ action('DongFangCorporationController@update', $purchaseOrder['id']) }}" method="post">
+                                {{csrf_field()}}
+                            <input name="_method" type="hidden" value="PATCH">
+                            <div class="form-group">
+                                <div class="form-row">
+                                <div class="col-lg-4">
+                                
+                                    <label>Paid to</label>
+                                    <input type="text" name="paidTo" class="form-control" value="{{ $purchaseOrder['paid_to'] }}" />
                                 </div>
-                              </div>
-                          	  <div class="form-group">
-	                            		<div class="form-row">
-                                  <div class="col-lg-2">
-	                            				<label>Quantity</label>
-                                      <input type="text" name="quantity" class="form-control"  value="{{ $purchaseOrder['quantity']}}"/>
-	                            			</div>
-											
-	                            			<div class="col-lg-4">
-	                            				<label>Description</label>
-	                            				<input type="text" name="description" class="form-control"  value="{{ $purchaseOrder['description'] }}"/>
-	                            			
-	                            			</div>
+                                <div class="col-lg-4">
+                                    <label>Address</label>
+                                    <input type="text" name="address" class="form-control"  value="{{ $purchaseOrder['address'] }}"  />
+                                   
+                                </div>
+                                <div class="col-lg-2">
+                                        <label>Date</label>
+                                    <input type="text" name="date"  class="datepicker form-control"  autocomplete="off" value="{{ $purchaseOrder['date'] }}" />
                                   
-                                    <div class="col-lg-2">
-	                            				<label>Unit Price</label>
-                                      <input type="text" name="unitPrice" class="form-control"  value="{{ $purchaseOrder['unit_price']}}"/>
-	                            			</div>
-                                    <div class="col-lg-2">
-                                        <label>Amount</label>
-                                        <input type="text" name="amount" class="form-control"  value="{{ $purchaseOrder['amount']}}" />
+                                </div>
+                                </div>     
+                            </div>
+                            <div class="form-group">
+                                <div class="form-row">
+                                      <div class="col-lg-2">
+                                        <label>Quantity</label>
+                                        <input type="text" name="quantity" class="form-control" value="{{ $purchaseOrder['quantity'] }}" />
                                         
                                     </div>
-                                  </div>
-	                            		
-                              </div>
-                                  <br>
-	                                <div>
-	                                    <input type="submit" class="btn btn-success float-right" value="Update" />
-                                      
-	                                </div>
-                              
-                              </form>
-                         </div>
-                    </div>
-                </div>
+                                    <div class="col-lg-4">
+                                        <label>Description</label>
+                                        <input type="text" name="description" class="form-control" value="{{ $purchaseOrder['description'] }}" />
+                                         
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label>Unit Price</label>
+                                        <input type="text" name="unitPrice" class="form-control" value="{{ $purchaseOrder['unit_price'] }}"  />
+                                       
+                                    </div>
+                                    <div class="col-lg-2">
+                                        <label>Amount</label>
+                                        <input type="text" name="amount" class="form-control" value="{{ $purchaseOrder['amount'] }}" />
+                                        
+                                    </div>  
+                                </div>
+                            </div>
+                            <br>
+                            <div>
+                                <input type="submit" class="btn btn-success float-right" value="Update" />
+                                
+                            </div>
+                            </form>
+                        </div>
+                     </div>
+                 </div>
             </div>
             <div class="row">
-            <div class="col-lg-4">
-                    <div class="card mb-3">
+                <div class="col-lg-4">
+                     <div class="card mb-3">
                          <div class="card-header">
                              <i class="fa fa-plus" aria-hidden="true"></i>
                               Add 
                           </div>
-                        
                           <div class="card-body">
-                              <form action="{{ action('RibosBarController@addNew', $purchaseOrder['id'] )}}" method="post">
+                          <form action="{{ action('DongFangCorporationController@addNew', $purchaseOrder['id'] )}}" method="post">
                              {{csrf_field()}}
-                              @if(session('addNewSuccess'))
-	                             	<p class="alert alert-success">{{ Session::get('addNewSuccess') }}</p>
-	                            @endif
-                              <div class="form-group">  
+                          @if(session('addNewSuccess'))
+                            <p class="alert alert-success">{{ Session::get('addNewSuccess') }}</p>
+                          @endif
+                          <div class="form-group">  
                                   <div class="form-row">
                                       <div class="col-lg-12">
                                           <label>Quantity</label>
@@ -138,7 +133,7 @@
                                     <span class="alert alert-danger">
                                       <strong>{{ $errors->first('amount') }}</strong>
                                     </span>
-											            @endif
+                                  @endif
                                   <div class="form-group">
                                       <div class="form-row">
                                           <div class="col-lg-12">
@@ -151,25 +146,26 @@
                                  
                                   <div>
                                     @if(Auth::user()['role_type'] == 1)
-                                       <input type="submit" class="btn btn-primary" value="Add" />
+                                       <input type="submit" class="btn btn-primary btn-lg" value="Add" />
                                     @endif
                                    </div>
                               </div>
-                              </form>
+                            </form>
                           </div>
-                    </div>
-                </div>
+                     </div>
+                </div>      
                 <div class="col-lg-8">
-                     <div class="card mb-3">
+                    <div class="card mb-3">
                         <div class="card-header">
-                       <i class="fab fa-first-order" aria-hidden="true"></i>
-                          Edit Purchase Order</div>
+                            <i class="fab fa-first-order" aria-hidden="true"></i>
+                            Edit Purchase Order
+                        </div>
                         <div class="card-body">
-                            @if(session('SuccessEdit'))
+                              @if(session('SuccessEdit'))
                                <p class="alert alert-success">{{ Session::get('SuccessEdit') }}</p>
                               @endif 
                             @foreach($pOrders as $pOrder)
-                            <form action="{{ action('RibosBarController@updatePo', $pOrder['id']) }}" method="post">
+                            <form action="{{ action('DongFangCorporationController@updatePo', $pOrder['id']) }}" method="post">
                             <div id="deletedId{{ $pOrder['id'] }}">
                             <div class="form-group">
                                  {{csrf_field()}}
@@ -214,18 +210,15 @@
                                 </div>
                             </div>
                           </form>
-                            @endforeach
-                          
+
+                              @endforeach
                         </div>
-                     </div>
+                    </div>
                 </div>
-            </div>
-             			
-      				
-      	</div>
-  
+            </div>  
+        </div>
     </div>
-     <!-- Sticky Footer -->
+      <!-- Sticky Footer -->
       <footer class="sticky-footer">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
@@ -236,17 +229,16 @@
           </div>
         </div>
       </footer>
-
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-<script type="text/javascript">
-   const confirmDelete = (id) => {
+<script>
+    const confirmDelete = (id) => {
       const  x = confirm("Do you want to delete this?");
       const poId = $("#poId").val();
           if(x){
               $.ajax({
                 type: "DELETE",
-                url: '/ribos-bar/delete/' + id,
+                url: '/dong-fang-corporation/delete/' + id,
                 data:{
                   _method: 'delete', 
                   "_token": "{{ csrf_token() }}",
@@ -269,7 +261,5 @@
           }
 
    }
- 
 </script>
-
 @endsection

@@ -212,7 +212,7 @@
                        <input type="number" name="quantity" class="quantityBBQ form-control" value="1" onchange="javascript:checkPrice()" onkeypress="return isNumber(event)" autocomplete="off" />   
                     </div>
                     <div class="col-lg-4">
-                        <label>Price</label>
+                       <label>Price</label>
                        <div id="price"></div>
                        <input type="text" id="originalPrice" name="price" class=" form-control" readonly />
                        <input type="hidden" id="foodName" />
@@ -266,6 +266,7 @@
 
         modal.find('.modal-title').text(recipient);
         modal.find('.modal-body #availPcs').text(available);
+        modal.find('.modal-body #getPcs').val(available);
         modal.find('.modal-body #flag').val(flag);
         modal.find('.modal-body #pcsBbq').val(available);
         modal.find('.modal-body #foodId').val(foodId);

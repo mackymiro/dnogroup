@@ -66,9 +66,9 @@
                                 <div class="form-row">
                                   <div class="col-lg-6">
                                     <label>Paid to</label>
-                                  <input type="text" name="paidTo" class="form-control" required="required" value="{{ $purchaseOrder['paid_to'] }}" />
+                                  <input type="text" name="paidTo" class="form-control"  value="{{ $purchaseOrder['paid_to'] }}" />
                                   <label>Address</label>
-                                  <input type="text" name="address" class="form-control" required="required" value="{{ $purchaseOrder['address'] }}" />
+                                  <input type="text" name="address" class="form-control"  value="{{ $purchaseOrder['address'] }}" />
                                   <label>Checked By</label>
                                   <select class="form-control" name="checkedBy">
                                       <option value="0">--Please Select--</option>
@@ -81,7 +81,7 @@
                                     <label>P.O Number</label>
                                     <input type="text" name="poNum" class="form-control" disabled="disabled"  value="{{ $purchaseOrder['p_o_number'] }}" />
                                     <label>Date</label>
-                                    <input type="text" name="date" id="datepicker" class="form-control" required="required" value="{{ $purchaseOrder['date'] }}" />
+                                    <input type="text" name="date" id="datepicker" class="form-control"  value="{{ $purchaseOrder['date'] }}" />
                                     <label>Requested By</label>
                                     <select class="form-control" name="requestedBy">
                                         <option value="0">--Please Select--</option>
