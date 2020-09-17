@@ -44,7 +44,7 @@
                                           <th>Supplier</th>
                                           <th>Product Name</th>
                                           <th>Qty</th>
-                                          <th class="bg-danger" style="color:white;">OUT</th>
+                                          <th class="bg-danger" style="color:white;">REMAINING</th>
                                           <th>Unit</th>
                                           <th>Amount</th>
                                           <th>Created By</th>
@@ -55,7 +55,7 @@
                                           <th>Supplier</th>
                                           <th>Product Name</th>
                                           <th>Qty</th>
-                                          <th class="bg-danger" style="color:white;">OUT</th>
+                                          <th class="bg-danger" style="color:white;">REMAINING</th>
                                           <th>Unit</th>
                                           <th>Amount</th>
                                           <th>Created By</th>
@@ -68,7 +68,7 @@
                                             <td>{{ $getStockStatusUrgello->supplier }}</td>
                                             <td>{{ $getStockStatusUrgello->product_name }}</td>
                                             <td>{{ $getStockStatusUrgello->qty }}</td>
-                                            <td class="bg-danger" style="color:white;">{{ $getStockStatusUrgello->product_out }}</td>
+                                            <td class="bg-danger" style="color:white;">{{ $getStockStatusUrgello->product_in }}</td>
                                             <td>{{ $getStockStatusUrgello->unit }}</td>
                                             <td><?php echo number_format($getStockStatusUrgello->amount, 2)?></td>
                                             <td>{{ $getStockStatusUrgello->created_by }}</td>
@@ -76,15 +76,7 @@
                                           @endforeach
                                       </tbody>
                                 </table>
-                                <table class="table table-bordered">
-                                    <thead>	
-                                    <tr>
-                                      <th width="20%" class="bg-info" style="color:white;">TOTAL OUT </th>
-                                      <th class="bg-danger" style="color:white; font-size:30px;">₱ <?php echo number_format($totalStockOut, 2)?></th>
-                                    </tr>
-                                  
-                                  </thead>
-                                </table>
+                               
                             </div>
                             @elseif($data == "Velez")
                             <div class="table-responsive">
@@ -95,7 +87,7 @@
                                           <th>Supplier</th>
                                           <th>Product Name</th>
                                           <th>Qty</th>
-                                          <th class="bg-danger" style="color:white;">OUT</th>
+                                          <th class="bg-danger" style="color:white;">REMAINING</th>
                                           <th>Unit</th>
                                           <th>Amount</th>
                                           <th>Created By</th>
@@ -106,7 +98,7 @@
                                           <th>Supplier</th>
                                           <th>Product Name</th>
                                           <th>Qty</th>
-                                          <th class="bg-danger" style="color:white;">OUT</th>
+                                          <th class="bg-danger" style="color:white;">REMAINING</th>
                                           <th>Unit</th>
                                           <th>Amount</th>
                                           <th>Created By</th>
@@ -119,7 +111,7 @@
                                             <td>{{ $getStockStatusVelez->supplier }}</td>
                                             <td>{{ $getStockStatusVelez->product_name }}</td>
                                             <td>{{ $getStockStatusVelez->qty }}</td>
-                                            <td class="bg-danger" style="color:white;">{{ $getStockStatusVelez->product_out }}</td>
+                                            <td class="bg-danger" style="color:white;">{{ $getStockStatusVelez->product_in }}</td>
                                             <td>{{ $getStockStatusVelez->unit }}</td>
                                             <td><?php echo number_format($getStockStatusVelez->amount, 2)?></td>
                                             <td>{{ $getStockStatusVelez->created_by }}</td>
@@ -127,15 +119,7 @@
                                           @endforeach
                                       </tbody>
                                 </table>
-                                <table class="table table-bordered">
-                                    <thead>	
-                                    <tr>
-                                      <th width="20%" class="bg-info" style="color:white;">TOTAL OUT </th>
-                                      <th class="bg-danger" style="color:white; font-size:30px;">₱ <?php echo number_format($totalStockOutVelez, 2)?></th>
-                                    </tr>
-                                  
-                                  </thead>
-                                </table>
+                              
                             </div>
                             @elseif($data == "Banilad")
                             <div class="table-responsive">
@@ -146,7 +130,7 @@
                                           <th>Supplier</th>
                                           <th>Product Name</th>
                                           <th>Qty</th>
-                                          <th class="bg-danger" style="color:white;">OUT</th>
+                                          <th class="bg-danger" style="color:white;">REMAINING</th>
                                           <th>Unit</th>
                                           <th>Amount</th>
                                       </thead>
@@ -155,8 +139,8 @@
                                           <th>DR No</th>
                                           <th>Supplier</th>
                                           <th>Product Name</th>
-                                          <th class="bg-danger" style="color:white;">Qty</th>
-                                          <th>OUT</th>
+                                          <th >Qty</th>
+                                          <th class="bg-danger" style="color:white;">REMAINING</th>
                                           <th>Unit</th>`
                                           <th>Amount</th>
                                       </tfoot>
@@ -168,7 +152,7 @@
                                             <td>{{ $getStockStatusBanilad->supplier }}</td>
                                             <td>{{ $getStockStatusBanilad->product_name }}</td>
                                             <td>{{ $getStockStatusBanilad->qty }}</td>
-                                            <td class="bg-danger" style="color:white;">{{ $getStockStatusBanilad->product_out }}</td>
+                                            <td class="bg-danger" style="color:white;">{{ $getStockStatusBanilad->product_in }}</td>
                                             <td>{{ $getStockStatusBanilad->unit }}</td>
                                             <td><?php echo number_format($getStockStatusBanilad->amount, 2)?></td>
                                             <td>{{ $getStockStatusBanilad->created_by }}</td>
@@ -176,15 +160,7 @@
                                           @endforeach
                                       </tbody>
                                 </table>
-                                <table class="table table-bordered">
-                                    <thead>	
-                                    <tr>
-                                      <th width="20%" class="bg-info" style="color:white;">TOTAL OUT </th>
-                                      <th class="bg-danger" style="color:white; font-size:30px;">₱ <?php echo number_format($totalStockOutBanilad, 2)?></th>
-                                    </tr>
-                                  
-                                  </thead>
-                                </table>
+                               
                             </div>
                             @elseif($data  == "GQS")
                             <div class="table-responsive">
@@ -195,7 +171,7 @@
                                           <th>Supplier</th>
                                           <th>Product Name</th>
                                           <th>Qty</th>
-                                          <th class="bg-danger" style="color:white;">OUT</th>
+                                          <th class="bg-danger" style="color:white;">REMAINING</th>
                                           <th>Unit</th>
                                           <th>Amount</th>
                                       </thead>
@@ -205,7 +181,7 @@
                                           <th>Supplier</th>
                                           <th>Product Name</th>
                                           <th >Qty</th>
-                                          <th class="bg-danger" style="color:white;">OUT</th>
+                                          <th class="bg-danger" style="color:white;">REMAINING</th>
                                           <th>Unit</th>
                                           <th>Amount</th>
                                       </tfoot>
@@ -217,7 +193,7 @@
                                             <td>{{ $getStockStatusGqs->supplier }}</td>
                                             <td>{{ $getStockStatusGqs->product_name }}</td>
                                             <td>{{ $getStockStatusGqs->qty }}</td>
-                                            <td class="bg-danger" style="color:white;">{{ $getStockStatusGqs->product_out }}</td>
+                                            <td class="bg-danger" style="color:white;">{{ $getStockStatusGqs->product_in }}</td>
                                             <td>{{ $getStockStatusGqs->unit }}</td>
                                             <td><?php echo number_format($getStockStatusGqs->amount, 2)?></td>
                                             <td>{{ $getStockStatusGqs->created_by }}</td>
@@ -225,15 +201,7 @@
                                           @endforeach
                                       </tbody>
                                 </table>
-                                <table class="table table-bordered">
-                                    <thead>	
-                                    <tr>
-                                      <th width="20%" class="bg-info" style="color:white;">TOTAL OUT </th>
-                                      <th class="bg-danger" style="color:white; font-size:30px;">₱ <?php echo number_format($totalStockOutGqs, 2)?></th>
-                                    </tr>
-                                  
-                                  </thead>
-                                </table>
+                               
                             </div>
                             @else
                                 <h1> Login To Branch To View Transactions </h1>
@@ -242,7 +210,76 @@
                     </div>
                 </div>
               </div>
+              <div class="row">
+                <div class="col-lg-12">
+                     <div class="card mb-3">
+                         <div class="card-header">
+                            <i class="fas fa-tasks"></i>
+                            Beverage Stock Status {{ $data }} -Branch 
+                        </div>
+                        <div class="card-body">
+                        @if($data  == "Urgello")
+                            <div class="table-responsive">
+                                <table class="table table-bordered display" width="100%" cellspacing="0">
+                                     <thead>
+                                          <th>Product ID</th>
+                                          <th>DR No</th>
+                                          <th>Supplier</th>
+                                          <th>Product Name</th>
+                                          <th>Qty</th>
+                                          <th class="bg-danger" style="color:white;">REMAINING</th>
+                                          <th>Unit</th>
+                                          <th>Amount</th>
+                                          <th>Created By</th>
+                                      </thead>
+                                      <tfoot>
+                                          <th>Product ID</th>
+                                          <th>DR No</th>
+                                          <th>Supplier</th>
+                                          <th>Product Name</th>
+                                          <th>Qty</th>
+                                          <th class="bg-danger" style="color:white;">REMAINING</th>
+                                          <th>Unit</th>
+                                          <th>Amount</th>
+                                          <th>Created By</th>
+                                      </tfoot>
+                                      <tbody>
+                                          @foreach($getStockStatusUrgelloDrinks as $getStockStatusUrgelloDrink)
+                                          <tr>
+                                            <td>{{ $getStockStatusUrgelloDrink->product_id_no }}</td>
+                                            <td>{{ $getStockStatusUrgelloDrink->dr_no }}</td>
+                                            <td>{{ $getStockStatusUrgelloDrink->supplier }}</td>
+                                            <td>{{ $getStockStatusUrgelloDrink->product_name }}</td>
+                                            <td>{{ $getStockStatusUrgelloDrink->qty }}</td>
+                                            <td class="bg-danger" style="color:white;">{{ $getStockStatusUrgelloDrink->product_in }}</td>
+                                            <td>{{ $getStockStatusUrgelloDrink->unit }}</td>
+                                            <td><?php echo number_format($getStockStatusUrgelloDrink->amount, 2)?></td>
+                                            <td>{{ $getStockStatusUrgelloDrink->created_by }}</td>
+                                          </tr>
+                                          @endforeach
+                                      </tbody>
+                                </table>
+                               
+                            </div>
+                          @elseif($data == "Velez")
+
+                          @endif
+                        </div>
+                     </div>
+                </div>
+              </div>
         </div>
     </div>
+       <!-- Sticky Footer -->
+       <footer class="sticky-footer">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright © Ribos Food Corporation 2019</span>
+            <br>
+            <br>
+            <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
+          </div>
+        </div>
+      </footer>
 </div>
 @endsection
