@@ -67,12 +67,12 @@
 				  							@foreach($getTransactionLists as $getTransactionList)
 											<?php $id = $getTransactionList->id; ?>
 											<?php
-												$amount1 = DB::table('ribos_bar_payment_vouchers')
+												$amount1 = DB::table('dno_holdings_co_payment_vouchers')
 															->select('*')
 															->where('id', $id)
 															->sum('amount');
 												
-												$amount2 = DB::table('ribos_bar_payment_vouchers')
+												$amount2 = DB::table('dno_holdings_co_payment_vouchers')
 															->select('*')
 															->where('pv_id', $id)
 															->sum('amount');
@@ -87,7 +87,7 @@
 			  									<td>
 			  										@if($getTransactionList->status != "FULLY PAID AND RELEASED")
 													  <p style="width:250px;">
-													  	<a href="{{ url('dno-holdings-co/edit-ribos-bar-payables-detail/'.$getTransactionList->id) }}" title="Edit">{{ $getTransactionList->invoice_number}}</a>
+													  	<a href="{{ url('dno-holdings-co/edit-dno-holdings-co-payable-detail/'.$getTransactionList->id) }}" title="Edit">{{ $getTransactionList->invoice_number}}</a>
 			  										  </p>
 													  @else
 													  <p style="width:250px;">{{ $getTransactionList->invoice_number}}</p>

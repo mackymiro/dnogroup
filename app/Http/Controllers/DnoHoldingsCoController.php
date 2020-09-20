@@ -16,6 +16,1235 @@ use App\DnoHoldingsCoSupplier;
 class DnoHoldingsCoController extends Controller
 {
 
+    public function printMultipleSummary(Request $request, $date){
+        $urlSegment = \Request::segment(3);
+        $uri = explode("TO", $urlSegment);
+        $uri0 = $uri[0];
+        $uri1 = $uri[1];
+
+        $moduleNamePV = "Payment Voucher";
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                    'dno_holdings_co_payment_vouchers')
+                    ->select( 
+                    'dno_holdings_co_payment_vouchers.id',
+                    'dno_holdings_co_payment_vouchers.user_id',
+                    'dno_holdings_co_payment_vouchers.pv_id',
+                    'dno_holdings_co_payment_vouchers.date',
+                    'dno_holdings_co_payment_vouchers.paid_to',
+                    'dno_holdings_co_payment_vouchers.account_no',
+                    'dno_holdings_co_payment_vouchers.account_name',
+                    'dno_holdings_co_payment_vouchers.particulars',
+                    'dno_holdings_co_payment_vouchers.amount',
+                    'dno_holdings_co_payment_vouchers.method_of_payment',
+                    'dno_holdings_co_payment_vouchers.prepared_by',
+                    'dno_holdings_co_payment_vouchers.approved_by',
+                    'dno_holdings_co_payment_vouchers.date_approved',
+                    'dno_holdings_co_payment_vouchers.received_by_date',
+                    'dno_holdings_co_payment_vouchers.created_by',
+                    'dno_holdings_co_payment_vouchers.invoice_number',
+                    'dno_holdings_co_payment_vouchers.issued_date',
+                    'dno_holdings_co_payment_vouchers.category',
+                    'dno_holdings_co_payment_vouchers.amount_due',
+                    'dno_holdings_co_payment_vouchers.delivered_date',
+                    'dno_holdings_co_payment_vouchers.status',
+                    'dno_holdings_co_payment_vouchers.cheque_number',
+                    'dno_holdings_co_payment_vouchers.cheque_amount',
+                    'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                    'dno_holdings_co_payment_vouchers.sub_category',
+                    'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                    'dno_holdings_co_payment_vouchers.deleted_at',
+                    'dno_holdings_co_payment_vouchers.created_at',
+                    'dno_holdings_co_codes.dno_holdings_code',
+                    'dno_holdings_co_codes.module_id',
+                    'dno_holdings_co_codes.module_code',
+                    'dno_holdings_co_codes.module_name')
+                    ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                    ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                    ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                    ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                    ->whereBetween('dno_holdings_co_payment_vouchers.created_at', [$uri0, $uri1])
+                    ->where('dno_holdings_co_payment_vouchers.method_of_payment', $cash)
+                    ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                    ->get()->toArray();
+
+        $totalAmountCashes = DB::table(
+                        'dno_holdings_co_payment_vouchers')
+                        ->select( 
+                        'dno_holdings_co_payment_vouchers.id',
+                        'dno_holdings_co_payment_vouchers.user_id',
+                        'dno_holdings_co_payment_vouchers.pv_id',
+                        'dno_holdings_co_payment_vouchers.date',
+                        'dno_holdings_co_payment_vouchers.paid_to',
+                        'dno_holdings_co_payment_vouchers.account_no',
+                        'dno_holdings_co_payment_vouchers.account_name',
+                        'dno_holdings_co_payment_vouchers.particulars',
+                        'dno_holdings_co_payment_vouchers.amount',
+                        'dno_holdings_co_payment_vouchers.method_of_payment',
+                        'dno_holdings_co_payment_vouchers.prepared_by',
+                        'dno_holdings_co_payment_vouchers.approved_by',
+                        'dno_holdings_co_payment_vouchers.date_approved',
+                        'dno_holdings_co_payment_vouchers.received_by_date',
+                        'dno_holdings_co_payment_vouchers.created_by',
+                        'dno_holdings_co_payment_vouchers.invoice_number',
+                        'dno_holdings_co_payment_vouchers.issued_date',
+                        'dno_holdings_co_payment_vouchers.category',
+                        'dno_holdings_co_payment_vouchers.amount_due',
+                        'dno_holdings_co_payment_vouchers.delivered_date',
+                        'dno_holdings_co_payment_vouchers.status',
+                        'dno_holdings_co_payment_vouchers.cheque_number',
+                        'dno_holdings_co_payment_vouchers.cheque_amount',
+                        'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                        'dno_holdings_co_payment_vouchers.sub_category',
+                        'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                        'dno_holdings_co_payment_vouchers.deleted_at',
+                        'dno_holdings_co_payment_vouchers.created_at',
+                        'dno_holdings_co_codes.dno_holdings_code',
+                        'dno_holdings_co_codes.module_id',
+                        'dno_holdings_co_codes.module_code',
+                        'dno_holdings_co_codes.module_name')
+                        ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                        ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                        ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                        ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                        ->whereBetween('dno_holdings_co_payment_vouchers.created_at',  [$uri0, $uri1])
+                        ->where('dno_holdings_co_payment_vouchers.method_of_payment', $cash)
+                        ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                        ->sum('dno_holdings_co_payment_vouchers.amount_due');
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                    'dno_holdings_co_payment_vouchers')
+                    ->select( 
+                    'dno_holdings_co_payment_vouchers.id',
+                    'dno_holdings_co_payment_vouchers.user_id',
+                    'dno_holdings_co_payment_vouchers.pv_id',
+                    'dno_holdings_co_payment_vouchers.date',
+                    'dno_holdings_co_payment_vouchers.paid_to',
+                    'dno_holdings_co_payment_vouchers.account_no',
+                    'dno_holdings_co_payment_vouchers.account_name',
+                    'dno_holdings_co_payment_vouchers.particulars',
+                    'dno_holdings_co_payment_vouchers.amount',
+                    'dno_holdings_co_payment_vouchers.method_of_payment',
+                    'dno_holdings_co_payment_vouchers.prepared_by',
+                    'dno_holdings_co_payment_vouchers.approved_by',
+                    'dno_holdings_co_payment_vouchers.date_approved',
+                    'dno_holdings_co_payment_vouchers.received_by_date',
+                    'dno_holdings_co_payment_vouchers.created_by',
+                    'dno_holdings_co_payment_vouchers.invoice_number',
+                    'dno_holdings_co_payment_vouchers.issued_date',
+                    'dno_holdings_co_payment_vouchers.category',
+                    'dno_holdings_co_payment_vouchers.amount_due',
+                    'dno_holdings_co_payment_vouchers.delivered_date',
+                    'dno_holdings_co_payment_vouchers.status',
+                    'dno_holdings_co_payment_vouchers.cheque_number',
+                    'dno_holdings_co_payment_vouchers.cheque_amount',
+                    'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                    'dno_holdings_co_payment_vouchers.sub_category',
+                    'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                    'dno_holdings_co_payment_vouchers.deleted_at',
+                    'dno_holdings_co_payment_vouchers.created_at',
+                    'dno_holdings_co_codes.dno_holdings_code',
+                    'dno_holdings_co_codes.module_id',
+                    'dno_holdings_co_codes.module_code',
+                    'dno_holdings_co_codes.module_name')
+                    ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                    ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                    ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                    ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                    ->whereBetween('dno_holdings_co_payment_vouchers.created_at',  [$uri0, $uri1])
+                    ->where('dno_holdings_co_payment_vouchers.method_of_payment', $check)
+                    ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                    ->get()->toArray();
+        
+        $status = "FULLY PAID AND RELEASED";     
+        $totalAmountCheck = DB::table(
+                    'dno_holdings_co_payment_vouchers')
+                    ->select( 
+                    'dno_holdings_co_payment_vouchers.id',
+                    'dno_holdings_co_payment_vouchers.user_id',
+                    'dno_holdings_co_payment_vouchers.pv_id',
+                    'dno_holdings_co_payment_vouchers.date',
+                    'dno_holdings_co_payment_vouchers.paid_to',
+                    'dno_holdings_co_payment_vouchers.account_no',
+                    'dno_holdings_co_payment_vouchers.account_name',
+                    'dno_holdings_co_payment_vouchers.particulars',
+                    'dno_holdings_co_payment_vouchers.amount',
+                    'dno_holdings_co_payment_vouchers.method_of_payment',
+                    'dno_holdings_co_payment_vouchers.prepared_by',
+                    'dno_holdings_co_payment_vouchers.approved_by',
+                    'dno_holdings_co_payment_vouchers.date_approved',
+                    'dno_holdings_co_payment_vouchers.received_by_date',
+                    'dno_holdings_co_payment_vouchers.created_by',
+                    'dno_holdings_co_payment_vouchers.invoice_number',
+                    'dno_holdings_co_payment_vouchers.issued_date',
+                    'dno_holdings_co_payment_vouchers.category',
+                    'dno_holdings_co_payment_vouchers.amount_due',
+                    'dno_holdings_co_payment_vouchers.delivered_date',
+                    'dno_holdings_co_payment_vouchers.status',
+                    'dno_holdings_co_payment_vouchers.cheque_number',
+                    'dno_holdings_co_payment_vouchers.cheque_amount',
+                    'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                    'dno_holdings_co_payment_vouchers.sub_category',
+                    'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                    'dno_holdings_co_payment_vouchers.deleted_at',
+                    'dno_holdings_co_payment_vouchers.created_at',
+                    'dno_holdings_co_codes.dno_holdings_code',
+                    'dno_holdings_co_codes.module_id',
+                    'dno_holdings_co_codes.module_code',
+                    'dno_holdings_co_codes.module_name')
+                    ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                    ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                    ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                    ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                    ->whereBetween('dno_holdings_co_payment_vouchers.created_at', [$uri0, $uri1])
+                    ->where('dno_holdings_co_payment_vouchers.method_of_payment', $check)
+                    ->where('dno_holdings_co_payment_vouchers.status','!=', $status)
+                    ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                    ->sum('dno_holdings_co_payment_vouchers.amount_due');
+
+    $totalPaidAmountCheck = DB::table(
+                        'dno_holdings_co_payment_vouchers')
+                        ->select( 
+                        'dno_holdings_co_payment_vouchers.id',
+                        'dno_holdings_co_payment_vouchers.user_id',
+                        'dno_holdings_co_payment_vouchers.pv_id',
+                        'dno_holdings_co_payment_vouchers.date',
+                        'dno_holdings_co_payment_vouchers.paid_to',
+                        'dno_holdings_co_payment_vouchers.account_no',
+                        'dno_holdings_co_payment_vouchers.account_name',
+                        'dno_holdings_co_payment_vouchers.particulars',
+                        'dno_holdings_co_payment_vouchers.amount',
+                        'dno_holdings_co_payment_vouchers.method_of_payment',
+                        'dno_holdings_co_payment_vouchers.prepared_by',
+                        'dno_holdings_co_payment_vouchers.approved_by',
+                        'dno_holdings_co_payment_vouchers.date_approved',
+                        'dno_holdings_co_payment_vouchers.received_by_date',
+                        'dno_holdings_co_payment_vouchers.created_by',
+                        'dno_holdings_co_payment_vouchers.invoice_number',
+                        'dno_holdings_co_payment_vouchers.issued_date',
+                        'dno_holdings_co_payment_vouchers.category',
+                        'dno_holdings_co_payment_vouchers.amount_due',
+                        'dno_holdings_co_payment_vouchers.delivered_date',
+                        'dno_holdings_co_payment_vouchers.status',
+                        'dno_holdings_co_payment_vouchers.cheque_number',
+                        'dno_holdings_co_payment_vouchers.cheque_amount',
+                        'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                        'dno_holdings_co_payment_vouchers.sub_category',
+                        'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                        'dno_holdings_co_payment_vouchers.deleted_at',
+                        'dno_holdings_co_payment_vouchers.created_at',
+                        'dno_holdings_co_codes.dno_holdings_code',
+                        'dno_holdings_co_codes.module_id',
+                        'dno_holdings_co_codes.module_code',
+                        'dno_holdings_co_codes.module_name')
+                        ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                        ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                        ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                        ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                        ->whereBetween('dno_holdings_co_payment_vouchers.created_at',  [$uri0, $uri1])
+                        ->where('dno_holdings_co_payment_vouchers.method_of_payment', $check)
+                        ->where('dno_holdings_co_payment_vouchers.status', $status)
+                        ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                        ->sum('dno_holdings_co_payment_vouchers.amount_due');
+    
+        
+        $getDateToday = "";
+        $pdf = PDF::loadView('printSummaryDnoHoldingsCo', compact('date', 'uri0', 'uri1', 'getDateToday', 
+        'getTransactionLists', 'getTransactionListCashes', 
+        'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck', 'totalPaidAmountCheck'));
+        
+        return $pdf->download('dno-holdings-co-summary-report.pdf');
+
+
+    }
+
+    public function printSummary(){
+        $getDateToday = date("Y-m-d");
+        $moduleNamePV = "Payment Voucher";
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                    'dno_holdings_co_payment_vouchers')
+                    ->select( 
+                    'dno_holdings_co_payment_vouchers.id',
+                    'dno_holdings_co_payment_vouchers.user_id',
+                    'dno_holdings_co_payment_vouchers.pv_id',
+                    'dno_holdings_co_payment_vouchers.date',
+                    'dno_holdings_co_payment_vouchers.paid_to',
+                    'dno_holdings_co_payment_vouchers.account_no',
+                    'dno_holdings_co_payment_vouchers.account_name',
+                    'dno_holdings_co_payment_vouchers.particulars',
+                    'dno_holdings_co_payment_vouchers.amount',
+                    'dno_holdings_co_payment_vouchers.method_of_payment',
+                    'dno_holdings_co_payment_vouchers.prepared_by',
+                    'dno_holdings_co_payment_vouchers.approved_by',
+                    'dno_holdings_co_payment_vouchers.date_approved',
+                    'dno_holdings_co_payment_vouchers.received_by_date',
+                    'dno_holdings_co_payment_vouchers.created_by',
+                    'dno_holdings_co_payment_vouchers.invoice_number',
+                    'dno_holdings_co_payment_vouchers.issued_date',
+                    'dno_holdings_co_payment_vouchers.category',
+                    'dno_holdings_co_payment_vouchers.amount_due',
+                    'dno_holdings_co_payment_vouchers.delivered_date',
+                    'dno_holdings_co_payment_vouchers.status',
+                    'dno_holdings_co_payment_vouchers.cheque_number',
+                    'dno_holdings_co_payment_vouchers.cheque_amount',
+                    'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                    'dno_holdings_co_payment_vouchers.sub_category',
+                    'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                    'dno_holdings_co_payment_vouchers.deleted_at',
+                    'dno_holdings_co_payment_vouchers.created_at',
+                    'dno_holdings_co_codes.dno_holdings_code',
+                    'dno_holdings_co_codes.module_id',
+                    'dno_holdings_co_codes.module_code',
+                    'dno_holdings_co_codes.module_name')
+                    ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                    ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                    ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                    ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                    ->whereDate('dno_holdings_co_payment_vouchers.created_at', '=', date($getDateToday))
+                    ->where('dno_holdings_co_payment_vouchers.method_of_payment', $cash)
+                    ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                    ->get()->toArray();
+
+        $totalAmountCashes = DB::table(
+                        'dno_holdings_co_payment_vouchers')
+                        ->select( 
+                        'dno_holdings_co_payment_vouchers.id',
+                        'dno_holdings_co_payment_vouchers.user_id',
+                        'dno_holdings_co_payment_vouchers.pv_id',
+                        'dno_holdings_co_payment_vouchers.date',
+                        'dno_holdings_co_payment_vouchers.paid_to',
+                        'dno_holdings_co_payment_vouchers.account_no',
+                        'dno_holdings_co_payment_vouchers.account_name',
+                        'dno_holdings_co_payment_vouchers.particulars',
+                        'dno_holdings_co_payment_vouchers.amount',
+                        'dno_holdings_co_payment_vouchers.method_of_payment',
+                        'dno_holdings_co_payment_vouchers.prepared_by',
+                        'dno_holdings_co_payment_vouchers.approved_by',
+                        'dno_holdings_co_payment_vouchers.date_approved',
+                        'dno_holdings_co_payment_vouchers.received_by_date',
+                        'dno_holdings_co_payment_vouchers.created_by',
+                        'dno_holdings_co_payment_vouchers.invoice_number',
+                        'dno_holdings_co_payment_vouchers.issued_date',
+                        'dno_holdings_co_payment_vouchers.category',
+                        'dno_holdings_co_payment_vouchers.amount_due',
+                        'dno_holdings_co_payment_vouchers.delivered_date',
+                        'dno_holdings_co_payment_vouchers.status',
+                        'dno_holdings_co_payment_vouchers.cheque_number',
+                        'dno_holdings_co_payment_vouchers.cheque_amount',
+                        'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                        'dno_holdings_co_payment_vouchers.sub_category',
+                        'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                        'dno_holdings_co_payment_vouchers.deleted_at',
+                        'dno_holdings_co_payment_vouchers.created_at',
+                        'dno_holdings_co_codes.dno_holdings_code',
+                        'dno_holdings_co_codes.module_id',
+                        'dno_holdings_co_codes.module_code',
+                        'dno_holdings_co_codes.module_name')
+                        ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                        ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                        ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                        ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                        ->whereDate('dno_holdings_co_payment_vouchers.created_at', '=', date($getDateToday))
+                        ->where('dno_holdings_co_payment_vouchers.method_of_payment', $cash)
+                        ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                        ->sum('dno_holdings_co_payment_vouchers.amount_due');
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                    'dno_holdings_co_payment_vouchers')
+                    ->select( 
+                    'dno_holdings_co_payment_vouchers.id',
+                    'dno_holdings_co_payment_vouchers.user_id',
+                    'dno_holdings_co_payment_vouchers.pv_id',
+                    'dno_holdings_co_payment_vouchers.date',
+                    'dno_holdings_co_payment_vouchers.paid_to',
+                    'dno_holdings_co_payment_vouchers.account_no',
+                    'dno_holdings_co_payment_vouchers.account_name',
+                    'dno_holdings_co_payment_vouchers.particulars',
+                    'dno_holdings_co_payment_vouchers.amount',
+                    'dno_holdings_co_payment_vouchers.method_of_payment',
+                    'dno_holdings_co_payment_vouchers.prepared_by',
+                    'dno_holdings_co_payment_vouchers.approved_by',
+                    'dno_holdings_co_payment_vouchers.date_approved',
+                    'dno_holdings_co_payment_vouchers.received_by_date',
+                    'dno_holdings_co_payment_vouchers.created_by',
+                    'dno_holdings_co_payment_vouchers.invoice_number',
+                    'dno_holdings_co_payment_vouchers.issued_date',
+                    'dno_holdings_co_payment_vouchers.category',
+                    'dno_holdings_co_payment_vouchers.amount_due',
+                    'dno_holdings_co_payment_vouchers.delivered_date',
+                    'dno_holdings_co_payment_vouchers.status',
+                    'dno_holdings_co_payment_vouchers.cheque_number',
+                    'dno_holdings_co_payment_vouchers.cheque_amount',
+                    'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                    'dno_holdings_co_payment_vouchers.sub_category',
+                    'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                    'dno_holdings_co_payment_vouchers.deleted_at',
+                    'dno_holdings_co_payment_vouchers.created_at',
+                    'dno_holdings_co_codes.dno_holdings_code',
+                    'dno_holdings_co_codes.module_id',
+                    'dno_holdings_co_codes.module_code',
+                    'dno_holdings_co_codes.module_name')
+                    ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                    ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                    ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                    ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                    ->whereDate('dno_holdings_co_payment_vouchers.created_at', '=', date($getDateToday))
+                    ->where('dno_holdings_co_payment_vouchers.method_of_payment', $check)
+                    ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                    ->get()->toArray();
+        
+        $status = "FULLY PAID AND RELEASED";     
+        $totalAmountCheck = DB::table(
+                    'dno_holdings_co_payment_vouchers')
+                    ->select( 
+                    'dno_holdings_co_payment_vouchers.id',
+                    'dno_holdings_co_payment_vouchers.user_id',
+                    'dno_holdings_co_payment_vouchers.pv_id',
+                    'dno_holdings_co_payment_vouchers.date',
+                    'dno_holdings_co_payment_vouchers.paid_to',
+                    'dno_holdings_co_payment_vouchers.account_no',
+                    'dno_holdings_co_payment_vouchers.account_name',
+                    'dno_holdings_co_payment_vouchers.particulars',
+                    'dno_holdings_co_payment_vouchers.amount',
+                    'dno_holdings_co_payment_vouchers.method_of_payment',
+                    'dno_holdings_co_payment_vouchers.prepared_by',
+                    'dno_holdings_co_payment_vouchers.approved_by',
+                    'dno_holdings_co_payment_vouchers.date_approved',
+                    'dno_holdings_co_payment_vouchers.received_by_date',
+                    'dno_holdings_co_payment_vouchers.created_by',
+                    'dno_holdings_co_payment_vouchers.invoice_number',
+                    'dno_holdings_co_payment_vouchers.issued_date',
+                    'dno_holdings_co_payment_vouchers.category',
+                    'dno_holdings_co_payment_vouchers.amount_due',
+                    'dno_holdings_co_payment_vouchers.delivered_date',
+                    'dno_holdings_co_payment_vouchers.status',
+                    'dno_holdings_co_payment_vouchers.cheque_number',
+                    'dno_holdings_co_payment_vouchers.cheque_amount',
+                    'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                    'dno_holdings_co_payment_vouchers.sub_category',
+                    'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                    'dno_holdings_co_payment_vouchers.deleted_at',
+                    'dno_holdings_co_payment_vouchers.created_at',
+                    'dno_holdings_co_codes.dno_holdings_code',
+                    'dno_holdings_co_codes.module_id',
+                    'dno_holdings_co_codes.module_code',
+                    'dno_holdings_co_codes.module_name')
+                    ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                    ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                    ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                    ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                    ->whereDate('dno_holdings_co_payment_vouchers.created_at', '=', date($getDateToday))
+                    ->where('dno_holdings_co_payment_vouchers.method_of_payment', $check)
+                    ->where('dno_holdings_co_payment_vouchers.status','!=', $status)
+                    ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                    ->sum('dno_holdings_co_payment_vouchers.amount_due');
+
+    $totalPaidAmountCheck = DB::table(
+                        'dno_holdings_co_payment_vouchers')
+                        ->select( 
+                        'dno_holdings_co_payment_vouchers.id',
+                        'dno_holdings_co_payment_vouchers.user_id',
+                        'dno_holdings_co_payment_vouchers.pv_id',
+                        'dno_holdings_co_payment_vouchers.date',
+                        'dno_holdings_co_payment_vouchers.paid_to',
+                        'dno_holdings_co_payment_vouchers.account_no',
+                        'dno_holdings_co_payment_vouchers.account_name',
+                        'dno_holdings_co_payment_vouchers.particulars',
+                        'dno_holdings_co_payment_vouchers.amount',
+                        'dno_holdings_co_payment_vouchers.method_of_payment',
+                        'dno_holdings_co_payment_vouchers.prepared_by',
+                        'dno_holdings_co_payment_vouchers.approved_by',
+                        'dno_holdings_co_payment_vouchers.date_approved',
+                        'dno_holdings_co_payment_vouchers.received_by_date',
+                        'dno_holdings_co_payment_vouchers.created_by',
+                        'dno_holdings_co_payment_vouchers.invoice_number',
+                        'dno_holdings_co_payment_vouchers.issued_date',
+                        'dno_holdings_co_payment_vouchers.category',
+                        'dno_holdings_co_payment_vouchers.amount_due',
+                        'dno_holdings_co_payment_vouchers.delivered_date',
+                        'dno_holdings_co_payment_vouchers.status',
+                        'dno_holdings_co_payment_vouchers.cheque_number',
+                        'dno_holdings_co_payment_vouchers.cheque_amount',
+                        'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                        'dno_holdings_co_payment_vouchers.sub_category',
+                        'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                        'dno_holdings_co_payment_vouchers.deleted_at',
+                        'dno_holdings_co_payment_vouchers.created_at',
+                        'dno_holdings_co_codes.dno_holdings_code',
+                        'dno_holdings_co_codes.module_id',
+                        'dno_holdings_co_codes.module_code',
+                        'dno_holdings_co_codes.module_name')
+                        ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                        ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                        ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                        ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                        ->whereDate('dno_holdings_co_payment_vouchers.created_at', '=', date($getDateToday))
+                        ->where('dno_holdings_co_payment_vouchers.method_of_payment', $check)
+                        ->where('dno_holdings_co_payment_vouchers.status', $status)
+                        ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                        ->sum('dno_holdings_co_payment_vouchers.amount_due');
+    
+        $uri0 = "";
+        $uri1 = "";
+        $pdf = PDF::loadView('printSummaryDnoHoldingsCo', compact('date', 'uri0', 'uri1', 'getDateToday', 'getTransactionLists', 'getTransactionListCashes', 
+        'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck', 'totalPaidAmountCheck'));
+
+        return $pdf->download('dno-holdings-co-summary-report.pdf');
+
+    }
+
+    public function getSummaryReportMultiple(Request $request){
+        $startDate = date("Y-m-d",strtotime($request->input('startDate')));
+        $endDate = date("Y-m-d",strtotime($request->input('endDate')."+1 day"));
+    
+        $moduleNamePV = "Payment Voucher";
+        $getTransactionLists = DB::table(
+                    'dno_holdings_co_payment_vouchers')
+                    ->select( 
+                    'dno_holdings_co_payment_vouchers.id',
+                    'dno_holdings_co_payment_vouchers.user_id',
+                    'dno_holdings_co_payment_vouchers.pv_id',
+                    'dno_holdings_co_payment_vouchers.date',
+                    'dno_holdings_co_payment_vouchers.paid_to',
+                    'dno_holdings_co_payment_vouchers.account_no',
+                    'dno_holdings_co_payment_vouchers.account_name',
+                    'dno_holdings_co_payment_vouchers.particulars',
+                    'dno_holdings_co_payment_vouchers.amount',
+                    'dno_holdings_co_payment_vouchers.method_of_payment',
+                    'dno_holdings_co_payment_vouchers.prepared_by',
+                    'dno_holdings_co_payment_vouchers.approved_by',
+                    'dno_holdings_co_payment_vouchers.date_approved',
+                    'dno_holdings_co_payment_vouchers.received_by_date',
+                    'dno_holdings_co_payment_vouchers.created_by',
+                    'dno_holdings_co_payment_vouchers.invoice_number',
+                    'dno_holdings_co_payment_vouchers.issued_date',
+                    'dno_holdings_co_payment_vouchers.category',
+                    'dno_holdings_co_payment_vouchers.amount_due',
+                    'dno_holdings_co_payment_vouchers.delivered_date',
+                    'dno_holdings_co_payment_vouchers.status',
+                    'dno_holdings_co_payment_vouchers.cheque_number',
+                    'dno_holdings_co_payment_vouchers.cheque_amount',
+                    'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                    'dno_holdings_co_payment_vouchers.sub_category',
+                    'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                    'dno_holdings_co_payment_vouchers.deleted_at',
+                    'dno_holdings_co_payment_vouchers.created_at',
+                    'dno_holdings_co_codes.dno_holdings_code',
+                    'dno_holdings_co_codes.module_id',
+                    'dno_holdings_co_codes.module_code',
+                    'dno_holdings_co_codes.module_name')
+                    ->leftJoin('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                    ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                    ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                    ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                    ->whereBetween('dno_holdings_co_payment_vouchers.created_at', [$startDate, $endDate])
+                    ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                    ->get()->toArray();
+
+
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                        'dno_holdings_co_payment_vouchers')
+                        ->select( 
+                        'dno_holdings_co_payment_vouchers.id',
+                        'dno_holdings_co_payment_vouchers.user_id',
+                        'dno_holdings_co_payment_vouchers.pv_id',
+                        'dno_holdings_co_payment_vouchers.date',
+                        'dno_holdings_co_payment_vouchers.paid_to',
+                        'dno_holdings_co_payment_vouchers.account_no',
+                        'dno_holdings_co_payment_vouchers.account_name',
+                        'dno_holdings_co_payment_vouchers.particulars',
+                        'dno_holdings_co_payment_vouchers.amount',
+                        'dno_holdings_co_payment_vouchers.method_of_payment',
+                        'dno_holdings_co_payment_vouchers.prepared_by',
+                        'dno_holdings_co_payment_vouchers.approved_by',
+                        'dno_holdings_co_payment_vouchers.date_approved',
+                        'dno_holdings_co_payment_vouchers.received_by_date',
+                        'dno_holdings_co_payment_vouchers.created_by',
+                        'dno_holdings_co_payment_vouchers.invoice_number',
+                        'dno_holdings_co_payment_vouchers.issued_date',
+                        'dno_holdings_co_payment_vouchers.category',
+                        'dno_holdings_co_payment_vouchers.amount_due',
+                        'dno_holdings_co_payment_vouchers.delivered_date',
+                        'dno_holdings_co_payment_vouchers.status',
+                        'dno_holdings_co_payment_vouchers.cheque_number',
+                        'dno_holdings_co_payment_vouchers.cheque_amount',
+                        'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                        'dno_holdings_co_payment_vouchers.sub_category',
+                        'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                        'dno_holdings_co_payment_vouchers.deleted_at',
+                        'dno_holdings_co_payment_vouchers.created_at',
+                        'dno_holdings_co_codes.dno_holdings_code',
+                        'dno_holdings_co_codes.module_id',
+                        'dno_holdings_co_codes.module_code',
+                        'dno_holdings_co_codes.module_name')
+                        ->leftJoin('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                        ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                        ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                        ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                        ->whereBetween('dno_holdings_co_payment_vouchers.created_at',  [$startDate, $endDate])
+                        ->where('dno_holdings_co_payment_vouchers.method_of_payment', $cash)
+                        ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                        ->get()->toArray();
+            
+        $totalAmountCashes = DB::table(
+                        'dno_holdings_co_payment_vouchers')
+                        ->select( 
+                        'dno_holdings_co_payment_vouchers.id',
+                        'dno_holdings_co_payment_vouchers.user_id',
+                        'dno_holdings_co_payment_vouchers.pv_id',
+                        'dno_holdings_co_payment_vouchers.date',
+                        'dno_holdings_co_payment_vouchers.paid_to',
+                        'dno_holdings_co_payment_vouchers.account_no',
+                        'dno_holdings_co_payment_vouchers.account_name',
+                        'dno_holdings_co_payment_vouchers.particulars',
+                        'dno_holdings_co_payment_vouchers.amount',
+                        'dno_holdings_co_payment_vouchers.method_of_payment',
+                        'dno_holdings_co_payment_vouchers.prepared_by',
+                        'dno_holdings_co_payment_vouchers.approved_by',
+                        'dno_holdings_co_payment_vouchers.date_approved',
+                        'dno_holdings_co_payment_vouchers.received_by_date',
+                        'dno_holdings_co_payment_vouchers.created_by',
+                        'dno_holdings_co_payment_vouchers.invoice_number',
+                        'dno_holdings_co_payment_vouchers.issued_date',
+                        'dno_holdings_co_payment_vouchers.category',
+                        'dno_holdings_co_payment_vouchers.amount_due',
+                        'dno_holdings_co_payment_vouchers.delivered_date',
+                        'dno_holdings_co_payment_vouchers.status',
+                        'dno_holdings_co_payment_vouchers.cheque_number',
+                        'dno_holdings_co_payment_vouchers.cheque_amount',
+                        'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                        'dno_holdings_co_payment_vouchers.sub_category',
+                        'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                        'dno_holdings_co_payment_vouchers.deleted_at',
+                        'dno_holdings_co_payment_vouchers.created_at',
+                        'dno_holdings_co_codes.dno_holdings_code',
+                        'dno_holdings_co_codes.module_id',
+                        'dno_holdings_co_codes.module_code',
+                        'dno_holdings_co_codes.module_name')
+                        ->leftJoin('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                        ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                        ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                        ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                        ->whereBetween('dno_holdings_co_payment_vouchers.created_at', [$startDate, $endDate])
+                        ->where('dno_holdings_co_payment_vouchers.method_of_payment', $cash)
+                        ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                        ->sum('dno_holdings_co_payment_vouchers.amount_due');
+
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                            'dno_holdings_co_payment_vouchers')
+                            ->select( 
+                            'dno_holdings_co_payment_vouchers.id',
+                            'dno_holdings_co_payment_vouchers.user_id',
+                            'dno_holdings_co_payment_vouchers.pv_id',
+                            'dno_holdings_co_payment_vouchers.date',
+                            'dno_holdings_co_payment_vouchers.paid_to',
+                            'dno_holdings_co_payment_vouchers.account_no',
+                            'dno_holdings_co_payment_vouchers.account_name',
+                            'dno_holdings_co_payment_vouchers.particulars',
+                            'dno_holdings_co_payment_vouchers.amount',
+                            'dno_holdings_co_payment_vouchers.method_of_payment',
+                            'dno_holdings_co_payment_vouchers.prepared_by',
+                            'dno_holdings_co_payment_vouchers.approved_by',
+                            'dno_holdings_co_payment_vouchers.date_approved',
+                            'dno_holdings_co_payment_vouchers.received_by_date',
+                            'dno_holdings_co_payment_vouchers.created_by',
+                            'dno_holdings_co_payment_vouchers.invoice_number',
+                            'dno_holdings_co_payment_vouchers.issued_date',
+                            'dno_holdings_co_payment_vouchers.category',
+                            'dno_holdings_co_payment_vouchers.amount_due',
+                            'dno_holdings_co_payment_vouchers.delivered_date',
+                            'dno_holdings_co_payment_vouchers.status',
+                            'dno_holdings_co_payment_vouchers.cheque_number',
+                            'dno_holdings_co_payment_vouchers.cheque_amount',
+                            'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                            'dno_holdings_co_payment_vouchers.sub_category',
+                            'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                            'dno_holdings_co_payment_vouchers.deleted_at',
+                            'dno_holdings_co_payment_vouchers.created_at',
+                            'dno_holdings_co_codes.dno_holdings_code',
+                            'dno_holdings_co_codes.module_id',
+                            'dno_holdings_co_codes.module_code',
+                            'dno_holdings_co_codes.module_name')
+                            ->leftJoin('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                            ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                            ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                            ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                            ->whereBetween('dno_holdings_co_payment_vouchers.created_at', [$startDate, $endDate])
+                            ->where('dno_holdings_co_payment_vouchers.method_of_payment', $check)
+                            ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                            ->get()->toArray();
+
+    
+        $status = "FULLY PAID AND RELEASED";
+        $totalAmountCheck = DB::table(
+                        'dno_holdings_co_payment_vouchers')
+                        ->select( 
+                        'dno_holdings_co_payment_vouchers.id',
+                        'dno_holdings_co_payment_vouchers.user_id',
+                        'dno_holdings_co_payment_vouchers.pv_id',
+                        'dno_holdings_co_payment_vouchers.date',
+                        'dno_holdings_co_payment_vouchers.paid_to',
+                        'dno_holdings_co_payment_vouchers.account_no',
+                        'dno_holdings_co_payment_vouchers.account_name',
+                        'dno_holdings_co_payment_vouchers.particulars',
+                        'dno_holdings_co_payment_vouchers.amount',
+                        'dno_holdings_co_payment_vouchers.method_of_payment',
+                        'dno_holdings_co_payment_vouchers.prepared_by',
+                        'dno_holdings_co_payment_vouchers.approved_by',
+                        'dno_holdings_co_payment_vouchers.date_approved',
+                        'dno_holdings_co_payment_vouchers.received_by_date',
+                        'dno_holdings_co_payment_vouchers.created_by',
+                        'dno_holdings_co_payment_vouchers.invoice_number',
+                        'dno_holdings_co_payment_vouchers.issued_date',
+                        'dno_holdings_co_payment_vouchers.category',
+                        'dno_holdings_co_payment_vouchers.amount_due',
+                        'dno_holdings_co_payment_vouchers.delivered_date',
+                        'dno_holdings_co_payment_vouchers.status',
+                        'dno_holdings_co_payment_vouchers.cheque_number',
+                        'dno_holdings_co_payment_vouchers.cheque_amount',
+                        'dno_holdings_co_payment_vouchers.sub_category',
+                        'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                        'dno_holdings_co_payment_vouchers.deleted_at',
+                        'dno_holdings_co_payment_vouchers.created_at',
+                        'dno_holdings_co_codes.dno_holdings_code',
+                        'dno_holdings_co_codes.module_id',
+                        'dno_holdings_co_codes.module_code',
+                        'dno_holdings_co_codes.module_name')
+                        ->leftJoin('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                        ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                        ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                        ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                        ->whereBetween('dno_holdings_co_payment_vouchers.created_at', [$startDate, $endDate])
+                        ->where('dno_holdings_co_payment_vouchers.method_of_payment', $check)
+                        ->where('dno_holdings_co_payment_vouchers.status', '!=', $status)
+                        ->sum('dno_holdings_co_payment_vouchers.amount_due');
+            
+        return view('dno-holdings-co-multiple-summary-report', compact('getTransactionLists', 'startDate', 'endDate', 'getTransactionListCashes', 
+        'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck'));
+
+    }
+
+    public function getSummaryReport(Request $request){
+        $getDate = $request->get('selectDate');
+        $moduleNamePV = "Payment Voucher";
+        $getTransactionLists = DB::table(
+                        'dno_holdings_co_payment_vouchers')
+                        ->select( 
+                        'dno_holdings_co_payment_vouchers.id',
+                        'dno_holdings_co_payment_vouchers.user_id',
+                        'dno_holdings_co_payment_vouchers.pv_id',
+                        'dno_holdings_co_payment_vouchers.date',
+                        'dno_holdings_co_payment_vouchers.paid_to',
+                        'dno_holdings_co_payment_vouchers.account_no',
+                        'dno_holdings_co_payment_vouchers.account_name',
+                        'dno_holdings_co_payment_vouchers.particulars',
+                        'dno_holdings_co_payment_vouchers.amount',
+                        'dno_holdings_co_payment_vouchers.method_of_payment',
+                        'dno_holdings_co_payment_vouchers.prepared_by',
+                        'dno_holdings_co_payment_vouchers.approved_by',
+                        'dno_holdings_co_payment_vouchers.date_approved',
+                        'dno_holdings_co_payment_vouchers.received_by_date',
+                        'dno_holdings_co_payment_vouchers.created_by',
+                        'dno_holdings_co_payment_vouchers.invoice_number',
+                        'dno_holdings_co_payment_vouchers.issued_date',
+                        'dno_holdings_co_payment_vouchers.category',
+                        'dno_holdings_co_payment_vouchers.amount_due',
+                        'dno_holdings_co_payment_vouchers.delivered_date',
+                        'dno_holdings_co_payment_vouchers.status',
+                        'dno_holdings_co_payment_vouchers.cheque_number',
+                        'dno_holdings_co_payment_vouchers.cheque_amount',
+                        'dno_holdings_co_payment_vouchers.sub_category',
+                        'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                        'dno_holdings_co_payment_vouchers.deleted_at',
+                        'dno_holdings_co_payment_vouchers.created_at',
+                        'dno_holdings_co_codes.dno_holdings_code',
+                        'dno_holdings_co_codes.module_id',
+                        'dno_holdings_co_codes.module_code',
+                        'dno_holdings_co_codes.module_name')
+                        ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                        ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                        ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                        ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                        ->whereDate('dno_holdings_co_payment_vouchers.created_at', '=', date($getDate))
+                        ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                        ->get()->toArray();
+
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                        'dno_holdings_co_payment_vouchers')
+                        ->select( 
+                        'dno_holdings_co_payment_vouchers.id',
+                        'dno_holdings_co_payment_vouchers.user_id',
+                        'dno_holdings_co_payment_vouchers.pv_id',
+                        'dno_holdings_co_payment_vouchers.date',
+                        'dno_holdings_co_payment_vouchers.paid_to',
+                        'dno_holdings_co_payment_vouchers.account_no',
+                        'dno_holdings_co_payment_vouchers.account_name',
+                        'dno_holdings_co_payment_vouchers.particulars',
+                        'dno_holdings_co_payment_vouchers.amount',
+                        'dno_holdings_co_payment_vouchers.method_of_payment',
+                        'dno_holdings_co_payment_vouchers.prepared_by',
+                        'dno_holdings_co_payment_vouchers.approved_by',
+                        'dno_holdings_co_payment_vouchers.date_approved',
+                        'dno_holdings_co_payment_vouchers.received_by_date',
+                        'dno_holdings_co_payment_vouchers.created_by',
+                        'dno_holdings_co_payment_vouchers.invoice_number',
+                        'dno_holdings_co_payment_vouchers.issued_date',
+                        'dno_holdings_co_payment_vouchers.category',
+                        'dno_holdings_co_payment_vouchers.amount_due',
+                        'dno_holdings_co_payment_vouchers.delivered_date',
+                        'dno_holdings_co_payment_vouchers.status',
+                        'dno_holdings_co_payment_vouchers.cheque_number',
+                        'dno_holdings_co_payment_vouchers.cheque_amount',
+                        'dno_holdings_co_payment_vouchers.sub_category',
+                        'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                        'dno_holdings_co_payment_vouchers.deleted_at',
+                        'dno_holdings_co_payment_vouchers.created_at',
+                        'dno_holdings_co_codes.dno_holdings_code',
+                        'dno_holdings_co_codes.module_id',
+                        'dno_holdings_co_codes.module_code',
+                        'dno_holdings_co_codes.module_name')
+                        ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                        ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                        ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                        ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                        ->whereDate('dno_holdings_co_payment_vouchers.created_at', '=', date($getDate))
+                        ->where('dno_holdings_co_payment_vouchers.method_of_payment', $cash)
+                        ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                        ->get()->toArray();
+
+        $totalAmountCashes = DB::table(
+                            'dno_holdings_co_payment_vouchers')
+                            ->select( 
+                            'dno_holdings_co_payment_vouchers.id',
+                            'dno_holdings_co_payment_vouchers.user_id',
+                            'dno_holdings_co_payment_vouchers.pv_id',
+                            'dno_holdings_co_payment_vouchers.date',
+                            'dno_holdings_co_payment_vouchers.paid_to',
+                            'dno_holdings_co_payment_vouchers.account_no',
+                            'dno_holdings_co_payment_vouchers.account_name',
+                            'dno_holdings_co_payment_vouchers.particulars',
+                            'dno_holdings_co_payment_vouchers.amount',
+                            'dno_holdings_co_payment_vouchers.method_of_payment',
+                            'dno_holdings_co_payment_vouchers.prepared_by',
+                            'dno_holdings_co_payment_vouchers.approved_by',
+                            'dno_holdings_co_payment_vouchers.date_approved',
+                            'dno_holdings_co_payment_vouchers.received_by_date',
+                            'dno_holdings_co_payment_vouchers.created_by',
+                            'dno_holdings_co_payment_vouchers.invoice_number',
+                            'dno_holdings_co_payment_vouchers.issued_date',
+                            'dno_holdings_co_payment_vouchers.category',
+                            'dno_holdings_co_payment_vouchers.amount_due',
+                            'dno_holdings_co_payment_vouchers.delivered_date',
+                            'dno_holdings_co_payment_vouchers.status',
+                            'dno_holdings_co_payment_vouchers.cheque_number',
+                            'dno_holdings_co_payment_vouchers.cheque_amount',
+                            'dno_holdings_co_payment_vouchers.sub_category',
+                            'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                            'dno_holdings_co_payment_vouchers.deleted_at',
+                            'dno_holdings_co_payment_vouchers.created_at',
+                            'dno_holdings_co_codes.dno_holdings_code',
+                            'dno_holdings_co_codes.module_id',
+                            'dno_holdings_co_codes.module_code',
+                            'dno_holdings_co_codes.module_name')
+                            ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                            ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                            ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                            ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                            ->whereDate('dno_holdings_co_payment_vouchers.created_at', '=', date($getDate))
+                            ->where('dno_holdings_co_payment_vouchers.method_of_payment', $cash)
+                            ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                            ->sum('dno_holdings_co_payment_vouchers.amount_due');
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                        'dno_holdings_co_payment_vouchers')
+                        ->select( 
+                        'dno_holdings_co_payment_vouchers.id',
+                        'dno_holdings_co_payment_vouchers.user_id',
+                        'dno_holdings_co_payment_vouchers.pv_id',
+                        'dno_holdings_co_payment_vouchers.date',
+                        'dno_holdings_co_payment_vouchers.paid_to',
+                        'dno_holdings_co_payment_vouchers.account_no',
+                        'dno_holdings_co_payment_vouchers.account_name',
+                        'dno_holdings_co_payment_vouchers.particulars',
+                        'dno_holdings_co_payment_vouchers.amount',
+                        'dno_holdings_co_payment_vouchers.method_of_payment',
+                        'dno_holdings_co_payment_vouchers.prepared_by',
+                        'dno_holdings_co_payment_vouchers.approved_by',
+                        'dno_holdings_co_payment_vouchers.date_approved',
+                        'dno_holdings_co_payment_vouchers.received_by_date',
+                        'dno_holdings_co_payment_vouchers.created_by',
+                        'dno_holdings_co_payment_vouchers.invoice_number',
+                        'dno_holdings_co_payment_vouchers.issued_date',
+                        'dno_holdings_co_payment_vouchers.category',
+                        'dno_holdings_co_payment_vouchers.amount_due',
+                        'dno_holdings_co_payment_vouchers.delivered_date',
+                        'dno_holdings_co_payment_vouchers.status',
+                        'dno_holdings_co_payment_vouchers.cheque_number',
+                        'dno_holdings_co_payment_vouchers.cheque_amount',
+                        'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                        'dno_holdings_co_payment_vouchers.sub_category',
+                        'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                        'dno_holdings_co_payment_vouchers.deleted_at',
+                        'dno_holdings_co_payment_vouchers.created_at',
+                        'dno_holdings_co_codes.dno_holdings_code',
+                        'dno_holdings_co_codes.module_id',
+                        'dno_holdings_co_codes.module_code',
+                        'dno_holdings_co_codes.module_name')
+                        ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                        ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                        ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                        ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                        ->whereDate('dno_holdings_co_payment_vouchers.created_at', '=', date($getDate))
+                        ->where('dno_holdings_co_payment_vouchers.method_of_payment', $check)
+                        ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                        ->get()->toArray();
+
+        
+        $status = "FULLY PAID AND RELEASED";
+        $totalAmountCheck = DB::table(
+                    'dno_holdings_co_payment_vouchers')
+                    ->select( 
+                    'dno_holdings_co_payment_vouchers.id',
+                    'dno_holdings_co_payment_vouchers.user_id',
+                    'dno_holdings_co_payment_vouchers.pv_id',
+                    'dno_holdings_co_payment_vouchers.date',
+                    'dno_holdings_co_payment_vouchers.paid_to',
+                    'dno_holdings_co_payment_vouchers.account_no',
+                    'dno_holdings_co_payment_vouchers.account_name',
+                    'dno_holdings_co_payment_vouchers.particulars',
+                    'dno_holdings_co_payment_vouchers.amount',
+                    'dno_holdings_co_payment_vouchers.method_of_payment',
+                    'dno_holdings_co_payment_vouchers.prepared_by',
+                    'dno_holdings_co_payment_vouchers.approved_by',
+                    'dno_holdings_co_payment_vouchers.date_approved',
+                    'dno_holdings_co_payment_vouchers.received_by_date',
+                    'dno_holdings_co_payment_vouchers.created_by',
+                    'dno_holdings_co_payment_vouchers.invoice_number',
+                    'dno_holdings_co_payment_vouchers.issued_date',
+                    'dno_holdings_co_payment_vouchers.category',
+                    'dno_holdings_co_payment_vouchers.amount_due',
+                    'dno_holdings_co_payment_vouchers.delivered_date',
+                    'dno_holdings_co_payment_vouchers.status',
+                    'dno_holdings_co_payment_vouchers.cheque_number',
+                    'dno_holdings_co_payment_vouchers.cheque_amount',
+                    'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                    'dno_holdings_co_payment_vouchers.sub_category',
+                    'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                    'dno_holdings_co_payment_vouchers.deleted_at',
+                    'dno_holdings_co_payment_vouchers.created_at',
+                    'dno_holdings_co_codes.dno_holdings_code',
+                    'dno_holdings_co_codes.module_id',
+                    'dno_holdings_co_codes.module_code',
+                    'dno_holdings_co_codes.module_name')
+                    ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                    ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                    ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                    ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                    ->whereDate('dno_holdings_co_payment_vouchers.created_at', '=', date($getDate))
+                    ->where('dno_holdings_co_payment_vouchers.method_of_payment', $check)
+                    ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                    ->sum('dno_holdings_co_payment_vouchers.amount_due');
+            
+        return view('dno-holdings-co-get-summary-report', compact('getDate', 'getTransactionLists', 'getTransactionListCashes', 
+        'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck'));
+
+    }
+
+    public function summaryReport(){
+        $getDateToday = date("Y-m-d");
+
+        $moduleNamePV = "Payment Voucher";
+        $getTransactionLists = DB::table(
+                        'dno_holdings_co_payment_vouchers')
+                        ->select( 
+                        'dno_holdings_co_payment_vouchers.id',
+                        'dno_holdings_co_payment_vouchers.user_id',
+                        'dno_holdings_co_payment_vouchers.pv_id',
+                        'dno_holdings_co_payment_vouchers.date',
+                        'dno_holdings_co_payment_vouchers.paid_to',
+                        'dno_holdings_co_payment_vouchers.account_no',
+                        'dno_holdings_co_payment_vouchers.account_name',
+                        'dno_holdings_co_payment_vouchers.particulars',
+                        'dno_holdings_co_payment_vouchers.amount',
+                        'dno_holdings_co_payment_vouchers.method_of_payment',
+                        'dno_holdings_co_payment_vouchers.prepared_by',
+                        'dno_holdings_co_payment_vouchers.approved_by',
+                        'dno_holdings_co_payment_vouchers.date_approved',
+                        'dno_holdings_co_payment_vouchers.received_by_date',
+                        'dno_holdings_co_payment_vouchers.created_by',
+                        'dno_holdings_co_payment_vouchers.invoice_number',
+                        'dno_holdings_co_payment_vouchers.issued_date',
+                        'dno_holdings_co_payment_vouchers.category',
+                        'dno_holdings_co_payment_vouchers.amount_due',
+                        'dno_holdings_co_payment_vouchers.delivered_date',
+                        'dno_holdings_co_payment_vouchers.status',
+                        'dno_holdings_co_payment_vouchers.cheque_number',
+                        'dno_holdings_co_payment_vouchers.cheque_amount',
+                        'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                        'dno_holdings_co_payment_vouchers.sub_category',
+                        'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                        'dno_holdings_co_payment_vouchers.deleted_at',
+                        'dno_holdings_co_payment_vouchers.created_at',
+                        'dno_holdings_co_codes.dno_holdings_code',
+                        'dno_holdings_co_codes.module_id',
+                        'dno_holdings_co_codes.module_code',
+                        'dno_holdings_co_codes.module_name')
+                        ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                        ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                        ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                        ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                        ->whereDate('dno_holdings_co_payment_vouchers.created_at', '=', date($getDateToday))
+                        ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                        ->get()->toArray();
+
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                        'dno_holdings_co_payment_vouchers')
+                        ->select( 
+                        'dno_holdings_co_payment_vouchers.id',
+                        'dno_holdings_co_payment_vouchers.user_id',
+                        'dno_holdings_co_payment_vouchers.pv_id',
+                        'dno_holdings_co_payment_vouchers.date',
+                        'dno_holdings_co_payment_vouchers.paid_to',
+                        'dno_holdings_co_payment_vouchers.account_no',
+                        'dno_holdings_co_payment_vouchers.account_name',
+                        'dno_holdings_co_payment_vouchers.particulars',
+                        'dno_holdings_co_payment_vouchers.amount',
+                        'dno_holdings_co_payment_vouchers.method_of_payment',
+                        'dno_holdings_co_payment_vouchers.prepared_by',
+                        'dno_holdings_co_payment_vouchers.approved_by',
+                        'dno_holdings_co_payment_vouchers.date_approved',
+                        'dno_holdings_co_payment_vouchers.received_by_date',
+                        'dno_holdings_co_payment_vouchers.created_by',
+                        'dno_holdings_co_payment_vouchers.invoice_number',
+                        'dno_holdings_co_payment_vouchers.issued_date',
+                        'dno_holdings_co_payment_vouchers.category',
+                        'dno_holdings_co_payment_vouchers.amount_due',
+                        'dno_holdings_co_payment_vouchers.delivered_date',
+                        'dno_holdings_co_payment_vouchers.status',
+                        'dno_holdings_co_payment_vouchers.cheque_number',
+                        'dno_holdings_co_payment_vouchers.cheque_amount',
+                        'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                        'dno_holdings_co_payment_vouchers.sub_category',
+                        'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                        'dno_holdings_co_payment_vouchers.deleted_at',
+                        'dno_holdings_co_payment_vouchers.created_at',
+                        'dno_holdings_co_codes.dno_holdings_code',
+                        'dno_holdings_co_codes.module_id',
+                        'dno_holdings_co_codes.module_code',
+                        'dno_holdings_co_codes.module_name')
+                        ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                        ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                        ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                        ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                        ->whereDate('dno_holdings_co_payment_vouchers.created_at', '=', date($getDateToday))
+                        ->where('dno_holdings_co_payment_vouchers.method_of_payment', $cash)
+                        ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                        ->get()->toArray();
+
+
+        $totalAmountCashes = DB::table(
+                            'dno_holdings_co_payment_vouchers')
+                            ->select( 
+                            'dno_holdings_co_payment_vouchers.id',
+                            'dno_holdings_co_payment_vouchers.user_id',
+                            'dno_holdings_co_payment_vouchers.pv_id',
+                            'dno_holdings_co_payment_vouchers.date',
+                            'dno_holdings_co_payment_vouchers.paid_to',
+                            'dno_holdings_co_payment_vouchers.account_no',
+                            'dno_holdings_co_payment_vouchers.account_name',
+                            'dno_holdings_co_payment_vouchers.particulars',
+                            'dno_holdings_co_payment_vouchers.amount',
+                            'dno_holdings_co_payment_vouchers.method_of_payment',
+                            'dno_holdings_co_payment_vouchers.prepared_by',
+                            'dno_holdings_co_payment_vouchers.approved_by',
+                            'dno_holdings_co_payment_vouchers.date_approved',
+                            'dno_holdings_co_payment_vouchers.received_by_date',
+                            'dno_holdings_co_payment_vouchers.created_by',
+                            'dno_holdings_co_payment_vouchers.invoice_number',
+                            'dno_holdings_co_payment_vouchers.issued_date',
+                            'dno_holdings_co_payment_vouchers.category',
+                            'dno_holdings_co_payment_vouchers.amount_due',
+                            'dno_holdings_co_payment_vouchers.delivered_date',
+                            'dno_holdings_co_payment_vouchers.status',
+                            'dno_holdings_co_payment_vouchers.cheque_number',
+                            'dno_holdings_co_payment_vouchers.cheque_amount',
+                            'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                            'dno_holdings_co_payment_vouchers.sub_category',
+                            'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                            'dno_holdings_co_payment_vouchers.deleted_at',
+                            'dno_holdings_co_payment_vouchers.created_at',
+                            'dno_holdings_co_codes.dno_holdings_code',
+                            'dno_holdings_co_codes.module_id',
+                            'dno_holdings_co_codes.module_code',
+                            'dno_holdings_co_codes.module_name')
+                            ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                            ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                            ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                            ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                            ->whereDate('dno_holdings_co_payment_vouchers.created_at', '=', date($getDateToday))
+                            ->where('dno_holdings_co_payment_vouchers.method_of_payment', $cash)
+                            ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                            ->sum('dno_holdings_co_payment_vouchers.amount_due');
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                        'dno_holdings_co_payment_vouchers')
+                        ->select( 
+                        'dno_holdings_co_payment_vouchers.id',
+                        'dno_holdings_co_payment_vouchers.user_id',
+                        'dno_holdings_co_payment_vouchers.pv_id',
+                        'dno_holdings_co_payment_vouchers.date',
+                        'dno_holdings_co_payment_vouchers.paid_to',
+                        'dno_holdings_co_payment_vouchers.account_no',
+                        'dno_holdings_co_payment_vouchers.account_name',
+                        'dno_holdings_co_payment_vouchers.particulars',
+                        'dno_holdings_co_payment_vouchers.amount',
+                        'dno_holdings_co_payment_vouchers.method_of_payment',
+                        'dno_holdings_co_payment_vouchers.prepared_by',
+                        'dno_holdings_co_payment_vouchers.approved_by',
+                        'dno_holdings_co_payment_vouchers.date_approved',
+                        'dno_holdings_co_payment_vouchers.received_by_date',
+                        'dno_holdings_co_payment_vouchers.created_by',
+                        'dno_holdings_co_payment_vouchers.invoice_number',
+                        'dno_holdings_co_payment_vouchers.issued_date',
+                        'dno_holdings_co_payment_vouchers.category',
+                        'dno_holdings_co_payment_vouchers.amount_due',
+                        'dno_holdings_co_payment_vouchers.delivered_date',
+                        'dno_holdings_co_payment_vouchers.status',
+                        'dno_holdings_co_payment_vouchers.cheque_number',
+                        'dno_holdings_co_payment_vouchers.cheque_amount',
+                        'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                        'dno_holdings_co_payment_vouchers.sub_category',
+                        'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                        'dno_holdings_co_payment_vouchers.deleted_at',
+                        'dno_holdings_co_payment_vouchers.created_at',
+                        'dno_holdings_co_codes.dno_holdings_code',
+                        'dno_holdings_co_codes.module_id',
+                        'dno_holdings_co_codes.module_code',
+                        'dno_holdings_co_codes.module_name')
+                        ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                        ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                        ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                        ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                        ->whereDate('dno_holdings_co_payment_vouchers.created_at', '=', date($getDateToday))
+                        ->where('dno_holdings_co_payment_vouchers.method_of_payment', $check)
+                        ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                        ->get()->toArray();
+       
+       
+        $status = "FULLY PAID AND RELEASED";
+        $totalAmountCheck = DB::table(
+                    'dno_holdings_co_payment_vouchers')
+                    ->select( 
+                    'dno_holdings_co_payment_vouchers.id',
+
+                    'dno_holdings_co_payment_vouchers.user_id',
+                    'dno_holdings_co_payment_vouchers.pv_id',
+                    'dno_holdings_co_payment_vouchers.date',
+                    'dno_holdings_co_payment_vouchers.paid_to',
+                    'dno_holdings_co_payment_vouchers.account_no',
+                    'dno_holdings_co_payment_vouchers.account_name',
+                    'dno_holdings_co_payment_vouchers.particulars',
+                    'dno_holdings_co_payment_vouchers.amount',
+                    'dno_holdings_co_payment_vouchers.method_of_payment',
+                    'dno_holdings_co_payment_vouchers.prepared_by',
+                    'dno_holdings_co_payment_vouchers.approved_by',
+                    'dno_holdings_co_payment_vouchers.date_approved',
+                    'dno_holdings_co_payment_vouchers.received_by_date',
+                    'dno_holdings_co_payment_vouchers.created_by',
+                    'dno_holdings_co_payment_vouchers.invoice_number',
+                    'dno_holdings_co_payment_vouchers.issued_date',
+                    'dno_holdings_co_payment_vouchers.category',
+                    'dno_holdings_co_payment_vouchers.amount_due',
+                    'dno_holdings_co_payment_vouchers.delivered_date',
+                    'dno_holdings_co_payment_vouchers.status',
+                    'dno_holdings_co_payment_vouchers.cheque_number',
+                    'dno_holdings_co_payment_vouchers.cheque_amount',
+                    'dno_holdings_co_payment_vouchers.cheque_total_amount',
+                    'dno_holdings_co_payment_vouchers.sub_category',
+                    'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                    'dno_holdings_co_payment_vouchers.deleted_at',
+                    'dno_holdings_co_payment_vouchers.created_at',
+                    'dno_holdings_co_codes.dno_holdings_code',
+                    'dno_holdings_co_codes.module_id',
+                    'dno_holdings_co_codes.module_code',
+                    'dno_holdings_co_codes.module_name')
+                    ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                    ->where('dno_holdings_co_payment_vouchers.pv_id', NULL)
+                    ->where('dno_holdings_co_payment_vouchers.deleted_at', NULL)
+                    ->where('dno_holdings_co_codes.module_name', $moduleNamePV)
+                    ->whereDate('dno_holdings_co_payment_vouchers.created_at', '=', date($getDateToday))
+                    ->where('dno_holdings_co_payment_vouchers.method_of_payment', $check)
+                    ->orderBy('dno_holdings_co_payment_vouchers.id', 'desc')
+                    ->sum('dno_holdings_co_payment_vouchers.amount_due');
+
+
+        return view('dno-holdings-co-summary-report', compact('getTransactionLists', 'getTransactionListCashes', 
+        'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck'));
+    }
+
+    public function search(Request $request){
+        $getSearchResults =DnoHoldingsCoCode::where('dno_holdings_code', $request->get('searchCode'))->get();
+        if($getSearchResults[0]->module_name === "Payment Voucher"){
+            $getSearchPaymentVouchers = DB::table(
+                        'dno_holdings_co_payment_vouchers')
+                        ->select( 
+                        'dno_holdings_co_payment_vouchers.id',
+                        'dno_holdings_co_payment_vouchers.user_id',
+                        'dno_holdings_co_payment_vouchers.pv_id',
+                        'dno_holdings_co_payment_vouchers.date',
+                        'dno_holdings_co_payment_vouchers.paid_to',
+                        'dno_holdings_co_payment_vouchers.account_no',
+                        'dno_holdings_co_payment_vouchers.account_name',
+                        'dno_holdings_co_payment_vouchers.particulars',
+                        'dno_holdings_co_payment_vouchers.amount',
+                        'dno_holdings_co_payment_vouchers.method_of_payment',
+                        'dno_holdings_co_payment_vouchers.prepared_by',
+                        'dno_holdings_co_payment_vouchers.approved_by',
+                        'dno_holdings_co_payment_vouchers.date_approved',
+                        'dno_holdings_co_payment_vouchers.received_by_date',
+                        'dno_holdings_co_payment_vouchers.created_by',
+                        'dno_holdings_co_payment_vouchers.invoice_number',
+                        'dno_holdings_co_payment_vouchers.issued_date',
+                        'dno_holdings_co_payment_vouchers.category',
+                        'dno_holdings_co_payment_vouchers.amount_due',
+                        'dno_holdings_co_payment_vouchers.delivered_date',
+                        'dno_holdings_co_payment_vouchers.status',
+                        'dno_holdings_co_payment_vouchers.cheque_number',
+                        'dno_holdings_co_payment_vouchers.cheque_amount',
+                        'dno_holdings_co_payment_vouchers.sub_category',
+                        'dno_holdings_co_payment_vouchers.sub_category_account_id',
+                        'dno_holdings_co_payment_vouchers.deleted_at',
+                        'dno_holdings_co_codes.dno_holdings_code',
+                        'dno_holdings_co_codes.module_id',
+                        'dno_holdings_co_codes.module_code',
+                        'dno_holdings_co_codes.module_name')
+                        ->join('dno_holdings_co_codes', 'dno_holdings_co_payment_vouchers.id', '=', 'dno_holdings_co_codes.module_id')
+                        ->where('dno_holdings_co_payment_vouchers.id', $getSearchResults[0]->module_id)
+                        ->where('dno_holdings_co_codes.module_name', $getSearchResults[0]->module_name)
+                        ->get()->toArray();
+                        
+                $getAllCodes = DnoHoldingsCoCode::get()->toArray();  
+                $module = $getSearchResults[0]->module_name;            
+
+                return view('dno-holdings-co-search-results',  compact('module', 'getAllCodes', 'getSearchPaymentVouchers'));
+        }
+    }
+
+    public function searchNumberCode(){
+        $getAllCodes = DnoHoldingsCoCode::get()->toArray();
+        return view('dno-holdings-co-search-number-code', compact('getAllCodes'));
+    }
+
     public function printSupplier($id){
         $viewSupplier = DnoHoldingsCoSupplier::where('id', $id)->get();
 

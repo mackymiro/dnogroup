@@ -2357,8 +2357,9 @@ class RibosBarController extends Controller
                                 ->where('ribos_bar_payment_vouchers.status', $status)
                                 ->sum('ribos_bar_payment_vouchers.cheque_total_amount');
         
-
-        $pdf = PDF::loadView('printSummaryRibosBar', compact('date', 'getDateToday', 'getAllSalesInvoices', 
+        $uri0 = "";
+        $uri1 = "";
+        $pdf = PDF::loadView('printSummaryRibosBar', compact('date', 'uri0', 'uri1', 'getDateToday', 'getAllSalesInvoices', 
         'totalSalesInvoice', 'purchaseOrders', 'totalPOrder','pettyCashLists', 
         'getTransactionLists', 'getTransactionListCashes', 
         'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck', 'totalPaidAmountCheck'));
@@ -2747,6 +2748,9 @@ class RibosBarController extends Controller
                             ->where('ribos_bar_payment_vouchers.method_of_payment', $check)
                             ->where('ribos_bar_payment_vouchers.status', '!=', $status)
                             ->sum('ribos_bar_payment_vouchers.amount_due');
+
+        $uri0 = "";
+        $uri1 = "";
 
         return view('ribos-bar-summary-report', compact('getAllSalesInvoices', 
         'totalSalesInvoice', 'purchaseOrders', 'totalPOrder','pettyCashLists', 

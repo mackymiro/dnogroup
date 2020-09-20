@@ -5973,6 +5973,48 @@ Route::group(['middleware' => ['auth']], function(){
 		'DnoHoldingsCoController@printSupplier')
 		->name('printSupplier')
 		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/summary-report/search-number-code',
+		'DnoHoldingsCoController@searchNumberCode')
+		->name('searchNumberCode')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/search',
+		'DnoHoldingsCoController@search')
+		->name('search')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/summary-report',
+		'DnoHoldingsCoController@summaryReport')
+		->name('summaryReport')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/search-date',
+		'DnoHoldingsCoController@getSummaryReport')
+		->name('getSummaryReport')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/search-multiple-date',
+		'DnoHoldingsCoController@getSummaryReportMultiple')
+		->name('getSummaryReportMultiple')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/printSummary',
+		'DnoHoldingsCoController@printSummary')
+		->name('printSummary')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/printMultipleSummary/{date}',
+		'DnoHoldingsCoController@printMultipleSummary')
+		->name('printMultipleSummary')
+		->middleware(['cashier']);
 });
 
 
