@@ -227,7 +227,7 @@ class RibosBarController extends Controller
             ]);
 
             $supplier->save();
-            return response()->json('Success: successfully updated.');        
+            return response()->json('Success: successfully added.');        
         }else{
             return response()->json('Failed: Already exist.');
         }

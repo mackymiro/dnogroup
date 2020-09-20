@@ -48,44 +48,60 @@ Route::group(['middleware' =>['user']], function(){
 	Route::post(
 		'/profile/store-create-branch',
 		'ProfileController@storeCreateBranch')
-		->name('storeCreateBranch');
+		->name('storeCreateBranch')
+		->middleware(['cashier']);
+
 
 	Route::post(
 		'/profile/reset-password-branch',
 		'ProfileController@resetBranchPassword')
-		->name('resetBranchPassword');
+		->name('resetBranchPassword')
+		->middleware(['cashier']);
+
 
 	//route for summary reports
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/summary-report/per-day',
 		'LoloPinoyLechonDeCebuController@summaryReportPerDay')
-		->name('summaryReportPerDay');
+		->name('summaryReportPerDay')
+		->middleware(['cashier']);
+
 
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/search-multiple-date',
 		'LoloPinoyLechonDeCebuController@getSummaryReportMultiple')
-		->name('getSummaryReportMultiple');
+		->name('getSummaryReportMultiple')
+		->middleware(['cashier']);
+
 
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/printMultipleSummary/{date}',
 		'LoloPinoyLechonDeCebuController@printMultipleSummary')
-		->name('printMultipleSummary');
+		->name('printMultipleSummary')
+		->middleware(['cashier']);
+
 
 
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/printSummary',
 		'LoloPinoyLechonDeCebuController@printSummary')
-		->name('printSummary');
+		->name('printSummary')
+		->middleware(['cashier']);
+
 
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/printGetSummary/{date}',
 		'LoloPinoyLechonDeCebuController@printGetSummary')
-		->name('printSummary');
+		->name('printSummary')
+		->middleware(['cashier']);
+
 
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/search-date',
 		'LoloPinoyLechonDeCebuController@getSummaryReport')
-		->name('getSummaryReport');
+		->name('getSummaryReport')
+		->middleware(['cashier']);
+
 
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/summary-report/search-number-code',
@@ -96,43 +112,59 @@ Route::group(['middleware' =>['user']], function(){
 	Route::post(
 		'/lolo-pinoy-lechon-de-cebu/search',
 		'LoloPinoyLechonDeCebuController@search')
-		->name('search');
+		->name('search')
+		->middleware(['cashier']);
+
 
 	//route for delete delivery receipt
 	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-delivery-receipt/{id}', 
 		'LoloPinoyLechonDeCebuController@destroyDeliveryReceipt')
-		->name('destroyDeliveryReceipt');
+		->name('destroyDeliveryReceipt')
+		->middleware(['cashier']);
+
 
 
 	Route::delete('/lolo-pinoy-lechon-de-cebu/delete/dr/{id}', 
 		'LoloPinoyLechonDeCebuController@destroyDR')
-		->name('destroyDR');
+		->name('destroyDR')
+		->middleware(['cashier']);
+
 
 
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/petty-cash-list',
 		'LoloPinoyLechonDeCebuController@pettyCashList')
-		->name('pettyCashListLechonDeCebu');
+		->name('pettyCashListLechonDeCebu')
+		->middleware(['cashier']);
+
 
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/suppliers',
 		'LoloPinoyLechonDeCebuController@supplier')
-		->name('supplier');
+		->name('supplier')
+		->middleware(['cashier']);
+
 
 	Route::post(
 		'/lolo-pinoy-lechon-de-cebu/supplier/add',
 		'LoloPinoyLechonDeCebuController@addSupplier')
-		->name('addSupplier');
+		->name('addSupplier')
+		->middleware(['cashier']);
+
 
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/suppliers/view/{id}',
 		'LoloPinoyLechonDeCebuController@viewSupplier')
-		->name('viewSupplier');
+		->name('viewSupplier')
+		->middleware(['cashier']);
+
 
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/supplier/print/{id}',
 		'LoloPinoyLechonDeCebuController@printSupplier')
-		->name('printSupplier');
+		->name('printSupplier')
+		->middleware(['cashier']);
+
 
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/utilities',
@@ -5814,6 +5846,133 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('printSupplier')
 		->middleware(['cashier']);
 
+	/*
+	/ DNO HOLDINGS & CO
+	/
+	*/
+
+	Route::get(
+		'/dno-holdings-co',
+		'DnoHoldingsCoController@index')
+		->name('indexDnoHolding')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/payment-voucher-form',
+		'DnoHoldingsCoController@paymentVoucherForm')
+		->name('paymentVoucherFormDnoHoldingsCo')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-holdsings-co/payment-voucher-store',
+		'DnoHoldingsCoController@paymentVoucherStore')
+		->name('paymentVoucherStoreDnoHoldingsCo')
+		->middleware(['cashier']);
+
+
+	Route::get(
+		'/dno-holdings-co/edit-dno-holdings-co-payable-detail/{id}',
+		'DnoHoldingsCoController@editPayablesDetail')
+		->name('editPayablesDetailDnoHoldingsCo')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-holdings-co/add-payment/{id}',
+		'DnoHoldingsCoController@addPayment')
+		->name('addPaymentDnoHoldingsCo')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-holdings-co/add-particulars/{id}',
+		'DnoHoldingsCoController@addParticulars')
+		->name('addParticularsDnoHoldingsCo')
+		->middleware(['cashier']);
+
+	Route::patch(
+		'/dno-holdings-co/payables/update-particulars/{id}',
+		'DnoHoldingsCoController@updateParticulars')
+		->name('updateParticulars')
+		->middleware(['cashier']);
+
+	Route::patch(
+		'/dno-holdings-co/payables/updateP/{id}',
+		'DnoHoldingsCoController@updateP')
+		->name('updateP')
+		->middleware(['cashier']);
+
+	Route::patch(
+		'/dno-holdings-co/payables/update-check/{id}',
+		'DnoHoldingsCoController@updateCheck')
+		->name('updateCheck')
+		->middleware(['cashier']);
+
+	Route::patch(
+		'/dno-holdings-co/payables/update-cash/{id}',
+		'DnoHoldingsCoController@updateCash')
+		->name('updateCash')
+		->middleware(['cashier']);
+
+	Route::patch(
+		'/dno-holdings-co/payables/update-details/{id}',
+		'DnoHoldingsCoController@updateDetails')
+		->name('updateDetails')
+		->middleware(['cashier']);
+
+	Route::patch(
+		'/dno-holdings-co/accept/{id}',
+		'DnoHoldingsCoController@accept')
+		->name('acceptDnoHoldingsCo')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/payables/transaction-list',
+		'DnoHoldingsCoController@transactionList')
+		->name('transactionListDnoHoldingsCo')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/view-payables-details/{id}',
+		'DnoHoldingsCoController@viewPayableDetails')
+		->name('viewPayableDetailsDnoHoldings')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/print-payables/{id}',
+		'DnoHoldingsCoController@printPayablesDnoHoldingsCo')
+		->name('printPayablesDnoHoldingsCo')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dno-holdings-co/delete-transaction-list/{id}',
+		'DnoHoldingsCoController@destroyTransactionList')
+		->name('destroyTransactionList')
+		->middleware(['cashier']);
+
+
+	Route::get(
+		'/dno-holdings-co/suppliers',
+		'DnoHoldingsCoController@supplier')
+		->name('supplier')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-holdings-co/supplier/add',
+		'DnoHoldingsCoController@addSupplier')
+		->name('addSupplier')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/suppliers/view/{id}',
+		'DnoHoldingsCoController@viewSupplier')
+		->name('viewSupplier')
+		->middleware(['cashier']);
+
+
+	Route::get(
+		'/dno-holdings-co/supplier/print/{id}',
+		'DnoHoldingsCoController@printSupplier')
+		->name('printSupplier')
+		->middleware(['cashier']);
 });
 
 

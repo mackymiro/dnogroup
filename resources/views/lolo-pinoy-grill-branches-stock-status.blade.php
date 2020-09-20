@@ -262,6 +262,130 @@
                                
                             </div>
                           @elseif($data == "Velez")
+                          <div class="table-responsive">
+                                <table class="table table-bordered display" width="100%" cellspacing="0">
+                                     <thead>
+                                          <th>Product ID</th>
+                                          <th>DR No</th>
+                                          <th>Supplier</th>
+                                          <th>Product Name</th>
+                                          <th>Qty</th>
+                                          <th class="bg-danger" style="color:white;">REMAINING</th>
+                                          <th>Unit</th>
+                                          <th>Amount</th>
+                                          <th>Created By</th>
+                                      </thead>
+                                      <tfoot>
+                                          <th>Product ID</th>
+                                          <th>DR No</th>
+                                          <th>Supplier</th>
+                                          <th>Product Name</th>
+                                          <th>Qty</th>
+                                          <th class="bg-danger" style="color:white;">REMAINING</th>
+                                          <th>Unit</th>
+                                          <th>Amount</th>
+                                          <th>Created By</th>
+                                      </tfoot>
+                                      <tbody>
+                                          @foreach($getStockStatusVelezDrinks as $getStockStatusVelezDrink)
+                                          <tr>
+                                            <td>{{ $getStockStatusVelezDrink->product_id_no }}</td>
+                                            <td>{{ $getStockStatusVelezDrink->dr_no }}</td>
+                                            <td>{{ $getStockStatusVelezDrink->supplier }}</td>
+                                            <td>{{ $getStockStatusVelezDrink->product_name }}</td>
+                                            <td>{{ $getStockStatusVelezDrink->qty }}</td>
+                                            <td class="bg-danger" style="color:white;">{{ $getStockStatusVelezDrink->product_in }}</td>
+                                            <td>{{ $getStockStatusVelezDrink->unit }}</td>
+                                            <td><?php echo number_format($getStockStatusVelezDrink->amount, 2)?></td>
+                                            <td>{{ $getStockStatusVelezDrink->created_by }}</td>
+                                          </tr>
+                                          @endforeach
+                                      </tbody>
+                                </table>
+                              
+                            </div>
+                          @elseif($data == "Banilad")
+                          <div class="table-responsive">
+                                <table class="table table-bordered display" width="100%" cellspacing="0">
+                                     <thead>
+                                          <th>Product ID</th>
+                                          <th>DR No</th>
+                                          <th>Supplier</th>
+                                          <th>Product Name</th>
+                                          <th>Qty</th>
+                                          <th class="bg-danger" style="color:white;">REMAINING</th>
+                                          <th>Unit</th>
+                                          <th>Amount</th>
+                                      </thead>
+                                      <tfoot>
+                                          <th>Product ID</th>
+                                          <th>DR No</th>
+                                          <th>Supplier</th>
+                                          <th>Product Name</th>
+                                          <th >Qty</th>
+                                          <th class="bg-danger" style="color:white;">REMAINING</th>
+                                          <th>Unit</th>`
+                                          <th>Amount</th>
+                                      </tfoot>
+                                      <tbody>
+                                           @foreach($getStockStatusBaniladDrinks as $getStockStatusBaniladDrinks)
+                                          <tr>
+                                            <td>{{ $getStockStatusBaniladDrinks->product_id_no }}</td>
+                                            <td>{{ $getStockStatusBaniladDrinks->dr_no }}</td>
+                                            <td>{{ $getStockStatusBaniladDrinks->supplier }}</td>
+                                            <td>{{ $getStockStatusBaniladDrinks->product_name }}</td>
+                                            <td>{{ $getStockStatusBaniladDrinks->qty }}</td>
+                                            <td class="bg-danger" style="color:white;">{{ $getStockStatusBaniladDrinks->product_in }}</td>
+                                            <td>{{ $getStockStatusBaniladDrinks->unit }}</td>
+                                            <td><?php echo number_format($getStockStatusBaniladDrinks->amount, 2)?></td>
+                                            <td>{{ $getStockStatusBaniladDrinks->created_by }}</td>
+                                          </tr>
+                                          @endforeach
+                                      </tbody>
+                                </table>
+                               
+                            </div>
+                          @elseif($data  == "GQS")
+                          <div class="table-responsive">
+                                <table class="table table-bordered display" width="100%" cellspacing="0">
+                                     <thead>
+                                          <th>Product ID</th>
+                                          <th>DR No</th>
+                                          <th>Supplier</th>
+                                          <th>Product Name</th>
+                                          <th>Qty</th>
+                                          <th class="bg-danger" style="color:white;">REMAINING</th>
+                                          <th>Unit</th>
+                                          <th>Amount</th>
+                                      </thead>
+                                      <tfoot>
+                                          <th>Product ID</th>
+                                          <th>DR No</th>
+                                          <th>Supplier</th>
+                                          <th>Product Name</th>
+                                          <th >Qty</th>
+                                          <th class="bg-danger" style="color:white;">REMAINING</th>
+                                          <th>Unit</th>
+                                          <th>Amount</th>
+                                      </tfoot>
+                                      <tbody>
+                                         @foreach($getStockStatusGqsDrinks as $getStockStatusGqsDrink)
+                                          <tr>
+                                            <td>{{ $getStockStatusGqs->product_id_no }}</td>
+                                            <td>{{ $getStockStatusGqs->dr_no }}</td>
+                                            <td>{{ $getStockStatusGqs->supplier }}</td>
+                                            <td>{{ $getStockStatusGqs->product_name }}</td>
+                                            <td>{{ $getStockStatusGqs->qty }}</td>
+                                            <td class="bg-danger" style="color:white;">{{ $getStockStatusGqs->product_in }}</td>
+                                            <td>{{ $getStockStatusGqs->unit }}</td>
+                                            <td><?php echo number_format($getStockStatusGqs->amount, 2)?></td>
+                                            <td>{{ $getStockStatusGqs->created_by }}</td>
+                                          </tr>
+                                          @endforeach
+                                      </tbody>
+                                </table>
+                               
+                            </div>
 
                           @endif
                         </div>

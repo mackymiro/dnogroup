@@ -5,18 +5,16 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
-class RibosBarPaymentVoucher extends Model
+class DnoHoldingsCoPaymentVoucher extends Model
 {
-
+    //
     use SoftDeletes;
-	
+
     protected $dates = ['deleted_at'];
 
     protected $fillable = [
         'user_id',
         'pv_id',
-        'reference_number',
         'date',
         'paid_to',
         'account_no',
@@ -30,7 +28,6 @@ class RibosBarPaymentVoucher extends Model
         'received_by_date',
         'created_by',
         'invoice_number',
-        'voucher_ref_number',
         'issued_date',
         'category',
         'sub_category',
@@ -44,6 +41,7 @@ class RibosBarPaymentVoucher extends Model
         'cheque_number',
         'cheque_amount',
         'cheque_total_amount',
-
+        
     ];
+
 }
