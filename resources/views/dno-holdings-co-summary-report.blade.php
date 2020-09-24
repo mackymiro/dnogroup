@@ -164,7 +164,7 @@
                                                             <td>
                                                                 @if($getTransactionList->status != "FULLY PAID AND RELEASED")
                                                                 <p style="width:250px;">
-                                                                    <a href="{{ url('dno-holdings-co/edit-ribos-bar-payables-detail/'.$getTransactionList->id) }}" title="Edit">{{ $getTransactionList->invoice_number}}</a>
+                                                                    <a href="{{ url('dno-holdings-co/edit-dno-holdings-co-payable-detail/'.$getTransactionList->id) }}" title="Edit">{{ $getTransactionList->invoice_number}}</a>
                                                                 </p>
                                                                 @else
                                                                 <p style="width:250px;">{{ $getTransactionList->invoice_number}}</p>
@@ -242,7 +242,7 @@
                                                             <td>
                                                                 @if($getTransactionListCash->status != "FULLY PAID AND RELEASED")
                                                                 <p style="width:250px;">
-                                                                    <a href="{{ url('dno-holdings-co/edit-ribos-bar-payables-detail/'.$getTransactionListCash->id) }}" title="Edit">{{ $getTransactionListCash->invoice_number}}</a>
+                                                                    <a href="{{ url('dno-holdings-co/edit-dno-holdings-co-payable-detail/'.$getTransactionListCash->id) }}" title="Edit">{{ $getTransactionListCash->invoice_number}}</a>
                                                                 </p>
                                                                 @else
                                                                 <p style="width:250px;">{{ $getTransactionListCash->invoice_number}}</p>
@@ -332,7 +332,7 @@
                                                           <td>
                                                               @if($getTransactionListCheck->status != "FULLY PAID AND RELEASED")
                                                               <p style="width:250px;">
-                                                                  <a href="{{ url('dno-holdings-co/edit-ribos-bar-payables-detail/'.$getTransactionListCheck->id) }}" title="Edit">{{ $getTransactionListCheck->invoice_number}}</a>
+                                                                  <a href="{{ url('dno-holdings-co/edit-dno-holdings-co-payable-detail/'.$getTransactionListCheck->id) }}" title="Edit">{{ $getTransactionListCheck->invoice_number}}</a>
                                                               </p>
                                                               @else
                                                               <p style="width:250px;">{{ $getTransactionListCheck->invoice_number}}</p>

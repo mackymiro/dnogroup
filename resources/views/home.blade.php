@@ -93,6 +93,24 @@
           <span>WLG Corporation</span>
         </a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url('dino-industrial-corporation') }}">
+          <i class="fas fa-book"></i>
+          <span>DINO Industrial Corporation</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url('local-ground') }}">
+          <i class="fas fa-book"></i>
+          <span>Local Ground</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ url('dno-holdings-co') }}">
+          <i class="fas fa-book"></i>
+          <span>DNO Holdings & Co</span>
+        </a>
+      </li>
       @endif
     </ul>
     <div id="content-wrapper">
@@ -314,6 +332,22 @@
                 <div class="mr-5">DNO Holdings & Co</div>
               </div>
               <a class="card-footer text-white clearfix small z-1" href="{{ url('dno-holdings-co') }}">
+                <span class="float-left">View Details</span>
+                <span class="float-right">
+                  <i class="fas fa-angle-right"></i>
+                </span>
+              </a>
+            </div>
+          </div>
+          <div class="col-xl-3 col-sm-6 mb-3">
+            <div class="card text-white bg-secondary o-hidden h-100">
+              <div class="card-body">
+                <div class="card-body-icon">
+                  <img src="{{ asset('images/digitized-logos/dno-foundation.jpg')}}" width="200" height="178" class="img-responsive mx-auto d-block" alt="DNO Foundation Inc">
+                </div>
+                <div class="mr-5">DNO Foundation Inc</div>
+              </div>
+              <a class="card-footer text-white clearfix small z-1" href="{{ url('dno-foundation-inc') }}">
                 <span class="float-left">View Details</span>
                 <span class="float-right">
                   <i class="fas fa-angle-right"></i>

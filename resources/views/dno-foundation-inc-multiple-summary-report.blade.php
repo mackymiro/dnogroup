@@ -1,4 +1,4 @@
-@extends('layouts.dno-holdings-co-app')
+@extends('layouts.dno-foundation-inc-app')
 @section('title', 'Summary Reports |')
 @section('content')
 <style >
@@ -26,14 +26,14 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="wrapper">
-       @include('sidebar.sidebar-dno-holdings-co')
+       @include('sidebar.sidebar-dno-foundation-inc')
        <div id="content-wrapper">
              <div class="container-fluid">
                   <!-- Breadcrumbs-->
                 <h1 class="mt-4">Summary Report(s)</h1>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                    <a href="#">DNO Holdings & Co </a>
+                    <a href="#">DNO Foundation Inc </a>
                     </li>
                     <li class="breadcrumb-item active">Summary Report(s)</li>
                 </ol>
@@ -46,20 +46,18 @@
                             </div>
                             <div class="card-body">
                                  <div class="form-group">
-                                    <div class="form-group">
-                                        <div class="form-row">
-                                            
-                                            <div class="col-lg-4">
-                                                <form action="{{ action('DnoFoundationIncController@getSummaryReport') }}" method="get">
-                                                {{ csrf_field() }}  
-                                                <h1>Search Date</h1>
-                                                <input type="text" name="selectDate" class="datepicker form-control"  required/>
-                                                <br>
-                                                <button type="submit" class="btn btn-success btn-lg"><i class="fa fa-search" aria-hidden="true"></i> Search Date</button>
-                                                </form>
-                                            </div>
-                                            
+                                    <div class="form-row">
+                                        
+                                        <div class="col-lg-4">
+                                            <form action="{{ action('DnoFoundationIncController@getSummaryReport') }}" method="get">
+                                            {{ csrf_field() }}  
+                                            <h1>Search Date</h1>
+                                            <input type="text" name="selectDate" class="datepicker form-control"  required/>
+                                            <br>
+                                            <button type="submit" class="btn btn-success btn-lg"><i class="fa fa-search" aria-hidden="true"></i> Search Date</button>
+                                            </form>
                                         </div>
+                                        
                                     </div>
                                 </div>
                                 <form action="{{ action('DnoFoundationIncController@getSummaryReportMultiple')}}" method="get"> 
@@ -100,8 +98,8 @@
 	    					    Summary Reports
                             </div>
                             <div class="card-body">
-                                <div>
-                                    <h1>Search Result For: {{ $getDate }}</h1>
+                                  <div>
+                                    <h1>Search Result For: {{ $startDate }} TO {{ $endDate}}</h1>
                                 </div>
                                 <br>
                                 <br>
@@ -113,7 +111,8 @@
                                     </div>
                                 </nav>
                                 <div class="tab-content" id="nav-tabContent">
-                                <div class="tab-pane fade show active" id="payables" role="tabpanel" aria-labelledby="payables-tab">
+                                           
+                                    <div class="tab-pane fade show active" id="payables" role="tabpanel" aria-labelledby="payables-tab">
                                         <br>
                                         <div class="table-responsive">
                                              <table class="table table-bordered display" width="100%" cellspacing="0">
@@ -153,12 +152,12 @@
                                                     @foreach($getTransactionLists as $getTransactionList)
                                                         <?php $id = $getTransactionList->id; ?>
                                                         <?php
-                                                            $amount1 = DB::table('dno_holdings_co_payment_vouchers')
+                                                            $amount1 = DB::table('dno_foundation_inc_payment_vouchers')
                                                                         ->select('*')
                                                                         ->where('id', $id)
                                                                         ->sum('amount');
                                                             
-                                                            $amount2 = DB::table('dno_holdings_co_payment_vouchers')
+                                                            $amount2 = DB::table('dno_foundation_inc_payment_vouchers')
                                                                         ->select('*')
                                                                         ->where('pv_id', $id)
                                                                         ->sum('amount');
@@ -169,13 +168,13 @@
                                                             <td>
                                                                 @if($getTransactionList->status != "FULLY PAID AND RELEASED")
                                                                 <p style="width:250px;">
-                                                                    <a href="{{ url('dno-holdings-co/edit-dno-holdings-co-payable-detail/'.$getTransactionList->id) }}" title="Edit">{{ $getTransactionList->invoice_number}}</a>
+                                                                    <a href="{{ url('dno-foundation-inc/edit-dno-foundation-inc-payable-detail/'.$getTransactionList->id) }}" title="Edit">{{ $getTransactionList->invoice_number}}</a>
                                                                 </p>
                                                                 @else
                                                                 <p style="width:250px;">{{ $getTransactionList->invoice_number}}</p>
                                                                 @endif
                                                             </td>
-                                                            <td><p style="width:140px;">{{ $getTransactionList->module_code}}{{ $getTransactionList->dno_holdings_code}}</p></td>
+                                                            <td><p style="width:140px;">{{ $getTransactionList->module_code}}{{ $getTransactionList->dno_foundation_code}}</p></td>
                                                             <td class="bg-info" style="color:#fff;"><p style="width:150px;">{{ $getTransactionList->category}}</p></td>
                                                             <td><p style="width:130px;">{{ $getTransactionList->issued_date}}</p></td>
                                                             <td><p style="width:200px;">{{ $getTransactionList->paid_to}}</p></td>
@@ -184,7 +183,7 @@
                                                             <td><p style="width:160px;">{{ $getTransactionList->delivered_date}}</p></td>
                                                             <td><p style="width:190px;">{{ $getTransactionList->method_of_payment }}</p></td>
                                                             
-                                                            <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('dno-holdings-co/view-payables-details/'.$getTransactionList->id) }}">{{ $getTransactionList->status }}</a></p></td>
+                                                            <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('dno-foundation-inc/view-payables-details/'.$getTransactionList->id) }}">{{ $getTransactionList->status }}</a></p></td>
                                                             <td><p style="width:190px;">{{ $getTransactionList->created_by}}</p></td>
                                                             
                                                         </tr>
@@ -196,7 +195,7 @@
                                     <div class="tab-pane fade" id="all" role="tabpanel" aria-labelledby="all-tab">
                                          <br>
                                          <div class="float-right">
-                                             <a href="{{ action('DnoHoldingsCoController@printSummary') }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                             <a href="{{ action('DnoFoundationIncController@printMultipleSummary', $startDate.'TO'.$endDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
                                         </div> 
                                     
                                         <br>
@@ -231,12 +230,12 @@
                                                 @foreach($getTransactionListCashes as $getTransactionListCash)
                                                         <?php $id = $getTransactionListCash->id; ?>
                                                         <?php
-                                                            $amount1 = DB::table('dno_holdings_co_payment_vouchers')
+                                                            $amount1 = DB::table('dno_foundation_inc_payment_vouchers')
                                                                         ->select('*')
                                                                         ->where('id', $id)
                                                                         ->sum('amount');
                                                             
-                                                            $amount2 = DB::table('dno_holdings_co_payment_vouchers')
+                                                            $amount2 = DB::table('dno_foundation_inc_payment_vouchers')
                                                                         ->select('*')
                                                                         ->where('pv_id', $id)
                                                                         ->sum('amount');
@@ -247,13 +246,13 @@
                                                             <td>
                                                                 @if($getTransactionListCash->status != "FULLY PAID AND RELEASED")
                                                                 <p style="width:250px;">
-                                                                    <a href="{{ url('dno-holdings-co/edit-dno-holdings-co-payable-detail/'.$getTransactionListCash->id) }}" title="Edit">{{ $getTransactionListCash->invoice_number}}</a>
+                                                                    <a href="{{ url('dno-foundation-inc/edit-dno-foundation-inc-payable-detail/'.$getTransactionListCash->id) }}" title="Edit">{{ $getTransactionListCash->invoice_number}}</a>
                                                                 </p>
                                                                 @else
                                                                 <p style="width:250px;">{{ $getTransactionListCash->invoice_number}}</p>
                                                                 @endif
                                                             </td>
-                                                            <td><p style="width:140px;">{{ $getTransactionListCash->module_code}}{{ $getTransactionListCash->dno_holdings_code}}</p></td>
+                                                            <td><p style="width:140px;">{{ $getTransactionListCash->module_code}}{{ $getTransactionListCash->dno_foundation_inc}}</p></td>
                                                            
                                                             <td><p style="width:130px;">{{ $getTransactionListCash->issued_date}}</p></td>
                                                             <td><p style="width:200px;">{{ $getTransactionListCash->paid_to}}</p></td>
@@ -261,7 +260,7 @@
                                                             <td class="bg-danger" style="color:white;"> <p style="width:170px;"><?php echo number_format($compute, 2);?></p></td>
                                                             
                                                             
-                                                            <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('dno-holdings-co/view-payables-details/'.$getTransactionListCash->id) }}">{{ $getTransactionListCash->status }}</a></p></td>
+                                                            <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('dno-foundation-inc/view-payables-details/'.$getTransactionListCash->id) }}">{{ $getTransactionListCash->status }}</a></p></td>
                                                             <td><p style="width:190px;">{{ $getTransactionListCash->created_by}}</p></td>
                                                             
                                                         </tr>
@@ -315,19 +314,19 @@
                                                 @foreach($getTransactionListChecks as $getTransactionListCheck)
                                                         <?php $id = $getTransactionListCheck->id; ?>
                                                         <?php
-                                                            $amount1 = DB::table('dno_holdings_co_payment_vouchers')
+                                                            $amount1 = DB::table('dno_foundation_inc_payment_vouchers')
                                                                         ->select('*')
                                                                         ->where('id', $id)
                                                                         ->sum('amount');
                                                             
-                                                            $amount2 = DB::table('dno_holdings_co_payment_vouchers')
+                                                            $amount2 = DB::table('dno_foundation_inc_payment_vouchers')
                                                                         ->select('*')
                                                                         ->where('pv_id', $id)
                                                                         ->sum('amount');
                                                             $compute = $amount1 + $amount2;
 
                                                                //get the check account no
-                                                             $getChecks = DB::table('dno_holdings_co_payment_vouchers')
+                                                             $getChecks = DB::table('dno_foundation_inc_payment_vouchers')
                                                                         ->select('*')
                                                                         ->where('pv_id', $id)
                                                                         ->get()->toArray();
@@ -337,13 +336,13 @@
                                                           <td>
                                                               @if($getTransactionListCheck->status != "FULLY PAID AND RELEASED")
                                                               <p style="width:250px;">
-                                                                  <a href="{{ url('dno-holdings-co/edit-dno-holdings-co-payable-detail/'.$getTransactionListCheck->id) }}" title="Edit">{{ $getTransactionListCheck->invoice_number}}</a>
+                                                                  <a href="{{ url('dno-foundation-inc/edit-dno-foundation-inc-payable-detail/'.$getTransactionListCheck->id) }}" title="Edit">{{ $getTransactionListCheck->invoice_number}}</a>
                                                               </p>
                                                               @else
                                                               <p style="width:250px;">{{ $getTransactionListCheck->invoice_number}}</p>
                                                               @endif
                                                           </td>
-                                                          <td><p style="width:140px;">{{ $getTransactionListCheck->module_code}}{{ $getTransactionListCheck->dno_holdings_code}}</p></td>
+                                                          <td><p style="width:140px;">{{ $getTransactionListCheck->module_code}}{{ $getTransactionListCheck->dno_foundation_code}}</p></td>
                                                          
                                                           <td><p style="width:130px;">{{ $getTransactionListCheck->issued_date}}</p></td>
                                                           <td><p style="width:200px;">{{ $getTransactionListCheck->paid_to}}</p></td>
@@ -367,7 +366,7 @@
                                                           <td class="bg-danger" style="color:white;"> <p style="width:170px;"><?php echo number_format($compute, 2);?></p></td>
                                                           @endif
                                                           
-                                                          <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('dno-holdings-code/view-payables-details/'.$getTransactionListCheck->id) }}">{{ $getTransactionListCheck->status }}</a></p></td>
+                                                          <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('dno-foundation-inc/view-payables-details/'.$getTransactionListCheck->id) }}">{{ $getTransactionListCheck->status }}</a></p></td>
                                                           <td><p style="width:190px;">{{ $getTransactionListCheck->created_by}}</p></td>
                                                           
                                                       </tr>

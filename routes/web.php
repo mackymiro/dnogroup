@@ -18,6 +18,10 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::match(['get', 'post'], 'register', function () {
+    echo "FORBIDDEN";
+})->name('register');
+
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['middleware' =>['user']], function(){
@@ -6015,6 +6019,168 @@ Route::group(['middleware' => ['auth']], function(){
 		'DnoHoldingsCoController@printMultipleSummary')
 		->name('printMultipleSummary')
 		->middleware(['cashier']);
+
+
+	/**
+	 * 
+	 * DNO FOUNDATION INC
+	 * 
+	 */
+	Route::get(
+		'/dno-foundation-inc',
+		'DnoFoundationIncController@index')
+		->name('index')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/payment-voucher-form',
+		'DnoFoundationIncController@paymentVoucherForm')
+		->name('paymentVoucherFormDnoFoundationInc')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-foundation-inc/payment-voucher-store',
+		'DnoFoundationIncController@paymentVoucherStore')
+		->name('paymentVoucherStore')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/edit-dno-foundation-inc-payable-detail/{id}',
+		'DnoFoundationIncController@editPayablesDetail')
+		->name('editPayablesDetailDnoFoundation')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-foundation-inc/add-payment/{id}',
+		'DnoFoundationIncController@addPayment')
+		->name('addPayment')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-foundation-inc/add-particulars/{id}',
+		'DnoFoundationIncController@addParticulars')
+		->name('addParticulars')
+		->middleware(['cashier']);
+
+	Route::patch(
+		'/dno-foundation-inc/accept/{id}',
+		'DnoFoundationIncController@accept')
+		->name('accept')
+		->middleware(['cashier']);
+
+	Route::patch(
+		'/dno-foundation-inc/payables/update-particulars/{id}',
+		'DnoFoundationIncController@updateParticulars')
+		->name('updateParticulars')
+		->middleware(['cashier']);
+	
+	Route::patch(
+		'/dno-foundation-inc/payables/updateP/{id}',
+		'DnoFoundationIncController@updateP')
+		->name('updateP')
+		->middleware(['cashier']);
+
+	Route::patch(
+		'/dno-foundation-inc/payables/update-check/{id}',
+		'DnoFoundationIncController@updateCheck')
+		->name('updateCheck')
+		->middleware(['cashier']);
+
+	Route::patch(
+		'/dno-foundation-inc/payables/update-cash/{id}',
+		'DnoFoundationIncController@updateCash')
+		->name('updateCash')
+		->middleware(['cashier']);
+
+	Route::patch(
+		'/dno-foundation-inc/payables/update-details/{id}',
+		'DnoFoundationIncController@updateDetails')
+		->name('updateDetails')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/payables/transaction-list',
+		'DnoFoundationIncController@transactionList')
+		->name('transactionList')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/view-payables-details/{id}',
+		'DnoFoundationIncController@viewPayableDetails')
+		->name('viewPayableDetails');
+
+	Route::get(
+		'/dno-foundation-inc/print-payables/{id}',
+		'DnoFoundationIncController@printPayablesDnoFoundationInc')
+		->name('printPayablesDnoFoundationInc')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/suppliers',
+		'DnoFoundationIncController@supplier')
+		->name('supplier')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-foundation-inc/supplier/add',
+		'DnoFoundationIncController@addSupplier')
+		->name('addSupplier')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/suppliers/view/{id}',
+		'DnoFoundationIncController@viewSupplier')
+		->name('viewSupplier')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/summary-report',
+		'DnoFoundationIncController@summaryReport')
+		->name('summaryReport')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/search-date',
+		'DnoFoundationIncController@getSummaryReport')
+		->name('getSummaryReport')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/search-multiple-date',
+		'DnoFoundationIncController@getSummaryReportMultiple')
+		->name('getSummaryReportMultiple')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/summary-report/search-number-code',
+		'DnoFoundationIncController@searchNumberCode')
+		->name('searchNumberCode')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/search',
+		'DnoFoundationIncController@search')
+		->name('search')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/printSummary',
+		'DnoFoundationIncController@printSummary')
+		->name('printSummary')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/printGetSummary/{date}',
+		'DnoFoundationIncController@printGetSummary')
+		->name('printGetSummary')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/printMultipleSummary/{date}',
+		'DnoFoundationIncController@printMultipleSummary')
+		->name('printMultipleSummary')
+		->middleware(['cashier']);
 });
+
 
 
