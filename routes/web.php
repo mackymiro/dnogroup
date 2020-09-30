@@ -2490,6 +2490,12 @@ Route::group(['middleware' => ['auth']], function(){
 		->middleware(['cashier']);
 
 	Route::get(
+		'/lolo-pinoy-grill-commissary/printStockInventory',
+		'LoloPinoyGrillCommissaryController@printStockInventory')
+		->name('printStockInventory')
+		->middleware(['cashier']);
+
+	Route::get(
 		'/lolo-pinoy-grill-commissary/commissary/stocks-inventory',
 		'LoloPinoyGrillCommissaryController@stocksInventory')
 		->name('stocksInventory')
