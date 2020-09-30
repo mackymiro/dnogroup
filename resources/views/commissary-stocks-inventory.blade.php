@@ -18,9 +18,12 @@
               			<div class="card mb-3">
             					<div class="card-header">
           					  <i class="fa fa-tasks" aria-hidden="true"></i>
-          					  All Lists</div>
+          					  All Lists
+                        <div class="float-right">
+                          <a  href="{{ action('LoloPinoyLechonDeCebuController@printStocksInventory') }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                        </div>
+                      </div>
     					    <div class="card-body">
-                   
                     <br>
                     <br>
     					  		<div class="table-responsive">

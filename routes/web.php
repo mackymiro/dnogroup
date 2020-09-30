@@ -1820,6 +1820,12 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('stocksInventory')
 		->middleware(['cashier']);
 
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/printStocksInventory',
+		'LoloPinoyLechonDeCebuController@printStocksInventory')
+		->name('printStocksInventory')
+		->middleware(['cashier']);
+
 
 	Route::post(
 		'/lolo-pinoy-lechon-de-cebu/add-payment/{id}',

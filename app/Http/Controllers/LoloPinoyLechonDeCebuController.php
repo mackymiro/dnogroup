@@ -26,7 +26,48 @@ use Session;
 
 
 class LoloPinoyLechonDeCebuController extends Controller
-{   
+{ 
+    
+    public function printStocksInventory(){
+        $getStockInventories = DB::table(
+                'commissary_raw_materials')
+                ->select(
+                    'commissary_raw_materials.id',
+                    'commissary_raw_materials.user_id',
+                    'commissary_raw_materials.rm_id',
+                    'commissary_raw_materials.product_name',
+                    'commissary_raw_materials.unit_price',
+                    'commissary_raw_materials.unit',
+                    'commissary_raw_materials.in',
+                    'commissary_raw_materials.out',
+                    'commissary_raw_materials.stock_amount',
+                    'commissary_raw_materials.remaining_stock',
+                    'commissary_raw_materials.amount',
+                    'commissary_raw_materials.supplier',
+                    'commissary_raw_materials.date',
+                    'commissary_raw_materials.item',
+                    'commissary_raw_materials.description',
+                    'commissary_raw_materials.reference_no',
+                    'commissary_raw_materials.qty',
+                    'commissary_raw_materials.requesting_branch',
+                    'commissary_raw_materials.cheque_no_issued',
+                    'commissary_raw_materials.status',
+                    'commissary_raw_materials.created_by',
+                    'lechon_de_cebu_raw_material_products.raw_materials_id',
+                    'lechon_de_cebu_raw_material_products.branch',
+                    'lechon_de_cebu_raw_material_products.product_id_no')
+                ->join('lechon_de_cebu_raw_material_products', 'commissary_raw_materials.id', '=', 'lechon_de_cebu_raw_material_products.raw_materials_id')
+                ->where('commissary_raw_materials.rm_id', NULL)
+                ->orderBy('commissary_raw_materials.id', 'desc')
+                ->get()->toArray();
+
+        //count the total amount 
+        $countTotalAmount = CommissaryRawMaterial::where('rm_id', NULL)->sum('amount');
+
+        $pdf = PDF::loadView('printStocksInventoryLechonDeCebu', compact('getStockInventories', 'countTotalAmount'));
+
+        return $pdf->download('lechon-de-cebu-stock-inventory.pdf');
+    }
 
     public function printSOAListsPO(){
         
@@ -7198,7 +7239,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         //count the total amount 
         $countTotalAmount = CommissaryRawMaterial::where('rm_id', NULL)->sum('amount');
 
-        return view('commissary-stocks-inventory', compact('user', 'getRawMaterials', 'countStockAmount', 'countTotalAmount'));
+        return view('commissary-stocks-inventory', compact('getRawMaterials', 'countStockAmount', 'countTotalAmount'));
     }
 
     //view statement of account
