@@ -3962,7 +3962,6 @@ class LoloPinoyLechonDeCebuController extends Controller
                         ->where('lechon_de_cebu_codes.module_name', $moduleNamePurchaseOrder)
                         ->where('lechon_de_cebu_purchase_orders.deleted_at', NULL)
                         ->whereDate('lechon_de_cebu_purchase_orders.created_at', '=', date($getDateToday))
-                        ->where('lechon_de_cebu_purchase_orders.deleted_at', NULL)
                         ->orderBy('lechon_de_cebu_purchase_orders.id', 'desc')
                         ->get()->toArray();
 
@@ -8587,7 +8586,6 @@ class LoloPinoyLechonDeCebuController extends Controller
         $addPurchaseOrder = new LechonDeCebuPurchaseOrder([
             'user_id'=>$user->id,
             'po_id'=>$id,
-            'p_o_number'=>$pO['p_o_number'],
             'quantity'=>$request->get('quantity'),
             'description'=>$request->get('description'),
             'unit_price'=>$request->get('unitPrice'),

@@ -8,7 +8,8 @@
     <div class="card card-login mx-auto mt-5">
         <div class="card-header">Forgot password </div>
          <a style="text-align:center;" class="navbar-brand" href="{{ url('/') }}">
-             <img src="{{ asset('images/ribos.jpg')}}" width="300" height="200" class="img-responsive" alt="Ribos Food Corporation">
+         <img src="{{ asset('images/digitized-logos/dno-holding-co.jpg')}}" width="399" height="200" class="img-responsive" alt="DNO Holdings Inc">
+          
         </a>
         <div class="card-body">
             <form class="form-horizontal" method="POST" action="{{ route('password.email') }}">

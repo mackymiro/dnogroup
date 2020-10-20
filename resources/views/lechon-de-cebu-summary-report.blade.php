@@ -164,10 +164,10 @@
                                                     <td>{{ $getAllSalesInvoice->ordered_by }}</td>
                                                     <td>{{ $getAllSalesInvoice->address}}</td>
                                                     <td>{{ $getAllSalesInvoice->qty}}</td>
-                                                    <td><?php echo number_format($getAllSalesInvoice->total_kls, 2); ?></td>
+                                                    <td><?= number_format($getAllSalesInvoice->total_kls, 2); ?></td>
                                                     <td>{{ $getAllSalesInvoice->item_description}}</td>
-                                                    <td><?php echo number_format($getAllSalesInvoice->unit_price, 2);?></td>
-                                                    <td><?php echo number_format($getAllSalesInvoice->amount, 2); ?></td>
+                                                    <td><?= number_format($getAllSalesInvoice->unit_price, 2);?></td>
+                                                    <td><?= number_format($getAllSalesInvoice->amount, 2); ?></td>
                                                     <td>{{ $getAllSalesInvoice->created_by}}</td>
                                                     </tr>
                                           @endforeach
@@ -227,7 +227,7 @@
                                                     <td><p style="width: 200px;">{{ $getAllDeliveryReceipt->delivered_to}}</p></td>
                                                     <td>{{ $getAllDeliveryReceipt->qty}}</td>
                                                     <td><p style="width: 200px;">{{ $getAllDeliveryReceipt->description}}</p></td>
-                                                    <td><?php echo number_format($getAllDeliveryReceipt->price);?></td>
+                                                    <td><?= number_format($getAllDeliveryReceipt->price);?></td>
                                                     <td><p style="width: 120px;">{{ $getAllDeliveryReceipt->created_by}}</p></td>
                                                     
                                                     </tr>
@@ -501,7 +501,7 @@
 												
 												<td><p style="width:200px;">{{ $getTransactionList->account_name}}</p></td>
 												<td class="bg-danger" style="color:white;">												  
-												  <p style="width:170px;"><?php echo number_format($compute, 2); ?></p></td>
+												  <p style="width:170px;"><?= number_format($compute, 2); ?></p></td>
 			  									<td><p style="width:160px;">{{ $getTransactionList->delivered_date}}</p></td>
 			  									<td><p style="width:190px;">{{ $getTransactionList->method_of_payment }}</p></td>
 			  									
@@ -550,7 +550,7 @@
                                                     <td><p style="width:130px;">{{ $getAllSalesInvoice->module_code}}{{ $getAllSalesInvoice->lechon_de_cebu_code}}</p></td>
                                                     <td>{{ $getAllSalesInvoice->date }}</td>
                                                     <td>{{ $getAllSalesInvoice->ordered_by }}</td>
-                                                    <td><?php echo number_format($getAllSalesInvoice->total_amount, 2); ?></td>
+                                                    <td><?= number_format($getAllSalesInvoice->total_amount, 2); ?></td>
                                                     <td>{{ $getAllSalesInvoice->created_by}}</td>
                                                     </tr>
                                                  @endforeach
@@ -562,7 +562,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th width="15%" class="bg-info" style="color:white;">Total:</th>
-                                                        <th class="bg-success" style="color:white"><?php echo number_format($totalSalesInvoice, 2);?></th>
+                                                        <th class="bg-success" style="color:white"><?= number_format($totalSalesInvoice, 2);?></th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -589,7 +589,7 @@
                                                     <td>{{ $getAllDeliveryReceipt->module_code}}{{ $getAllDeliveryReceipt->lechon_de_cebu_code}}</td>
                                                     
                                                     <td>{{ $getAllDeliveryReceipt->date}}</td>
-                                                    <td><?php echo number_format($getAllDeliveryReceipt->total, 2);?></td>
+                                                    <td><?= number_format($getAllDeliveryReceipt->total, 2);?></td>
                                                     <td><p style="width: 120px;">{{ $getAllDeliveryReceipt->created_by}}</p></td>
                                                     
                                                     </tr>
@@ -600,7 +600,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th width="15%" class="bg-info" style="color:white;">Total:</th>
-                                                        <th class="bg-success" style="color:white"><?php echo number_format($totalDeliveryReceipt, 2);?></th>
+                                                        <th class="bg-success" style="color:white"><?= number_format($totalDeliveryReceipt, 2);?></th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -631,7 +631,7 @@
                                                         <td>{{ $purchaseOrder->module_code }}{{ $purchaseOrder->lechon_de_cebu_code }}</td>
                                                         <td>{{ $purchaseOrder->date }}</td>
                                                         <td>{{ $purchaseOrder->paid_to }}</td>
-                                                        <td><?php echo number_format($purchaseOrder->total_price, 2)?></td>
+                                                        <td><?= number_format($purchaseOrder->total_price, 2)?></td>
                                                         <td>{{ $purchaseOrder->created_by }}</td>
                                                     </tr>
                                                 @endforeach
@@ -642,7 +642,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th width="15%" class="bg-info" style="color:white;">Total:</th>
-                                                        <th class="bg-success" style="color:white"><?php echo number_format($totalPOrder, 2);?></th>
+                                                        <th class="bg-success" style="color:white"><?= number_format($totalPOrder, 2);?></th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -675,7 +675,7 @@
                                                     <td>{{ $billingStatement->bill_to }}</td>
                                                     
                                                     <td>{{ $billingStatement->period_cover }}</td>
-                                                    <td><?php echo number_format($billingStatement->total_amount, 2)?></td>
+                                                    <td><?= number_format($billingStatement->total_amount, 2)?></td>
                                                     <td>{{ $billingStatement->created_by }}</td>
                                                 </tr>
                                                 @endforeach
@@ -685,7 +685,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th width="15%" class="bg-info" style="color:white;">Total:</th>
-                                                        <th class="bg-success" style="color:white"><?php echo number_format($totalBStatement, 2);?></th>
+                                                        <th class="bg-success" style="color:white"><?= number_format($totalBStatement, 2);?></th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -750,7 +750,7 @@
                                                         <td><p style="width:200px;">{{ $getTransactionListCash->method_of_payment}}</p></td>
                                                        
                                                         <td class="bg-danger" style="color:white;">												  
-                                                        <p style="width:170px;"><?php echo number_format($compute, 2); ?></p></td>
+                                                        <p style="width:170px;"><?= number_format($compute, 2); ?></p></td>
                                                         
                                                         <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('lolo-pinoy-lechon-de-cebu/view-payables-details/'.$getTransactionList->id) }}">{{ $getTransactionList->status }}</a></p></td>
                                                         <td><p style="width:190px;">{{ $getTransactionListCash->created_by}}</p></td>
@@ -764,7 +764,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th width="15%" class="bg-info" style="color:white;">Total:</th>
-                                                        <th class="bg-success" style="color:white"><?php echo number_format($totalAmountCashes, 2);?></th>
+                                                        <th class="bg-success" style="color:white"><?= number_format($totalAmountCashes, 2);?></th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -850,13 +850,13 @@
                                                                 </p>
                                                         </td>
                                                         <td><p style="width:200px;">{{ $getTransactionListCheck->method_of_payment}}</p></td>
-                                                        <td class="bg-success" style="color:white"><p style="width:170px;"><?php echo number_format($getTransactionListCheck->cheque_total_amount, 2); ?></p></td>
+                                                        <td class="bg-success" style="color:white"><p style="width:170px;"><?= number_format($getTransactionListCheck->cheque_total_amount, 2); ?></p></td>
                                                           
                                                         @if($getTransactionListCheck->status === "FULLY PAID AND RELEASED")
                                                             <td class="bg-danger" style="color:white;"> <p style="width:170px;">0</p></td>
                                                         @else
                                                         <td class="bg-danger" style="color:white;">												  
-                                                            <p style="width:170px;"><?php echo number_format($compute, 2); ?></p>
+                                                            <p style="width:170px;"><?= number_format($compute, 2); ?></p>
                                                         </td>
                                                         @endif
                                                         <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('lolo-pinoy-lechon-de-cebu/view-payables-details/'.$getTransactionListCheck->id) }}">{{ $getTransactionListCheck->status }}</a></p></td>
@@ -871,7 +871,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th width="15%" class="bg-info" style="color:white;">Total:</th>
-                                                        <th class="bg-success" style="color:white"><?php echo number_format($totalAmountCheck, 2);?></th>
+                                                        <th class="bg-success" style="color:white"><?= number_format($totalAmountCheck, 2);?></th>
                                                     </tr>
                                                 </thead>
                                                 </table>

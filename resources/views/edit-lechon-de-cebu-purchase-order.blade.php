@@ -169,7 +169,7 @@
                                       <br>
                                       <input type="hidden" id="poId" name="poId" value="{{ $purchaseOrder['id'] }}" />
                                       <input type="submit" class="btn btn-success" value="Update" />
-                                      @if($user->role_type == 1)
+                                      @if(Auth::user()['role_type'] == 1)
                                       <a id="delete" onClick="confirmDelete('{{ $pOrder['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
                                       @endif
                                     </div>
@@ -179,7 +179,7 @@
                           </form>
                             @endforeach
                             <div>
-                              @if($user->role_type == 1)
+                              @if(Auth::user()['role_type'] == 1)
                               <a href="{{ url('lolo-pinoy-lechon-de-cebu/add-new/'.$purchaseOrder['id']) }}" class="btn btn-primary">Add New</a>
                               @endif
                             </div>

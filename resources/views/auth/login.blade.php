@@ -5,7 +5,7 @@
     <div class="card card-login mx-auto mt-5">
         <div class="card-header">Login </div>
         <a style="text-align:center;" class="navbar-brand" href="{{ url('/') }}">
-            <img src="{{ asset('images/dno-holdings-logo.jpg')}}" width="300" height="200" class="img-responsive" alt="DNO Holdings Inc">
+            <img src="{{ asset('images/digitized-logos/dno-holding-co.jpg')}}" width="399" height="200" class="img-responsive" alt="DNO Holdings Inc">
         </a>
         <div class="card-body">
           <form class="form-horizontal" method="POST" action="{{ route('login') }}">

@@ -33,4 +33,17 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+
+    /*public function delivery_receipts(){
+        return $this->hasMany('App\DnoFoodVenturesDeliveryReceipt');
+    }*/
+
+    public function dno_food_ventures_raw_material_products(){
+        return $this->hasMany('App\DnoFoodVenturesRawMaterialProduct');
+    }
+
+
+
+
 }

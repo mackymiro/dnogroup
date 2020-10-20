@@ -98,14 +98,55 @@
                             <div class="card-body">
                                  <nav>
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                        <a class="nav-item nav-link active" id="nav-pettyCash" data-toggle="tab" href="#pettyCash" role="tab" aria-controls="purchaseOrder" aria-selected="false">Petty Cash</a>
+                                        <a class="nav-item nav-link active" id="nav-purchaseOrder" data-toggle="tab" href="#purchaseOrder" role="tab" aria-controls="purchaseOrder" aria-selected="false">Purchase Order</a>
+                                        <a class="nav-item nav-link" id="nav-pettyCash" data-toggle="tab" href="#pettyCash" role="tab" aria-controls="purchaseOrder" aria-selected="false">Petty Cash</a>
                                         <a class="nav-item nav-link" id="nav-payables" data-toggle="tab" href="#payables" role="tab" aria-controls="payables" aria-selected="false">Payables</a>
                                         <a class="nav-item nav-link" id="nav-all" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="false">All</a>
                                    
                                     </div>
                                 </nav>
                                 <div class="tab-content" id="nav-tabContent">
-                                     <div class="tab-pane fade show active" id="pettyCash" role="tabpanel" aria-labelledby="pettyCash-tab">
+                                <div class="tab-pane fade show active" id="purchaseOrder" role="tabpanel" aria-labelledby="purchaseOrder-tab">
+                                   
+                                    <div class="table-responsive">
+                                    <table class="table table-bordered display" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Action</th>
+                                                        <th>PO #</th>
+                                                        <th>Paid to</th>
+                                                        <th>Date</th>
+                                                        <th>Created by</th>
+                                                    </tr>
+				  					            </thead>
+                                                <tfoot>
+                                                    <tr>
+                                                        <th>Action</th>
+                                                        <th>PO Number</th>
+                                                        <th>Paid to</th>
+                                                        <th>Date</th>
+                                                        <th>Created by</th>
+                                                    </tr>
+                                                </tfoot>
+                                                <tbody> 
+                                                @foreach($purchaseOrders as $purchaseOrder)
+                                                <tr id="deletedId{{ $purchaseOrder->id }}">
+                                                    <td>
+                                                    <a href="{{ url('dno-food-ventures/'.$purchaseOrder->id.'/view') }}" title="View"><i class="fas fa-low-vision"></i></a>
+                                                    </td>
+                                                    <td>{{ $purchaseOrder->module_code }}{{ $purchaseOrder->dno_food_venture_code }}</td>
+                                                    <td>{{ $purchaseOrder->date }}</td>
+                                                    <td>{{ $purchaseOrder->paid_to }}</td>
+                                                    
+                                                    <td>{{ $purchaseOrder->created_by }}</td>
+				  						        </tr>
+                                                @endforeach
+                                                </tbody>
+                                            </table>
+                                    </div>
+                                </div>
+                               
+                                     <div class="tab-pane fade" id="pettyCash" role="tabpanel" aria-labelledby="pettyCash-tab">
                                        <br>
                                        <div class="table-responsive">
                                              <table class="table table-bordered display" width="100%" cellspacing="0">
@@ -202,7 +243,7 @@
                                             
                                             <td><p style="width:200px;">{{ $getTransactionList->account_name}}</p></td>
                                             <td class="bg-danger" style="color:white;">
-                                            <p style="width:170px;"><?php echo number_format($compute, 2);?></p></td>
+                                            <p style="width:170px;"><?= number_format($compute, 2);?></p></td>
                                             <td><p style="width:160px;">{{ $getTransactionList->delivered_date}}</p></td>
                                               <td><p style="width:190px;">{{ $getTransactionList->method_of_payment }}</p></td>
                                             <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('dno-food-ventures/view-dno-food-ventures-payables-details/'.$getTransactionList->id) }}">{{ $getTransactionList->status }}</a></p></td>
@@ -221,6 +262,45 @@
                                              <a href="{{ action('DnoFoodVenturesController@printSummary') }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
                                         </div>
                                         <br>
+                                        <div class="table-responsive">
+                                             <h1>Purchase Order</h1>
+                                             <table class="table table-bordered display" width="100%" cellspacing="0">
+                                                 <thead>
+                                                    <th>PO No</th>
+                                                    <th>Date</th>
+                                                    <th>Paid To</th>
+                                                    <th>Amount</th>
+                                                    <th>Created By</th>
+				  						        </thead>
+                                                <tfoot>
+                                                    <th>PO No</th>
+                                                    <th>Date</th>
+                                                    <th>Paid To</th>
+                                                    <th>Amount</th>
+                                                    <th>Created By</th>
+                                                </tfoot>
+                                                <tbody>
+                                                @foreach($purchaseOrders as $purchaseOrder)
+                                                    <tr>
+                                                       
+                                                        <td>{{ $purchaseOrder->module_code }}{{ $purchaseOrder->dno_food_venture_code }}</td>
+                                                        <td>{{ $purchaseOrder->date }}</td>
+                                                        <td>{{ $purchaseOrder->paid_to }}</td>
+                                                        <td><?= number_format($purchaseOrder->total_price, 2)?></td>
+                                                        <td>{{ $purchaseOrder->created_by }}</td>
+                                                    </tr>
+                                                @endforeach
+                                                </tbody>
+                                             </table>
+                                             <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="15%" class="bg-info" style="color:white;">Total:</th>
+                                                        <th class="bg-success" style="color:white"><?= number_format($totalPOrder, 2);?></th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
                                         <div class="table-responsive">
                                             <h1>Payment Cash Voucher </h1>
                                             <table class="table table-bordered display" width="100%" cellspacing="0">
@@ -280,7 +360,7 @@
                                                             <td><p style="width:200px;">{{ $getTransactionListCash->paid_to}}</p></td>
                                                     
                                                             <td><p style="width:190px;">{{ $getTransactionListCash->method_of_payment }}</p></td>
-                                                            <td class="bg-danger" style="color:white;"> <p style="width:170px;"><?php echo number_format($compute, 2);?></p></td>
+                                                            <td class="bg-danger" style="color:white;"> <p style="width:170px;"><?= number_format($compute, 2);?></p></td>
                                                             
                                                             
                                                             <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('dno-resources-development/view-dno-resources-payables-details/'.$getTransactionListCash->id) }}">{{ $getTransactionListCash->status }}</a></p></td>
@@ -295,7 +375,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th width="15%" class="bg-info" style="color:white;">Total:</th>
-                                                        <th class="bg-success" style="color:white"><?php echo number_format($totalAmountCashes, 2);?></th>
+                                                        <th class="bg-success" style="color:white"><?= number_format($totalAmountCashes, 2);?></th>
                                                     </tr>
                                                 </thead>
                                             </table> 
@@ -374,24 +454,24 @@
                                                             <td><p style="width:200px;">{{ $getTransactionListCheck->paid_to}}</p></td>
                                                             <td>
                                                                 <?php foreach($getChecks as $getCheck): ?>
-                                                                    <?php echo $getCheck->account_name_no; ?>
+                                                                    <?= $getCheck->account_name_no; ?>
                                                                 <?php endforeach; ?>
                                                             </td>
                                                             <td>
                                                                 <p style="width:190px;">
                                                                 <?php foreach($getChecks as $getCheck): ?>
-                                                                        <?php echo $getCheck->cheque_number; ?>
+                                                                        <?= $getCheck->cheque_number; ?>
                                                                     <?php endforeach; ?>
                                                                 </p>
                                                             </td>
                                                             <td><p style="width:190px;">{{ $getTransactionListCheck->method_of_payment }}</p></td>
                                                             <td><p style="width:190px;">{{ $getTransactionListCheck->currency }}</p></td>
                                                            
-                                                            <td class="bg-success" style="color:white"><p style="width:170px;"><?php echo number_format($getTransactionListCheck->cheque_total_amount, 2); ?></p></td>
+                                                            <td class="bg-success" style="color:white"><p style="width:170px;"><?= number_format($getTransactionListCheck->cheque_total_amount, 2); ?></p></td>
                                                             @if($getTransactionListCheck->status === "FULLY PAID AND RELEASED")
                                                                 <td class="bg-danger" style="color:white;"> <p style="width:170px;">0</p></td>
                                                             @else
-                                                            <td class="bg-danger" style="color:white;"> <p style="width:170px;"><?php echo number_format($compute, 2);?></p></td>
+                                                            <td class="bg-danger" style="color:white;"> <p style="width:170px;"><?= number_format($compute, 2);?></p></td>
                                                             @endif
                                                             
                                                             <td class="bg-success" style="color:white; "><p style="width:240px;"><a class="anchor" href="{{ url('wlg-corporation/view-wlg-corporation-payables-details/'.$getTransactionListCheck->id) }}">{{ $getTransactionListCheck->status }}</a></p></td>
@@ -405,13 +485,13 @@
                                                 <thead>
                                                     <tr>
                                                         <th width="15%" class="bg-info" style="color:white;">Total:</th>
-                                                        <th class="bg-success" style="color:white"><?php echo number_format($totalAmountCheck, 2);?></th>
+                                                        <th class="bg-success" style="color:white"><?= number_format($totalAmountCheck, 2);?></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
                                                         <th width="15%" class="bg-info" style="color:white;">Total (USD):</th>
-                                                        <th class="bg-success" style="color:white"><?php echo number_format($totalAmountCheckInUSD, 2);?></th>
+                                                        <th class="bg-success" style="color:white"><?= number_format($totalAmountCheckInUSD, 2);?></th>
                                                     </tr>
                                                 </tbody>
                                             </table>

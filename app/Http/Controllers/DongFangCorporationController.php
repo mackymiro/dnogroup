@@ -18,6 +18,47 @@ use App\DongFangCorporationPurchaseOrder;
 class DongFangCorporationController extends Controller
 {
 
+    public function printPettyCash($id){
+        $moduleName = "Petty Cash";
+
+        $getPettyCash = DB::table(
+                'dong_fang_corporation_petty_cashes')
+                ->select( 
+                'dong_fang_corporation_petty_cashes.id',
+                'dong_fang_corporation_petty_cashes.user_id',
+                'dong_fang_corporation_petty_cashes.pc_id',
+                'dong_fang_corporation_petty_cashes.date',
+                'dong_fang_corporation_petty_cashes.petty_cash_name',
+                'dong_fang_corporation_petty_cashes.petty_cash_summary',
+                'dong_fang_corporation_petty_cashes.amount',
+                'dong_fang_corporation_petty_cashes.created_by',
+                'dong_fang_corporation_petty_cashes.created_at',
+                'dong_fang_corporation_petty_cashes.deleted_at',
+                'dong_fang_corporation_codes.dong_fang_code',
+                'dong_fang_corporation_codes.module_id',
+                'dong_fang_corporation_codes.module_code',
+                'dong_fang_corporation_codes.module_name')
+                ->leftJoin('dong_fang_corporation_codes', 'dong_fang_corporation_petty_cashes.id', '=', 'dong_fang_corporation_codes.module_id')
+                ->where('dong_fang_corporation_petty_cashes.id', $id)
+                ->where('dong_fang_corporation_petty_cashes.deleted_at', NULL)
+                ->where('dong_fang_corporation_codes.module_name', $moduleName)
+                ->orderBy('dong_fang_corporation_petty_cashes.id', 'desc')
+                ->get()->toArray();
+
+        $getPettyCashSummaries = DongFangCorporationPettyCash::where('pc_id', $id)->get()->toArray();
+
+        //total
+        $totalPettyCash = DongFangCorporationPettyCash::where('id', $id)->where('pc_id', NULL)->sum('amount');
+
+        $pettyCashSummaryTotal = DongFangCorporationPettyCash::where('pc_id', $id)->sum('amount');
+
+        $sum = $totalPettyCash + $pettyCashSummaryTotal;
+
+        $pdf = PDF::loadView('printPettyCashDongFang', compact('getPettyCash', 'getPettyCashSummaries', 'sum'));
+        return $pdf->download('dong-fang-corporation-petty-cash.pdf');
+
+    }
+
     public function printPO($id){
         $moduleName = "Purchase Order";
         $purchaseOrder = DB::table(

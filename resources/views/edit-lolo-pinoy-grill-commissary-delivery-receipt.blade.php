@@ -83,7 +83,7 @@
                                   ?>
                                   <option value="0">--Please Select--</option>
                                   @foreach($getRawMaterials as $getRawMaterial)
-                                  <option value="{{ $getRawMaterial->id}}-{{ $getRawMaterial->product_id_no}}" <?php echo ($prodExp[1] == $getRawMaterial->product_id_no) ? 'selected="selected"' : '' ?>>{{ $getRawMaterial->product_id_no}}</option>
+                                  <option value="{{ $getRawMaterial->id}}-{{ $getRawMaterial->product_id_no}}" <?= ($prodExp[1] == $getRawMaterial->product_id_no) ? 'selected="selected"' : '' ?>>{{ $getRawMaterial->product_id_no}}</option>
                                   @endforeach
                               </select>
                     				</div>
@@ -117,7 +117,7 @@
                     				<div class="col-md-2">
                     					<label>Amount</label>
                     					<input type="text" name="unitPrice" class="form-control"  disabled="disabled"
-                    					value="<?php echo number_format($getDeliveryReceipt['amount'], 2)?>" />
+                    					value="<?= number_format($getDeliveryReceipt['amount'], 2)?>" />
                     				</div>
                     			</div>
                         	</div>
@@ -126,7 +126,7 @@
       					  	 		<div class="form-row">
       					  	 			<div class="float-right">
       					  	 				
-					  	 					<button type="submit" class="btn btn-success">
+					  	 					<button type="submit" class="btn btn-success btn-lg">
 										      <i class="fa fa-refresh" aria-hidden="true"></i> Update Delivery Receipt
 									      	 </button>
 			                            
@@ -196,7 +196,7 @@
                             </div>
                             <div>
                               @if(Auth::user()['role_type'] == 1)
-                              <button type="submit" class="btn btn-primary">Add New</button>
+                              <button type="submit" class="btn btn-primary btn-lg">Add New</button>
                               @endif
                             </div>
                             </form>
@@ -234,7 +234,7 @@
                                                     ?>
                                                     <option value="0">--Please Select--</option>
                                                    @foreach($getRawMaterials as $getRawMaterial)
-                                                       <option value="{{ $getRawMaterial->id}}-{{ $getRawMaterial->product_id_no}}" <?php echo ($prodExp[1] == $getRawMaterial->product_id_no) ? 'selected="selected"' : '' ?>>{{ $getRawMaterial->product_id_no}}</option>
+                                                       <option value="{{ $getRawMaterial->id}}-{{ $getRawMaterial->product_id_no}}" <?= ($prodExp[1] == $getRawMaterial->product_id_no) ? 'selected="selected"' : '' ?>>{{ $getRawMaterial->product_id_no}}</option>
                                                     @endforeach
                                                 </select>
 
@@ -268,7 +268,7 @@
                                             <div class="col-md-2">
                                                 <label>Amount</label>
                                                 <input type="text" name="unitPrice" class="form-control"  disabled="disabled"
-                                                value="<?php echo number_format($dReceipt['amount'], 2)?>" />
+                                                value="<?= number_format($dReceipt['amount'], 2)?>" />
                                             </div>
                                         </div>
                                     </div>
@@ -349,20 +349,20 @@
                   var prodId = $(this).children("option:selected").val();
                   var prodIdSplit = prodId.split("-");
                   var prodArr = prodIdSplit[0];
-                  if(prodArr  == "<?php echo $getRawMaterial->id;?>"){
+                  if(prodArr  == "<?= $getRawMaterial->id;?>"){
                     <?php 
                         $getId = DB::table(
                                   'lolo_pinoy_grill_commissary_raw_materials')
                                   ->where('id', $getRawMaterial->id)
                                   ->get();
                     ?>
-                     $("#availableAdd").html('<input type="text" name="available" value="<?php echo $getId[0]->remaining_stock?>" class="form-control" readonly="readonly" /> ');
+                     $("#availableAdd").html('<input type="text" name="available" value="<?= $getId[0]->remaining_stock?>" class="form-control" readonly="readonly" /> ');
                      $("#availableCloseAdd").hide(); 
-                     $("#unitAdd").html('<input type="text" name="unit" value="<?php echo $getId[0]->unit?>" class="form-control" readonly="readonly" /> ');
+                     $("#unitAdd").html('<input type="text" name="unit" value="<?= $getId[0]->unit?>" class="form-control" readonly="readonly" /> ');
                      $("#unitCloseAdd").hide();
-                     $("#itemDescAdd").html('<input type="text" name="itemDescription" value="<?php echo $getId[0]->product_name; ?>" class="form-control" readonly="readonly">')
+                     $("#itemDescAdd").html('<input type="text" name="itemDescription" value="<?= $getId[0]->product_name; ?>" class="form-control" readonly="readonly">')
                      $("#itemDescCloseAdd").hide();
-                     $("#unitPriceAdd").html('<input type="text" name="unitPrice" value="<?php echo $getId[0]->unit_price; ?>" class="form-control" readonly="readonly" >');
+                     $("#unitPriceAdd").html('<input type="text" name="unitPrice" value="<?= $getId[0]->unit_price; ?>" class="form-control" readonly="readonly" >');
                      $("#unitPriceCloseAdd").hide();
                                 
               }
@@ -382,7 +382,7 @@
                   var prodId = $(this).children("option:selected").val();
                   var prodIdSplit = prodId.split("-");
                   var prodArr = prodIdSplit[0];
-                  if(prodArr  == "<?php echo $getRawMaterial->id;?>"){
+                  if(prodArr  == "<?= $getRawMaterial->id;?>"){
                     <?php 
                         $getId = DB::table(
                                   'lolo_pinoy_grill_commissary_raw_materials')
@@ -390,11 +390,11 @@
                                   ->get();
                     ?>
                  
-                     $("#unit").html('<input type="text" name="unit" value="<?php echo $getId[0]->unit?>" class="form-control" readonly="readonly" /> ');
+                     $("#unit").html('<input type="text" name="unit" value="<?= $getId[0]->unit?>" class="form-control" readonly="readonly" /> ');
                      $("#unitClose").hide();
-                     $("#itemDesc").html('<input type="text" name="itemDescription" value="<?php echo $getId[0]->product_name; ?>" class="form-control" readonly="readonly">')
+                     $("#itemDesc").html('<input type="text" name="itemDescription" value="<?= $getId[0]->product_name; ?>" class="form-control" readonly="readonly">')
                      $("#itemDescClose").hide();
-                     $("#unitPrice").html('<input type="text" name="unitPrice" value="<?php echo $getId[0]->unit_price; ?>" class="form-control" readonly="readonly" >');
+                     $("#unitPrice").html('<input type="text" name="unitPrice" value="<?= $getId[0]->unit_price; ?>" class="form-control" readonly="readonly" >');
                      $("#unitPriceClose").hide();
                                 
               }
@@ -414,7 +414,7 @@
                   var prodId = $(this).children("option:selected").val();
                   var prodIdSplit = prodId.split("-");
                   var prodArr = prodIdSplit[0];
-                  if(prodArr  == "<?php echo $getRawMaterial->id;?>"){
+                  if(prodArr  == "<?= $getRawMaterial->id;?>"){
                     <?php 
                         $getId = DB::table(
                                   'lolo_pinoy_grill_commissary_raw_materials')
@@ -422,12 +422,12 @@
                                   ->get();
                     ?>
                    
-                     $("#unit2-<?php echo $dReceipt['id']?>").html('<input type="text" name="unit" value="<?php echo $getId[0]->unit?>" class="form-control" readonly="readonly" /> ');
-                     $("#unitClose2-<?php echo $dReceipt['id']?>").hide();
-                     $("#itemDesc2-<?php echo $dReceipt['id'];?>").html('<input type="text" name="itemDescription" value="<?php echo $getId[0]->product_name; ?>" class="form-control" readonly="readonly">')
-                     $("#itemDescClose2-<?php echo $dReceipt['id'];?>").hide();
-                     $("#unitPrice2-<?php echo $dReceipt['id'];?>").html('<input type="text" name="unitPrice" value="<?php echo $getId[0]->unit_price; ?>" class="form-control" readonly="readonly" >');
-                     $("#unitPriceClose2-<?php echo $dReceipt['id'];?>").hide();                    
+                     $("#unit2-<?= $dReceipt['id']?>").html('<input type="text" name="unit" value="<?= $getId[0]->unit?>" class="form-control" readonly="readonly" /> ');
+                     $("#unitClose2-<?= $dReceipt['id']?>").hide();
+                     $("#itemDesc2-<?= $dReceipt['id'];?>").html('<input type="text" name="itemDescription" value="<?= $getId[0]->product_name; ?>" class="form-control" readonly="readonly">')
+                     $("#itemDescClose2-<?= $dReceipt['id'];?>").hide();
+                     $("#unitPrice2-<?= $dReceipt['id'];?>").html('<input type="text" name="unitPrice" value="<?= $getId[0]->unit_price; ?>" class="form-control" readonly="readonly" >');
+                     $("#unitPriceClose2-<?= $dReceipt['id'];?>").hide();                    
                   
               }
 

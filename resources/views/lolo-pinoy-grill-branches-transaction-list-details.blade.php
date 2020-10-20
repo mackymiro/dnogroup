@@ -46,9 +46,9 @@
                                 <tr>
                                    
                                     <th class="bg-info" style="color:#fff;" width="15%">SENIOR CITIZEN</th>
-                                    <th class="bg-success" style="color:#fff; font-size:35px;" ></th>
+                                    <th class="bg-success" style="color:#fff; font-size:35px;" >{{ $getOrder[0]->senior_citizen_label}}</th>
                                     <th class="bg-info" style="color:#fff;" width="15%">SENIOR CITIZEN ID</th>
-                                    <th class="bg-success" style="color:#fff; font-size:35px;" ></th>
+                                    <th class="bg-success" style="color:#fff; font-size:35px;" >{{ $getOrder[0]->senior_citizen_id}}</th>
                                 </tr>
                             </table>
                             <table id="output" class="table table-striped">
@@ -67,6 +67,7 @@
                                             <td>
                                                 <form action="{{ action('LoloPinoyGrillBranchesController@voidItem', $getOrder[0]->id ) }}" method="post">
                                                     {{ csrf_field() }}
+                                                    <input type="hidden" name="mainId" value="{{ $getOrder[0]->id}}" />
                                                     <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-cog"></i> VOID</button>
                                                 </form>
                                             </td>

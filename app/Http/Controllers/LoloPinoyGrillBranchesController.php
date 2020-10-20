@@ -307,58 +307,128 @@ class LoloPinoyGrillBranchesController extends Controller
         $qty = $getSalesInfo[0]['qty']; 
      
         $branch = $request->session()->get('sessionBranch');
-        $flag = "Foods";
-        $getBranchItem = DB::table(
-                                'lolo_pinoy_grill_branches_store_stocks')
-                                ->select(
-                                'lolo_pinoy_grill_branches_store_stocks.id',
-                                'lolo_pinoy_grill_branches_store_stocks.user_id',
-                                'lolo_pinoy_grill_branches_store_stocks.date',
-                                'lolo_pinoy_grill_branches_store_stocks.dr_no',
-                                'lolo_pinoy_grill_branches_store_stocks.supplier',
-                                'lolo_pinoy_grill_branches_store_stocks.product_name',
-                                'lolo_pinoy_grill_branches_store_stocks.price',
-                                'lolo_pinoy_grill_branches_store_stocks.qty',
-                                'lolo_pinoy_grill_branches_store_stocks.unit',
-                                'lolo_pinoy_grill_branches_store_stocks.product_in',
-                                'lolo_pinoy_grill_branches_store_stocks.product_out',
-                                'lolo_pinoy_grill_branches_store_stocks.amount',
-                                'lolo_pinoy_grill_branches_store_stocks.branch',
-                                'lolo_pinoy_grill_branches_store_stocks.flag',
-                                'lolo_pinoy_grill_branches_store_stocks.created_by',
-                                'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
-                                'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
-                                ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
-                                ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branch)
-                                ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flag)
-                                ->where('lolo_pinoy_grill_branches_store_stocks.product_name', $getItemExp)
-                                ->get()->toArray();
 
+        if($getSalesInfo[0]['flag'] === "Foods"){
+            $flag = "Foods";
+            $getBranchItem = DB::table(
+                                    'lolo_pinoy_grill_branches_store_stocks')
+                                    ->select(
+                                    'lolo_pinoy_grill_branches_store_stocks.id',
+                                    'lolo_pinoy_grill_branches_store_stocks.user_id',
+                                    'lolo_pinoy_grill_branches_store_stocks.date',
+                                    'lolo_pinoy_grill_branches_store_stocks.dr_no',
+                                    'lolo_pinoy_grill_branches_store_stocks.supplier',
+                                    'lolo_pinoy_grill_branches_store_stocks.product_name',
+                                    'lolo_pinoy_grill_branches_store_stocks.price',
+                                    'lolo_pinoy_grill_branches_store_stocks.qty',
+                                    'lolo_pinoy_grill_branches_store_stocks.unit',
+                                    'lolo_pinoy_grill_branches_store_stocks.product_in',
+                                    'lolo_pinoy_grill_branches_store_stocks.product_out',
+                                    'lolo_pinoy_grill_branches_store_stocks.amount',
+                                    'lolo_pinoy_grill_branches_store_stocks.branch',
+                                    'lolo_pinoy_grill_branches_store_stocks.flag',
+                                    'lolo_pinoy_grill_branches_store_stocks.created_by',
+                                    'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
+                                    'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
+                                    ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
+                                    ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branch)
+                                    ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flag)
+                                    ->where('lolo_pinoy_grill_branches_store_stocks.product_name', $getItemExp)
+                                    ->get()->toArray();
+    
+           
+            $computeProductIn = $qty + $getBranchItem[0]->product_in;
+    
+            //update the product in. add
+            $updateProductItem = LoloPinoyGrillBranchesStoreStock::find($getBranchItem[0]->id);
+            $updateProductItem->product_in = $computeProductIn; 
+            $updateProductItem->save();
+    
+        
+            //get the main id Item
+            $getMainItem = LoloPinoyGrillBranchesSalesForm::where('id', $request->get('mainId'))->where('deleted_at', '!=', NULL)->sum('amount');
+
+            //get the query or the other food items amount
+            $getOtherItemAmount = LoloPinoyGrillBranchesSalesForm::where('sf_id', $id)->where('deleted_at', NULL)->sum('amount');
+        
+    
+            $computeMainId = $getMainItem + $getOtherItemAmount; 
+           
+
+            //update the main food item id
+            $updateMainFoodItem = LoloPinoyGrillBranchesSalesForm::find($id);
+            $updateMainFoodItem->total_amount_of_sales = $computeMainId;
+            $updateMainFoodItem->save();
+            
+            //delete the transction
+            $deleteTransaction = LoloPinoyGrillBranchesSalesForm::find($id);
+            $deleteTransaction->delete(); 
+    
        
-        $computeProductIn = $qty + $getBranchItem[0]->product_in;
-
-        //update the product in. add
-        $updateProductItem = LoloPinoyGrillBranchesStoreStock::find($getBranchItem[0]->id);
-        $updateProductItem->product_in = $computeProductIn; 
-        $updateProductItem->save();
-
-
-        //get the query or the other food items amount
-        $getOtherItemAmount = LoloPinoyGrillBranchesSalesForm::where('sf_id', $id)->where('deleted_at', NULL)->sum('amount');
+    
+    
+            return redirect()->route('transactionListDetailsLoloPinoyGrillBranches', ['id'=>$id]);
     
 
-        //update the main food item id
-        $updateMainFoodItem = LoloPinoyGrillBranchesSalesForm::find($id);
-        $updateMainFoodItem->total_amount_of_sales = $getOtherItemAmount;
-        $updateMainFoodItem->save();
+        }else{
+            $flag = "Drinks";
+            $getBranchItem = DB::table(
+                                    'lolo_pinoy_grill_branches_store_stocks')
+                                    ->select(
+                                    'lolo_pinoy_grill_branches_store_stocks.id',
+                                    'lolo_pinoy_grill_branches_store_stocks.user_id',
+                                    'lolo_pinoy_grill_branches_store_stocks.date',
+                                    'lolo_pinoy_grill_branches_store_stocks.dr_no',
+                                    'lolo_pinoy_grill_branches_store_stocks.supplier',
+                                    'lolo_pinoy_grill_branches_store_stocks.product_name',
+                                    'lolo_pinoy_grill_branches_store_stocks.price',
+                                    'lolo_pinoy_grill_branches_store_stocks.qty',
+                                    'lolo_pinoy_grill_branches_store_stocks.unit',
+                                    'lolo_pinoy_grill_branches_store_stocks.product_in',
+                                    'lolo_pinoy_grill_branches_store_stocks.product_out',
+                                    'lolo_pinoy_grill_branches_store_stocks.amount',
+                                    'lolo_pinoy_grill_branches_store_stocks.branch',
+                                    'lolo_pinoy_grill_branches_store_stocks.flag',
+                                    'lolo_pinoy_grill_branches_store_stocks.created_by',
+                                    'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
+                                    'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
+                                    ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
+                                    ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branch)
+                                    ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flag)
+                                    ->where('lolo_pinoy_grill_branches_store_stocks.product_name', $getItemExp)
+                                    ->get()->toArray();
+    
+           
+            $computeProductIn = $qty + $getBranchItem[0]->product_in;
+    
+            //update the product in. add
+            $updateProductItem = LoloPinoyGrillBranchesStoreStock::find($getBranchItem[0]->id);
+            $updateProductItem->product_in = $computeProductIn; 
+            $updateProductItem->save();
+    
+    
+             //get the main id Item
+             $getMainItem = LoloPinoyGrillBranchesSalesForm::where('id', $request->get('mainId'))->where('deleted_at', '!=', NULL)->sum('amount');
 
-
-        //delete the transction
-        $deleteTransaction = LoloPinoyGrillBranchesSalesForm::find($id);
-        $deleteTransaction->delete();
-
-        return redirect()->route('transactionListDetailsLoloPinoyGrillBranches', ['id'=>$id]);
-
+            //get the query or the other food items amount
+            $getOtherItemAmount = LoloPinoyGrillBranchesSalesForm::where('sf_id', $id)->where('deleted_at', NULL)->sum('amount');
+        
+            $computeMainId = $getMainItem + $getOtherItemAmount; 
+    
+            //update the main food item id
+            $updateMainFoodItem = LoloPinoyGrillBranchesSalesForm::find($id);
+            $updateMainFoodItem->total_amount_of_sales = $computeMainId;
+            $updateMainFoodItem->save();
+    
+    
+            //delete the transction
+            $deleteTransaction = LoloPinoyGrillBranchesSalesForm::find($id);
+            $deleteTransaction->delete();
+    
+            return redirect()->route('transactionListDetailsLoloPinoyGrillBranches', ['id'=>$id]);
+    
+        }
+       
 
     }
 
@@ -394,6 +464,8 @@ class LoloPinoyGrillBranchesController extends Controller
                         'lolo_pinoy_grill_branches_sales_forms.amount',
                         'lolo_pinoy_grill_branches_sales_forms.total_discounts_seniors_pwds',
                         'lolo_pinoy_grill_branches_sales_forms.total_amount_of_sales',
+                        'lolo_pinoy_grill_branches_sales_forms.senior_citizen_id',
+                        'lolo_pinoy_grill_branches_sales_forms.senior_citizen_label',
                         'lolo_pinoy_grill_branches_sales_forms.senior_amount',
                         'lolo_pinoy_grill_branches_sales_forms.gift_cert',
                         'lolo_pinoy_grill_branches_sales_forms.cash_amount',
@@ -418,6 +490,8 @@ class LoloPinoyGrillBranchesController extends Controller
                             'lolo_pinoy_grill_branches_sales_forms.amount',
                             'lolo_pinoy_grill_branches_sales_forms.total_discounts_seniors_pwds',
                             'lolo_pinoy_grill_branches_sales_forms.total_amount_of_sales',
+                            'lolo_pinoy_grill_branches_sales_forms.senior_citizen_id',
+                            'lolo_pinoy_grill_branches_sales_forms.senior_citizen_label',
                             'lolo_pinoy_grill_branches_sales_forms.senior_amount',
                             'lolo_pinoy_grill_branches_sales_forms.gift_cert',
                             'lolo_pinoy_grill_branches_sales_forms.cash_amount',
@@ -2973,7 +3047,7 @@ class LoloPinoyGrillBranchesController extends Controller
         $getDate =  date("Y-m-d");
 
         //get transaction id
-        $getTransId = LoloPinoyGrillBranchesSalesForm::find($request->transactionId);
+        $getTransId = LoloPinoyGrillBranchesSalesForm::withTrashed()->find($request->transactionId);
 
         //compute 
         $amt = $request->amount + $getTransId->total_amount_of_sales;

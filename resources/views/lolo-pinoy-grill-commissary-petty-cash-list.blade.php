@@ -197,7 +197,7 @@
                 success:function(data){
                     console.log(data);
                     $("#succAdd").fadeIn().delay(3000).fadeOut();
-                    $("#succAdd").html(`<p class="alert alert-success">Succesfully added.</p>`);
+                    $("#succAdd").html(`<p class="alert alert-success">${data}</p>`);
 
                     setTimeout(function(){
                         window.location = `/lolo-pinoy-grill-commissary/edit-petty-cash/${data}`;

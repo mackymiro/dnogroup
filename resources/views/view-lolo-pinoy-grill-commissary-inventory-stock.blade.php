@@ -330,7 +330,7 @@
 
 					if(succDataArr == "Success"){
 						$("#succUp"+id).fadeIn().delay(3000).fadeOut();
-						$("#succUp"+id).html(`<p class="alert alert-success">Succesfully added a remarks.</p>`);
+						$("#succUp"+id).html(`<p class="alert alert-success">${data}</p>`);
 						
 						setTimeout(function(){
 							document.location.reload();

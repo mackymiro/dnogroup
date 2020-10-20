@@ -149,7 +149,7 @@
         </div>
       </footer>
 </div>
-<script type="text/javascript"> 
+<script> 
   const isNumber =(evt) => {
 		evt = (evt) ? evt : window.event;
 		var charCode = (evt.which) ? evt.which : evt.keyCode;
@@ -172,7 +172,7 @@
               var prodIdSplit = prodId.split("-");
               var prodArr = prodIdSplit[0];
   
-              if(prodArr  === "<?php echo $getRawMaterial->id;?>"){
+              if(prodArr  === "<?= $getRawMaterial->id;?>"){
                     console.log(prodArr);
                     <?php 
                         $getId = DB::table(
@@ -180,13 +180,13 @@
                                   ->where('id', $getRawMaterial->id)
                                   ->get();
                     ?>
-                     $("#available").html('<input type="text" name="available" value="<?php echo $getId[0]->remaining_stock?>" class="form-control" readonly="readonly" /> ');
+                     $("#available").html('<input type="text" name="available" value="<?= $getId[0]->remaining_stock?>" class="form-control" readonly="readonly" /> ');
                      $("#availableClose").hide(); 
-                     $("#unit").html('<input type="text" name="unit" value="<?php echo $getId[0]->unit?>" class="form-control" readonly="readonly" /> ');
+                     $("#unit").html('<input type="text" name="unit" value="<?= $getId[0]->unit?>" class="form-control" readonly="readonly" /> ');
                      $("#unitClose").hide();
-                     $("#itemDesc").html('<input type="text" name="itemDescription" value="<?php echo $getId[0]->product_name; ?>" class="form-control" readonly="readonly">')
+                     $("#itemDesc").html('<input type="text" name="itemDescription" value="<?= $getId[0]->product_name; ?>" class="form-control" readonly="readonly">')
                      $("#itemDescClose").hide();
-                     $("#unitPrice").html('<input type="text" name="unitPrice" value="<?php echo $getId[0]->unit_price; ?>" class="form-control" readonly="readonly" >');
+                     $("#unitPrice").html('<input type="text" name="unitPrice" value="<?= $getId[0]->unit_price; ?>" class="form-control" readonly="readonly" >');
                      $("#unitPriceClose").hide();
                     
                   

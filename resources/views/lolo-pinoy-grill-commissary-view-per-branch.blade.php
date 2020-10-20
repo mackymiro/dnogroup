@@ -135,41 +135,41 @@
 				  							<th>Unit</th>
 				  							<th>Item Description</th>
 				  							<th>Unit Price</th>
-				  							<th>Amount</th>
+				  							<th>Amount</t
 				  							<th>Created By</th>
 					  					</tfoot>
                                         <tbody>
-                                             @foreach($getVelezBranches as $getVelezBranche)
+                                             @foreach($getVelezBranches as $getVelezBranch)
                                                 <tr>
                                                     <td>
                                                     @if(Auth::user()['role_type'] !== 3)
-                                                        <a href="{{ url('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-delivery-receipt/'.$getVelezBranche->id ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                                        <a href="{{ url('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-delivery-receipt/'.$getVelezBranch->id ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                                     @endif
                                                     @if(Auth::user()['role_type'] == 1)
-                                                        <a id="delete" onClick="confirmDelete('{{ $getVelezBranche->id}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                                                        <a id="delete" onClick="confirmDelete('{{ $getVelezBranch->id}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
                                                     @endif
-                                                        <a href="{{ url('lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-commissary-delivery-receipt/'.$getVelezBranche->id)}}" title="View"><i class="fas fa-low-vision"></i></a>
+                                                        <a href="{{ url('lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-commissary-delivery-receipt/'.$getVelezBranch->id)}}" title="View"><i class="fas fa-low-vision"></i></a>
                                                     
                                                     </td>
-                                                    <td>{{ $getVelezBranche->date}}</td>
-                                                    <td>{{ $getVelezBranche->module_code}}{{ $getVelezBranche->lolo_pinoy_grill_code}}</td>
-                                                    <td><p style="width:180px;">{{ $getVelezBranche->delivered_to}}</p></td>
-                                                    <td>{{ $getVelezBranche->address}}</td>
+                                                    <td>{{ $getVelezBranch->date}}</td>
+                                                    <td>{{ $getVelezBranch->module_code}}{{ $getVelezBranch->lolo_pinoy_grill_code}}</td>
+                                                    <td><p style="width:180px;">{{ $getVelezBranch->delivered_to}}</p></td>
+                                                    <td>{{ $getVelezBranch->address}}</td>
                                                     <td>
                                                         <?php
-                                                            $prodArr = $getVelezBranche->product_id;
+                                                            $prodArr = $getVelezBranch->product_id;
                                                             $prodExp = explode("-", $prodArr);
                                                             
                                                         ?>
                                                         <p style="width:180px;">{{ $prodExp[1] }}</p>
                                                         
                                                     </td>
-                                                    <td>{{ $getVelezBranche->qty}}</td>
-                                                    <td>{{ $getVelezBranche->unit}}</td>
-                                                    <td>{{ $getVelezBranche->item_description}}</td>
-                                                    <td><?php echo number_format($getVelezBranche->unit_price, 2)?></td>
-                                                    <td><?php echo number_format($getVelezBranche->amount, 2)?></td>
-                                                    <td>{{ $getVelezBranche->created_by}}</td>
+                                                    <td>{{ $getVelezBranch->qty}}</td>
+                                                    <td>{{ $getVelezBranch->unit}}</td>
+                                                    <td>{{ $getVelezBranch->item_description}}</td>
+                                                    <td><?= number_format($getVelezBranch->unit_price, 2)?></td>
+                                                    <td><?= number_format($getVelezBranch->amount, 2)?></td>
+                                                    <td>{{ $getVelezBranch->created_by}}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -232,7 +232,7 @@
                                                     
                                                     </td>
                                                     <td>{{ $getGqsBranch->date}}</td>
-                                                    <td>{{ $getVelezBranche->module_code}}{{ $getGqsBranch->lolo_pinoy_grill_code}}</td>
+                                                    <td>{{ $getGqsBranch->module_code}}{{ $getGqsBranch->lolo_pinoy_grill_code}}</td>
                                                     <td><p style="width:180px;">{{ $getGqsBranch->delivered_to}}</p></td>
                                                     <td>{{ $getGqsBranch->address}}</td>
                                                     <td>
@@ -312,7 +312,7 @@
                                                     
                                                     </td>
                                                     <td>{{ $getUrgelloBranch->date}}</td>
-                                                    <td>{{ $getVelezBranche->module_code}}{{ $getUrgelloBranch->lolo_pinoy_grill_code}}</td>
+                                                    <td>{{ $getUrgelloBranch->module_code}}{{ $getUrgelloBranch->lolo_pinoy_grill_code}}</td>
                                                     <td><p style="width:180px;">{{ $getUrgelloBranch->delivered_to}}</p></td>
                                                     <td>{{ $getUrgelloBranch->address}}</td>
                                                     <td>

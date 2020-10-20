@@ -4341,7 +4341,7 @@ class LoloPinoyGrillCommissaryController extends Controller
         $updateRawMaterial->amount = $compute;
         $updateRawMaterial->save();
 
-        return response()->json('Success: successfully updated.');
+        return response()->json('Success: Succesfully added a remarks.');
        
     }
 
@@ -4703,7 +4703,7 @@ class LoloPinoyGrillCommissaryController extends Controller
         $getDeliveryOutlets = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', '!=', NULL)->where('description', $descriptionDIn)->get()->toArray();
         $getDeliveryOutletsOuts = LoloPinoyGrillCommissaryRawMaterial::where('rm_id', '!=', NULL)->where('description', $descriptionDOut)->get()->toArray();
         
-
+        
         return view('commissary-delivery-outlet-lolo-pinoy-grill', compact('getDeliveryOutlets', 'getDeliveryOutletsOuts'));
     }
 
@@ -4878,11 +4878,6 @@ class LoloPinoyGrillCommissaryController extends Controller
 
         $name  = $firstName." ".$lastName;
 
-        //validate
-        $this->validate($request,[
-            'productName' =>'required',
-        ]);
-
         //
         $dataProductId = DB::select('SELECT id, product_id_no FROM lolo_pinoy_grill_commissary_raw_material_products ORDER BY id DESC LIMIT 1');
 
@@ -4927,7 +4922,7 @@ class LoloPinoyGrillCommissaryController extends Controller
             $insertedId = $addNewRawMaterial->id;
     
             //save to table lolo_pinoy_grill_commissary_raw_material_products
-              $addNewProd = new LoloPinoyGrillCommissaryRawMaterialProduct([
+            $addNewProd = new LoloPinoyGrillCommissaryRawMaterialProduct([
                 'raw_materials_id'=>$insertedId,
                 'branch'=>$request->branch,
                 'product_id_no'=>$uProd,
@@ -5811,7 +5806,6 @@ class LoloPinoyGrillCommissaryController extends Controller
 
     //view billing statement
     public function viewBillingStatement($id){
-
         $moduleName = "Billing Statement";
         $viewBillingStatement = DB::table(
                                 'lolo_pinoy_grill_commissary_billing_statements')
@@ -5857,9 +5851,6 @@ class LoloPinoyGrillCommissaryController extends Controller
 
     //billingStatementLists
     public function billingStatementLists(){
-    
-        $billingStatements = LoloPinoyGrillCommissaryBillingStatement::where('billing_statement_id', NULL)->get()->toArray();
-
         $moduleName = "Billing Statement";
         $billingStatements = DB::table(
                                 'lolo_pinoy_grill_commissary_billing_statements')
@@ -5888,31 +5879,7 @@ class LoloPinoyGrillCommissaryController extends Controller
                                 ->orderBy('lolo_pinoy_grill_commissary_billing_statements.id', 'desc')
                                 ->get();
 
-
         return view('lolo-pinoy-grill-commissary-billing-statement-lists', compact('billingStatements'));
-    }
-
-    //updateBillingStatement
-    public function updateBillingStatement(Request $request, $id){
-        $updateBilling = LoloPinoyGrillCommissaryBillingStatement::find($id);
-
-
-        $wholeLechon = $request->get('wholeLechon');
-        $add = $wholeLechon * 500;
-
-        $updateBilling->date_of_transaction = $request->get('transactionDate');
-        $updateBilling->whole_lechon = $wholeLechon;
-        $updateBilling->description = $request->get('description');
-        $updateBilling->invoice_number = $request->get('invoiceNumber');
-        $updateBilling->amount = $add;
-
-        $updateBilling->save();
-
-        Session::flash('SuccessEdit', 'Successfully updated');
-        return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-commissary-billing-statement/'
-            .$request->get('billingStatementId'));
-
-
     }
 
     //add new billing statement data
@@ -6022,7 +5989,7 @@ class LoloPinoyGrillCommissaryController extends Controller
     public function updateBillingInfo(Request $request, $id){
          $updateBillingOrder = LoloPinoyGrillCommissaryBillingStatement::find($id);
 
-          $wholeLechon = $request->get('wholeLechon');
+        $wholeLechon = $request->get('wholeLechon');
         $add = $wholeLechon * 500; 
 
         $updateBillingOrder->bill_to = $request->get('billTo');
@@ -6315,7 +6282,7 @@ class LoloPinoyGrillCommissaryController extends Controller
                                 ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
                                 ->get()->toArray();
 
-        $moduleName = "Sales Invoice";
+        $moduleNameSales = "Sales Invoice";
         $getAllSalesInvoices = DB::table(
                                 'lolo_pinoy_grill_commissary_sales_invoices')
                                 ->select(
@@ -6340,7 +6307,7 @@ class LoloPinoyGrillCommissaryController extends Controller
                                 ->leftJoin('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_sales_invoices.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
                                 ->where('lolo_pinoy_grill_commissary_sales_invoices.si_id', NULL)
                                 ->orderBy('lolo_pinoy_grill_commissary_sales_invoices.id', 'desc')
-                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNameSales)
                                 ->where('lolo_pinoy_grill_commissary_sales_invoices.deleted_at', NULL)
                                 ->get()->toArray();
 
@@ -6708,7 +6675,7 @@ class LoloPinoyGrillCommissaryController extends Controller
 
         Session::flash('addDeliveryReceiptSuccess', 'Successfully added.');
 
-        return redirect()->route('editDeliveryReceiptLoloPinoyGrillCommissary', ['id'=>$id]);
+        return redirect()->route('DnoFoodVentures.editDeliveryReceipt', ['id'=>$id]);
 
     }
 
@@ -7275,7 +7242,7 @@ class LoloPinoyGrillCommissaryController extends Controller
     public function destroyBillingDataStatement(Request $request, $id){
         $billStatement = LoloPinoyGrillCommissaryBillingStatement::find($request->billingStatementId);
 
-        $billingStatement = LechonDeCebuBillingStatement::find($id);
+        $billingStatement = LoloPinoyGrillCommissaryBillingStatement::find($id);
 
         $getAmount = $billStatement->total_amount - $billingStatement->amount;
         $billStatement->total_amount = $getAmount;

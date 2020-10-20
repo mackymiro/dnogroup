@@ -70,7 +70,7 @@
 											<td>
 											<!-- Button trigger modal -->
 									
-											<a data-toggle="modal" data-target="#rawM<?php echo $getRawMaterial->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+											<a data-toggle="modal" data-target="#rawM<?= $getRawMaterial->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
 											
 											@if(Auth::user()['role_type'] != 3 && Auth::user()['role_type'] != 2)
 											<a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getRawMaterial->id }}')" title="Delete"><i class="fas fa-trash"></i></a>
@@ -82,9 +82,9 @@
 											<td>{{ $getRawMaterial->unit }}</td>
 											<td class="bg-success" style="color:white;">{{ $getRawMaterial->in }}</td>
 											<td>{{ $getRawMaterial->out }}</td>
-											<td><?php echo number_format($getRawMaterial->stock_amount, 2); ?></td>
+											<td><?= number_format($getRawMaterial->stock_amount, 2); ?></td>
 											<td class="bg-success" style="color:white;">{{ $getRawMaterial->remaining_stock}}</td>
-											<td><?php echo number_format($getRawMaterial->amount, 2);?></td>
+											<td><?= number_format($getRawMaterial->amount, 2);?></td>
 											<td><p style="width:180px;">{{ $getRawMaterial->supplier}}</p></td>
 											<td><p style="width: 100px;">{{ $getRawMaterial->created_by }}</p></td>
 															
@@ -103,7 +103,7 @@
 
 	@foreach($getRawMaterials as $getRawMaterial)
   	<!-- Modal -->
-	<div class="modal fade" id="rawM<?php echo $getRawMaterial->id; ?>" tabindex="<?php echo $getRawMaterial->id?>" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal fade" id="rawM<?= $getRawMaterial->id; ?>" tabindex="<?= $getRawMaterial->id?>" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
 			<div class="modal-header">
@@ -113,36 +113,36 @@
 				</button>
 			</div>
 			<div class="modal-body">
-  				<div id="success<?php echo $getRawMaterial->id;?>"></div>
+  				<div id="success<?= $getRawMaterial->id;?>"></div>
 				<div class="form-group">
 					
 					<div class="form-row">
 						<div class="col-md-4">
 							<label>Branch </label>
-							<input type="text" id="branch1<?php echo $getRawMaterial->id?>" name="branch" class="form-control" value="{{ $getRawMaterial->branch }}" disabled />
+							<input type="text" id="branch1<?= $getRawMaterial->id?>" name="branch" class="form-control" value="{{ $getRawMaterial->branch }}" disabled />
 						</div>
 						
 						<div class="col-md-4">
 							<label>Product Name</label>
-							<input type="text" id="productName1<?php echo $getRawMaterial->id?>" name="productName" class="form-control" value="{{ $getRawMaterial->product_name }}" />
+							<input type="text" id="productName1<?= $getRawMaterial->id?>" name="productName" class="form-control" value="{{ $getRawMaterial->product_name }}" />
 							
 						</div>
 						<div class="col-md-2">
 							<label>Unit Price</label>
-							<input type="text"  id="unitPrice1<?php echo $getRawMaterial->id?>" name="unitPrice" class="form-control" onkeypress="return isNumber(event)" value="{{ $getRawMaterial->unit_price }}"/>
+							<input type="text"  id="unitPrice1<?= $getRawMaterial->id?>" name="unitPrice" class="form-control" onkeypress="return isNumber(event)" value="{{ $getRawMaterial->unit_price }}"/>
 						</div>
 						<div class="col-md-2">
 							<label>Unit</label>
-							<input type="text" id="unit1<?php echo $getRawMaterial->id?>" name="unit" class="form-control" value="{{ $getRawMaterial->unit }}"  />
+							<input type="text" id="unit1<?= $getRawMaterial->id?>" name="unit" class="form-control" value="{{ $getRawMaterial->unit }}"  />
 						</div>
 						<div class="col-md-4">
 							<label>IN (input number only)</label>
-							<input type="text" id="in1<?php echo $getRawMaterial->id?>" name="in" class="form-control" onkeypress="return isNumber(event)" value="{{ $getRawMaterial->in }}" />
+							<input type="text" id="in1<?= $getRawMaterial->id?>" name="in" class="form-control" onkeypress="return isNumber(event)" value="{{ $getRawMaterial->in }}" />
 						</div>
 					
 						<div class="col-md-4">
 							<label>Supplier</label>
-							<input type="text" id="supplier1<?php echo $getRawMaterial->id?>" name="supplier" class="form-control" value="{{ $getRawMaterial->supplier }}" />
+							<input type="text" id="supplier1<?= $getRawMaterial->id?>" name="supplier" class="form-control" value="{{ $getRawMaterial->supplier }}" />
 						</div>					
 						
 					</div>
@@ -150,7 +150,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
-				<button type="button" onclick="updateRaw(<?php echo $getRawMaterial->id?>)" class="btn btn-success btn-lg">Update</button>
+				<button type="button" onclick="updateRaw(<?= $getRawMaterial->id?>)" class="btn btn-success btn-lg">Update</button>
 			</div>
 			</div>
 		</div>
@@ -242,10 +242,10 @@
 		
 		//make ajax call
 		$.ajax({
-			type: "PATCH",
+			type: "PUT",
 			url: '/lolo-pinoy-grill-commissary/commissary/update-raw-material/' + id,
 			data:{
-				_method: 'patch',
+				_method: 'put',
 				"_token": "{{ csrf_token() }}",
 				"id":id,
 				"productName1":productName1,
@@ -319,14 +319,14 @@
 
 					if(succDataArr == "Success"){
 						$("#succAdd").fadeIn().delay(3000).fadeOut();
-						$("#succAdd").html(`<p class="alert alert-success">Succesfully added.</p>`);
+						$("#succAdd").html(`<p class="alert alert-success">${data}</p>`);
 						
 						setTimeout(function(){
 							document.location.reload();
 						}, 3000);
 					}else{
 						$("#succExists").fadeIn().delay(3000).fadeOut();
-                        $("#succExists").html(`<p class="alert alert-danger">Supplier already exists.</p>`);
+                        $("#succExists").html(`<p class="alert alert-danger">${data}</p>`);
 					}
                     
                     

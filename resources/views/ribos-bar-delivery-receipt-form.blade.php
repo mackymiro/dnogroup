@@ -1,6 +1,23 @@
 @extends('layouts.ribos-bar-app')
 @section('title', 'Delivery Receipt Form |')
 @section('content')
+<script>
+ 
+  $(function() {
+    $( ".datepicker" ).datepicker();
+  });
+</script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css" >
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+
 <div id="wrapper">
 	<!-- Sidebar -->
     	@include('sidebar.sidebar-ribos-bar')
@@ -47,54 +64,54 @@
 		                    			<div class="form-row">
 			                    				<div class="col-md-2">
 		                    						<label>Product Id</label>
-		                    						<input type="text" name="productId" class="form-control" required="required" />
-			                      				</div>
-			                      				@if ($errors->has('productId'))
-				                                  <span class="alert alert-danger">
-				                                    <strong>{{ $errors->first('productId') }}</strong>
-				                                  </span>
-				                                @endif
+													<select data-live-search="true" name="productId" class="selectpicker form-control">
+														<option value="0">--Please Select--</option>
+														@foreach($getRawMaterials as $getRawMaterial)
+															<option value="{{ $getRawMaterial->id}}-{{ $getRawMaterial->product_id_no}}">{{ $getRawMaterial->product_id_no}}</option>
+														@endforeach
+													</select>
+												</div>
+			                      				
 		                        				<div class="col-md-1">
 		                    						<label>QTY</label>
-		                    						<input type="text" name="qty" class="form-control" required="required" />
+		                    						<input type="text" name="qty" class="form-control" required="required"  onkeypress="return isNumber(event)"/>
 		                        				</div>
-		                        				@if ($errors->has('qty'))
-				                                  <span class="alert alert-danger">
-				                                    <strong>{{ $errors->first('qty') }}</strong>
-				                                  </span>
-				                                @endif
+												<div class="col-md-4">
+													<label>Remaining Stock</label>
+													<div id="availableClose">
+													<input type="text" name="available" class="form-control" disabled />
+													</div>
+													<div id="available"></div>
+												</div>
 		                        				<div class="col-md-1">
 		                    						<label>Unit</label>
-		                    						<input type="text" name="unit" class="form-control" required="required" />
+													<div id="unitClose">
+														<input type="text" name="unit" class="form-control" disabled/>
+													</div>
+													<div id="unit"></div>
 		                        				</div>
-		                        				@if ($errors->has('unit'))
-				                                  <span class="alert alert-danger">
-				                                    <strong>{{ $errors->first('unit') }}</strong>
-				                                  </span>
-				                                @endif
+		                        			
 		                        				<div class="col-md-4">
 		                        					<label>Item Description</label>
-		                        					<input type="text" name="itemDescription" class="form-control" required="required" />
-		                        				</div>
-		                        				@if ($errors->has('itemDescription'))
-				                                  <span class="alert alert-danger">
-				                                    <strong>{{ $errors->first('itemDescription') }}</strong>
-				                                  </span>
-				                                @endif
+													<div id="itemDescClose">
+														<input type="text" name="itemDescription" class="form-control" disabled />
+													</div>
+													<div id="itemDesc"></div>
+												</div>
+		                        			
 		                        				<div class="col-md-2">
 		                        					<label>Unit Price</label>
-		                        					<input type="text" name="unitPrice" class="form-control" required="required" />
-		                        				</div>
-		                        				@if ($errors->has('unitPrice'))
-				                                  <span class="alert alert-danger">
-				                                    <strong>{{ $errors->first('unitPrice') }}</strong>
-				                                  </span>
-				                                @endif
+													<div id="unitPriceClose">
+														<input type="text" name="unitPrice" class="form-control"  disabled />
+													</div>
+													<div id="unitPrice"></div>
+												</div>
+		                        			
 		                    			</div>	
                         			</div>
-                        			<div>
-			  	 				      <input type="submit" class="btn btn-success float-right" value="Add Delivery Receipt" />
-				  	 			    </div>
+									<div>
+                          				<button type="submit" class="btn btn-success btn-lg float-right"><i class="fas fa-save"></i> Save Delivery Receipt</button>
+        		  	 			    </div>
 				  	 				</form>
 	                            </div>
 		            		</div>
@@ -102,5 +119,63 @@
 		            </div>
     		</div>
     	</div>
+		 <!-- Sticky Footer -->
+		 <footer class="sticky-footer">
+        <div class="container my-auto">
+          <div class="copyright text-center my-auto">
+            <span>Copyright © Ribos Food Corporation 2019</span>
+            <br>
+            <br>
+            <span>Made with ❤️ at <a href="https://cebucodesolutions.com" target="_blank">Cebu Code Solutions</a></span>
+          </div>
+        </div>
+      </footer> 
 </div>
+<script>
+	const isNumber =(evt) => {
+		evt = (evt) ? evt : window.event;
+		var charCode = (evt.which) ? evt.which : evt.keyCode;
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	}
+
+	$(document).ready(function(){
+      $("select").change(function(){
+          <?php
+            $getRawMaterials = DB::table(
+                                  'ribos_bar_raw_materials')
+                                  ->where('rm_id', NULL)
+                                  ->get(); ?>
+          <?php foreach($getRawMaterials as $key=>$getRawMaterial): ?>
+              
+              var prodId = $(this).children("option:selected").val();
+              var prodIdSplit = prodId.split("-");
+              var prodArr = prodIdSplit[0];
+  
+              if(prodArr  === "<?= $getRawMaterial->id;?>"){
+                    console.log(prodArr);
+                    <?php 
+                        $getId = DB::table(
+                                  'ribos_bar_raw_materials')
+                                  ->where('id', $getRawMaterial->id)
+                                  ->get();
+                    ?>
+                     $("#available").html('<input type="text" name="available" value="<?= $getId[0]->remaining_stock?>" class="form-control" readonly="readonly" /> ');
+                     $("#availableClose").hide(); 
+                     $("#unit").html('<input type="text" name="unit" value="<?= $getId[0]->unit?>" class="form-control" readonly="readonly" /> ');
+                     $("#unitClose").hide();
+                     $("#itemDesc").html('<input type="text" name="itemDescription" value="<?= $getId[0]->product_name; ?>" class="form-control" readonly="readonly">')
+                     $("#itemDescClose").hide();
+                     $("#unitPrice").html('<input type="text" name="unitPrice" value="<?= $getId[0]->unit_price; ?>" class="form-control" readonly="readonly" >');
+                     $("#unitPriceClose").hide();
+                    
+                  
+              }
+          <?php endforeach; ?>           
+        
+      });
+  });
+</script>
 @endsection

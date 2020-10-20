@@ -22,6 +22,45 @@ use App\MrPotatoSupplier;
 class MrPotatoController extends Controller
 {   
 
+    public function printPettyCash($id){
+        $moduleName = "Petty Cash";
+        $getPettyCash = DB::table(
+                    'mr_potato_petty_cashes')
+                    ->select( 
+                    'mr_potato_petty_cashes.id',
+                    'mr_potato_petty_cashes.user_id',
+                    'mr_potato_petty_cashes.pc_id',
+                    'mr_potato_petty_cashes.date',
+                    'mr_potato_petty_cashes.petty_cash_name',
+                    'mr_potato_petty_cashes.petty_cash_summary',
+                    'mr_potato_petty_cashes.amount',
+                    'mr_potato_petty_cashes.created_by',
+                    'mr_potato_petty_cashes.deleted_at',
+                    'mr_potato_codes.mr_potato_code',
+                    'mr_potato_codes.module_id',
+                    'mr_potato_codes.module_code',
+                    'mr_potato_codes.module_name')
+                    ->leftJoin('mr_potato_codes', 'mr_potato_petty_cashes.id', '=', 'mr_potato_codes.module_id')
+                    ->where('mr_potato_petty_cashes.id', $id)
+                    ->where('mr_potato_codes.module_name', $moduleName)
+                    ->get()->toArray();
+
+        $getPettyCashSummaries = MrPotatoPettyCash::where('pc_id', $id)->get()->toArray();
+
+        //total
+        $totalPettyCash = MrPotatoPettyCash::where('id', $id)->where('pc_id', NULL)->sum('amount');
+
+        $pettyCashSummaryTotal = MrPotatoPettyCash::where('pc_id', $id)->sum('amount');
+
+        $sum = $totalPettyCash + $pettyCashSummaryTotal;
+
+        $pdf = PDF::loadView('printPettyCashMrPotato', compact('getPettyCash', 'getPettyCashSummaries', 'sum'));
+        return $pdf->download('mr-potato-petty-cash.pdf');
+            
+
+
+    }
+
     public function printSupplier($id){
         $viewSupplier = MrPotatoSupplier::where('id', $id)->get();
 

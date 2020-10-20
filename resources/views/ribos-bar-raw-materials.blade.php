@@ -45,10 +45,10 @@
 					  						<th>Product Name</th>
 					  						<th>Unit Price</th>
 					  						<th>Unit</th>
-					  						<th class="bg-danger" style="color:white;">IN</th>
+					  						<th class="bg-success" style="color:white;">IN</th>
 					  						<th>OUT</th>
 					  						<th>Stock Out Amount</th>
-						                    <th>Remaining Stock</th>
+						                    <th class="bg-success" style="color:white;">Remaining Stock</th>
 						                    <th>Amount</th>
                                             <th>Supplier</th>
 					  						<th>Created By</th>
@@ -60,33 +60,34 @@
 					  						<th>Product Name</th>
 					  						<th>Unit Price</th>
 					  						<th>Unit</th>
-					  						<th class="bg-danger" style="color:white;">IN</th>
+					  						<th class="bg-success" style="color:white;">IN</th>
 					  						<th>OUT</th>
 					  						<th>Stock Out Amount</th>
-						                    <th>Remaining Stock</th>
+						                    <th class="bg-success" style="color:white;">Remaining Stock</th>
 						                    <th>Amount</th>
                                             <th>Supplier</th>
 					  						<th>Created By</th>
 										</tfoot>
                                         <tbody>
                                         @foreach($getRawMaterials as $getRawMaterial)
-										<tr id="deletedId{{ $getRawMaterial['id']}}">
+										<tr id="deletedId{{ $getRawMaterial->id }}">
 											<td>
-											<a href="{{ url('ribos-bar/store-stock/edit-raw-materials/'.$getRawMaterial['id']) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-											<a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getRawMaterial['id'] }}')" title="Delete"><i class="fas fa-trash"></i></a>
+											<a data-toggle="modal" data-target="#rawM<?= $getRawMaterial->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+											
+                                            <a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getRawMaterial->id }}')" title="Delete"><i class="fas fa-trash"></i></a>
 										
 											</td>
-											<td>{{ $getRawMaterial['product_id_no'] }}</td>
-											<td><p style="width: 180px;"><a href="{{ url('ribos-bar/store-stock/view-raw-material-details/'.$getRawMaterial['id']) }}">{{ $getRawMaterial['product_name'] }}</a></p></td>
-											<td>{{ $getRawMaterial['unit_price'] }}</td>
-											<td>{{ $getRawMaterial['unit'] }}</td>
-											<td class="bg-danger" style="color:white;">{{ $getRawMaterial['in'] }}</td>
-											<td>{{ $getRawMaterial['out'] }}</td>
-											<td><?php echo number_format($getRawMaterial['stock_amount'], 2); ?></td>
-											<td>{{ $getRawMaterial['remaining_stock']}}</td>
-											<td><?php echo number_format($getRawMaterial['amount'], 2);?></td>
-											<td><p style="width:180px;">{{ $getRawMaterial['supplier']}}</p></td>
-											<td><p style="width: 100px;">{{ $getRawMaterial['created_by'] }}</p></td>
+											<td>{{ $getRawMaterial->product_id_no }}</td>
+											<td><p style="width: 180px;"><a href="{{ url('ribos-bar/store-stock/view-raw-material-details/'.$getRawMaterial->id) }}">{{ $getRawMaterial->product_name }}</a></p></td>
+											<td>{{ $getRawMaterial->unit_price }}</td>
+											<td>{{ $getRawMaterial->unit }}</td>
+											<td class="bg-success" style="color:white;">{{ $getRawMaterial->in }}</td>
+											<td>{{ $getRawMaterial->out }}</td>
+											<td ><?= number_format($getRawMaterial->stock_amount, 2); ?></td>
+											<td class="bg-success" style="color:white;">{{ $getRawMaterial->remaining_stock}}</td>
+											<td><?= number_format($getRawMaterial->amount, 2);?></td>
+											<td><p style="width:180px;">{{ $getRawMaterial->supplier }}</p></td>
+											<td><p style="width: 100px;">{{ $getRawMaterial->created_by }}</p></td>
 															
 										</tr>
 										@endforeach
@@ -99,9 +100,67 @@
               </div>
         </div>
     </div>
+
+    @foreach($getRawMaterials as $getRawMaterial)
+  	<!-- Modal -->
+	<div class="modal fade" id="rawM<?= $getRawMaterial->id; ?>" tabindex="<?= $getRawMaterial->id?>" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLongTitle">Update RAW Materials</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+  				<div id="success<?= $getRawMaterial->id;?>"></div>
+				<div class="form-group">
+					
+					<div class="form-row">
+						<div class="col-md-4">
+							<label>Branch </label>
+							<input type="text" id="branch1<?= $getRawMaterial->id?>" name="branch" class="form-control" value="{{ $getRawMaterial->branch }}" disabled />
+						</div>
+						
+						<div class="col-md-4">
+							<label>Product Name</label>
+							<input type="text" id="productName1<?= $getRawMaterial->id?>" name="productName" class="form-control" value="{{ $getRawMaterial->product_name }}" />
+							
+						</div>
+						<div class="col-md-2">
+							<label>Unit Price</label>
+							<input type="text"  id="unitPrice1<?= $getRawMaterial->id?>" name="unitPrice" class="form-control" onkeypress="return isNumber(event)" value="{{ $getRawMaterial->unit_price }}"/>
+						</div>
+						<div class="col-md-2">
+							<label>Unit</label>
+							<input type="text" id="unit1<?= $getRawMaterial->id?>" name="unit" class="form-control" value="{{ $getRawMaterial->unit }}"  />
+						</div>
+						<div class="col-md-4">
+							<label>IN (input number only)</label>
+							<input type="text" id="in1<?= $getRawMaterial->id?>" name="in" class="form-control" onkeypress="return isNumber(event)" value="{{ $getRawMaterial->in }}" />
+						</div>
+					
+						<div class="col-md-4">
+							<label>Supplier</label>
+							<input type="text" id="supplier1<?= $getRawMaterial->id?>" name="supplier" class="form-control" value="{{ $getRawMaterial->supplier }}" />
+						</div>					
+						
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
+				<button type="button" onclick="updateRaw(<?= $getRawMaterial->id?>)" class="btn btn-success btn-lg">Update</button>
+			</div>
+			</div>
+		</div>
+		</div>
+
+
+	 @endforeach
     <!--Modal-->
     <div class="modal fade createRawMaterial" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Add RAW Material</h5>
@@ -128,7 +187,7 @@
                             </div>
                             <div class="col-md-2">
                                 <label>Unit Price</label>
-                                <input type="text" id="unitPrice" name="unitPrice" class="form-control" />
+                                <input type="text" id="unitPrice" name="unitPrice" class="form-control"  onkeypress="return isNumber(event)"/>
                             </div>
                             <div class="col-md-2">
                                 <label>Unit</label>
@@ -138,40 +197,22 @@
                     </div>
                     <div class="form-group">
                         <div class="form-row">
-                            <div class="col-md-2">
-                                <label>IN</label>
-                                <input type="text" id="in" name="in" class="form-control" />
-                            </div>
-                            <div class="col-md-2">
-                                <label>OUT</label>
-                                <input type="text" id="out" name="out" class="form-control" />
-                            </div>
                             <div class="col-md-4">
-                                <label>Stock Out Amount</label>
-                                <input type="text" id="stockOutAmount" name="stockAmount" class="form-control" />
-                            </div>
-                            <div class="col-md-4">
-                                <label>Remaining Stock</label>
-                                <input type="text" id="remainingStock"name="remainingStock" class="form-control" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-row">
-                            <div class="col-md-2">
-                                <label>Amount</label>
-                                <input type="text" id="amount" name="amount" class="form-control" />
+                                <label>IN (input number only)</label>
+                                <input type="text" id="in" name="in" class="form-control"  onkeypress="return isNumber(event)"/>
                             </div>
                             <div class="col-md-4">
                                 <label>Supplier</label>
                                 <input type="text" id="supplier" name="supplier" class="form-control" />
                             </div>
+                           
                         </div>
                     </div>
+                 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onclick="closeRAW()" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button type="button" onclick="addRAW()" class="btn btn-success">Add RAW Material </button>
+                    	<button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
+				        <button type="button" onclick="saveRaw()" class="btn btn-success btn-lg">Save</button>
                 </div>
             </div>
         </div>
@@ -192,16 +233,57 @@
 <script type="text/javascript">
     $("#validate").hide();
 
-    const addRAW = () =>{
+    const updateRaw = (id) =>{
+	
+        const productName1 = $("#productName1" +id).val();
+        const unitPrice1 = $("#unitPrice1" +id).val();
+        const unit1 = $("#unit1" +id).val();
+        const stockIn1 = $("#in1" +id).val();
+        const supplier1 = $("#supplier1" +id).val();
+        
+        //make ajax call
+        $.ajax({
+            type: "PUT",
+            url: '/ribos-bar/store-stock/update-raw-material/' + id,
+            data:{
+                _method: 'put',
+                "_token": "{{ csrf_token() }}",
+                "id":id,
+                "productName1":productName1,
+                "unitPrice1":unitPrice1,
+                "unit1":unit1,
+                "stockIn1":stockIn1,
+                "supplier1":supplier1,
+            },
+            success: function(data){
+                console.log(data);
+                const getData = data;
+                const succData = getData.split(":");
+                const succDataArr = succData[0];
+
+                if(succDataArr == "Success"){
+                    $("#success"+id).fadeIn().delay(3000).fadeOut();
+                    $("#success"+id).html(`<p class="alert alert-success">${data}</p>`);
+                    
+                    setTimeout(function(){
+                        document.location.reload();
+                    }, 3000);
+                }
+            },
+            error: function(data){
+                console.log('Error:', data);
+            }
+
+        });
+
+    }
+
+    const saveRaw = () =>{
         const branch = $("#branch").val();
         const prductName = $("#prductName").val();
         const unitPrice = $("#unitPrice").val();
         const unit = $("#unit").val();
-        const inData = $("#in").val();
-        const outData = $("#out").val();
-        const stockOutAmount = $("#stockOutAmount").val();
-        const remainingStock = $("#remainingStock").val();
-        const amount = $("#amount").val();
+        const stockIn = $("#in").val();
         const supplier = $("#supplier").val();
 
         if(branch == "" || prductName == "" || supplier == ""){
@@ -218,11 +300,7 @@
                     "prductName":prductName,
                     "unitPrice":unitPrice,
                     "unit":unit,
-                    "inData":inData,
-                    "outData":outData,
-                    "stockOutAmount":stockOutAmount,
-                    "remainingStock":remainingStock,
-                    "amount":amount,
+                    "stockIn":stockIn,
                     "supplier":supplier,
 
                 },
@@ -249,5 +327,14 @@
             });
         }
     }
+
+    const isNumber =(evt) => {
+		evt = (evt) ? evt : window.event;
+		var charCode = (evt.which) ? evt.which : evt.keyCode;
+		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+			return false;
+		}
+		return true;
+	}
 </script>
 @endsection

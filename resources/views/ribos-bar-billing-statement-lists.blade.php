@@ -21,44 +21,40 @@
     					  <div class="card-body">
     					  	<div class="table-responsive">
 				  				<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-				  					<thead>
-				  						<th>Action</th>
-				  						<th>Reference #</th>
-                      <th>PO #</th>
-				  						<th>Bill To</th>
-				  						<th>Date</th>
-				  						<th>Period Covered</th>
-				  						<th>Created By</th>
-			  						</thead>
-			  						<tfoot>
-			  							<th>Action</th>
-				  						<th>Reference #</th>
-                      <th>PO #</th>
-				  						<th>Bill To</th>
-				  						<th>Date</th>
-				  						<th>Period Covered</th>
-				  						<th>Created By</th>
-
-			  						</tfoot>
+								  	<thead>
+										<th>Action</th>
+										<th>BS No</th>
+										<th>Bill To</th>
+										<th>Date</th>
+										<th>Period Covered</th>
+										<th>Created By</th>
+									</thead>
+									<tfoot>
+										<th>Action</th>
+										<th>BS No</th>
+										<th>Bill To</th>
+										<th>Date</th>
+										<th>Period Covered</th>
+										<th>Created By</th>
+									</tfoot>		
 			  						<tbody>
 			  							@foreach($billingStatements as $billingStatement)
-			  							<tr id="deletedId{{ $billingStatement['id'] }}">
+			  							<tr id="deletedId{{ $billingStatement->id }}">
 			  								<td>
                          						 @if(Auth::user()['role_type'] !== 3)
-			  									<a href="{{ url('ribos-bar/edit-ribos-bar-billing-statement/'.$billingStatement['id'] ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+			  									<a href="{{ url('ribos-bar/edit-ribos-bar-billing-statement/'.$billingStatement->id ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
 												@endif
 												@if(Auth::user()['role_type'] == 1)
-				  								<a id="delete" onClick="confirmDelete('{{ $billingStatement['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+				  								<a id="delete" onClick="confirmDelete('{{ $billingStatement->id }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
 												@endif
-				  								<a href="{{ url('ribos-bar/view-ribos-bar-billing-statement/'.$billingStatement['id']) }}" title="View"><i class="fas fa-low-vision"></i></a>
+				  								<a href="{{ url('ribos-bar/view-ribos-bar-billing-statement/'.$billingStatement->id) }}" title="View"><i class="fas fa-low-vision"></i></a>
 
 			  								</td>
-			  								<td><a href="#">#-{{ $billingStatement['reference_number'] }}</a></td>
-                        <td><a href="#">#-{{ $billingStatement['p_o_number'] }}</a></td>
-			  								<td>{{ $billingStatement['bill_to'] }}</td>
-			  								<td>{{ $billingStatement['date'] }}</td>
-			  								<td>{{ $billingStatement['period_cover'] }}</td>
-			  								<td>{{ $billingStatement['created_by'] }}</td>
+											  <td>{{ $billingStatement->module_code}}{{ $billingStatement->ribos_bar_code}}</td>
+											<td>{{ $billingStatement->bill_to }}</td>
+											<td>{{ $billingStatement->date }}</td>
+											<td>{{ $billingStatement->period_cover }}</td>
+											<td>{{ $billingStatement->created_by }}</td>
 			  							</tr>
 			  							@endforeach
 			  						</tbody>

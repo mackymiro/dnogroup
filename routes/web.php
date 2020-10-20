@@ -2095,6 +2095,14 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('lolo-pinoy-lechon-de-cebu.inventoryStockUpdate')
 		->middleware(['cashier']);
 
+	Route::put(
+		'/dno-food-ventures/inventory-stock-update/{id}',
+		'LoloPinoyLechonDeCebuController@inventoryStockUpdate')
+		->name('inventoryStockUpdate')
+		->middleware(['cashier']);
+	
+
+
 	//route for download PDF file
 	Route::get('/lolo-pinoy-lechon-de-cebu/printDelivery/{id}', 
 	'LoloPinoyLechonDeCebuController@printDelivery')
@@ -2483,7 +2491,7 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('addRawMaterial')
 		->middleware(['cashier']);
 
-	Route::patch(
+	Route::put(
 		'/lolo-pinoy-grill-commissary/commissary/update-raw-material/{id}',
 		'LoloPinoyGrillCommissaryController@updateRawMaterial')
 		->name('updateRawMaterial')
@@ -3258,6 +3266,12 @@ Route::group(['middleware' => ['auth']], function(){
 		->middleware(['cashier']);
 
 	Route::get(
+		'/mr-potato/printPettyCash/{id}',
+		'MrPotatoController@printPettyCash')
+		->name('printPettyCash')
+		->middleware(['cashier']);
+
+	Route::get(
 		'/mr-potato/utilities',
 		'MrPotatoController@utilities')
 		->name('mr-potato.utilities')
@@ -3315,7 +3329,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/ribos-bar/edit-ribos-bar-delivery-receipt/{id}',
 		'RibosBarController@editDeliveryReceipt')
-		->name('ribos-bar.editDeliveryReceipt')
+		->name('editDeliveryReceiptRibosBar')
 		->middleware(['cashier']);
 
 	Route::patch(
@@ -3541,7 +3555,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/ribos-bar/billing-statement-form',
 		'RibosBarController@billingStatementForm')
-		->name('ribos-bar.billingStatementForm')
+		->name('billingStatementFormRibosBar')
 		->middleware(['cashier']);
 
 	Route::post(
@@ -3553,10 +3567,10 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/ribos-bar/edit-ribos-bar-billing-statement/{id}',
 		'RibosBarController@editBillingStatement')
-		->name('ribos-bar.editBillingStatement')
+		->name('editBillingStatementRibosBar')
 		->middleware(['cashier']);
 
-	Route::patch(
+	Route::put(
 		'/ribos-bar/update-billing-info/{id}',
 		'RibosBarController@updateBillingInfo')
 		->name('ribos-bar.updateBillingInfo')
@@ -3573,13 +3587,6 @@ Route::group(['middleware' => ['auth']], function(){
 		'RibosBarController@addNewBillingData')
 		->name('ribos-bar.addNewBillingData')
 		->middleware(['cashier']);
-
-	Route::patch(
-		'/ribos-bar/update-billing-statement/{id}',
-		'RibosBarController@updateBillingStatement')
-		->name('ribos-bar.updateBillingStatement')
-		->middleware(['cashier']);
-
 
 
 	Route::get(
@@ -3786,6 +3793,12 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('ribos-bar.addRawMaterial')
 		->middleware(['cashier']);
 
+	Route::put(
+		'/ribos-bar/store-stock/update-raw-material/{id}',
+		'RibosBarController@updateRawMaterial')
+		->name('updateRawMaterial')
+		->middleware(['cashier']);
+		
 	Route::get(
 		'/ribos-bar/store-stock/view-raw-material-details/{id}',
 		'RibosBarController@viewRawMaterialDetails')
@@ -4378,6 +4391,282 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dno-food-ventures',
 		'DnoFoodVenturesController@index')
 		->name('dno-food-ventures')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/delivery-receipt-form',
+		'DnoFoodVenturesController@deliveryReceiptForm')
+		->name('deliveryReceiptFormDnoFoodVentures')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-food-ventures/store-delivery-receipt',
+		'DnoFoodVenturesController@storeDeliveryReceipt')
+		->name('storeDeliveryReceiptDnoFoodVenuturs')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/{id}/edit-dno-food-ventures',
+		'DnoFoodVenturesController@editDeliveryReceipt')
+		->name('DnoFoodVentures.editDeliveryReceipt')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-food-ventures/{id}/update-delivery-receipt',
+		'DnoFoodVenturesController@updateDeliveryReceipt')
+		->name('DnoFoodVenturesController.updateDeliveryReceipt')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-food-ventures/{id}/add-new-delivery-receipt-data',
+		'DnoFoodVenturesController@addNewDeliveryReceiptData')
+		->name('DnoFoodVenturesController.addNewDeliveryReceiptData')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dno-food-ventures/delete-delivery-receipt/{id}',
+		'DnoFoodVenturesController@destroyDeliveryReceipt')
+		->name('destroyDeliveryReceipt')
+		->middleware(['cashier']);
+	
+	
+	Route::get(
+		'dno-food-ventures/delete/DR/{id}',
+		'DnoFoodVenturesController@destroyDR')
+		->name('destroyDRDnoFoodVentures')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/delivery-receipt/lists',
+		'DnoFoodVenturesController@deliveryReceiptList')
+		->name('deliveryReceiptList')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/{id}/view-dno-food-ventures-delivery-receipt',
+		'DnoFoodVenturesController@viewDeliveryReceipt')
+		->name('viewDeliveryReceipt')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/{id}/printDelivery',
+		'DnoFoodVenturesController@printDelivery')
+		->name('printDelivery')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/billing-statement-form',
+		'DnoFoodVenturesController@billingStatementForm')
+		->name('billingStatementForm')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-food-ventures/store-billing-statement',
+		'DnoFoodVenturesController@storeBillingStatement')
+		->name('storeBillingStatement')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/{id}/edit-billing-statement',
+		'DnoFoodVenturesController@editBillingStatement')
+		->name('editBillingStatementDnoFoodVentures')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/billing-statement-lists',
+		'DnoFoodVenturesController@billingStatementLists')
+		->name('billingStatementListsDnoFoodVentures')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/{id}/view-billing-statement',
+		'DnoFoodVenturesController@viewBillingStatement')
+		->name('viewBillingStatementDnoFoodVenture')
+		->middleware(['cashier']);
+
+
+	Route::post(
+		'/dno-food-ventures/{id}/add-new-billing-data',
+		'DnoFoodVenturesController@addNewBillingData')
+		->name('addNewBillingDataDnoFoodVentures')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dno-food-ventures/delete-data-billing-statement/{id}',
+		'DnoFoodVenturesController@destroyBillingDataStatement')
+		->name('destroyBillingDataStatement')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dno-food-ventures/delete-billing-statement/{id}',
+		'DnoFoodVenturesController@destroyBillingStatement')
+		->name('destroyBillingStatement')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-food-ventures/{id}/update-billing-info',
+		'DnoFoodVenturesController@updateBillingInfo')
+		->name('updateBillingInfoDnoFoodVentures')
+		->middleware(['cashier']);
+
+
+	Route::get(
+		'/dno-food-ventures/sales-invoice-form',
+		'DnoFoodVenturesController@salesInvoiceForm')
+		->name('salesInvoiceForm')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-food-ventures/store-sales-invoice',
+		'DnoFoodVenturesController@storeSalesInvoice')
+		->name('storeSalesInvoice')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/{id}/edit-sales-invoice',
+		'DnoFoodVenturesController@editSalesInvoice')
+		->name('editSalesInvoiceDnoFoodVentures')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/{id}/view-sales-invoice',
+		'DnoFoodVenturesController@viewSalesInvoice')
+		->name('viewSalesInvoice')
+		->middleware(['cashier']);
+		
+	Route::post(
+		'/dno-food-ventures/add-new-sales-invoice-data/{id}',
+		'DnoFoodVenturesController@addNewSalesInvoiceData')
+		->name('addNewSalesInvoiceData')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-food-ventures/{id}/update-si',
+		'DnoFoodVenturesController@updateSi')
+		->name('updateSi')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-food-ventures/{id}/update-sales-invoice',
+		'DnoFoodVenturesController@updateSalesInvoice')
+		->name('updateSalesInvoiceDnoFoodVentures')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dno-food-ventures/delete-sales-invoice/{id}',
+		'DnoFoodVenturesController@destroySalesInvoice')
+		->name('destroySalesInvoice')
+		->middleware(['cashier']);
+
+
+	Route::get(
+		'/dno-food-ventures/commissary/raw-materials',
+		'DnoFoodVenturesController@rawMaterials')
+		->name('rawMaterials')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-food-ventures/commissary/create-raw-materials',
+		'DnoFoodVenturesController@addRawMaterial')
+		->name('addRawMaterial')
+		->middleware(['cashier']);
+
+
+	Route::put(
+		'/dno-food-ventures/commissary/update-raw-material/{id}',
+		'DnoFoodVenturesController@updateRawMaterial')
+		->name('updateRawMaterial')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/view-raw-material-details/{id}',
+		'DnoFoodVenturesController@viewRawMaterialDetails')
+		->name('viewRawMaterialDetailsDnoFoodVentures')
+		->middleware(['cashier']);
+
+
+	Route::get(
+		'/dno-food-ventures/commissary/stocks-inventory',
+		'DnoFoodVenturesController@stocksInventory')
+		->name('stocksInventory')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/commissary/delivery-outlets',
+		'DnoFoodVenturesController@commissaryDeliveryOutlet')
+		->name('commissaryDeliveryOutlet')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/commissary/inventory-of-stocks',
+		'DnoFoodVenturesController@inventoryOfStocks')
+		->name('inventoryOfStocks')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/view-inventory-of-stocks/{id}',
+		'DnoFoodVenturesController@viewInventoryOfStocks')
+		->name('viewInventoryOfStocks')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/purchase-order',
+		'DnoFoodVenturesController@purchaseOrder')
+		->name('purchaseOrderDnoFoodVenture')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-food-ventures/store',
+		'DnoFoodVenturesController@store')
+		->name('storeDnoFoodVentures')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/{id}/edit',
+		'DnoFoodVenturesController@edit')
+		->name('editDnoFoodVentures')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-food-ventures/add-new-purchase-order/{id}',
+		'DnoFoodVenturesController@addNewPurchaseOrder')
+		->name('addNewPurchaseOrderDnoFoodVentures')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-food-ventures/update-po/{id}',
+		'DnoFoodVenturesController@updatePo')
+		->name('updatePoDnoFoodVentures')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dno-food-ventures/delete/{id}',
+		'DnoFoodVenturesController@destroy')
+		->name('destroy')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/purchase-order-lists',
+		'DnoFoodVenturesController@purchaseOrderList')
+		->name('purchaseOrderList')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/{id}/view',
+		'DnoFoodVenturesController@show')
+		->name('show')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/printPO/{id}',
+		'DnoFoodVenturesController@printPO')
+		->name('printPO')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dno-food-ventures/delete/PO/{id}',
+		'DnoFoodVenturesController@destroyPO')
+		->name('destroyPO')
 		->middleware(['cashier']);
 
 	Route::get(

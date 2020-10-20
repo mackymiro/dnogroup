@@ -1,6 +1,15 @@
 @extends('layouts.ribos-bar-app')
 @section('title', 'View RAW Material Details |')
 @section('content')
+<script>
+  $(function() {
+    $( ".datepicker" ).datepicker();
+  });
+</script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="wrapper">
     <!-- Sidebar -->
     @include('sidebar.sidebar-ribos-bar')
@@ -17,8 +26,8 @@
             </ol>
             <a href="{{ url('ribos-bar/store-stock/raw-materials') }}">Back to Lists</a>
             <div class="col-lg-12">
-            	 <img src="{{ asset('images/ribos.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Lolo Pinoy Grill">
-            	 
+            	 	<img src="{{ asset('images/digitized-logos/ribos-food-corp.png')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="Rib's Bar">
+             
             	 <h4 class="text-center"><u>ITEM DETAILS </u></h4>
             </div>
             <div class="row">
@@ -35,10 +44,10 @@
 		            	 			<div class="col-lg-12">
                                         <!-- Button trigger modal -->
                                           
-                                        <a class="btn btn-primary" href="#" data-toggle="modal" data-target=".addDeliveryIn" >ADD DELIVERY IN </a>
+                                        <a class="btn btn-success btn-lg" href="#" data-toggle="modal" data-target=".addDeliveryIn" >ADD DELIVERY IN </a>
                                     	<br>
 			            	 			<br>
-                                        <a class="btn btn-primary" href="#" data-toggle="modal" data-target=".requestStockOut" >REQUEST STOCK OUT</a>
+                                        <a class="btn btn-primary btn-lg" href="#" data-toggle="modal" data-target=".requestStockOut" >REQUEST STOCK OUT</a>
                                     </div>
 		            	 		
 		            	 		</div>
@@ -136,7 +145,7 @@
                                             <td>{{ $getViewRawDetail['item']}}</td>
                                             <td>{{ $getViewRawDetail['qty']}}</td>
                                             <td>{{ $getViewRawDetail['unit']}}</td>
-                                            <td><?php echo number_format($getViewRawDetail['amount'], 2)?></td>
+                                            <td><?= number_format($getViewRawDetail['amount'], 2)?></td>
                                             @if($getViewRawDetail['status'] == "Paid")
                                                 <td class="bg-success" style="color:white;">{{ $getViewRawDetail['status']}}</td>
                                             @else
@@ -157,7 +166,7 @@
     </div>
     <!--Modal-->
     <div class="modal fade requestStockOut" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Request Stock Out</h5>
@@ -173,6 +182,10 @@
                             </div>
                             <div id="succAddDRequest" class="col-lg-12"></div>
                             <div id="existsRSO" class="col-lg-12"></div>
+                            <div class="col-lg-2">
+                                <label>Date</label>
+                                <input type="text" id="date" name="date" class="datepicker form-control"  />	
+                            </div>
                             <div class="col-md-2">
                                 <label>Product Id</label>
                                 <input type="text" id="productIdRSO" name="productIdRSO" class="form-control" value="{{ $viewRawDetail['product_id_no']}}" readonly="readonly" />
@@ -190,10 +203,6 @@
                                 <label>Qty</label>
                                 <input type="text" id="qtyRSO" name="qtyRSO" class="form-control" />
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-row">
                             <div class="col-md-4">
                                 <label>Requesting Branch</label>
                                 <input type="text" id="requestingBranch" name="requestingBranch" class="form-control" />
@@ -209,6 +218,12 @@
                                     </select>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-row">
+                           
+                          
                             <div class="col-md-4">
                                 <label>Cheque No Issued</label>
                                 <input type="hidden" id="rStockOut" value="REQUEST STOCK OUT" />
@@ -220,18 +235,18 @@
                   
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onclick="closeRSO()" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button type="button" onclick="requestStockOut(<?php echo $viewRawDetail['id']?>)" class="btn btn-success">Request Stock Out</button>
+                    <button type="button" onclick="closeRSO()" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="requestStockOut(<?= $viewRawDetail['id']?>)" class="btn btn-success btn-lg">Save Request Stock Out</button>
                 </div>
             </div>
         </div>
     </div><!-- end of Modal -->
     <!--Modal-->
     <div class="modal fade addDeliveryIn" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Add RAW Material</h5>
+                    <h5 class="modal-title" id="exampleModalLongTitle">Delivery In</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -240,10 +255,14 @@
                     <div class="form-group">
                         <div class="form-row">
                             <div id="validateStatus" class="col-lg-12">
-                                <p  class="alert alert-danger">Please Select Status</p>
+                                <p  class="alert alert-danger">Please fill up field</p>
                             </div>
                              <div id="existsDeliveryIn" class="col-lg-12"></div>
                             <div id="succAddDeliveryIn" class="col-lg-12"></div>
+                            <div class="col-lg-2">
+                                <label>Date</label>
+                                <input type="text" id="date" name="date" class="datepicker form-control"  />	
+                            </div>
                             <div class="col-md-2">
                                 <label>Product Id</label>
                                 <input type="text" id="productId" name="productId" class="form-control" value="{{ $viewRawDetail['product_id_no']}}" readonly="readonly" />
@@ -261,10 +280,6 @@
                                 <label>Qty</label>
                                 <input type="text" id="qty" name="qty" class="form-control" />
                             </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-row">
                             <div class="col-md-4">
                                 <label>Status</label>
                                 <div id="app-status">
@@ -280,14 +295,14 @@
                                 <label>Cheque No Issued</label>
                                 <input type="text" id="chequeNoIssued" name="chequeNoIssued" class="form-control" />
                             </div>
-                          
                         </div>
                     </div>
+                   
                   
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onclick="closeDeliveryIn()" class="btn btn-danger" data-dismiss="modal">Close</button>
-                    <button type="button" onclick="addDeliveryIn(<?php echo $viewRawDetail['id']?>)" class="btn btn-success">Add Delivery In</button>
+                    <button type="button" onclick="closeDeliveryIn()" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="addDeliveryIn(<?= $viewRawDetail['id']?>)" class="btn btn-success btn-lg">Save Delivery</button>
                 </div>
             </div>
         </div>
@@ -304,7 +319,6 @@
         </div>
     </footer>
 </div>  
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
     $("#validateStatus").hide();
     $("#validateStatusRSO").hide();

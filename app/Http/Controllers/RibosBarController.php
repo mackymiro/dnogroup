@@ -21,9 +21,32 @@ use App\RibosBarRawMaterial;
 use App\RibosBarPettyCash;
 use App\RibosBarCode;
 use App\RibosBarSupplier;
+use App\RibosBarRawMaterialProduct;
 
 class RibosBarController extends Controller
 {
+
+    public function updateRawMaterial(Request $request){
+        $updateRawMaterial = RibosBarRawMaterial::find($request->id);
+
+        //unit price times number of IN products
+        $unitPrice = $request->unitPrice1 * $request->stockIn1;
+
+        $amount = $unitPrice;
+
+        $updateRawMaterial->product_name = $request->productName1;
+        $updateRawMaterial->unit_price = $request->unitPrice1;
+        $updateRawMaterial->unit = $request->unit1;
+        $updateRawMaterial->in = $request->stockIn1;
+        $updateRawMaterial->remaining_stock = $request->stockIn1;
+        $updateRawMaterial->amount = $amount;
+        $updateRawMaterial->supplier = $request->supplier1;
+
+        $updateRawMaterial->save();
+
+        return response()->json('Success: successfully updated.'); 
+
+    }
 
     public function printSupplier($id){
         $viewSupplier = RibosBarSupplier::where('id', $id)->get();
@@ -3042,7 +3065,7 @@ class RibosBarController extends Controller
         $name  = $firstName." ".$lastName;
 
         //get the latest insert id query in table commissary RAW material product id no
-        $dataProductId = DB::select('SELECT id, product_id_no FROM ribos_bar_raw_materials ORDER BY id DESC LIMIT 1');
+        $dataProductId = DB::select('SELECT id, product_id_no FROM ribos_bar_raw_material_products ORDER BY id DESC LIMIT 1');
 
          //if code is not zero add plus 1 product id no
          if(isset($dataProductId[0]->product_id_no) != 0){
@@ -3055,6 +3078,10 @@ class RibosBarController extends Controller
             $newProd = 1;
             $uProd = sprintf("%06d",$newProd);
         } 
+
+        //unit price times number of IN products
+        $unitPrice = $request->unitPrice * $request->stockIn;
+        $amount = $unitPrice;
 
         //check if product name exists
         $target = DB::table(
@@ -3071,16 +3098,24 @@ class RibosBarController extends Controller
                 'product_name'=>$request->prductName,
                 'unit_price'=>$request->unitPrice,
                 'unit'=>$request->unit,
-                'in'=>$request->inData,
-                'out'=>$request->outData,
-                'stock_amount'=>$request->stockOutAmount,
-                'remaining_stock'=>$request->remainingStock,
-                'amount'=>$request->amount,
+                'in'=>$request->stockIn,
+                'remaining_stock'=>$request->stockIn,
+                'amount'=>$amount,
                 'supplier'=>$request->supplier,
                 'created_by'=>$name,
     
             ]);
             $addNewRawMaterial->save();
+            $insertedId = $addNewRawMaterial->id;
+
+            $addNewProd = new RibosBarRawMaterialProduct([
+                'raw_materials_id'=>$insertedId,
+                'branch'=>$request->branch,
+                'product_id_no'=>$uProd,
+            ]);
+    
+            $addNewProd->save();
+            
             return response()->json('Success: successfully added a RAW Material');
 
         }else{
@@ -3092,7 +3127,38 @@ class RibosBarController extends Controller
     }
 
     public function rawMaterials(){
-        $getRawMaterials = RibosBarRawMaterial::where('rm_id', NULL)->get()->toArray();
+        $getRawMaterials = DB::table(
+                    'ribos_bar_raw_materials')
+                    ->select(
+                        'ribos_bar_raw_materials.id',
+                        'ribos_bar_raw_materials.user_id',
+                        'ribos_bar_raw_materials.rm_id',
+                        'ribos_bar_raw_materials.product_name',
+                        'ribos_bar_raw_materials.unit_price',
+                        'ribos_bar_raw_materials.unit',
+                        'ribos_bar_raw_materials.in',
+                        'ribos_bar_raw_materials.out',
+                        'ribos_bar_raw_materials.stock_amount',
+                        'ribos_bar_raw_materials.remaining_stock',
+                        'ribos_bar_raw_materials.amount',
+                        'ribos_bar_raw_materials.supplier',
+                        'ribos_bar_raw_materials.date',
+                        'ribos_bar_raw_materials.item',
+                        'ribos_bar_raw_materials.description',
+                        'ribos_bar_raw_materials.reference_no',
+                        'ribos_bar_raw_materials.qty',
+                        'ribos_bar_raw_materials.requesting_branch',
+                        'ribos_bar_raw_materials.cheque_no_issued',
+                        'ribos_bar_raw_materials.status',
+                        'ribos_bar_raw_materials.created_by',
+                        'ribos_bar_raw_material_products.raw_materials_id',
+                        'ribos_bar_raw_material_products.branch',
+                        'ribos_bar_raw_material_products.product_id_no')
+                    ->leftJoin('ribos_bar_raw_material_products', 'ribos_bar_raw_materials.id', '=', 'ribos_bar_raw_material_products.raw_materials_id')
+                    ->where('ribos_bar_raw_materials.rm_id', NULL)
+                    ->orderBy('ribos_bar_raw_materials.id', 'desc')
+                    ->get()->toArray();
+       
         return view('ribos-bar-raw-materials', compact('getRawMaterials'));
     }
 
@@ -4012,8 +4078,32 @@ class RibosBarController extends Controller
     //
     public function viewBillingStatement($id){
 
-        $viewBillingStatement = RibosBarBillingStatement::find($id);
-        
+        $moduleName = "Billing Statement";
+        $viewBillingStatement = DB::table(
+                        'ribos_bar_billing_statements')
+                        ->select(
+                            'ribos_bar_billing_statements.id',
+                            'ribos_bar_billing_statements.user_id',
+                            'ribos_bar_billing_statements.billing_statement_id',
+                            'ribos_bar_billing_statements.bill_to',
+                            'ribos_bar_billing_statements.address',
+                            'ribos_bar_billing_statements.date',
+                            'ribos_bar_billing_statements.branch',
+                            'ribos_bar_billing_statements.period_cover',
+                            'ribos_bar_billing_statements.terms',
+                            'ribos_bar_billing_statements.date_of_transaction',
+                            'ribos_bar_billing_statements.invoice_number',
+                            'ribos_bar_billing_statements.description',
+                            'ribos_bar_billing_statements.amount',
+                            'ribos_bar_billing_statements.created_by',
+                            'ribos_bar_codes.ribos_bar_code',
+                            'ribos_bar_codes.module_id',
+                            'ribos_bar_codes.module_code',
+                            'ribos_bar_codes.module_name')
+                        ->leftJoin('ribos_bar_codes', 'ribos_bar_billing_statements.id', '=', 'ribos_bar_codes.module_id')
+                        ->where('ribos_bar_billing_statements.id', $id)
+                        ->where('ribos_bar_codes.module_name', $moduleName)
+                        ->get();
 
         $billingStatements = RibosBarBillingStatement::where('billing_statement_id', $id)->get()->toArray();
 
@@ -4031,35 +4121,44 @@ class RibosBarController extends Controller
 
     //
     public function billingStatementLists(){
-      
-        $billingStatements = RibosBarBillingStatement::where('billing_statement_id', NULL)->get()->toArray();
+        $moduleName = "Billing Statement";
+
+        $billingStatements = DB::table(
+                        'ribos_bar_billing_statements')
+                        ->select(
+                            'ribos_bar_billing_statements.id',
+                            'ribos_bar_billing_statements.user_id',
+                            'ribos_bar_billing_statements.billing_statement_id',
+                            'ribos_bar_billing_statements.bill_to',
+                            'ribos_bar_billing_statements.address',
+                            'ribos_bar_billing_statements.date',
+                            'ribos_bar_billing_statements.branch',
+                            'ribos_bar_billing_statements.period_cover',
+                            'ribos_bar_billing_statements.terms',
+                            'ribos_bar_billing_statements.date_of_transaction',
+                            'ribos_bar_billing_statements.invoice_number',
+                            'ribos_bar_billing_statements.description',
+                            'ribos_bar_billing_statements.amount',
+                            'ribos_bar_billing_statements.created_by',
+                            'ribos_bar_codes.ribos_bar_code',
+                            'ribos_bar_codes.module_id',
+                            'ribos_bar_codes.module_code',
+                            'ribos_bar_codes.module_name')
+                        ->leftJoin('ribos_bar_codes', 'ribos_bar_billing_statements.id', '=', 'ribos_bar_codes.module_id')
+                        ->where('ribos_bar_billing_statements.billing_statement_id', NULL)
+                        ->where('ribos_bar_codes.module_name', $moduleName)
+                        ->orderBy('ribos_bar_billing_statements.id', 'desc')
+                        ->get();
 
 
         return view('ribos-bar-billing-statement-lists', compact('billingStatements'));
     }
 
-    //
-    public function updateBillingStatement(Request $request, $id){
-        $updateBilling = RibosBarBillingStatement::find($id);
-
-        $wholeLechon = $request->get('wholeLechon');
-        $add = $wholeLechon * 500; 
-
-        $updateBilling->date_of_transaction = $request->get('transactionDate');
-        $updateBilling->whole_lechon = $wholeLechon;
-        $updateBilling->description = $request->get('description');
-        $updateBilling->invoice_number = $request->get('invoiceNumber');
-        $updateBilling->amount = $add;
-
-        $updateBilling->save();
-
-        Session::flash('SuccessEdit', 'Successfully updated');
-        return redirect('ribos-bar/edit-ribos-bar-billing-statement/'.$request->get('billingStatementId'));
-    }
+ 
 
     //
     public function addNewBillingData(Request $request, $id){
-         $ids = Auth::user()->id;
+        $ids = Auth::user()->id;
         $user = User::find($ids);
 
         $billingOrder = RibosBarBillingStatement::find($id);
@@ -4069,29 +4168,90 @@ class RibosBarController extends Controller
 
         $name  = $firstName." ".$lastName;
 
-          //get the whole lechon then multiply by 500
-        $wholeLechon = $request->get('wholeLechon');
-        $add = $wholeLechon * 500; 
+        $amount = $request->get('amount');
+        $tot = $billingOrder->total_amount + $amount;
+
+        if($request->get('choose') === "Sales Invoice"){
+            $order = $request->get('choose');
+            $invoiceNo = $request->get('invoiceNumber');
+            $invoiceListId = $request->get('invoiceListId');
+            $qty = $request->get('qty');
+            $totalKls = $request->get('totalKls');
+            $unitPrice = $request->get('unitPrice');
+
+            $drNo = NULL;
+            $productId = NULL;
+            $unit = NULL;
+            $drList = NULL;
+            $unit = NULL;
+        }else{
+            $order = $request->get('choose');
+            $qty = $request->get('qty');
+            $unitPrice = $request->get('unitPrice');
+            $drNo = $request->get('drNo');
+            $productId  = $request->get('productId');
+            $unit = $request->get('unit'); 
+            $drList = $request->get('drList');
+            $unit = $request->get('unit');
+
+            $invoiceNo = NULL;
+            $invoiceListId = NULL;
+            $totalKls = NULL; 
+        }
 
         $addBillingStatement = new RibosBarBillingStatement([
             'user_id'=>$user->id,
             'billing_statement_id'=>$id,
-            'reference_number'=>$billingOrder['reference_number'],
-            'p_o_number'=>$billingOrder['p_o_number'],
             'date_of_transaction'=>$request->get('transactionDate'),
+            'order'=>$order,
+            'invoice_list_id'=>$invoiceListId,
+            'qty'=>$qty,
+            'dr_no'=>$drNo,
+            'dr_list_id'=>$drList,
+            'product_id'=>$productId,
+            'total_kls'=>$totalKls,
             'invoice_number'=>$request->get('invoiceNumber'),
-            'whole_lechon'=>$wholeLechon,
             'description'=>$request->get('description'),
-            'amount'=>$add,
+            'amount'=>$request->get('amount'),
             'created_by'=>$name,
         ]);
 
         $addBillingStatement->save();
 
+         //save to table statement of account
+         $addStatementAccount =  new RibosBarStatementOfAccount([
+            'user_id'=>$user->id,
+            'billing_statement_id'=>$id,
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'invoice_number'=>$request->get('invoiceNumber'),
+            'description'=>$request->get('description'),
+            'order'=>$order,
+            'invoice_list_id'=>$invoiceListId,
+            'qty'=>$qty,
+            'dr_no'=>$drNo,
+            'dr_list_id'=>$drList,
+            'product_id'=>$productId,
+            'total_kls'=>$totalKls,
+            'amount'=>$amount,
+            'created_by'=>$name,
+         ]);
+         $addStatementAccount->save();
+
+         $statementOrder = RibosBarStatementOfAccount::find($id);
+            
+         //update
+         $billingOrder->total_amount = $tot;
+         $billingOrder->save();
+
+            //update soa table
+        $statementOrder->total_amount  = $tot;
+        $statementOrder->total_remaining_balance = $tot;
+        $statementOrder->save();
+  
+
         Session::flash('addBillingSuccess', 'Successfully added.');
 
-        return redirect('ribos-bar/add-new-ribos-bar-billing/'.$id);
-
+        return redirect()->route('editBillingStatementRibosBar', ['id'=>$id]);
     }
 
     //
@@ -4104,8 +4264,7 @@ class RibosBarController extends Controller
     public function updateBillingInfo(Request $request, $id){
         $updateBillingOrder = RibosBarBillingStatement::find($id);
 
-        $wholeLechon = $request->get('wholeLechon');
-        $add = $wholeLechon * 500; 
+      
 
         $updateBillingOrder->bill_to = $request->get('billTo');
         $updateBillingOrder->address = $request->get('address');
@@ -4115,7 +4274,6 @@ class RibosBarController extends Controller
         $updateBillingOrder->p_o_number = $request->get('poNumber');
         $updateBillingOrder->invoice_number = $request->get('invoiceNumber');
         $updateBillingOrder->date_of_transaction = $request->get('transactionDate');
-        $updateBillingOrder->whole_lechon = $wholeLechon;
         $updateBillingOrder->description = $request->get('description');
         $updateBillingOrder->amount = $add;
 
@@ -4130,13 +4288,76 @@ class RibosBarController extends Controller
     public function editBillingStatement($id){
       
         $billingStatement = RibosBarBillingStatement::find($id);
+
+        $moduleName = "Delivery Receipt";
+        $drNos = DB::table(
+                    'ribos_bar_delivery_receipts')
+                    ->select( 
+                    'ribos_bar_delivery_receipts.id',
+                    'ribos_bar_delivery_receipts.user_id',
+                    'ribos_bar_delivery_receipts.dr_id',
+                    'ribos_bar_delivery_receipts.delivered_to',
+                    'ribos_bar_delivery_receipts.address',
+                    'ribos_bar_delivery_receipts.dr_no',
+                    'ribos_bar_delivery_receipts.date',
+                    'ribos_bar_delivery_receipts.product_id',
+                    'ribos_bar_delivery_receipts.qty',
+                    'ribos_bar_delivery_receipts.unit',
+                    'ribos_bar_delivery_receipts.item_description',
+                    'ribos_bar_delivery_receipts.unit_price',
+                    'ribos_bar_delivery_receipts.amount',
+                    'ribos_bar_delivery_receipts.prepared_by',
+                    'ribos_bar_delivery_receipts.approved_by',
+                    'ribos_bar_delivery_receipts.checked_by',
+                    'ribos_bar_delivery_receipts.received_by',
+                    'ribos_bar_delivery_receipts.created_by',      
+                    'ribos_bar_codes.ribos_bar_code',
+                    'ribos_bar_codes.module_id',
+                    'ribos_bar_codes.module_code',
+                    'ribos_bar_codes.module_name')
+                    ->leftJoin('ribos_bar_codes', 'ribos_bar_delivery_receipts.id', '=', 'ribos_bar_codes.module_id')
+                    ->where('ribos_bar_delivery_receipts.dr_id', NULL)
+                    ->where('ribos_bar_codes.module_name', $moduleName)
+                    ->get()->toArray();
+
+        $moduleNameSales = "Sales Invoice";
+        $getAllSalesInvoices = DB::table(
+                    'ribos_bar_sales_invoices')
+                    ->select(
+                        'ribos_bar_sales_invoices.id',
+                        'ribos_bar_sales_invoices.user_id',
+                        'ribos_bar_sales_invoices.si_id',
+                        'ribos_bar_sales_invoices.invoice_number',
+                        'ribos_bar_sales_invoices.date',
+                        'ribos_bar_sales_invoices.ordered_by',
+                        'ribos_bar_sales_invoices.address',
+                        'ribos_bar_sales_invoices.qty',
+                        'ribos_bar_sales_invoices.total_kls',
+                        'ribos_bar_sales_invoices.item_description',
+                        'ribos_bar_sales_invoices.unit_price',
+                        'ribos_bar_sales_invoices.amount',
+                        'ribos_bar_sales_invoices.total_amount', 
+                        'ribos_bar_sales_invoices.created_by',
+                        'ribos_bar_sales_invoices.deleted_at',                     
+                        'ribos_bar_codes.ribos_bar_code',
+                        'ribos_bar_codes.module_id',
+                        'ribos_bar_codes.module_code',
+                        'ribos_bar_codes.module_name')
+                    ->leftJoin('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
+                    ->where('ribos_bar_sales_invoices.si_id', NULL)
+                    ->where('ribos_bar_codes.module_name', $moduleNameSales)
+                    ->where('ribos_bar_sales_invoices.deleted_at', NULL)
+                    ->get()->toArray();
+
+
        
         $bStatements = RibosBarBillingStatement::where('billing_statement_id', $id)->get()->toArray();
 
         //get the purchase order lists
         $getPurchaseOrders = RibosBarPurchaseOrder::where('po_id', NULL)->get()->toArray();
         
-        return view('edit-ribos-bar-billing-statement-form', compact('billingStatement', 'bStatements', 'getPurchaseOrders'));
+        return view('edit-ribos-bar-billing-statement-form', compact('id', 'billingStatement', 'bStatements', 
+        'getPurchaseOrders', 'drNos', 'getAllSalesInvoices'));
     }
 
     //
@@ -4159,20 +4380,15 @@ class RibosBarController extends Controller
             'date'=>'required',
             'terms'=>'required',
             'transactionDate'=>'required',
-            'wholeLechon'=>'required',
-            'description'=>'required',
         ]);
 
-        $wholeLechon = $request->get('wholeLechon');
-        $add = $wholeLechon * 500; 
-
          //get the latest insert id query in table billing statements ref number
-        $dataReferenceNum = DB::select('SELECT id, reference_number FROM ribos_bar_billing_statements ORDER BY id DESC LIMIT 1');
+        $dataReferenceNum = DB::select('SELECT id, ribos_bar_code FROM ribos_bar_codes ORDER BY id DESC LIMIT 1');
 
         //if code is not zero add plus 1 reference number
-        if(isset($dataReferenceNum[0]->reference_number) != 0){
+        if(isset($dataReferenceNum[0]->ribos_bar_code) != 0){
             //if code is not 0
-            $newRefNum = $dataReferenceNum[0]->reference_number +1;
+            $newRefNum = $dataReferenceNum[0]->ribos_bar_code +1;
             $uRef = sprintf("%06d",$newRefNum);   
 
         }else{
@@ -4181,20 +4397,55 @@ class RibosBarController extends Controller
             $uRef = sprintf("%06d",$newRefNum);
         } 
 
+        if($request->get('choose') === "Sales Invoice"){
+            $order = $request->get('choose');
+            $invoiceNo = $request->get('invoiceNumber');
+            $invoiceListId = $request->get('invoiceListId');
+            $qty = $request->get('qty');
+            $totalKls = $request->get('totalKls');
+            $unitPrice = $request->get('unitPrice');
+
+            $drNo = NULL;
+            $productId = NULL;
+            $unit = NULL;
+            $drList = NULL;
+            $unit = NULL;
+        }else{
+            $order = $request->get('choose');
+            $qty = $request->get('qty');
+            $unitPrice = $request->get('unitPrice');
+            $drNo = $request->get('drNo');
+            $productId  = $request->get('productId');
+            $unit = $request->get('unit'); 
+            $drList = $request->get('drList');
+            $unit = $request->get('unit');
+
+            $invoiceNo = NULL;
+            $invoiceListId = NULL;
+            $totalKls = NULL; 
+        }
+
           $billingStatement = new RibosBarBillingStatement([
             'user_id'=>$user->id,
             'bill_to'=>$request->get('billTo'),
             'address'=>$request->get('address'),
             'period_cover'=>$request->get('periodCovered'),
             'date'=>$request->get('date'),
-            'invoice_number'=>$request->get('invoiceNumber'),
-            'reference_number'=>$uRef,
-            'p_o_number'=>$request->get('poNumber'),
+            'invoice_number'=>$invoiceNo,
             'terms'=>$request->get('terms'),
             'date_of_transaction'=>$request->get('transactionDate'),
-            'whole_lechon'=>$wholeLechon,
+            'order'=>$order,
+            'invoice_list_id'=>$invoiceListId,
+            'qty'=>$qty,
+            'dr_no'=>$drNo,
+            'dr_list_id'=>$drList,
+            'product_id'=>$productId,
+            'total_kls'=>$totalKls,
             'description'=>$request->get('description'),
-            'amount'=>$add,
+            'unit_price'=>$unitPrice,
+            'unit'=>$unit,
+            'amount'=>$request->get('amount'),
+            'total_amount'=>$request->get('amount'),
             'created_by'=>$name,
             'prepared_by'=>$name,
         ]);
@@ -4203,18 +4454,133 @@ class RibosBarController extends Controller
 
         $insertedId = $billingStatement->id;
 
-         return redirect('ribos-bar/edit-ribos-bar-billing-statement/'.$insertedId);
+        $moduleCode = "BS-";
+        $moduleName = "Billing Statement";
+
+        $ribosBarCode = new RibosBarCode([
+            'user_id'=>$user->id,
+            'ribos_bar_code'=>$uRef,
+            'module_id'=>$insertedId,
+            'module_code'=>$moduleCode,
+            'module_name'=>$moduleName,
+        ]);
+
+        $ribosBarCode->save();
+        $bsNo = $ribosBarCode->id;
+
+        $bsNoId = RibosBarCode::find($bsNo);
+
+        $statementAccount = new RibosBarStatementOfAccount([
+            'user_id'=>$user->id,
+            'bill_to'=>$request->get('billTo'),
+            'bs_no'=>$bsNoId->lolo_pinoy_grill_code,
+            'dr_no'=>$drNo,
+            'product_id'=>$productId,
+            'period_cover'=>$request->get('periodCovered'),
+            'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNumber'),
+            'terms'=>$request->get('terms'),
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'qty'=>$qty,
+            'description'=>$request->get('description'),
+            'unit_price'=>$unitPrice,
+            'unit'=>$unit,
+            'amount'=>$request->get('amount'),
+            'total_amount'=>$request->get('amount'),
+            'total_remaining_balance'=>$request->get('amount'),
+            'created_by'=>$name,
+            'prepared_by'=>$name,
+        ]);
+        
+        $statementAccount->save();
+        $insertedIdStatement = $statementAccount->id;
+
+        $moduleCodeSOA = "SOA-";
+        $moduleNameSOA = "Statement Of Account";
+
+        $uRefStatement = $uRef + 1; 
+        $uRefState = sprintf("%06d",$uRefStatement);
+        
+        $statement = new RibosBarCode([
+            'user_id'=>$user->id,
+            'ribos_bar_code'=>$uRefState,
+            'module_id'=>$insertedIdStatement,
+            'module_code'=>$moduleCodeSOA,
+            'module_name'=>$moduleNameSOA,
+        ]);
+
+        $statement->save();
+        
+        return redirect()->route('editBillingStatementRibosBar', ['id'=>$insertedId]);
 
     }
 
     //
     public function billingStatementForm(){
+        $moduleName = "Delivery Receipt";
+        $drNos = DB::table(
+                    'ribos_bar_delivery_receipts')
+                    ->select( 
+                    'ribos_bar_delivery_receipts.id',
+                    'ribos_bar_delivery_receipts.user_id',
+                    'ribos_bar_delivery_receipts.dr_id',
+                    'ribos_bar_delivery_receipts.delivered_to',
+                    'ribos_bar_delivery_receipts.address',
+                    'ribos_bar_delivery_receipts.dr_no',
+                    'ribos_bar_delivery_receipts.date',
+                    'ribos_bar_delivery_receipts.product_id',
+                    'ribos_bar_delivery_receipts.qty',
+                    'ribos_bar_delivery_receipts.unit',
+                    'ribos_bar_delivery_receipts.item_description',
+                    'ribos_bar_delivery_receipts.unit_price',
+                    'ribos_bar_delivery_receipts.amount',
+                    'ribos_bar_delivery_receipts.prepared_by',
+                    'ribos_bar_delivery_receipts.approved_by',
+                    'ribos_bar_delivery_receipts.checked_by',
+                    'ribos_bar_delivery_receipts.received_by',
+                    'ribos_bar_delivery_receipts.created_by',      
+                    'ribos_bar_codes.ribos_bar_code',
+                    'ribos_bar_codes.module_id',
+                    'ribos_bar_codes.module_code',
+                    'ribos_bar_codes.module_name')
+                    ->leftJoin('ribos_bar_codes', 'ribos_bar_delivery_receipts.id', '=', 'ribos_bar_codes.module_id')
+                    ->where('ribos_bar_delivery_receipts.dr_id', NULL)
+                    ->where('ribos_bar_codes.module_name', $moduleName)
+                    ->get()->toArray();
 
-        //get the purchase order lists
-        $getPurchaseOrders = RibosBarPurchaseOrder::where('po_id', NULL)->get()->toArray();
+
+
+        $moduleNameSales = "Sales Invoice";
+        $getAllSalesInvoices = DB::table(
+                        'ribos_bar_sales_invoices')
+                        ->select(
+                            'ribos_bar_sales_invoices.id',
+                            'ribos_bar_sales_invoices.user_id',
+                            'ribos_bar_sales_invoices.si_id',
+                            'ribos_bar_sales_invoices.invoice_number',
+                            'ribos_bar_sales_invoices.date',
+                            'ribos_bar_sales_invoices.ordered_by',
+                            'ribos_bar_sales_invoices.address',
+                            'ribos_bar_sales_invoices.qty',
+                            'ribos_bar_sales_invoices.total_kls',
+                            'ribos_bar_sales_invoices.item_description',
+                            'ribos_bar_sales_invoices.unit_price',
+                            'ribos_bar_sales_invoices.amount',
+                            'ribos_bar_sales_invoices.total_amount', 
+                            'ribos_bar_sales_invoices.created_by',
+                            'ribos_bar_sales_invoices.deleted_at',                     
+                            'ribos_bar_codes.ribos_bar_code',
+                            'ribos_bar_codes.module_id',
+                            'ribos_bar_codes.module_code',
+                            'ribos_bar_codes.module_name')
+                        ->leftJoin('ribos_bar_codes', 'ribos_bar_sales_invoices.id', '=', 'ribos_bar_codes.module_id')
+                        ->where('ribos_bar_sales_invoices.si_id', NULL)
+                        ->where('ribos_bar_codes.module_name', $moduleNameSales)
+                        ->where('ribos_bar_sales_invoices.deleted_at', NULL)
+                        ->get()->toArray();
        
 
-        return view('ribos-bar-billing-statement-form', compact('getPurchaseOrders'));
+        return view('ribos-bar-billing-statement-form', compact('getAllSalesInvoices', 'drNos'));
     }
 
     //
@@ -4856,8 +5222,37 @@ class RibosBarController extends Controller
 
     //
     public function viewDeliveryReceipt($id){
-
-        $viewDeliveryReceipt = RibosBarDeliveryReceipt::find($id);
+        $moduleName = "Delivery Receipt";
+        $viewDeliveryReceipt = DB::table(
+                    'ribos_bar_delivery_receipts')
+                    ->select( 
+                    'ribos_bar_delivery_receipts.id',
+                    'ribos_bar_delivery_receipts.user_id',
+                    'ribos_bar_delivery_receipts.dr_id',
+                    'ribos_bar_delivery_receipts.delivered_to',
+                    'ribos_bar_delivery_receipts.address',
+                    'ribos_bar_delivery_receipts.dr_no',
+                    'ribos_bar_delivery_receipts.date',
+                    'ribos_bar_delivery_receipts.product_id',
+                    'ribos_bar_delivery_receipts.qty',
+                    'ribos_bar_delivery_receipts.unit',
+                    'ribos_bar_delivery_receipts.item_description',
+                    'ribos_bar_delivery_receipts.unit_price',
+                    'ribos_bar_delivery_receipts.amount',
+                    'ribos_bar_delivery_receipts.prepared_by',
+                    'ribos_bar_delivery_receipts.approved_by',
+                    'ribos_bar_delivery_receipts.checked_by',
+                    'ribos_bar_delivery_receipts.received_by',
+                    'ribos_bar_delivery_receipts.created_by',      
+                    'ribos_bar_codes.ribos_bar_code',
+                    'ribos_bar_codes.module_id',
+                    'ribos_bar_codes.module_code',
+                    'ribos_bar_codes.module_name')
+                    ->leftJoin('ribos_bar_codes', 'ribos_bar_delivery_receipts.id', '=', 'ribos_bar_codes.module_id')
+                    ->where('ribos_bar_delivery_receipts.id', $id)
+                    ->where('ribos_bar_codes.module_name', $moduleName)
+                    ->get()->toArray();
+    
 
         $deliveryReceipts = RibosBarDeliveryReceipt::where('dr_id', $id)->get()->toArray();
 
@@ -4878,7 +5273,7 @@ class RibosBarController extends Controller
 
         $sum2  = $countTotalAmount + $countAmount;
 
-        return view('view-ribos-bar-delivery-receipt', compact('viewDeliveryReceipt', 'deliveryReceipts', 'countUnit', 'sum', 'sum2'));
+        return view('view-ribos-bar-delivery-receipt', compact('viewDeliveryReceipt', 'deliveryReceipts', 'countUnitPrice', 'sum', 'sum2'));
     }
 
     //
@@ -4886,7 +5281,7 @@ class RibosBarController extends Controller
       
          //getAllDeliveryReceipt
         $getAllDeliveryReceipts = RibosBarDeliveryReceipt::where('dr_id', NULL)->get()->toArray();
-
+    
         return view('ribos-bar-delivery-receipt-list', compact('getAllDeliveryReceipts'));
     }
 
@@ -4932,7 +5327,62 @@ class RibosBarController extends Controller
         $compute = $qty * $unitPrice;
         $sum = $compute;
 
-          //get date today
+        $getAmount = $deliveryReceipt->total_amount + $sum;
+
+        $avail = $request->get('productId'); 
+        $availExp = explode("-", $avail);
+
+        $rawMaterial = DB::table(
+                'ribos_bar_raw_materials')
+                ->select(
+                    'ribos_bar_raw_materials.id',
+                    'ribos_bar_raw_materials.user_id',
+                    'ribos_bar_raw_materials.rm_id',
+                    'ribos_bar_raw_materials.product_name',
+                    'ribos_bar_raw_materials.unit_price',
+                    'ribos_bar_raw_materials.unit',
+                    'ribos_bar_raw_materials.in',
+                    'ribos_bar_raw_materials.out',
+                    'ribos_bar_raw_materials.stock_amount',
+                    'ribos_bar_raw_materials.remaining_stock',
+                    'ribos_bar_raw_materials.amount',
+                    'ribos_bar_raw_materials.supplier',
+                    'ribos_bar_raw_materials.date',
+                    'ribos_bar_raw_materials.item',
+                    'ribos_bar_raw_materials.description',
+                    'ribos_bar_raw_materials.reference_no',
+                    'ribos_bar_raw_materials.qty',
+                    'ribos_bar_raw_materials.requesting_branch',
+                    'ribos_bar_raw_materials.cheque_no_issued',
+                    'ribos_bar_raw_materials.status',
+                    'ribos_bar_raw_materials.created_by',
+                    'ribos_bar_raw_material_products.raw_materials_id',
+                    'ribos_bar_raw_material_products.branch',
+                    'ribos_bar_raw_material_products.product_id_no')
+                ->leftJoin('ribos_bar_raw_material_products', 'ribos_bar_raw_materials.id', '=', 'ribos_bar_raw_material_products.raw_materials_id')
+                ->where('ribos_bar_raw_material_products.raw_materials_id', $availExp[0])
+                ->orderBy('ribos_bar_raw_materials.id', 'desc')
+                ->get();
+
+          //minus available pcs from the qty
+          $aPcs = $rawMaterial[0]->remaining_stock - $qty;
+        
+          //add qty to out 
+          $out = $rawMaterial[0]->out + $qty;
+              
+          //compute the stock out amount in unit price
+          $stockAmount = $rawMaterial[0]->unit_price * $qty;
+              
+          //update raw material table
+          $updateRawMaterial = RibosBarRawMaterial::find($availExp[0]);
+          
+          $updateRawMaterial->out = $out;
+          $updateRawMaterial->remaining_stock = $aPcs;
+          $updateRawMaterial->stock_amount = $stockAmount;
+          $updateRawMaterial->save();
+  
+
+        //get date today
         $getDateToday =  date('Y-m-d');
 
         $addNewDeliveryReceipt = new RibosBarDeliveryReceipt([
@@ -4953,10 +5403,12 @@ class RibosBarController extends Controller
         ]);
 
         $addNewDeliveryReceipt->save();
+        $deliveryReceipt->total_amount  = $getAmount; 
+        $deliveryReceipt->save();
 
         Session::flash('addDeliveryReceiptSuccess', 'Successfully added.');
 
-        return redirect('ribos-bar/add-new-delivery-receipt/'.$id);
+        return redirect()->route('editDeliveryReceiptRibosBar', ['id'=>$id]);
 
     }
 
@@ -4998,10 +5450,43 @@ class RibosBarController extends Controller
         //getDeliveryReceipt
         $getDeliveryReceipt = RibosBarDeliveryReceipt::find($id);
 
+        $getRawMaterials = DB::table(
+                    'ribos_bar_raw_materials')
+                    ->select(
+                        'ribos_bar_raw_materials.id',
+                        'ribos_bar_raw_materials.user_id',
+                        'ribos_bar_raw_materials.rm_id',
+                        'ribos_bar_raw_materials.product_name',
+                        'ribos_bar_raw_materials.unit_price',
+                        'ribos_bar_raw_materials.unit',
+                        'ribos_bar_raw_materials.in',
+                        'ribos_bar_raw_materials.out',
+                        'ribos_bar_raw_materials.stock_amount',
+                        'ribos_bar_raw_materials.remaining_stock',
+                        'ribos_bar_raw_materials.amount',
+                        'ribos_bar_raw_materials.supplier',
+                        'ribos_bar_raw_materials.date',
+                        'ribos_bar_raw_materials.item',
+                        'ribos_bar_raw_materials.description',
+                        'ribos_bar_raw_materials.reference_no',
+                        'ribos_bar_raw_materials.qty',
+                        'ribos_bar_raw_materials.requesting_branch',
+                        'ribos_bar_raw_materials.cheque_no_issued',
+                        'ribos_bar_raw_materials.status',
+                        'ribos_bar_raw_materials.created_by',
+                        'ribos_bar_raw_material_products.raw_materials_id',
+                        'ribos_bar_raw_material_products.branch',
+                        'ribos_bar_raw_material_products.product_id_no')
+                    ->leftJoin('ribos_bar_raw_material_products', 'ribos_bar_raw_materials.id', '=', 'ribos_bar_raw_material_products.raw_materials_id')
+                    ->where('ribos_bar_raw_materials.rm_id', NULL)
+                    ->orderBy('ribos_bar_raw_materials.id', 'desc')
+                    ->get()->toArray();
+
+
          //dReceipts
         $dReceipts = RibosBarDeliveryReceipt::where('dr_id', $id)->get()->toArray();
 
-        return view('edit-ribos-bar-delivery-receipt', compact('getDeliveryReceipt', 'dReceipts'));
+        return view('edit-ribos-bar-delivery-receipt', compact('id','getDeliveryReceipt', 'dReceipts', 'getRawMaterials'));
     }   
 
     //store delivery receipt
@@ -5016,13 +5501,7 @@ class RibosBarController extends Controller
         
         //validate
         $this->validate($request, [
-            'deliveredTo' =>'required',
-            'productId' =>'required',
-            'qty'=>'required',
-            'unit'=>'required',
-            'itemDescription'=>'required',
-            'unitPrice'=>'required',
-           
+            'deliveredTo' =>'required', 
         ]);
 
 
@@ -5050,8 +5529,9 @@ class RibosBarController extends Controller
         $sum = $compute;
 
          $storeDeliveryReceipt = new RibosBarDeliveryReceipt([
-            'user_id'=>$user->id,            
-            'date'=>$getDateToday,
+            'user_id'=>$user->id,
+            'dr_no'=>$uDr,            
+            'date'=>$request->get('date'),
             'delivered_to'=>$request->get('deliveredTo'),
             'product_id'=>$request->get('productId'),
             'qty'=>$qty,
@@ -5073,7 +5553,7 @@ class RibosBarController extends Controller
         $moduleName = "Delivery Receipt";
 
         //save to lechon_de_cebu_codes table
-        $ribosBar = new LechonDeCebuCode([
+        $ribosBar = new RibosBarCode([
             'user_id'=>$user->id,
             'ribos_bar_code'=>$uDr,
             'module_id'=>$insertedId,
@@ -5088,8 +5568,39 @@ class RibosBarController extends Controller
 
     //
     public function deliveryReceiptForm(){
-     
-        return view('ribos-bar-delivery-receipt-form');
+        $getRawMaterials = DB::table(
+                    'ribos_bar_raw_materials')
+                    ->select(
+                        'ribos_bar_raw_materials.id',
+                        'ribos_bar_raw_materials.user_id',
+                        'ribos_bar_raw_materials.rm_id',
+                        'ribos_bar_raw_materials.product_name',
+                        'ribos_bar_raw_materials.unit_price',
+                        'ribos_bar_raw_materials.unit',
+                        'ribos_bar_raw_materials.in',
+                        'ribos_bar_raw_materials.out',
+                        'ribos_bar_raw_materials.stock_amount',
+                        'ribos_bar_raw_materials.remaining_stock',
+                        'ribos_bar_raw_materials.amount',
+                        'ribos_bar_raw_materials.supplier',
+                        'ribos_bar_raw_materials.date',
+                        'ribos_bar_raw_materials.item',
+                        'ribos_bar_raw_materials.description',
+                        'ribos_bar_raw_materials.reference_no',
+                        'ribos_bar_raw_materials.qty',
+                        'ribos_bar_raw_materials.requesting_branch',
+                        'ribos_bar_raw_materials.cheque_no_issued',
+                        'ribos_bar_raw_materials.status',
+                        'ribos_bar_raw_materials.created_by',
+                        'ribos_bar_raw_material_products.raw_materials_id',
+                        'ribos_bar_raw_material_products.branch',
+                        'ribos_bar_raw_material_products.product_id_no')
+                    ->leftJoin('ribos_bar_raw_material_products', 'ribos_bar_raw_materials.id', '=', 'ribos_bar_raw_material_products.raw_materials_id')
+                    ->where('ribos_bar_raw_materials.rm_id', NULL)
+                    ->orderBy('ribos_bar_raw_materials.id', 'desc')
+                    ->get()->toArray();
+
+        return view('ribos-bar-delivery-receipt-form', ['getRawMaterials'=>$getRawMaterials]);
     }
 
     /**
