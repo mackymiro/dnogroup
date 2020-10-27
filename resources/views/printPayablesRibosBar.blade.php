@@ -113,15 +113,13 @@
 									<tr style="border:1px solid black;">
 										<td style="text-align:center; border: 1px solid black;">{{ $getParticular['date']}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $getParticular['particulars']}}</td>
-										<td style="text-align:center; border: 1px solid black; font-size:18px;"><?php echo number_format($getParticular['amount'], 2); ?></td>
+										<td style="text-align:center; border: 1px solid black; font-size:18px;"><?= number_format($getParticular['amount'], 2); ?></td>
 									</tr>
 									@endforeach
 								</tbody>	
 						  </table>
                           <br>
-                          <br>
-                          <br>
-                          <br>
+                         
 						  @if($payableId[0]->method_of_payment === "CHECK")
                           <table style="border:1px solid black;">
                           		  <thead>

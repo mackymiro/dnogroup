@@ -3980,22 +3980,25 @@ class LoloPinoyGrillBranchesController extends Controller
 
         //getParticular details
         $getParticulars = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
-      
+    
+        $getChequeNumbers = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
-        $payablesVouchers = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->get()->toArray();
-
-          //count the total amount 
-        $countTotalAmount = LoloPinoyGrillBranchesPaymentVoucher::where('id', $id)->sum('amount_due');
-
-
-          //
-        $countAmount = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->sum('amount_due');
-
-        $sum  = $countTotalAmount + $countAmount;
+        $getCashAmounts = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
+        
+        $amount1 = LoloPinoyGrillBranchesPaymentVoucher::where('id', $id)->sum('amount');
+        $amount2 = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->sum('amount');
+            
+        $sum = $amount1 + $amount2;
+        
+        //
+        $chequeAmount1 = LoloPinoyGrillBranchesPaymentVoucher::where('id', $id)->sum('cheque_amount');
+        $chequeAmount2 = LoloPinoyGrillBranchesPaymentVoucher::where('pv_id', $id)->sum('cheque_amount');
+        
+        $sumCheque = $chequeAmount1 + $chequeAmount2;
        
 
-        $pdf = PDF::loadView('printPayablesLoloPinoyGrillBranches', compact('payableId', 'payablesVouchers', 'getParticulars', 'sum'));
-
+        $pdf = PDF::loadView('printPayablesLoloPinoyGrillBranches', compact('payableId',  
+        'getChequeNumbers', 'getCashAmounts', 'sum', 'getParticulars', 'sumCheque'));
         return $pdf->download('lolo-pinoy-grill-branches-payment-voucher.pdf');
     }   
 

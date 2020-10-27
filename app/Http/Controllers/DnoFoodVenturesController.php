@@ -715,8 +715,7 @@ class DnoFoodVenturesController extends Controller
         $deliveryId = DnoFoodVenturesDeliveryReceipt::with(['user', 'delivery_receipts'])
                         ->where('id', $id)
                         ->get();
-        
-        
+      
         $deliveryReceipts = DnoFoodVenturesDeliveryReceipt::where('dr_id', $id)->get()->toArray();
 
         //count the total unit price
@@ -3516,24 +3515,26 @@ class DnoFoodVenturesController extends Controller
                             ->where('dno_food_ventures_codes.module_name', $moduleName)
                             ->get();
 
-          //getParticular details
-          $getParticulars = DnoFoodVenturesPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
-      
+        $getParticulars = DnoFoodVenturesPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
 
-          $payablesVouchers = DnoFoodVenturesPaymentVoucher::where('pv_id', $id)->get()->toArray();
+        $getChequeNumbers = DnoFoodVenturesPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
+
+        $getCashAmounts = DnoFoodVenturesPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
+        
+        $amount1 = DnoFoodVenturesPaymentVoucher::where('id', $id)->sum('amount');
+        $amount2 = DnoFoodVenturesPaymentVoucher::where('pv_id', $id)->sum('amount');
+        
+        $sum = $amount1 + $amount2;
+        
+        //
+        $chequeAmount1 = DnoFoodVenturesPaymentVoucher::where('id', $id)->sum('cheque_amount');
+        $chequeAmount2 = DnoFoodVenturesPaymentVoucher::where('pv_id', $id)->sum('cheque_amount');
+        
+        $sumCheque = $chequeAmount1 + $chequeAmount2;
+
   
-            //count the total amount 
-          $countTotalAmount = DnoFoodVenturesPaymentVoucher::where('id', $id)->sum('amount_due');
-  
-  
-            //
-          $countAmount = DnoFoodVenturesPaymentVoucher::where('pv_id', $id)->sum('amount_due');
-  
-          $sum  = $countTotalAmount + $countAmount;
-         
-  
-          $pdf = PDF::loadView('printPayablesDNOFoodVentures', compact('payableId',  'payablesVouchers', 'sum', 'getParticulars'));
-  
+          $pdf = PDF::loadView('printPayablesDNOFoodVentures',  compact('payableId',  
+          'getChequeNumbers', 'getCashAmounts', 'sum', 'getParticulars', 'sumCheque'));
           return $pdf->download('dno-food-ventures-payment-voucher.pdf');
   
         

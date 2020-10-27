@@ -2777,7 +2777,7 @@ class DnoResourcesDevelopmentController extends Controller
          
          $sumCheque = $chequeAmount1 + $chequeAmount2;
 
-         return view('dno-resources-payables-detail', compact('user', 'transactionList', 'getChequeNumbers','sum', 
+         return view('dno-resources-payables-detail', compact('transactionList', 'getChequeNumbers','sum', 
             'getParticulars', 'sumCheque', 'getCashAmounts'));
     }
 
@@ -2831,7 +2831,7 @@ class DnoResourcesDevelopmentController extends Controller
 
         $totalAmoutDue = DnoResourcesDevelopmentCorpPaymentVoucher::where('pv_id', NULL)->where('status' ,'!=', $status)->sum('amount_due');
 
-        return view('dno-resources-transaction-list', compact('user', 'getTransactionLists', 'totalAmoutDue'));
+        return view('dno-resources-transaction-list', compact('getTransactionLists', 'totalAmoutDue'));
     }
 
     //

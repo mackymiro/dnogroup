@@ -4213,24 +4213,28 @@ class LoloPinoyGrillCommissaryController extends Controller
                             ->get();
 
 
-        //getParticular details
-        $getParticulars = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
-      
-
-        $payablesVouchers = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->get()->toArray();
-
-          //count the total amount 
-        $countTotalAmount = LoloPinoyGrillCommissaryPaymentVoucher::where('id', $id)->sum('amount_due');
-
-
+         //getParticular details
+         $getParticulars = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+        
+         $getChequeNumbers = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
+ 
+         $getCashAmounts = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
+         
+          $amount1 = LoloPinoyGrillCommissaryPaymentVoucher::where('id', $id)->sum('amount');
+          $amount2 = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->sum('amount');
+            
+          $sum = $amount1 + $amount2;
+          
           //
-        $countAmount = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->sum('amount_due');
-
-        $sum  = $countTotalAmount + $countAmount;
+          $chequeAmount1 = LoloPinoyGrillCommissaryPaymentVoucher::where('id', $id)->sum('cheque_amount');
+          $chequeAmount2 = LoloPinoyGrillCommissaryPaymentVoucher::where('pv_id', $id)->sum('cheque_amount');
+          
+          $sumCheque = $chequeAmount1 + $chequeAmount2;
        
 
-        $pdf = PDF::loadView('printPayablesLoloPinoyGrillCommissary', compact('payableId', 'user', 'payablesVouchers', 'getParticulars', 'sum'));
-
+        $pdf = PDF::loadView('printPayablesLoloPinoyGrillCommissary', compact('payableId',  
+        'getChequeNumbers', 'getCashAmounts', 'sum', 'getParticulars', 'sumCheque'));
+        
         return $pdf->download('lolo-pinoy-grill-commissary-payment-voucher.pdf');
     }
 

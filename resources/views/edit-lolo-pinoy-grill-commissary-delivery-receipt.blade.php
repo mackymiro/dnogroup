@@ -80,7 +80,9 @@
                                   <?php
                                       $prodArr = $getDeliveryReceipt['product_id'];
                                       $prodExp = explode("-", $prodArr);
+
                                   ?>
+                              
                                   <option value="0">--Please Select--</option>
                                   @foreach($getRawMaterials as $getRawMaterial)
                                   <option value="{{ $getRawMaterial->id}}-{{ $getRawMaterial->product_id_no}}" <?= ($prodExp[1] == $getRawMaterial->product_id_no) ? 'selected="selected"' : '' ?>>{{ $getRawMaterial->product_id_no}}</option>

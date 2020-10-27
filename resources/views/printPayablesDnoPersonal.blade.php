@@ -165,7 +165,7 @@
                                             $
 
                                             @endif 	
-										<?php echo number_format($payableId[0]->amount, 2); ?></td>
+										<?= number_format($payableId[0]->amount, 2); ?></td>
 									</tr>
 
 									@foreach($getParticulars as $getParticular)
@@ -178,7 +178,7 @@
                                             $
 
                                             @endif 	
-										<?php echo number_format($getParticular['amount'], 2); ?>
+										<?= number_format($getParticular['amount'], 2); ?>
 										</td>
 									</tr>
 									@endforeach
@@ -209,9 +209,9 @@
 	                                        <td style=" text-align:center; border: 1px solid black;"><strong>Total</strong></td>
 	                                        <td style=" text-align:center; border: 1px solid black; font-size:18px;"> 
 												@if($sumCheque != 0.00)
-													<?php echo number_format($sumCheque, 2);?>
+													<?= number_format($sumCheque, 2);?>
 												@else
-												<?php echo number_format($sum, 2); ?>
+												<?= number_format($sum, 2); ?>
 												@endif	
 											</td>
 	                                      </tr>
@@ -229,9 +229,9 @@
 												<?php 
 													$sumTot = $sum - $sumCheque;
 												?>
-												<?php echo number_format($sumTot, 2);?>
+												<?= number_format($sumTot, 2);?>
 											@else
-											<?php echo number_format($sum, 2); ?>
+											<?= number_format($sum, 2); ?>
 											@endif	
 										</td>
 									</tr>
@@ -258,7 +258,7 @@
                                             $
 
                                             @endif 	
-										  <?php echo number_format($getCashAmount['cheque_amount'], 2);?></td>
+										  <?= number_format($getCashAmount['cheque_amount'], 2);?></td>
                                         </tr> 
                                         @endforeach
                                       
@@ -272,9 +272,9 @@
                                             $
 											@endif 	
 											@if($sumCheque != 0.00)
-												<?php echo number_format($sumCheque, 2);?>
+												<?= number_format($sumCheque, 2);?>
 											@else
-											<?php echo number_format($sum, 2); ?>
+											<?= number_format($sum, 2); ?>
 											@endif
 											</td>
 	                                      </tr>

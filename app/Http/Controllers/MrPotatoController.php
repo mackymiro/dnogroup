@@ -3571,22 +3571,26 @@ class MrPotatoController extends Controller
                             ->where('mr_potato_codes.module_name', $moduleName)
                             ->get();
 
-        $payablesVouchers = MrPotatoPaymentVoucher::where('pv_id', $id)->get()->toArray();
+       //getParticular details
+       $getParticulars = MrPotatoPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
+    
+       $getChequeNumbers = MrPotatoPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
-        //getParticular details
-        $getParticulars = MrPotatoPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
-     
-
-          //count the total amount 
-        $countTotalAmount = MrPotatoPaymentVoucher::where('id', $id)->sum('amount_due');
-
-         //
-        $countAmount = MrPotatoPaymentVoucher::where('pv_id', $id)->sum('amount_due');
-
-        $sum  = $countTotalAmount + $countAmount;
+       $getCashAmounts = MrPotatoPaymentVoucher::where('pv_id', $id)->where('cheque_amount', '!=', NULL)->get()->toArray();
        
-         $pdf = PDF::loadView('printPayablesMrPotato', compact('payableId',  'payablesVouchers', 'sum', 'getParticulars'));
-
+       $amount1 = MrPotatoPaymentVoucher::where('id', $id)->sum('amount');
+       $amount2 = MrPotatoPaymentVoucher::where('pv_id', $id)->sum('amount');
+           
+       $sum = $amount1 + $amount2;
+       
+       //
+       $chequeAmount1 = MrPotatoPaymentVoucher::where('id', $id)->sum('cheque_amount');
+       $chequeAmount2 = MrPotatoPaymentVoucher::where('pv_id', $id)->sum('cheque_amount');
+       
+       $sumCheque = $chequeAmount1 + $chequeAmount2;
+       
+         $pdf = PDF::loadView('printPayablesMrPotato',  compact('payableId',  
+         'getChequeNumbers', 'getCashAmounts', 'sum', 'getParticulars', 'sumCheque'));
         return $pdf->download('mr-potato-payment-voucher.pdf');
     }  
 

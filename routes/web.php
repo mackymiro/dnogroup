@@ -6481,6 +6481,102 @@ Route::group(['middleware' => ['auth']], function(){
 		'DnoFoundationIncController@printMultipleSummary')
 		->name('printMultipleSummary')
 		->middleware(['cashier']);
+
+	/*
+	*
+	* WIMPYS FOOD EXPRESS INC
+	*
+	*/
+
+	Route::get(
+		'/wimpys-food-express',
+		'WimpysFoodExpressController@index')
+		->name('index')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/payment-voucher-form',
+		'WimpysFoodExpressController@paymentVoucherForm')
+		->name('paymentVoucherFormWimpys')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/wimpys-food-express/payment-voucher-store',
+		'WimpysFoodExpressController@paymentVoucherStore')
+		->name('paymentVoucherStoreWimpysFoodExpress')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/edit-wimpys-food-express-payables-detail',
+		'WimpysFoodExpressController@editPayablesDetail')
+		->name('editPayablesDetailWimpysFoodExpress')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/wimpys-food-express/{id}/add-particulars',
+		'WimpysFoodExpressController@addParticulars')
+		->name('addParticularsWimpysFoodExpress')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/wimpys-food-exppress/{id}/add-payment',
+		'WimpysFoodExpressController@addPayment')
+		->name('addPaymentWimpysFoodExpress')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/wimpys-food-express/payables/update-cash/{id}',
+		'WimpysFoodExpressController@updateCash')
+		->name('updateCash')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/wimpys-food-express/payables/update-check/{id}',
+		'WimpysFoodExpressController@updateCheck')
+		->name('updateCheck')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/wimpys-food-express/payables/updateP/{id}',
+		'WimpysFoodExpressController@updateP')
+		->name('updateP')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/wimpys-food-express/payables/update-particulars/{id}',
+		'WimpysFoodExpressController@updateParticulars')
+		->name('updateParticulars')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/wimpys-food-express/payables/update-details/{id}',
+		'WimpysFoodExpressController@updateDetails')
+		->name('updateDetails')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/wimpys-food-express/{id}/accept',
+		'WimpysFoodExpressController@accept')
+		->name('acceptWimpysFoodExpress')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/payables/transaction-list',
+		'WimpysFoodExpressController@transactionList')
+		->name('transactionList')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/view-wimpys-food-express-payables-detail',
+		'WimpysFoodExpressController@viewPayableDetails')
+		->name('viewPayableDetailsWimpysFoodExpress')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/printPayables',
+		'WimpysFoodExpressController@printPayables')
+		->name('printPayables')
+		->middleware(['cashier']);
 });
 
 

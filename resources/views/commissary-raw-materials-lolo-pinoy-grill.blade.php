@@ -73,7 +73,8 @@
 											<a data-toggle="modal" data-target="#rawM<?= $getRawMaterial->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
 											
 											@if(Auth::user()['role_type'] != 3 && Auth::user()['role_type'] != 2)
-											<a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getRawMaterial->id }}')" title="Delete"><i class="fas fa-trash"></i></a>
+											<!--<a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getRawMaterial->id }}')" title="Delete"><i class="fas fa-trash"></i></a>
+											-->
 											@endif
 											</td>
 											<td>{{ $getRawMaterial->product_id_no }}</td>

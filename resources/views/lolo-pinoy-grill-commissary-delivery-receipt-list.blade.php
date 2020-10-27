@@ -75,7 +75,11 @@
                                                         $prodExp = explode("-", $prodArr);
                                                         
                                                     ?>
-					  								<p style="width:180px;">{{ $prodExp[1] }}</p>
+													<?php if(isset($prodExp)): ?>
+														<p style="width:180px;"></p>
+													<?php else:?>
+														<p style="width:180px;">{{ $prodExp[1] }}</p>
+													<?php endif; ?>
 				  									
 				  								</td>
 					  							<td>{{ $getAllDeliveryReceipt->qty}}</td>

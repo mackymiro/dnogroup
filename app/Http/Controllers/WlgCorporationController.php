@@ -2198,7 +2198,7 @@ class WlgCorporationController extends Controller
          $getParticulars = WlgCorporationPaymentVoucher::where('pv_id', $id)->where('particulars', '!=', NULL)->get()->toArray();
         
 
-        return view('view-wlg-corporation-payable-details', compact('user', 'viewPaymentDetail', 'getViewPaymentDetails', 'getParticulars'));
+        return view('view-wlg-corporation-payable-details', compact('viewPaymentDetail', 'getViewPaymentDetails', 'getParticulars'));
    
     }
 

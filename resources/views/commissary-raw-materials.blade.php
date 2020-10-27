@@ -70,7 +70,8 @@
 											  <a data-toggle="modal" data-target="#rawM<?php echo $getRawMaterial->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
 											
 					                      	<?php if(Auth::user()['role_type'] != 3): ?>
-											  <a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getRawMaterial->id }}')" title="Delete"><i class="fas fa-trash"></i></a>
+											<!--  <a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getRawMaterial->id }}')" title="Delete"><i class="fas fa-trash"></i></a>
+											  -->
 											  <?php endif;?>
 		  									</td>
 					                        <td>{{ $getRawMaterial->product_id_no }}</td>

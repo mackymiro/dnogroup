@@ -24,14 +24,13 @@
 	 <div id="content-wrapper">
  		<div class="container-fluid">
  				<div  style="margin-top:-10px;">
-            	 <img style="margin-left: 5px;" src="{{ asset('images/digitized-logos/lolo-pinoy-lechon-de-cebu-pdf-small.png')}}"   alt="Lechon de Cebu">
-            	 	 <p style="margin-top:-50px; margin-left:110px;text-align:left;">
+            	 <img style="margin-left:5px;" src="{{ asset('images/digitized-logos/wimpys-logo.png')}}"  alt="Wimpy's Food Express">
+            	 	 <p style="margin-top:-80px; margin-left:100px;text-align:left;">
 		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
 						Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
 
 						Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
-            	 	 </p>
-					 @if($payableId[0]->method_of_payment === "CASH")
+            	 	 </p00	            	@if($payableId[0]->method_of_payment === "CASH")
 	            	 <h4 ><u>PAYMENT CASH VOUCHER</u></h4>
 					 @else
 					 <h4 ><u>PAYMENT CHECK VOUCHER</u></h4>
@@ -46,47 +45,97 @@
                                     <table >
                                           <thead>
                                             <tr>
-                                                <th width="30%">Paid To</th>
+                                                <th width="25%">Paid To:</th>
                                                 <th> {{ $payableId[0]->paid_to }}</th>
                                             </tr>
+											@if($payableId[0]->method_of_payment  === "CHECK")
+											@if($payableId[0]->account_no != NULL)
+											<tr>
+												<th width="30%">Account No:</th>
+												<th> {{ $payableId[0]->account_no }}</th>
+											</tr>
+											@endif
+											<tr>
+                                                <th width="25%">Account Name:</th>
+                                                <th> {{ $payableId[0]->account_name }}</th>
+                                            </tr>
+											@if($payableId[0]->bank_card != 0)
+											<tr>
+
+												 <?php
+                                                        $bankName = $payableId[0]->bank_card;
+                                                        $bankNameArr = explode("-", $bankName);
+                                            
+                                                     ?>
+                                                <th width="25%">Bank Name:</th>
+                                                <th> <?php echo $bankNameArr[1]	;?></th>
+                                            </tr>
+											@endif
+											@endif
+										
+											@if($payableId[0]->method_of_payment === "CASH")
+											@if($payableId[0]->account_no != NULL)
+												<tr>
+													<th width="30%">Account No:</th>
+													<th> {{ $payableId[0]->account_no }}</th>
+												</tr>
+											@endif
+										
+											<tr>
+                                                <th width="23%">Account Name:</th>
+                                                <th> {{ $payableId[0]->account_name }}</th>
+                                            </tr>
+											@if($payableId[0]->bank_card != 0)
+											<tr>
+												 <?php
+                                                        $bankName = $payableId[0]->bank_card;
+                                                        $bankNameArr = explode("-", $bankName);
+                                            
+                                                     ?>
+                                                <th width="25%">Bank Name:</th>
+                                                <th> <?php echo $bankNameArr[1];?></th>
+                                            </tr>
+											@endif
+											@endif 
+											
+										
                                             <tr>
-                                                <th>Status</th>
+                                                <th>Status:</th>
                                                 <th>{{ $payableId[0]->status }}</th>
                                             </tr>
-                                            <tr>
-                                                <th>Date</th>
-                                                <th> {{ $payableId[0]->issued_date }} </th>
-                                            </tr>
-											<tr>
-                                                <th width="30%">Account Name</th>
-                                                <th> {{ $payableId[0]->account_name }} </th>
-                                            </tr>
-                                           
+                                                                    
                                         </thead>
                                       
                                   </table>   
                              </div>
-							
+							 
 	                          <div style="float:right; width: 50%">
 	                              <table >
 	                                   <thead>
                                             <tr>
-                                                <th width="20%">Amount Due</th>
-                                                <th><?php echo number_format($payableId[0]->amount_due, 2);?></th>
+                                                <th width="20%">Amount Due:</th>
+                                                <th><?php echo number_format($sum, 2);?></th>
                                             </tr>
                                             <tr>
-                                                <th>Invoice #</th>
+                                                <th>Invoice No:</th>
                                                 <th> {{ $payableId[0]->invoice_number }}</th>
                                             </tr>
 											<tr>
-                                                <th>PV No</th>
-                                                <th>{{ $payableId[0]->module_code}}{{ $payableId[0]->lechon_de_cebu_code }}</th>
+                                                <th>PV No:</th>
+                                                <th>{{ $payableId[0]->module_code}}{{ $payableId[0]->dno_personal_code}} </th>
                                             </tr>
 											<tr>
-												<th width="30%">Payment Method</th>
+												<th>Payment Method:</th>
 												<th>{{ $payableId[0]->method_of_payment}}</th>
 											</tr>
-                                           
+                                            <tr>
+                                                <th>Date Issued:</th>
+                                                <th> {{ $payableId[0]->issued_date }} </th>
+                                            </tr> 
+											<tr>
+                                                <th>Currency:</th>
+                                                <th> {{ $payableId[0]->currency }} </th>
+                                            </tr>  
                                         </thead>
 	                              </table>
 	                          </div>
@@ -97,6 +146,7 @@
                           <br>
 						  <br>
 						  <br>
+
 						  <table style="border:1px solid black;">
 								<thead>
 									<tr>
@@ -109,19 +159,34 @@
 									<tr style="border: 1px solid black;">
 										<td style="text-align:center; border: 1px solid black;">{{ $payableId[0]->issued_date}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $payableId[0]->particulars}}</td>
-										<td style="text-align:center; border: 1px solid black; font-size:18px;"><?php echo number_format($payableId[0]->amount, 2); ?></td>
+										<td style="text-align:center; border: 1px solid black; font-size:18px;">
+										
+                                            @if($payableId[0]->currency === "USD")
+                                            $
+
+                                            @endif 	
+										<?php echo number_format($payableId[0]->amount, 2); ?></td>
 									</tr>
+
 									@foreach($getParticulars as $getParticular)
 									<tr style="border:1px solid black;">
 										<td style="text-align:center; border: 1px solid black;">{{ $getParticular['date']}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $getParticular['particulars']}}</td>
-										<td style="text-align:center; border: 1px solid black; font-size:18px;"><?= number_format($getParticular['amount'], 2); ?></td>
+										<td style="text-align:center; border: 1px solid black; font-size:18px;">
+									
+                                            @if($getParticular['currency'] === "USD")
+                                            $
+
+                                            @endif 	
+										<?php echo number_format($getParticular['amount'], 2); ?>
+										</td>
 									</tr>
 									@endforeach
-								</tbody>	
+								</tbody>
 						  </table>
-						  <br>
-                          @if($payableId[0]->method_of_payment === "CHECK")
+                          <br>
+                        
+						  @if($payableId[0]->method_of_payment === "CHECK")
                           <table style="border:1px solid black;">
                           		  <thead>
                                       <tr>
@@ -144,9 +209,9 @@
 	                                        <td style=" text-align:center; border: 1px solid black;"><strong>Total</strong></td>
 	                                        <td style=" text-align:center; border: 1px solid black; font-size:18px;"> 
 												@if($sumCheque != 0.00)
-													<?= number_format($sumCheque, 2);?>
+													<?php echo number_format($sumCheque, 2);?>
 												@else
-												<?= number_format($sum, 2); ?>
+												<?php echo number_format($sum, 2); ?>
 												@endif	
 											</td>
 	                                      </tr>
@@ -164,9 +229,9 @@
 												<?php 
 													$sumTot = $sum - $sumCheque;
 												?>
-												<?= number_format($sumTot, 2);?>
+												<?php echo number_format($sumTot, 2);?>
 											@else
-											<?= number_format($sum, 2); ?>
+											<?php echo number_format($sum, 2); ?>
 											@endif	
 										</td>
 									</tr>
@@ -189,8 +254,11 @@
                                          
                                           <td style="text-align:center; border: 1px solid black; font-size:18px;" >
 										
-        
-										  <?= number_format($getCashAmount['cheque_amount'], 2);?></td>
+                                            @if($getCashAmount['currency'] === "USD")
+                                            $
+
+                                            @endif 	
+										  <?php echo number_format($getCashAmount['cheque_amount'], 2);?></td>
                                         </tr> 
                                         @endforeach
                                       
@@ -200,11 +268,13 @@
 	                                        <td style=" text-align:center; border: 1px solid black;"><strong>Total</strong></td>
 	                                        <td style=" text-align:center; border: 1px solid black; font-size:18px;"> 
 											
-                                          
+                                            @if($payableId[0]->currency === "USD")
+                                            $
+											@endif 	
 											@if($sumCheque != 0.00)
-												<?= number_format($sumCheque, 2);?>
+												<?php echo number_format($sumCheque, 2);?>
 											@else
-											<?= number_format($sum, 2); ?>
+											<?php echo number_format($sum, 2); ?>
 											@endif
 											</td>
 	                                      </tr>
@@ -222,9 +292,9 @@
 												<?php 
 													$sumTot = $sum - $sumCheque;
 												?>
-												<?= number_format($sumTot, 2);?>
+												<?php echo number_format($sumTot, 2);?>
 											@else
-											<?= number_format($sum, 2); ?>
+											<?php echo number_format($sum, 2); ?>
 											@endif	
 										</td>
 									</tr>
@@ -233,6 +303,7 @@
 						  @endif
 						  <br>
 						  <br>
+						  @if($payableId[0]->method_of_payment != "CASH")
 						  <table style="border:1px solid black;">
 								<thead>
 									<tr>
@@ -253,16 +324,15 @@
 							</tbody>
                                 
                           </table>
-						
-                           <div style="margin-top:50px;">
+						  @endif
+                           <div style="margin-top:70px;">
                            		<table  >
                            			<thead>
                            				<tr>
                        						<th style="width:30%;">Prepared By</th>
-											<th>Checked By</th></th>
+											<th>Checked By</th>
                        						<th>Approved By</th>
 											<th>Date</th>
-											
                            				</tr>
                            			</thead>
                            			<tbody>
@@ -272,26 +342,25 @@
                            						{{ $payableId[0]->created_by}}
 
                            					</td>
-                           					<td>
+											<td>
                            						________________________<br>
                            						Aprilane Q Maturan<br>
                            						Finance Officer
                            					</td>
-											<td>
+                           					<td>
                            						________________________<br>
                            						
                            					</td>
 											<td>
-                           						________________________<br>
-                           						
-                           					</td>
+												________________________
+											</td>
                            					
                            				</tr>
                            			</tbody>
                            		</table>
                            	
                            </div>
-						   <div style="margin-top:30px;">
+						   <div style="margin-top:100px;">
                            		<table  >
                            			<thead>
                            				<tr>
