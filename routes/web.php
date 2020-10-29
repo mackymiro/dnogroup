@@ -6163,6 +6163,67 @@ Route::group(['middleware' => ['auth']], function(){
 		->middleware(['cashier']);
 
 	Route::get(
+		'/dno-holdings-co/purchase-order',
+		'DnoHoldingsCoController@purchaseOrder')
+		->name('purchaseOrder')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-holdings-co/store',
+		'DnoHoldingsCoController@store')
+		->name('store')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/{id}/edit',
+		'DnoHoldingsCoController@edit')
+		->name('editDnoHoldingsCo')
+		->middleware(['cashier']);
+		
+
+	Route::post(
+		'/dno-holdings-co/{id}/add-new-purchase',
+		'DnoHoldingsCoController@addNewPurchaseOrder')
+		->name('addNewPurchaseOrder')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-holdings-co/{id}/update-po',
+		'DnoHoldingsCoController@updatePo')
+		->name('updatePo')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dno-holings-co/delete/{id}',
+		'DnoHoldingsCoController@destroy')
+		->name('destroy')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/purchase-order-lists',
+		'DnoHoldingsCoController@purchaseOrderList')
+		->name('purchaseOrderList')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dno-holdings-co/delete/PO/{id}',
+		'DnoHoldingsCoController@destroyPO')
+		->name('destroyPO')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/{id}/view',
+		'DnoHoldingsCoController@show')
+		->name('show')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/{id}/printPO',
+		'DnoHoldingsCoController@printPO')
+		->name('printPO')
+		->middleware(['cashier']);
+
+	Route::get(
 		'/dno-holdings-co/payment-voucher-form',
 		'DnoHoldingsCoController@paymentVoucherForm')
 		->name('paymentVoucherFormDnoHoldingsCo')

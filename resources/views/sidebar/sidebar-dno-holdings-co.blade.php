@@ -30,6 +30,19 @@
           
         </div>
       </li>
+      <li class="nav-item dropdown ">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           <i class="fab fa-first-order"></i>
+          <span>Purchase Order</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+         
+          <a class="dropdown-item" href="{{ url('dno-holdings-co/purchase-order') }}">P.O Form</a>
+        
+          <a class="dropdown-item" href="{{ url('dno-holdings-co/purchase-order-lists') }}">Lists</a>
+         
+        </div>
+      </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fa fa-industry" aria-hidden="true"></i>

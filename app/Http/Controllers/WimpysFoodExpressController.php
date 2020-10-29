@@ -46,7 +46,6 @@ class WimpysFoodExpressController extends Controller
                                                 ->orderBy('id', 'desc')
                                                 ->get(); 
        
-
         return view('wimpys-food-express-purchase-order-list', compact('purchaseOrders'));
     }
 
