@@ -35,7 +35,7 @@
  <div id="app">
         <nav class="navbar navbar-expand navbar-dark bg-dark static-top">
 
-    <a class="navbar-brand mr-1" href="{{ url('/dno-holdings-co') }}">DNO Foundation Inc</a>
+    <a class="navbar-brand mr-1" href="{{ url('/dno-foundation-inc') }}">DNO Foundation Inc</a>
 
     <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
       <i class="fas fa-bars"></i>

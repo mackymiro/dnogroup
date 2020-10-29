@@ -24,8 +24,8 @@
 	 <div id="content-wrapper">
  		<div class="container-fluid">
  				<div  style="margin-top:-10px;">
-            	 <img style="margin-left:5px;" src="{{ asset('images/digitized-logos/wimpys-logo.png')}}"  alt="Wimpy's Food Express">
-            	 	 <p style="margin-top:-80px; margin-left:100px;text-align:left;">
+            	 <img style="margin-left:5px;" src="{{ asset('images/digitized-logos/wimpys-logo1.png')}}"  alt="Wimpy's Food Express">
+            	 	 <p style="margin-top:-80px; margin-left:150px;text-align:left;">
 		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
 						Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
 
@@ -122,7 +122,13 @@
                                             </tr>
 											<tr>
                                                 <th>PV No:</th>
-                                                <th>{{ $payableId[0]->module_code}}{{ $payableId[0]->dno_personal_code}} </th>
+                                                <th>
+													@foreach($payableId[0]->payment_vouchers as $voucher)
+														@if($voucher->module_name === "Payment Voucher")
+														{{ $voucher->module_code}}{{ $voucher->wimpys_food_express_code}} 
+														@endif
+													@endforeach
+												</th>
                                             </tr>
 											<tr>
 												<th>Payment Method:</th>

@@ -359,7 +359,7 @@
             <div class="card text-white bg-info o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                     <img src="{{ asset('images/digitized-logos/wimpys-logo.jpg')}}" width="250" height="100" class="img-responsive mx-auto d-block" alt="DNO Personal ">
+                     <img src="{{ asset('images/digitized-logos/wimpys-logo1.jpg')}}" width="250" height="100" class="img-responsive mx-auto d-block" alt="DNO Personal ">
                 </div>
                 <div class="mr-5">Wimpy's Food Express Inc</div>
               </div>

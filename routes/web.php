@@ -6577,6 +6577,32 @@ Route::group(['middleware' => ['auth']], function(){
 		'WimpysFoodExpressController@printPayables')
 		->name('printPayables')
 		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/suppliers',
+		'WimpysFoodExpressController@supplier')
+		->name('supplier')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/wimpys-food-express/supplier/add',
+		'WimpysFoodExpressController@addSupplier')
+		->name('addSupplier')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/suppliers/{id}/view',
+		'WimpysFoodExpressController@viewSupplier')
+		->name('viewSupplier')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/supplier/{id}/print',
+		'WimpysFoodExpressController@printSupplier')
+		->name('printSupplier')
+		->middleware(['cashier']);
+	
+
 });
 
 

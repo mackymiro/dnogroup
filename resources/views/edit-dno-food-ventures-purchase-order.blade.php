@@ -215,7 +215,7 @@
                                     </div>
                                      <div class="col-lg-4">
                                       <br>
-                                      <input type="hidden" id="poId" name="poId" value="{{ $purchaseOrder['id'] }}" />
+                                      <input type="hidden" id="poId" name="poId" value="{{ $purchaseOrder[0]->id }}" />
                                       <input type="submit" class="btn btn-success" value="Update" />
                                       @if(Auth::user()['role_type'] == 1)
                                       <a id="delete" onClick="confirmDelete('{{ $pOrder['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>

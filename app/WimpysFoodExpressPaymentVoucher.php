@@ -54,4 +54,5 @@ class WimpysFoodExpressPaymentVoucher extends Model
 		return $this->hasMany('App\WimpysFoodExpressCode',  'module_id');
 	}
 
+
 }

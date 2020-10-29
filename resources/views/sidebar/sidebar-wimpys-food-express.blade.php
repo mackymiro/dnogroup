@@ -13,8 +13,8 @@
           <span>Summary Report(s)</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-            <a class="dropdown-item" href="{{ url('dno-foundation-inc/summary-report') }}">Summary Report(s)</a>
-            <a class="dropdown-item" href="{{ url('dno-foundation-inc/summary-report/search-number-code') }}">Search Number Code</a>
+            <a class="dropdown-item" href="#">Summary Report(s)</a>
+            <a class="dropdown-item" href="#">Search Number Code</a>
       
         </div>
       </li>
@@ -30,7 +30,18 @@
           
         </div>
       </li>
-    
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-industry" aria-hidden="true"></i>
+
+
+          <span>Suppliers</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+            <a class="dropdown-item" href="{{ url('wimpys-food-express/suppliers') }}"> Suppliers</a>
+            
+        </div>
+      </li>
      
       @if(Auth::user()['role_type'] != 3)
   	   <li class="nav-item dropdown ">

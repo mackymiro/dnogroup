@@ -7,12 +7,155 @@ use Illuminate\Support\Facades\DB;
 
 use Auth;
 use Session;
+use PDF;
 use App\User;
 use App\WimpysFoodExpressPaymentVoucher;
 use App\WimpysFoodExpressCode;
+use App\WimpysFoodExpressSupplier;
 
 class WimpysFoodExpressController extends Controller
 {
+
+    public function printSupplier($id){
+        $printSuppliers =  WimpysFoodExpressSupplier::with(['user', 'suppliers'])
+                                                ->where('id', $id)
+                                                ->get(); 
+
+        $status = "FULLY PAID AND RELEASED";
+        $totalAmountDue  = DB::table(
+                            'wimpys_food_express_payment_vouchers')
+                            ->select( 
+                            'wimpys_food_express_payment_vouchers.id',
+                            'wimpys_food_express_payment_vouchers.user_id',
+                            'wimpys_food_express_payment_vouchers.pv_id',
+                            'wimpys_food_express_payment_vouchers.date',
+                            'wimpys_food_express_payment_vouchers.paid_to',
+                            'wimpys_food_express_payment_vouchers.account_no',
+                            'wimpys_food_express_payment_vouchers.account_name',
+                            'wimpys_food_express_payment_vouchers.particulars',
+                            'wimpys_food_express_payment_vouchers.amount',
+                            'wimpys_food_express_payment_vouchers.method_of_payment',
+                            'wimpys_food_express_payment_vouchers.prepared_by',
+                            'wimpys_food_express_payment_vouchers.approved_by',
+                            'wimpys_food_express_payment_vouchers.date_approved',
+                            'wimpys_food_express_payment_vouchers.received_by_date',
+                            'wimpys_food_express_payment_vouchers.created_by',
+                            'wimpys_food_express_payment_vouchers.created_at',
+                            'wimpys_food_express_payment_vouchers.invoice_number',
+                            'wimpys_food_express_payment_vouchers.issued_date',
+                            'wimpys_food_express_payment_vouchers.category',
+                            'wimpys_food_express_payment_vouchers.amount_due',
+                            'wimpys_food_express_payment_vouchers.delivered_date',
+                            'wimpys_food_express_payment_vouchers.status',
+                            'wimpys_food_express_payment_vouchers.cheque_number',
+                            'wimpys_food_express_payment_vouchers.cheque_amount',
+                            'wimpys_food_express_payment_vouchers.sub_category',
+                            'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                            'wimpys_food_express_payment_vouchers.supplier_id',
+                            'wimpys_food_express_payment_vouchers.supplier_name',
+                            'wimpys_food_express_payment_vouchers.deleted_at',
+                            'wimpys_food_express_suppliers.id',
+                            'wimpys_food_express_suppliers.date',
+                            'wimpys_food_express_suppliers.supplier_name')
+                            ->leftJoin('wimpys_food_express_suppliers', 'wimpys_food_express_payment_vouchers.supplier_id', '=', 'wimpys_food_express_suppliers.id')
+                            ->where('wimpys_food_express_suppliers.id', $id)
+                            ->where('wimpys_food_express_payment_vouchers.status', '!=', $status)
+                            ->sum('amount_due');
+                                        
+        
+        $pdf = PDF::loadView('printSupplierWimpys', compact('printSuppliers', 'totalAmountDue'));
+
+        return $pdf->download('wimpys-food-express-supplier.pdf');
+    }
+
+    public function viewSupplier($id){
+        $viewSuppliers =  WimpysFoodExpressSupplier::with(['user', 'suppliers'])
+                                                ->where('id', $id)
+                                                ->get();
+
+        $status = "FULLY PAID AND RELEASED";
+        $totalAmountDue  = DB::table(
+                            'wimpys_food_express_payment_vouchers')
+                            ->select( 
+                            'wimpys_food_express_payment_vouchers.id',
+                            'wimpys_food_express_payment_vouchers.user_id',
+                            'wimpys_food_express_payment_vouchers.pv_id',
+                            'wimpys_food_express_payment_vouchers.date',
+                            'wimpys_food_express_payment_vouchers.paid_to',
+                            'wimpys_food_express_payment_vouchers.account_no',
+                            'wimpys_food_express_payment_vouchers.account_name',
+                            'wimpys_food_express_payment_vouchers.particulars',
+                            'wimpys_food_express_payment_vouchers.amount',
+                            'wimpys_food_express_payment_vouchers.method_of_payment',
+                            'wimpys_food_express_payment_vouchers.prepared_by',
+                            'wimpys_food_express_payment_vouchers.approved_by',
+                            'wimpys_food_express_payment_vouchers.date_approved',
+                            'wimpys_food_express_payment_vouchers.received_by_date',
+                            'wimpys_food_express_payment_vouchers.created_by',
+                            'wimpys_food_express_payment_vouchers.created_at',
+                            'wimpys_food_express_payment_vouchers.invoice_number',
+                            'wimpys_food_express_payment_vouchers.issued_date',
+                            'wimpys_food_express_payment_vouchers.category',
+                            'wimpys_food_express_payment_vouchers.amount_due',
+                            'wimpys_food_express_payment_vouchers.delivered_date',
+                            'wimpys_food_express_payment_vouchers.status',
+                            'wimpys_food_express_payment_vouchers.cheque_number',
+                            'wimpys_food_express_payment_vouchers.cheque_amount',
+                            'wimpys_food_express_payment_vouchers.sub_category',
+                            'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                            'wimpys_food_express_payment_vouchers.supplier_id',
+                            'wimpys_food_express_payment_vouchers.supplier_name',
+                            'wimpys_food_express_payment_vouchers.deleted_at',
+                            'wimpys_food_express_suppliers.id',
+                            'wimpys_food_express_suppliers.date',
+                            'wimpys_food_express_suppliers.supplier_name')
+                            ->leftJoin('wimpys_food_express_suppliers', 'wimpys_food_express_payment_vouchers.supplier_id', '=', 'wimpys_food_express_suppliers.id')
+                            ->where('wimpys_food_express_suppliers.id', $id)
+                            ->where('wimpys_food_express_payment_vouchers.status', '!=', $status)
+                            ->sum('amount_due');
+            
+        return view('view-wimpys-food-express-supplier', compact('viewSuppliers', 'totalAmountDue'));
+    }
+
+
+    public function addSupplier(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+            //check if supplier name exits
+        $target = DB::table(
+                'wimpys_food_express_suppliers')
+                ->where('supplier_name', $request->supplierName)
+                ->get()->first();
+
+        if($target === NULL){
+            $supplier = new WimpysFoodExpressSupplier([
+                'user_id'=>$user->id,
+                'date'=>$request->date,
+                'supplier_name'=>$request->supplierName, 
+                'created_by'=>$name,
+            ]);
+
+            $supplier->save();
+            return response()->json('Success: successfully updated.');      
+        }else{
+            return response()->json('Failed: Already exist.');
+        }
+
+
+
+    }
+    public function supplier(){
+        $suppliers = WimpysFoodExpressSupplier::with(['user', 'suppliers'])
+                                            ->orderBy('id', 'desc')
+                                            ->get();
+        return view('wimpys-food-express-supplier', compact('suppliers'));
+    }
 
     public function printPayables($id){
         $payableId = WimpysFoodExpressPaymentVoucher::with(['user','payment_vouchers'])
@@ -388,6 +531,13 @@ class WimpysFoodExpressController extends Controller
             $subCat = NULL;
             $subCatAccountId = NULL;
 
+        }else if($request->get('category') === "Supplier"){
+            
+            $supplier = $request->get('supplierName');
+            $supplierExp = explode("-", $supplier);
+
+            $subCat = NULL;
+            $subCatAccountId = NULL;
         }
 
           //check if invoice number already exists
@@ -411,6 +561,8 @@ class WimpysFoodExpressController extends Controller
                 'category'=>$request->get('category'),
                 'sub_category'=>$subCat,
                 'sub_category_account_id'=>$subCatAccountId,
+                'supplier_id'=>$supplierExp[0],
+                'supplier_name'=>$supplierExp[1],
                 'prepared_by'=>$name,
                 'created_by'=>$name,
 
@@ -442,9 +594,10 @@ class WimpysFoodExpressController extends Controller
   
     }
 
-    public function paymentVoucherForm(){
-
-        return view('payment-voucher-form-wimpys-food-express');
+    public function paymentVoucherForm(){   
+        $suppliers =  WimpysFoodExpressSupplier::with(['user', 'suppliers'])
+                                                 ->get();
+        return view('payment-voucher-form-wimpys-food-express', compact('suppliers'));
     }
 
     /**

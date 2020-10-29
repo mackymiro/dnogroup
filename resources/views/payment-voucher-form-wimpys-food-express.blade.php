@@ -34,7 +34,7 @@
               <li class="breadcrumb-item ">Payment Voucher Form</li>
             </ol>
              <div class="col-lg-12">
-            	 <img src="{{ asset('images/digitized-logos/wimpys-food-express.png')}}" width="350" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
+            	 <img src="{{ asset('images/digitized-logos/wimpys-logo1.jpg')}}" width="350" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
             	 
             	 <h4 class="text-center"><u>PAYMENT VOUCHER</u></h4>
             </div>
@@ -95,10 +95,17 @@
                                     <label>Category</label>
                                     <select  name="category" class="category form-control" > 
                                         <option value="None">None</option>
-                                       
+                                        <option value="Supplier">Supplier</option>
                                       </select>
                                 </div> 
-                              
+                                <div id="supplierList" class="col-lg-2">
+                                      <label>Supplier Name</label>
+                                      <select data-live-search="true" id="supplierName" name="supplierName" class="form-control selectpicker">
+                                          @foreach($suppliers as $supplier)
+                                            <option value="{{ $supplier['id']}}-{{ $supplier['supplier_name']}}">{{ $supplier['supplier_name']}}</option>
+                                          @endforeach
+                                      </select>
+                                  </div> 
                               
                              
                             </div>
