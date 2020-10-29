@@ -12,9 +12,94 @@ use App\User;
 use App\WimpysFoodExpressPaymentVoucher;
 use App\WimpysFoodExpressCode;
 use App\WimpysFoodExpressSupplier;
+use App\WimpysFoodExpressPurchaseOrder;
 
 class WimpysFoodExpressController extends Controller
 {
+
+    public function printPO($id){
+        $purchaseOrder =  WimpysFoodExpressPurchaseOrder::with(['user', 'purchase_orders'])
+                                            ->where('id', $id)                     
+                                            ->get(); 
+
+           
+        $pOrders = WimpysFoodExpressPurchaseOrder::where('po_id', $id)->get()->toArray();
+
+            //count the total amount 
+        $countTotalAmount = WimpysFoodExpressPurchaseOrder::where('id', $id)->sum('amount');
+    
+            //
+        $countAmount = WimpysFoodExpressPurchaseOrder::where('po_id', $id)->sum('amount');
+    
+        $sum  = $countTotalAmount + $countAmount;
+    
+    
+        $pdf = PDF::loadView('printPOWimpysFoodExpress', compact('purchaseOrder', 'pOrders', 'sum'));
+    
+        return $pdf->download('wimpys-food-express-purchase-order.pdf');
+    }
+
+    public function purchaseOrderList(){
+        $purchaseOrders =  WimpysFoodExpressPurchaseOrder::with(['user', 'purchase_orders'])
+                                                ->where('po_id', NULL)
+                                                ->where('deleted_at', NULL)
+                                                ->orderBy('id', 'desc')
+                                                ->get(); 
+       
+
+        return view('wimpys-food-express-purchase-order-list', compact('purchaseOrders'));
+    }
+
+    public function updatePo(Request $request, $id){
+        $order = WimpysFoodExpressPurchaseOrder::find($id);
+        $order->quantity = $request->get('quant');
+        $order->description = $request->get('desc');
+        $order->unit_price = $request->get('unitP');
+        $order->amount = $request->get('amt');
+
+        $order->save();
+
+        Session::flash('SuccessEdit', 'Successfully updated');
+        return redirect()->route('editWimpysFoodExpress', ['id'=>$request->get('poId')]);
+    }
+
+    public function addNewPurchaseOrder(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $pO = WimpysFoodExpressPurchaseOrder::find($id);
+    
+        $tot = $pO->total_price + $request->get('amount');
+
+        $addPurchaseOrder = new WimpysFoodExpressPurchaseOrder([
+            'user_id'=>$user->id,
+            'po_id'=>$id,
+            'quantity'=>$request->get('quantity'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$request->get('unitPrice'),
+            'amount'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+
+        $addPurchaseOrder->save();
+
+        //update
+        $pO->total_price = $tot;
+        $pO->save();
+
+        Session::flash('purchaseOrderSuccess', 'Successfully added purchase order');
+
+        return redirect()->route('editWimpysFoodExpress', ['id'=>$id]);
+    }
+
+    public function purchaseOrder(){
+        return view('wimpys-food-express-purchase-order');
+    }
 
     public function printSupplier($id){
         $printSuppliers =  WimpysFoodExpressSupplier::with(['user', 'suppliers'])
@@ -630,6 +715,71 @@ class WimpysFoodExpressController extends Controller
     public function store(Request $request)
     {
         //
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        //
+         $this->validate($request, [
+            'paidTo' => 'required',
+            'address'=> 'required',
+            'quantity'=>'required',
+            'description'=>'required',
+            'unitPrice'=>'required',
+            'amount'=>'required',
+        ]);
+
+         //get the latest insert id query in table lechon_de_cebu_codes
+         $data = DB::select('SELECT id, wimpys_food_express_code FROM wimpys_food_express_codes ORDER BY id DESC LIMIT 1');
+        
+         //if code is not zero add plus 1
+        if(isset($data[0]->wimpys_food_express_code) != 0){
+             //if code is not 0
+             $newNum = $data[0]->wimpys_food_express_code +1;
+             $uNum = sprintf("%06d",$newNum);    
+         }else{
+             //if code is 0 
+             $newNum = 1;
+             $uNum = sprintf("%06d",$newNum);
+         }
+
+         
+         $purchaseOrder = new WimpysFoodExpressPurchaseOrder([
+            'user_id' =>$user->id,
+            'paid_to'=>$request->get('paidTo'),
+            'address'=>$request->get('address'),
+            'date'=>$request->get('date'),
+            'quantity'=>$request->get('quantity'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$request->get('unitPrice'),
+            'amount'=>$request->get('amount'),
+            'total_price'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+
+        $purchaseOrder->save();
+
+        $insertedId = $purchaseOrder->id;
+
+        $moduleCode = "PO-";
+        $moduleName = "Purchase Order";
+
+           //save to lechon_de_cebu_codes table
+        $wimpysFoodExpress = new WimpysFoodExpressCode([
+            'user_id'=>$user->id,
+            'wimpys_food_express_code'=>$uNum,
+            'module_id'=>$insertedId,
+            'module_code'=>$moduleCode,
+            'module_name'=>$moduleName,
+
+        ]);
+        $wimpysFoodExpress->save();
+
+        return redirect()->route('editWimpysFoodExpress', ['id'=>$insertedId]);
     }
 
     /**
@@ -641,6 +791,22 @@ class WimpysFoodExpressController extends Controller
     public function show($id)
     {
         //
+        $purchaseOrder =  WimpysFoodExpressPurchaseOrder::with(['user', 'purchase_orders'])
+                                                    ->where('id', $id)
+                                                    ->get(); 
+
+        $pOrders = WimpysFoodExpressPurchaseOrder::where('po_id', $id)->get()->toArray();
+
+            //count the total amount 
+        $countTotalAmount = WimpysFoodExpressPurchaseOrder::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = WimpysFoodExpressPurchaseOrder::where('po_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+
+        return view('view-wimpys-food-express-purchase-order', compact('purchaseOrder', 'pOrders', 'sum'));
     }
 
     /**
@@ -652,11 +818,18 @@ class WimpysFoodExpressController extends Controller
     public function edit($id)
     {
         //
+        $purchaseOrder = WimpysFoodExpressPurchaseOrder::with(['user', 'purchase_orders'])
+                                                ->where('id', $id)
+                                                ->get();
+
+        $pOrders = WimpysFoodExpressPurchaseOrder::where('po_id', $id)->get()->toArray();
+
+        return view('edit-wimpys-food-express-purchase-order', compact('id', 'purchaseOrder', 'pOrders'));
     }
 
     /**
      * Update the specified resource in storage.
-     *
+     *+
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -666,14 +839,29 @@ class WimpysFoodExpressController extends Controller
         //
     }
 
+    public function destroyPO($id){
+        $purchaseOrder = WimpysFoodExpressPurchaseOrder::find($id);
+        $purchaseOrder->delete();
+    }
+
     /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         //
+        $poId = WimpysFoodExpressPurchaseOrder::find($request->poId);
+
+        $purchaseOrder = WimpysFoodExpressPurchaseOrder::find($id);
+        $getAmount = $poId->total_price - $purchaseOrder->amount;
+
+        $poId->total_price = $getAmount;
+        $poId->save();
+
+        $purchaseOrder->delete();
+
     }
 }

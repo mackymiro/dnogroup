@@ -6601,8 +6601,66 @@ Route::group(['middleware' => ['auth']], function(){
 		'WimpysFoodExpressController@printSupplier')
 		->name('printSupplier')
 		->middleware(['cashier']);
-	
 
+	Route::get(
+		'/wimpys-food-express/purchase-order',
+		'WimpysFoodExpressController@purchaseOrder')
+		->name('purchaseOrder')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/wimpys-food-express/store',
+		'WimpysFoodExpressController@store')
+		->name('store')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/edit',
+		'WimpysFoodExpressController@edit')
+		->name('editWimpysFoodExpress')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/wimpys-food-express/{id}/add-new-purchase-order',
+		'WimpysFoodExpressController@addNewPurchaseOrder')
+		->name('addNewPurchaseOrder')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/wimpys-food-express/{id}/update-po',
+		'WimpysFoodExpressController@updatePo')
+		->name('updatePo')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/wimpys-food-express/delete/{id}',
+		'WimpysFoodExpressController@destroy')
+		->name('destroy')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/purchase-order-lists',
+		'WimpysFoodExpressController@purchaseOrderList')
+		->name('purchaseOrderList')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/view',
+		'WimpysFoodExpressController@show')
+		->name('show')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/printPo',
+		'WimpysFoodExpressController@printPO')
+		->name('printPO')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/wimpys-food-express/delete/PO/{id}',
+		'WimpysFoodExpressController@destroyPO')
+		->name('destroyPO')
+		->middleware(['cashier']);
 });
 
 
