@@ -85,17 +85,7 @@
                                                 <th width="23%">Account Name:</th>
                                                 <th> {{ $payableId[0]->account_name }}</th>
                                             </tr>
-											@if($payableId[0]->bank_card != 0)
-											<tr>
-												 <?php
-                                                        $bankName = $payableId[0]->bank_card;
-                                                        $bankNameArr = explode("-", $bankName);
-                                            
-                                                     ?>
-                                                <th width="25%">Bank Name:</th>
-                                                <th> <?php echo $bankNameArr[1];?></th>
-                                            </tr>
-											@endif
+											
 											@endif 
 											
 										

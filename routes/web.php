@@ -6224,13 +6224,67 @@ Route::group(['middleware' => ['auth']], function(){
 		->middleware(['cashier']);
 
 	Route::get(
+		'/dno-holdings-co/petty-cash-list',
+		'DnoHoldingsCoController@pettyCashList')
+		->name('pettyCashList')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-holdings-co/petty-cash/add',
+		'DnoHoldingsCoController@addPettyCash')
+		->name('addPettyCash')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/{id}/edit-petty-cash/',
+		'DnoHoldingsCoController@editPettyCash')
+		->name('editPettyCashDnoHoldingsCo')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dno-holdings-co/petty-cash/delete/{id}',
+		'DnoHoldingsCoController@destroyPettyCash')
+		->name('estroyPettyCash')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-holdings-co/{id}/update-pc',
+		'DnoHoldingsCoController@updatePC')
+		->name('updatePC')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-holdings-co/{id}/add-new-petty-cash',
+		'DnoHoldingsCoController@addNewPettyCash')
+		->name('addNewPettyCash')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-holdings-co/{id}/update-petty-cash',
+		'DnoHoldingsCoController@updatePettyCash')
+		->name('updatePettyCash')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/petty-cash/{id}/view',
+		'DnoHoldingsCoController@viewPettyCash')
+		->name('viewPettyCash')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/petty-cash/{id}/print',
+		'DnoHoldingsCoController@printPettyCash')
+		->name('printPettyCash')
+		->middleware(['cashier']);
+	
+	Route::get(
 		'/dno-holdings-co/payment-voucher-form',
 		'DnoHoldingsCoController@paymentVoucherForm')
 		->name('paymentVoucherFormDnoHoldingsCo')
 		->middleware(['cashier']);
 
 	Route::post(
-		'/dno-holdsings-co/payment-voucher-store',
+		'/dno-holdings-co/payment-voucher-store',
 		'DnoHoldingsCoController@paymentVoucherStore')
 		->name('paymentVoucherStoreDnoHoldingsCo')
 		->middleware(['cashier']);
@@ -6631,6 +6685,12 @@ Route::group(['middleware' => ['auth']], function(){
 		'/wimpys-food-express/{id}/view-wimpys-food-express-payables-detail',
 		'WimpysFoodExpressController@viewPayableDetails')
 		->name('viewPayableDetailsWimpysFoodExpress')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/wimpys-food-express/delete-transaction-list/{id}',
+		'WimpysFoodExpressController@destroyTransactionList')
+		->name('destroyTransactionList')
 		->middleware(['cashier']);
 
 	Route::get(

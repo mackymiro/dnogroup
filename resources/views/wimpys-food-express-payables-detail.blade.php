@@ -276,7 +276,7 @@
 			  							<div class="col-lg-2">
 		  									<label>PV No</label>
                                              @foreach($transactionList[0]->payment_vouchers as $voucher)
-                                                @if($voucher->module_name == "Payment Voucher")
+                                                @if($voucher->module_name === "Payment Voucher")
                                                 <input type="text" name="voucherRef" class="form-control" value="{{ $voucher->module_code}} {{ $voucher->wimpys_food_express_code }}" disabled="disabled" />
 			  						
                                                 @endif
@@ -327,8 +327,13 @@
 			  							</div>
 			  							<div class="col-lg-2">
 		  									<label>PV No</label>
-		  									<input type="text" name="voucherRef" class="form-control" value="{{ $transactionList[0]->module_code}}{{ $transactionList[0]->dno_personal_code}}" disabled="disabled" />
-			  							</div>
+											  @foreach($transactionList[0]->payment_vouchers as $voucher)
+                                                @if($voucher->module_name === "Payment Voucher")
+                                                <input type="text" name="voucherRef" class="form-control" value="{{ $voucher->module_code}} {{ $voucher->wimpys_food_express_code }}" disabled="disabled" />
+			  						
+                                                @endif
+                                             @endforeach 
+										</div>
   										<div class="col-lg-6">
 		  									<label>Account Name</label>
 		  									<input type="text" name="accountName" class="form-control" value="{{ $transactionList[0]->account_name }}" disabled="disabled" />

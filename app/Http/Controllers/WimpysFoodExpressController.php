@@ -553,6 +553,8 @@ class WimpysFoodExpressController extends Controller
         $transactionList = WimpysFoodExpressPaymentVoucher::with(['user','payment_vouchers'])
                                 ->where('id', $id)
                                 ->get();
+
+      
        
         $getChequeNumbers = WimpysFoodExpressPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
@@ -614,6 +616,9 @@ class WimpysFoodExpressController extends Controller
 
             $subCat = NULL;
             $subCatAccountId = NULL;
+
+            $supplierExp = NULL;
+
 
         }else if($request->get('category') === "Supplier"){
             
@@ -836,6 +841,11 @@ class WimpysFoodExpressController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    public function destroyTransactionList($id){
+        $transactionList = WimpysFoodExpressPaymentVoucher::find($id);
+        $transactionList->delete();
     }
 
     public function destroyPO($id){

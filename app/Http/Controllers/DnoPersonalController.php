@@ -2823,7 +2823,7 @@ class DnoPersonalController extends Controller
                                 ->orderBy('dno_personal_petty_cashes.id', 'desc')
                                 ->get()->toArray();
        
-        return view('dno-personal-petty-cash-list', compact('getPettyCashLists', 'pettyCashLists'));
+        return view('dno-personal-petty-cash-list', compact('pettyCashLists'));
     }
 
     //view service provider
