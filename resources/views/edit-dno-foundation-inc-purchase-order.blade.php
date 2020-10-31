@@ -1,4 +1,4 @@
-@extends('layouts.dno-holdings-co-app')
+@extends('layouts.dno-foundation-inc-app')
 @section('title', 'Edit Purchase Order |')
 @section('content')
 <script>
@@ -29,7 +29,7 @@
   });
 </script>
 <div id="wrapper">
-	 @include('sidebar.sidebar-dno-holdings-co')
+	 @include('sidebar.sidebar-dno-foundation-inc')
 
     <div id="content-wrapper">   
      
@@ -37,14 +37,14 @@
     		 <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">DNO Holdings & Co</a>
+                <a href="#">DNO Foundation Inc</a>
               </li>
               <li class="breadcrumb-item active">Update Purchase Order Form</li>
             </ol>
-            <a href="{{ url('dno-holdings-co/purchase-order-lists') }}">Back to Lists</a>
+            <a href="{{ url('dno-foundation-inc/purchase-order-lists') }}">Back to Lists</a>
             <div class="col-lg-12">
-                <img src="{{ asset('images/digitized-logos/dno-holdings-co.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="DNO Holdings & Co">
-               <h4 class="text-center"><u>PURCHASE ORDER</u></h4>
+             <img src="{{ asset('images/digitized-logos/dno-foundation.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="DNO Foundation Inc">
+                 <h4 class="text-center"><u>PURCHASE ORDER</u></h4>
             </div>
             <div class="row">
                 <div class="col-lg-12">
@@ -56,9 +56,9 @@
                                @if(session('SuccessE'))
                                  <p class="alert alert-success">{{ Session::get('SuccessE') }}</p>
                                 @endif 
-                               <form action="{{ action('DnoHoldingsCoController@update', $purchaseOrder[0]->id) }}" method="post">
+                               <form action="{{ action('DnoFoundationIncController@update', $purchaseOrder[0]->id) }}" method="post">
                                {{csrf_field()}}
-                              <input name="_method" type="hidden" value="PATCH">
+                              <input name="_method" type="hidden" value="PUT">
                               <div class="form-group">
                                 <div class="form-row">
                                   <div class="col-lg-6">
@@ -72,7 +72,7 @@
                                     <label>P.O #</label>
                                     @foreach($purchaseOrder[0]->purchase_orders as $po)
                                         @if($po->module_name === "Purchase Order")
-                                        <input type="text" name="poNum" class="form-control" disabled="disabled"  value="{{ $po->dno_holdings_code }}" />
+                                        <input type="text" name="poNum" class="form-control" disabled="disabled"  value="{{ $po->dno_foundation_code }}" />
                                   
                                         @endif
                                     @endforeach
@@ -121,8 +121,8 @@
                          <div class="card-header">
                             <i class="fab fa-first-order" aria-hidden="true"></i>
                           Add Purchase Order</div>
-                          <div class="card-body">
-        					   		<form action="{{ action('DnoHoldingsCoController@addNewPurchaseOrder', $id) }}" method="post">
+                            <div class="card-body">
+        					   		<form action="{{ action('DnoFoundationIncController@addNewPurchaseOrder', $id) }}" method="post">
     					   				{{csrf_field()}}
     					   				 @if(session('purchaseOrderSuccess'))
 						                   <p class="alert alert-success">{{ Session::get('purchaseOrderSuccess') }}</p>
@@ -191,7 +191,7 @@
                                <p class="alert alert-success">{{ Session::get('SuccessEdit') }}</p>
                               @endif 
                             @foreach($pOrders as $pOrder)
-                            <form action="{{ action('DnoHoldingsCoController@updatePo', $pOrder['id']) }}" method="post">
+                            <form action="{{ action('DnoFoundationIncController@updatePo', $pOrder['id']) }}" method="post">
                             <div class="form-group">
                                  {{csrf_field()}}
                                  <input name="_method" type="hidden" value="PUT">
@@ -262,7 +262,7 @@
           if(x){
               $.ajax({
                 type: "DELETE",
-                url: '/dno-holings-co/delete/' + id,
+                url: '/dno-foundation-inc/delete/' + id,
                 data:{
                   _method: 'delete', 
                   "_token": "{{ csrf_token() }}",

@@ -6540,6 +6540,72 @@ Route::group(['middleware' => ['auth']], function(){
 		->middleware(['cashier']);
 
 	Route::get(
+		'/dno-foundation-inc/purchase-order',
+		'DnoFoundationIncController@purchaseOrder')
+		->name('purchaseOrder')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-foundation-inc/store',
+		'DnoFoundationIncController@store')
+		->name('store')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/{id}/edit',
+		'DnoFoundationIncController@edit')
+		->name('editDnoFoundationInc')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-foundation-inc/{id}/update',
+		'DnoFoundationIncController@update')
+		->name('update')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-foundation-inc/{id}/add-new-purchase-order',
+		'DnoFoundationIncController@addNewPurchaseOrder')
+		->name('addNewPurchaseOrder')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-foundation-inc/{id}/update-po',
+		'DnoFoundationIncController@updatePo')
+		->name('updatePo')
+		->middleware(['cashier']);
+	
+	Route::delete(
+		'/dno-foundation-inc/delete/{id}',
+		'DnoFoundationIncController@destroy')
+		->name('destroy')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/purchase-order-lists',
+		'DnoFoundationIncController@purchaseOrderList')
+		->name('purchaseOrderList')
+		->middleware(['cashier']);
+	
+	Route::get(
+		'/dno-foundation-inc/{id}/view',
+		'DnoFoundationIncController@show')
+		->name('show')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/{id}/printPO',
+		'DnoFoundationIncController@printPO')
+		->name('printPO')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dno-foundation-inc/delete/PO/{id}',
+		'DnoFoundationIncController@destroyPO')
+		->name('destroyPO')
+		->middleware(['cashier']);
+
+	Route::get(
 		'/dno-foundation-inc/payment-voucher-form',
 		'DnoFoundationIncController@paymentVoucherForm')
 		->name('paymentVoucherFormDnoFoundationInc')

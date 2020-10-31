@@ -2855,7 +2855,6 @@ class DnoHoldingsCoController extends Controller
         $moduleCode = "PO-";
         $moduleName = "Purchase Order";
 
-           //save to lechon_de_cebu_codes table
         $dnoHoldings = new DnoHoldingsCoCode([
             'user_id'=>$user->id,
             'dno_holdings_code'=>$uNum,

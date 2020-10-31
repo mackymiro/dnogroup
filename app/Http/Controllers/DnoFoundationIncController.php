@@ -12,9 +12,92 @@ use App\User;
 use App\DnoFoundationIncPaymentVoucher;
 use App\DnoFoundationIncCode;
 use App\DnoFoundationIncSupplier;
+use App\DnoFoundationIncPurchaseOrder;
 
 class DnoFoundationIncController extends Controller
 {
+
+    public function printPO($id){
+        $purchaseOrder =  DnoFoundationIncPurchaseOrder::with(['user', 'purchase_orders'])
+                                                    ->where('id', $id)                     
+                                                    ->get(); 
+
+        $pOrders = DnoFoundationIncPurchaseOrder::where('po_id', $id)->get()->toArray();
+
+        //count the total amount 
+        $countTotalAmount = DnoFoundationIncPurchaseOrder::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = DnoFoundationIncPurchaseOrder::where('po_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+
+        $pdf = PDF::loadView('printPODnoFoundationInc', compact('purchaseOrder', 'pOrders', 'sum'));
+
+        return $pdf->download('dno-foundation-inc-purchase-order.pdf');
+
+    }
+
+    public function purchaseOrderList(){
+        $purchaseOrders =  DnoFoundationIncPurchaseOrder::with(['user', 'purchase_orders'])
+                                                        ->where('po_id', NULL)
+                                                        ->where('deleted_at', NULL)
+                                                        ->orderBy('id', 'desc')
+                                                        ->get(); 
+
+        return view('dno-foundation-inc-purchase-order-list', compact('purchaseOrders'));
+    }
+
+    public function updatePo(Request $request, $id){
+        $order = DnoFoundationIncPurchaseOrder::find($id);
+        $order->quantity = $request->get('quant');
+        $order->description = $request->get('desc');
+        $order->unit_price = $request->get('unitP');
+        $order->amount = $request->get('amt');
+
+        $order->save();
+
+        Session::flash('SuccessEdit', 'Successfully updated');
+        return redirect()->route('editDnoFoundationInc', ['id'=>$request->get('poId')]);
+    }
+
+    public function addNewPurchaseOrder(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+        
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+        
+        $pO = DnoFoundationIncPurchaseOrder::find($id);
+    
+        $tot = $pO->total_price + $request->get('amount');
+
+        $addPurchaseOrder = new DnoFoundationIncPurchaseOrder([
+            'user_id'=>$user->id,
+            'po_id'=>$id,
+            'quantity'=>$request->get('quantity'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$request->get('unitPrice'),
+            'amount'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+
+        $addPurchaseOrder->save();
+
+        //update
+        $pO->total_price = $tot;
+        $pO->save();
+
+        Session::flash('purchaseOrderSuccess', 'Successfully added purchase order');
+        return redirect()->route('editDnoFoundationInc', ['id'=>$id]);
+    }
+
+    public function purchaseOrder(){
+        return view('dno-foundation-inc-purchase-order');
+    }
 
     public function printMultipleSummary(Request $request, $date){
         $urlSegment = \Request::segment(3);
@@ -2211,7 +2294,71 @@ class DnoFoundationIncController extends Controller
     public function store(Request $request)
     {
         //
-    }
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        //
+        $this->validate($request, [
+            'paidTo' => 'required',
+            'address'=> 'required',
+            'quantity'=>'required',
+            'description'=>'required',
+            'unitPrice'=>'required',
+            'amount'=>'required',
+        ]);
+
+          //get the latest insert id query in table lechon_de_cebu_codes
+          $data = DB::select('SELECT id, dno_foundation_code FROM dno_foundation_inc_codes ORDER BY id DESC LIMIT 1');
+        
+          //if code is not zero add plus 1
+         if(isset($data[0]->dno_foundation_code) != 0){
+              //if code is not 0
+              $newNum = $data[0]->dno_foundation_code +1;
+              $uNum = sprintf("%06d",$newNum);    
+          }else{
+              //if code is 0 
+              $newNum = 1;
+              $uNum = sprintf("%06d",$newNum);
+          }
+
+          $purchaseOrder = new DnoFoundationIncPurchaseOrder([
+                'user_id' =>$user->id,
+                'paid_to'=>$request->get('paidTo'),
+                'address'=>$request->get('address'),
+                'date'=>$request->get('date'),
+                'quantity'=>$request->get('quantity'),
+                'description'=>$request->get('description'),
+                'unit_price'=>$request->get('unitPrice'),
+                'amount'=>$request->get('amount'),
+                'total_price'=>$request->get('amount'),
+                'created_by'=>$name,
+          ]);
+
+          $purchaseOrder->save();
+
+          $insertedId = $purchaseOrder->id;
+
+          $moduleCode = "PO-";
+          $moduleName = "Purchase Order";
+
+          $dnoFoundationInc = new DnoFoundationIncCode([
+                'user_id'=>$user->id,
+                'dno_foundation_code'=>$uNum,
+                'module_id'=>$insertedId,
+                'module_code'=>$moduleCode,
+                'module_name'=>$moduleName,
+          ]);
+
+          $dnoFoundationInc->save();
+
+          return redirect()->route('editDnoFoundationInc', ['id'=>$insertedId]);
+
+    }   
 
     /**
      * Display the specified resource.
@@ -2222,6 +2369,22 @@ class DnoFoundationIncController extends Controller
     public function show($id)
     {
         //
+        $purchaseOrder =  DnoFoundationIncPurchaseOrder::with(['user', 'purchase_orders'])
+                                                    ->where('id', $id)
+                                                    ->get(); 
+
+        $pOrders = DnoFoundationIncPurchaseOrder::where('po_id', $id)->get()->toArray();
+
+        //count the total amount 
+        $countTotalAmount = DnoFoundationIncPurchaseOrder::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = DnoFoundationIncPurchaseOrder::where('po_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+
+        return view('view-dno-foundation-inc-purchase-order', compact('purchaseOrder', 'pOrders', 'sum'));
     }
 
     /**
@@ -2233,6 +2396,12 @@ class DnoFoundationIncController extends Controller
     public function edit($id)
     {
         //
+        $purchaseOrder = DnoFoundationIncPurchaseOrder::with(['user', 'purchase_orders'])
+                                                        ->where('id', $id)
+                                                        ->get();
+        $pOrders = DnoFoundationIncPurchaseOrder::where('po_id', $id)->get()->toArray();
+
+        return view('edit-dno-foundation-inc-purchase-order', compact('id', 'purchaseOrder', 'pOrders'));
     }
 
     /**
@@ -2245,6 +2414,43 @@ class DnoFoundationIncController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $paidTo = $request->get('paidTo');
+        $address = $request->get('address');
+        $quantity = $request->get('quantity');
+        $description = $request->get('description');
+        $date = $request->get('date');
+        $unitPrice = $request->get('unitPrice');
+        $amount = $request->get('amount');
+
+        $purchaseOrder = DnoFoundationIncPurchaseOrder::find($id);
+        
+        $purchaseOrder->paid_to = $paidTo;
+        $purchaseOrder->address = $address;
+        $purchaseOrder->date = $date;
+        $purchaseOrder->description = $description;
+        $purchaseOrder->quantity = $quantity;
+        $purchaseOrder->unit_price = $unitPrice;
+        $purchaseOrder->amount = $amount;
+
+        $purchaseOrder->save();
+
+
+        Session::flash('SuccessE', 'Successfully updated');
+
+        return redirect()->route('editDnoFoundationInc', ['id'=>$id]);
+    }
+
+    public function destroyPO($id){
+        $purchaseOrder = DnoFoundationIncPurchaseOrder::find($id);
+        $purchaseOrder->delete();
     }
 
     /**
@@ -2253,8 +2459,18 @@ class DnoFoundationIncController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         //
+        $poId = DnoFoundationIncPurchaseOrder::find($request->poId);
+
+        $purchaseOrder = DnoFoundationIncPurchaseOrder::find($id);
+        $getAmount = $poId->total_price - $purchaseOrder->amount;
+
+        $poId->total_price = $getAmount;
+        $poId->save();
+
+        $purchaseOrder->delete();
+
     }
 }

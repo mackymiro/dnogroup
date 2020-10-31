@@ -1,16 +1,16 @@
-@extends('layouts.dno-holdings-co-app')
+@extends('layouts.dno-foundation-inc-app')
 @section('title', 'Purchase Order Lists |')
 @section('content')
 <div id="wrapper">
 	<!-- Sidebar -->
 
-	 @include('sidebar.sidebar-dno-holdings-co')
+	 @include('sidebar.sidebar-dno-foundation-inc')
      <div id="content-wrapper">
      	<div class="container-fluid">
      		 <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">DNO Holings & Co</a>
+                <a href="#">DNO Foundation Inc</a>
               </li>
               <li class="breadcrumb-item active">Purchase Order All Lists</li>
             </ol>
@@ -44,29 +44,29 @@
 				  						</tr>
 				  					</tfoot>
 				  					<tbody>
-                      @foreach($purchaseOrders as $purchaseOrder)
-                      <tr id="deletedId{{ $purchaseOrder->id }}">
-                          <td>
-                          
-                          <a href="/dno-holdings-co/{{ $purchaseOrder->id }}/edit " title="Edit"><i class="fas fa-pencil-alt"></i></a>
-                          @if(Auth::user()['role_type'] == 1)
-                              <a id="delete" onClick="confirmDelete('{{ $purchaseOrder->id }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
-                          @endif
-                              <a href="/dno-holdings-co/{{ $purchaseOrder->id }}/view" title="View"><i class="fas fa-low-vision"></i></a>
-                          </td>
-                          <td>
-                              @foreach($purchaseOrder->purchase_orders as $po)
-                                  @if($po->module_name === "Purchase Order")
-                                      {{ $po->module_code }} {{ $po->dno_holdings_code  }}
-                                  @endif
-                              @endforeach    
-                          </td>
-                          <td>{{ $purchaseOrder->date }}</td>
-                          <td>{{ $purchaseOrder->paid_to }}</td>
-                          
-                          <td>{{ $purchaseOrder->created_by }}</td>
-                      </tr>
-                      @endforeach
+                                    @foreach($purchaseOrders as $purchaseOrder)
+                                    <tr id="deletedId{{ $purchaseOrder->id }}">
+                                        <td>
+                                        
+                                        <a href="/dno-foundation-inc/{{ $purchaseOrder->id }}/edit " title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                        @if(Auth::user()['role_type'] == 1)
+                                            <a id="delete" onClick="confirmDelete('{{ $purchaseOrder->id }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                                        @endif
+                                            <a href="/dno-foundation-inc/{{ $purchaseOrder->id }}/view" title="View"><i class="fas fa-low-vision"></i></a>
+                                        </td>
+                                        <td>
+                                            @foreach($purchaseOrder->purchase_orders as $po)
+                                                @if($po->module_name === "Purchase Order")
+                                                    {{ $po->module_code }} {{ $po->dno_foundation_code  }}
+                                                @endif
+                                            @endforeach    
+                                        </td>
+                                        <td>{{ $purchaseOrder->date }}</td>
+                                        <td>{{ $purchaseOrder->paid_to }}</td>
+                                        
+                                        <td>{{ $purchaseOrder->created_by }}</td>
+                                    </tr>
+                                    @endforeach
 				  					</tbody>
 				  				</table>
 					  		</div>
@@ -96,7 +96,7 @@
         if(x){
             $.ajax({
               type: "DELETE",
-              url: '/dno-holdings-co/delete/PO/' + id,
+              url: '/dno-foundation-inc/delete/PO/' + id,
               data:{
                 _method: 'delete', 
                 "_token": "{{ csrf_token() }}",
