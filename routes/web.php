@@ -6276,7 +6276,67 @@ Route::group(['middleware' => ['auth']], function(){
 		'DnoHoldingsCoController@printPettyCash')
 		->name('printPettyCash')
 		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/billing-statement-form',
+		'DnoHoldingsCoController@billingStatementForm')
+		->name('billingStatementForm')
+		->middleware(['cashier']);
 	
+	Route::post(
+		'/dno-holdings-co/store-billing-statement',
+		'DnoHoldingsCoController@storeBillingStatement')
+		->name('storeBillingStatement')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/{id}/edit-billing-statement',
+		'DnoHoldingsCoController@editBillingStatement')
+		->name('editBillingStatementDnoHoldingsCo')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-holdings-co/{id}/update-billing-info',
+		'DnoHoldingsCoController@updateBillingInfo')
+		->name('updateBillingInfoDnoHoldingsCo')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-holdings-co/{id}/add-new-billing',
+		'DnoHoldingsCoController@addNewBilling')
+		->name('addNewBilling')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dno-holdings-co/delete-data-billing-statement/{id}',
+		'DnoHoldingsCoController@destroyBillingDataStatement')
+		->name('destroyBillingDataStatement')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/billing-statement-lists',
+		'DnoHoldingsCoController@billingStatementList')
+		->name('billingStatementList')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dno-holdings-co/delete-billing-statement/{id}',
+		'DnoHoldingsCoController@destroyBillingStatement')
+		->name('destroyBillingStatement')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/{id}/view-billing-statement/',
+		'DnoHoldingsCoController@viewBillingStatement')
+		->name('viewBillingStatement')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/{id}/printBillingStatement',
+		'DnoHoldingsCoController@printBillingStatement')
+		->name('printBillingStatement')
+		->middleware(['cashier']);
+		
 	Route::get(
 		'/dno-holdings-co/payment-voucher-form',
 		'DnoHoldingsCoController@paymentVoucherForm')

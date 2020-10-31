@@ -14,9 +14,212 @@ use App\DnoHoldingsCoCode;
 use App\DnoHoldingsCoSupplier;
 use App\DnoHoldingsCoPurchaseOrder;
 use App\DnoHoldingsCoPettyCash;
+use App\DnoHoldingsCoBillingStatement; 
+
 
 class DnoHoldingsCoController extends Controller
 {
+
+    public function printBillingStatement($id){ 
+        $printBillingStatement = DnoHoldingsCoBillingStatement::with(['user', 'billing_statements'])
+                                                                ->where('id', $id)
+                                                                ->get();
+
+        $billingStatements = DnoHoldingsCoBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+            //count the total amount 
+        $countTotalAmount = DnoHoldingsCoBillingStatement::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = DnoHoldingsCoBillingStatement::where('billing_statement_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        $pdf = PDF::loadView('printBillingStatementDnoHoldingsCo', compact('printBillingStatement', 'billingStatements', 'sum'));
+
+        return $pdf->download('dno-holdings-co-billing-statement.pdf');   
+    }
+
+    public function viewBillingStatement($id){
+        $viewBillingStatement = DnoHoldingsCoBillingStatement::with(['user', 'billing_statements'])
+                                                    ->where('id', $id)
+                                                    ->get();
+        
+
+        $billingStatements = DnoHoldingsCoBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+            //count the total amount 
+        $countTotalAmount = DnoHoldingsCoBillingStatement::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = DnoHoldingsCoBillingStatement::where('billing_statement_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        return view('view-dno-holdings-co-billing-statement', compact('viewBillingStatement', 'billingStatements', 'sum'));
+ 
+    }
+
+    public function billingStatementList(){
+        $billingStatements = DnoHoldingsCoBillingStatement::with(['user', 'billing_statements'])
+                                                ->where('billing_statement_id', NULL)
+                                                ->where('deleted_at', NULL)
+                                                ->orderBy('id', 'desc')
+                                                ->get();
+
+        return view('dno-holdings-co-billing-statement-lists', compact('billingStatements'));
+    }
+
+    public function addNewBilling(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $billingOrder = DnoHoldingsCoBillingStatement::find($id);
+        
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $amount = $request->get('amount');
+
+        $tot = $billingOrder->total_amount + $amount; 
+
+        $addBillingStatement = new DnoHoldingsCoBillingStatement([
+            'user_id'=>$user->id,
+            'billing_statement_id'=>$id,
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$request->get('unitPrice'),
+            'dr_no'=>$request->get('drNo'),
+            'amount'=>$amount,
+            'created_by'=>$name,
+        ]);
+
+        $addBillingStatement->save();
+
+
+         //update
+         $billingOrder->total_amount = $tot;
+         $billingOrder->save();
+
+         Session::flash('SuccessAdd', 'Successfully added.');
+
+         return redirect()->route('editBillingStatementDnoHoldingsCo', ['id'=>$id]);
+    }
+
+
+
+    public function updateBillingInfo(Request $request, $id){
+        $updateBillingOrder = DnoHoldingsCoBillingStatement::find($id);
+
+
+        $updateBillingOrder->bill_to = $request->get('billTo');
+        $updateBillingOrder->address = $request->get('address');
+        $updateBillingOrder->period_cover = $request->get('periodCovered');
+      
+        $updateBillingOrder->terms = $request->get('terms');
+        $updateBillingOrder->date_of_transaction = $request->get('transactionDate');
+        $updateBillingOrder->dr_no = $request->get('drNo');
+        $updateBillingOrder->description = $request->get('description');
+        $updateBillingOrder->unit_price = $request->get('unitPrice');
+        $updateBillingOrder->amount = $request->get('amount');
+        $updateBillingOrder->save();
+
+        Session::flash('SuccessE', 'Successfully updated');
+
+        return redirect()->route('editBillingStatementDnoHoldingsCo', ['id'=>$id]);
+    }
+
+    public function editBillingStatement($id){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $billingStatement = DnoHoldingsCoBillingStatement::find($id);
+       
+        $bStatements = DnoHoldingsCoBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+        return view('edit-dno-holdings-co-billing-statement-form', compact('billingStatement', 'bStatements'));
+    }
+
+    public function storeBillingStatement(Request $request){
+    
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        //get user name
+        $name  = $firstName." ".$lastName;
+
+          //validate
+        $this->validate($request, [
+            'billTo' =>'required',
+            'address'=>'required',
+            'periodCovered'=>'required',
+            'date'=>'required',
+            'terms'=>'required',
+            'transactionDate'=>'required',
+        ]);
+
+        //get the latest insert id query in table billing statements ref number
+        $dataReferenceNum = DB::select('SELECT id, dno_holdings_code FROM dno_holdings_co_codes ORDER BY id DESC LIMIT 1');
+
+          //if code is not zero add plus 1 reference number
+        if(isset($dataReferenceNum[0]->dno_holdings_code) != 0){
+              //if code is not 0
+              $newRefNum = $dataReferenceNum[0]->dno_holdings_code +1;
+              $uRef = sprintf("%06d",$newRefNum);   
+  
+          }else{
+              //if code is 0 
+              $newRefNum = 1;
+              $uRef = sprintf("%06d",$newRefNum);
+          } 
+
+          $billingStatement = new DnoHoldingsCoBillingStatement([
+            'user_id'=>$user->id,
+            'bill_to'=>$request->get('billTo'),
+            'address'=>$request->get('address'),
+            'period_cover'=>$request->get('periodCovered'),
+            'date'=>$request->get('date'),
+            'terms'=>$request->get('terms'),
+            'dr_no'=>$request->get('drNo'),
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$request->get('unitPrice'),
+            'amount'=>$request->get('amount'),
+            'total_amount'=>$request->get('amount'),
+            'created_by'=>$name,
+            'prepared_by'=>$name,
+        ]);
+
+        $billingStatement->save();
+
+        $insertedId = $billingStatement->id;
+
+        $moduleCode = "BS-";
+        $moduleName = "Billing Statement";
+
+        $dnoHoldingsCo = new DnoHoldingsCoCode([
+            'user_id'=>$user->id,
+            'dno_holdings_code'=>$uRef,
+            'module_id'=>$insertedId,
+            'module_code'=>$moduleCode,
+            'module_name'=>$moduleName,
+
+        ]);
+
+        $dnoHoldingsCo->save();
+
+        return redirect()->route('editBillingStatementDnoHoldingsCo', ['id'=>$insertedId]);
+
+    }
+
+    public function billingStatementForm(){
+        return view('dno-holdings-co-billing-statement-form');
+    }
 
     public function printPettyCash($id){    
         $getPettyCash =  DnoHoldingsCoPettyCash::with(['user', 'petty_cashes'])
@@ -2420,6 +2623,23 @@ class DnoHoldingsCoController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    public function destroyBillingStatement($id){
+        $billingStatement = DnoHoldingsCoBillingStatement::find($id);
+        $billingStatement->delete();
+    }
+
+    public function destroyBillingDataStatement(Request $request, $id){
+        $billStatement = DnoHoldingsCoBillingStatement::find($request->billingStatementId);
+
+        $billingStatement = DnoHoldingsCoBillingStatement::find($id);
+    
+        $getAmount = $billStatement->total_amount - $billingStatement->amount;
+        $billStatement->total_amount = $getAmount;
+        $billStatement->save();
+
+        $billingStatement->delete();
     }
 
 
