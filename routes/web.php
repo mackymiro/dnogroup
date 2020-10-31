@@ -6336,7 +6336,38 @@ Route::group(['middleware' => ['auth']], function(){
 		'DnoHoldingsCoController@printBillingStatement')
 		->name('printBillingStatement')
 		->middleware(['cashier']);
-		
+
+	Route::get(
+		'/dno-holdings-co/statement-of-account/lists',
+		'DnoHoldingsCoController@statementOfAccountLists')
+		->name('statementOfAccountLists')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/{id}/edit-statement-of-account/',
+		'DnoHoldingsCoController@editStatementAccount')
+		->name('editStatementAccount')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-holdings-co/s-account/{id}',
+		'DnoHoldingsCoController@sAccountUpdate')
+		->name('sAccountUpdate')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/{id}/view-statement-account/',
+		'DnoHoldingsCoController@viewStatementAccount')
+		->name('viewStatementAccount')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-holdings-co/{id}/printSOA',
+		'DnoHoldingsCoController@printSOA')
+		->name('printSOA')
+		->middleware(['cashier']);
+
+
 	Route::get(
 		'/dno-holdings-co/payment-voucher-form',
 		'DnoHoldingsCoController@paymentVoucherForm')

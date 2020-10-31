@@ -1,23 +1,24 @@
-@extends('layouts.lolo-pinoy-lechon-de-cebu-app')
+@extends('layouts.dno-holdings-co-app')
 @section('title', 'View Statement Of Account |')
 @section('content')
 
 <div id="wrapper">
 		<!-- Sidebar -->
-     @include('sidebar.sidebar')
+     @include('sidebar.sidebar-dno-holdings-co')
     <div id="content-wrapper">
  		<div class="container-fluid">
 			 <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">Lechon de Cebu</a>
+                <a href="#">DNO Holdings & Co</a>
               </li>
               <li class="breadcrumb-item active">View Statement Of Account Details</li>
             </ol>
-              <a href="{{ url('lolo-pinoy-lechon-de-cebu/statement-of-account/lists') }}">Back to Lists</a>
+              <a href="{{ url('dno-holdings-co/statement-of-account/lists') }}">Back to Lists</a>
             <div class="col-lg-12">
-            	 <img src="{{ asset('images/digitized-logos/lolo-pinoy-lechon-de-cebu.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
+            <img src="{{ asset('images/digitized-logos/dno-holdings-co.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="DNO Holdings & Co">
             	 
+              
             	 <h4 class="text-center"><u>VIEW STATEMENT OF ACCOUNT</u></h4>
             </div>
             <div class="row">
@@ -27,7 +28,7 @@
                               <i class="fas fa-receipt" aria-hidden="true"></i>
                             View Statement Of Account 
                               <div class="float-right">
-                               <a href="{{ action('LoloPinoyLechonDeCebuController@printSOA', $viewStatementAccount[0]->id) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                               <a href="{{ action('DnoHoldingsCoController@printSOA', $viewStatementAccount[0]->id) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                              </div>
                         </div>
                         <div class="card-body">
@@ -61,7 +62,13 @@
                                         <thead>
                                             <tr>
                                                 <th width="20%">SOA No</th>
-                                                <th>{{ $viewStatementAccount[0]->lechon_de_cebu_code }}</th>
+                                                <th>
+                                                    @foreach($viewStatementAccount[0]->statement_of_accounts as $statement)
+                                                        @if($statement->module_name === "Statement Of Account")
+                                                            {{ $statement->module_code}}{{ $statement->dno_holdings_code}}
+                                                        @endif
+                                                    @endforeach
+                                                </th>
                                             </tr>
                                             
                                             <tr>
@@ -80,21 +87,18 @@
                                         <div class="col-lg-6">
                                            <table class="table table-bordered">
                                                 <thead>
-                                                    <tr>
-                                                        <th width="30%">Branch</th>
-                                                        <th>{{ $viewStatementAccount[0]->branch }}</th>
-                                                    </tr>
+                                                  
                                                     <tr>
                                                         <th>Payment Method</th>
                                                         <th> {{ $viewStatementAccount[0]->payment_method }}</th>
                                                     </tr>
                                                     <tr>
                                                         <th class="bg-success" style="color:white;">Total Amount</th>
-                                                        <th class="bg-success" style="color:white;">₱ <?= number_format($sum, 2);?></th>
+                                                        <th class="bg-success" style="color:white;">₱ <?php echo number_format($sum, 2);?></th>
                                                     </tr>
                                                      <tr>
                                                         <th class="bg-danger" style="color:white;">Total Remaining Amount </th>
-                                                        <th class="bg-danger" style="color:white;">₱ <?= number_format($computeAll, 2);?></th>
+                                                        <th class="bg-danger" style="color:white;">₱ <?php echo number_format($computeAll, 2);?></th>
                                                     </tr>
                                                     
                                                 
@@ -128,28 +132,25 @@
                                      <thead>
                                         <tr>
                                           <th class="bg-info" style="color:white;">DATE</th>
-                                          <th class="bg-info" style="color:white;">INVOICE #</th>
-                                          <th class="bg-info" style="color:white;">WHOLE LECHON 500/KL</th>
                                           <th class="bg-info" style="color:white;">DESCRIPTION</th>
+                                          <th class="bg-info" style="color:white;">UNIT PRICE</th>
                                           <th class="bg-info" style="color:white;">AMOUNT</th>
                                           <th class="bg-info" style="color:white;">STATUS</th>
                                         </tr>
                                       </thead>
                                       <tbody>
                                           <tr>
-                                          <td>{{ $viewStatementAccount[0]->transaction_date }}</td>
-                                          <td>{{ $viewStatementAccount[0]->invoice_number }}</td>
-                                          <td>{{ $viewStatementAccount[0]->whole_lechon }}</td>
+                                          <td>{{ $viewStatementAccount[0]->date_of_transaction }}</td>
                                           <td>{{ $viewStatementAccount[0]->description }}</td>
-                                          <td><?= number_format($viewStatementAccount[0]->amount, 2); ?></td>
+                                          <td>{{ $viewStatementAccount[0]->unit_price }}</td>
+                                          <td><?php echo number_format($viewStatementAccount[0]->amount, 2); ?></td>
                                           <td>{{ $viewStatementAccount[0]->status }}</td>
                                           </tr>
                                           @foreach($statementAccounts as $statementAccount)
                                           <tr>
-                                            <td>{{ $statementAccount['transaction_date'] }}</td>
-                                            <td>{{ $statementAccount['invoice_number'] }}</td>
-                                            <td>{{ $statementAccount['whole_lechon'] }}</td>
+                                            <td>{{ $statementAccount['date_of_transaction'] }}</td>
                                             <td>{{ $statementAccount['description'] }}</td>
+                                            <td>{{ $statementAccount['unit_price'] }}</td>
                                             <td><?= number_format($statementAccount['amount'], 2);?></td>
                                             <td>{{ $statementAccount['status']}}</td>
                                           </tr>
@@ -158,7 +159,7 @@
                                             <td></td>
                                             <td></td>
                                             <td><strong>Total</strong></td>
-                                            <td><strong>₱ <?php echo number_format($sum, 2)?></strong></td>
+                                            <td><strong>₱ <?= number_format($sum, 2)?></strong></td>
                                           </tr>
                                         </tbody>
                                 </table>

@@ -15,13 +15,237 @@ use App\DnoHoldingsCoSupplier;
 use App\DnoHoldingsCoPurchaseOrder;
 use App\DnoHoldingsCoPettyCash;
 use App\DnoHoldingsCoBillingStatement; 
+use App\DnoHoldingsCoStatementOfAccount;
 
 
 class DnoHoldingsCoController extends Controller
 {
 
+    public function printSOA($id){
+        $soa = DnoHoldingsCoStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                                ->where('billing_statement_id', NULL)
+                                                                ->orderBy('id', 'desc')
+                                                                ->get();                                                   
+                                                                
+        $statementAccounts = DnoHoldingsCoStatementOfAccount::where('billing_statement_id', $id)->get()->toArray();
+        
+        $moduleName = "Statement Of Account";
+        $countTotalAmount =  DB::table(
+                            'dno_holdings_co_statement_of_accounts')
+                            ->select(
+                                'dno_holdings_co_statement_of_accounts.id',
+                                'dno_holdings_co_statement_of_accounts.user_id',
+                                'dno_holdings_co_statement_of_accounts.billing_statement_id',
+                                'dno_holdings_co_statement_of_accounts.bill_to',
+                                'dno_holdings_co_statement_of_accounts.address',
+                                'dno_holdings_co_statement_of_accounts.date',
+                                'dno_holdings_co_statement_of_accounts.period_cover',
+                                'dno_holdings_co_statement_of_accounts.terms',
+                                'dno_holdings_co_statement_of_accounts.date_of_transaction',
+                                'dno_holdings_co_statement_of_accounts.description',
+                                'dno_holdings_co_statement_of_accounts.amount',
+                                'dno_holdings_co_statement_of_accounts.paid_amount',
+                                'dno_holdings_co_statement_of_accounts.payment_method',
+                                'dno_holdings_co_statement_of_accounts.collection_date',
+                                'dno_holdings_co_statement_of_accounts.check_number',
+                                'dno_holdings_co_statement_of_accounts.check_amount',
+                                'dno_holdings_co_statement_of_accounts.or_number',
+                                'dno_holdings_co_statement_of_accounts.status',
+                                'dno_holdings_co_statement_of_accounts.created_by',
+                                'dno_holdings_co_codes.dno_holdings_code',
+                                'dno_holdings_co_codes.module_id',
+                                'dno_holdings_co_codes.module_code',
+                                'dno_holdings_co_codes.module_name')
+                            ->join('dno_holdings_co_codes', 'dno_holdings_co_statement_of_accounts.id', '=', 'dno_holdings_co_codes.module_id')
+                            ->where('dno_holdings_co_statement_of_accounts.id', $id)
+                            ->where('dno_holdings_co_codes.module_name', $moduleName)
+                            ->sum('dno_holdings_co_statement_of_accounts.amount');
+                
+        $countAmount = DnoHoldingsCoStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+        //
+         $countAmount = DnoHoldingsCoStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+
+         $sum  = $countTotalAmount + $countAmount;
+
+         $pdf = PDF::loadView('printSOADnoHoldings', compact('soa', 'statementAccounts', 'sum'));
+
+         return $pdf->download('dno-holdings-co-statement-of-account.pdf');
+    }
+
+    public function viewStatementAccount($id){
+        $viewStatementAccount = DnoHoldingsCoStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                                    ->where('id', $id)
+                                                                    ->get();
+
+        $statementAccounts = DnoHoldingsCoStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->get();
+
+        //count the total amount 
+       $countTotalAmount = DnoHoldingsCoStatementOfAccount::where('id', $id)->sum('amount');
+
+         //
+       $countAmount = DnoHoldingsCoStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+       $sum  = $countTotalAmount + $countAmount;
+     
+
+        //count the total balance if there are paid amount
+       $paidAmountCount = DnoHoldingsCoStatementOfAccount::where('id', $id)->sum('paid_amount');
+      
+       //
+       $countAmountOthersPaid = DnoHoldingsCoStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('paid_amount');
+       
+       $compute  = $paidAmountCount + $countAmountOthersPaid;
+
+
+       //minus the total balance to paid amounts
+       $computeAll  = $sum - $compute;
+
+       return view('view-dno-holdings-co-statement-account', compact('viewStatementAccount', 'statementAccounts', 'sum', 'computeAll'));
+ 
+    }
+
+    public function sAccountUpdate(Request $request, $id){
+         //get the main Id 
+         $mainIdSoa = DnoHoldingsCoStatementOfAccount::find($request->mainId);
+
+         $compute = $mainIdSoa->total_remaining_balance - $request->paidAmount;
+         
+         $mainIdSoa->total_remaining_balance = $compute; 
+         $mainIdSoa->save();
+ 
+         $statementAccountPaid = DnoHoldingsCoStatementOfAccount::find($request->id);
+         $statementAccountPaid->paid_amount = $request->paidAmount;
+         $statementAccountPaid->status = $request->status;
+         $statementAccountPaid->collection_date = $request->collectionDate;
+         $statementAccountPaid->check_number = $request->checkNumber;
+         $statementAccountPaid->check_amount = $request->checkAmount;
+         $statementAccountPaid->or_number = $request->orNumber;
+         $statementAccountPaid->payment_method = $request->payment;
+ 
+         $statementAccountPaid->save();
+ 
+         return response()->json('Success: paid successfully');
+    }
+
+    public function editStatementAccount($id){
+        $getStatementOfAccount = DnoHoldingsCoStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                            ->where('id', $id)
+                                                            ->get();
+          //AllAcounts not yet paid
+       $allAccounts = DnoHoldingsCoStatementOfAccount::where('billing_statement_id', $id)->where('status', NULL)->get()->toArray();
+    
+       $stat = "PAID";
+       $allAccountsPaids = DnoHoldingsCoStatementOfAccount::where('billing_statement_id', $id)->where('status', $stat)->get()->toArray();  
+        
+       //count the total amount 
+        $countTotalAmount = DnoHoldingsCoStatementOfAccount::where('id', $id)->sum('amount');
+
+         //
+        $countAmount = DnoHoldingsCoStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        //count the total balance if there are paid amount
+        $paidAmountCount = DnoHoldingsCoStatementOfAccount::where('id', $id)->sum('paid_amount');
+       
+        //
+        $countAmountOthersPaid = DnoHoldingsCoStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('paid_amount');
+        
+        $compute  = $paidAmountCount + $countAmountOthersPaid;
+
+        //minus the total balance to paid amounts
+        $computeAll  = $sum - $compute;
+
+        return view('edit-dno-holdings-co-statement-of-account', compact('id', 'getStatementOfAccount', 'computeAll', 'allAccounts', 'allAccountsPaids', 'sum'));
+
+        
+    }
+
+    public function statementOfAccountLists(){
+        $statementOfAccounts = DnoHoldingsCoStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                            ->where('billing_statement_id', NULL)
+                                                            ->where('deleted_at', NULL)
+                                                            ->orderBy('id', 'desc')
+                                                            ->get();
+        $status = "PAID";
+        $moduleName = "Statement Of Account";
+        $totalAmount  =   DB::table(
+                        'dno_holdings_co_statement_of_accounts')
+                        ->select(
+                            'dno_holdings_co_statement_of_accounts.id',
+                            'dno_holdings_co_statement_of_accounts.user_id',
+                            'dno_holdings_co_statement_of_accounts.billing_statement_id',
+                            'dno_holdings_co_statement_of_accounts.bill_to',
+                            'dno_holdings_co_statement_of_accounts.address',
+                            'dno_holdings_co_statement_of_accounts.date',
+                            'dno_holdings_co_statement_of_accounts.period_cover',
+                            'dno_holdings_co_statement_of_accounts.terms',
+                            'dno_holdings_co_statement_of_accounts.date_of_transaction',
+                            'dno_holdings_co_statement_of_accounts.description',
+                            'dno_holdings_co_statement_of_accounts.amount',
+                            'dno_holdings_co_statement_of_accounts.total_amount',
+                            'dno_holdings_co_statement_of_accounts.total_remaining_balance',
+                            'dno_holdings_co_statement_of_accounts.paid_amount',
+                            'dno_holdings_co_statement_of_accounts.payment_method',
+                            'dno_holdings_co_statement_of_accounts.collection_date',
+                            'dno_holdings_co_statement_of_accounts.check_number',
+                            'dno_holdings_co_statement_of_accounts.check_amount',
+                            'dno_holdings_co_statement_of_accounts.or_number',
+                            'dno_holdings_co_statement_of_accounts.status',
+                            'dno_holdings_co_statement_of_accounts.created_by',
+                            'dno_holdings_co_codes.dno_holdings_code',
+                            'dno_holdings_co_codes.module_id',
+                            'dno_holdings_co_codes.module_code',
+                            'dno_holdings_co_codes.module_name')
+                        ->join('dno_holdings_co_codes', 'dno_holdings_co_statement_of_accounts.id', '=', 'dno_holdings_co_codes.module_id')
+                        ->where('dno_holdings_co_statement_of_accounts.billing_statement_id', NULL)
+                        ->where('dno_holdings_co_codes.module_name', $moduleName)
+                        ->where('dno_holdings_co_statement_of_accounts.status', '=', $status)
+                        ->sum('dno_holdings_co_statement_of_accounts.total_amount');
+ 
+        $totalRemainingBalance = DB::table(
+                            'dno_holdings_co_statement_of_accounts')
+                            ->select(
+                                'dno_holdings_co_statement_of_accounts.id',
+                                'dno_holdings_co_statement_of_accounts.user_id',
+                                'dno_holdings_co_statement_of_accounts.billing_statement_id',
+                                'dno_holdings_co_statement_of_accounts.bill_to',
+                                'dno_holdings_co_statement_of_accounts.address',
+                                'dno_holdings_co_statement_of_accounts.date',
+                                'dno_holdings_co_statement_of_accounts.period_cover',
+                                'dno_holdings_co_statement_of_accounts.terms',
+                                'dno_holdings_co_statement_of_accounts.date_of_transaction',
+                                'dno_holdings_co_statement_of_accounts.description',
+                                'dno_holdings_co_statement_of_accounts.amount',
+                                'dno_holdings_co_statement_of_accounts.total_amount',
+                                'dno_holdings_co_statement_of_accounts.total_remaining_balance',
+                                'dno_holdings_co_statement_of_accounts.paid_amount',
+                                'dno_holdings_co_statement_of_accounts.payment_method',
+                                'dno_holdings_co_statement_of_accounts.collection_date',
+                                'dno_holdings_co_statement_of_accounts.check_number',
+                                'dno_holdings_co_statement_of_accounts.check_amount',
+                                'dno_holdings_co_statement_of_accounts.or_number',
+                                'dno_holdings_co_statement_of_accounts.status',
+                                'dno_holdings_co_statement_of_accounts.created_by',
+                                'dno_holdings_co_codes.dno_holdings_code',
+                                'dno_holdings_co_codes.module_id',
+                                'dno_holdings_co_codes.module_code',
+                                'dno_holdings_co_codes.module_name')
+                            ->join('dno_holdings_co_codes', 'dno_holdings_co_statement_of_accounts.id', '=', 'dno_holdings_co_codes.module_id')
+                            ->where('dno_holdings_co_statement_of_accounts.billing_statement_id', NULL)
+                            ->where('dno_holdings_co_codes.module_name', $moduleName)
+                            ->where('dno_holdings_co_statement_of_accounts.status', NULL)
+                            ->sum('dno_holdings_co_statement_of_accounts.total_remaining_balance');
+
+        return view('dno-holdings-co-statement-of-account-lists', compact('statementOfAccounts', 'totalAmount', 
+        'totalRemainingBalance'));
+    }
+
     public function printBillingStatement($id){ 
-        $printBillingStatement = DnoHoldingsCoBillingStatement::with(['user', 'billing_statements'])
+        $printBillingStatement = DnoHoldingsCoBillingStatement::
+        with(['user', 'billing_statements'])
                                                                 ->where('id', $id)
                                                                 ->get();
 
@@ -85,6 +309,7 @@ class DnoHoldingsCoController extends Controller
 
         $tot = $billingOrder->total_amount + $amount; 
 
+
         $addBillingStatement = new DnoHoldingsCoBillingStatement([
             'user_id'=>$user->id,
             'billing_statement_id'=>$id,
@@ -98,10 +323,29 @@ class DnoHoldingsCoController extends Controller
 
         $addBillingStatement->save();
 
+        $addStatementAccount = new DnoHoldingsCoStatementOfAccount([
+            'user_id'=>$user->id,
+            'billing_statement_id'=>$id,
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$request->get('unitPrice'),
+            'dr_no'=>$request->get('drNo'),
+            'amount'=>$amount,
+            'total_amount'=>$amount,
+            'created_by'=>$name,
+        ]);
+
+        $addStatementAccount->save();
+        $statementOrder = DnoHoldingsCoStatementOfAccount::find($id);   
 
          //update
          $billingOrder->total_amount = $tot;
          $billingOrder->save();
+
+        //update soa table
+        $statementOrder->total_amount  = $tot;
+        $statementOrder->total_remaining_balance = $tot;
+        $statementOrder->save();
 
          Session::flash('SuccessAdd', 'Successfully added.');
 
@@ -212,6 +456,47 @@ class DnoHoldingsCoController extends Controller
         ]);
 
         $dnoHoldingsCo->save();
+        $bsNo = $dnoHoldingsCo->id; 
+
+        $bsNoId = DnoHoldingsCoCode::find($bsNo);
+
+        $statementAccount = new DnoHoldingsCoStatementOfAccount([
+            'user_id'=>$user->id,
+            'bs_no'=>$bsNoId->dno_holdings_code,
+            'bill_to'=>$request->get('billTo'),
+            'period_cover'=>$request->get('periodCovered'),
+            'date'=>$request->get('date'),
+            'terms'=>$request->get('terms'),
+            'dr_no'=>$request->get('drNo'),
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$request->get('unitPrice'),
+            'amount'=>$request->get('amount'),
+            'total_amount'=>$request->get('amount'),
+            'total_remaining_balance'=>$request->get('amount'),
+            'created_by'=>$name,
+            'prepared_by'=>$name,
+
+
+        ]);
+        $statementAccount->save();
+        $insertedIdStatement = $statementAccount->id;
+
+        $moduleCodeSOA = "SOA-";
+        $moduleNameSOA = "Statement Of Account";
+        
+        $uRefStatement = $uRef + 1; 
+        $uRefState = sprintf("%06d",$uRefStatement);
+
+        $statement = new DnoHoldingsCoCode([
+            'user_id'=>$user->id,
+            'dno_holdings_code'=>$uRefState,
+            'module_id'=>$insertedIdStatement,
+            'module_code'=>$moduleCodeSOA,
+            'module_name'=>$moduleNameSOA,
+
+        ]);
+        $statement->save();
 
         return redirect()->route('editBillingStatementDnoHoldingsCo', ['id'=>$insertedId]);
 
@@ -2402,7 +2687,7 @@ class DnoHoldingsCoController extends Controller
            //get the category
         if($request->get('category') == "None"){
             $subCat = NULL;
-            $subCatAcctId = NULL;
+            $subCatAccountId = NULL;
             $supplierExp = NULL;
        
         }else if($request->get('category') == "Supplier"){
@@ -2410,7 +2695,17 @@ class DnoHoldingsCoController extends Controller
             $supplierExp = explode("-", $supplier);
 
             $subCat = "NULL";
-            $subCatAcctId = "NULL";
+            $subCatAccountId = "NULL";
+        }else if($request->get('category')  == "Petty Cash"){
+            $subCat = $request->get('pettyCashNo');
+            $subCatAccountId = NULL;
+
+            $supplierExp = NULL;
+
+        }else if($request->get('category')  == "Payroll"){
+            $subCat = NULL;
+            $subCatAccountId = NULL;
+            $supplierExp = NULL;
         }
 
         //check if invoice number already exists
@@ -2434,7 +2729,7 @@ class DnoHoldingsCoController extends Controller
                     'particulars'=>$request->get('particulars'),
                     'category'=>$request->get('category'),
                     'sub_category'=>$subCat,
-                    'sub_category_account_id'=>$subCatAcctId,
+                    'sub_category_account_id'=>$subCatAccountId,
                     'supplier_id'=>$supplierExp[0],
                     'supplier_name'=>$supplierExp[1],  
                     'prepared_by'=>$name,
@@ -2469,7 +2764,13 @@ class DnoHoldingsCoController extends Controller
          //get suppliers
          $suppliers = DnoHoldingsCoSupplier::get()->toArray();
 
-        return view('payment-voucher-form-dno-holdings-co', compact('suppliers'));
+         $pettyCashes =   DnoHoldingsCoPettyCash::with(['user', 'petty_cashes'])
+                                                ->where('pc_id', NULL)
+                                                ->where('deleted_at', NULL)
+                                                ->get();
+        
+
+        return view('payment-voucher-form-dno-holdings-co', compact('suppliers', 'pettyCashes'));
     }
 
     /**

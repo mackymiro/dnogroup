@@ -43,6 +43,16 @@
          
         </div>
       </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+           <i class="fas fa-receipt"></i>
+          <span>Statement Of Account</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item" href="{{ url('dno-holdings-co/statement-of-account/lists') }}">Lists</a>
+         
+        </div>
+      </li>
       <li class="nav-item dropdown ">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fas fa-receipt"></i>
