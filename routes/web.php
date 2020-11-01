@@ -6244,7 +6244,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::delete(
 		'/dno-holdings-co/petty-cash/delete/{id}',
 		'DnoHoldingsCoController@destroyPettyCash')
-		->name('estroyPettyCash')
+		->name('destroyPettyCash')
 		->middleware(['cashier']);
 
 	Route::put(
@@ -6603,6 +6603,60 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dno-foundation-inc/delete/PO/{id}',
 		'DnoFoundationIncController@destroyPO')
 		->name('destroyPO')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/petty-cash-list',
+		'DnoFoundationIncController@pettyCashList')
+		->name('pettyCashList')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-foundation-inc/petty-cash/add',
+		'DnoFoundationIncController@addPettyCash')
+		->name('addPettyCash')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/{i}/edit-petty-cash/',
+		'DnoFoundationIncController@editPettyCash')
+		->name('editPettyCashDnoFoundationInc')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-foundation-inc/{id}/update-petty-cash',
+		'DnoFoundationIncController@updatePettyCash')
+		->name('updatePettyCash')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-foundation-inc/{id}/add-new-petty-cash',
+		'DnoFoundationIncController@addNewPettyCash')
+		->name('addNewPettyCash')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-foundation-inc/{id}/updatePC',
+		'DnoFoundationIncController@updatePC')
+		->name('updatePC')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dno-foundation-inc/petty-cash/delete/{id}',
+		'DnoFoundationIncController@destroyPettyCash')
+		->name('destroyPettyCash')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/petty-cash/{id}/view',
+		'DnoFoundationIncController@viewPettyCash')
+		->name('viewPettyCash')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/petty-cash/{id}/print',
+		'DnoFoundationIncController@printPettyCash')
+		->name('printPettyCash')
 		->middleware(['cashier']);
 
 	Route::get(

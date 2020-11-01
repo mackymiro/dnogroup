@@ -1,4 +1,4 @@
-@extends('layouts.dno-holdings-co-app')
+@extends('layouts.dno-foundation-inc-app')
 @section('title', 'Petty Cash List |')
 @section('content')
 <script>
@@ -16,13 +16,13 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="wrapper">
-     @include('sidebar.sidebar-dno-holdings-co')
+     @include('sidebar.sidebar-dno-foundation-inc')
      <div id="content-wrapper">
         <div class="container-fluid">
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                <a href="#">DNO Holdings & Co</a>
+                <a href="#">DNO Foundation Inc</a>
                 </li>
                 <li class="breadcrumb-item active">Petty Cash</li>
                 <li class="breadcrumb-item ">Petty Cash List</li>
@@ -67,11 +67,11 @@
 					  						</tr>
 				  						</tfoot>
                                         <tbody>
-                                           @foreach($pettyCashLists as $pettyCashList)
+                                            @foreach($pettyCashLists as $pettyCashList)
                                             <tr id="deletedId{{ $pettyCashList->id}}">    
                                                 <td>
                                                 @if(Auth::user()['role_type'] != 3)
-                                                    <a href="/dno-holdings-co/{{ $pettyCashList->id }}/edit-petty-cash/" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                                    <a href="/dno-foundation-inc/{{ $pettyCashList->id }}/edit-petty-cash/" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                                     @endif
                                                 @if(Auth::user()['role_type'] == 1 || Auth::user()['role_type'] == 2        )
                                                     <a id="delete" onClick="confirmDelete('{{ $pettyCashList->id}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
@@ -81,13 +81,13 @@
                                                 <td>
                                                     @foreach($pettyCashList->petty_cashes as $pc)
                                                         @if($pc->module_name === "Petty Cash")
-                                                              {{ $pc->module_code}}{{ $pc->dno_holdings_code}}
+                                                              {{ $pc->module_code}}{{ $pc->dno_foundation_code}}
                                                    
                                                         @endif
                                                     @endforeach
                                                    
                                                 </td>
-                                                <td><a href="/dno-holdings-co/petty-cash/{{ $pettyCashList->id }}/view">{{ $pettyCashList->petty_cash_name}}</a></td>
+                                                <td><a href="/dno-foundation-inc/petty-cash/{{ $pettyCashList->id }}/view">{{ $pettyCashList->petty_cash_name}}</a></td>
                                                 <td>{{ $pettyCashList->created_by}}</td>
                                             </tr>   
                                             @endforeach
@@ -166,7 +166,7 @@
             //make ajax call
             $.ajax({
                 type:"POST",
-                url:'/dno-holdings-co/petty-cash/add',
+                url:'/dno-foundation-inc/petty-cash/add',
                 data:{
                     _method:'post',
                     "_token":"{{ csrf_token() }}",
@@ -180,7 +180,7 @@
                     $("#succAdd").fadeIn().delay(3000).fadeOut();
                     $("#succAdd").html(`<p class="alert alert-success">Succesfully added.</p>`);
                     setTimeout(function(){
-                        window.location = `/dno-holdings-co/${data}/edit-petty-cash/`;
+                        window.location = `/dno-foundation-inc/${data}/edit-petty-cash/`;
                     }, 3000);
                     
                 },
@@ -196,7 +196,7 @@
           if(x){
               $.ajax({
                 type: "DELETE",
-                url: '/dno-holdings-co/petty-cash/delete/' + id,
+                url: '/dno-foundation-inc/petty-cash/delete/' + id,
                 data:{
                   _method: 'delete', 
                   "_token": "{{ csrf_token() }}",

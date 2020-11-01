@@ -35,7 +35,7 @@
 	              <li class="breadcrumb-item ">Payment Voucher Form</li>
 	            </ol>
                 <div class="col-lg-12">
-	            		<img src="{{ asset('images/digitized-logos/dno-foundation.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="DNO Holdings & Co">
+	            		<img src="{{ asset('images/digitized-logos/dno-foundation.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="DNO Foundation Inc">
             	 
 	            	 <h4 class="text-center"><u>PAYMENT VOUCHER</u></h4>
 	            </div>
