@@ -4558,7 +4558,61 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('destroySalesInvoice')
 		->middleware(['cashier']);
 
+	Route::get(
+		'/dno-food-ventures/petty-cash-list',
+		'DnoFoodVenturesController@pettyCashList')
+		->name('pettyCashList')
+		->middleware(['cashier']);
 
+	Route::post(
+		'/dno-food-ventures/petty-cash/add',
+		'DnoFoodVenturesController@addPettyCash')
+		->name('addPettyCash')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/{id}/edit-petty-cash/',
+		'DnoFoodVenturesController@editPettyCash')
+		->name('editPettyCashDnoFoodVentures')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-food-ventures/{id}/update-petty-cash',
+		'DnoFoodVenturesController@updatePettyCash')
+		->name('updatePettyCash')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-food-ventures/{id}/add-new-petty-cash',
+		'DnoFoodVenturesController@addNewPettyCash')
+		->name('addNewPettyCash')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-food-ventures/{id}/update-pc',
+		'DnoFoodVenturesController@updatePC')
+		->name('updatePC')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dno-food-ventures/petty-cash/delete/{id}',
+		'DnoFoodVenturesController@destroyPettyCash')
+		->name('destroyPettyCash')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/petty-cash/{id}/view',
+		'DnoFoodVenturesController@viewPettyCash')
+		->name('viewPettyCash')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/{id}/printPettyCash',
+		'DnoFoodVenturesController@printPettyCash')
+		->name('printPettyCash')
+		->middleware(['cashier']);
+
+		
 	Route::get(
 		'/dno-food-ventures/commissary/raw-materials',
 		'DnoFoodVenturesController@rawMaterials')

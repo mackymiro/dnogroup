@@ -96,6 +96,8 @@
                                             <select  name="category" class="category selcls form-control" > 
                                                 <option value="None">None</option>
                                                 <option value="Supplier">Supplier</option>
+                                                <option value="Petty Cash">Petty Cash</option>
+                                                <option value="Payroll">Payroll</option>
                                             </select>
                                         </div> 
                                         <div id="supplierList" class="col-lg-4">
@@ -104,6 +106,18 @@
                                                  @foreach($suppliers as $supplier)
                                                     <option value="{{ $supplier['id']}}-{{ $supplier['supplier_name']}}">{{ $supplier['supplier_name']}}</option>
                                                  @endforeach
+                                            </select>
+                                        </div>  
+                                        <div id="pettyCashList" class="col-lg-4">
+                                            <label>Petty Cash List</label>
+                                            <select data-live-search="true" id="pettyCash" name="pettyCash" class="form-control selectpicker">
+                                                @foreach($pettyCashes  as $pettyCash)
+                                                    @foreach($pettyCash->petty_cashes as $pc)
+                                                        @if($pc->module_name === "Petty Cash")
+                                                            <option value="{{ $pc->module_code}}-{{ $pc->dno_foundation_code }}">{{ $pc->dno_foundation_code}}</option>
+                                                        @endif
+                                                    @endforeach    
+                                                @endforeach
                                             </select>
                                         </div>  
                                     </div>
@@ -147,6 +161,7 @@
 </div>
 <script>
     $("#supplierList").hide();
+    $("#pettyCashList").hide();
 
      $(".category").change(function(){
         const cat = $(this.options[this.selectedIndex]).closest('option:selected').val();
@@ -154,6 +169,12 @@
             $("#supplierList").hide();
         }else if(cat === "Supplier"){
             $("#supplierList").show();
+        }else if(cat === "Petty Cash"){
+            $("#supplierList").hide();
+            $("#pettyCashList").show();
+        }else if(cat === "Payroll"){
+            $("#supplierList").hide();
+            $("#pettyCashList").hide();
         }
     });
 </script>

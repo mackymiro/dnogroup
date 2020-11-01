@@ -2763,7 +2763,7 @@ class DnoFoundationIncController extends Controller
            //get the category
         if($request->get('category') == "None"){
             $subCat = NULL;
-            $subCatAcctId = NULL;
+            $subCatAccountId = NULL;
             $supplierExp = NULL;
        
         }else if($request->get('category') == "Supplier"){
@@ -2771,7 +2771,17 @@ class DnoFoundationIncController extends Controller
             $supplierExp = explode("-", $supplier);
 
             $subCat = "NULL";
-            $subCatAcctId = "NULL";
+            $subCatAccountId = "NULL";
+        }else if($request->get('category')  == "Petty Cash"){
+            $subCat = $request->get('pettyCashNo');
+            $subCatAccountId = NULL;
+
+            $supplierExp = NULL;
+
+        }else if($request->get('category')  == "Payroll"){
+            $subCat = NULL;
+            $subCatAccountId = NULL;
+            $supplierExp = NULL;
         }
 
          //check if invoice number already exists
@@ -2795,7 +2805,7 @@ class DnoFoundationIncController extends Controller
                     'particulars'=>$request->get('particulars'),
                     'category'=>$request->get('category'),
                     'sub_category'=>$subCat,
-                    'sub_category_account_id'=>$subCatAcctId,
+                    'sub_category_account_id'=>$subCatAccountId,
                     'supplier_id'=>$supplierExp[0],
                     'supplier_name'=>$supplierExp[1],  
                     'prepared_by'=>$name,
@@ -2830,7 +2840,12 @@ class DnoFoundationIncController extends Controller
         //get suppliers
         $suppliers = DnoFoundationIncSupplier::get()->toArray();
 
-        return view('payment-voucher-form-dno-foundation-inc', compact('suppliers'));
+        $pettyCashes = DnoFoundationIncPettyCash::with(['user', 'petty_cashes'])
+                                                        ->where('pc_id', NULL)
+                                                        ->where('deleted_at', NULL)
+                                                        ->get();
+
+        return view('payment-voucher-form-dno-foundation-inc', compact('suppliers', 'pettyCashes'));
     }
 
     /**

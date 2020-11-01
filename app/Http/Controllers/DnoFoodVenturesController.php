@@ -18,12 +18,167 @@ use App\DnoFoodVenturesRawMaterial;
 use App\DnoFoodVenturesRawMaterialProduct;
 use App\DnoFoodVenturesSalesInvoice;
 use App\DnoFoodVenturesBillingStatement;
+use App\DnoFoodVenturesPettyCash;
 
 
 class DnoFoodVenturesController extends Controller
 {
+    public function printPettyCash($id){
+        $getPettyCash =  DnoFoodVenturesPettyCash::with(['user', 'petty_cashes'])
+                                                    ->where('id', $id)
+                                                    ->get();
+
+        $getPettyCashSummaries = DnoFoodVenturesPettyCash::where('pc_id', $id)->get()->toArray();
+
+        //total
+        $totalPettyCash = DnoFoodVenturesPettyCash::where('id', $id)->where('pc_id', NULL)->sum('amount');
+
+        $pettyCashSummaryTotal = DnoFoodVenturesPettyCash::where('pc_id', $id)->sum('amount');
+
+        $sum = $totalPettyCash + $pettyCashSummaryTotal;
+
+        $pdf = PDF::loadView('printPettyCashDnoFoodVentures', compact('getPettyCash', 'getPettyCashSummaries', 'sum'));
+
+        return $pdf->download('dno-food-ventures-petty-cash.pdf');
+    }
+
+    public function viewPettyCash($id){
+        $getPettyCash =  DnoFoodVenturesPettyCash::with(['user', 'petty_cashes'])
+                                                    ->where('id', $id)
+                                                    ->get();
+
+        $getPettyCashSummaries = DnoFoodVenturesPettyCash::where('pc_id', $id)->get()->toArray();
+
+        //total
+        $totalPettyCash = DnoFoodVenturesPettyCash::where('id', $id)->where('pc_id', NULL)->sum('amount');
+
+        $pettyCashSummaryTotal = DnoFoodVenturesPettyCash::where('pc_id', $id)->sum('amount');
+
+        $sum = $totalPettyCash + $pettyCashSummaryTotal;
+
+
+        return view('dno-food-ventures-view-petty-cash', compact('getPettyCash', 'getPettyCashSummaries', 'sum'));
+    }
+
+    public function updatePC(Request $request, $id){
+        $updatePC = DnoFoodVenturesPettyCash::find($id);
+
+        $updatePC->date = $request->get('date');
+        $updatePC->petty_cash_summary = $request->get('pettyCashSummary');
+        $updatePC->amount = $request->get('amount');
+        $updatePC->save();
+
+        Session::flash('updatePC', 'Successfully updated.');
+        return redirect()->route('editPettyCashDnoFoodVentures', ['id'=>$request->get('pcId')]);
+    }
+
+    public function addNewPettyCash(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $addNew = new DnoFoodVenturesPettyCash([
+            'user_id'=>$user->id,
+            'pc_id'=>$id,
+            'date'=>$request->get('date'),
+            'petty_cash_summary'=>$request->get('pettyCashSummary'),
+            'amount'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+        $addNew->save();
+
+        Session::flash('addNewSuccess', 'Successfully added.');
+
+        return redirect()->route('editPettyCashDnoFoodVentures', ['id'=>$id]);
+    }
+
+    public function updatePettyCash(Request $request, $id){
+        $update = DnoFoodVenturesPettyCash::find($id);
+        $update->date = $request->get('date');
+        $update->petty_cash_name = $request->get('pettyCashName');
+        $update->petty_cash_summary = $request->get('pettyCashSummary');
+        $update->amount = $request->get('amount');
+
+        $update->save();
+        Session::flash('editSuccess', 'Successfully updated.'); 
+
+        return redirect()->route('editPettyCashDnoFoodVentures', ['id'=>$id]);
+    }
+
+    public function editPettyCash($id){
+        $pettyCash =  DnoFoodVenturesPettyCash::with(['user', 'petty_cashes'])
+                                                ->where('id', $id)
+                                                ->get();
+
+        $pettyCashSummaries = DnoFoodVenturesPettyCash::where('pc_id', $id)->get()->toArray();
+
+        return view('edit-dno-food-ventures-petty-cash', compact('pettyCash', 'pettyCashSummaries'));
+    }
     
-   
+    public function addPettyCash(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //get the latest insert id query in table dno personal codes
+         $dataCashNo = DB::select('SELECT id, dno_food_venture_code FROM dno_food_ventures_codes ORDER BY id DESC LIMIT 1');
+
+         //if code is not zero add plus 1 petty cash no
+         if(isset($dataCashNo[0]->dno_food_venture_code) != 0){
+             //if code is not 0
+             $newProd = $dataCashNo[0]->dno_food_venture_code +1;
+             $uPetty = sprintf("%06d",$newProd);   
+ 
+         }else{
+             //if code is 0 
+             $newProd = 1;
+             $uPetty = sprintf("%06d",$newProd);
+         } 
+
+         $addPettyCash = new DnoFoodVenturesPettyCash([
+            'user_id'=>$user->id,
+            'date'=>$request->date,
+            'petty_cash_name'=>$request->pettyCashName,
+            'petty_cash_summary'=>$request->pettyCashSummary,
+            'created_by'=>$name,
+        ]);
+
+        $addPettyCash->save();
+        $insertId = $addPettyCash->id;
+
+        $moduleCode = "PC-";
+        $moduleName = "Petty Cash";
+
+        $dnoFoundation = new DnoFoodVenturesCode([
+            'user_id'=>$user->id,
+            'dno_food_venture_code'=>$uPetty,
+            'module_id'=>$insertId,
+            'module_code'=>$moduleCode,
+            'module_name'=>$moduleName,
+        ]);
+        $dnoFoundation->save();
+      
+        return response()->json($insertId);
+
+
+    }
+    
+    public function pettyCashList(){
+        $pettyCashLists =  DnoFoodVenturesPettyCash::with(['user', 'petty_cashes'])
+                                                        ->where('pc_id', NULL)
+                                                        ->where('deleted_at', NULL)
+                                                        ->orderBy('id', 'desc')
+                                                        ->get();
+        return view('dno-food-ventures-petty-cash-list', compact('pettyCashLists'));
+    }   
 
     public function viewSalesInvoice($id){
         $viewSalesInvoice = DnoFoodVenturesSalesInvoice::with(['user', 'sales_invoices'])
@@ -4198,6 +4353,11 @@ class DnoFoodVenturesController extends Controller
     {
         //
         
+    }
+
+    public function destroyPettyCash($id){
+        $pettyCash = DnoFoodVenturesPettyCash::find($id);
+        $pettyCash->delete();
     }
 
     public function destroyBillingStatement($id){
