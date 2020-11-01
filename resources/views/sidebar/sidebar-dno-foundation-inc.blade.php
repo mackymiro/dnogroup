@@ -49,7 +49,7 @@
           <span>Statement Of Account</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="{{ url('dno-holdings-co/statement-of-account/lists') }}">Lists</a>
+          <a class="dropdown-item" href="{{ url('dno-foundation-inc/statement-of-account/lists') }}">Lists</a>
          
         </div>
       </li>

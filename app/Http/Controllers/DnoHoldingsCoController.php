@@ -244,8 +244,7 @@ class DnoHoldingsCoController extends Controller
     }
 
     public function printBillingStatement($id){ 
-        $printBillingStatement = DnoHoldingsCoBillingStatement::
-        with(['user', 'billing_statements'])
+        $printBillingStatement = DnoHoldingsCoBillingStatement::with(['user', 'billing_statements'])
                                                                 ->where('id', $id)
                                                                 ->get();
 
@@ -497,7 +496,7 @@ class DnoHoldingsCoController extends Controller
 
         ]);
         $statement->save();
-
+            
         return redirect()->route('editBillingStatementDnoHoldingsCo', ['id'=>$insertedId]);
 
     }

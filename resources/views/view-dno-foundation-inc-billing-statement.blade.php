@@ -1,4 +1,4 @@
-@extends('layouts.dno-holdings-co-app')
+@extends('layouts.dno-foundation-inc-app')
 @section('title', 'View Billing Statement |')
 @section('content')
 <script>
@@ -8,20 +8,20 @@
 </script>
 <div id="wrapper">
 	<!-- Sidebar -->
-   @include('sidebar.sidebar-dno-holdings-co')
+   @include('sidebar.sidebar-dno-foundation-inc')
     <div id="content-wrapper">
     	<div class="container-fluid">
     		 <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">DNO Holdings & Co</a>
+                <a href="#">DNO Foundation Inc</a>
               </li>
               <li class="breadcrumb-item active">View Billing Statement</li>
             </ol>
-              <a href="{{ url('dno-holdings-co/billing-statement-lists') }}">Back to Lists</a>
+              <a href="{{ url('dno-foundation-inc/billing-statement-lists') }}">Back to Lists</a>
           	<div class="col-lg-12">
-            	<img src="{{ asset('images/digitized-logos/dno-holdings-co.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="DNO Holdings & Co">
-            	  
+              <img src="{{ asset('images/digitized-logos/dno-foundation.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="DNO Foundation Inc">
+            	 	  
             	 <h4 class="text-center"><u>VIEW BILLING STATEMENT</u></h4>
             </div>
             <div class="row">
@@ -32,7 +32,7 @@
                             View Billing Statment
                             @if($viewBillingStatement[0]->deleted_at == NULL)
                             <div class="float-right">
-                               <a href="{{ action('DnoHoldingsCoController@printBillingStatement', $viewBillingStatement[0]->id)}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                               <a href="{{ action('DnoFoundationIncController@printBillingStatement', $viewBillingStatement[0]->id)}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                              </div>
                              @endif
                         </div>
@@ -73,7 +73,7 @@
                                                 <th>
                                                     @foreach($viewBillingStatement[0]->billing_statements as $statement)
                                                         @if($statement->module_name === "Billing Statement")
-                                                            {{ $statement->module_code }}{{ $statement->dno_holdings_code}}
+                                                            {{ $statement->module_code }}{{ $statement->dno_foundation_code}}
                                                         @endif
                                                     @endforeach
                                                 </th>

@@ -1,4 +1,4 @@
-@extends('layouts.dno-holdings-co-app')
+@extends('layouts.dno-foundation-inc-app')
 @section('title', 'Billing Statement Form |')
 @section('content')
 <script>
@@ -13,21 +13,21 @@
 
 <div id="wrapper">
 	<!-- Sidebar -->
-    @include('sidebar.sidebar-dno-holdings-co')
+    @include('sidebar.sidebar-dno-foundation-inc')
     <div id="content-wrapper">
-      <form action="{{ action('DnoHoldingsCoController@storeBillingStatement') }}" method="post">
+      <form action="{{ action('DnoFoundationIncController@storeBillingStatement') }}" method="post">
           {{csrf_field()}}
     	<div class="container-fluid">
     		 <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">DNO Holdings & Co</a>
+                <a href="#">DNO Foundation Inc</a>
               </li>
               <li class="breadcrumb-item active">Billing Statement Form</li>
             </ol>
             <div class="col-lg-12">
-            	 	<img src="{{ asset('images/digitized-logos/dno-holdings-co.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="DNO Holdings & Co">
-            	 
+                <img src="{{ asset('images/digitized-logos/dno-foundation.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="DNO Foundation Inc">
+
             	 <h4 class="text-center"><u>BILLING STATEMENT</u></h4>
             </div>
             <div class="row">
@@ -90,23 +90,23 @@
                               </div>
                               </div>
                     	 		</div>
-                        <div class="form-group">
-                            <div class="form-row">
+                                 <div class="form-group">
+                                    <div class="form-row">
             	 						<div class="col-lg-2">
         	 								<label>Date</label>
         	 								<input type="text" name="transactionDate" class="datepicker form-control" required="required"  />
         	 								@if ($errors->has('transactionDate'))
-                            <span class="alert alert-danger">
-                              <strong>{{ $errors->first('transactionDate') }}</strong>
-                            </span>
-                          @endif
+                                                    <span class="alert alert-danger">
+                                                    <strong>{{ $errors->first('transactionDate') }}</strong>
+                                                    </span>
+                                                @endif
             	 						</div>
                                       
-                        <div class="col-lg-2">
-                          <label>DR #</label>
-                          <input type="text" name="drNo" class="form-control" />
-                        
-                        </div>
+                                            <div class="col-lg-2">
+                                            <label>DR #</label>
+                                            <input type="text" name="drNo" class="form-control" required />
+                                            
+                                            </div>
 										    <div  class="col-lg-4">
         	 								<label>Item Description</label>
         	 								<input type="text" name="description" class="form-control"/>

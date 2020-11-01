@@ -1,4 +1,4 @@
-@extends('layouts.dno-holdings-co-app')
+@extends('layouts.dno-foundation-inc-app')
 @section('title', 'Statement Of Account Lists |')
 @section('content')
 <script>
@@ -7,13 +7,13 @@
   });   
 </script>
 <div id="wrapper">
-	 @include('sidebar.sidebar-dno-holdings-co')
+	 @include('sidebar.sidebar-dno-foundation-inc')
 	<div id="content-wrapper">
 		<div class="container-fluid">
 			 <!-- Breadcrumbs-->
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                  <a href="#">DNO Holdings & Co</a>
+                  <a href="#">DNO Foundation Inc</a>
                 </li>
                 <li class="breadcrumb-item active">Statement Of Account All Lists</li>
               </ol>
@@ -62,17 +62,17 @@
                                             <tr id="deletedId{{ $statementOfAccount->id}}">
                                                 <td>
                                                     @if(Auth::user()['role_type'] !== 3)
-                                                    <a href="/dno-holdings-co/{{ $statementOfAccount->id }}/edit-statement-of-account/" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                                    <a href="/dno-foundation-inc/{{ $statementOfAccount->id }}/edit-statement-of-account/" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                                     @endif
                                                     
-                                                    <a href="/dno-holdings-co/{{ $statementOfAccount->id }}/view-statement-account/" title="View"><i class="fas fa-low-vision"></i></a>
+                                                    <a href="/dno-foundation-inc/{{ $statementOfAccount->id }}/view-statement-account/" title="View"><i class="fas fa-low-vision"></i></a>
 
                                                 </td>
                                                 <td>{{ $statementOfAccount->date }}</td>
                                                 <td>
                                                     @foreach($statementOfAccount->statement_of_accounts as $statement)
                                                         @if($statement->module_name === "Statement Of Account")
-                                                          {{ $statement->module_code }}{{ $statement->dno_holdings_code}}
+                                                          {{ $statement->module_code }}{{ $statement->dno_foundation_code }}
                                                         @endif
                                                     @endforeach
                                                 </td>
@@ -99,11 +99,11 @@
 					  				<thead>
 					  					<tr>
 					  						<th width="30%" class="bg-info" style="color:white; font-size:28px;">TOTAL PAID AMOUNT</th>
-					  						<th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?=  number_format($totalAmount, 2);?></span></th>
+					  						<th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?php // number_format($totalAmount, 2);?></span></th>
 					  					</tr>
                                         <tr>
 					  						<th width="30%" class="bg-info" style="color:white; font-size:28px;">TOTAL UNPAID AMOUNT</th>
-					  						<th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?=  number_format($totalRemainingBalance, 2);?></span></th>
+					  						<th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?php //number_format($totalRemainingBalance, 2);?></span></th>
 					  					</tr>
 
 					  				</thead>

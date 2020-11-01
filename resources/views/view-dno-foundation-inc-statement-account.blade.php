@@ -1,24 +1,22 @@
-@extends('layouts.dno-holdings-co-app')
+@extends('layouts.dno-foundation-inc-app')
 @section('title', 'View Statement Of Account |')
 @section('content')
 
 <div id="wrapper">
 		<!-- Sidebar -->
-     @include('sidebar.sidebar-dno-holdings-co')
+     @include('sidebar.sidebar-dno-foundation-inc')
     <div id="content-wrapper">
  		<div class="container-fluid">
 			 <!-- Breadcrumbs-->
             <ol class="breadcrumb">
               <li class="breadcrumb-item">
-                <a href="#">DNO Holdings & Co</a>
+                <a href="#">DNO Foundation Inc</a>
               </li>
               <li class="breadcrumb-item active">View Statement Of Account Details</li>
             </ol>
-              <a href="{{ url('dno-holdings-co/statement-of-account/lists') }}">Back to Lists</a>
+              <a href="{{ url('dno-foundation-inc/statement-of-account/lists') }}">Back to Lists</a>
             <div class="col-lg-12">
-            <img src="{{ asset('images/digitized-logos/dno-holdings-co.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="DNO Holdings & Co">
-            	 
-              
+               <img src="{{ asset('images/digitized-logos/dno-foundation.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="DNO Foundation Inc">          
             	 <h4 class="text-center"><u>VIEW STATEMENT OF ACCOUNT</u></h4>
             </div>
             <div class="row">
@@ -28,7 +26,7 @@
                               <i class="fas fa-receipt" aria-hidden="true"></i>
                             View Statement Of Account 
                               <div class="float-right">
-                               <a href="{{ action('DnoHoldingsCoController@printSOA', $viewStatementAccount[0]->id) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                               <a href="{{ action('DnoFoundationIncController@printSOA', $viewStatementAccount[0]->id) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                              </div>
                         </div>
                         <div class="card-body">
@@ -41,7 +39,7 @@
                                                 <th width="30%">Bill To</th>
                                                 <th> {{ $viewStatementAccount[0]->bill_to }}</th>
                                             </tr>
-                                         
+                                          
                                             <tr>
                                                 <th>Period Covered</th>
                                                 <th> {{ $viewStatementAccount[0]->period_cover }} </th>
@@ -62,7 +60,7 @@
                                                 <th>
                                                     @foreach($viewStatementAccount[0]->statement_of_accounts as $statement)
                                                         @if($statement->module_name === "Statement Of Account")
-                                                            {{ $statement->module_code}}{{ $statement->dno_holdings_code}}
+                                                            {{ $statement->module_code}}{{ $statement->dno_foundation_code}}
                                                         @endif
                                                     @endforeach
                                                 </th>

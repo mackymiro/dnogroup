@@ -14,9 +14,419 @@ use App\DnoFoundationIncCode;
 use App\DnoFoundationIncSupplier;
 use App\DnoFoundationIncPurchaseOrder;
 use App\DnoFoundationIncPettyCash;
+use App\DnoFoundationIncBillingStatement;
+use App\DnoFoundationIncStatementOfAccount;
 
 class DnoFoundationIncController extends Controller
 {
+    public function printSOA($id){
+        
+        $soa = DnoFoundationIncStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                                ->where('billing_statement_id', NULL)
+                                                                ->orderBy('id', 'desc')
+                                                                ->get();                                                   
+                                                                
+        $statementAccounts = DnoFoundationIncStatementOfAccount::where('billing_statement_id', $id)->get()->toArray();
+        
+        $moduleName = "Statement Of Account";
+        $countTotalAmount =  DB::table(
+                            'dno_foundation_inc_statement_of_accounts')
+                            ->select(
+                                'dno_foundation_inc_statement_of_accounts.id',
+                                'dno_foundation_inc_statement_of_accounts.user_id',
+                                'dno_foundation_inc_statement_of_accounts.billing_statement_id',
+                                'dno_foundation_inc_statement_of_accounts.bill_to',
+                                'dno_foundation_inc_statement_of_accounts.address',
+                                'dno_foundation_inc_statement_of_accounts.date',
+                                'dno_foundation_inc_statement_of_accounts.period_cover',
+                                'dno_foundation_inc_statement_of_accounts.terms',
+                                'dno_foundation_inc_statement_of_accounts.date_of_transaction',
+                                'dno_foundation_inc_statement_of_accounts.description',
+                                'dno_foundation_inc_statement_of_accounts.amount',
+                                'dno_foundation_inc_statement_of_accounts.paid_amount',
+                                'dno_foundation_inc_statement_of_accounts.payment_method',
+                                'dno_foundation_inc_statement_of_accounts.collection_date',
+                                'dno_foundation_inc_statement_of_accounts.check_number',
+                                'dno_foundation_inc_statement_of_accounts.check_amount',
+                                'dno_foundation_inc_statement_of_accounts.or_number',
+                                'dno_foundation_inc_statement_of_accounts.status',
+                                'dno_foundation_inc_statement_of_accounts.created_by',
+                                'dno_foundation_inc_codes.dno_holdings_code',
+                                'dno_foundation_inc_codes.module_id',
+                                'dno_foundation_inc_codes.module_code',
+                                'dno_foundation_inc_codes.module_name')
+                            ->join('dno_foundation_inc_codes', 'dno_foundation_inc_statement_of_accounts.id', '=', 'dno_foundation_inc_codes.module_id')
+                            ->where('dno_foundation_inc_statement_of_accounts.id', $id)
+                            ->where('dno_foundation_inc_codes.module_name', $moduleName)
+                            ->sum('dno_foundation_inc_statement_of_accounts.amount');
+                
+        $countAmount = DnoFoundationIncStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+        //
+         $countAmount = DnoFoundationIncStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+
+         $sum  = $countTotalAmount + $countAmount;
+
+         $pdf = PDF::loadView('printSOADnoFoundationInc', compact('soa', 'statementAccounts', 'sum'));
+
+         return $pdf->download('dno-foundation-inc-statement-of-account.pdf');
+    }
+
+    public function viewStatementAccount($id){
+        $viewStatementAccount = DnoFoundationIncStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                                ->where('id', $id)
+                                                                ->get();
+
+        $statementAccounts = DnoFoundationIncStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->get();
+
+        //count the total amount 
+        $countTotalAmount = DnoFoundationIncStatementOfAccount::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = DnoFoundationIncStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+
+        //count the total balance if there are paid amount
+        $paidAmountCount = DnoFoundationIncStatementOfAccount::where('id', $id)->sum('paid_amount');
+
+        //
+        $countAmountOthersPaid = DnoFoundationIncStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('paid_amount');
+
+        $compute  = $paidAmountCount + $countAmountOthersPaid;
+
+
+        //minus the total balance to paid amounts
+        $computeAll  = $sum - $compute;
+
+        return view('view-dno-foundation-inc-statement-account', compact('viewStatementAccount', 'statementAccounts', 'sum', 'computeAll'));
+
+    }
+
+    public function sAccountUpdate(Request $request, $id){
+         //get the main Id 
+         $mainIdSoa = DnoFoundationIncStatementOfAccount::find($request->mainId);
+
+         $compute = $mainIdSoa->total_remaining_balance - $request->paidAmount;
+         
+         $mainIdSoa->total_remaining_balance = $compute; 
+         $mainIdSoa->save();
+ 
+         $statementAccountPaid = DnoFoundationIncStatementOfAccount::find($request->id);
+         $statementAccountPaid->paid_amount = $request->paidAmount;
+         $statementAccountPaid->status = $request->status;
+         $statementAccountPaid->collection_date = $request->collectionDate;
+         $statementAccountPaid->check_number = $request->checkNumber;
+         $statementAccountPaid->check_amount = $request->checkAmount;
+         $statementAccountPaid->or_number = $request->orNumber;
+         $statementAccountPaid->payment_method = $request->payment;
+ 
+         $statementAccountPaid->save();
+ 
+         return response()->json('Success: paid successfully');
+    }
+
+    public function editStatementAccount($id){
+        $getStatementOfAccount = DnoFoundationIncStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                                    ->where('id', $id)
+                                                                    ->get();
+        //AllAcounts not yet paid
+        $allAccounts = DnoFoundationIncStatementOfAccount::where('billing_statement_id', $id)->where('status', NULL)->get()->toArray();
+
+        $stat = "PAID";
+        $allAccountsPaids = DnoFoundationIncStatementOfAccount::where('billing_statement_id', $id)->where('status', $stat)->get()->toArray();  
+
+        //count the total amount 
+        $countTotalAmount = DnoFoundationIncStatementOfAccount::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = DnoFoundationIncStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        //count the total balance if there are paid amount
+        $paidAmountCount = DnoFoundationIncStatementOfAccount::where('id', $id)->sum('paid_amount');
+
+        //
+        $countAmountOthersPaid = DnoFoundationIncStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('paid_amount');
+
+        $compute  = $paidAmountCount + $countAmountOthersPaid;
+
+        //minus the total balance to paid amounts
+        $computeAll  = $sum - $compute;
+
+        return view('edit-dno-foundation-inc-statement-of-account', compact('id', 'getStatementOfAccount', 'computeAll', 'allAccounts', 'allAccountsPaids', 'sum'));
+
+    }
+
+    public function statementOfAccountLists(){
+        $statementOfAccounts = DnoFoundationIncStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                                ->where('billing_statement_id', NULL)
+                                                                ->where('deleted_at', NULL)
+                                                                ->orderBy('id', 'desc')
+                                                                ->get();
+        return view('dno-foundation-inc-statement-of-account-lists', compact('statementOfAccounts'));
+    }
+
+    public function printBillingStatement($id){
+        $printBillingStatement = DnoFoundationIncBillingStatement::with(['user', 'billing_statements'])
+                                                                ->where('id', $id)
+                                                                ->get();
+
+        $billingStatements = DnoFoundationIncBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+            //count the total amount 
+        $countTotalAmount = DnoFoundationIncBillingStatement::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = DnoFoundationIncBillingStatement::where('billing_statement_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        $pdf = PDF::loadView('printBillingStatementDnoFoundationInc', compact('printBillingStatement', 'billingStatements', 'sum'));
+
+        return $pdf->download('dno-foundation-inc-billing-statement.pdf'); 
+    }
+
+    public function viewBillingStatement($id){
+        $viewBillingStatement = DnoFoundationIncBillingStatement::with(['user', 'billing_statements'])
+                                                                ->where('id', $id)
+                                                                ->get();
+
+
+        $billingStatements = DnoFoundationIncBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+        //count the total amount 
+        $countTotalAmount = DnoFoundationIncBillingStatement::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = DnoFoundationIncBillingStatement::where('billing_statement_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        return view('view-dno-foundation-inc-billing-statement', compact('viewBillingStatement', 'billingStatements', 'sum'));
+
+    }
+
+    public function billingStatementList(){
+        $billingStatements = DnoFoundationIncBillingStatement::with(['user', 'billing_statements'])
+                                                            ->where('billing_statement_id', NULL)
+                                                            ->where('deleted_at', NULL)
+                                                            ->orderBy('id', 'desc')
+                                                            ->get();
+
+        return view('dno-foundation-inc-billing-statement-lists', compact('billingStatements'));
+    }
+
+    public function addNewBilling(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $billingOrder = DnoFoundationIncBillingStatement::find($id);
+        
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $amount = $request->get('amount');
+
+        $tot = $billingOrder->total_amount + $amount; 
+
+        $addBillingStatement = new DnoFoundationIncBillingStatement([
+            'user_id'=>$user->id,
+            'billing_statement_id'=>$id,
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$request->get('unitPrice'),
+            'dr_no'=>$request->get('drNo'),
+            'amount'=>$amount,
+            'created_by'=>$name,
+        ]);
+
+        $addBillingStatement->save();
+
+        $addStatementAccount = new DnoFoundationIncStatementOfAccount([
+            'user_id'=>$user->id,
+            'billing_statement_id'=>$id,
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$request->get('unitPrice'),
+            'dr_no'=>$request->get('drNo'),
+            'amount'=>$amount,
+            'total_amount'=>$amount,
+            'created_by'=>$name,
+        ]);
+
+        $addStatementAccount->save();
+        $statementOrder = DnoFoundationIncStatementOfAccount::find($id);  
+
+         //update
+         $billingOrder->total_amount = $tot;
+         $billingOrder->save();
+
+        //update soa table
+        $statementOrder->total_amount  = $tot;
+        $statementOrder->total_remaining_balance = $tot;
+        $statementOrder->save();
+
+        Session::flash('SuccessAdd', 'Successfully added.');
+
+        return redirect()->route('editBillingStatementDnoFoundationInc', ['id'=>$id]);
+
+    }
+
+    public function updateBillingInfo(Request $request, $id){
+        $updateBillingOrder = DnoFoundationIncBillingStatement::find($id);
+
+
+        $updateBillingOrder->bill_to = $request->get('billTo');
+        $updateBillingOrder->address = $request->get('address');
+        $updateBillingOrder->period_cover = $request->get('periodCovered');
+      
+        $updateBillingOrder->terms = $request->get('terms');
+        $updateBillingOrder->date_of_transaction = $request->get('transactionDate');
+        $updateBillingOrder->dr_no = $request->get('drNo');
+        $updateBillingOrder->description = $request->get('description');
+        $updateBillingOrder->unit_price = $request->get('unitPrice');
+        $updateBillingOrder->amount = $request->get('amount');
+        $updateBillingOrder->save();
+
+        Session::flash('SuccessE', 'Successfully updated');
+
+        return redirect()->route('editBillingStatementDnoFoundationInc', ['id'=>$id]);
+    }
+
+    public function editBillingStatement($id){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $billingStatement = DnoFoundationIncBillingStatement::find($id);
+       
+        $bStatements = DnoFoundationIncBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+        return view('edit-dno-foundation-inc-billing-statement-form', compact('billingStatement', 'bStatements'));
+    }
+
+    public function storeBillingStatement(Request $request){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        //get user name
+        $name  = $firstName." ".$lastName;
+
+        //get the latest insert id query in table billing statements ref number
+        $dataReferenceNum = DB::select('SELECT id, dno_foundation_code FROM dno_foundation_inc_codes ORDER BY id DESC LIMIT 1');
+
+        //if code is not zero add plus 1 reference number
+        if(isset($dataReferenceNum[0]->dno_foundation_code) != 0){
+            //if code is not 0
+            $newRefNum = $dataReferenceNum[0]->dno_foundation_code +1;
+            $uRef = sprintf("%06d",$newRefNum);   
+
+        }else{
+            //if code is 0 
+            $newRefNum = 1;
+            $uRef = sprintf("%06d",$newRefNum);
+        } 
+
+
+        $target = DB::table(
+                    'dno_foundation_inc_billing_statements')
+                    ->where('dr_no', $request->get('dr_no'))
+                    ->get()->first();
+
+        if($target === NULL){
+            $billingStatement = new DnoFoundationIncBillingStatement([
+                'user_id'=>$user->id,
+                'bill_to'=>$request->get('billTo'),
+                'address'=>$request->get('address'),
+                'period_cover'=>$request->get('periodCovered'),
+                'date'=>$request->get('date'),
+                'terms'=>$request->get('terms'),
+                'dr_no'=>$request->get('drNo'),
+                'date_of_transaction'=>$request->get('transactionDate'),
+                'description'=>$request->get('description'),
+                'unit_price'=>$request->get('unitPrice'),
+                'amount'=>$request->get('amount'),
+                'total_amount'=>$request->get('amount'),
+                'created_by'=>$name,
+                'prepared_by'=>$name,
+            ]);
+
+            $billingStatement->save();
+
+            $insertedId = $billingStatement->id;
+    
+            $moduleCode = "BS-";
+            $moduleName = "Billing Statement";
+
+            $dnoFoundationInc = new DnoFoundationIncCode([
+                'user_id'=>$user->id,
+                'dno_foundation_code'=>$uRef,
+                'module_id'=>$insertedId,
+                'module_code'=>$moduleCode,
+                'module_name'=>$moduleName,
+    
+            ]);
+    
+            $dnoFoundationInc->save();
+            $bsNo = $dnoFoundationInc->id;
+
+            $bsNoId = DnoFoundationIncCode::find($bsNo);
+
+            $statementAccount = new DnoFoundationIncStatementOfAccount([
+                'user_id'=>$user->id,
+                'bs_no'=>$bsNoId->dno_foundation_code,
+                'bill_to'=>$request->get('billTo'),
+                'period_cover'=>$request->get('periodCovered'),
+                'date'=>$request->get('date'),
+                'terms'=>$request->get('terms'),
+                'dr_no'=>$request->get('drNo'),
+                'date_of_transaction'=>$request->get('transactionDate'),
+                'description'=>$request->get('description'),
+                'unit_price'=>$request->get('unitPrice'),
+                'amount'=>$request->get('amount'),
+                'total_amount'=>$request->get('amount'),
+                'total_remaining_balance'=>$request->get('amount'),
+                'created_by'=>$name,
+                'prepared_by'=>$name,
+    
+    
+            ]);
+            $statementAccount->save();
+            $insertedIdStatement = $statementAccount->id;
+
+            $moduleCodeSOA = "SOA-";
+            $moduleNameSOA = "Statement Of Account";
+            
+            $uRefStatement = $uRef + 1; 
+            $uRefState = sprintf("%06d",$uRefStatement);
+            
+            $statement = new DnoFoundationIncCode([
+                'user_id'=>$user->id,
+                'dno_foundation_code'=>$uRefState,
+                'module_id'=>$insertedIdStatement,
+                'module_code'=>$moduleCodeSOA,
+                'module_name'=>$moduleNameSOA,
+    
+            ]);
+            $statement->save();
+
+            return redirect()->route('editBillingStatementDnoFoundationInc', ['id'=>$insertedId]);
+        }else{
+            return redirect()->route('billingStatementFormDnoFoundationInc')->with('error', 'DR Number Already Exists. Please See Transaction List For Your Reference');
+        }
+    }
+    
+    public function billingStatementForm(){
+        return view('dno-foundation-inc-billing-statement-form');
+    }
 
     public function printPettyCash($id){
         $getPettyCash =  DnoFoundationIncPettyCash::with(['user', 'petty_cashes'])
@@ -2605,6 +3015,23 @@ class DnoFoundationIncController extends Controller
         Session::flash('SuccessE', 'Successfully updated');
 
         return redirect()->route('editDnoFoundationInc', ['id'=>$id]);
+    }
+
+    public function destroyBillingStatement($id){   
+        $billingStatement = DnoFoundationIncBillingStatement::find($id);
+        $billingStatement->delete();
+    }
+
+    public function destroyBillingDataStatement(Request $request, $id){
+        $billStatement = DnoFoundationIncBillingStatement::find($request->billingStatementId);
+
+        $billingStatement = DnoFoundationIncBillingStatement::find($id);
+    
+        $getAmount = $billStatement->total_amount - $billingStatement->amount;
+        $billStatement->total_amount = $getAmount;
+        $billStatement->save();
+
+        $billingStatement->delete();
     }
 
     public function destroyPettyCash($id){

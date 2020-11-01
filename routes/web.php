@@ -6660,6 +6660,99 @@ Route::group(['middleware' => ['auth']], function(){
 		->middleware(['cashier']);
 
 	Route::get(
+		'/dno-foundation-inc/billing-statement-form',
+		'DnoFoundationIncController@billingStatementForm')
+		->name('billingStatementFormDnoFoundationInc')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-foundation-inc/store-billing-statement',
+		'DnoFoundationIncController@storeBillingStatement')
+		->name('storeBillingStatement')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/{id}/edit-billing-statement',
+		'DnoFoundationIncController@editBillingStatement')
+		->name('editBillingStatementDnoFoundationInc')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-foundation-inc/{id}/update-billing-info',
+		'DnoFoundationIncController@updateBillingInfo')
+		->name('updateBillingInfo')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-foundation-inc/{id}/add-new-billing',
+		'DnoFoundationIncController@addNewBilling')
+		->name('addNewBilling')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dno-foundation-inc/delete-data-billing-statement/{id}',
+		'DnoFoundationIncController@destroyBillingDataStatement')
+		->name('destroyBillingDataStatement')
+		->middleware(['cashier']);
+
+
+	Route::delete(
+		'/dno-foundation-inc/delete-billing-statement/{id}',
+		'DnoFoundationIncController@destroyBillingStatement')
+		->name('destroyBillingStatement')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/billing-statement-lists',
+		'DnoFoundationIncController@billingStatementList')
+		->name('billingStatementList')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/{id}/view-billing-statement/',
+		'DnoFoundationIncController@viewBillingStatement')
+		->name('viewBillingStatement')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/{id}/printBillingStatement',
+		'DnoFoundationIncController@printBillingStatement')
+		->name('printBillingStatement')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/statement-of-account/lists',
+		'DnoFoundationIncController@statementOfAccountLists')
+		->name('statementOfAccountLists')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/{id}/edit-statement-of-account/',
+		'DnoFoundationIncController@editStatementAccount')
+		->name('editStatementAccount')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-foundation-inc/s-account/{id}',
+		'DnoFoundationIncController@sAccountUpdate')
+		->name('sAccountUpdate')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/{id}/view-statement-account/',
+		'DnoFoundationIncController@viewStatementAccount')
+		->name('viewStatementAccount')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/{id}/printSOA',
+		'DnoFoundationIncController@printSOA')
+		->name('printSOA')
+		->middleware(['cashier']);
+
+		
+		
+	Route::get(
 		'/dno-foundation-inc/payment-voucher-form',
 		'DnoFoundationIncController@paymentVoucherForm')
 		->name('paymentVoucherFormDnoFoundationInc')
