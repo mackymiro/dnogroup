@@ -5071,6 +5071,61 @@ Route::group(['middleware' => ['auth']], function(){
 		->middleware(['cashier']);
 
 	Route::get(
+		'/dno-resources-development/petty-cash-list',
+		'DnoResourcesDevelopmentController@pettyCashList')
+		->name('pettyCashList')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-resources-development/petty-cash/add',
+		'DnoResourcesDevelopmentController@addPettyCash')
+		->name('addPettyCash')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-resources-development/{id}/edit-petty-cash/',
+		'DnoResourcesDevelopmentController@editPettyCash')
+		->name('editPettyCashDnoResourcesDevelopment')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-resources-development/{id}/update-petty-cash',
+		'DnoResourcesDevelopmentController@updatePettyCash')
+		->name('updatePettyCash')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-resources-development/{id}/add-new-petty-cash',
+		'DnoResourcesDevelopmentController@addNewPettyCash')
+		->name('addNewPettyCash')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-resources-development/{id}/updatePC',
+		'DnoResourcesDevelopmentController@updatePC')
+		->name('updatePC')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dno-resources-development/petty-cash/delete/{id}',
+		'DnoResourcesDevelopmentController@destroyPettyCash')
+		->name('destroyPettyCash')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-resources-development/petty-cash/{id}/view',
+		'DnoResourcesDevelopmentController@viewPettyCash')
+		->name('viewPettyCash')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-resources-development/{id}/printPettyCash',
+		'DnoResourcesDevelopmentController@printPettyCash')
+		->name('printPettyCash')
+		->middleware(['cashier']);
+
+			
+	Route::get(
 		'/dno-resources-development/suppliers',
 		'DnoResourcesDevelopmentController@supplier')
 		->name('supplier')

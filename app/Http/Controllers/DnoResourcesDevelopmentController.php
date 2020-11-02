@@ -14,9 +14,167 @@ use App\DnoResourcesDevelopmentCorpPurchaseOrder;
 use App\DnoResourcesDevelopmentCorpDeliveryTransactionForm; 
 use App\DnoResourcesDevelopmentCode;
 use App\DnoResourcesDevelopmentCorpSupplier;
+use App\DnoResourcesDevelopmentCorpPettyCash;
 
 class DnoResourcesDevelopmentController extends Controller
 {
+    public function printPettyCash($id){
+        $getPettyCash =  DnoResourcesDevelopmentCorpPettyCash::with(['user', 'petty_cashes'])
+                                                    ->where('id', $id)
+                                                    ->get();
+
+        $getPettyCashSummaries = DnoResourcesDevelopmentCorpPettyCash::where('pc_id', $id)->get()->toArray();
+
+        //total
+        $totalPettyCash = DnoResourcesDevelopmentCorpPettyCash::where('id', $id)->where('pc_id', NULL)->sum('amount');
+
+        $pettyCashSummaryTotal = DnoResourcesDevelopmentCorpPettyCash::where('pc_id', $id)->sum('amount');
+
+        $sum = $totalPettyCash + $pettyCashSummaryTotal;
+
+        $pdf = PDF::loadView('printPettyCashDnoResourcesDevelopment', compact('getPettyCash', 'getPettyCashSummaries', 'sum'));
+
+        return $pdf->download('dno-resources-development-corp-petty-cash.pdf');
+    }
+
+    public function viewPettyCash($id){
+        $getPettyCash =  DnoResourcesDevelopmentCorpPettyCash::with(['user', 'petty_cashes'])
+                                                        ->where('id', $id)
+                                                        ->get();
+
+        $getPettyCashSummaries = DnoResourcesDevelopmentCorpPettyCash::where('pc_id', $id)->get()->toArray();
+
+        //total
+        $totalPettyCash = DnoResourcesDevelopmentCorpPettyCash::where('id', $id)->where('pc_id', NULL)->sum('amount');
+
+        $pettyCashSummaryTotal = DnoResourcesDevelopmentCorpPettyCash::where('pc_id', $id)->sum('amount');
+
+        $sum = $totalPettyCash + $pettyCashSummaryTotal;
+
+
+        return view('dno-resources-development-corp-view-petty-cash', compact('getPettyCash', 'getPettyCashSummaries', 'sum'));
+    }
+
+    public function updatePC(Request $request, $id){
+        $updatePC = DnoResourcesDevelopmentCorpPettyCash::find($id);
+
+        $updatePC->date = $request->get('date');
+        $updatePC->petty_cash_summary = $request->get('pettyCashSummary');
+        $updatePC->amount = $request->get('amount');
+        $updatePC->save();
+
+        Session::flash('updatePC', 'Successfully updated.');
+        return redirect()->route('editPettyCashDnoResourcesDevelopment', ['id'=>$request->get('pcId')]);
+    }
+
+    public function addNewPettyCash(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        
+        $addNew = new DnoResourcesDevelopmentCorpPettyCash([
+            'user_id'=>$user->id,
+            'pc_id'=>$id,
+            'date'=>$request->get('date'),
+            'petty_cash_summary'=>$request->get('pettyCashSummary'),
+            'amount'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+        $addNew->save();
+
+        Session::flash('addNewSuccess', 'Successfully added.');
+
+        return redirect()->route('editPettyCashDnoResourcesDevelopment', ['id'=>$id]);
+    }
+
+    public function updatePettyCash(Request $request, $id){
+        $update = DnoResourcesDevelopmentCorpPettyCash::find($id);
+        $update->date = $request->get('date');
+        $update->petty_cash_name = $request->get('pettyCashName');
+        $update->petty_cash_summary = $request->get('pettyCashSummary');
+        $update->amount = $request->get('amount');
+
+        $update->save();
+        Session::flash('editSuccess', 'Successfully updated.'); 
+
+        return redirect()->route('editPettyCashDnoResourcesDevelopment', ['id'=>$id]);
+    }
+
+    public function editPettyCash($id){
+        $pettyCash =  DnoResourcesDevelopmentCorpPettyCash::with(['user', 'petty_cashes'])
+                                                ->where('id', $id)
+                                                ->get();
+
+        $pettyCashSummaries = DnoResourcesDevelopmentCorpPettyCash::where('pc_id', $id)->get()->toArray();
+
+        return view('edit-dno-resources-development-corp-petty-cash', compact('pettyCash', 'pettyCashSummaries'));
+    }
+
+    public function addPettyCash(Request $request){     
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //get the latest insert id query in table dno personal codes
+         $dataCashNo = DB::select('SELECT id, dno_resources_code FROM dno_resources_development_codes ORDER BY id DESC LIMIT 1');
+
+         //if code is not zero add plus 1 petty cash no
+         if(isset($dataCashNo[0]->dno_resources_code) != 0){
+             //if code is not 0
+             $newProd = $dataCashNo[0]->dno_resources_code +1;
+             $uPetty = sprintf("%06d",$newProd);   
+ 
+         }else{
+             //if code is 0 
+             $newProd = 1;
+             $uPetty = sprintf("%06d",$newProd);
+         } 
+
+         $addPettyCash = new DnoResourcesDevelopmentCorpPettyCash([
+            'user_id'=>$user->id,
+            'date'=>$request->date,
+            'petty_cash_name'=>$request->pettyCashName,
+            'petty_cash_summary'=>$request->pettyCashSummary,
+            'created_by'=>$name,
+        ]);
+
+        $addPettyCash->save();
+        $insertId = $addPettyCash->id;
+
+        $moduleCode = "PC-";
+        $moduleName = "Petty Cash";
+
+        $dnoResources = new DnoResourcesDevelopmentCode([
+            'user_id'=>$user->id,
+            'dno_resources_code'=>$uPetty,
+            'module_id'=>$insertId,
+            'module_code'=>$moduleCode,
+            'module_name'=>$moduleName,
+        ]);
+        $dnoResources->save();
+      
+        return response()->json($insertId);
+
+
+    }
+
+    public function pettyCashList(){
+        $pettyCashLists =  DnoResourcesDevelopmentCorpPettyCash::with(['user', 'petty_cashes'])
+                                                        ->where('pc_id', NULL)
+                                                        ->where('deleted_at', NULL)
+                                                        ->orderBy('id', 'desc')
+                                                        ->get();
+        return view('dno-resources-development-corp-petty-cash-list', compact('pettyCashLists'));
+    }
 
     public function printPO($id){
         $moduleName = "Purchase Order";
@@ -3131,6 +3289,11 @@ class DnoResourcesDevelopmentController extends Controller
         //
     }
 
+
+    public function destroyPettyCash($id){
+        $pettyCash = DnoResourcesDevelopmentCorpPettyCash::find($id);
+        $pettyCash->delete();
+    }
 
     public function destroyDeliveryTransaction($id){
         $deliveryTransaction = DnoResourcesDevelopmentCorpDeliveryTransactionForm::find($id);
