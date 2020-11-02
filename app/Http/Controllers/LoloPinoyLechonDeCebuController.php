@@ -7472,7 +7472,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         //minus the total balance to paid amounts
         $computeAll  = $sum - $compute;
 
-        return view('edit-statement-of-account', compact('id', 'getStatementOfAccount', 'computeAll','sAccounts', 'allAccounts', 'allAccountsPaids', 'sum'));
+        return view('edit-statement-of-account', compact('id', 'getStatementOfAccount', 'computeAll', 'allAccounts', 'allAccountsPaids', 'sum'));
     }
 
 
@@ -7690,7 +7690,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 ->sum('lechon_de_cebu_statement_of_accounts.total_remaining_balance');
 
         return view('lechon-de-cebu-statement-of-account-lists', compact('statementOfAccounts', 
-        'statementOfAccountsPaids', 'totalAmount', 'totalRemainingBalance', 'privateOrders', 'totalAmountPO', 'totalRemainingBalancePo'));
+         'totalAmount', 'totalRemainingBalance', 'privateOrders', 'totalAmountPO', 'totalRemainingBalancePo'));
     }
 
     //store statement of account

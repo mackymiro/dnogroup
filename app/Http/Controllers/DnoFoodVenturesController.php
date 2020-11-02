@@ -19,10 +19,502 @@ use App\DnoFoodVenturesRawMaterialProduct;
 use App\DnoFoodVenturesSalesInvoice;
 use App\DnoFoodVenturesBillingStatement;
 use App\DnoFoodVenturesPettyCash;
+use App\DnoFoodVenturesStatementOfAccount; 
 
 
 class DnoFoodVenturesController extends Controller
 {
+
+    public function printSOAListsDR(){
+        $sDr = "Delivery Receipt";
+        $printSOAStatementsDRs = DnoFoodVenturesStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                                    ->where('billing_statement_id', NULL)
+                                                                    ->where('deleted_at', NULL)
+                                                                    ->where('order', $sDr)
+                                                                    ->orderBy('id', 'desc')
+                                                                    ->get();
+                                                    
+        $moduleName = "Statement Of Account";
+        $status = "PAID";
+        $totalAmountDR = DB::table(
+                                    'dno_food_ventures_statement_of_accounts')
+                                    ->select(
+                                        'dno_food_ventures_statement_of_accounts.id',
+                                        'dno_food_ventures_statement_of_accounts.user_id',
+                                        'dno_food_ventures_statement_of_accounts.billing_statement_id',
+                                        'dno_food_ventures_statement_of_accounts.bill_to',
+                                        'dno_food_ventures_statement_of_accounts.address',
+                                        'dno_food_ventures_statement_of_accounts.date',
+                                        'dno_food_ventures_statement_of_accounts.period_cover',
+                                        'dno_food_ventures_statement_of_accounts.terms',
+                                        'dno_food_ventures_statement_of_accounts.date_of_transaction',
+                                        'dno_food_ventures_statement_of_accounts.order',
+                                        'dno_food_ventures_statement_of_accounts.description',
+                                        'dno_food_ventures_statement_of_accounts.amount',
+                                        'dno_food_ventures_statement_of_accounts.total_amount',
+                                        'dno_food_ventures_statement_of_accounts.total_remaining_balance',
+                                        'dno_food_ventures_statement_of_accounts.paid_amount',
+                                        'dno_food_ventures_statement_of_accounts.payment_method',
+                                        'dno_food_ventures_statement_of_accounts.collection_date',
+                                        'dno_food_ventures_statement_of_accounts.check_number',
+                                        'dno_food_ventures_statement_of_accounts.check_amount',
+                                        'dno_food_ventures_statement_of_accounts.or_number',
+                                        'dno_food_ventures_statement_of_accounts.status',
+                                        'dno_food_ventures_statement_of_accounts.created_by',
+                                        'dno_food_ventures_codes.dno_food_venture_code',
+                                        'dno_food_ventures_codes.module_id',
+                                        'dno_food_ventures_codes.module_code',
+                                        'dno_food_ventures_codes.module_name')
+                                    ->join('dno_food_ventures_codes', 'dno_food_ventures_statement_of_accounts.id', '=', 'dno_food_ventures_codes.module_id')
+                                    ->where('dno_food_ventures_statement_of_accounts.billing_statement_id', NULL)
+                                    ->where('dno_food_ventures_codes.module_name', $moduleName)
+                                    ->where('dno_food_ventures_statement_of_accounts.status', '=', $status)
+                                    ->where('dno_food_ventures_statement_of_accounts.order', $sDr)
+                                    ->sum('dno_food_ventures_statement_of_accounts.total_amount');
+        
+        $totalRemainingBalanceDR = DB::table(
+                                    'dno_food_ventures_statement_of_accounts')
+                                    ->select(
+                                        'dno_food_ventures_statement_of_accounts.id',
+                                        'dno_food_ventures_statement_of_accounts.user_id',
+                                        'dno_food_ventures_statement_of_accounts.billing_statement_id',
+                                        'dno_food_ventures_statement_of_accounts.bill_to',
+                                        'dno_food_ventures_statement_of_accounts.address',
+                                        'dno_food_ventures_statement_of_accounts.date',
+                                        'dno_food_ventures_statement_of_accounts.period_cover',
+                                        'dno_food_ventures_statement_of_accounts.terms',
+                                        'dno_food_ventures_statement_of_accounts.date_of_transaction',
+                                        'dno_food_ventures_statement_of_accounts.order',
+                                        'dno_food_ventures_statement_of_accounts.description',
+                                        'dno_food_ventures_statement_of_accounts.amount',
+                                        'dno_food_ventures_statement_of_accounts.total_amount',
+                                        'dno_food_ventures_statement_of_accounts.total_remaining_balance',
+                                        'dno_food_ventures_statement_of_accounts.paid_amount',
+                                        'dno_food_ventures_statement_of_accounts.payment_method',
+                                        'dno_food_ventures_statement_of_accounts.collection_date',
+                                        'dno_food_ventures_statement_of_accounts.check_number',
+                                        'dno_food_ventures_statement_of_accounts.check_amount',
+                                        'dno_food_ventures_statement_of_accounts.or_number',
+                                        'dno_food_ventures_statement_of_accounts.status',
+                                        'dno_food_ventures_statement_of_accounts.created_by',
+                                        'dno_food_ventures_codes.dno_food_venture_code',
+                                        'dno_food_ventures_codes.module_id',
+                                        'dno_food_ventures_codes.module_code',
+                                        'dno_food_ventures_codes.module_name')
+                                    ->join('dno_food_ventures_codes', 'dno_food_ventures_statement_of_accounts.id', '=', 'dno_food_ventures_codes.module_id')
+                                    ->where('dno_food_ventures_statement_of_accounts.billing_statement_id', NULL)
+                                    ->where('dno_food_ventures_codes.module_name', $moduleName)
+                                    ->where('dno_food_ventures_statement_of_accounts.status', NULL)
+                                    ->where('dno_food_ventures_statement_of_accounts.order', $sDr)
+                                    ->sum('dno_food_ventures_statement_of_accounts.total_remaining_balance');
+
+            $pdf = PDF::loadView('printSOAListsDRDnoFoodVentures', compact('printSOAStatementsDRs', 
+            'totalAmountDR', 'totalRemainingBalanceDR'));
+
+            return $pdf->download('dno-food-ventures-statement-of-account-list-delivery-receipt.pdf');
+                                
+    }
+
+
+    public function printSOAListSO(){
+        $sO = "Sales Invoice";
+        $printSOAStatements = DnoFoodVenturesStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                                    ->where('billing_statement_id', NULL)
+                                                                    ->where('deleted_at', NULL)
+                                                                    ->where('order', $sO)
+                                                                    ->orderBy('id', 'desc')
+                                                                    ->get();
+        $status = "PAID";
+        $moduleName = "Statement Of Account";
+        $totalAmount = DB::table(
+                            'dno_food_ventures_statement_of_accounts')
+                            ->select(
+                                'dno_food_ventures_statement_of_accounts.id',
+                                'dno_food_ventures_statement_of_accounts.user_id',
+                                'dno_food_ventures_statement_of_accounts.billing_statement_id',
+                                'dno_food_ventures_statement_of_accounts.bill_to',
+                                'dno_food_ventures_statement_of_accounts.address',
+                                'dno_food_ventures_statement_of_accounts.date',
+                                'dno_food_ventures_statement_of_accounts.period_cover',
+                                'dno_food_ventures_statement_of_accounts.terms',
+                                'dno_food_ventures_statement_of_accounts.date_of_transaction',
+                                'dno_food_ventures_statement_of_accounts.order',
+                                'dno_food_ventures_statement_of_accounts.description',
+                                'dno_food_ventures_statement_of_accounts.amount',
+                                'dno_food_ventures_statement_of_accounts.total_amount',
+                                'dno_food_ventures_statement_of_accounts.total_remaining_balance',
+                                'dno_food_ventures_statement_of_accounts.paid_amount',
+                                'dno_food_ventures_statement_of_accounts.payment_method',
+                                'dno_food_ventures_statement_of_accounts.collection_date',
+                                'dno_food_ventures_statement_of_accounts.check_number',
+                                'dno_food_ventures_statement_of_accounts.check_amount',
+                                'dno_food_ventures_statement_of_accounts.or_number',
+                                'dno_food_ventures_statement_of_accounts.status',
+                                'dno_food_ventures_statement_of_accounts.created_by',
+                                'dno_food_ventures_codes.dno_food_venture_code',
+                                'dno_food_ventures_codes.module_id',
+                                'dno_food_ventures_codes.module_code',
+                                'dno_food_ventures_codes.module_name')
+                            ->join('dno_food_ventures_codes', 'dno_food_ventures_statement_of_accounts.id', '=', 'dno_food_ventures_codes.module_id')
+                            ->where('dno_food_ventures_statement_of_accounts.billing_statement_id', NULL)
+                            ->where('dno_food_ventures_codes.module_name', $moduleName)
+                            ->where('dno_food_ventures_statement_of_accounts.status', '=', $status)
+                            ->where('dno_food_ventures_statement_of_accounts.order', $sO)
+                            ->sum('dno_food_ventures_statement_of_accounts.total_amount');
+
+       $totalRemainingBalance = DB::table(
+                            'dno_food_ventures_statement_of_accounts')
+                            ->select(
+                                'dno_food_ventures_statement_of_accounts.id',
+                                'dno_food_ventures_statement_of_accounts.user_id',
+                                'dno_food_ventures_statement_of_accounts.billing_statement_id',
+                                'dno_food_ventures_statement_of_accounts.bill_to',
+                                'dno_food_ventures_statement_of_accounts.address',
+                                'dno_food_ventures_statement_of_accounts.date',
+                                'dno_food_ventures_statement_of_accounts.period_cover',
+                                'dno_food_ventures_statement_of_accounts.terms',
+                                'dno_food_ventures_statement_of_accounts.date_of_transaction',
+                                'dno_food_ventures_statement_of_accounts.order',
+                                'dno_food_ventures_statement_of_accounts.description',
+                                'dno_food_ventures_statement_of_accounts.amount',
+                                'dno_food_ventures_statement_of_accounts.total_amount',
+                                'dno_food_ventures_statement_of_accounts.total_remaining_balance',
+                                'dno_food_ventures_statement_of_accounts.paid_amount',
+                                'dno_food_ventures_statement_of_accounts.payment_method',
+                                'dno_food_ventures_statement_of_accounts.collection_date',
+                                'dno_food_ventures_statement_of_accounts.check_number',
+                                'dno_food_ventures_statement_of_accounts.check_amount',
+                                'dno_food_ventures_statement_of_accounts.or_number',
+                                'dno_food_ventures_statement_of_accounts.status',
+                                'dno_food_ventures_statement_of_accounts.created_by',
+                                'dno_food_ventures_codes.dno_food_venture_code',
+                                'dno_food_ventures_codes.module_id',
+                                'dno_food_ventures_codes.module_code',
+                                'dno_food_ventures_codes.module_name')
+                            ->join('dno_food_ventures_codes', 'dno_food_ventures_statement_of_accounts.id', '=', 'dno_food_ventures_codes.module_id')
+                            ->where('dno_food_ventures_statement_of_accounts.billing_statement_id', NULL)
+                            ->where('dno_food_ventures_codes.module_name', $moduleName)
+                            ->where('dno_food_ventures_statement_of_accounts.status', NULL)
+                            ->where('dno_food_ventures_statement_of_accounts.order', $sO)
+                            ->sum('dno_food_ventures_statement_of_accounts.total_remaining_balance');
+
+        $pdf = PDF::loadView('printSOAListsSODnoFoodVentures', compact('printSOAStatements', 
+        'totalAmount', 'totalRemainingBalance'));
+
+        return $pdf->download('dno-food-ventures-statement-of-account-list-sales-order.pdf');
+
+    }
+
+
+    public function printSOA($id){
+        $soa = DnoFoodVenturesStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                                ->where('billing_statement_id', NULL)
+                                                                ->orderBy('id', 'desc')
+                                                                ->get();                                                   
+                                                                
+        $statementAccounts = DnoFoodVenturesStatementOfAccount::where('billing_statement_id', $id)->get()->toArray();
+
+        $moduleName = "Statement Of Account";
+        $countTotalAmount =  DB::table(
+                            'dno_food_ventures_statement_of_accounts')
+                            ->select(
+                                'dno_food_ventures_statement_of_accounts.id',
+                                'dno_food_ventures_statement_of_accounts.user_id',
+                                'dno_food_ventures_statement_of_accounts.billing_statement_id',
+                                'dno_food_ventures_statement_of_accounts.bill_to',
+                                'dno_food_ventures_statement_of_accounts.address',
+                                'dno_food_ventures_statement_of_accounts.date',
+                                'dno_food_ventures_statement_of_accounts.period_cover',
+                                'dno_food_ventures_statement_of_accounts.terms',
+                                'dno_food_ventures_statement_of_accounts.date_of_transaction',
+                                'dno_food_ventures_statement_of_accounts.description',
+                                'dno_food_ventures_statement_of_accounts.amount',
+                                'dno_food_ventures_statement_of_accounts.paid_amount',
+                                'dno_food_ventures_statement_of_accounts.payment_method',
+                                'dno_food_ventures_statement_of_accounts.collection_date',
+                                'dno_food_ventures_statement_of_accounts.check_number',
+                                'dno_food_ventures_statement_of_accounts.check_amount',
+                                'dno_food_ventures_statement_of_accounts.or_number',
+                                'dno_food_ventures_statement_of_accounts.status',
+                                'dno_food_ventures_statement_of_accounts.created_by',
+                                'dno_food_ventures_codes.dno_food_venture_code',
+                                'dno_food_ventures_codes.module_id',
+                                'dno_food_ventures_codes.module_code',
+                                'dno_food_ventures_codes.module_name')
+                            ->join('dno_food_ventures_codes', 'dno_food_ventures_statement_of_accounts.id', '=', 'dno_food_ventures_codes.module_id')
+                            ->where('dno_food_ventures_statement_of_accounts.id', $id)
+                            ->where('dno_food_ventures_codes.module_name', $moduleName)
+                            ->sum('dno_food_ventures_statement_of_accounts.amount');
+
+         $countAmount = DnoFoodVenturesStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+    //
+        $countAmount = DnoFoodVenturesStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        $pdf = PDF::loadView('printSOADnoFoodVentures', compact('soa', 'statementAccounts', 'sum'));
+
+        return $pdf->download('dno-food-ventures-statement-of-account.pdf');
+    }   
+
+    public function viewStatementAccount($id){
+        $viewStatementAccount = DnoFoodVenturesStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                                        ->where('id', $id)
+                                                                        ->get();
+
+        $statementAccounts = DnoFoodVenturesStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->get();
+
+        //count the total amount 
+        $countTotalAmount = DnoFoodVenturesStatementOfAccount::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = DnoFoodVenturesStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+
+        //count the total balance if there are paid amount
+        $paidAmountCount = DnoFoodVenturesStatementOfAccount::where('id', $id)->sum('paid_amount');
+
+        //
+        $countAmountOthersPaid = DnoFoodVenturesStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('paid_amount');
+
+        $compute  = $paidAmountCount + $countAmountOthersPaid;
+
+
+        //minus the total balance to paid amounts
+        $computeAll  = $sum - $compute;
+
+        return view('view-dno-food-ventures-statement-account', compact('viewStatementAccount', 'statementAccounts', 'sum', 'computeAll'));
+
+    }
+
+    public function sAccountUpdate(Request $request, $id){
+         //get the main Id 
+         $mainIdSoa = DnoFoodVenturesStatementOfAccount::find($request->mainId);
+
+         $compute = $mainIdSoa->total_remaining_balance - $request->paidAmount;
+         
+         $mainIdSoa->total_remaining_balance = $compute; 
+         $mainIdSoa->save();
+ 
+         $statementAccountPaid = DnoFoodVenturesStatementOfAccount::find($request->id);
+         $statementAccountPaid->paid_amount = $request->paidAmount;
+         $statementAccountPaid->status = $request->status;
+         $statementAccountPaid->collection_date = $request->collectionDate;
+         $statementAccountPaid->check_number = $request->checkNumber;
+         $statementAccountPaid->check_amount = $request->checkAmount;
+         $statementAccountPaid->or_number = $request->orNumber;
+         $statementAccountPaid->payment_method = $request->payment;
+ 
+         $statementAccountPaid->save();
+ 
+         return response()->json('Success: paid successfully');
+
+    }
+
+    public function editStatementAccount($id){
+        $getStatementOfAccount = DnoFoodVenturesStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                                    ->where('id', $id)
+                                                                    ->get();
+        //AllAcounts not yet paid
+        $allAccounts = DnoFoodVenturesStatementOfAccount::where('billing_statement_id', $id)->where('status', NULL)->get()->toArray();
+
+        $stat = "PAID";
+        $allAccountsPaids = DnoFoodVenturesStatementOfAccount::where('billing_statement_id', $id)->where('status', $stat)->get()->toArray();  
+
+        //count the total amount 
+        $countTotalAmount = DnoFoodVenturesStatementOfAccount::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = DnoFoodVenturesStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        //count the total balance if there are paid amount
+        $paidAmountCount = DnoFoodVenturesStatementOfAccount::where('id', $id)->sum('paid_amount');
+
+        //
+        $countAmountOthersPaid = DnoFoodVenturesStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('paid_amount');
+
+        $compute  = $paidAmountCount + $countAmountOthersPaid;
+
+        //minus the total balance to paid amounts
+        $computeAll  = $sum - $compute;
+
+        return view('edit-dno-food-ventures-statement-of-account', compact('id', 'getStatementOfAccount', 'computeAll', 'allAccounts', 'allAccountsPaids', 'sum'));
+
+    }
+
+    public function statementOfAccountLists(){
+        $sO = "Sales Invoice";
+        $statementOfAccounts = DnoFoodVenturesStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                                    ->where('billing_statement_id', NULL)
+                                                                    ->where('deleted_at', NULL)
+                                                                    ->where('order', $sO)
+                                                                    ->orderBy('id', 'desc')
+                                                                    ->get();
+        $status = "PAID";
+        $moduleName = "Statement Of Account";
+        $totalAmount = DB::table(
+                            'dno_food_ventures_statement_of_accounts')
+                            ->select(
+                                'dno_food_ventures_statement_of_accounts.id',
+                                'dno_food_ventures_statement_of_accounts.user_id',
+                                'dno_food_ventures_statement_of_accounts.billing_statement_id',
+                                'dno_food_ventures_statement_of_accounts.bill_to',
+                                'dno_food_ventures_statement_of_accounts.address',
+                                'dno_food_ventures_statement_of_accounts.date',
+                                'dno_food_ventures_statement_of_accounts.period_cover',
+                                'dno_food_ventures_statement_of_accounts.terms',
+                                'dno_food_ventures_statement_of_accounts.date_of_transaction',
+                                'dno_food_ventures_statement_of_accounts.order',
+                                'dno_food_ventures_statement_of_accounts.description',
+                                'dno_food_ventures_statement_of_accounts.amount',
+                                'dno_food_ventures_statement_of_accounts.total_amount',
+                                'dno_food_ventures_statement_of_accounts.total_remaining_balance',
+                                'dno_food_ventures_statement_of_accounts.paid_amount',
+                                'dno_food_ventures_statement_of_accounts.payment_method',
+                                'dno_food_ventures_statement_of_accounts.collection_date',
+                                'dno_food_ventures_statement_of_accounts.check_number',
+                                'dno_food_ventures_statement_of_accounts.check_amount',
+                                'dno_food_ventures_statement_of_accounts.or_number',
+                                'dno_food_ventures_statement_of_accounts.status',
+                                'dno_food_ventures_statement_of_accounts.created_by',
+                                'dno_food_ventures_codes.dno_food_venture_code',
+                                'dno_food_ventures_codes.module_id',
+                                'dno_food_ventures_codes.module_code',
+                                'dno_food_ventures_codes.module_name')
+                            ->join('dno_food_ventures_codes', 'dno_food_ventures_statement_of_accounts.id', '=', 'dno_food_ventures_codes.module_id')
+                            ->where('dno_food_ventures_statement_of_accounts.billing_statement_id', NULL)
+                            ->where('dno_food_ventures_codes.module_name', $moduleName)
+                            ->where('dno_food_ventures_statement_of_accounts.status', '=', $status)
+                            ->where('dno_food_ventures_statement_of_accounts.order', $sO)
+                            ->sum('dno_food_ventures_statement_of_accounts.total_amount');
+
+       $totalRemainingBalance = DB::table(
+                            'dno_food_ventures_statement_of_accounts')
+                            ->select(
+                                'dno_food_ventures_statement_of_accounts.id',
+                                'dno_food_ventures_statement_of_accounts.user_id',
+                                'dno_food_ventures_statement_of_accounts.billing_statement_id',
+                                'dno_food_ventures_statement_of_accounts.bill_to',
+                                'dno_food_ventures_statement_of_accounts.address',
+                                'dno_food_ventures_statement_of_accounts.date',
+                                'dno_food_ventures_statement_of_accounts.period_cover',
+                                'dno_food_ventures_statement_of_accounts.terms',
+                                'dno_food_ventures_statement_of_accounts.date_of_transaction',
+                                'dno_food_ventures_statement_of_accounts.order',
+                                'dno_food_ventures_statement_of_accounts.description',
+                                'dno_food_ventures_statement_of_accounts.amount',
+                                'dno_food_ventures_statement_of_accounts.total_amount',
+                                'dno_food_ventures_statement_of_accounts.total_remaining_balance',
+                                'dno_food_ventures_statement_of_accounts.paid_amount',
+                                'dno_food_ventures_statement_of_accounts.payment_method',
+                                'dno_food_ventures_statement_of_accounts.collection_date',
+                                'dno_food_ventures_statement_of_accounts.check_number',
+                                'dno_food_ventures_statement_of_accounts.check_amount',
+                                'dno_food_ventures_statement_of_accounts.or_number',
+                                'dno_food_ventures_statement_of_accounts.status',
+                                'dno_food_ventures_statement_of_accounts.created_by',
+                                'dno_food_ventures_codes.dno_food_venture_code',
+                                'dno_food_ventures_codes.module_id',
+                                'dno_food_ventures_codes.module_code',
+                                'dno_food_ventures_codes.module_name')
+                            ->join('dno_food_ventures_codes', 'dno_food_ventures_statement_of_accounts.id', '=', 'dno_food_ventures_codes.module_id')
+                            ->where('dno_food_ventures_statement_of_accounts.billing_statement_id', NULL)
+                            ->where('dno_food_ventures_codes.module_name', $moduleName)
+                            ->where('dno_food_ventures_statement_of_accounts.status', NULL)
+                            ->where('dno_food_ventures_statement_of_accounts.order', $sO)
+                            ->sum('dno_food_ventures_statement_of_accounts.total_remaining_balance');
+
+        $sDr = "Delivery Receipt";
+        $statementOfAccountsDRs = DnoFoodVenturesStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                                    ->where('billing_statement_id', NULL)
+                                                                    ->where('deleted_at', NULL)
+                                                                    ->where('order', $sDr)
+                                                                    ->orderBy('id', 'desc')
+                                                                    ->get();
+
+        $totalAmountDR = DB::table(
+                                    'dno_food_ventures_statement_of_accounts')
+                                    ->select(
+                                        'dno_food_ventures_statement_of_accounts.id',
+                                        'dno_food_ventures_statement_of_accounts.user_id',
+                                        'dno_food_ventures_statement_of_accounts.billing_statement_id',
+                                        'dno_food_ventures_statement_of_accounts.bill_to',
+                                        'dno_food_ventures_statement_of_accounts.address',
+                                        'dno_food_ventures_statement_of_accounts.date',
+                                        'dno_food_ventures_statement_of_accounts.period_cover',
+                                        'dno_food_ventures_statement_of_accounts.terms',
+                                        'dno_food_ventures_statement_of_accounts.date_of_transaction',
+                                        'dno_food_ventures_statement_of_accounts.order',
+                                        'dno_food_ventures_statement_of_accounts.description',
+                                        'dno_food_ventures_statement_of_accounts.amount',
+                                        'dno_food_ventures_statement_of_accounts.total_amount',
+                                        'dno_food_ventures_statement_of_accounts.total_remaining_balance',
+                                        'dno_food_ventures_statement_of_accounts.paid_amount',
+                                        'dno_food_ventures_statement_of_accounts.payment_method',
+                                        'dno_food_ventures_statement_of_accounts.collection_date',
+                                        'dno_food_ventures_statement_of_accounts.check_number',
+                                        'dno_food_ventures_statement_of_accounts.check_amount',
+                                        'dno_food_ventures_statement_of_accounts.or_number',
+                                        'dno_food_ventures_statement_of_accounts.status',
+                                        'dno_food_ventures_statement_of_accounts.created_by',
+                                        'dno_food_ventures_codes.dno_food_venture_code',
+                                        'dno_food_ventures_codes.module_id',
+                                        'dno_food_ventures_codes.module_code',
+                                        'dno_food_ventures_codes.module_name')
+                                    ->join('dno_food_ventures_codes', 'dno_food_ventures_statement_of_accounts.id', '=', 'dno_food_ventures_codes.module_id')
+                                    ->where('dno_food_ventures_statement_of_accounts.billing_statement_id', NULL)
+                                    ->where('dno_food_ventures_codes.module_name', $moduleName)
+                                    ->where('dno_food_ventures_statement_of_accounts.status', '=', $status)
+                                    ->where('dno_food_ventures_statement_of_accounts.order', $sDr)
+                                    ->sum('dno_food_ventures_statement_of_accounts.total_amount');
+        
+        $totalRemainingBalanceDR = DB::table(
+                                    'dno_food_ventures_statement_of_accounts')
+                                    ->select(
+                                        'dno_food_ventures_statement_of_accounts.id',
+                                        'dno_food_ventures_statement_of_accounts.user_id',
+                                        'dno_food_ventures_statement_of_accounts.billing_statement_id',
+                                        'dno_food_ventures_statement_of_accounts.bill_to',
+                                        'dno_food_ventures_statement_of_accounts.address',
+                                        'dno_food_ventures_statement_of_accounts.date',
+                                        'dno_food_ventures_statement_of_accounts.period_cover',
+                                        'dno_food_ventures_statement_of_accounts.terms',
+                                        'dno_food_ventures_statement_of_accounts.date_of_transaction',
+                                        'dno_food_ventures_statement_of_accounts.order',
+                                        'dno_food_ventures_statement_of_accounts.description',
+                                        'dno_food_ventures_statement_of_accounts.amount',
+                                        'dno_food_ventures_statement_of_accounts.total_amount',
+                                        'dno_food_ventures_statement_of_accounts.total_remaining_balance',
+                                        'dno_food_ventures_statement_of_accounts.paid_amount',
+                                        'dno_food_ventures_statement_of_accounts.payment_method',
+                                        'dno_food_ventures_statement_of_accounts.collection_date',
+                                        'dno_food_ventures_statement_of_accounts.check_number',
+                                        'dno_food_ventures_statement_of_accounts.check_amount',
+                                        'dno_food_ventures_statement_of_accounts.or_number',
+                                        'dno_food_ventures_statement_of_accounts.status',
+                                        'dno_food_ventures_statement_of_accounts.created_by',
+                                        'dno_food_ventures_codes.dno_food_venture_code',
+                                        'dno_food_ventures_codes.module_id',
+                                        'dno_food_ventures_codes.module_code',
+                                        'dno_food_ventures_codes.module_name')
+                                    ->join('dno_food_ventures_codes', 'dno_food_ventures_statement_of_accounts.id', '=', 'dno_food_ventures_codes.module_id')
+                                    ->where('dno_food_ventures_statement_of_accounts.billing_statement_id', NULL)
+                                    ->where('dno_food_ventures_codes.module_name', $moduleName)
+                                    ->where('dno_food_ventures_statement_of_accounts.status', NULL)
+                                    ->where('dno_food_ventures_statement_of_accounts.order', $sDr)
+                                    ->sum('dno_food_ventures_statement_of_accounts.total_remaining_balance');
+                                            
+    
+        return view('dno-food-ventures-statement-of-account-lists', compact('statementOfAccounts', 
+        'statementOfAccountsDRs', 'totalAmount', 'totalRemainingBalance', 'totalAmountDR', 'totalRemainingBalanceDR'));
+    }
+
     public function printPettyCash($id){
         $getPettyCash =  DnoFoodVenturesPettyCash::with(['user', 'petty_cashes'])
                                                     ->where('id', $id)
@@ -473,9 +965,38 @@ class DnoFoodVenturesController extends Controller
 
         $addNewBillingStatement->save();
 
+        $addStatementAccount = new DnoFoodVenturesStatementOfAccount([
+            'user_id'=>$user->id,
+            'billing_statement_id'=>$id,
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'order'=>$order,
+            'invoice_list_id'=>$invoiceListId,
+            'qty'=>$qty,
+            'dr_no'=>$drNo,
+            'dr_list_id'=>$drList,
+            'product_id'=>$productId,
+            'total_kls'=>$totalKls,
+            'invoice_number'=>$request->get('invoiceNumber'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$unitPrice,
+            'unit'=>$unit,
+            'amount'=>$request->get('amount'),
+            'total_amount'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+
+        $addStatementAccount->save();
+        $statementOrder = DnoFoodVenturesStatementOfAccount::find($id);  
+
+
          //update
          $billingOrder->total_amount = $tot;
          $billingOrder->save();
+
+           //update soa table
+        $statementOrder->total_amount  = $tot;
+        $statementOrder->total_remaining_balance = $tot;
+        $statementOrder->save();
 
          Session::flash('addBillingSuccess', 'Successfully added.');
          return redirect()->route('editBillingStatementDnoFoodVentures', ['id'=>$id]);
@@ -583,7 +1104,7 @@ class DnoFoodVenturesController extends Controller
             $totalKls = $request->get('totalKls');
             $unitPrice = $request->get('unitPrice');
 
-            $drno = NULL;
+            $drNo = NULL;
             $productId = NULL;
             $unit = NULL;
             $drList = NULL;
@@ -645,6 +1166,45 @@ class DnoFoodVenturesController extends Controller
         ]);
 
         $dnoFoodVenturesCode->save();
+        $bsNo = $dnoFoodVenturesCode->id;
+
+        $bsNoId = DnoFoodVenturesCode::find($bsNo);
+
+        $statementAccount = new DnoFoodVenturesStatementOfAccount([
+            'user_id'=>$user->id,
+            'bs_no'=>$bsNoId->dno_food_venture_code,
+            'bill_to'=>$request->get('billTo'),
+            'period_cover'=>$request->get('periodCovered'),
+            'order'=>$order,
+            'date'=>$request->get('date'),
+            'terms'=>$request->get('terms'),
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$request->get('unitPrice'),
+            'amount'=>$request->get('amount'),
+            'total_amount'=>$request->get('amount'),
+            'total_remaining_balance'=>$request->get('amount'),
+            'created_by'=>$name,
+            'prepared_by'=>$name,
+
+        ]);
+        $statementAccount->save();
+        $insertedIdStatement = $statementAccount->id;
+
+        $moduleCodeSOA = "SOA-";
+        $moduleNameSOA = "Statement Of Account";
+        
+        $uRefStatement = $uRef + 1; 
+        $uRefState = sprintf("%06d",$uRefStatement);
+
+        $statement = new DnoFoodVenturesCode([
+            'user_id'=>$user->id,
+            'dno_food_venture_code'=>$uRefState,
+            'module_id'=>$insertedIdStatement,
+            'module_code'=>$moduleCodeSOA,
+            'module_name'=>$moduleNameSOA,
+        ]);
+        $statement->save();
 
         return redirect()->route('editBillingStatementDnoFoodVentures', ['id'=>$insertedId]);
        
@@ -4135,8 +4695,13 @@ class DnoFoodVenturesController extends Controller
 
          //get suppliers
          $suppliers = DnoFoodVenturesSupplier::get()->toArray();
+
+         $pettyCashes = DnoFoodVenturesPettyCash::with(['user', 'petty_cashes'])
+                                                        ->where('pc_id', NULL)
+                                                        ->where('deleted_at', NULL)
+                                                        ->get();
         
-        return view('payment-voucher-form-dno-food-ventures', compact('suppliers'));
+        return view('payment-voucher-form-dno-food-ventures', compact('suppliers', 'pettyCashes'));
     }
 
 

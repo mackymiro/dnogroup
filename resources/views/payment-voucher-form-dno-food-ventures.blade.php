@@ -108,6 +108,18 @@
                                         <option value="{{ $supplier['id']}}-{{ $supplier['supplier_name']}}">{{ $supplier['supplier_name']}}</option>
                                       @endforeach
                                     </select>
+                                  </div>  
+                                  <div id="pettyCashList" class="col-lg-4">
+                                      <label>Petty Cash List</label>
+                                      <select data-live-search="true" id="pettyCash" name="pettyCash" class="form-control selectpicker">
+                                          @foreach($pettyCashes  as $pettyCash)
+                                              @foreach($pettyCash->petty_cashes as $pc)
+                                                  @if($pc->module_name === "Petty Cash")
+                                                      <option value="{{ $pc->module_code}}-{{ $pc->dno_food_venture_code }}">{{ $pc->dno_food_venture_code}}</option>
+                                                  @endif
+                                              @endforeach    
+                                          @endforeach
+                                      </select>
                                   </div>       
                             </div>
                          </div>
@@ -167,6 +179,8 @@
     $("#utility").hide();
     $("#accountId").hide();
     $("#supplierList").hide();
+    $("#pettyCashList").hide();
+
 
     const bills = () =>{
       $("#accountId").show();
@@ -180,24 +194,35 @@
             $("#utility").hide();
             $("#accountId").hide();
             $("#supplierList").hide();
+            $("#pettyCashList").hide();
+
         }else if(cat === "Petty Cash"){
             $("#pettyCashNo").show();
             $("#utility").hide();
             $("#accountId").hide();
             $("#supplierList").hide();
+
+            $("#pettyCashList").show();
+
         }else if(cat === "Utility"){  
             $("#pettyCashNo").hide();
             $("#utility").show();
             $("#supplierList").hide();
+            $("#pettyCashList").hide();
+
             bills();
         }else if(cat  === "Payroll"){
             $("#pettyCashNo").hide();
             $("#utility").hide();
             $("#accountId").hide();
+            $("#pettyCashList").hide();
+
 
             $("#supplierList").hide();
         }else if(cat === "Supplier"){
             $("#supplierList").show();
+            $("#pettyCashList").hide();
+
         }
     });
 </script>

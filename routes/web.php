@@ -4612,6 +4612,47 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('printPettyCash')
 		->middleware(['cashier']);
 
+	Route::get(
+		'/dno-food-ventures/statement-of-account/lists',
+		'DnoFoodVenturesController@statementOfAccountLists')
+		->name('statementOfAccountLists')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/{id}/edit-statement-of-account/',
+		'DnoFoodVenturesController@editStatementAccount')
+		->name('editStatementAccountDnoFoodVentures')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-food-ventures/s-account/{id}',
+		'DnoFoodVenturesController@sAccountUpdate')
+		->name('sAccountUpdate')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/{id}/view-statement-account/',
+		'DnoFoodVenturesController@viewStatementAccount')
+		->name('viewStatementAccount')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/{id}/printSOA',
+		'DnoFoodVenturesController@printSOA')
+		->name('printSOA')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/printSOAListSO',
+		'DnoFoodVenturesController@printSOAListSO')
+		->name('printSOAListSO')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-food-ventures/printSOAListsDR',
+		'DnoFoodVenturesController@printSOAListsDR')
+		->name('printSOAListsDR')
+		->middleware(['cashier']);
 		
 	Route::get(
 		'/dno-food-ventures/commissary/raw-materials',

@@ -24,7 +24,7 @@
 	 <div id="content-wrapper">
  		<div class="container-fluid">
  				<div  style="margin-top:-10px;">
-                 <img style="margin-left: 5px;" src="{{ asset('images/digitized-logos/dno-foundation.png')}}"  alt="DNO Holings & Co">
+                 <img style="margin-left: 5px;" src="{{ asset('images/digitized-logos/dno-food-venture-pdf.png')}}"   alt="DNO Food Ventures">
             	 	 	 	 <p  style="margin-top:-50px; margin-left:110px;text-align:left;">
 		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
 						Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
@@ -46,10 +46,7 @@
                                                 <th width="25%">Bill To</th>
                                                 <th> {{ $soa[0]->bill_to }}</th>
                                             </tr>
-                                            <tr>
-                                                <th>Address</th>
-                                                <th>{{ $soa[0]->address }}</th>
-                                            </tr>
+                                          
                                             <tr>
                                                 <th>Period Covered</th>
                                                 <th> {{ $soa[0]->period_cover }} </th>
@@ -82,7 +79,7 @@
                                                 <th>
                                                     @foreach($soa[0]->statement_of_accounts as $statement)
                                                         @if($statement->module_name === "Statement Of Account")
-                                                            {{ $statement->module_code}}{{ $statement->dno_foundation_code }}
+                                                            {{ $statement->module_code}}{{ $statement->dno_food_venture_code }}
                                                         @endif
                                                     @endforeach
                                                 </th>

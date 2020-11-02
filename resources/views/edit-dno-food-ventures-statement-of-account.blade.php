@@ -1,4 +1,4 @@
-@extends('layouts.dno-foundation-inc-app')
+@extends('layouts.dno-food-ventures-app')
   @section('title', 'Edit Statment Of Account|')
   @section('content')
   <script>
@@ -17,20 +17,20 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
   <div id="wrapper">
-  	 @include('sidebar.sidebar-dno-foundation-inc')
+  	 @include('sidebar.sidebar-dno-food-ventures')
   	<div id="content-wrapper">
   		<div class="container-fluid">
   			<!-- Breadcrumbs-->
               <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                  <a href="#">DNO Foundation Inc</a>
+                  <a href="#">DNO Food Ventures</a>
                 </li>
                 <li class="breadcrumb-item active">Update Statement Of Account Form</li>
               </ol>
-              <a href="{{ url('dno-foundation-inc/statement-of-account/lists') }}">Back to Lists</a>
+              <a href="{{ url('dno-food-ventures/statement-of-account/lists') }}">Back to Lists</a>
               <div class="col-lg-12">
-                 <img src="{{ asset('images/digitized-logos/dno-foundation.jpg')}}" width="390" height="250" class="img-responsive mx-auto d-block" alt="DNO Foundation Inc">
- 
+              <img src="{{ asset('images/digitized-logos/dno-food-venture.png')}}" width="366" height="178" class="img-responsive mx-auto d-block" alt="DNO Food Ventures">
+            
               	 <h4 class="text-center"><u>STATEMENT OF ACCOUNT</u></h4>
               </div>
               <div class="row">
@@ -71,7 +71,7 @@
                                         <label>SOA No</label>
                                         @foreach($getStatementOfAccount[0]->statement_of_accounts as $statement)
                                             @if($statement->module_name === "Statement Of Account")
-                                            <input type="text" name="date" class="form-control" value="{{ $statement->dno_holdings_code }}" disabled="disabled" />
+                                            <input type="text" name="date" class="form-control" value="{{ $statement->dno_food_venture_code }}" disabled="disabled" />
                                     
                                             @endif
                                         @endforeach
@@ -373,12 +373,32 @@
                             <label>Date</label>
                             <input type="text" name="date" class="form-control" value="{{ $getStatementOfAccount[0]->date }}" disabled />
                         </div>
-                      
+                        @if($getStatementOfAccount[0]->order != "Delivery Receipt")
+                        <div class="col-lg-4">
+                            <label>Invoice</label>
+                            <input type="text" name="invoice" class="form-control" value="{{ $getStatementOfAccount[0]->invoice_number}}" disabled />
+                        </div>
+                        @endif
+                        @if($getStatementOfAccount[0]->order === "Delivery Receipt")
+                        <div class="col-lg-2">
+                            <label>Dr No</label>
+                            <input type="text" name="drNo" class="form-control" value="{{ $getStatementOfAccount[0]->dr_no }}" disabled />
+                        </div>
+                        @endif
                         <div class="col-lg-6">
                             <label>Description</label>
                             <input type="text" name="description" class="form-control" value="{{ $getStatementOfAccount[0]->description}}" disabled/>
                         </div>
-                     
+                        @if($getStatementOfAccount[0]->order === "Delivery Receipt")
+                        <div class="col-lg-2">
+                            <label>Whole Lechon</label>
+                            <input type="text" name="wholeLechon" class="form-control" value="{{ $getStatementOfAccount[0]->whole_lechon }}" disabled />
+                        </div>
+                        <div class="col-lg-2">
+                            <label>Unit</label>
+                            <input type="text" name="unit" class="form-control" value="{{ $getStatementOfAccount[0]->unit }}" disabled />
+                        </div>
+                        @endif
                         <div class="col-lg-2">
                             <label>Amount</label>
                             <input type="text" name="amount" class="form-control" value="<?= number_format($getStatementOfAccount[0]->amount, 2)?>" disabled />
@@ -465,7 +485,7 @@
               //make ajax call
             $.ajax({
                 type: "PUT",
-                url: '/dno-foundation-inc/s-account/' + id,
+                url: '/dno-food-ventures/s-account/' + id,
                 data:{
                     _method: 'patch', 
                     "_token": "{{ csrf_token() }}",
