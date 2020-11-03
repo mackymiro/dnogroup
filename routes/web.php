@@ -6526,7 +6526,7 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/dno-holdings-co/billing-statement-form',
 		'DnoHoldingsCoController@billingStatementForm')
-		->name('billingStatementForm')
+		->name('billingStatementFormDnoHoldings')
 		->middleware(['cashier']);
 	
 	Route::post(
