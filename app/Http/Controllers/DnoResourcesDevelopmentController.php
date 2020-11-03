@@ -3690,7 +3690,12 @@ class DnoResourcesDevelopmentController extends Controller
         //get suppliers
         $suppliers = DnoResourcesDevelopmentCorpSupplier::get()->toArray();
 
-        return view('payment-voucher-form-dno-resources', compact('suppliers'));
+        $pettyCashes = DnoResourcesDevelopmentCorpPettyCash::with(['user', 'petty_cashes'])
+                                                        ->where('pc_id', NULL)
+                                                        ->where('deleted_at', NULL)
+                                                        ->get();
+
+        return view('payment-voucher-form-dno-resources', compact('suppliers', 'pettyCashes'));
     }
 
     /**
