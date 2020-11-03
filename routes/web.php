@@ -7225,7 +7225,42 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('printBillingStatement')
 		->middleware(['cashier']);
 
-		
+	Route::get(
+		'/wimpys-food-express/statement-of-account/lists',
+		'WimpysFoodExpressController@statementOfAccountLists')
+		->name('statementOfAccountLists')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/edit-statement-of-account',
+		'WimpysFoodExpressController@editStatementAccount')
+		->name('editStatementAccount')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/wimpys-food-express/s-account/{id}',
+		'WimpysFoodExpressController@sAccountUpdate')
+		->name('sAccountUpdate')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/view-statement-account',
+		'WimpysFoodExpressController@viewStatementAccount')
+		->name('viewStatementAccount')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/printSOA',
+		'WimpysFoodExpressController@printSOA')
+		->name('printSOA')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/printSOAList',
+		'WimpysFoodExpressController@printSOAList')
+		->name('printSOAList')
+		->middleware(['cashier']);
+
 	Route::get(
 		'/wimpys-food-express/payment-voucher-form',
 		'WimpysFoodExpressController@paymentVoucherForm')
