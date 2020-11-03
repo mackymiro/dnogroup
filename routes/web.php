@@ -7219,6 +7219,12 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('viewBillingStatement')
 		->middleware(['cashier']);
 
+	Route::delete(
+		'/wimpys-food-express/delete-billing-statement/{id}',
+		'WimpysFoodExpressController@destroyBillingStatement')
+		->name('destroyBillingStatement')
+		->middleware(['cashier']);
+
 	Route::get(
 		'/wimpys-food-express/{id}/printBillingStatement',
 		'WimpysFoodExpressController@printBillingStatement')

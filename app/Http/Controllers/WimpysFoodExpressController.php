@@ -50,6 +50,7 @@ class WimpysFoodExpressController extends Controller
                             'wimpys_food_express_statement_of_accounts.or_number',
                             'wimpys_food_express_statement_of_accounts.status',
                             'wimpys_food_express_statement_of_accounts.created_by',
+                            'wimpys_food_express_statement_of_accounts.deleted_at',
                             'wimpys_food_express_codes.wimpys_food_express_code',
                             'wimpys_food_express_codes.module_id',
                             'wimpys_food_express_codes.module_code',
@@ -58,6 +59,7 @@ class WimpysFoodExpressController extends Controller
                             ->where('wimpys_food_express_statement_of_accounts.billing_statement_id', NULL)
                             ->where('wimpys_food_express_codes.module_name', $moduleName)
                             ->where('wimpys_food_express_statement_of_accounts.status', '=', $status)
+                            ->where('wimpys_food_express_statement_of_accounts.deleted_at', NULL)
                             ->sum('wimpys_food_express_statement_of_accounts.total_amount');
                                                 
             $totalRemainingBalance  =   DB::table(
@@ -84,6 +86,7 @@ class WimpysFoodExpressController extends Controller
                                 'wimpys_food_express_statement_of_accounts.or_number',
                                 'wimpys_food_express_statement_of_accounts.status',
                                 'wimpys_food_express_statement_of_accounts.created_by',
+                                'wimpys_food_express_statement_of_accounts.deleted_at',
                                 'wimpys_food_express_codes.wimpys_food_express_code',
                                 'wimpys_food_express_codes.module_id',
                                 'wimpys_food_express_codes.module_code',
@@ -92,6 +95,7 @@ class WimpysFoodExpressController extends Controller
                                 ->where('wimpys_food_express_statement_of_accounts.billing_statement_id', NULL)
                                 ->where('wimpys_food_express_codes.module_name', $moduleName)
                                 ->where('wimpys_food_express_statement_of_accounts.status', NULL)
+                                ->where('wimpys_food_express_statement_of_accounts.deleted_at', NULL)
                                 ->sum('wimpys_food_express_statement_of_accounts.total_remaining_balance');
 
             $pdf = PDF::loadView('printSOAListsWimpysFoodexp', compact('printSOAStatements', 
@@ -132,6 +136,7 @@ class WimpysFoodExpressController extends Controller
                             'wimpys_food_express_statement_of_accounts.or_number',
                             'wimpys_food_express_statement_of_accounts.status',
                             'wimpys_food_express_statement_of_accounts.created_by',
+                            'wimpys_food_express_statement_of_accounts.deleted_at',
                             'wimpys_food_express_codes.wimpys_food_express_code',
                             'wimpys_food_express_codes.module_id',
                             'wimpys_food_express_codes.module_code',
@@ -139,6 +144,7 @@ class WimpysFoodExpressController extends Controller
                             ->join('wimpys_food_express_codes', 'wimpys_food_express_statement_of_accounts.id', '=', 'wimpys_food_express_codes.module_id')
                             ->where('wimpys_food_express_statement_of_accounts.id', $id)
                             ->where('wimpys_food_express_codes.module_name', $moduleName)
+                            ->where('wimpys_food_express_statement_of_accounts.deleted_at', NULL)
                             ->sum('wimpys_food_express_statement_of_accounts.amount');
 
         $countAmount = WimpysFoodExpressStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
@@ -276,6 +282,7 @@ class WimpysFoodExpressController extends Controller
                         'wimpys_food_express_statement_of_accounts.or_number',
                         'wimpys_food_express_statement_of_accounts.status',
                         'wimpys_food_express_statement_of_accounts.created_by',
+                        'wimpys_food_express_statement_of_accounts.deleted_at',
                         'wimpys_food_express_codes.wimpys_food_express_code',
                         'wimpys_food_express_codes.module_id',
                         'wimpys_food_express_codes.module_code',
@@ -284,6 +291,7 @@ class WimpysFoodExpressController extends Controller
                         ->where('wimpys_food_express_statement_of_accounts.billing_statement_id', NULL)
                         ->where('wimpys_food_express_codes.module_name', $moduleName)
                         ->where('wimpys_food_express_statement_of_accounts.status', '=', $status)
+                        ->where('wimpys_food_express_statement_of_accounts.deleted_at', NULL)
                         ->sum('wimpys_food_express_statement_of_accounts.total_amount');
                                             
         $totalRemainingBalance  =   DB::table(
@@ -318,6 +326,7 @@ class WimpysFoodExpressController extends Controller
                             ->where('wimpys_food_express_statement_of_accounts.billing_statement_id', NULL)
                             ->where('wimpys_food_express_codes.module_name', $moduleName)
                             ->where('wimpys_food_express_statement_of_accounts.status', NULL)
+                            ->where('wimpys_food_express_statement_of_accounts.deleted_at', NULL)
                             ->sum('wimpys_food_express_statement_of_accounts.total_remaining_balance');
 
         return view('wimpys-food-express-statement-of-account-lists', compact('statementOfAccounts',
@@ -1461,6 +1470,17 @@ class WimpysFoodExpressController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    public function destroyBillingStatement($id){
+        $billingStatement = WimpysFoodExpressBillingStatement::find($id);
+        $billingStatement->delete();
+        
+
+        //delete SOA 
+        $soa = WimpysFoodExpressStatementOfAccount::find($id);
+        $soa->delete();
+
     }
 
     public function destroyBillingDataStatement(Request $request, $id){

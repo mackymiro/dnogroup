@@ -95,7 +95,7 @@
 	 	if(x){
 	 		$.ajax({
               type: "DELETE",
-              url: '/dno-foundation-inc/delete-billing-statement/' + id,
+              url: '/wimpys-food-express/delete-billing-statement/' + id,
               data:{
                 _method: 'delete', 
                 "_token": "{{ csrf_token() }}",
