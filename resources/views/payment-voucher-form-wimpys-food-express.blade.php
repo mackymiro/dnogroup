@@ -34,7 +34,7 @@
               <li class="breadcrumb-item ">Payment Voucher Form</li>
             </ol>
              <div class="col-lg-12">
-            	 <img src="{{ asset('images/digitized-logos/wimpys-logo1.jpg')}}" width="350" height="178" class="img-responsive mx-auto d-block" alt="Lechon de Cebu">
+            	 <img src="{{ asset('images/digitized-logos/wimpys-logo1.jpg')}}" width="350" height="178" class="img-responsive mx-auto d-block" alt="Wimpy's Food Express">
             	 
             	 <h4 class="text-center"><u>PAYMENT VOUCHER</u></h4>
             </div>

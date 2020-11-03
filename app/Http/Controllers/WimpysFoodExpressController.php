@@ -13,9 +13,323 @@ use App\WimpysFoodExpressPaymentVoucher;
 use App\WimpysFoodExpressCode;
 use App\WimpysFoodExpressSupplier;
 use App\WimpysFoodExpressPurchaseOrder;
+use App\WimpysFoodExpressBillingStatement; 
+use App\WimpysFoodExpressStatementOfAccount;
 
 class WimpysFoodExpressController extends Controller
 {
+    public function printBillingStatement($id){
+        $printBillingStatement = WimpysFoodExpressBillingStatement::with(['user', 'billing_statements'])
+                                                                        ->where('id', $id)
+                                                                        ->get();
+
+        $billingStatements = WimpysFoodExpressBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+        //count the total amount 
+        $countTotalAmount = WimpysFoodExpressBillingStatement::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = WimpysFoodExpressBillingStatement::where('billing_statement_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        $pdf = PDF::loadView('printBillingStatementWimpysFoodExpress', compact('printBillingStatement', 'billingStatements', 'sum'));
+
+        return $pdf->download('wimpys-food-express-billing-statement.pdf'); 
+    }
+
+    public function viewBillingStatement($id){
+        $viewBillingStatement = WimpysFoodExpressBillingStatement::with(['user', 'billing_statements'])
+                                                                ->where('id', $id)
+                                                                ->get();
+
+
+        $billingStatements = WimpysFoodExpressBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+        //count the total amount 
+        $countTotalAmount = WimpysFoodExpressBillingStatement::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = WimpysFoodExpressBillingStatement::where('billing_statement_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        return view('view-wimpys-food-express-billing-statement', compact('viewBillingStatement', 'billingStatements', 'sum'));
+
+    }
+
+    public function billingStatementList(){
+        $billingStatements = WimpysFoodExpressBillingStatement::with(['user', 'billing_statements'])
+                                                                ->where('billing_statement_id', NULL)
+                                                                ->where('deleted_at', NULL)
+                                                                ->orderBy('id', 'desc')
+                                                                ->get();
+
+        return view('wimpys-food-express-billing-statement-lists', compact('billingStatements'));
+    }
+
+    public function updateBillingInfo(Request $request, $id){   
+        $updateBillingOrder = WimpysFoodExpressBillingStatement::find($id);
+
+        $getOtherBilling = WimpysFoodExpressBillingStatement::where('billing_statement_id', $id)->get();
+       
+        if(isset($getOtherBilling[0]->amount) == ""){
+            $amount = $request->get('amount');
+            $getOtherAmount = 0 + $amount; 
+
+        }else{
+            $amount = $request->get('amount');
+            $getOtherAmount = $getOtherBilling[0]->amount + $amount; 
+        
+        }
+     
+
+        $updateBillingOrder->bill_to = $request->get('billTo');
+        $updateBillingOrder->address = $request->get('address');
+        $updateBillingOrder->period_cover = $request->get('periodCovered');
+      
+        $updateBillingOrder->terms = $request->get('terms');
+        $updateBillingOrder->date_of_transaction = $request->get('transactionDate');
+        $updateBillingOrder->dr_no = $request->get('drNo');
+        $updateBillingOrder->description = $request->get('description');
+        $updateBillingOrder->unit_price = $request->get('unitPrice');
+        $updateBillingOrder->amount = $request->get('amount');
+        $updateBillingOrder->total_amount = $getOtherAmount;
+        $updateBillingOrder->save();
+
+
+             
+        //statement of account
+        $getMainStatement = WimpysFoodExpressStatementOfAccount::find($id);
+
+        $getStatement = WimpysFoodExpressStatementOfAccount::where('billing_statement_id', $id)->get();
+      
+        if(isset($getStatement[0]->amount) == ""){
+            $amount = $request->get('amount');
+            $getOtherAmountSOA = 0 + $amount; 
+
+        }else{
+            $amount = $request->get('amount');
+            $getOtherAmountSOA = $getStatement[0]->amount + $amount; 
+        
+        }
+
+        $getMainStatement->bill_to = $request->get('billTo');
+        $getMainStatement->period_cover = $request->get('periodCovered');
+      
+        $getMainStatement->terms = $request->get('terms');
+        $getMainStatement->date_of_transaction = $request->get('transactionDate');
+        $getMainStatement->dr_no = $request->get('drNo');
+        $getMainStatement->description = $request->get('description');
+        $getMainStatement->unit_price = $request->get('unitPrice');
+        $getMainStatement->amount =  $request->get('amount');
+        $getMainStatement->total_amount = $getOtherAmountSOA;
+        $getMainStatement->total_remaining_balance = $getOtherAmountSOA;
+        $getMainStatement->save();
+
+        Session::flash('SuccessE', 'Successfully updated');
+
+        return redirect()->route('editBillingStatementWimpysFoodExp', ['id'=>$id]);
+    }
+
+    public function addNewBilling(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $billingOrder = WimpysFoodExpressBillingStatement::find($id);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $amount = $request->get('amount');
+
+        $tot = $billingOrder->total_amount + $amount; 
+
+        $addBillingStatement = new WimpysFoodExpressBillingStatement([
+            'user_id'=>$user->id,
+            'billing_statement_id'=>$id,
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$request->get('unitPrice'),
+            'dr_no'=>$request->get('drNo'),
+            'amount'=>$amount,
+            'created_by'=>$name,
+        ]);
+
+        $addBillingStatement->save();
+
+        $addStatementAccount = new WimpysFoodExpressStatementOfAccount([
+            'user_id'=>$user->id,
+            'billing_statement_id'=>$id,
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$request->get('unitPrice'),
+            'dr_no'=>$request->get('drNo'),
+            'amount'=>$amount,
+            'total_amount'=>$amount,
+            'created_by'=>$name,
+        ]);
+        $addStatementAccount->save();
+        $statementOrder = WimpysFoodExpressStatementOfAccount::find($id);
+        
+        //update
+        $billingOrder->total_amount = $tot;
+        $billingOrder->save();
+
+        //update soa table
+        $statementOrder->total_amount  = $tot;
+        $statementOrder->total_remaining_balance = $tot;
+        $statementOrder->save();
+            
+        Session::flash('SuccessAdd', 'Successfully added.');
+
+        return redirect()->route('editBillingStatementWimpysFoodExp', ['id'=>$id]);
+
+    }
+
+    public function editBillingStatement($id){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $billingStatement = WimpysFoodExpressBillingStatement::find($id);
+
+        $bStatements = WimpysFoodExpressBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+        return view('edit-wimpys-food-express-billing-statement-form', compact('billingStatement', 'bStatements'));
+    
+    }
+
+    public function storeBillingStatement(Request $request){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        //get user name
+        $name  = $firstName." ".$lastName;
+
+        $this->validate($request,[
+            'billTo' =>'required',
+            'address'=>'required',
+            'periodCovered'=>'required',
+            'date'=>'required',
+            'terms'=>'required',
+            'transactionDate'=>'required',
+        ]);
+
+         //get the latest insert id query in table billing statements ref number
+         $dataReferenceNum = DB::select('SELECT id, wimpys_food_express_code FROM wimpys_food_express_codes ORDER BY id DESC LIMIT 1');
+
+         //if code is not zero add plus 1 reference number
+         if(isset($dataReferenceNum[0]->wimpys_food_express_code) != 0){
+             //if code is not 0
+             $newRefNum = $dataReferenceNum[0]->wimpys_food_express_code +1;
+             $uRef = sprintf("%06d",$newRefNum);   
+ 
+         }else{
+             //if code is 0 
+             $newRefNum = 1;
+             $uRef = sprintf("%06d",$newRefNum);
+         } 
+
+         $target = DB::table(
+                    'wimpys_food_express_billing_statements')
+                    ->where('dr_no', $request->get('dr_no'))
+                    ->get()->first();
+
+        if($target === NULL){
+            $billingStatement = new WimpysFoodExpressBillingStatement([
+                'user_id'=>$user->id,
+                'bill_to'=>$request->get('billTo'),
+                'address'=>$request->get('address'),
+                'period_cover'=>$request->get('periodCovered'),
+                'date'=>$request->get('date'),
+                'terms'=>$request->get('terms'),
+                'dr_no'=>$request->get('drNo'),
+                'date_of_transaction'=>$request->get('transactionDate'),
+                'description'=>$request->get('description'),
+                'unit_price'=>$request->get('unitPrice'),
+                'amount'=>$request->get('amount'),
+                'total_amount'=>$request->get('amount'),
+                'created_by'=>$name,
+                'prepared_by'=>$name,
+            ]);
+
+            $billingStatement->save();
+
+            $insertedId = $billingStatement->id;
+    
+            $moduleCode = "BS-";
+            $moduleName = "Billing Statement";
+
+            $wimpysFoodExp = new WimpysFoodExpressCode([
+                'user_id'=>$user->id,
+                'wimpys_food_express_code'=>$uRef,
+                'module_id'=>$insertedId,
+                'module_code'=>$moduleCode,
+                'module_name'=>$moduleName,
+    
+            ]);
+    
+            $wimpysFoodExp->save();
+            $bsNo = $wimpysFoodExp->id;
+
+            $bsNoId = WimpysFoodExpressCode::find($bsNo);
+
+            $statementAccount = new WimpysFoodExpressStatementOfAccount([
+                'user_id'=>$user->id,
+                'bs_no'=>$bsNoId->wimpys_food_express_code,
+                'bill_to'=>$request->get('billTo'),
+                'period_cover'=>$request->get('periodCovered'),
+                'date'=>$request->get('date'),
+                'terms'=>$request->get('terms'),
+                'dr_no'=>$request->get('drNo'),
+                'date_of_transaction'=>$request->get('transactionDate'),
+                'description'=>$request->get('description'),
+                'unit_price'=>$request->get('unitPrice'),
+                'amount'=>$request->get('amount'),
+                'total_amount'=>$request->get('amount'),
+                'total_remaining_balance'=>$request->get('amount'),
+                'created_by'=>$name,
+                'prepared_by'=>$name,
+            ]);
+            $statementAccount->save();
+            $insertedIdStatement = $statementAccount->id;
+
+            $moduleCodeSOA = "SOA-";
+            $moduleNameSOA = "Statement Of Account";
+            
+            $uRefStatement = $uRef + 1; 
+            $uRefState = sprintf("%06d",$uRefStatement);
+
+            $statement = new WimpysFoodExpressCode([
+                'user_id'=>$user->id,
+                'wimpys_food_express_code'=>$uRefState,
+                'module_id'=>$insertedIdStatement,
+                'module_code'=>$moduleCodeSOA,
+                'module_name'=>$moduleNameSOA,
+    
+            ]);
+            $statement->save();
+
+            return redirect()->route('editBillingStatementWimpysFoodExp', ['id'=>$insertedId]);
+
+        }else{
+            return redirect()->route('billingStatementFormWimpysFoodExp')->with('error', 'DR Number Already Exists. Please See Transaction List For Your Reference');
+      
+        }
+
+
+
+
+    }
+
+    public function billingStatementForm(){
+        return view('wimpys-food-exoress-billing-statement-form');
+    }
 
     public function printPO($id){
         $purchaseOrder =  WimpysFoodExpressPurchaseOrder::with(['user', 'purchase_orders'])
@@ -841,6 +1155,31 @@ class WimpysFoodExpressController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    public function destroyBillingDataStatement(Request $request, $id){
+        $billStatement = WimpysFoodExpressBillingStatement::find($request->billingStatementId);
+
+        $billingStatement = WimpysFoodExpressBillingStatement::find($id);
+    
+        $getAmount = $billStatement->total_amount - $billingStatement->amount;
+        $billStatement->total_amount = $getAmount;
+        $billStatement->save();
+
+        $billingStatement->delete();
+
+        //update statement of account table
+        $statementAccount = WimpysFoodExpressStatementOfAccount::find($request->billingStatementId);
+
+        $stateAccount = WimpysFoodExpressStatementOfAccount::find($id);
+
+        $getStateAmount = $statementAccount->total_amount - $stateAccount->amount; 
+        $statementAccount->total_amount = $getStateAmount;
+        $statementAccount->total_remaining_balance = $getStateAmount;
+        $statementAccount->save();
+
+        $stateAccount->delete();
+
     }
 
     public function destroyTransactionList($id){

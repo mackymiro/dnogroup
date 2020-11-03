@@ -7172,6 +7172,61 @@ Route::group(['middleware' => ['auth']], function(){
 		->middleware(['cashier']);
 
 	Route::get(
+		'/wimpys-food-express/billing-statement-form',
+		'WimpysFoodExpressController@billingStatementForm')
+		->name('billingStatementFormWimpysFoodExp')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/wimpys-food-express/store-billing-statement',
+		'WimpysFoodExpressController@storeBillingStatement')
+		->name('storeBillingStatement')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/edit-billing-statement',
+		'WimpysFoodExpressController@editBillingStatement')
+		->name('editBillingStatementWimpysFoodExp')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/wimpys-food-express/{id}/add-new-billing',
+		'WimpysFoodExpressController@addNewBilling')
+		->name('addNewBilling')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/wimpys-food-express/{id}/update-billing-info',
+		'WimpysFoodExpressController@updateBillingInfo')
+		->name('updateBillingInfo')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/wimpys-food-express/delete-data-billing-statement/{id}',
+		'WimpysFoodExpressController@destroyBillingDataStatement')
+		->name('destroyBillingDataStatement')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/billing-statement-lists',
+		'WimpysFoodExpressController@billingStatementList')
+		->name('billingStatementList')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/view-billing-statement/',
+		'WimpysFoodExpressController@viewBillingStatement')
+		->name('viewBillingStatement')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/printBillingStatement',
+		'WimpysFoodExpressController@printBillingStatement')
+		->name('printBillingStatement')
+		->middleware(['cashier']);
+
+		
+	Route::get(
 		'/wimpys-food-express/payment-voucher-form',
 		'WimpysFoodExpressController@paymentVoucherForm')
 		->name('paymentVoucherFormWimpys')
