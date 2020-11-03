@@ -19,6 +19,92 @@ use App\DnoFoundationIncStatementOfAccount;
 
 class DnoFoundationIncController extends Controller
 {
+
+    public function printSOAList(){
+        $printSOAStatements = DnoFoundationIncStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                                ->where('billing_statement_id', NULL)
+                                                                ->where('deleted_at', NULL)
+                                                                ->orderBy('id', 'desc')
+                                                                ->get();
+
+            $status = "PAID";
+            $moduleName = "Statement Of Account";
+            $totalAmount =  DB::table(
+                                    'dno_foundation_inc_statement_of_accounts')
+                                    ->select(
+                                        'dno_foundation_inc_statement_of_accounts.id',
+                                        'dno_foundation_inc_statement_of_accounts.user_id',
+                                        'dno_foundation_inc_statement_of_accounts.billing_statement_id',
+                                        'dno_foundation_inc_statement_of_accounts.bill_to',
+                                        'dno_foundation_inc_statement_of_accounts.address',
+                                        'dno_foundation_inc_statement_of_accounts.date',
+                                        'dno_foundation_inc_statement_of_accounts.period_cover',
+                                        'dno_foundation_inc_statement_of_accounts.terms',
+                                        'dno_foundation_inc_statement_of_accounts.date_of_transaction',
+                                        'dno_foundation_inc_statement_of_accounts.description',
+                                        'dno_foundation_inc_statement_of_accounts.amount',
+                                        'dno_holdings_co_statement_of_accounts.total_amount',
+                                        'dno_holdings_co_statement_of_accounts.total_remaining_balance',
+                                        'dno_foundation_inc_statement_of_accounts.paid_amount',
+                                        'dno_foundation_inc_statement_of_accounts.payment_method',
+                                        'dno_foundation_inc_statement_of_accounts.collection_date',
+                                        'dno_foundation_inc_statement_of_accounts.check_number',
+                                        'dno_foundation_inc_statement_of_accounts.check_amount',
+                                        'dno_foundation_inc_statement_of_accounts.or_number',
+                                        'dno_foundation_inc_statement_of_accounts.status',
+                                        'dno_foundation_inc_statement_of_accounts.created_by',
+                                        'dno_foundation_inc_codes.dno_holdings_code',
+                                        'dno_foundation_inc_codes.module_id',
+                                        'dno_foundation_inc_codes.module_code',
+                                        'dno_foundation_inc_codes.module_name')
+                                    ->join('dno_foundation_inc_codes', 'dno_foundation_inc_statement_of_accounts.id', '=', 'dno_foundation_inc_codes.module_id')
+                                    ->where('dno_foundation_inc_statement_of_accounts.billing_statement_id', NULL)
+                                    ->where('dno_foundation_inc_codes.module_name', $moduleName)
+                                    ->where('dno_foundation_inc_statement_of_accounts.status', '=', $status)
+                                    ->sum('dno_foundation_inc_statement_of_accounts.total_amount');
+
+        $totalRemainingBalance =  DB::table(
+                                'dno_foundation_inc_statement_of_accounts')
+                                ->select(
+                                    'dno_foundation_inc_statement_of_accounts.id',
+                                    'dno_foundation_inc_statement_of_accounts.user_id',
+                                    'dno_foundation_inc_statement_of_accounts.billing_statement_id',
+                                    'dno_foundation_inc_statement_of_accounts.bill_to',
+                                    'dno_foundation_inc_statement_of_accounts.address',
+                                    'dno_foundation_inc_statement_of_accounts.date',
+                                    'dno_foundation_inc_statement_of_accounts.period_cover',
+                                    'dno_foundation_inc_statement_of_accounts.terms',
+                                    'dno_foundation_inc_statement_of_accounts.date_of_transaction',
+                                    'dno_foundation_inc_statement_of_accounts.description',
+                                    'dno_foundation_inc_statement_of_accounts.amount',
+                                    'dno_holdings_co_statement_of_accounts.total_amount',
+                                    'dno_holdings_co_statement_of_accounts.total_remaining_balance',
+                                    'dno_foundation_inc_statement_of_accounts.paid_amount',
+                                    'dno_foundation_inc_statement_of_accounts.payment_method',
+                                    'dno_foundation_inc_statement_of_accounts.collection_date',
+                                    'dno_foundation_inc_statement_of_accounts.check_number',
+                                    'dno_foundation_inc_statement_of_accounts.check_amount',
+                                    'dno_foundation_inc_statement_of_accounts.or_number',
+                                    'dno_foundation_inc_statement_of_accounts.status',
+                                    'dno_foundation_inc_statement_of_accounts.created_by',
+                                    'dno_foundation_inc_codes.dno_holdings_code',
+                                    'dno_foundation_inc_codes.module_id',
+                                    'dno_foundation_inc_codes.module_code',
+                                    'dno_foundation_inc_codes.module_name')
+                                ->join('dno_foundation_inc_codes', 'dno_foundation_inc_statement_of_accounts.id', '=', 'dno_foundation_inc_codes.module_id')
+                                ->where('dno_foundation_inc_statement_of_accounts.billing_statement_id', NULL)
+                                ->where('dno_foundation_inc_codes.module_name', $moduleName)
+                                ->where('dno_foundation_inc_statement_of_accounts.status', NULL)
+                                ->sum('dno_foundation_inc_statement_of_accounts.total_remaining_balance');
+
+        $pdf = PDF::loadView('printSOAListsDnoFoundationInc', compact('printSOAStatements', 
+        'totalAmount', 'totalRemainingBalance'));
+
+        return $pdf->download('dno-foundation-inc-statement-of-account-list.pdf');
+    }
+
+
+
     public function printSOA($id){
         
         $soa = DnoFoundationIncStatementOfAccount::with(['user', 'statement_of_accounts'])
@@ -167,7 +253,77 @@ class DnoFoundationIncController extends Controller
                                                                 ->where('deleted_at', NULL)
                                                                 ->orderBy('id', 'desc')
                                                                 ->get();
-        return view('dno-foundation-inc-statement-of-account-lists', compact('statementOfAccounts'));
+            $status = "PAID";
+            $moduleName = "Statement Of Account";
+            $totalAmount = DB::table(
+                                    'dno_foundation_inc_statement_of_accounts')
+                                    ->select(
+                                        'dno_foundation_inc_statement_of_accounts.id',
+                                        'dno_foundation_inc_statement_of_accounts.user_id',
+                                        'dno_foundation_inc_statement_of_accounts.billing_statement_id',
+                                        'dno_foundation_inc_statement_of_accounts.bill_to',
+                                        'dno_foundation_inc_statement_of_accounts.address',
+                                        'dno_foundation_inc_statement_of_accounts.date',
+                                        'dno_foundation_inc_statement_of_accounts.period_cover',
+                                        'dno_foundation_inc_statement_of_accounts.terms',
+                                        'dno_foundation_inc_statement_of_accounts.date_of_transaction',
+                                        'dno_foundation_inc_statement_of_accounts.description',
+                                        'dno_foundation_inc_statement_of_accounts.amount',
+                                        'dno_foundation_inc_statement_of_accounts.total_amount',
+                                        'dno_foundation_inc_statement_of_accounts.paid_amount',
+                                        'dno_foundation_inc_statement_of_accounts.payment_method',
+                                        'dno_foundation_inc_statement_of_accounts.collection_date',
+                                        'dno_foundation_inc_statement_of_accounts.check_number',
+                                        'dno_foundation_inc_statement_of_accounts.check_amount',
+                                        'dno_foundation_inc_statement_of_accounts.or_number',
+                                        'dno_foundation_inc_statement_of_accounts.status',
+                                        'dno_foundation_inc_statement_of_accounts.created_by',
+                                        'dno_foundation_inc_codes.dno_holdings_code',
+                                        'dno_foundation_inc_codes.module_id',
+                                        'dno_foundation_inc_codes.module_code',
+                                        'dno_foundation_inc_codes.module_name')
+                                    ->join('dno_foundation_inc_codes', 'dno_foundation_inc_statement_of_accounts.id', '=', 'dno_foundation_inc_codes.module_id')
+                                    ->where('dno_foundation_inc_statement_of_accounts.billing_statement_id', NULL)
+                                    ->where('dno_foundation_inc_codes.module_name', $moduleName)
+                                    ->where('dno_foundation_inc_statement_of_accounts.status', '=', $status)
+                                    ->sum('dno_foundation_inc_statement_of_accounts.total_amount');
+                
+            $totalRemainingBalance = DB::table(
+                                        'dno_foundation_inc_statement_of_accounts')
+                                        ->select(
+                                            'dno_foundation_inc_statement_of_accounts.id',
+                                            'dno_foundation_inc_statement_of_accounts.user_id',
+                                            'dno_foundation_inc_statement_of_accounts.billing_statement_id',
+                                            'dno_foundation_inc_statement_of_accounts.bill_to',
+                                            'dno_foundation_inc_statement_of_accounts.address',
+                                            'dno_foundation_inc_statement_of_accounts.date',
+                                            'dno_foundation_inc_statement_of_accounts.period_cover',
+                                            'dno_foundation_inc_statement_of_accounts.terms',
+                                            'dno_foundation_inc_statement_of_accounts.date_of_transaction',
+                                            'dno_foundation_inc_statement_of_accounts.description',
+                                            'dno_foundation_inc_statement_of_accounts.amount',
+                                            'dno_foundation_inc_statement_of_accounts.total_amount',
+                                            'dno_foundation_inc_statement_of_accounts.total_remaining_balance',
+                                            'dno_foundation_inc_statement_of_accounts.paid_amount',
+                                            'dno_foundation_inc_statement_of_accounts.payment_method',
+                                            'dno_foundation_inc_statement_of_accounts.collection_date',
+                                            'dno_foundation_inc_statement_of_accounts.check_number',
+                                            'dno_foundation_inc_statement_of_accounts.check_amount',
+                                            'dno_foundation_inc_statement_of_accounts.or_number',
+                                            'dno_foundation_inc_statement_of_accounts.status',
+                                            'dno_foundation_inc_statement_of_accounts.created_by',
+                                            'dno_foundation_inc_codes.dno_holdings_code',
+                                            'dno_foundation_inc_codes.module_id',
+                                            'dno_foundation_inc_codes.module_code',
+                                            'dno_foundation_inc_codes.module_name')
+                                        ->join('dno_foundation_inc_codes', 'dno_foundation_inc_statement_of_accounts.id', '=', 'dno_foundation_inc_codes.module_id')
+                                        ->where('dno_foundation_inc_statement_of_accounts.billing_statement_id', NULL)
+                                        ->where('dno_foundation_inc_codes.module_name', $moduleName)
+                                        ->where('dno_foundation_inc_statement_of_accounts.status', NULL)
+                                        ->sum('dno_foundation_inc_statement_of_accounts.total_remaining_balance');
+            
+        return view('dno-foundation-inc-statement-of-account-lists', compact('statementOfAccounts', 'totalAmount', 
+        'totalRemainingBalance'));
     }
 
     public function printBillingStatement($id){

@@ -24,7 +24,7 @@
                         <i class="fa fa-tasks" aria-hidden="true"></i>
           					   SOA Lists
                        <div class="float-right">
-                          <a href="{{ action('LoloPinoyLechonDeCebuController@printSOAListsSsp') }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                          <a href="{{ action('DnoHoldingsCoController@printSOAList') }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                         </div>
                     </div>
     					  <div class="card-body">

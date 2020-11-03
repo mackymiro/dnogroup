@@ -6595,6 +6595,12 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('editStatementAccount')
 		->middleware(['cashier']);
 
+	Route::get(
+		'/dno-holdings-co/printSOAList',
+		'DnoHoldingsCoController@printSOAList')
+		->name('printSOAList')
+		->middleware(['cashier']);
+
 	Route::put(
 		'/dno-holdings-co/s-account/{id}',
 		'DnoHoldingsCoController@sAccountUpdate')
@@ -6976,6 +6982,12 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dno-foundation-inc/{id}/edit-statement-of-account/',
 		'DnoFoundationIncController@editStatementAccount')
 		->name('editStatementAccount')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/printSOAList',
+		'DnoFoundationIncController@printSOAList')
+		->name('printSOAList')
 		->middleware(['cashier']);
 
 	Route::put(

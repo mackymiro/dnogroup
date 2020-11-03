@@ -24,7 +24,7 @@
                         <i class="fa fa-tasks" aria-hidden="true"></i>
           					   SOA Lists
                        <div class="float-right">
-                          <a href="{{ action('LoloPinoyLechonDeCebuController@printSOAListsSsp') }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                          <a href="{{ action('DnoFoundationIncController@printSOAList') }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                         </div>
                     </div>
     					  <div class="card-body">
@@ -99,11 +99,11 @@
 					  				<thead>
 					  					<tr>
 					  						<th width="30%" class="bg-info" style="color:white; font-size:28px;">TOTAL PAID AMOUNT</th>
-					  						<th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?php // number_format($totalAmount, 2);?></span></th>
+					  						<th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?= number_format($totalAmount, 2);?></span></th>
 					  					</tr>
                                         <tr>
 					  						<th width="30%" class="bg-info" style="color:white; font-size:28px;">TOTAL UNPAID AMOUNT</th>
-					  						<th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?php //number_format($totalRemainingBalance, 2);?></span></th>
+					  						<th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?= number_format($totalRemainingBalance, 2);?></span></th>
 					  					</tr>
 
 					  				</thead>

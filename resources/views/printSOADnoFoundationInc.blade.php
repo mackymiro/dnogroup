@@ -46,10 +46,7 @@
                                                 <th width="25%">Bill To</th>
                                                 <th> {{ $soa[0]->bill_to }}</th>
                                             </tr>
-                                            <tr>
-                                                <th>Address</th>
-                                                <th>{{ $soa[0]->address }}</th>
-                                            </tr>
+                                          
                                             <tr>
                                                 <th>Period Covered</th>
                                                 <th> {{ $soa[0]->period_cover }} </th>
