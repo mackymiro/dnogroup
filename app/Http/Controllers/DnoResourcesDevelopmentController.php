@@ -15,9 +15,590 @@ use App\DnoResourcesDevelopmentCorpDeliveryTransactionForm;
 use App\DnoResourcesDevelopmentCode;
 use App\DnoResourcesDevelopmentCorpSupplier;
 use App\DnoResourcesDevelopmentCorpPettyCash;
+use App\DnoResourcesDevelopmentCorpBillingStatement;
+use App\DnoResourcesDevelopmentCorpStatementOfAccount;
 
 class DnoResourcesDevelopmentController extends Controller
 {
+
+    public function printSOALists(){
+        $printSOAStatements = DnoResourcesDevelopmentCorpStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                                ->where('billing_statement_id', NULL)
+                                                                ->where('deleted_at', NULL)
+                                                                ->orderBy('id', 'desc')
+                                                                ->get();
+        $status = "PAID";
+        $moduleName = "Statement Of Account";
+        $totalAmount = DB::table(
+                        'dno_resources_development_corp_statement_of_accounts')
+                        ->select(
+                            'dno_resources_development_corp_statement_of_accounts.id',
+                            'dno_resources_development_corp_statement_of_accounts.user_id',
+                            'dno_resources_development_corp_statement_of_accounts.billing_statement_id',
+                            'dno_resources_development_corp_statement_of_accounts.bill_to',
+                            'dno_resources_development_corp_statement_of_accounts.address',
+                            'dno_resources_development_corp_statement_of_accounts.date',
+                            'dno_resources_development_corp_statement_of_accounts.period_cover',
+                            'dno_resources_development_corp_statement_of_accounts.terms',
+                            'dno_resources_development_corp_statement_of_accounts.date_of_transaction',
+                            'dno_resources_development_corp_statement_of_accounts.description',
+                            'dno_resources_development_corp_statement_of_accounts.amount',
+                            'dno_resources_development_corp_statement_of_accounts.total_amount',
+                            'dno_resources_development_corp_statement_of_accounts.paid_amount',
+                            'dno_resources_development_corp_statement_of_accounts.payment_method',
+                            'dno_resources_development_corp_statement_of_accounts.collection_date',
+                            'dno_resources_development_corp_statement_of_accounts.check_number',
+                            'dno_resources_development_corp_statement_of_accounts.check_amount',
+                            'dno_resources_development_corp_statement_of_accounts.or_number',
+                            'dno_resources_development_corp_statement_of_accounts.status',
+                            'dno_resources_development_corp_statement_of_accounts.created_by',
+                            'dno_resources_development_codes.dno_resources_code',
+                            'dno_resources_development_codes.module_id',
+                            'dno_resources_development_codes.module_code',
+                            'dno_resources_development_codes.module_name')
+                        ->join('dno_resources_development_codes', 'dno_resources_development_corp_statement_of_accounts.id', '=', 'dno_resources_development_codes.module_id')
+                        ->where('dno_resources_development_corp_statement_of_accounts.billing_statement_id', NULL)
+                        ->where('dno_resources_development_codes.module_name', $moduleName)
+                        ->where('dno_resources_development_corp_statement_of_accounts.status', '=', $status)
+                        ->sum('dno_resources_development_corp_statement_of_accounts.total_amount');
+
+
+    $totalRemainingBalance = DB::table(
+                            'dno_resources_development_corp_statement_of_accounts')
+                            ->select(
+                                'dno_resources_development_corp_statement_of_accounts.id',
+                                'dno_resources_development_corp_statement_of_accounts.user_id',
+                                'dno_resources_development_corp_statement_of_accounts.billing_statement_id',
+                                'dno_resources_development_corp_statement_of_accounts.bill_to',
+                                'dno_resources_development_corp_statement_of_accounts.address',
+                                'dno_resources_development_corp_statement_of_accounts.date',
+                                'dno_resources_development_corp_statement_of_accounts.period_cover',
+                                'dno_resources_development_corp_statement_of_accounts.terms',
+                                'dno_resources_development_corp_statement_of_accounts.date_of_transaction',
+                                'dno_resources_development_corp_statement_of_accounts.description',
+                                'dno_resources_development_corp_statement_of_accounts.amount',
+                                'dno_resources_development_corp_statement_of_accounts.total_amount',
+                                'dno_resources_development_corp_statement_of_accounts.total_remaining_balance',
+                                'dno_resources_development_corp_statement_of_accounts.paid_amount',
+                                'dno_resources_development_corp_statement_of_accounts.payment_method',
+                                'dno_resources_development_corp_statement_of_accounts.collection_date',
+                                'dno_resources_development_corp_statement_of_accounts.check_number',
+                                'dno_resources_development_corp_statement_of_accounts.check_amount',
+                                'dno_resources_development_corp_statement_of_accounts.or_number',
+                                'dno_resources_development_corp_statement_of_accounts.status',
+                                'dno_resources_development_corp_statement_of_accounts.created_by',
+                                'dno_resources_development_codes.dno_resources_code',
+                                'dno_resources_development_codes.module_id',
+                                'dno_resources_development_codes.module_code',
+                                'dno_resources_development_codes.module_name')
+                            ->join('dno_resources_development_codes', 'dno_resources_development_corp_statement_of_accounts.id', '=', 'dno_resources_development_codes.module_id')
+                            ->where('dno_resources_development_corp_statement_of_accounts.billing_statement_id', NULL)
+                            ->where('dno_resources_development_codes.module_name', $moduleName)
+                            ->where('dno_resources_development_corp_statement_of_accounts.status', NULL)
+                            ->sum('dno_resources_development_corp_statement_of_accounts.total_remaining_balance');
+
+        $pdf = PDF::loadView('printSOAListsDnoResources', compact('printSOAStatements', 
+        'totalAmount', 'totalRemainingBalance'));
+
+        return $pdf->download('dno-resources-development-corp-statement-of-account-list.pdf');
+
+    }
+
+    public function printSOA($id){  
+        
+        $soa = DnoResourcesDevelopmentCorpStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                                ->where('billing_statement_id', NULL)
+                                                                ->orderBy('id', 'desc')
+                                                                ->get();                                                   
+                                                                
+        $statementAccounts = DnoResourcesDevelopmentCorpStatementOfAccount::where('billing_statement_id', $id)->get()->toArray();
+        
+        $moduleName = "Statement Of Account";
+        $countTotalAmount =  DB::table(
+                            'dno_resources_development_corp_statement_of_accounts')
+                            ->select(
+                                'dno_resources_development_corp_statement_of_accounts.id',
+                                'dno_resources_development_corp_statement_of_accounts.user_id',
+                                'dno_resources_development_corp_statement_of_accounts.billing_statement_id',
+                                'dno_resources_development_corp_statement_of_accounts.bill_to',
+                                'dno_resources_development_corp_statement_of_accounts.address',
+                                'dno_resources_development_corp_statement_of_accounts.date',
+                                'dno_resources_development_corp_statement_of_accounts.period_cover',
+                                'dno_resources_development_corp_statement_of_accounts.terms',
+                                'dno_resources_development_corp_statement_of_accounts.date_of_transaction',
+                                'dno_resources_development_corp_statement_of_accounts.description',
+                                'dno_resources_development_corp_statement_of_accounts.amount',
+                                'dno_resources_development_corp_statement_of_accounts.paid_amount',
+                                'dno_resources_development_corp_statement_of_accounts.payment_method',
+                                'dno_resources_development_corp_statement_of_accounts.collection_date',
+                                'dno_resources_development_corp_statement_of_accounts.check_number',
+                                'dno_resources_development_corp_statement_of_accounts.check_amount',
+                                'dno_resources_development_corp_statement_of_accounts.or_number',
+                                'dno_resources_development_corp_statement_of_accounts.status',
+                                'dno_resources_development_corp_statement_of_accounts.created_by',
+                                'dno_resources_development_codes.dno_resources_code',
+                                'dno_resources_development_codes.module_id',
+                                'dno_resources_development_codes.module_code',
+                                'dno_resources_development_codes.module_name')
+                            ->join('dno_resources_development_codes', 'dno_resources_development_corp_statement_of_accounts.id', '=', 'dno_resources_development_codes.module_id')
+                            ->where('dno_resources_development_corp_statement_of_accounts.id', $id)
+                            ->where('dno_resources_development_codes.module_name', $moduleName)
+                            ->sum('dno_resources_development_corp_statement_of_accounts.amount');
+                
+        $countAmount = DnoResourcesDevelopmentCorpStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+        //
+         $countAmount = DnoResourcesDevelopmentCorpStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+
+         $sum  = $countTotalAmount + $countAmount;
+
+         $pdf = PDF::loadView('printSOADnoResourcesDevelopment', compact('soa', 'statementAccounts', 'sum'));
+
+         return $pdf->download('dno-resources-development-corp-statement-of-account.pdf');
+    }
+
+    public function viewStatementAccount($id){
+        $viewStatementAccount = DnoResourcesDevelopmentCorpStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                                ->where('id', $id)
+                                                                ->get();
+
+        $statementAccounts = DnoResourcesDevelopmentCorpStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->get();
+
+        //count the total amount 
+        $countTotalAmount = DnoResourcesDevelopmentCorpStatementOfAccount::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = DnoResourcesDevelopmentCorpStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+
+        //count the total balance if there are paid amount
+        $paidAmountCount = DnoResourcesDevelopmentCorpStatementOfAccount::where('id', $id)->sum('paid_amount');
+
+        //
+        $countAmountOthersPaid = DnoResourcesDevelopmentCorpStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('paid_amount');
+
+        $compute  = $paidAmountCount + $countAmountOthersPaid;
+
+
+        //minus the total balance to paid amounts
+        $computeAll  = $sum - $compute;
+
+        return view('view-dno-resources-development-corp-statement-account', compact('viewStatementAccount', 'statementAccounts', 'sum', 'computeAll'));
+
+    }
+
+    public function sAccountUpdate(Request $request, $id){  
+          //get the main Id 
+          $mainIdSoa = DnoResourcesDevelopmentCorpStatementOfAccount::find($request->mainId);
+
+          $compute = $mainIdSoa->total_remaining_balance - $request->paidAmount;
+          
+          $mainIdSoa->total_remaining_balance = $compute; 
+          $mainIdSoa->save();
+  
+          $statementAccountPaid = DnoResourcesDevelopmentCorpStatementOfAccount::find($request->id);
+          $statementAccountPaid->paid_amount = $request->paidAmount;
+          $statementAccountPaid->status = $request->status;
+          $statementAccountPaid->collection_date = $request->collectionDate;
+          $statementAccountPaid->check_number = $request->checkNumber;
+          $statementAccountPaid->check_amount = $request->checkAmount;
+          $statementAccountPaid->or_number = $request->orNumber;
+          $statementAccountPaid->payment_method = $request->payment;
+  
+          $statementAccountPaid->save();
+  
+          return response()->json('Success: paid successfully');
+  
+    }
+
+    public function editStatementAccount($id){
+        $getStatementOfAccount = DnoResourcesDevelopmentCorpStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                                    ->where('id', $id)
+                                                                    ->get();
+        //AllAcounts not yet paid
+        $allAccounts = DnoResourcesDevelopmentCorpStatementOfAccount::where('billing_statement_id', $id)->where('status', NULL)->get()->toArray();
+
+        $stat = "PAID";
+        $allAccountsPaids = DnoResourcesDevelopmentCorpStatementOfAccount::where('billing_statement_id', $id)->where('status', $stat)->get()->toArray();  
+
+        //count the total amount 
+        $countTotalAmount = DnoResourcesDevelopmentCorpStatementOfAccount::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = DnoResourcesDevelopmentCorpStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        //count the total balance if there are paid amount
+        $paidAmountCount = DnoResourcesDevelopmentCorpStatementOfAccount::where('id', $id)->sum('paid_amount');
+
+        //
+        $countAmountOthersPaid = DnoResourcesDevelopmentCorpStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('paid_amount');
+
+        $compute  = $paidAmountCount + $countAmountOthersPaid;
+
+        //minus the total balance to paid amounts
+        $computeAll  = $sum - $compute;
+
+        return view('edit-dno-resources-development-corp-statement-of-account', compact('id', 'getStatementOfAccount', 'computeAll', 'allAccounts', 'allAccountsPaids', 'sum'));
+
+    }
+
+    public function statementOfAccountLists(){
+        $statementOfAccounts = DnoResourcesDevelopmentCorpStatementOfAccount::with(['user', 'statement_of_accounts'])
+                                                                ->where('billing_statement_id', NULL)
+                                                                ->where('deleted_at', NULL)
+                                                                ->orderBy('id', 'desc')
+                                                                ->get();
+
+        $status = "PAID";
+        $moduleName = "Statement Of Account";
+        $totalAmount = DB::table(
+                        'dno_resources_development_corp_statement_of_accounts')
+                        ->select(
+                            'dno_resources_development_corp_statement_of_accounts.id',
+                            'dno_resources_development_corp_statement_of_accounts.user_id',
+                            'dno_resources_development_corp_statement_of_accounts.billing_statement_id',
+                            'dno_resources_development_corp_statement_of_accounts.bill_to',
+                            'dno_resources_development_corp_statement_of_accounts.address',
+                            'dno_resources_development_corp_statement_of_accounts.date',
+                            'dno_resources_development_corp_statement_of_accounts.period_cover',
+                            'dno_resources_development_corp_statement_of_accounts.terms',
+                            'dno_resources_development_corp_statement_of_accounts.date_of_transaction',
+                            'dno_resources_development_corp_statement_of_accounts.description',
+                            'dno_resources_development_corp_statement_of_accounts.amount',
+                            'dno_resources_development_corp_statement_of_accounts.total_amount',
+                            'dno_resources_development_corp_statement_of_accounts.paid_amount',
+                            'dno_resources_development_corp_statement_of_accounts.payment_method',
+                            'dno_resources_development_corp_statement_of_accounts.collection_date',
+                            'dno_resources_development_corp_statement_of_accounts.check_number',
+                            'dno_resources_development_corp_statement_of_accounts.check_amount',
+                            'dno_resources_development_corp_statement_of_accounts.or_number',
+                            'dno_resources_development_corp_statement_of_accounts.status',
+                            'dno_resources_development_corp_statement_of_accounts.created_by',
+                            'dno_resources_development_codes.dno_resources_code',
+                            'dno_resources_development_codes.module_id',
+                            'dno_resources_development_codes.module_code',
+                            'dno_resources_development_codes.module_name')
+                        ->join('dno_resources_development_codes', 'dno_resources_development_corp_statement_of_accounts.id', '=', 'dno_resources_development_codes.module_id')
+                        ->where('dno_resources_development_corp_statement_of_accounts.billing_statement_id', NULL)
+                        ->where('dno_resources_development_codes.module_name', $moduleName)
+                        ->where('dno_resources_development_corp_statement_of_accounts.status', '=', $status)
+                        ->sum('dno_resources_development_corp_statement_of_accounts.total_amount');
+
+                                                        
+            $totalRemainingBalance = DB::table(
+                                    'dno_resources_development_corp_statement_of_accounts')
+                                    ->select(
+                                        'dno_resources_development_corp_statement_of_accounts.id',
+                                        'dno_resources_development_corp_statement_of_accounts.user_id',
+                                        'dno_resources_development_corp_statement_of_accounts.billing_statement_id',
+                                        'dno_resources_development_corp_statement_of_accounts.bill_to',
+                                        'dno_resources_development_corp_statement_of_accounts.address',
+                                        'dno_resources_development_corp_statement_of_accounts.date',
+                                        'dno_resources_development_corp_statement_of_accounts.period_cover',
+                                        'dno_resources_development_corp_statement_of_accounts.terms',
+                                        'dno_resources_development_corp_statement_of_accounts.date_of_transaction',
+                                        'dno_resources_development_corp_statement_of_accounts.description',
+                                        'dno_resources_development_corp_statement_of_accounts.amount',
+                                        'dno_resources_development_corp_statement_of_accounts.total_amount',
+                                        'dno_resources_development_corp_statement_of_accounts.total_remaining_balance',
+                                        'dno_resources_development_corp_statement_of_accounts.paid_amount',
+                                        'dno_resources_development_corp_statement_of_accounts.payment_method',
+                                        'dno_resources_development_corp_statement_of_accounts.collection_date',
+                                        'dno_resources_development_corp_statement_of_accounts.check_number',
+                                        'dno_resources_development_corp_statement_of_accounts.check_amount',
+                                        'dno_resources_development_corp_statement_of_accounts.or_number',
+                                        'dno_resources_development_corp_statement_of_accounts.status',
+                                        'dno_resources_development_corp_statement_of_accounts.created_by',
+                                        'dno_resources_development_codes.dno_resources_code',
+                                        'dno_resources_development_codes.module_id',
+                                        'dno_resources_development_codes.module_code',
+                                        'dno_resources_development_codes.module_name')
+                                    ->join('dno_resources_development_codes', 'dno_resources_development_corp_statement_of_accounts.id', '=', 'dno_resources_development_codes.module_id')
+                                    ->where('dno_resources_development_corp_statement_of_accounts.billing_statement_id', NULL)
+                                    ->where('dno_resources_development_codes.module_name', $moduleName)
+                                    ->where('dno_resources_development_corp_statement_of_accounts.status', NULL)
+                                    ->sum('dno_resources_development_corp_statement_of_accounts.total_remaining_balance');
+                                                        
+
+        
+        return view('dno-resources-development-corp-statement-of-account-lists', compact('statementOfAccounts', 
+        'totalAmount', 'totalRemainingBalance'));
+    }
+
+    public function printBillingStatement($id){
+        $printBillingStatement = DnoResourcesDevelopmentCorpBillingStatement::with(['user', 'billing_statements'])
+                                                                    ->where('id', $id)
+                                                                    ->get();
+
+        $billingStatements = DnoResourcesDevelopmentCorpBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+        //count the total amount 
+        $countTotalAmount = DnoResourcesDevelopmentCorpBillingStatement::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = DnoResourcesDevelopmentCorpBillingStatement::where('billing_statement_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        $pdf = PDF::loadView('printBillingStatementDnoResourcesDevelopment', compact('printBillingStatement', 'billingStatements', 'sum'));
+
+        return $pdf->download('dno-resources-development-corp-billing-statement.pdf'); 
+    }
+
+    public function viewBillingStatement($id){
+        $viewBillingStatement = DnoResourcesDevelopmentCorpBillingStatement::with(['user', 'billing_statements'])
+                                                                ->where('id', $id)
+                                                                ->get();
+
+
+        $billingStatements = DnoResourcesDevelopmentCorpBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+        //count the total amount 
+        $countTotalAmount = DnoResourcesDevelopmentCorpBillingStatement::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = DnoResourcesDevelopmentCorpBillingStatement::where('billing_statement_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        return view('view-dno-resources-development-corp-billing-statement', compact('viewBillingStatement', 'billingStatements', 'sum'));
+
+    }
+
+    public function billingStatementList(){
+
+        $billingStatements = DnoResourcesDevelopmentCorpBillingStatement::with(['user', 'billing_statements'])
+                                                                ->where('billing_statement_id', NULL)
+                                                                ->where('deleted_at', NULL)
+                                                                ->orderBy('id', 'desc')
+                                                                ->get();
+        return view('dno-resources-development-corp-billing-statement-lists', compact('billingStatements'));
+    }
+
+    public function addNewBilling(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $billingOrder = DnoResourcesDevelopmentCorpBillingStatement::find($id);
+        
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $amount = $request->get('amount');
+
+        $tot = $billingOrder->total_amount + $amount; 
+
+        $addBillingStatement = new DnoResourcesDevelopmentCorpBillingStatement([
+            'user_id'=>$user->id,
+            'billing_statement_id'=>$id,
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$request->get('unitPrice'),
+            'dr_no'=>$request->get('drNo'),
+            'amount'=>$amount,
+            'created_by'=>$name,
+        ]);
+
+        $addBillingStatement->save();
+
+        $addStatementAccount = new DnoResourcesDevelopmentCorpStatementOfAccount([
+            'user_id'=>$user->id,
+            'billing_statement_id'=>$id,
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'description'=>$request->get('description'),
+            'unit_price'=>$request->get('unitPrice'),
+            'dr_no'=>$request->get('drNo'),
+            'amount'=>$amount,
+            'total_amount'=>$amount,
+            'created_by'=>$name,
+        ]);
+
+        $addStatementAccount->save();
+        $statementOrder = DnoResourcesDevelopmentCorpStatementOfAccount::find($id);  
+
+        $billingOrder->total_amount = $tot;
+        $billingOrder->save();
+
+       //update soa table
+       $statementOrder->total_amount  = $tot;
+       $statementOrder->total_remaining_balance = $tot;
+       $statementOrder->save();
+
+       Session::flash('SuccessAdd', 'Successfully added.');
+
+       return redirect()->route('editBillingStatementDnoResourcesDevelopment', ['id'=>$id]);
+
+    }
+
+    public function updateBillingInfo(Request $request, $id){
+        $updateBillingOrder = DnoResourcesDevelopmentCorpBillingStatement::find($id);
+
+
+        $updateBillingOrder->bill_to = $request->get('billTo');
+        $updateBillingOrder->address = $request->get('address');
+        $updateBillingOrder->period_cover = $request->get('periodCovered');
+      
+        $updateBillingOrder->terms = $request->get('terms');
+        $updateBillingOrder->date_of_transaction = $request->get('transactionDate');
+        $updateBillingOrder->dr_no = $request->get('drNo');
+        $updateBillingOrder->description = $request->get('description');
+        $updateBillingOrder->unit_price = $request->get('unitPrice');
+        $updateBillingOrder->amount = $request->get('amount');
+        $updateBillingOrder->save();
+
+        Session::flash('SuccessE', 'Successfully updated');
+
+        return redirect()->route('editBillingStatementDnoResourcesDevelopment', ['id'=>$id]);
+    }
+
+    public function editBillingStatement($id){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $billingStatement = DnoResourcesDevelopmentCorpBillingStatement::find($id);
+       
+        $bStatements = DnoResourcesDevelopmentCorpBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+        return view('edit-dno-resources-development-corp-billing-statement-form', compact('billingStatement', 'bStatements'));
+    }
+
+    public function storeBillingStatement(Request $request){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        //get user name
+        $name  = $firstName." ".$lastName;
+
+         //validate
+         $this->validate($request, [
+            'billTo' =>'required',
+            'address'=>'required',
+            'periodCovered'=>'required',
+            'date'=>'required',
+            'terms'=>'required',
+            'transactionDate'=>'required',
+        ]);
+
+         //get the latest insert id query in table billing statements ref number
+         $dataReferenceNum = DB::select('SELECT id, dno_resources_code FROM dno_resources_development_codes ORDER BY id DESC LIMIT 1');
+
+         //if code is not zero add plus 1 reference number
+         if(isset($dataReferenceNum[0]->dno_resources_code) != 0){
+             //if code is not 0
+             $newRefNum = $dataReferenceNum[0]->dno_resources_code +1;
+             $uRef = sprintf("%06d",$newRefNum);   
+ 
+         }else{
+             //if code is 0 
+             $newRefNum = 1;
+             $uRef = sprintf("%06d",$newRefNum);
+         } 
+
+         $target = DB::table(
+            'dno_resources_development_corp_billing_statements')
+            ->where('dr_no', $request->get('dr_no'))
+            ->get()->first();
+
+        if($target === NULL){
+            $billingStatement = new DnoResourcesDevelopmentCorpBillingStatement([
+                'user_id'=>$user->id,
+                'bill_to'=>$request->get('billTo'),
+                'address'=>$request->get('address'),
+                'period_cover'=>$request->get('periodCovered'),
+                'date'=>$request->get('date'),
+                'terms'=>$request->get('terms'),
+                'dr_no'=>$request->get('drNo'),
+                'date_of_transaction'=>$request->get('transactionDate'),
+                'description'=>$request->get('description'),
+                'unit_price'=>$request->get('unitPrice'),
+                'amount'=>$request->get('amount'),
+                'total_amount'=>$request->get('amount'),
+                'created_by'=>$name,
+                'prepared_by'=>$name,
+            ]);
+            $billingStatement->save();
+
+            $insertedId = $billingStatement->id;
+    
+            $moduleCode = "BS-";
+            $moduleName = "Billing Statement";
+
+            $dnoResources = new DnoResourcesDevelopmentCode([
+                'user_id'=>$user->id,
+                'dno_resources_code'=>$uRef,
+                'module_id'=>$insertedId,
+                'module_code'=>$moduleCode,
+                'module_name'=>$moduleName,
+    
+            ]);
+    
+            $dnoResources->save();
+            $bsNo = $dnoResources->id;
+
+            $bsNoId = DnoResourcesDevelopmentCode::find($bsNo);
+
+            $statementAccount = new DnoResourcesDevelopmentCorpStatementOfAccount([
+                'user_id'=>$user->id,
+                'bs_no'=>$bsNoId->dno_resources_code,
+                'bill_to'=>$request->get('billTo'),
+                'period_cover'=>$request->get('periodCovered'),
+                'date'=>$request->get('date'),
+                'terms'=>$request->get('terms'),
+                'dr_no'=>$request->get('drNo'),
+                'date_of_transaction'=>$request->get('transactionDate'),
+                'description'=>$request->get('description'),
+                'unit_price'=>$request->get('unitPrice'),
+                'amount'=>$request->get('amount'),
+                'total_amount'=>$request->get('amount'),
+                'total_remaining_balance'=>$request->get('amount'),
+                'created_by'=>$name,
+                'prepared_by'=>$name,
+    
+            ]);
+            $statementAccount->save();
+            $insertedIdStatement = $statementAccount->id;
+
+            $moduleCodeSOA = "SOA-";
+            $moduleNameSOA = "Statement Of Account";
+            
+            $uRefStatement = $uRef + 1; 
+            $uRefState = sprintf("%06d",$uRefStatement);
+            
+            $statement = new DnoResourcesDevelopmentCode([
+                'user_id'=>$user->id,
+                'dno_resources_code'=>$uRefState,
+                'module_id'=>$insertedIdStatement,
+                'module_code'=>$moduleCodeSOA,
+                'module_name'=>$moduleNameSOA,
+    
+            ]);
+            $statement->save();
+
+            return redirect()->route('editBillingStatementDnoResourcesDevelopment', ['id'=>$insertedId]);
+
+
+        }else{
+            return redirect()->route('billingStatementFormDnoResourcesDevelopment')->with('error', 'DR Number Already Exists. Please See Transaction List For Your Reference');
+        }    
+        
+
+
+    }
+
+    public function billingStatementForm(){
+        return view('dno-resources-development-corp-billing-statement-form');
+    }
+
     public function printPettyCash($id){
         $getPettyCash =  DnoResourcesDevelopmentCorpPettyCash::with(['user', 'petty_cashes'])
                                                     ->where('id', $id)
@@ -3287,6 +3868,26 @@ class DnoResourcesDevelopmentController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    public function destroyBillingStatement($id){
+        $billingStatement = DnoResourcesDevelopmentCorpBillingStatement::find($id);
+        $billingStatement->delete();
+
+        $statementAccount = DnoResourcesDevelopmentCorpStatementOfAccount::find($id);
+        $statementAccount->delete();
+    }
+
+    public function destroyBillingDataStatement(Request $request, $id){
+        $billStatement = DnoResourcesDevelopmentCorpBillingStatement::find($request->billingStatementId);
+
+        $billingStatement = DnoResourcesDevelopmentCorpBillingStatement::find($id);
+    
+        $getAmount = $billStatement->total_amount - $billingStatement->amount;
+        $billStatement->total_amount = $getAmount;
+        $billStatement->save();
+
+        $billingStatement->delete();
     }
 
 

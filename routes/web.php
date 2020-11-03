@@ -5071,6 +5071,102 @@ Route::group(['middleware' => ['auth']], function(){
 		->middleware(['cashier']);
 
 	Route::get(
+		'/dno-resources-development/billing-statement-form',
+		'DnoResourcesDevelopmentController@billingStatementForm')
+		->name('billingStatementFormDnoResourcesDevelopment')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-resources-development/store-billing-statement',
+		'DnoResourcesDevelopmentController@storeBillingStatement')
+		->name('storeBillingStatement')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-resources-development/{id}/edit-billing-statement',
+		'DnoResourcesDevelopmentController@editBillingStatement')
+		->name('editBillingStatementDnoResourcesDevelopment')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-resources-development/{id}/update-billing-info',
+		'DnoResourcesDevelopmentController@updateBillingInfo')
+		->name('updateBillingInfo')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/dno-resources-development/{id}/add-new-billing',
+		'DnoResourcesDevelopmentController@addNewBilling')
+		->name('addNewBilling')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dno-resources-development/delete-data-billing-statement/{id}',
+		'DnoResourcesDevelopmentController@destroyBillingDataStatement')
+		->name('destroyBillingDataStatement')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-resources-development/billing-statement-lists',
+		'DnoResourcesDevelopmentController@billingStatementList')
+		->name('billingStatementList')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-resources-development/{id}/view-billing-statement',
+		'DnoResourcesDevelopmentController@viewBillingStatement')
+		->name('viewBillingStatement')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-resources-development/{id}/printBillingStatement',
+		'DnoResourcesDevelopmentController@printBillingStatement')
+		->name('printBillingStatement')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-resources-development/statement-of-account/lists',
+		'DnoResourcesDevelopmentController@statementOfAccountLists')
+		->name('statementOfAccountLists')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-resources-development/{id}/edit-statement-of-account',
+		'DnoResourcesDevelopmentController@editStatementAccount')
+		->name('editStatementAccountDnoResourcesDevelopment')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/dno-resources-development/s-account/{id}',
+		'DnoResourcesDevelopmentController@sAccountUpdate')
+		->name('sAccountUpdate')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-resources-development/{id}/view-statement-account',
+		'DnoResourcesDevelopmentController@viewStatementAccount')
+		->name('viewStatementAccount')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-resources-development/{id}/printSOA',
+		'DnoResourcesDevelopmentController@printSOA')
+		->name('printSOA')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/dno-resources-development/delete-billing-statement/{id}',
+		'DnoResourcesDevelopmentController@destroyBillingStatement')
+		->name('destroyBillingStatement')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-resources-development/printSOALists',
+		'DnoResourcesDevelopmentController@printSOALists')
+		->name('printSOALists')
+		->middleware(['cashier']);
+
+	Route::get(
 		'/dno-resources-development/petty-cash-list',
 		'DnoResourcesDevelopmentController@pettyCashList')
 		->name('pettyCashList')
