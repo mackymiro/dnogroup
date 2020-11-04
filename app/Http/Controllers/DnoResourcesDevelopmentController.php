@@ -440,6 +440,17 @@ class DnoResourcesDevelopmentController extends Controller
     public function updateBillingInfo(Request $request, $id){
         $updateBillingOrder = DnoResourcesDevelopmentCorpBillingStatement::find($id);
 
+        $getOtherBilling = DnoResourcesDevelopmentCorpBillingStatement::where('billing_statement_id', $id)->get();
+       
+        if(isset($getOtherBilling[0]->amount) == ""){
+            $amount = $request->get('amount');
+            $getOtherAmount = 0 + $amount; 
+
+        }else{
+            $amount = $request->get('amount');
+            $getOtherAmount = $getOtherBilling[0]->amount + $amount; 
+        
+        }
 
         $updateBillingOrder->bill_to = $request->get('billTo');
         $updateBillingOrder->address = $request->get('address');
@@ -451,7 +462,36 @@ class DnoResourcesDevelopmentController extends Controller
         $updateBillingOrder->description = $request->get('description');
         $updateBillingOrder->unit_price = $request->get('unitPrice');
         $updateBillingOrder->amount = $request->get('amount');
+        $updateBillingOrder->total_amount = $getOtherAmount;
         $updateBillingOrder->save();
+
+        //statement of account
+        $getMainStatement = DnoResourcesDevelopmentCorpStatementOfAccount::find($id);
+
+        $getStatement = DnoResourcesDevelopmentCorpStatementOfAccount::where('billing_statement_id', $id)->get();
+
+        if(isset($getStatement[0]->amount) == ""){
+            $amount = $request->get('amount');
+            $getOtherAmountSOA = 0 + $amount; 
+
+        }else{
+            $amount = $request->get('amount');
+            $getOtherAmountSOA = $getStatement[0]->amount + $amount; 
+        
+        }
+
+        $getMainStatement->bill_to = $request->get('billTo');
+        $getMainStatement->period_cover = $request->get('periodCovered');
+      
+        $getMainStatement->terms = $request->get('terms');
+        $getMainStatement->date_of_transaction = $request->get('transactionDate');
+        $getMainStatement->dr_no = $request->get('drNo');
+        $getMainStatement->description = $request->get('description');
+        $getMainStatement->unit_price = $request->get('unitPrice');
+        $getMainStatement->amount =  $request->get('amount');
+        $getMainStatement->total_amount = $getOtherAmountSOA;
+        $getMainStatement->total_remaining_balance = $getOtherAmountSOA;
+        $getMainStatement->save();
 
         Session::flash('SuccessE', 'Successfully updated');
 
@@ -3879,6 +3919,7 @@ class DnoResourcesDevelopmentController extends Controller
         $billingStatement = DnoResourcesDevelopmentCorpBillingStatement::find($id);
         $billingStatement->delete();
 
+        //delete SOA
         $statementAccount = DnoResourcesDevelopmentCorpStatementOfAccount::find($id);
         $statementAccount->delete();
     }
@@ -3893,6 +3934,18 @@ class DnoResourcesDevelopmentController extends Controller
         $billStatement->save();
 
         $billingStatement->delete();
+
+         //update statement of account table
+         $statementAccount = DnoResourcesDevelopmentCorpStatementOfAccount::find($request->billingStatementId);
+
+         $stateAccount = DnoResourcesDevelopmentCorpStatementOfAccount::find($id);
+ 
+         $getStateAmount = $statementAccount->total_amount - $stateAccount->amount; 
+         $statementAccount->total_amount = $getStateAmount;
+         $statementAccount->total_remaining_balance = $getStateAmount;
+         $statementAccount->save();
+ 
+         $stateAccount->delete();
     }
 
 
