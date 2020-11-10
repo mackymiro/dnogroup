@@ -7495,7 +7495,17 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('printGetSummary')
 		->middleware(['cashier']);
 
+	Route::get(
+		'/wimpys-food-express/summary-report/search-number-code',
+		'WimpysFoodExpressController@searchNumberCode')
+		->name('searchNumberCode')
+		->middleware(['cashier']);
 
+	Route::get(
+		'/wimpys-food-express/search',
+		'WimpysFoodExpressController@search')
+		->name('search')
+		->middleware(['cashier']);
 		
 });
 

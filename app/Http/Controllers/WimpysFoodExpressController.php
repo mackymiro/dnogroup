@@ -20,6 +20,63 @@ use App\WimpysFoodExpressStockInventory;
 class WimpysFoodExpressController extends Controller
 {
 
+    public function search(Request $request){
+        $getSearchResults = WimpysFoodExpressCode::where('wimpys_food_express_code', $request->get('searchCode'))->get();
+        if($getSearchResults[0]->module_name === "Payment Voucher"){
+            $getSearchPaymentVouchers = DB::table('wimpys_food_express_payment_vouchers')
+                    ->select( 
+                    'wimpys_food_express_payment_vouchers.id',
+                    'wimpys_food_express_payment_vouchers.user_id',
+                    'wimpys_food_express_payment_vouchers.pv_id',
+                    'wimpys_food_express_payment_vouchers.date',
+                    'wimpys_food_express_payment_vouchers.paid_to',
+                    'wimpys_food_express_payment_vouchers.account_no',
+                    'wimpys_food_express_payment_vouchers.account_name',
+                    'wimpys_food_express_payment_vouchers.particulars',
+                    'wimpys_food_express_payment_vouchers.amount',
+                    'wimpys_food_express_payment_vouchers.method_of_payment',
+                    'wimpys_food_express_payment_vouchers.prepared_by',
+                    'wimpys_food_express_payment_vouchers.approved_by',
+                    'wimpys_food_express_payment_vouchers.date_approved',
+                    'wimpys_food_express_payment_vouchers.received_by_date',
+                    'wimpys_food_express_payment_vouchers.created_by',
+                    'wimpys_food_express_payment_vouchers.created_at',
+                    'wimpys_food_express_payment_vouchers.invoice_number',
+                    'wimpys_food_express_payment_vouchers.issued_date',
+                    'wimpys_food_express_payment_vouchers.category',
+                    'wimpys_food_express_payment_vouchers.amount_due',
+                    'wimpys_food_express_payment_vouchers.delivered_date',
+                    'wimpys_food_express_payment_vouchers.status',
+                    'wimpys_food_express_payment_vouchers.cheque_number',
+                    'wimpys_food_express_payment_vouchers.cheque_amount',
+                    'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                    'wimpys_food_express_payment_vouchers.sub_category',
+                    'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                    'wimpys_food_express_payment_vouchers.deleted_at',
+                    'wimpys_food_express_codes.wimpys_food_express_code',
+                    'wimpys_food_express_codes.module_id',
+                    'wimpys_food_express_codes.module_code',
+                    'wimpys_food_express_codes.module_name')
+                    ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                    ->where('wimpys_food_express_payment_vouchers.id', $getSearchResults[0]->module_id)
+                    ->where('wimpys_food_express_codes.module_name',  $getSearchResults[0]->module_name)
+                    ->get()->toArray();
+
+
+            $getAllCodes = WimpysFoodExpressCode::get()->toArray();  
+            $module = $getSearchResults[0]->module_name;  
+            
+            return view('wimpys-food-express-search-results',  compact('module', 'getAllCodes', 'getSearchPaymentVouchers'));
+           
+        }
+    }
+
+    public function searchNumberCode(){
+        $getAllCodes = WimpysFoodExpressCode::get()->toArray();
+        return view('wimpys-food-express-search-number-code', compact('getAllCodes'));
+
+    }
+
     public function printGetSummary($date){
         $uri0 = "";
         $uri1 = "";
@@ -2134,8 +2191,9 @@ class WimpysFoodExpressController extends Controller
 
     public function viewPayableDetails($id){
         $viewPaymentDetail = WimpysFoodExpressPaymentVoucher::with(['user','payment_vouchers'])
-                            ->where('id', $id)
-                            ->get(); 
+                                                            ->where('id', $id)
+                                                            ->withTrashed()
+                                                            ->get(); 
                             
         $getChequeNumbers = WimpysFoodExpressPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 

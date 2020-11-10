@@ -14,7 +14,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
             <a class="dropdown-item" href="{{ url('wimpys-food-express/summary-report')}}">Summary Report(s)</a>
-            <a class="dropdown-item" href="{{ url('wimpys-food-express/summary-report/') }}">Search Number Code</a>
+            <a class="dropdown-item" href="{{ url('wimpys-food-express/summary-report/search-number-code') }}">Search Number Code</a>
       
         </div>
       </li>
