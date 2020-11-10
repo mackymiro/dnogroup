@@ -15,9 +15,1241 @@ use App\WimpysFoodExpressSupplier;
 use App\WimpysFoodExpressPurchaseOrder;
 use App\WimpysFoodExpressBillingStatement; 
 use App\WimpysFoodExpressStatementOfAccount;
+use App\WimpysFoodExpressStockInventory; 
 
 class WimpysFoodExpressController extends Controller
 {
+
+    public function printGetSummary($date){
+        $uri0 = "";
+        $uri1 = "";
+
+        $moduleNamePV = "Payment Voucher";
+        $cash = "CASH";
+
+        $getTransactionListCashes = DB::table(
+                'wimpys_food_express_payment_vouchers')
+                ->select( 
+                'wimpys_food_express_payment_vouchers.id',
+                'wimpys_food_express_payment_vouchers.user_id',
+                'wimpys_food_express_payment_vouchers.pv_id',
+                'wimpys_food_express_payment_vouchers.date',
+                'wimpys_food_express_payment_vouchers.paid_to',
+                'wimpys_food_express_payment_vouchers.account_no',
+                'wimpys_food_express_payment_vouchers.account_name',
+                'wimpys_food_express_payment_vouchers.particulars',
+                'wimpys_food_express_payment_vouchers.amount',
+                'wimpys_food_express_payment_vouchers.method_of_payment',
+                'wimpys_food_express_payment_vouchers.prepared_by',
+                'wimpys_food_express_payment_vouchers.approved_by',
+                'wimpys_food_express_payment_vouchers.date_approved',
+                'wimpys_food_express_payment_vouchers.received_by_date',
+                'wimpys_food_express_payment_vouchers.created_by',
+                'wimpys_food_express_payment_vouchers.created_at',
+                'wimpys_food_express_payment_vouchers.invoice_number',
+                'wimpys_food_express_payment_vouchers.issued_date',
+                'wimpys_food_express_payment_vouchers.category',
+                'wimpys_food_express_payment_vouchers.amount_due',
+                'wimpys_food_express_payment_vouchers.delivered_date',
+                'wimpys_food_express_payment_vouchers.status',
+                'wimpys_food_express_payment_vouchers.cheque_number',
+                'wimpys_food_express_payment_vouchers.cheque_amount',
+                'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                'wimpys_food_express_payment_vouchers.sub_category',
+                'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                'wimpys_food_express_payment_vouchers.deleted_at',
+                'wimpys_food_express_codes.wimpys_food_express_code',
+                'wimpys_food_express_codes.module_id',
+                'wimpys_food_express_codes.module_code',
+                'wimpys_food_express_codes.module_name')
+                ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                ->whereDate('wimpys_food_express_payment_vouchers.created_at', '=', date($date))
+                ->where('wimpys_food_express_payment_vouchers.method_of_payment', $cash)
+                ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                ->get()->toArray();
+
+        $status = "FULLY PAID AND RELEASED";
+        $totalAmountCashes = DB::table(
+                        'wimpys_food_express_payment_vouchers')
+                        ->select( 
+                        'wimpys_food_express_payment_vouchers.id',
+                        'wimpys_food_express_payment_vouchers.user_id',
+                        'wimpys_food_express_payment_vouchers.pv_id',
+                        'wimpys_food_express_payment_vouchers.date',
+                        'wimpys_food_express_payment_vouchers.paid_to',
+                        'wimpys_food_express_payment_vouchers.account_no',
+                        'wimpys_food_express_payment_vouchers.account_name',
+                        'wimpys_food_express_payment_vouchers.particulars',
+                        'wimpys_food_express_payment_vouchers.amount',
+                        'wimpys_food_express_payment_vouchers.method_of_payment',
+                        'wimpys_food_express_payment_vouchers.prepared_by',
+                        'wimpys_food_express_payment_vouchers.approved_by',
+                        'wimpys_food_express_payment_vouchers.date_approved',
+                        'wimpys_food_express_payment_vouchers.received_by_date',
+                        'wimpys_food_express_payment_vouchers.created_by',
+                        'wimpys_food_express_payment_vouchers.created_at',
+                        'wimpys_food_express_payment_vouchers.invoice_number',
+                        'wimpys_food_express_payment_vouchers.issued_date',
+                        'wimpys_food_express_payment_vouchers.category',
+                        'wimpys_food_express_payment_vouchers.amount_due',
+                        'wimpys_food_express_payment_vouchers.delivered_date',
+                        'wimpys_food_express_payment_vouchers.status',
+                        'wimpys_food_express_payment_vouchers.cheque_number',
+                        'wimpys_food_express_payment_vouchers.cheque_amount',
+                        'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                        'wimpys_food_express_payment_vouchers.sub_category',
+                        'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                        'wimpys_food_express_payment_vouchers.deleted_at',
+                        'wimpys_food_express_codes.wimpys_food_express_code',
+                        'wimpys_food_express_codes.module_id',
+                        'wimpys_food_express_codes.module_code',
+                        'wimpys_food_express_codes.module_name')
+                        ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                        ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                        ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                        ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                        ->whereDate('wimpys_food_express_payment_vouchers.created_at', '=', date($date))
+                        ->where('wimpys_food_express_payment_vouchers.method_of_payment', $cash)
+                        ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                        ->sum('wimpys_food_express_payment_vouchers.amount_due');
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                    'wimpys_food_express_payment_vouchers')
+                    ->select( 
+                    'wimpys_food_express_payment_vouchers.id',
+                    'wimpys_food_express_payment_vouchers.user_id',
+                    'wimpys_food_express_payment_vouchers.pv_id',
+                    'wimpys_food_express_payment_vouchers.date',
+                    'wimpys_food_express_payment_vouchers.paid_to',
+                    'wimpys_food_express_payment_vouchers.account_no',
+                    'wimpys_food_express_payment_vouchers.account_name',
+                    'wimpys_food_express_payment_vouchers.particulars',
+                    'wimpys_food_express_payment_vouchers.amount',
+                    'wimpys_food_express_payment_vouchers.method_of_payment',
+                    'wimpys_food_express_payment_vouchers.prepared_by',
+                    'wimpys_food_express_payment_vouchers.approved_by',
+                    'wimpys_food_express_payment_vouchers.date_approved',
+                    'wimpys_food_express_payment_vouchers.received_by_date',
+                    'wimpys_food_express_payment_vouchers.created_by',
+                    'wimpys_food_express_payment_vouchers.created_at',
+                    'wimpys_food_express_payment_vouchers.invoice_number',
+                    'wimpys_food_express_payment_vouchers.issued_date',
+                    'wimpys_food_express_payment_vouchers.category',
+                    'wimpys_food_express_payment_vouchers.amount_due',
+                    'wimpys_food_express_payment_vouchers.delivered_date',
+                    'wimpys_food_express_payment_vouchers.status',
+                    'wimpys_food_express_payment_vouchers.cheque_number',
+                    'wimpys_food_express_payment_vouchers.cheque_amount',
+                    'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                    'wimpys_food_express_payment_vouchers.sub_category',
+                    'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                    'wimpys_food_express_payment_vouchers.deleted_at',
+                    'wimpys_food_express_codes.wimpys_food_express_code',
+                    'wimpys_food_express_codes.module_id',
+                    'wimpys_food_express_codes.module_code',
+                    'wimpys_food_express_codes.module_name')
+                    ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                    ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                    ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                    ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                    ->whereDate('wimpys_food_express_payment_vouchers.created_at', '=', date($date))
+                    ->where('wimpys_food_express_payment_vouchers.method_of_payment', $check)
+                    ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                    ->get()->toArray();
+
+        $totalAmountCheck = DB::table(
+                        'wimpys_food_express_payment_vouchers')
+                        ->select( 
+                        'wimpys_food_express_payment_vouchers.id',
+                        'wimpys_food_express_payment_vouchers.user_id',
+                        'wimpys_food_express_payment_vouchers.pv_id',
+                        'wimpys_food_express_payment_vouchers.date',
+                        'wimpys_food_express_payment_vouchers.paid_to',
+                        'wimpys_food_express_payment_vouchers.account_no',
+                        'wimpys_food_express_payment_vouchers.account_name',
+                        'wimpys_food_express_payment_vouchers.particulars',
+                        'wimpys_food_express_payment_vouchers.amount',
+                        'wimpys_food_express_payment_vouchers.method_of_payment',
+                        'wimpys_food_express_payment_vouchers.prepared_by',
+                        'wimpys_food_express_payment_vouchers.approved_by',
+                        'wimpys_food_express_payment_vouchers.date_approved',
+                        'wimpys_food_express_payment_vouchers.received_by_date',
+                        'wimpys_food_express_payment_vouchers.created_by',
+                        'wimpys_food_express_payment_vouchers.created_at',
+                        'wimpys_food_express_payment_vouchers.invoice_number',
+                        'wimpys_food_express_payment_vouchers.issued_date',
+                        'wimpys_food_express_payment_vouchers.category',
+                        'wimpys_food_express_payment_vouchers.amount_due',
+                        'wimpys_food_express_payment_vouchers.delivered_date',
+                        'wimpys_food_express_payment_vouchers.status',
+                        'wimpys_food_express_payment_vouchers.cheque_number',
+                        'wimpys_food_express_payment_vouchers.cheque_amount',
+                        'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                        'wimpys_food_express_payment_vouchers.sub_category',
+                        'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                        'wimpys_food_express_payment_vouchers.deleted_at',
+                        'wimpys_food_express_codes.wimpys_food_express_code',
+                        'wimpys_food_express_codes.module_id',
+                        'wimpys_food_express_codes.module_code',
+                        'wimpys_food_express_codes.module_name')
+                        ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                        ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                        ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                        ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                        ->whereDate('wimpys_food_express_payment_vouchers.created_at', '=', date($date))
+                        ->where('wimpys_food_express_payment_vouchers.method_of_payment', $check)
+                        ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                        ->sum('wimpys_food_express_payment_vouchers.amount_due');
+
+    $totalPaidAmountCheck = DB::table(
+                            'wimpys_food_express_payment_vouchers')
+                            ->select( 
+                            'wimpys_food_express_payment_vouchers.id',
+                            'wimpys_food_express_payment_vouchers.user_id',
+                            'wimpys_food_express_payment_vouchers.pv_id',
+                            'wimpys_food_express_payment_vouchers.date',
+                            'wimpys_food_express_payment_vouchers.paid_to',
+                            'wimpys_food_express_payment_vouchers.account_no',
+                            'wimpys_food_express_payment_vouchers.account_name',
+                            'wimpys_food_express_payment_vouchers.particulars',
+                            'wimpys_food_express_payment_vouchers.amount',
+                            'wimpys_food_express_payment_vouchers.method_of_payment',
+                            'wimpys_food_express_payment_vouchers.prepared_by',
+                            'wimpys_food_express_payment_vouchers.approved_by',
+                            'wimpys_food_express_payment_vouchers.date_approved',
+                            'wimpys_food_express_payment_vouchers.received_by_date',
+                            'wimpys_food_express_payment_vouchers.created_by',
+                            'wimpys_food_express_payment_vouchers.created_at',
+                            'wimpys_food_express_payment_vouchers.invoice_number',
+                            'wimpys_food_express_payment_vouchers.issued_date',
+                            'wimpys_food_express_payment_vouchers.category',
+                            'wimpys_food_express_payment_vouchers.amount_due',
+                            'wimpys_food_express_payment_vouchers.delivered_date',
+                            'wimpys_food_express_payment_vouchers.status',
+                            'wimpys_food_express_payment_vouchers.cheque_number',
+                            'wimpys_food_express_payment_vouchers.cheque_amount',
+                            'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                            'wimpys_food_express_payment_vouchers.sub_category',
+                            'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                            'wimpys_food_express_payment_vouchers.deleted_at',
+                            'wimpys_food_express_codes.wimpys_food_express_code',
+                            'wimpys_food_express_codes.module_id',
+                            'wimpys_food_express_codes.module_code',
+                            'wimpys_food_express_codes.module_name')
+                            ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                            ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                            ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                            ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                            ->whereDate('wimpys_food_express_payment_vouchers.created_at', '=', date($date))
+                            ->where('wimpys_food_express_payment_vouchers.method_of_payment', $check)
+                            ->where('wimpys_food_express_payment_vouchers.status', $status)
+                            ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                            ->sum('wimpys_food_express_payment_vouchers.amount_due');
+        
+        
+        $getDateToday = "";     
+        $pdf = PDF::loadView('printSummaryWimpysFoodExp',  compact('date', 'getDateToday', 'uri0', 'uri1', 
+            'getTransactionListCashes', 'getTransactionListChecks', 
+            'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck'));
+        
+        return $pdf->download('wimpys-food-express-summary-report.pdf');
+                
+
+    }
+
+    public function printSummary(){
+        $getDateToday = date("Y-m-d");
+        $moduleNamePV = "Payment Voucher";
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                        'wimpys_food_express_payment_vouchers')
+                        ->select( 
+                        'wimpys_food_express_payment_vouchers.id',
+                        'wimpys_food_express_payment_vouchers.user_id',
+                        'wimpys_food_express_payment_vouchers.pv_id',
+                        'wimpys_food_express_payment_vouchers.date',
+                        'wimpys_food_express_payment_vouchers.paid_to',
+                        'wimpys_food_express_payment_vouchers.account_no',
+                        'wimpys_food_express_payment_vouchers.account_name',
+                        'wimpys_food_express_payment_vouchers.particulars',
+                        'wimpys_food_express_payment_vouchers.amount',
+                        'wimpys_food_express_payment_vouchers.method_of_payment',
+                        'wimpys_food_express_payment_vouchers.prepared_by',
+                        'wimpys_food_express_payment_vouchers.approved_by',
+                        'wimpys_food_express_payment_vouchers.date_approved',
+                        'wimpys_food_express_payment_vouchers.received_by_date',
+                        'wimpys_food_express_payment_vouchers.created_by',
+                        'wimpys_food_express_payment_vouchers.created_at',
+                        'wimpys_food_express_payment_vouchers.invoice_number',
+                        'wimpys_food_express_payment_vouchers.issued_date',
+                        'wimpys_food_express_payment_vouchers.category',
+                        'wimpys_food_express_payment_vouchers.amount_due',
+                        'wimpys_food_express_payment_vouchers.delivered_date',
+                        'wimpys_food_express_payment_vouchers.status',
+                        'wimpys_food_express_payment_vouchers.cheque_number',
+                        'wimpys_food_express_payment_vouchers.cheque_amount',
+                        'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                        'wimpys_food_express_payment_vouchers.sub_category',
+                        'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                        'wimpys_food_express_payment_vouchers.deleted_at',
+                        'wimpys_food_express_codes.wimpys_food_express_code',
+                        'wimpys_food_express_codes.module_id',
+                        'wimpys_food_express_codes.module_code',
+                        'wimpys_food_express_codes.module_name')
+                        ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                        ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                        ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                        ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                        ->whereDate('wimpys_food_express_payment_vouchers.created_at', '=', date($getDateToday))
+                        ->where('wimpys_food_express_payment_vouchers.method_of_payment', $cash)
+                        ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                        ->get()->toArray();
+
+        $totalAmountCashes = DB::table(
+                            'wimpys_food_express_payment_vouchers')
+                            ->select( 
+                            'wimpys_food_express_payment_vouchers.id',
+                            'wimpys_food_express_payment_vouchers.user_id',
+                            'wimpys_food_express_payment_vouchers.pv_id',
+                            'wimpys_food_express_payment_vouchers.date',
+                            'wimpys_food_express_payment_vouchers.paid_to',
+                            'wimpys_food_express_payment_vouchers.account_no',
+                            'wimpys_food_express_payment_vouchers.account_name',
+                            'wimpys_food_express_payment_vouchers.particulars',
+                            'wimpys_food_express_payment_vouchers.amount',
+                            'wimpys_food_express_payment_vouchers.method_of_payment',
+                            'wimpys_food_express_payment_vouchers.prepared_by',
+                            'wimpys_food_express_payment_vouchers.approved_by',
+                            'wimpys_food_express_payment_vouchers.date_approved',
+                            'wimpys_food_express_payment_vouchers.received_by_date',
+                            'wimpys_food_express_payment_vouchers.created_by',
+                            'wimpys_food_express_payment_vouchers.created_at',
+                            'wimpys_food_express_payment_vouchers.invoice_number',
+                            'wimpys_food_express_payment_vouchers.issued_date',
+                            'wimpys_food_express_payment_vouchers.category',
+                            'wimpys_food_express_payment_vouchers.amount_due',
+                            'wimpys_food_express_payment_vouchers.delivered_date',
+                            'wimpys_food_express_payment_vouchers.status',
+                            'wimpys_food_express_payment_vouchers.cheque_number',
+                            'wimpys_food_express_payment_vouchers.cheque_amount',
+                            'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                            'wimpys_food_express_payment_vouchers.sub_category',
+                            'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                            'wimpys_food_express_payment_vouchers.deleted_at',
+                            'wimpys_food_express_codes.wimpys_food_express_code',
+                            'wimpys_food_express_codes.module_id',
+                            'wimpys_food_express_codes.module_code',
+                            'wimpys_food_express_codes.module_name')
+                            ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                            ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                            ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                            ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                            ->whereDate('wimpys_food_express_payment_vouchers.created_at', '=', date($getDateToday))
+                            ->where('wimpys_food_express_payment_vouchers.method_of_payment', $cash)
+                            ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                            ->sum('wimpys_food_express_payment_vouchers.amount_due');
+
+
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                    'wimpys_food_express_payment_vouchers')
+                    ->select( 
+                    'wimpys_food_express_payment_vouchers.id',
+                    'wimpys_food_express_payment_vouchers.user_id',
+                    'wimpys_food_express_payment_vouchers.pv_id',
+                    'wimpys_food_express_payment_vouchers.date',
+                    'wimpys_food_express_payment_vouchers.paid_to',
+                    'wimpys_food_express_payment_vouchers.account_no',
+                    'wimpys_food_express_payment_vouchers.account_name',
+                    'wimpys_food_express_payment_vouchers.particulars',
+                    'wimpys_food_express_payment_vouchers.amount',
+                    'wimpys_food_express_payment_vouchers.method_of_payment',
+                    'wimpys_food_express_payment_vouchers.prepared_by',
+                    'wimpys_food_express_payment_vouchers.approved_by',
+                    'wimpys_food_express_payment_vouchers.date_approved',
+                    'wimpys_food_express_payment_vouchers.received_by_date',
+                    'wimpys_food_express_payment_vouchers.created_by',
+                    'wimpys_food_express_payment_vouchers.created_at',
+                    'wimpys_food_express_payment_vouchers.invoice_number',
+                    'wimpys_food_express_payment_vouchers.issued_date',
+                    'wimpys_food_express_payment_vouchers.category',
+                    'wimpys_food_express_payment_vouchers.amount_due',
+                    'wimpys_food_express_payment_vouchers.delivered_date',
+                    'wimpys_food_express_payment_vouchers.status',
+                    'wimpys_food_express_payment_vouchers.cheque_number',
+                    'wimpys_food_express_payment_vouchers.cheque_amount',
+                    'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                    'wimpys_food_express_payment_vouchers.sub_category',
+                    'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                    'wimpys_food_express_payment_vouchers.deleted_at',
+                    'wimpys_food_express_codes.wimpys_food_express_code',
+                    'wimpys_food_express_codes.module_id',
+                    'wimpys_food_express_codes.module_code',
+                    'wimpys_food_express_codes.module_name')
+                    ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                    ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                    ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                    ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                    ->whereDate('wimpys_food_express_payment_vouchers.created_at', '=', date($getDateToday))
+                    ->where('wimpys_food_express_payment_vouchers.method_of_payment', $check)
+                    ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                    ->get()->toArray();
+
+        $status = "FULLY PAID AND RELEASED";
+        $totalAmountCheck = DB::table(
+                'wimpys_food_express_payment_vouchers')
+                ->select( 
+                'wimpys_food_express_payment_vouchers.id',
+                'wimpys_food_express_payment_vouchers.user_id',
+                'wimpys_food_express_payment_vouchers.pv_id',
+                'wimpys_food_express_payment_vouchers.date',
+                'wimpys_food_express_payment_vouchers.paid_to',
+                'wimpys_food_express_payment_vouchers.account_no',
+                'wimpys_food_express_payment_vouchers.account_name',
+                'wimpys_food_express_payment_vouchers.particulars',
+                'wimpys_food_express_payment_vouchers.amount',
+                'wimpys_food_express_payment_vouchers.method_of_payment',
+                'wimpys_food_express_payment_vouchers.prepared_by',
+                'wimpys_food_express_payment_vouchers.approved_by',
+                'wimpys_food_express_payment_vouchers.date_approved',
+                'wimpys_food_express_payment_vouchers.received_by_date',
+                'wimpys_food_express_payment_vouchers.created_by',
+                'wimpys_food_express_payment_vouchers.created_at',
+                'wimpys_food_express_payment_vouchers.invoice_number',
+                'wimpys_food_express_payment_vouchers.issued_date',
+                'wimpys_food_express_payment_vouchers.category',
+                'wimpys_food_express_payment_vouchers.amount_due',
+                'wimpys_food_express_payment_vouchers.delivered_date',
+                'wimpys_food_express_payment_vouchers.status',
+                'wimpys_food_express_payment_vouchers.cheque_number',
+                'wimpys_food_express_payment_vouchers.cheque_amount',
+                'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                'wimpys_food_express_payment_vouchers.sub_category',
+                'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                'wimpys_food_express_payment_vouchers.deleted_at',
+                'wimpys_food_express_codes.wimpys_food_express_code',
+                'wimpys_food_express_codes.module_id',
+                'wimpys_food_express_codes.module_code',
+                'wimpys_food_express_codes.module_name')
+                ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                ->whereDate('wimpys_food_express_payment_vouchers.created_at', '=', date($getDateToday))
+                ->where('wimpys_food_express_payment_vouchers.method_of_payment', $check)
+                ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                ->sum('wimpys_food_express_payment_vouchers.amount_due');
+        
+    $totalPaidAmountCheck = DB::table(
+                    'wimpys_food_express_payment_vouchers')
+                    ->select( 
+                    'wimpys_food_express_payment_vouchers.id',
+                    'wimpys_food_express_payment_vouchers.user_id',
+                    'wimpys_food_express_payment_vouchers.pv_id',
+                    'wimpys_food_express_payment_vouchers.date',
+                    'wimpys_food_express_payment_vouchers.paid_to',
+                    'wimpys_food_express_payment_vouchers.account_no',
+                    'wimpys_food_express_payment_vouchers.account_name',
+                    'wimpys_food_express_payment_vouchers.particulars',
+                    'wimpys_food_express_payment_vouchers.amount',
+                    'wimpys_food_express_payment_vouchers.method_of_payment',
+                    'wimpys_food_express_payment_vouchers.prepared_by',
+                    'wimpys_food_express_payment_vouchers.approved_by',
+                    'wimpys_food_express_payment_vouchers.date_approved',
+                    'wimpys_food_express_payment_vouchers.received_by_date',
+                    'wimpys_food_express_payment_vouchers.created_by',
+                    'wimpys_food_express_payment_vouchers.created_at',
+                    'wimpys_food_express_payment_vouchers.invoice_number',
+                    'wimpys_food_express_payment_vouchers.issued_date',
+                    'wimpys_food_express_payment_vouchers.category',
+                    'wimpys_food_express_payment_vouchers.amount_due',
+                    'wimpys_food_express_payment_vouchers.delivered_date',
+                    'wimpys_food_express_payment_vouchers.status',
+                    'wimpys_food_express_payment_vouchers.cheque_number',
+                    'wimpys_food_express_payment_vouchers.cheque_amount',
+                    'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                    'wimpys_food_express_payment_vouchers.sub_category',
+                    'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                    'wimpys_food_express_payment_vouchers.deleted_at',
+                    'wimpys_food_express_codes.wimpys_food_express_code',
+                    'wimpys_food_express_codes.module_id',
+                    'wimpys_food_express_codes.module_code',
+                    'wimpys_food_express_codes.module_name')
+                    ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                    ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                    ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                    ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                    ->whereDate('wimpys_food_express_payment_vouchers.created_at', '=', date($getDateToday))
+                    ->where('wimpys_food_express_payment_vouchers.method_of_payment', $check)
+                    ->where('wimpys_food_express_payment_vouchers.status', $status)
+                    ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                    ->sum('wimpys_food_express_payment_vouchers.amount_due');
+
+        $uri0 = "";
+        $uri1 = "";
+        $pdf = PDF::loadView('printSummaryWimpysFoodExp', compact('uri0', 'uri1', 'getDateToday', 
+        'getTransactionListCashes', 
+        'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck', 'totalPaidAmountCheck'));
+
+        return $pdf->download('wimpys-food-express-inc-summary-report.pdf');
+
+    }
+
+    public function getSummaryReportMultiple(Request $request){
+        $startDate = date("Y-m-d",strtotime($request->input('startDate')));
+        $endDate = date("Y-m-d",strtotime($request->input('endDate')."+1 day"));
+        $moduleNamePV = "Payment Voucher";
+
+        $getTransactionLists = DB::table(
+                    'wimpys_food_express_payment_vouchers')
+                    ->select( 
+                    'wimpys_food_express_payment_vouchers.id',
+                    'wimpys_food_express_payment_vouchers.user_id',
+                    'wimpys_food_express_payment_vouchers.pv_id',
+                    'wimpys_food_express_payment_vouchers.date',
+                    'wimpys_food_express_payment_vouchers.paid_to',
+                    'wimpys_food_express_payment_vouchers.account_no',
+                    'wimpys_food_express_payment_vouchers.account_name',
+                    'wimpys_food_express_payment_vouchers.particulars',
+                    'wimpys_food_express_payment_vouchers.amount',
+                    'wimpys_food_express_payment_vouchers.method_of_payment',
+                    'wimpys_food_express_payment_vouchers.prepared_by',
+                    'wimpys_food_express_payment_vouchers.approved_by',
+                    'wimpys_food_express_payment_vouchers.date_approved',
+                    'wimpys_food_express_payment_vouchers.received_by_date',
+                    'wimpys_food_express_payment_vouchers.created_by',
+                    'wimpys_food_express_payment_vouchers.created_at',
+                    'wimpys_food_express_payment_vouchers.invoice_number',
+                    'wimpys_food_express_payment_vouchers.issued_date',
+                    'wimpys_food_express_payment_vouchers.category',
+                    'wimpys_food_express_payment_vouchers.amount_due',
+                    'wimpys_food_express_payment_vouchers.delivered_date',
+                    'wimpys_food_express_payment_vouchers.status',
+                    'wimpys_food_express_payment_vouchers.cheque_number',
+                    'wimpys_food_express_payment_vouchers.cheque_amount',
+                    'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                    'wimpys_food_express_payment_vouchers.sub_category',
+                    'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                    'wimpys_food_express_payment_vouchers.deleted_at',
+                    'wimpys_food_express_codes.wimpys_food_express_code',
+                    'wimpys_food_express_codes.module_id',
+                    'wimpys_food_express_codes.module_code',
+                    'wimpys_food_express_codes.module_name')
+                    ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                    ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                    ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                    ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                    ->whereBetween('wimpys_food_express_payment_vouchers.created_at', [$startDate, $endDate])
+                    ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                    ->get()->toArray();
+
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                        'wimpys_food_express_payment_vouchers')
+                        ->select( 
+                        'wimpys_food_express_payment_vouchers.id',
+                        'wimpys_food_express_payment_vouchers.user_id',
+                        'wimpys_food_express_payment_vouchers.pv_id',
+                        'wimpys_food_express_payment_vouchers.date',
+                        'wimpys_food_express_payment_vouchers.paid_to',
+                        'wimpys_food_express_payment_vouchers.account_no',
+                        'wimpys_food_express_payment_vouchers.account_name',
+                        'wimpys_food_express_payment_vouchers.particulars',
+                        'wimpys_food_express_payment_vouchers.amount',
+                        'wimpys_food_express_payment_vouchers.method_of_payment',
+                        'wimpys_food_express_payment_vouchers.prepared_by',
+                        'wimpys_food_express_payment_vouchers.approved_by',
+                        'wimpys_food_express_payment_vouchers.date_approved',
+                        'wimpys_food_express_payment_vouchers.received_by_date',
+                        'wimpys_food_express_payment_vouchers.created_by',
+                        'wimpys_food_express_payment_vouchers.created_at',
+                        'wimpys_food_express_payment_vouchers.invoice_number',
+                        'wimpys_food_express_payment_vouchers.issued_date',
+                        'wimpys_food_express_payment_vouchers.category',
+                        'wimpys_food_express_payment_vouchers.amount_due',
+                        'wimpys_food_express_payment_vouchers.delivered_date',
+                        'wimpys_food_express_payment_vouchers.status',
+                        'wimpys_food_express_payment_vouchers.cheque_number',
+                        'wimpys_food_express_payment_vouchers.cheque_amount',
+                        'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                        'wimpys_food_express_payment_vouchers.sub_category',
+                        'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                        'wimpys_food_express_payment_vouchers.deleted_at',
+                        'wimpys_food_express_codes.wimpys_food_express_code',
+                        'wimpys_food_express_codes.module_id',
+                        'wimpys_food_express_codes.module_code',
+                        'wimpys_food_express_codes.module_name')
+                        ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                        ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                        ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                        ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                        ->whereBetween('wimpys_food_express_payment_vouchers.created_at', [$startDate, $endDate])
+                        ->where('wimpys_food_express_payment_vouchers.method_of_payment', $cash)
+                        ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                        ->get()->toArray();
+
+        $totalAmountCashes = DB::table(
+                        'wimpys_food_express_payment_vouchers')
+                        ->select( 
+                        'wimpys_food_express_payment_vouchers.id',
+                        'wimpys_food_express_payment_vouchers.user_id',
+                        'wimpys_food_express_payment_vouchers.pv_id',
+                        'wimpys_food_express_payment_vouchers.date',
+                        'wimpys_food_express_payment_vouchers.paid_to',
+                        'wimpys_food_express_payment_vouchers.account_no',
+                        'wimpys_food_express_payment_vouchers.account_name',
+                        'wimpys_food_express_payment_vouchers.particulars',
+                        'wimpys_food_express_payment_vouchers.amount',
+                        'wimpys_food_express_payment_vouchers.method_of_payment',
+                        'wimpys_food_express_payment_vouchers.prepared_by',
+                        'wimpys_food_express_payment_vouchers.approved_by',
+                        'wimpys_food_express_payment_vouchers.date_approved',
+                        'wimpys_food_express_payment_vouchers.received_by_date',
+                        'wimpys_food_express_payment_vouchers.created_by',
+                        'wimpys_food_express_payment_vouchers.created_at',
+                        'wimpys_food_express_payment_vouchers.invoice_number',
+                        'wimpys_food_express_payment_vouchers.issued_date',
+                        'wimpys_food_express_payment_vouchers.category',
+                        'wimpys_food_express_payment_vouchers.amount_due',
+                        'wimpys_food_express_payment_vouchers.delivered_date',
+                        'wimpys_food_express_payment_vouchers.status',
+                        'wimpys_food_express_payment_vouchers.cheque_number',
+                        'wimpys_food_express_payment_vouchers.cheque_amount',
+                        'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                        'wimpys_food_express_payment_vouchers.sub_category',
+                        'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                        'wimpys_food_express_payment_vouchers.deleted_at',
+                        'wimpys_food_express_codes.wimpys_food_express_code',
+                        'wimpys_food_express_codes.module_id',
+                        'wimpys_food_express_codes.module_code',
+                        'wimpys_food_express_codes.module_name')
+                        ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                        ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                        ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                        ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                        ->whereBetween('wimpys_food_express_payment_vouchers.created_at', [$startDate, $endDate])
+                        ->where('wimpys_food_express_payment_vouchers.method_of_payment', $cash)
+                        ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                        ->sum('wimpys_food_express_payment_vouchers.amount_due');
+
+
+            $check = "CHECK";
+            $getTransactionListChecks = DB::table(
+                        'wimpys_food_express_payment_vouchers')
+                        ->select( 
+                        'wimpys_food_express_payment_vouchers.id',
+                        'wimpys_food_express_payment_vouchers.user_id',
+                        'wimpys_food_express_payment_vouchers.pv_id',
+                        'wimpys_food_express_payment_vouchers.date',
+                        'wimpys_food_express_payment_vouchers.paid_to',
+                        'wimpys_food_express_payment_vouchers.account_no',
+                        'wimpys_food_express_payment_vouchers.account_name',
+                        'wimpys_food_express_payment_vouchers.particulars',
+                        'wimpys_food_express_payment_vouchers.amount',
+                        'wimpys_food_express_payment_vouchers.method_of_payment',
+                        'wimpys_food_express_payment_vouchers.prepared_by',
+                        'wimpys_food_express_payment_vouchers.approved_by',
+                        'wimpys_food_express_payment_vouchers.date_approved',
+                        'wimpys_food_express_payment_vouchers.received_by_date',
+                        'wimpys_food_express_payment_vouchers.created_by',
+                        'wimpys_food_express_payment_vouchers.created_at',
+                        'wimpys_food_express_payment_vouchers.invoice_number',
+                        'wimpys_food_express_payment_vouchers.issued_date',
+                        'wimpys_food_express_payment_vouchers.category',
+                        'wimpys_food_express_payment_vouchers.amount_due',
+                        'wimpys_food_express_payment_vouchers.delivered_date',
+                        'wimpys_food_express_payment_vouchers.status',
+                        'wimpys_food_express_payment_vouchers.cheque_number',
+                        'wimpys_food_express_payment_vouchers.cheque_amount',
+                        'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                        'wimpys_food_express_payment_vouchers.sub_category',
+                        'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                        'wimpys_food_express_payment_vouchers.deleted_at',
+                        'wimpys_food_express_codes.wimpys_food_express_code',
+                        'wimpys_food_express_codes.module_id',
+                        'wimpys_food_express_codes.module_code',
+                        'wimpys_food_express_codes.module_name')
+                        ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                        ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                        ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                        ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                        ->whereBetween('wimpys_food_express_payment_vouchers.created_at', [$startDate, $endDate])
+                        ->where('wimpys_food_express_payment_vouchers.method_of_payment', $check)
+                        ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                        ->get()->toArray();
+    
+            $status = "FULLY PAID AND RELEASED";
+            $totalAmountCheck = DB::table(
+                    'wimpys_food_express_payment_vouchers')
+                    ->select( 
+                    'wimpys_food_express_payment_vouchers.id',
+                    'wimpys_food_express_payment_vouchers.user_id',
+                    'wimpys_food_express_payment_vouchers.pv_id',
+                    'wimpys_food_express_payment_vouchers.date',
+                    'wimpys_food_express_payment_vouchers.paid_to',
+                    'wimpys_food_express_payment_vouchers.account_no',
+                    'wimpys_food_express_payment_vouchers.account_name',
+                    'wimpys_food_express_payment_vouchers.particulars',
+                    'wimpys_food_express_payment_vouchers.amount',
+                    'wimpys_food_express_payment_vouchers.method_of_payment',
+                    'wimpys_food_express_payment_vouchers.prepared_by',
+                    'wimpys_food_express_payment_vouchers.approved_by',
+                    'wimpys_food_express_payment_vouchers.date_approved',
+                    'wimpys_food_express_payment_vouchers.received_by_date',
+                    'wimpys_food_express_payment_vouchers.created_by',
+                    'wimpys_food_express_payment_vouchers.created_at',
+                    'wimpys_food_express_payment_vouchers.invoice_number',
+                    'wimpys_food_express_payment_vouchers.issued_date',
+                    'wimpys_food_express_payment_vouchers.category',
+                    'wimpys_food_express_payment_vouchers.amount_due',
+                    'wimpys_food_express_payment_vouchers.delivered_date',
+                    'wimpys_food_express_payment_vouchers.status',
+                    'wimpys_food_express_payment_vouchers.cheque_number',
+                    'wimpys_food_express_payment_vouchers.cheque_amount',
+                    'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                    'wimpys_food_express_payment_vouchers.sub_category',
+                    'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                    'wimpys_food_express_payment_vouchers.deleted_at',
+                    'wimpys_food_express_codes.wimpys_food_express_code',
+                    'wimpys_food_express_codes.module_id',
+                    'wimpys_food_express_codes.module_code',
+                    'wimpys_food_express_codes.module_name')
+                    ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                    ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                    ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                    ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                    ->whereBetween('wimpys_food_express_payment_vouchers.created_at', [$startDate, $endDate])
+                    ->where('wimpys_food_express_payment_vouchers.method_of_payment', $check)
+                    ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                    ->sum('wimpys_food_express_payment_vouchers.amount_due');
+            
+        return view('wimpys-food-express-multiple-summary-report', compact('getTransactionLists', 'startDate', 'endDate', 'getTransactionListCashes', 
+        'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck'));
+
+
+    }
+
+    public function getSummaryReport(Request $request){
+        $getDate = $request->get('selectDate');
+        $moduleNamePV = "Payment Voucher";
+
+        $getTransactionLists = DB::table(
+                    'wimpys_food_express_payment_vouchers')
+                    ->select( 
+                    'wimpys_food_express_payment_vouchers.id',
+                    'wimpys_food_express_payment_vouchers.user_id',
+                    'wimpys_food_express_payment_vouchers.pv_id',
+                    'wimpys_food_express_payment_vouchers.date',
+                    'wimpys_food_express_payment_vouchers.paid_to',
+                    'wimpys_food_express_payment_vouchers.account_no',
+                    'wimpys_food_express_payment_vouchers.account_name',
+                    'wimpys_food_express_payment_vouchers.particulars',
+                    'wimpys_food_express_payment_vouchers.amount',
+                    'wimpys_food_express_payment_vouchers.method_of_payment',
+                    'wimpys_food_express_payment_vouchers.prepared_by',
+                    'wimpys_food_express_payment_vouchers.approved_by',
+                    'wimpys_food_express_payment_vouchers.date_approved',
+                    'wimpys_food_express_payment_vouchers.received_by_date',
+                    'wimpys_food_express_payment_vouchers.created_by',
+                    'wimpys_food_express_payment_vouchers.created_at',
+                    'wimpys_food_express_payment_vouchers.invoice_number',
+                    'wimpys_food_express_payment_vouchers.issued_date',
+                    'wimpys_food_express_payment_vouchers.category',
+                    'wimpys_food_express_payment_vouchers.amount_due',
+                    'wimpys_food_express_payment_vouchers.delivered_date',
+                    'wimpys_food_express_payment_vouchers.status',
+                    'wimpys_food_express_payment_vouchers.cheque_number',
+                    'wimpys_food_express_payment_vouchers.cheque_amount',
+                    'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                    'wimpys_food_express_payment_vouchers.sub_category',
+                    'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                    'wimpys_food_express_payment_vouchers.deleted_at',
+                    'wimpys_food_express_codes.wimpys_food_express_code',
+                    'wimpys_food_express_codes.module_id',
+                    'wimpys_food_express_codes.module_code',
+                    'wimpys_food_express_codes.module_name')
+                    ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                    ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                    ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                    ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                    ->whereDate('wimpys_food_express_payment_vouchers.created_at', '=', date($getDate))
+                    ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                    ->get()->toArray();
+
+        $cash = "CASH";
+        $getTransactionListCashes = DB::table(
+                        'wimpys_food_express_payment_vouchers')
+                        ->select( 
+                        'wimpys_food_express_payment_vouchers.id',
+                        'wimpys_food_express_payment_vouchers.user_id',
+                        'wimpys_food_express_payment_vouchers.pv_id',
+                        'wimpys_food_express_payment_vouchers.date',
+                        'wimpys_food_express_payment_vouchers.paid_to',
+                        'wimpys_food_express_payment_vouchers.account_no',
+                        'wimpys_food_express_payment_vouchers.account_name',
+                        'wimpys_food_express_payment_vouchers.particulars',
+                        'wimpys_food_express_payment_vouchers.amount',
+                        'wimpys_food_express_payment_vouchers.method_of_payment',
+                        'wimpys_food_express_payment_vouchers.prepared_by',
+                        'wimpys_food_express_payment_vouchers.approved_by',
+                        'wimpys_food_express_payment_vouchers.date_approved',
+                        'wimpys_food_express_payment_vouchers.received_by_date',
+                        'wimpys_food_express_payment_vouchers.created_by',
+                        'wimpys_food_express_payment_vouchers.created_at',
+                        'wimpys_food_express_payment_vouchers.invoice_number',
+                        'wimpys_food_express_payment_vouchers.issued_date',
+                        'wimpys_food_express_payment_vouchers.category',
+                        'wimpys_food_express_payment_vouchers.amount_due',
+                        'wimpys_food_express_payment_vouchers.delivered_date',
+                        'wimpys_food_express_payment_vouchers.status',
+                        'wimpys_food_express_payment_vouchers.cheque_number',
+                        'wimpys_food_express_payment_vouchers.cheque_amount',
+                        'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                        'wimpys_food_express_payment_vouchers.sub_category',
+                        'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                        'wimpys_food_express_payment_vouchers.deleted_at',
+                        'wimpys_food_express_codes.wimpys_food_express_code',
+                        'wimpys_food_express_codes.module_id',
+                        'wimpys_food_express_codes.module_code',
+                        'wimpys_food_express_codes.module_name')
+                        ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                        ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                        ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                        ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                        ->whereDate('wimpys_food_express_payment_vouchers.created_at', '=', date($getDate))
+                        ->where('wimpys_food_express_payment_vouchers.method_of_payment', $cash)
+                        ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                        ->get()->toArray();
+
+        $totalAmountCashes = DB::table(
+                    'wimpys_food_express_payment_vouchers')
+                    ->select( 
+                    'wimpys_food_express_payment_vouchers.id',
+                    'wimpys_food_express_payment_vouchers.user_id',
+                    'wimpys_food_express_payment_vouchers.pv_id',
+                    'wimpys_food_express_payment_vouchers.date',
+                    'wimpys_food_express_payment_vouchers.paid_to',
+                    'wimpys_food_express_payment_vouchers.account_no',
+                    'wimpys_food_express_payment_vouchers.account_name',
+                    'wimpys_food_express_payment_vouchers.particulars',
+                    'wimpys_food_express_payment_vouchers.amount',
+                    'wimpys_food_express_payment_vouchers.method_of_payment',
+                    'wimpys_food_express_payment_vouchers.prepared_by',
+                    'wimpys_food_express_payment_vouchers.approved_by',
+                    'wimpys_food_express_payment_vouchers.date_approved',
+                    'wimpys_food_express_payment_vouchers.received_by_date',
+                    'wimpys_food_express_payment_vouchers.created_by',
+                    'wimpys_food_express_payment_vouchers.created_at',
+                    'wimpys_food_express_payment_vouchers.invoice_number',
+                    'wimpys_food_express_payment_vouchers.issued_date',
+                    'wimpys_food_express_payment_vouchers.category',
+                    'wimpys_food_express_payment_vouchers.amount_due',
+                    'wimpys_food_express_payment_vouchers.delivered_date',
+                    'wimpys_food_express_payment_vouchers.status',
+                    'wimpys_food_express_payment_vouchers.cheque_number',
+                    'wimpys_food_express_payment_vouchers.cheque_amount',
+                    'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                    'wimpys_food_express_payment_vouchers.sub_category',
+                    'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                    'wimpys_food_express_payment_vouchers.deleted_at',
+                    'wimpys_food_express_codes.wimpys_food_express_code',
+                    'wimpys_food_express_codes.module_id',
+                    'wimpys_food_express_codes.module_code',
+                    'wimpys_food_express_codes.module_name')
+                    ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                    ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                    ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                    ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                    ->whereDate('wimpys_food_express_payment_vouchers.created_at', '=', date($getDate))
+                    ->where('wimpys_food_express_payment_vouchers.method_of_payment', $cash)
+                    ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                    ->sum('wimpys_food_express_payment_vouchers.amount_due');
+                    
+        $check = "CHECK";
+        $getTransactionListChecks = DB::table(
+                        'wimpys_food_express_payment_vouchers')
+                            ->select( 
+                            'wimpys_food_express_payment_vouchers.id',
+                            'wimpys_food_express_payment_vouchers.user_id',
+                            'wimpys_food_express_payment_vouchers.pv_id',
+                            'wimpys_food_express_payment_vouchers.date',
+                            'wimpys_food_express_payment_vouchers.paid_to',
+                            'wimpys_food_express_payment_vouchers.account_no',
+                            'wimpys_food_express_payment_vouchers.account_name',
+                            'wimpys_food_express_payment_vouchers.particulars',
+                            'wimpys_food_express_payment_vouchers.amount',
+                            'wimpys_food_express_payment_vouchers.method_of_payment',
+                            'wimpys_food_express_payment_vouchers.prepared_by',
+                            'wimpys_food_express_payment_vouchers.approved_by',
+                            'wimpys_food_express_payment_vouchers.date_approved',
+                            'wimpys_food_express_payment_vouchers.received_by_date',
+                            'wimpys_food_express_payment_vouchers.created_by',
+                            'wimpys_food_express_payment_vouchers.created_at',
+                            'wimpys_food_express_payment_vouchers.invoice_number',
+                            'wimpys_food_express_payment_vouchers.issued_date',
+                            'wimpys_food_express_payment_vouchers.category',
+                            'wimpys_food_express_payment_vouchers.amount_due',
+                            'wimpys_food_express_payment_vouchers.delivered_date',
+                            'wimpys_food_express_payment_vouchers.status',
+                            'wimpys_food_express_payment_vouchers.cheque_number',
+                            'wimpys_food_express_payment_vouchers.cheque_amount',
+                            'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                            'wimpys_food_express_payment_vouchers.sub_category',
+                            'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                            'wimpys_food_express_payment_vouchers.deleted_at',
+                            'wimpys_food_express_codes.wimpys_food_express_code',
+                            'wimpys_food_express_codes.module_id',
+                            'wimpys_food_express_codes.module_code',
+                            'wimpys_food_express_codes.module_name')
+                            ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                            ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                            ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                            ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                            ->whereDate('wimpys_food_express_payment_vouchers.created_at', '=', date($getDate))
+                            ->where('wimpys_food_express_payment_vouchers.method_of_payment', $check)
+                            ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                            ->get()->toArray();
+
+        $status = "FULLY PAID AND RELEASED";
+        $totalAmountCheck = DB::table(
+                'wimpys_food_express_payment_vouchers')
+                ->select( 
+                'wimpys_food_express_payment_vouchers.id',
+                'wimpys_food_express_payment_vouchers.user_id',
+                'wimpys_food_express_payment_vouchers.pv_id',
+                'wimpys_food_express_payment_vouchers.date',
+                'wimpys_food_express_payment_vouchers.paid_to',
+                'wimpys_food_express_payment_vouchers.account_no',
+                'wimpys_food_express_payment_vouchers.account_name',
+                'wimpys_food_express_payment_vouchers.particulars',
+                'wimpys_food_express_payment_vouchers.amount',
+                'wimpys_food_express_payment_vouchers.method_of_payment',
+                'wimpys_food_express_payment_vouchers.prepared_by',
+                'wimpys_food_express_payment_vouchers.approved_by',
+                'wimpys_food_express_payment_vouchers.date_approved',
+                'wimpys_food_express_payment_vouchers.received_by_date',
+                'wimpys_food_express_payment_vouchers.created_by',
+                'wimpys_food_express_payment_vouchers.created_at',
+                'wimpys_food_express_payment_vouchers.invoice_number',
+                'wimpys_food_express_payment_vouchers.issued_date',
+                'wimpys_food_express_payment_vouchers.category',
+                'wimpys_food_express_payment_vouchers.amount_due',
+                'wimpys_food_express_payment_vouchers.delivered_date',
+                'wimpys_food_express_payment_vouchers.status',
+                'wimpys_food_express_payment_vouchers.cheque_number',
+                'wimpys_food_express_payment_vouchers.cheque_amount',
+                'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                'wimpys_food_express_payment_vouchers.sub_category',
+                'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                'wimpys_food_express_payment_vouchers.deleted_at',
+                'wimpys_food_express_codes.wimpys_food_express_code',
+                'wimpys_food_express_codes.module_id',
+                'wimpys_food_express_codes.module_code',
+                'wimpys_food_express_codes.module_name')
+                ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                ->whereDate('wimpys_food_express_payment_vouchers.created_at', '=', date($getDate))
+                ->where('wimpys_food_express_payment_vouchers.method_of_payment', $check)
+                ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                ->sum('wimpys_food_express_payment_vouchers.amount_due');
+        
+        return view('wimpys-food-express-get-summary-report', compact('getDate', 'getTransactionLists', 'getTransactionListCashes', 
+        'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck'));
+    
+                    
+    }
+
+    public function summaryReport(){    
+        $getDateToday = date("Y-m-d");
+        $moduleNamePV = "Payment Voucher";
+
+        $getTransactionLists = DB::table(
+            'wimpys_food_express_payment_vouchers')
+            ->select( 
+            'wimpys_food_express_payment_vouchers.id',
+            'wimpys_food_express_payment_vouchers.user_id',
+            'wimpys_food_express_payment_vouchers.pv_id',
+            'wimpys_food_express_payment_vouchers.date',
+            'wimpys_food_express_payment_vouchers.paid_to',
+            'wimpys_food_express_payment_vouchers.account_no',
+            'wimpys_food_express_payment_vouchers.account_name',
+            'wimpys_food_express_payment_vouchers.particulars',
+            'wimpys_food_express_payment_vouchers.amount',
+            'wimpys_food_express_payment_vouchers.method_of_payment',
+            'wimpys_food_express_payment_vouchers.prepared_by',
+            'wimpys_food_express_payment_vouchers.approved_by',
+            'wimpys_food_express_payment_vouchers.date_approved',
+            'wimpys_food_express_payment_vouchers.received_by_date',
+            'wimpys_food_express_payment_vouchers.created_by',
+            'wimpys_food_express_payment_vouchers.created_at',
+            'wimpys_food_express_payment_vouchers.invoice_number',
+            'wimpys_food_express_payment_vouchers.issued_date',
+            'wimpys_food_express_payment_vouchers.category',
+            'wimpys_food_express_payment_vouchers.amount_due',
+            'wimpys_food_express_payment_vouchers.delivered_date',
+            'wimpys_food_express_payment_vouchers.status',
+            'wimpys_food_express_payment_vouchers.cheque_number',
+            'wimpys_food_express_payment_vouchers.cheque_amount',
+            'wimpys_food_express_payment_vouchers.cheque_total_amount',
+            'wimpys_food_express_payment_vouchers.sub_category',
+            'wimpys_food_express_payment_vouchers.sub_category_account_id',
+            'wimpys_food_express_payment_vouchers.deleted_at',
+            'wimpys_food_express_codes.wimpys_food_express_code',
+            'wimpys_food_express_codes.module_id',
+            'wimpys_food_express_codes.module_code',
+            'wimpys_food_express_codes.module_name')
+            ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+            ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+            ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+            ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+            ->whereDate('wimpys_food_express_payment_vouchers.created_at', '=', date($getDateToday))
+            ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+            ->get()->toArray();
+
+    $cash = "CASH";
+    $getTransactionListCashes = DB::table(
+            'wimpys_food_express_payment_vouchers')
+            ->select( 
+            'wimpys_food_express_payment_vouchers.id',
+            'wimpys_food_express_payment_vouchers.user_id',
+            'wimpys_food_express_payment_vouchers.pv_id',
+            'wimpys_food_express_payment_vouchers.date',
+            'wimpys_food_express_payment_vouchers.paid_to',
+            'wimpys_food_express_payment_vouchers.account_no',
+            'wimpys_food_express_payment_vouchers.account_name',
+            'wimpys_food_express_payment_vouchers.particulars',
+            'wimpys_food_express_payment_vouchers.amount',
+            'wimpys_food_express_payment_vouchers.method_of_payment',
+            'wimpys_food_express_payment_vouchers.prepared_by',
+            'wimpys_food_express_payment_vouchers.approved_by',
+            'wimpys_food_express_payment_vouchers.date_approved',
+            'wimpys_food_express_payment_vouchers.received_by_date',
+            'wimpys_food_express_payment_vouchers.created_by',
+            'wimpys_food_express_payment_vouchers.created_at',
+            'wimpys_food_express_payment_vouchers.invoice_number',
+            'wimpys_food_express_payment_vouchers.issued_date',
+            'wimpys_food_express_payment_vouchers.category',
+            'wimpys_food_express_payment_vouchers.amount_due',
+            'wimpys_food_express_payment_vouchers.delivered_date',
+            'wimpys_food_express_payment_vouchers.status',
+            'wimpys_food_express_payment_vouchers.cheque_number',
+            'wimpys_food_express_payment_vouchers.cheque_amount',
+            'wimpys_food_express_payment_vouchers.cheque_total_amount',
+            'wimpys_food_express_payment_vouchers.sub_category',
+            'wimpys_food_express_payment_vouchers.sub_category_account_id',
+            'wimpys_food_express_payment_vouchers.deleted_at',
+            'wimpys_food_express_codes.wimpys_food_express_code',
+            'wimpys_food_express_codes.module_id',
+            'wimpys_food_express_codes.module_code',
+            'wimpys_food_express_codes.module_name')
+            ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+            ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+            ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+            ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+            ->whereDate('wimpys_food_express_payment_vouchers.created_at', '=', date($getDateToday))
+            ->where('wimpys_food_express_payment_vouchers.method_of_payment', $cash)
+            ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+            ->get()->toArray();
+
+    $totalAmountCashes = DB::table(
+                'wimpys_food_express_payment_vouchers')
+                ->select( 
+                'wimpys_food_express_payment_vouchers.id',
+                'wimpys_food_express_payment_vouchers.user_id',
+                'wimpys_food_express_payment_vouchers.pv_id',
+                'wimpys_food_express_payment_vouchers.date',
+                'wimpys_food_express_payment_vouchers.paid_to',
+                'wimpys_food_express_payment_vouchers.account_no',
+                'wimpys_food_express_payment_vouchers.account_name',
+                'wimpys_food_express_payment_vouchers.particulars',
+                'wimpys_food_express_payment_vouchers.amount',
+                'wimpys_food_express_payment_vouchers.method_of_payment',
+                'wimpys_food_express_payment_vouchers.prepared_by',
+                'wimpys_food_express_payment_vouchers.approved_by',
+                'wimpys_food_express_payment_vouchers.date_approved',
+                'wimpys_food_express_payment_vouchers.received_by_date',
+                'wimpys_food_express_payment_vouchers.created_by',
+                'wimpys_food_express_payment_vouchers.created_at',
+                'wimpys_food_express_payment_vouchers.invoice_number',
+                'wimpys_food_express_payment_vouchers.issued_date',
+                'wimpys_food_express_payment_vouchers.category',
+                'wimpys_food_express_payment_vouchers.amount_due',
+                'wimpys_food_express_payment_vouchers.delivered_date',
+                'wimpys_food_express_payment_vouchers.status',
+                'wimpys_food_express_payment_vouchers.cheque_number',
+                'wimpys_food_express_payment_vouchers.cheque_amount',
+                'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                'wimpys_food_express_payment_vouchers.sub_category',
+                'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                'wimpys_food_express_payment_vouchers.deleted_at',
+                'wimpys_food_express_codes.wimpys_food_express_code',
+                'wimpys_food_express_codes.module_id',
+                'wimpys_food_express_codes.module_code',
+                'wimpys_food_express_codes.module_name')
+                ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                ->whereDate('wimpys_food_express_payment_vouchers.created_at', '=', date($getDateToday))
+                ->where('wimpys_food_express_payment_vouchers.method_of_payment', $cash)
+                ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                ->sum('wimpys_food_express_payment_vouchers.amount_due');
+
+    $check = "CHECK";
+    $getTransactionListChecks = DB::table(
+                    'wimpys_food_express_payment_vouchers')
+                    ->select( 
+                    'wimpys_food_express_payment_vouchers.id',
+                    'wimpys_food_express_payment_vouchers.user_id',
+                    'wimpys_food_express_payment_vouchers.pv_id',
+                    'wimpys_food_express_payment_vouchers.date',
+                    'wimpys_food_express_payment_vouchers.paid_to',
+                    'wimpys_food_express_payment_vouchers.account_no',
+                    'wimpys_food_express_payment_vouchers.account_name',
+                    'wimpys_food_express_payment_vouchers.particulars',
+                    'wimpys_food_express_payment_vouchers.amount',
+                    'wimpys_food_express_payment_vouchers.method_of_payment',
+                    'wimpys_food_express_payment_vouchers.prepared_by',
+                    'wimpys_food_express_payment_vouchers.approved_by',
+                    'wimpys_food_express_payment_vouchers.date_approved',
+                    'wimpys_food_express_payment_vouchers.received_by_date',
+                    'wimpys_food_express_payment_vouchers.created_by',
+                    'wimpys_food_express_payment_vouchers.created_at',
+                    'wimpys_food_express_payment_vouchers.invoice_number',
+                    'wimpys_food_express_payment_vouchers.issued_date',
+                    'wimpys_food_express_payment_vouchers.category',
+                    'wimpys_food_express_payment_vouchers.amount_due',
+                    'wimpys_food_express_payment_vouchers.delivered_date',
+                    'wimpys_food_express_payment_vouchers.status',
+                    'wimpys_food_express_payment_vouchers.cheque_number',
+                    'wimpys_food_express_payment_vouchers.cheque_amount',
+                    'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                    'wimpys_food_express_payment_vouchers.sub_category',
+                    'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                    'wimpys_food_express_payment_vouchers.deleted_at',
+                    'wimpys_food_express_codes.wimpys_food_express_code',
+                    'wimpys_food_express_codes.module_id',
+                    'wimpys_food_express_codes.module_code',
+                    'wimpys_food_express_codes.module_name')
+                    ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                    ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                    ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                    ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                    ->whereDate('wimpys_food_express_payment_vouchers.created_at', '=', date($getDateToday))
+                    ->where('wimpys_food_express_payment_vouchers.method_of_payment', $check)
+                    ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                    ->get()->toArray();
+    
+        $status = "FULLY PAID AND RELEASED";
+        $totalAmountCheck = DB::table(
+                'wimpys_food_express_payment_vouchers')
+                ->select( 
+                'wimpys_food_express_payment_vouchers.id',
+                'wimpys_food_express_payment_vouchers.user_id',
+                'wimpys_food_express_payment_vouchers.pv_id',
+                'wimpys_food_express_payment_vouchers.date',
+                'wimpys_food_express_payment_vouchers.paid_to',
+                'wimpys_food_express_payment_vouchers.account_no',
+                'wimpys_food_express_payment_vouchers.account_name',
+                'wimpys_food_express_payment_vouchers.particulars',
+                'wimpys_food_express_payment_vouchers.amount',
+                'wimpys_food_express_payment_vouchers.method_of_payment',
+                'wimpys_food_express_payment_vouchers.prepared_by',
+                'wimpys_food_express_payment_vouchers.approved_by',
+                'wimpys_food_express_payment_vouchers.date_approved',
+                'wimpys_food_express_payment_vouchers.received_by_date',
+                'wimpys_food_express_payment_vouchers.created_by',
+                'wimpys_food_express_payment_vouchers.created_at',
+                'wimpys_food_express_payment_vouchers.invoice_number',
+                'wimpys_food_express_payment_vouchers.issued_date',
+                'wimpys_food_express_payment_vouchers.category',
+                'wimpys_food_express_payment_vouchers.amount_due',
+                'wimpys_food_express_payment_vouchers.delivered_date',
+                'wimpys_food_express_payment_vouchers.status',
+                'wimpys_food_express_payment_vouchers.cheque_number',
+                'wimpys_food_express_payment_vouchers.cheque_amount',
+                'wimpys_food_express_payment_vouchers.cheque_total_amount',
+                'wimpys_food_express_payment_vouchers.sub_category',
+                'wimpys_food_express_payment_vouchers.sub_category_account_id',
+                'wimpys_food_express_payment_vouchers.deleted_at',
+                'wimpys_food_express_codes.wimpys_food_express_code',
+                'wimpys_food_express_codes.module_id',
+                'wimpys_food_express_codes.module_code',
+                'wimpys_food_express_codes.module_name')
+                ->join('wimpys_food_express_codes', 'wimpys_food_express_payment_vouchers.id', '=', 'wimpys_food_express_codes.module_id')
+                ->where('wimpys_food_express_payment_vouchers.pv_id', NULL)
+                ->where('wimpys_food_express_codes.module_name', $moduleNamePV)
+                ->where('wimpys_food_express_payment_vouchers.deleted_at', NULL)
+                ->whereDate('wimpys_food_express_payment_vouchers.created_at', '=', date($getDateToday))
+                ->where('wimpys_food_express_payment_vouchers.method_of_payment', $cash)
+                ->orderBy('wimpys_food_express_payment_vouchers.id', 'desc')
+                ->sum('wimpys_food_express_payment_vouchers.amount_due');
+
+
+        return view('wimpys-food-express-summary-report', compact('getTransactionLists', 'getTransactionListCashes', 
+        'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck'));
+
+    }
+
+    public function orderForm(){
+        return view('wimpys-food-express-order-form');
+    }
+
+    public function updateRawMaterial(Request $request){
+        $updateRawMaterial = WimpysFoodExpressStockInventory::find($request->id);
+
+        $updateRawMaterial->product_name = $request->productName;
+        $updateRawMaterial->price = $request->price;
+        $updateRawMaterial->category = $request->category;
+        $updateRawMaterial->save();
+        
+        return response()->json('Success: successfully updated.');  
+
+    }
+
+    public function addRawMaterial(Request $request){   
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+          //check if product name name exits
+        $target = DB::table(
+            'wimpys_food_express_stock_inventories')
+            ->where('product_name', $request->productName)
+            ->get()->first(); 
+
+        if($target === NULL){
+            $addNewMaterial = new WimpysFoodExpressStockInventory([
+                'user_id'=>$user->id,
+                'product_name'=>$request->productName,
+                'price'=>$request->price,
+                'category'=>$request->category,
+                'created_by'=>$name,
+            ]);
+
+            $addNewMaterial->save();
+
+            return response()->json('Success: successfully add material.'); 
+        }else{
+            return response()->json('Failed: Already exist.');
+        }
+    }
+
+    public function rawMaterials(){
+        $getMaterials = WimpysFoodExpressStockInventory::get()->toArray();
+
+        return view('wimpys-food-express-raw-materials', ['getMaterials'=>$getMaterials]);
+    }
 
     public function printSOAList(){
         $printSOAStatements = WimpysFoodExpressStatementOfAccount::with(['user', 'statement_of_accounts'])

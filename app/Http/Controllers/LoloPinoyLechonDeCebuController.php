@@ -6001,11 +6001,11 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $amount = $unitPrice;
 
-        //check if product name name exits
+       //check if product name name exits
         $target = DB::table(
                 'commissary_raw_materials')
                 ->where('product_name', $request->productName)
-                ->get()->first();
+                ->get()->first(); 
 
         if($target === NULL){
             $addNewRawMaterial = new CommissaryRawMaterial([

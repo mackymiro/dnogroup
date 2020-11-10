@@ -13,19 +13,41 @@
           <span>Summary Report(s)</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-            <a class="dropdown-item" href="#">Summary Report(s)</a>
-            <a class="dropdown-item" href="#">Search Number Code</a>
+            <a class="dropdown-item" href="{{ url('wimpys-food-express/summary-report')}}">Summary Report(s)</a>
+            <a class="dropdown-item" href="{{ url('wimpys-food-express/summary-report/') }}">Search Number Code</a>
       
         </div>
       </li>
       @endif
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-           <i class="fas fa-cash-register"></i>
-          <span>Sales Invoice</span>
+        <i class="fas fa-receipt"></i>
+          <span>Order Form</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="">Sales Invoice Form</a>
+          <a class="dropdown-item" href="{{ url('wimpys-food-express/order-form') }}">Order Form</a>
+          <a class="dropdown-item" href="{{ url('wimpys-food-express') }}">Lists</a>
+          
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-receipt"></i>
+          <span>Client Booking Form</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item" href="">Order Form</a>
+          <a class="dropdown-item" href="{{ url('wimpys-food-express') }}">Lists</a>
+          
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-receipt"></i>
+          <span>Catering Event<br> Delivery Checklist</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          <a class="dropdown-item" href="">Checklist </a>
           <a class="dropdown-item" href="{{ url('wimpys-food-express') }}">Lists</a>
           
         </div>
@@ -93,4 +115,15 @@
         </div>
       </li>
       @endif
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-apple-alt"></i>
+          <span>Stock Inventory</span>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+          
+          <a class="dropdown-item" href="{{ url('wimpys-food-express/raw-materials') }}">RAW Materials</a>
+          <a class="dropdown-item" href="{{ url('wimpys-food-express/stocks-inventory') }}">Stocks Inventory</a>       
+        </div>
+      </li>
  </ul>
