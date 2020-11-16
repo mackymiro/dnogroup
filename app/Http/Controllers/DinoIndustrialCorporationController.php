@@ -1496,8 +1496,11 @@ class DinoIndustrialCorporationController extends Controller
                                 ->whereDate('dino_industrial_corporation_payment_vouchers.created_at', '=', date($getDateToday))
                                 ->where('dino_industrial_corporation_payment_vouchers.status', $status)
                                 ->sum('dino_industrial_corporation_payment_vouchers.cheque_total_amount');
+        
+        $uri0 = "";
+        $uri1 = "";
 
-        $pdf = PDF::loadView('printSummaryDIC',  compact('date', 'getDateToday', 
+        $pdf = PDF::loadView('printSummaryDIC',  compact('uri0', 'uri1', 'date', 'getDateToday', 
         'getTransactionListCashes', 'getTransactionListChecks',  
         'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck'));
         

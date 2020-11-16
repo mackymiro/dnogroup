@@ -1831,7 +1831,9 @@ class WlgCorporationController extends Controller
                                     ->where('wlg_corporation_payment_vouchers.status', $status)
                                     ->sum('wlg_corporation_payment_vouchers.cheque_total_amount');
 
-        $pdf = PDF::loadView('printSummaryWlg',  compact('date', 'getDateToday', 
+        $uri0 = "";
+        $uri1 = "";
+        $pdf = PDF::loadView('printSummaryWlg',  compact('uri0', 'uri1','date', 'getDateToday', 
          'getTransactionListCashes', 'getTransactionListChecks',  
         'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck'));
         

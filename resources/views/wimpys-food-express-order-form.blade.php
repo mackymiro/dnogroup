@@ -306,32 +306,28 @@
             $('#orderForm').modal('hide');
             
         }else{
-        
-             //make ajax call
-             $.ajax({
-                type: 'POST',
-                url: '/wimpys-food-express/add-form',
-                data:{
-                    _method:'post',
-                    "_token":"{{ csrf_token() }}",
-                    "productName":productName,
-                    "quantity":quantity,
-                    "unit":unit,
-                    "price":price,
-                    "total":newPrice,
 
-                },
-                success:function(data){
-                    console.log(data);
-                    setTimeout(function(){
-                        window.location = "/wimpys-food-express/order-form/" + data + "/transaction";
-                    }, 1000);
-                
-                },
-                error:function(data){
-                    console.log('Error', data);
-                }
-             });
+            const table =  document.getElementById("output");
+            const row = document.createElement("tr");
+            
+            const productName = row.insertCell(0);
+            const qty = row.insertCell(1);
+            const unit = row.insertCell(2);
+           
+
+    
+            productName.innerHTML = `${productName}`;
+            qty.innerHTML = `${qty}`;
+            unit.innerHTML = `${unit}`;
+          
+
+            row.append(productName);  
+            row.append(qty);
+            row.append(unit);
+         
+            document.getElementById("rows").appendChild(row);
+        
+           
 
             $('#orderForm').modal('hide');
         }

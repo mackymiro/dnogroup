@@ -43,7 +43,7 @@
 
                                 Lists
                                 <div class="float-right">
-                                    <a href="{{ url('lolo-pinoy-lechon-de-cebu/supplier/print/'.$viewSupplier[0]->id) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                                    <a href="{{ url('lolo-pinoy-grill-branches/supplier/print/'.$viewSupplier[0]->id) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                                 </div>
                              </div>
                             

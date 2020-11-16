@@ -3489,7 +3489,10 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     ->where('lechon_de_cebu_payment_vouchers.status', $status)
                                     ->sum('lechon_de_cebu_payment_vouchers.cheque_total_amount');
 
-         $pdf = PDF::loadView('printSummary',  compact('date', 'getDateToday', 'getAllSalesInvoices', 
+
+        $uri0 = "";
+        $uri1 = "";
+         $pdf = PDF::loadView('printSummary',  compact('uri0', 'uri1','date', 'getDateToday', 'getAllSalesInvoices', 
         'getAllDeliveryReceipts', 'purchaseOrders', 'statementOfAccounts', 'billingStatements', 
         'pettyCashLists',  'getTransactionLists', 'getTransactionListCashes', 'getTransactionListChecks', 'totalSalesInvoice', 'totalDeliveryReceipt', 'totalPOrder', 'totalBStatement', 
         'totalPaymentVoucherCash','totalPaymentVoucherCheck', 'totalPaidAmountCheck'));

@@ -1800,7 +1800,9 @@ class DongFangCorporationController extends Controller
                                     ->where('dong_fang_corporation_payment_vouchers.status', $status)
                                     ->sum('dong_fang_corporation_payment_vouchers.cheque_total_amount');
 
-        $pdf = PDF::loadView('printSummaryDongFang', compact('date', 'getDateToday', 'getTransactionListCashes', 
+        $uri0 = "";
+        $uri1 = "";
+        $pdf = PDF::loadView('printSummaryDongFang', compact('uri0', 'uri1', 'date', 'getDateToday', 'getTransactionListCashes', 
         'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck', 'totalPaidAmountCheck'));
                                 
         return $pdf->download('dong-fang-corporation-summary-report.pdf');

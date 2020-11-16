@@ -154,33 +154,30 @@
                        </div>
                        <table id="output"  class="table table-bordered">
                           <thead>
-                              <th>ACTIONS</th>
+                              
                               <th>ITEMS</th>
                               <th>QUANTITY</th>
                               <th>UNIT</th>
                               <th>PRICE</th>
                               <th>TOTAL</th>
+                              <th>ACTIONS</th>
                           </thead>
                           <tbody id="rows">
                              @if($transaction[0]->deleted_at == NULL)
                             <tr>
-                                <td></td>
                                 <td>{{ $transaction[0]->items}}</td>
                                 <td>{{ $transaction[0]->qty }}</td>
                                 <td>{{ $transaction[0]->unit }}</td>
                                 <td><?= number_format($transaction[0]->price, 2)?></td>
                                 <td><?= number_format($transaction[0]->total, 2)?></td>
+                                <td><a href="#" class="btn btn-danger">Delete</a></td>
                             </tr>
                             @endif
+                          
                           </tbody>
-                          <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td class="bg-danger" style="color:#fff;">Total</td>
-                            </tr>
+                          
                        </table>
+                       <input type="hidden" id="orderId" name="orderId" value="{{ $id }}" />
                     </div>
                 </div>
             </div>
@@ -297,34 +294,48 @@
 
     const addMaterial = () =>{
         const productName = $("#productName").val();
-        const quantity = $("#quantity").val();
+        const quantity = parseInt($("#quantity").val());
         const price = $("#price").val();
         const unit = $("#unit").val();
       
         const newPrice = $("#newPrice").val();
 
+        const text = "<a href='#' class='btn btn-danger'>Delete</a>";
+        const delt =  text;
+       
+
         if(quantity === 1){
+            
             const table =  document.getElementById("output");
             const row = document.createElement("tr");
             
-            const pro = row.insertCell(0);
+            const nameOfProduct = row.insertCell(0);
             const qty = row.insertCell(1);
-            const amount = row.insertCell(2);
-
+            const units = row.insertCell(2);
+            const priceT = row.insertCell(3);
+            const totT = row.insertCell(4);
+            const del = row.insertCell(5);
     
+    
+            nameOfProduct.innerHTML = `${productName}`;
             qty.innerHTML = `${quantity}`;
-            item.innerHTML = `${foodName} - ${flavor}`;
-            amount.innerHTML = `${originalPrice}`;
-              
+            units.innerHTML = `${unit}`;
+            priceT.innerHTML = `${price}`;
+            totT.innerHTML = `${price}`;
+            del.innerHTML = `${delt}`;
+
+            row.append(nameOfProduct);  
             row.append(qty);
-            row.append(item);
-            row.append(amount);
+            row.append(units);
+            row.append(priceT);
+            row.append(totT);
+            row.append(del);
             document.getElementById("rows").appendChild(row);
 
             //make ajax call
             $.ajax({
                 type: 'POST',
-                url: '/wimpys-food-express/add-form',
+                url: '/wimpys-food-express/transaction/additional',
                 data:{
                     _method:'post',
                     "_token":"{{ csrf_token() }}",
@@ -345,36 +356,40 @@
                     console.log('Error', data);
                 }
              });
+
+
 
             $('#orderForm').modal('hide');
             
         }else{
         
-             //make ajax call
-             $.ajax({
-                type: 'POST',
-                url: '/wimpys-food-express/add-form',
-                data:{
-                    _method:'post',
-                    "_token":"{{ csrf_token() }}",
-                    "productName":productName,
-                    "quantity":quantity,
-                    "unit":unit,
-                    "price":price,
-                    "total":newPrice,
+            const table =  document.getElementById("output");
+            const row = document.createElement("tr");
+            
+            const nameOfProduct = row.insertCell(0);
+            const qty = row.insertCell(1);
+            const units = row.insertCell(2);
+            const priceT = row.insertCell(3);
+            const priceNew = row.insertCell(4);
+            const del = row.insertCell(5);
+    
+    
+            nameOfProduct.innerHTML = `${productName}`;
+            qty.innerHTML = `${quantity}`;
+            units.innerHTML = `${unit}`;
+            priceT.innerHTML = `${price}`;
+            priceNew.innerHTML = `${newPrice}`;
+            del.innerHTML = `${delt}`;
 
-                },
-                success:function(data){
-                    console.log(data);
-                    setTimeout(function(){
-                        window.location = "/wimpys-food-express/order-form/" + data + "/transaction";
-                    }, 1000);
-                
-                },
-                error:function(data){
-                    console.log('Error', data);
-                }
-             });
+
+            row.append(nameOfProduct);  
+            row.append(qty);
+            row.append(units);
+            row.append(priceT);
+            row.append(priceNew);
+            row.append(del);
+            document.getElementById("rows").appendChild(row);
+
 
             $('#orderForm').modal('hide');
         }

@@ -23,9 +23,9 @@
 <div id="wrapper">
 	 <div id="content-wrapper">
  		<div class="container-fluid">
- 				<div  style="margin-top:60px;">
-            	 <img style="margin-left: 250px;" src="{{ asset('images/pdf/mr-potato.png')}}"   alt="Mr Potato">
-            	 	 <p >
+ 				<div  style="margin-top:-10px;">
+            	 <img style="margin-left: -30px;" src="{{ asset('images/pdf/mr-potato.png')}}"   alt="Mr Potato"> 
+                    <p  style="margin-top:-100px; margin-left:165px;text-align:left;">
 		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
 						Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
 

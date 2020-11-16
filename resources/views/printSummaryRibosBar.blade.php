@@ -23,9 +23,9 @@
 <div id="wrapper">
 	 <div id="content-wrapper">
  		<div class="container-fluid">
- 				<div  style="margin-top:60px;">
-            	 <img style="margin-left: 170px;" src="{{ asset('images/ribos.jpg')}}"   alt="Ribo's Bar">
-            	 	 <p >
+ 				<div  style="margin-top:-10px;">
+                 <img style="margin-left: 5px;" src="{{ asset('images/digitized-logos/ribos-food-corp-pdf1.png')}}"  alt="Ribo's Bar">
+            	 	 <p  style="margin-top:-50px; margin-left:110px;text-align:left;">
 		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
 						Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
 

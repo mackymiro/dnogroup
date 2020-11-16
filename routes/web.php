@@ -2220,6 +2220,12 @@ Route::group(['middleware' => ['auth']], function(){
 		->middleware(['cashier']);
 
 	Route::get(
+		'/lolo-pinoy-grill-commissary/supplier/print/{id}',
+		'LoloPinoyGrillCommissaryController@printSupplier')
+		->name('printSupplier')
+		->middleware(['cashier']);
+
+	Route::get(
 		'/lolo-pinoy-grill-commissary/view-lolo-pinoy-grill-commissary-purchase-order/{id}',
 		'LoloPinoyGrillCommissaryController@show')
 		->name('show')
@@ -2961,7 +2967,14 @@ Route::group(['middleware' => ['auth']], function(){
 	Route::get(
 		'/lolo-pinoy-grill-branches/suppliers/view/{id}',
 		'LoloPinoyGrillBranchesController@viewSupplier')
-		->name('viewSupplier');
+		->name('viewSupplier')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/lolo-pinoy-grill-branches/supplier/print/{id}',
+		'LoloPinoyGrillBranchesController@printSupplier')
+		->name('printSupplier')
+		->middleware(['cashier']);
 
 	Route::get(
 		'/lolo-pinoy-grill-branches/store-stock/delivery-in-transaction',

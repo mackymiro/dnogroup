@@ -3513,7 +3513,9 @@ class DnoFoodVenturesController extends Controller
                                                 ->where('dno_food_ventures_payment_vouchers.currency', $currency)
                                                 ->sum('dno_food_ventures_payment_vouchers.cheque_total_amount');
 
-        $pdf = PDF::loadView('printSummaryDnoFoodVentures',  compact('date', 'getDateToday', 
+        $uri0 = "";
+        $uri1 = "";
+        $pdf = PDF::loadView('printSummaryDnoFoodVentures',  compact('uri0', 'uri1','date', 'getDateToday', 
         'purchaseOrders', 'getTransactionListCashes', 'getTransactionListChecks','totalPOrder', 
         'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck', 'totalAmountCheckInUSD', 'totalPaidAmountCheckInUSD'));
         

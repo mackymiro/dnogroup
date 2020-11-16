@@ -1288,7 +1288,7 @@ class WimpysFoodExpressController extends Controller
                         ->get();
         
 
-        return view('wimpys-food-express-order-form-transactions', compact('getMaterials', 
+        return view('wimpys-food-express-order-form-transactions', compact('id','getMaterials', 
         'getMaterials2', 'getMaterials3', 'getMaterials4', 'transaction'));
     }
 

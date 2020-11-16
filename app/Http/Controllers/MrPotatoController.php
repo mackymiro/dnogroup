@@ -2603,8 +2603,9 @@ class MrPotatoController extends Controller
                                     ->where('mr_potato_payment_vouchers.status', $status)
                                     ->sum('mr_potato_payment_vouchers.cheque_total_amount');
                       
-        
-        $pdf = PDF::loadView('printSummaryMrPotato',  compact('date', 'getDateToday', 'getAllSalesInvoices', 
+        $uri0 = "";
+        $uri1 = "";
+        $pdf = PDF::loadView('printSummaryMrPotato',  compact('uri0', 'uri1', 'date', 'getDateToday', 'getAllSalesInvoices', 
         'getAllDeliveryReceipts', 'purchaseOrders', 'statementOfAccounts', 'billingStatements', 
         'pettyCashLists',  'getTransactionLists', 'getTransactionListCashes', 'getTransactionListChecks', 'totalSalesInvoice', 'totalDeliveryReceipt', 'totalPOrder', 'totalBStatement', 
         'totalAmountCash','totalAmountCheck', 'totalPaidAmountCheck'));

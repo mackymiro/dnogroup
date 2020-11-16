@@ -2745,8 +2745,9 @@ class DnoResourcesDevelopmentController extends Controller
                                     ->where('dno_resources_development_corp_payment_vouchers.currency', $currency)
                                     ->sum('dno_resources_development_corp_payment_vouchers.cheque_total_amount');
                             
-                                
-        $pdf = PDF::loadView('printSummaryDnoResoures',  compact('date', 'getDateToday', 
+        $uri0 = "";
+        $uri1 = "";
+        $pdf = PDF::loadView('printSummaryDnoResoures',  compact('uri0', 'uri1', 'date', 'getDateToday', 
         'getTransactionListCashes', 'getTransactionListChecks',  
         'totalAmountCashes','totalAmountCheck', 'totalPaidAmountCheck', 'totalAmountCheckInUSD', 'totalPaidAmountCheckInUSD'));
         
