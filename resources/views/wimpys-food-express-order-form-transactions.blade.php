@@ -15,6 +15,7 @@
                 <a href="#">Wimpy's Food Express</a>
               </li>
               <li class="breadcrumb-item active">Order Form</li>
+              <li class="breadcrumb-item active">Transactions</li>
             </ol>
             <div class="col-lg-12">
             <img src="{{ asset('images/digitized-logos/wimpys-logo1.jpg')}}" width="350" height="178" class="img-responsive mx-auto d-block" alt="Wimpy's Food Express">
@@ -135,8 +136,25 @@
                         Order Form
                     </div>
                     <div class="card-body">
+                       <div class="form-group">
+                            <div class="form-row">
+                                <div class="col-lg-2">
+                                    <label>Date</label>
+                                    <input type="text" name="date" class="form-control" />
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>Time</label>
+                                    <input type="text" name="time" class="form-control" />
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>No Of People</label>
+                                    <input type="text" name="noOfPeople" class="form-control" />
+                                </div>
+                            </div>
+                       </div>
                        <table id="output"  class="table table-bordered">
                           <thead>
+                              <th>ACTIONS</th>
                               <th>ITEMS</th>
                               <th>QUANTITY</th>
                               <th>UNIT</th>
@@ -144,7 +162,16 @@
                               <th>TOTAL</th>
                           </thead>
                           <tbody id="rows">
-                                    
+                             @if($transaction[0]->deleted_at == NULL)
+                            <tr>
+                                <td></td>
+                                <td>{{ $transaction[0]->items}}</td>
+                                <td>{{ $transaction[0]->qty }}</td>
+                                <td>{{ $transaction[0]->unit }}</td>
+                                <td><?= number_format($transaction[0]->price, 2)?></td>
+                                <td><?= number_format($transaction[0]->total, 2)?></td>
+                            </tr>
+                            @endif
                           </tbody>
                           <tr>
                                 <td></td>
@@ -277,6 +304,22 @@
         const newPrice = $("#newPrice").val();
 
         if(quantity === 1){
+            const table =  document.getElementById("output");
+            const row = document.createElement("tr");
+            
+            const pro = row.insertCell(0);
+            const qty = row.insertCell(1);
+            const amount = row.insertCell(2);
+
+    
+            qty.innerHTML = `${quantity}`;
+            item.innerHTML = `${foodName} - ${flavor}`;
+            amount.innerHTML = `${originalPrice}`;
+              
+            row.append(qty);
+            row.append(item);
+            row.append(amount);
+            document.getElementById("rows").appendChild(row);
 
             //make ajax call
             $.ajax({

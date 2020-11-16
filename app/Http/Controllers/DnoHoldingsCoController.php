@@ -2905,7 +2905,7 @@ class DnoHoldingsCoController extends Controller
          //get suppliers
          $suppliers = DnoHoldingsCoSupplier::get()->toArray();
 
-         $pettyCashes =   DnoHoldingsCoPettyCash::with(['user', 'petty_cashes'])
+         $pettyCashes = DnoHoldingsCoPettyCash::with(['user', 'petty_cashes'])
                                                 ->where('pc_id', NULL)
                                                 ->where('deleted_at', NULL)
                                                 ->get();

@@ -121,7 +121,19 @@
 														<option value="{{ $supplier['id']}}-{{ $supplier['supplier_name']}}">{{ $supplier['supplier_name']}}</option>
 													@endforeach
 												</select>
-											</div>    
+											</div> 
+											<div id="pettyCashList" class="col-lg-4">
+												<label>Petty Cash List</label>
+												<select data-live-search="true" id="pettyCash" name="pettyCash" class="form-control selectpicker">
+													@foreach($pettyCashes  as $pettyCash)
+														@foreach($pettyCash->petty_cashes as $pc)
+															@if($pc->module_name === "Petty Cash")
+																<option value="{{ $pc->module_code}}-{{ $pc->lolo_pinoy_grill_code }}">{{ $pc->lolo_pinoy_grill_code}}</option>
+															@endif
+														@endforeach    
+													@endforeach
+												</select>
+											</div>     
 										</div>
                           	   		</div>
 									<div class="form-group">
@@ -164,6 +176,7 @@
 	$("#bills").hide();
   	$("#selectId").hide();
     $("#supplierList").hide();
+	$("#pettyCashList").hide();
 
 	$(".category").change(function(){
 		const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
@@ -171,21 +184,26 @@
 			$("#bills").hide();
   			$("#selectId").hide();
 			$("#supplierList").hide();
+
+			$("#pettyCashList").show();
 		}else if(cat === "Utilities"){
 			$("#bills").show();
   			$("#selectId").show();
-			  $("#supplierList").hide();
+			$("#supplierList").hide();
+			$("#pettyCashList").hide();
 		}else if(cat === "Payroll"){
 			$("#bills").hide();
   			$("#selectId").hide();
 			$("#supplierList").hide();
+			$("#pettyCashList").hide();
 		}else if(cat  === "Supplier"){
 			$("#supplierList").show();
-
+			$("#pettyCashList").hide();
 		}else if(cat === "0"){
 			$("#bills").hide();
   			$("#selectId").hide();
 			$("#supplierList").hide();
+			$("#pettyCashList").hide();
 		
 		}
 	});	

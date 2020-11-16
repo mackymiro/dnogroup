@@ -21,4 +21,13 @@ class MrPotatoPettyCash extends Model
         'amount',
         'created_by',
     ];
+
+    public function user(){
+        return $this->belongsTo('App\User');
+    }
+
+
+    public function petty_cashes(){
+        return $this->hasMany('App\MrPotatoCode', 'module_id');
+    }
 }

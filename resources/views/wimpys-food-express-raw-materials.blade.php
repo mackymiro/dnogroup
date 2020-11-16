@@ -17,7 +17,7 @@
                   <a href="#">Wimpy's Food Express</a>
                 </li>
                 <li class="breadcrumb-item ">Stock Inventory</li>
-                <li class="breadcrumb-item active">RAW Materials</li>
+                <li class="breadcrumb-item active">RAW Order Form Materials</li>
               </ol>
               <div class="row">
               		<div class="col-lg-12">
@@ -28,7 +28,7 @@
       					  	<div class="card-body">
 								<!-- Button trigger modal -->
 								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createRaw">
-									Create RAW Materials
+									Create RAW Order Form Materials
 								</button>
 			                     <br>
                     			 <br>
@@ -37,6 +37,7 @@
                 			 			<thead>
 	  				  						<th>Action</th>
 	  				  						<th>Product Name</th>
+											<th>Unit</th>
 											<th>Price</th>
 	  				  						<th class="bg-success" style="color:white;">Category</th>
 	  				  						<th>Created By</th>
@@ -44,6 +45,7 @@
 			  						   <tfoot>
 				  							<th>Action</th>
 	  				  						<th>Product Name</th>
+											<th>Unit</th>
 											<th>Price</th>
 	  				  						<th class="bg-success" style="color:white;">Category</th>
 	  				  						<th>Created By</th>
@@ -53,10 +55,11 @@
                       						<tr>
   												<td>
   													 <!-- Button trigger modal -->
-													<a data-toggle="modal" data-target="" href="#rawM<?php echo $getMaterial['id']?>" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+													<a data-toggle="modal" data-target="" href="#rawM<?= $getMaterial['id']?>" title="Edit"><i class="fas fa-pencil-alt"></i></a>
 										
 												</td>
 												<td>{{ $getMaterial['product_name'] }}</td>
+												<td>{{ $getMaterial['unit']}}</td>
 												<td>{{ $getMaterial['price'] }}</td>
 												<td class="bg-success" style="color:white;">{{ $getMaterial['category'] }}</td>
 												<td>{{ $getMaterial['created_by']}}</td>
@@ -73,7 +76,7 @@
 	 </div>
 	 @foreach($getMaterials as $getMaterial)
   	<!-- Modal -->
-	<div class="modal fade" id="rawM<?php echo $getMaterial['id']; ?>" tabindex="<?php echo $getMaterial['id'] ?>" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal fade" id="rawM<?= $getMaterial['id']; ?>" tabindex="<?= $getMaterial['id'] ?>" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
 			<div class="modal-header">
@@ -93,6 +96,10 @@
 							<label>Product Name</label>
 							<input type="text" id="productName1<?= $getMaterial['id']?>" name="productName1" class="form-control" value="{{ $getMaterial['product_name'] }}" />
 							
+						</div>
+						<div class="col-md-4">
+  							<label>Unit</label>
+							<input type="text" id="unit1<?= $getMaterial['id']?>" name="unit1" class="form-control" value="{{ $getMaterial['unit']}}" />
 						</div>
 						<div class="col-md-2">
 							<label>Price</label>
@@ -145,6 +152,10 @@
 							<label>Product Name</label>
 							<input type="text" id="productName" name="productName" class="form-control" required="required" />
 							
+						</div>
+						<div class="col-md-4">
+  							<label>Unit</label>
+							<input type="text" id="unit" name="unit" class="form-control" />
 						</div>
 						<div class="col-md-2">
 							<label>Price</label>
@@ -231,6 +242,7 @@
 
 	const saveRaw = () =>{
 		const productName = $("#productName").val();
+		const unit = $("#unit").val();
 		const price = $("#price").val();
 		const category = $("#category").val();
 
@@ -244,7 +256,8 @@
                 data:{
                     _method:'post',
                     "_token":"{{ csrf_token() }}",
-                    "productName":productName,
+					"productName":productName,
+					"unit":unit,
                     "price":price,
 					"category":category,
                 },

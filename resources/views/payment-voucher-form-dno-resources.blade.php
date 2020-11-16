@@ -99,7 +99,6 @@
                                           <select  name="category" class="category selcls form-control" > 
                                               <option value="None">None</option>
                                               <option value="Petty Cash">Petty Cash</option>
-                                              <option value="Utility">Utility</option>
                                               <option value="Payroll">Payroll</option>
                                               <option value="Supplier">Supplier</option>
                                             </select>

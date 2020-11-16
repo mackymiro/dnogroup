@@ -4464,7 +4464,14 @@ class MrPotatoController extends Controller
          //get suppliers
          $suppliers = MrPotatoSupplier::get()->toArray();
 
-        return view('payment-voucher-form-mr-potato', compact('getAllFlags', 'suppliers'));
+         $pettyCashes = MrPotatoPettyCash::with(['user', 'petty_cashes'])
+                                                            ->where('pc_id', NULL)
+                                                            ->where('deleted_at', NULL)
+                                                            ->get();
+
+
+
+        return view('payment-voucher-form-mr-potato', compact('getAllFlags', 'suppliers', 'pettyCashes'));
     }
 
     //

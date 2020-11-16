@@ -16,6 +16,7 @@ use App\WimpysFoodExpressPurchaseOrder;
 use App\WimpysFoodExpressBillingStatement; 
 use App\WimpysFoodExpressStatementOfAccount;
 use App\WimpysFoodExpressStockInventory; 
+use App\WimpysFoodExpressOrderForm;
 
 class WimpysFoodExpressController extends Controller
 {
@@ -1254,8 +1255,98 @@ class WimpysFoodExpressController extends Controller
 
     }
 
+    public function transactionOrder($id){
+        
+        $categoryKitchen = "Kitchen";
+        $categoryDessert = "Dessert";
+        $categoryDecor = "Decor";
+        $categoryEqup  = "Equipment and Supplies";
+
+        $getMaterials = WimpysFoodExpressStockInventory::where('category',$categoryKitchen)->get()->toArray();
+
+        $getMaterials2 = WimpysFoodExpressStockInventory::where('category', $categoryDessert)->get()->toArray();
+
+        $getMaterials3 = WimpysFoodExpressStockInventory::where('category', $categoryDecor)->get()->toArray();
+        
+        $getMaterials4 = WimpysFoodExpressStockInventory::where('category', $categoryEqup)->get()->toArray();
+
+        $transaction = DB::table(
+                        'wimpys_food_express_order_forms')
+                        ->select(
+                        'wimpys_food_express_order_forms.user_id',
+                        'wimpys_food_express_order_forms.order_id',
+                        'wimpys_food_express_order_forms.date',
+                        'wimpys_food_express_order_forms.time',
+                        'wimpys_food_express_order_forms.no_of_people',
+                        'wimpys_food_express_order_forms.items',
+                        'wimpys_food_express_order_forms.qty',
+                        'wimpys_food_express_order_forms.unit',
+                        'wimpys_food_express_order_forms.price',
+                        'wimpys_food_express_order_forms.total',
+                        'wimpys_food_express_order_forms.deleted_at')
+                        ->where('wimpys_food_express_order_forms.id', $id)
+                        ->get();
+        
+
+        return view('wimpys-food-express-order-form-transactions', compact('getMaterials', 
+        'getMaterials2', 'getMaterials3', 'getMaterials4', 'transaction'));
+    }
+
+    public function addForm(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //get the date today
+        $getDate =  date("Y-m-d");
+
+        if($request->quantity == 1){
+            $priceT = $request->price;
+             
+        }else{
+            $priceT = $request->total;
+        }
+
+
+        $addItem = new WimpysFoodExpressOrderForm([
+            'user_id'=>$user->id,
+            'date'=>$getDate,
+            'items'=>$request->productName,
+            'qty'=>$request->quantity,
+            'unit'=>$request->unit,
+            'price'=>$request->price,
+            'total'=>$priceT,
+            'created_by'=>$name,
+        ]);
+
+        $addItem->save();   
+        $insertId = $addItem->id; 
+        
+        return response()->json($insertId);
+
+        
+    }
+
     public function orderForm(){
-        return view('wimpys-food-express-order-form');
+        $categoryKitchen = "Kitchen";
+        $categoryDessert = "Dessert";
+        $categoryDecor = "Decor";
+        $categoryEqup  = "Equipment and Supplies";
+
+        $getMaterials = WimpysFoodExpressStockInventory::where('category',$categoryKitchen)->get()->toArray();
+
+        $getMaterials2 = WimpysFoodExpressStockInventory::where('category', $categoryDessert)->get()->toArray();
+
+        $getMaterials3 = WimpysFoodExpressStockInventory::where('category', $categoryDecor)->get()->toArray();
+        
+        $getMaterials4 = WimpysFoodExpressStockInventory::where('category', $categoryEqup)->get()->toArray();
+        
+        return view('wimpys-food-express-order-form', compact('getMaterials', 'getMaterials2', 
+        'getMaterials3', 'getMaterials4'));
     }
 
     public function updateRawMaterial(Request $request){
@@ -1289,6 +1380,7 @@ class WimpysFoodExpressController extends Controller
             $addNewMaterial = new WimpysFoodExpressStockInventory([
                 'user_id'=>$user->id,
                 'product_name'=>$request->productName,
+                'unit'=>$request->unit,
                 'price'=>$request->price,
                 'category'=>$request->category,
                 'created_by'=>$name,

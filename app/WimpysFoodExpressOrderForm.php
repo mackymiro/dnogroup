@@ -5,21 +5,24 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class LoloPinoyGrillBranchesPettyCash extends Model
+class WimpysFoodExpressOrderForm extends Model
 {
-    
+    //
     use SoftDeletes;
-	
+
     protected $dates = ['deleted_at'];
-    
+
     protected $fillable = [
         'user_id',
-        'pc_id',
-        'petty_cash_no',
+        'order_id',
         'date',
-        'petty_cash_name',
-        'petty_cash_summary',
-        'amount',
+        'time',
+        'no_of_people',
+        'items',
+        'qty',
+        'unit',
+        'price',
+        'total',
         'created_by',
     ];
 
@@ -27,7 +30,6 @@ class LoloPinoyGrillBranchesPettyCash extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function petty_cashes(){
-        return $this->hasMany('App\LoloPinoyGrillBranchesCode', 'module_id');
-    }
+
+    
 }

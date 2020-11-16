@@ -58,9 +58,9 @@
                                          <td>{{ $getTransactionBranch['date']}}</td>
                                          <td>{{ $getTransactionBranch['id']}}</td>
                                         <td>{{ $getTransactionBranch['branch']}}</td>
-                                        <td class="bg-danger" style="color:#fff;"><?php echo number_format($getTransactionBranch['total_amount_of_sales'], 2); ?></td>
-                                        <td><?php echo number_format($getTransactionBranch['total_discounts_seniors_pwds']); ?></td>
-                                        <td><?php echo number_format($getTransactionBranch['gift_cert'], 2)?></td>
+                                        <td class="bg-danger" style="color:#fff;"><?= number_format($getTransactionBranch['total_amount_of_sales'], 2); ?></td>
+                                        <td><?= number_format($getTransactionBranch['total_discounts_seniors_pwds']); ?></td>
+                                        <td><?= number_format($getTransactionBranch['gift_cert'], 2)?></td>
                                         <td>{{ $getTransactionBranch['created_by']}}</td>
                                       </tr>
                                       @endforeach
@@ -71,7 +71,7 @@
                                     <thead>	
                                     <tr>
                                       <th width="20%" class="bg-info" style="color:white;">TOTAL SALES </th>
-                                      <th class="bg-danger" style="color:white; font-size:30px;">₱ <?php echo number_format($sum, 2)?></th>
+                                      <th class="bg-danger" style="color:white; font-size:30px;">₱ <?= number_format($sum, 2)?></th>
                                     </tr>
                                   
                                   </thead>

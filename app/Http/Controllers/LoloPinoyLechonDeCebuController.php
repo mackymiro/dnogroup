@@ -8043,7 +8043,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $sum  = $countTotalAmount + $countAmount;
 
 
-        return view('view-lechon-de-cebu-billing-statement', compact('user', 'viewBillingStatement', 'billingStatements', 'sum'));
+        return view('view-lechon-de-cebu-billing-statement', compact('viewBillingStatement', 'billingStatements', 'sum'));
     }
 
 
@@ -8052,6 +8052,19 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $updateBillingOrder = LechonDeCebuBillingStatement::find($id);
 
+        $getOtherBilling = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->get();
+
+        if(isset($getOtherBilling[0]->amount) == ""){
+            $amount = $request->get('amount');
+            $getOtherAmount = 0 + $amount; 
+
+        }else{
+            $amount = $request->get('amount');
+            $getOtherAmount = $getOtherBilling[0]->amount + $amount; 
+        
+        }
+
+
 
         $updateBillingOrder->bill_to = $request->get('billTo');
         $updateBillingOrder->address = $request->get('address');
@@ -8059,6 +8072,7 @@ class LoloPinoyLechonDeCebuController extends Controller
       
         $updateBillingOrder->terms = $request->get('terms');
         $updateBillingOrder->branch = $request->get('branch');
+        $updateBillingOrder->total_amount = $getOtherAmount;
         $updateBillingOrder->save();
 
         Session::flash('SuccessE', 'Successfully updated');
@@ -8136,11 +8150,16 @@ class LoloPinoyLechonDeCebuController extends Controller
         $user = User::find($ids);
 
         $billingOrder = LechonDeCebuBillingStatement::find($id);
+      
         
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 
         $name  = $firstName." ".$lastName;
+
+        $amount = $request->get('amount');
+
+        $tot = $billingOrder->total_amount + $amount; 
 
           //if user selects an order
         if($request->get('choose') === "Ssp"){
@@ -9000,6 +9019,18 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $billingStatement->delete();
 
+         //update statement of account table
+         $statementAccount = LechoDeCebuStatementOfAccount::find($request->billingStatementId);
+
+         $stateAccount = LechoDeCebuStatementOfAccount::find($id);
+ 
+         $getStateAmount = $statementAccount->total_amount - $stateAccount->amount; 
+         $statementAccount->total_amount = $getStateAmount;
+         $statementAccount->total_remaining_balance = $getStateAmount;
+         $statementAccount->save();
+ 
+         $stateAccount->delete();
+
     }
    
 
@@ -9008,6 +9039,10 @@ class LoloPinoyLechonDeCebuController extends Controller
     public function destroyBillingStatement($id){
         $billingStatement = LechonDeCebuBillingStatement::find($id);
         $billingStatement->delete();
+
+        //delete SOA 
+        $soa = LechonDeCebuStatementOfAccount::find($id);
+        $soa->delete();
     }
 
     public function destroyPO($id){

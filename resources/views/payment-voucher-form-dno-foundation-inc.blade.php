@@ -169,6 +169,7 @@
             $("#supplierList").hide();
         }else if(cat === "Supplier"){
             $("#supplierList").show();
+            $("#pettyCashList").hide();
         }else if(cat === "Petty Cash"){
             $("#supplierList").hide();
             $("#pettyCashList").show();

@@ -3380,7 +3380,7 @@ class WlgCorporationController extends Controller
     }
 
 
-    public function destroyPettyCash(){
+    public function destroyPettyCash($id){
         $pettyCash  = WlgCorporationPettyCash::find($id);
         $pettyCash->delete();
     }

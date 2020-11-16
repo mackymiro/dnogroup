@@ -248,7 +248,7 @@
                                                                 <p style="width:250px;">{{ $getTransactionListCash->invoice_number}}</p>
                                                                 @endif
                                                             </td>
-                                                            <td><p style="width:140px;">{{ $getTransactionListCash->module_code}}{{ $getTransactionListCash->dno_foundation_code}}</p></td>
+                                                            <td><p style="width:140px;">{{ $getTransactionListCash->module_code}}{{ $getTransactionListCash->wimpys_food_express_code}}</p></td>
                                                            
                                                             <td><p style="width:130px;">{{ $getTransactionListCash->issued_date}}</p></td>
                                                             <td><p style="width:200px;">{{ $getTransactionListCash->paid_to}}</p></td>

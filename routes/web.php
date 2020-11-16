@@ -127,12 +127,10 @@ Route::group(['middleware' =>['user']], function(){
 		->middleware(['cashier']);
 
 
-
 	Route::delete('/lolo-pinoy-lechon-de-cebu/delete/dr/{id}', 
 		'LoloPinoyLechonDeCebuController@destroyDR')
 		->name('destroyDR')
 		->middleware(['cashier']);
-
 
 
 	Route::get(
@@ -7463,6 +7461,18 @@ Route::group(['middleware' => ['auth']], function(){
 		'/wimpys-food-express/order-form',
 		'WimpysFoodExpressController@orderForm')
 		->name('orderForm')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/wimpys-food-express/add-form',
+		'WimpysFoodExpressController@addForm')
+		->name('addForm')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/order-form/{id}/transaction',
+		'WimpysFoodExpressController@transactionOrder')
+		->name('transactionOrder')
 		->middleware(['cashier']);
 		
 	Route::get(

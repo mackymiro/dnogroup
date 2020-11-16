@@ -4461,7 +4461,13 @@ class LoloPinoyGrillBranchesController extends Controller
          //get suppliers
          $suppliers = LoloPinoyGrillBranchesSupplier::get()->toArray();
 
-        return view('payment-voucher-form-lolo-pinoy-grill-branches', compact('getAllFlags', 'suppliers'));
+         $pettyCashes = LoloPinoyGrillBranchesPettyCash::with(['user', 'petty_cashes'])
+                                                        ->where('pc_id', NULL)
+                                                        ->where('deleted_at', NULL)
+                                                        ->get();
+
+
+        return view('payment-voucher-form-lolo-pinoy-grill-branches', compact('getAllFlags', 'suppliers', 'pettyCashes'));
         
     }
 

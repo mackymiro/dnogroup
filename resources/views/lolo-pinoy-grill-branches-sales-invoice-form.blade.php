@@ -39,7 +39,7 @@
                                   <div class="form-row">
                                    <?php foreach($getBranches as $getBranch): ?>
                                      <div class="col-lg-4">
-                                        <button type="button" class="bbq btn btn-warning btn-lg" data-toggle="modal" data-target="#bbq" data-id="<?php echo $getBranch->id ?>" data-menu="<?php echo $getBranch->product_name?>" data-price="<?php echo number_format($getBranch->price, 2) ?>" data-available="<?php echo $getBranch->product_in ?>" data-flag="<?php echo $getBranch->flag; ?>"><?php echo $getBranch->product_name?> ₱ <?php echo number_format($getBranch->price, 2) ?></button>
+                                        <button type="button" class="bbq btn btn-warning btn-lg" data-toggle="modal" data-target="#bbq" data-id="<?= $getBranch->id ?>" data-menu="<?= $getBranch->product_name?>" data-price="<?= number_format($getBranch->price, 2) ?>" data-available="<?= $getBranch->product_in ?>" data-flag="<?= $getBranch->flag; ?>"><?= $getBranch->product_name?> ₱ <?= number_format($getBranch->price, 2) ?></button>
                                         <br>
                                         <br>
                                      </div>                         
@@ -64,7 +64,7 @@
                                 <div class="form-row">
                                     <?php foreach($getBranchDrinks as $getBranchDrink): ?>
                                     <div class="col-lg-2">
-                                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-id="<?php echo $getBranchDrink->id?>" data-target="#softdrinks" data-menu="<?php echo $getBranchDrink->product_name ?>" data-price="<?php echo number_format($getBranchDrink->price, 2)?>" data-available="<?php echo number_format($getBranchDrink->product_in, 2) ?>" data-flag="<?php echo $getBranchDrink->flag;?>"><?php echo $getBranchDrink->product_name?> ₱ <?php echo number_format($getBranchDrink->price, 2)?></button>
+                                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-id="<?php echo $getBranchDrink->id?>" data-target="#softdrinks" data-menu="<?= $getBranchDrink->product_name ?>" data-price="<?= number_format($getBranchDrink->price, 2)?>" data-available="<?= number_format($getBranchDrink->product_in, 2) ?>" data-flag="<?= $getBranchDrink->flag;?>"><?= $getBranchDrink->product_name?> ₱ <?= number_format($getBranchDrink->price, 2)?></button>
                                         <br>
                                         <br>
                                     </div>

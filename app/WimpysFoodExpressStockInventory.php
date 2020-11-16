@@ -10,6 +10,7 @@ class WimpysFoodExpressStockInventory extends Model
     protected $fillable = [
         'user_id',
         'product_name',
+        'unit',
         'price',
         'category',
         'created_by',

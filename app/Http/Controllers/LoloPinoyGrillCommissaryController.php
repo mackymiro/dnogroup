@@ -5804,8 +5804,13 @@ class LoloPinoyGrillCommissaryController extends Controller
 
          //get suppliers
          $suppliers = LoloPinoyGrillCommissarySupplier::get()->toArray();
+
+         $pettyCashes = LoloPinoyGrillCommissaryPettyCash::with(['user', 'petty_cashes'])
+                                                    ->where('pc_id', NULL)
+                                                    ->where('deleted_at', NULL)
+                                                    ->get();
     
-        return view('payment-voucher-form-lolo-pinoy-grill', compact('getAllFlags', 'suppliers'));
+        return view('payment-voucher-form-lolo-pinoy-grill', compact('getAllFlags', 'suppliers', 'pettyCashes'));
     }
 
     //view billing statement
