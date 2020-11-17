@@ -2947,6 +2947,525 @@ class LoloPinoyLechonDeCebuController extends Controller
         
 
     }
+
+    public function printMultipleSummaryDeliveryReceipt(Request $request, $date){
+        $urlSegment = \Request::segment(3);
+        $uri = explode("TO", $urlSegment);
+        $uri0 = $uri[0];
+        $uri1 = $uri[1];   
+        
+        $moduleNameDelivery = "Delivery Receipt";
+        $getAllDeliveryReceipts = DB::table(
+                                'lechon_de_cebu_delivery_receipts')
+                                ->select( 
+                                'lechon_de_cebu_delivery_receipts.id',
+                                'lechon_de_cebu_delivery_receipts.user_id',
+                                'lechon_de_cebu_delivery_receipts.dr_id',
+                                'lechon_de_cebu_delivery_receipts.sold_to',
+                                'lechon_de_cebu_delivery_receipts.delivered_to',
+                                'lechon_de_cebu_delivery_receipts.time',
+                                'lechon_de_cebu_delivery_receipts.date',
+                                'lechon_de_cebu_delivery_receipts.date_to_be_delivered',
+                                'lechon_de_cebu_delivery_receipts.contact_person',
+                                'lechon_de_cebu_delivery_receipts.mobile_num',
+                                'lechon_de_cebu_delivery_receipts.qty',
+                                'lechon_de_cebu_delivery_receipts.description',
+                                'lechon_de_cebu_delivery_receipts.price',
+                                'lechon_de_cebu_delivery_receipts.total',
+                                'lechon_de_cebu_delivery_receipts.special_instruction',
+                                'lechon_de_cebu_delivery_receipts.consignee_name',
+                                'lechon_de_cebu_delivery_receipts.consignee_contact_num',
+                                'lechon_de_cebu_delivery_receipts.prepared_by',
+                                'lechon_de_cebu_delivery_receipts.checked_by',
+                                'lechon_de_cebu_delivery_receipts.received_by',
+                                'lechon_de_cebu_delivery_receipts.duplicate_status',
+                                'lechon_de_cebu_delivery_receipts.created_by',
+                                'lechon_de_cebu_delivery_receipts.deleted_at',
+                                'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                'lechon_de_cebu_codes.module_id',
+                                'lechon_de_cebu_codes.module_code',
+                                'lechon_de_cebu_codes.module_name')
+                                ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
+                                ->where('lechon_de_cebu_codes.module_name', $moduleNameDelivery)
+                                ->where('lechon_de_cebu_delivery_receipts.deleted_at', NULL)
+                                ->whereBetween('lechon_de_cebu_delivery_receipts.created_at', [$uri0, $uri1])
+                                ->orderBy('lechon_de_cebu_delivery_receipts.id', 'desc')
+                                ->get()->toArray();
+
+        //total for delivery receipt
+        $moduleNameDelivery = "Delivery Receipt";
+        $totalDeliveryReceipt = DB::table(
+                                'lechon_de_cebu_delivery_receipts')
+                                ->select( 
+                                'lechon_de_cebu_delivery_receipts.id',
+                                'lechon_de_cebu_delivery_receipts.user_id',
+                                'lechon_de_cebu_delivery_receipts.dr_id',
+                                'lechon_de_cebu_delivery_receipts.sold_to',
+                                'lechon_de_cebu_delivery_receipts.delivered_to',
+                                'lechon_de_cebu_delivery_receipts.time',
+                                'lechon_de_cebu_delivery_receipts.date',
+                                'lechon_de_cebu_delivery_receipts.date_to_be_delivered',
+                                'lechon_de_cebu_delivery_receipts.contact_person',
+                                'lechon_de_cebu_delivery_receipts.mobile_num',
+                                'lechon_de_cebu_delivery_receipts.qty',
+                                'lechon_de_cebu_delivery_receipts.description',
+                                'lechon_de_cebu_delivery_receipts.price',
+                                'lechon_de_cebu_delivery_receipts.total',
+                                'lechon_de_cebu_delivery_receipts.special_instruction',
+                                'lechon_de_cebu_delivery_receipts.consignee_name',
+                                'lechon_de_cebu_delivery_receipts.consignee_contact_num',
+                                'lechon_de_cebu_delivery_receipts.prepared_by',
+                                'lechon_de_cebu_delivery_receipts.checked_by',
+                                'lechon_de_cebu_delivery_receipts.received_by',
+                                'lechon_de_cebu_delivery_receipts.duplicate_status',
+                                'lechon_de_cebu_delivery_receipts.created_by',
+                                'lechon_de_cebu_delivery_receipts.deleted_at',
+                                'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                'lechon_de_cebu_codes.module_id',
+                                'lechon_de_cebu_codes.module_code',
+                                'lechon_de_cebu_codes.module_name')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
+                                ->where('lechon_de_cebu_codes.module_name', $moduleNameDelivery)
+                                ->where('lechon_de_cebu_delivery_receipts.deleted_at', NULL)
+                                ->whereBetween('lechon_de_cebu_delivery_receipts.created_at', [$uri0, $uri1])
+                                ->sum('lechon_de_cebu_delivery_receipts.total');
+
+
+        $pdf = PDF::loadView('printSummaryDeliveryReceipt',  compact('date', 'uri0', 'uri1', 
+        'getAllDeliveryReceipts',  'totalDeliveryReceipt'));
+        
+        return $pdf->download('lechon-de-cebu-summary-report-delivery-receipt.pdf');
+
+    }
+
+    public function printGetSummaryDeliveryReceipt($date){
+          //Delivery Receipt 
+          $moduleNameDelivery = "Delivery Receipt";
+          $getAllDeliveryReceipts = DB::table(
+                                  'lechon_de_cebu_delivery_receipts')
+                                  ->select( 
+                                  'lechon_de_cebu_delivery_receipts.id',
+                                  'lechon_de_cebu_delivery_receipts.user_id',
+                                  'lechon_de_cebu_delivery_receipts.dr_id',
+                                  'lechon_de_cebu_delivery_receipts.sold_to',
+                                  'lechon_de_cebu_delivery_receipts.delivered_to',
+                                  'lechon_de_cebu_delivery_receipts.time',
+                                  'lechon_de_cebu_delivery_receipts.date',
+                                  'lechon_de_cebu_delivery_receipts.date_to_be_delivered',
+                                  'lechon_de_cebu_delivery_receipts.contact_person',
+                                  'lechon_de_cebu_delivery_receipts.mobile_num',
+                                  'lechon_de_cebu_delivery_receipts.qty',
+                                  'lechon_de_cebu_delivery_receipts.description',
+                                  'lechon_de_cebu_delivery_receipts.price',
+                                  'lechon_de_cebu_delivery_receipts.total',
+                                  'lechon_de_cebu_delivery_receipts.special_instruction',
+                                  'lechon_de_cebu_delivery_receipts.consignee_name',
+                                  'lechon_de_cebu_delivery_receipts.consignee_contact_num',
+                                  'lechon_de_cebu_delivery_receipts.prepared_by',
+                                  'lechon_de_cebu_delivery_receipts.checked_by',
+                                  'lechon_de_cebu_delivery_receipts.received_by',
+                                  'lechon_de_cebu_delivery_receipts.duplicate_status',
+                                  'lechon_de_cebu_delivery_receipts.created_by',
+                                  'lechon_de_cebu_delivery_receipts.deleted_at',
+                                  'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                  'lechon_de_cebu_codes.module_id',
+                                  'lechon_de_cebu_codes.module_code',
+                                  'lechon_de_cebu_codes.module_name')
+                                  ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                  ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
+                                  ->where('lechon_de_cebu_codes.module_name', $moduleNameDelivery)
+                                  ->where('lechon_de_cebu_delivery_receipts.deleted_at', NULL)
+                                  ->whereDate('lechon_de_cebu_delivery_receipts.created_at', '=', date($date))
+                                  ->orderBy('lechon_de_cebu_delivery_receipts.id', 'desc')
+                                  ->get()->toArray();
+  
+          //total for delivery receipt
+          $moduleNameDelivery = "Delivery Receipt";
+          $totalDeliveryReceipt = DB::table(
+                                  'lechon_de_cebu_delivery_receipts')
+                                  ->select( 
+                                  'lechon_de_cebu_delivery_receipts.id',
+                                  'lechon_de_cebu_delivery_receipts.user_id',
+                                  'lechon_de_cebu_delivery_receipts.dr_id',
+                                  'lechon_de_cebu_delivery_receipts.sold_to',
+                                  'lechon_de_cebu_delivery_receipts.delivered_to',
+                                  'lechon_de_cebu_delivery_receipts.time',
+                                  'lechon_de_cebu_delivery_receipts.date',
+                                  'lechon_de_cebu_delivery_receipts.date_to_be_delivered',
+                                  'lechon_de_cebu_delivery_receipts.contact_person',
+                                  'lechon_de_cebu_delivery_receipts.mobile_num',
+                                  'lechon_de_cebu_delivery_receipts.qty',
+                                  'lechon_de_cebu_delivery_receipts.description',
+                                  'lechon_de_cebu_delivery_receipts.price',
+                                  'lechon_de_cebu_delivery_receipts.total',
+                                  'lechon_de_cebu_delivery_receipts.special_instruction',
+                                  'lechon_de_cebu_delivery_receipts.consignee_name',
+                                  'lechon_de_cebu_delivery_receipts.consignee_contact_num',
+                                  'lechon_de_cebu_delivery_receipts.prepared_by',
+                                  'lechon_de_cebu_delivery_receipts.checked_by',
+                                  'lechon_de_cebu_delivery_receipts.received_by',
+                                  'lechon_de_cebu_delivery_receipts.duplicate_status',
+                                  'lechon_de_cebu_delivery_receipts.created_by',
+                                  'lechon_de_cebu_delivery_receipts.deleted_at',
+                                  'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                  'lechon_de_cebu_codes.module_id',
+                                  'lechon_de_cebu_codes.module_code',
+                                  'lechon_de_cebu_codes.module_name')
+                                  ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                  ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
+                                  ->where('lechon_de_cebu_codes.module_name', $moduleNameDelivery)
+                                  ->where('lechon_de_cebu_delivery_receipts.deleted_at', NULL)
+                                  ->whereDate('lechon_de_cebu_delivery_receipts.created_at', '=', date($date))
+                                  ->sum('lechon_de_cebu_delivery_receipts.total');
+
+            $getDateToday = "";
+            $uri0 ="";
+            $uri1 = "";
+            $pdf = PDF::loadView('printSummaryDeliveryReceipt',  compact('date', 'uri0', 'uri1', 'getDateToday',
+            'getAllDeliveryReceipts', 'totalDeliveryReceipt'));
+            
+            return $pdf->download('lechon-de-cebu-summary-report-delivery-receipt.pdf');
+ 
+    }
+
+    public function printSummaryDeliveryReceipt(){
+        $getDateToday = date("Y-m-d");
+
+         //Delivery Receipt 
+         $moduleNameDelivery = "Delivery Receipt";
+         $getAllDeliveryReceipts = DB::table(
+                                 'lechon_de_cebu_delivery_receipts')
+                                 ->select( 
+                                 'lechon_de_cebu_delivery_receipts.id',
+                                 'lechon_de_cebu_delivery_receipts.user_id',
+                                 'lechon_de_cebu_delivery_receipts.dr_id',
+                                 'lechon_de_cebu_delivery_receipts.sold_to',
+                                 'lechon_de_cebu_delivery_receipts.delivered_to',
+                                 'lechon_de_cebu_delivery_receipts.time',
+                                 'lechon_de_cebu_delivery_receipts.date',
+                                 'lechon_de_cebu_delivery_receipts.date_to_be_delivered',
+                                 'lechon_de_cebu_delivery_receipts.contact_person',
+                                 'lechon_de_cebu_delivery_receipts.mobile_num',
+                                 'lechon_de_cebu_delivery_receipts.qty',
+                                 'lechon_de_cebu_delivery_receipts.description',
+                                 'lechon_de_cebu_delivery_receipts.price',
+                                 'lechon_de_cebu_delivery_receipts.total',
+                                 'lechon_de_cebu_delivery_receipts.special_instruction',
+                                 'lechon_de_cebu_delivery_receipts.consignee_name',
+                                 'lechon_de_cebu_delivery_receipts.consignee_contact_num',
+                                 'lechon_de_cebu_delivery_receipts.prepared_by',
+                                 'lechon_de_cebu_delivery_receipts.checked_by',
+                                 'lechon_de_cebu_delivery_receipts.received_by',
+                                 'lechon_de_cebu_delivery_receipts.duplicate_status',
+                                 'lechon_de_cebu_delivery_receipts.created_by',
+                                 'lechon_de_cebu_delivery_receipts.deleted_at',
+                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                 'lechon_de_cebu_codes.module_id',
+                                 'lechon_de_cebu_codes.module_code',
+                                 'lechon_de_cebu_codes.module_name')
+                                 ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                 ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
+                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameDelivery)
+                                 ->where('lechon_de_cebu_delivery_receipts.deleted_at', NULL)
+                                 ->whereDate('lechon_de_cebu_delivery_receipts.created_at', '=', date($getDateToday))
+                                 ->orderBy('lechon_de_cebu_delivery_receipts.id', 'desc')
+                                 ->get()->toArray();
+ 
+         //total for delivery receipt
+         $moduleNameDelivery = "Delivery Receipt";
+         $totalDeliveryReceipt = DB::table(
+                                 'lechon_de_cebu_delivery_receipts')
+                                 ->select( 
+                                 'lechon_de_cebu_delivery_receipts.id',
+                                 'lechon_de_cebu_delivery_receipts.user_id',
+                                 'lechon_de_cebu_delivery_receipts.dr_id',
+                                 'lechon_de_cebu_delivery_receipts.sold_to',
+                                 'lechon_de_cebu_delivery_receipts.delivered_to',
+                                 'lechon_de_cebu_delivery_receipts.time',
+                                 'lechon_de_cebu_delivery_receipts.date',
+                                 'lechon_de_cebu_delivery_receipts.date_to_be_delivered',
+                                 'lechon_de_cebu_delivery_receipts.contact_person',
+                                 'lechon_de_cebu_delivery_receipts.mobile_num',
+                                 'lechon_de_cebu_delivery_receipts.qty',
+                                 'lechon_de_cebu_delivery_receipts.description',
+                                 'lechon_de_cebu_delivery_receipts.price',
+                                 'lechon_de_cebu_delivery_receipts.total',
+                                 'lechon_de_cebu_delivery_receipts.special_instruction',
+                                 'lechon_de_cebu_delivery_receipts.consignee_name',
+                                 'lechon_de_cebu_delivery_receipts.consignee_contact_num',
+                                 'lechon_de_cebu_delivery_receipts.prepared_by',
+                                 'lechon_de_cebu_delivery_receipts.checked_by',
+                                 'lechon_de_cebu_delivery_receipts.received_by',
+                                 'lechon_de_cebu_delivery_receipts.duplicate_status',
+                                 'lechon_de_cebu_delivery_receipts.created_by',
+                                 'lechon_de_cebu_delivery_receipts.deleted_at',
+                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                 'lechon_de_cebu_codes.module_id',
+                                 'lechon_de_cebu_codes.module_code',
+                                 'lechon_de_cebu_codes.module_name')
+                                 ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                 ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
+                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameDelivery)
+                                 ->where('lechon_de_cebu_delivery_receipts.deleted_at', NULL)
+                                 ->whereDate('lechon_de_cebu_delivery_receipts.created_at', '=', date($getDateToday))
+                                 ->sum('lechon_de_cebu_delivery_receipts.total');
+
+            $uri0 = "";
+            $uri1 = "";
+            $pdf = PDF::loadView('printSummaryDeliveryReceipt',  compact('uri0', 'uri1','date', 'getDateToday', 
+            'getAllDeliveryReceipts', 'totalDeliveryReceipt'));
+                                 
+            return $pdf->download('lechon-de-cebu-summary-report-delivery-receipt.pdf');
+         
+    }   
+
+
+    public function printMultipleSummarySalesInvoice(Request $request, $date){
+        $urlSegment = \Request::segment(3);
+        $uri = explode("TO", $urlSegment);
+        $uri0 = $uri[0];
+        $uri1 = $uri[1];
+
+        $moduleName = "Sales Invoice";
+         $getAllSalesInvoices = DB::table(
+                         'lechon_de_cebu_sales_invoices')
+                         ->select(
+                             'lechon_de_cebu_sales_invoices.id',
+                             'lechon_de_cebu_sales_invoices.user_id',
+                             'lechon_de_cebu_sales_invoices.si_id',
+                             'lechon_de_cebu_sales_invoices.invoice_number',
+                             'lechon_de_cebu_sales_invoices.date',
+                             'lechon_de_cebu_sales_invoices.ordered_by',
+                             'lechon_de_cebu_sales_invoices.address',
+                             'lechon_de_cebu_sales_invoices.qty',
+                             'lechon_de_cebu_sales_invoices.total_kls',
+                             'lechon_de_cebu_sales_invoices.body',
+                             'lechon_de_cebu_sales_invoices.head_and_feet',
+                             'lechon_de_cebu_sales_invoices.item_description',
+                             'lechon_de_cebu_sales_invoices.unit_price',
+                             'lechon_de_cebu_sales_invoices.amount',
+                             'lechon_de_cebu_sales_invoices.total_amount',
+                             'lechon_de_cebu_sales_invoices.created_by',
+                             'lechon_de_cebu_sales_invoices.created_at',
+                             'lechon_de_cebu_sales_invoices.updated_at',  
+                             'lechon_de_cebu_sales_invoices.deleted_at',                            
+                             'lechon_de_cebu_codes.lechon_de_cebu_code',
+                             'lechon_de_cebu_codes.module_id',
+                             'lechon_de_cebu_codes.module_code',
+                             'lechon_de_cebu_codes.module_name')
+                         ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+                         ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
+                         ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                         ->where('lechon_de_cebu_sales_invoices.deleted_at', NULL)
+                         ->whereBetween('lechon_de_cebu_sales_invoices.created_at', [$uri0, $uri1])
+                         ->orderBy('lechon_de_cebu_sales_invoices.id', 'desc')
+                         ->get()->toArray();
+        
+        $totalSalesInvoice = DB::table(
+                            'lechon_de_cebu_sales_invoices')
+                            ->select(
+                                'lechon_de_cebu_sales_invoices.id',
+                                'lechon_de_cebu_sales_invoices.user_id',
+                                'lechon_de_cebu_sales_invoices.si_id',
+                                'lechon_de_cebu_sales_invoices.invoice_number',
+                                'lechon_de_cebu_sales_invoices.date',
+                                'lechon_de_cebu_sales_invoices.ordered_by',
+                                'lechon_de_cebu_sales_invoices.address',
+                                'lechon_de_cebu_sales_invoices.qty',
+                                'lechon_de_cebu_sales_invoices.total_kls',
+                                'lechon_de_cebu_sales_invoices.body',
+                                'lechon_de_cebu_sales_invoices.head_and_feet',
+                                'lechon_de_cebu_sales_invoices.item_description',
+                                'lechon_de_cebu_sales_invoices.unit_price',
+                                'lechon_de_cebu_sales_invoices.amount',
+                                'lechon_de_cebu_sales_invoices.total_amount',
+                                'lechon_de_cebu_sales_invoices.created_by',
+                                'lechon_de_cebu_sales_invoices.created_at',
+                                'lechon_de_cebu_sales_invoices.updated_at',
+                                'lechon_de_cebu_sales_invoices.deleted_at',                            
+                                'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                'lechon_de_cebu_codes.module_id',
+                                'lechon_de_cebu_codes.module_code',
+                                'lechon_de_cebu_codes.module_name')
+                            ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+                            ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
+                            ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                            ->where('lechon_de_cebu_sales_invoices.deleted_at', NULL)
+                            ->whereBetween('lechon_de_cebu_sales_invoices.created_at', [$uri0, $uri1])
+                            ->sum('lechon_de_cebu_sales_invoices.total_amount');
+
+
+        $pdf = PDF::loadView('printSummarySalesInvoice',  compact('date', 'uri0', 'uri1', 'getAllSalesInvoices', 
+        'totalSalesInvoice'));
+        
+        return $pdf->download('lechon-de-cebu-summary-report-sales-report.pdf');
+    }
+
+    public function printGetSummarySalesInvoice($date){
+        $moduleName = "Sales Invoice";
+        $getAllSalesInvoices = DB::table(
+                        'lechon_de_cebu_sales_invoices')
+                        ->select(
+                            'lechon_de_cebu_sales_invoices.id',
+                            'lechon_de_cebu_sales_invoices.user_id',
+                            'lechon_de_cebu_sales_invoices.si_id',
+                            'lechon_de_cebu_sales_invoices.invoice_number',
+                            'lechon_de_cebu_sales_invoices.date',
+                            'lechon_de_cebu_sales_invoices.ordered_by',
+                            'lechon_de_cebu_sales_invoices.address',
+                            'lechon_de_cebu_sales_invoices.qty',
+                            'lechon_de_cebu_sales_invoices.total_kls',
+                            'lechon_de_cebu_sales_invoices.body',
+                            'lechon_de_cebu_sales_invoices.head_and_feet',
+                            'lechon_de_cebu_sales_invoices.item_description',
+                            'lechon_de_cebu_sales_invoices.unit_price',
+                            'lechon_de_cebu_sales_invoices.amount',
+                            'lechon_de_cebu_sales_invoices.total_amount',
+                            'lechon_de_cebu_sales_invoices.created_by',
+                            'lechon_de_cebu_sales_invoices.created_at',
+                            'lechon_de_cebu_sales_invoices.updated_at',  
+                            'lechon_de_cebu_sales_invoices.deleted_at',                            
+                            'lechon_de_cebu_codes.lechon_de_cebu_code',
+                            'lechon_de_cebu_codes.module_id',
+                            'lechon_de_cebu_codes.module_code',
+                            'lechon_de_cebu_codes.module_name')
+                        ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+                        ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
+                        ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                        ->where('lechon_de_cebu_sales_invoices.deleted_at', NULL)
+                        ->whereDate('lechon_de_cebu_sales_invoices.created_at', '=', date($date))
+                        ->orderBy('lechon_de_cebu_sales_invoices.id', 'desc')
+                        ->get()->toArray();
+       
+       $totalSalesInvoice = DB::table(
+                           'lechon_de_cebu_sales_invoices')
+                           ->select(
+                               'lechon_de_cebu_sales_invoices.id',
+                               'lechon_de_cebu_sales_invoices.user_id',
+                               'lechon_de_cebu_sales_invoices.si_id',
+                               'lechon_de_cebu_sales_invoices.invoice_number',
+                               'lechon_de_cebu_sales_invoices.date',
+                               'lechon_de_cebu_sales_invoices.ordered_by',
+                               'lechon_de_cebu_sales_invoices.address',
+                               'lechon_de_cebu_sales_invoices.qty',
+                               'lechon_de_cebu_sales_invoices.total_kls',
+                               'lechon_de_cebu_sales_invoices.body',
+                               'lechon_de_cebu_sales_invoices.head_and_feet',
+                               'lechon_de_cebu_sales_invoices.item_description',
+                               'lechon_de_cebu_sales_invoices.unit_price',
+                               'lechon_de_cebu_sales_invoices.amount',
+                               'lechon_de_cebu_sales_invoices.total_amount',
+                               'lechon_de_cebu_sales_invoices.created_by',
+                               'lechon_de_cebu_sales_invoices.created_at',
+                               'lechon_de_cebu_sales_invoices.updated_at',
+                               'lechon_de_cebu_sales_invoices.deleted_at',                            
+                               'lechon_de_cebu_codes.lechon_de_cebu_code',
+                               'lechon_de_cebu_codes.module_id',
+                               'lechon_de_cebu_codes.module_code',
+                               'lechon_de_cebu_codes.module_name')
+                           ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+                           ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
+                           ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                           ->where('lechon_de_cebu_sales_invoices.deleted_at', NULL)
+                           ->whereDate('lechon_de_cebu_sales_invoices.created_at', '=', date($date))
+                           ->sum('lechon_de_cebu_sales_invoices.total_amount');
+
+            $getDateToday = "";
+            $uri0 ="";
+            $uri1 = "";
+            $pdf = PDF::loadView('printSummarySalesInvoice',  compact('date', 'uri0', 'uri1', 'getDateToday', 'getAllSalesInvoices', 
+            'totalSalesInvoice'));
+            
+            return $pdf->download('lechon-de-cebu-summary-report-sales-invoice.pdf');
+
+    }
+
+    //printSummary sales invoice
+    public function printSummarySalesInvoice(){
+        //sales invoice
+        $getDateToday = date("Y-m-d");
+
+        $moduleName = "Sales Invoice";
+
+        $getAllSalesInvoices = DB::table(
+            'lechon_de_cebu_sales_invoices')
+            ->select(
+                'lechon_de_cebu_sales_invoices.id',
+                'lechon_de_cebu_sales_invoices.user_id',
+                'lechon_de_cebu_sales_invoices.si_id',
+                'lechon_de_cebu_sales_invoices.invoice_number',
+                'lechon_de_cebu_sales_invoices.date',
+                'lechon_de_cebu_sales_invoices.ordered_by',
+                'lechon_de_cebu_sales_invoices.address',
+                'lechon_de_cebu_sales_invoices.qty',
+                'lechon_de_cebu_sales_invoices.total_kls',
+                'lechon_de_cebu_sales_invoices.body',
+                'lechon_de_cebu_sales_invoices.head_and_feet',
+                'lechon_de_cebu_sales_invoices.item_description',
+                'lechon_de_cebu_sales_invoices.unit_price',
+                'lechon_de_cebu_sales_invoices.amount',
+                'lechon_de_cebu_sales_invoices.total_amount',
+                'lechon_de_cebu_sales_invoices.created_by',
+                'lechon_de_cebu_sales_invoices.created_at',
+                'lechon_de_cebu_sales_invoices.updated_at',
+                'lechon_de_cebu_sales_invoices.deleted_at',                            
+                'lechon_de_cebu_codes.lechon_de_cebu_code',
+                'lechon_de_cebu_codes.module_id',
+                'lechon_de_cebu_codes.module_code',
+                'lechon_de_cebu_codes.module_name')
+            ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+            ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
+            ->where('lechon_de_cebu_codes.module_name', $moduleName)
+            ->where('lechon_de_cebu_sales_invoices.deleted_at', NULL)
+            ->whereDate('lechon_de_cebu_sales_invoices.created_at', '=', date($getDateToday))
+            ->orderBy('lechon_de_cebu_sales_invoices.id', 'desc')
+            ->get()->toArray();
+
+        $totalSalesInvoice = DB::table(
+               'lechon_de_cebu_sales_invoices')
+               ->select(
+                   'lechon_de_cebu_sales_invoices.id',
+                   'lechon_de_cebu_sales_invoices.user_id',
+                   'lechon_de_cebu_sales_invoices.si_id',
+                   'lechon_de_cebu_sales_invoices.invoice_number',
+                   'lechon_de_cebu_sales_invoices.date',
+                   'lechon_de_cebu_sales_invoices.ordered_by',
+                   'lechon_de_cebu_sales_invoices.address',
+                   'lechon_de_cebu_sales_invoices.qty',
+                   'lechon_de_cebu_sales_invoices.total_kls',
+                   'lechon_de_cebu_sales_invoices.body',
+                   'lechon_de_cebu_sales_invoices.head_and_feet',
+                   'lechon_de_cebu_sales_invoices.item_description',
+                   'lechon_de_cebu_sales_invoices.unit_price',
+                   'lechon_de_cebu_sales_invoices.amount',
+                   'lechon_de_cebu_sales_invoices.total_amount',
+                   'lechon_de_cebu_sales_invoices.created_by',
+                   'lechon_de_cebu_sales_invoices.created_at',
+                   'lechon_de_cebu_sales_invoices.updated_at', 
+                   'lechon_de_cebu_sales_invoices.deleted_at',                            
+                   'lechon_de_cebu_codes.lechon_de_cebu_code',
+                   'lechon_de_cebu_codes.module_id',
+                   'lechon_de_cebu_codes.module_code',
+                   'lechon_de_cebu_codes.module_name')
+               ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
+               ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
+               ->where('lechon_de_cebu_codes.module_name', $moduleName)
+               ->where('lechon_de_cebu_sales_invoices.deleted_at', NULL)
+               ->whereDate('lechon_de_cebu_sales_invoices.created_at', '=', date($getDateToday))
+               ->sum('lechon_de_cebu_sales_invoices.total_amount');
+
+        $uri0 = "";
+        $uri1 = "";
+        $pdf = PDF::loadView('printSummarySalesInvoice',  compact('uri0', 'uri1','date', 'getDateToday', 'getAllSalesInvoices', 
+       'totalSalesInvoice'));
+        
+        return $pdf->download('lechon-de-cebu-summary-report-sales-invoice.pdf');
+
+
+
+    }
     
     public function printSummary(){
          //sales invoice

@@ -119,7 +119,14 @@
                                 </nav>
                                 <div class="tab-content" id="nav-tabContent">
                                     <div class="tab-pane fade show active" id="salesInvoice" role="tabpanel" aria-labelledby="salesInvoice-tab">
-                                       	<br>
+                                        <br>
+                                       
+                                       <div class="float-right">
+                                           <a href="{{ action('LoloPinoyLechonDeCebuController@printGetSummarySalesInvoice', $getDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                       </div>
+                                       <br>
+                                       <br>
+                                       <br>
                                         <div class="table-responsive">
                                              <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                                 <thead>
@@ -182,7 +189,14 @@
                                         </div>  
                                     </div>
                                     <div class="tab-pane fade" id="deliveryReceipt" role="tabpanel" aria-labelledby="deliveryReceipt-tab">
-                                    <br>
+                                         <br>
+                                       
+                                       <div class="float-right">
+                                           <a href="{{ action('LoloPinoyLechonDeCebuController@printGetSummaryDeliveryReceipt', $getDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                       </div>
+                                       <br>
+                                       <br>
+                                       <br>
                                         <div class="table-responsive">
                                            <table class="table table-bordered display"  width="100%" cellspacing="0">
                                                 <thead>
@@ -224,8 +238,9 @@
                                                     <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-delivery-receipt/'.$getAllDeliveryReceipt->id)}}" title="View"><i class="fas fa-low-vision"></i></a>
                                                 
                                                     </td>
-                                                    <td>{{ $getAllDeliveryReceipt->date}}</td>
+                                                   
                                                     <td>{{ $getAllDeliveryReceipt->module_code}}{{ $getAllDeliveryReceipt->lechon_de_cebu_code}}</td>
+                                                    <td>{{ $getAllDeliveryReceipt->date}}</td>
                                                     <td><p style="width: 170px;">{{ $getAllDeliveryReceipt->sold_to}}</p></td>
                                                     <td><p style="width: 110px;">{{ $getAllDeliveryReceipt->time}}</p></td>
                                                     <td><p style="width: 140px;">{{ $getAllDeliveryReceipt->date_to_be_delivered}}</p></td>

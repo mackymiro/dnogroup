@@ -270,7 +270,7 @@
 
     const addMaterial = () =>{
         const productName = $("#productName").val();
-        const quantity = $("#quantity").val();
+        const quantity = parseInt($("#quantity").val());
         const price = $("#price").val();
         const unit = $("#unit").val();
       

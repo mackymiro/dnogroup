@@ -1345,7 +1345,45 @@ Route::group(['middleware' =>['sales']], function(){
 		Route::get(
 			'/lolo-pinoy-lechon-de-cebu/printSummary',
 			'LoloPinoyLechonDeCebuController@printSummary')
-			->name('printSummary');
+			->name('printSummary')
+			->middleware(['cashier']);
+
+		Route::get(
+			'/lolo-pinoy-lechon-de-cebu/printSummarySalesInvoice',
+			'LoloPinoyLechonDeCebuController@printSummarySalesInvoice')
+			->name('printSummarySalesInvoice')
+			->middleware(['cashier']);
+
+		Route::get(
+			'/lolo-pinoy-lechon-de-cebu/printSummaryDeliveryReceipt',
+			'LoloPinoyLechonDeCebuController@printSummaryDeliveryReceipt')
+			->name('printSummaryDeliveryReceipt')
+			->middleware(['cashier']);
+
+		Route::get(
+				'/lolo-pinoy-lechon-de-cebu/printGetSummarySalesInvoice/{date}',
+				'LoloPinoyLechonDeCebuController@printGetSummarySalesInvoice')
+				->name('printGetSummarySalesInvoice')
+			->middleware(['cashier']);
+
+		Route::get(
+			'/lolo-pinoy-lechon-de-cebu/printMultipleSummarySalesInvoice/{date}',
+			'LoloPinoyLechonDeCebuController@printMultipleSummarySalesInvoice')
+			->name('printMultipleSummarySalesInvoice')
+			->middleware(['cashier']);
+
+		Route::get(
+			'/lolo-pinoy-lechon-de-cebu/printGetSummaryDeliveryReceipt/{date}',
+			'LoloPinoyLechonDeCebuController@printGetSummaryDeliveryReceipt')
+			->name('printGetSummaryDeliveryReceipt')
+			->middleware(['cashier']);
+
+		Route::get(
+			'/lolo-pinoy-lechon-de-cebu/printMultipleSummaryDeliveryReceipt/{date}',
+			'LoloPinoyLechonDeCebuController@printMultipleSummaryDeliveryReceipt')
+			->name('printMultipleSummaryDeliveryReceipt')
+			->middleware(['cashier']);
+	
 	
 		Route::get(
 			'/lolo-pinoy-lechon-de-cebu/printGetSummary/{date}',
