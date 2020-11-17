@@ -81,8 +81,8 @@
                                  @endif
                               </td>
                               
-                              <td><?php echo number_format($statementOfAccount->total_amount, 2)?></td>
-                              <td><?php echo number_format($statementOfAccount->total_remaining_balance, 2)?></td>
+                              <td><?= number_format($statementOfAccount->total_amount, 2)?></td>
+                              <td><?= number_format($statementOfAccount->total_remaining_balance, 2)?></td>
                               <td>{{ $statementOfAccount->created_by}}</td>
                             </tr>
                             @endforeach

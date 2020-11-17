@@ -1385,6 +1385,18 @@ Route::group(['middleware' =>['sales']], function(){
 			->middleware(['cashier']);
 
 		Route::get(
+			'/lolo-pinoy-lechon-de-cebu/printGetSummarySOA/{date}',
+			'LoloPinoyLechonDeCebuController@printGetSummarySOA')
+			->name('printGetSummarySOA')
+			->middleware(['cashier']);	
+
+		Route::get(
+			'/lolo-pinoy-lechon-de-cebu/printMultipleSummarySOA/{date}',
+			'LoloPinoyLechonDeCebuController@printMultipleSummarySOA')
+			->name('printMultipleSummarySOA')
+			->middleware(['cashier']);
+
+		Route::get(
 			'/lolo-pinoy-lechon-de-cebu/printSummaryBillingStatement',
 			'LoloPinoyLechonDeCebuController@printSummaryBillingStatement')
 			->name('printSummaryBillingStatement')

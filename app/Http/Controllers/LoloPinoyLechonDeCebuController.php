@@ -834,6 +834,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                        'lechon_de_cebu_statement_of_accounts.user_id',
                                        'lechon_de_cebu_statement_of_accounts.billing_statement_id',
                                        'lechon_de_cebu_statement_of_accounts.bill_to',
+                                       'lechon_de_cebu_statement_of_accounts.bs_no',
                                        'lechon_de_cebu_statement_of_accounts.address',
                                        'lechon_de_cebu_statement_of_accounts.date',
                                        'lechon_de_cebu_statement_of_accounts.branch',
@@ -846,6 +847,9 @@ class LoloPinoyLechonDeCebuController extends Controller
                                        'lechon_de_cebu_statement_of_accounts.description',
                                        'lechon_de_cebu_statement_of_accounts.amount',
                                        'lechon_de_cebu_statement_of_accounts.paid_amount',
+                                        'lechon_de_cebu_statement_of_accounts.status',
+                                       'lechon_de_cebu_statement_of_accounts.total_amount',
+                                       'lechon_de_cebu_statement_of_accounts.total_remaining_balance',
                                        'lechon_de_cebu_statement_of_accounts.created_by',
                                        'lechon_de_cebu_codes.lechon_de_cebu_code',
                                        'lechon_de_cebu_codes.module_id',
@@ -1421,6 +1425,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                       'lechon_de_cebu_statement_of_accounts.user_id',
                                       'lechon_de_cebu_statement_of_accounts.billing_statement_id',
                                       'lechon_de_cebu_statement_of_accounts.bill_to',
+                                      'lechon_de_cebu_statement_of_accounts.bs_no',
                                       'lechon_de_cebu_statement_of_accounts.address',
                                       'lechon_de_cebu_statement_of_accounts.date',
                                       'lechon_de_cebu_statement_of_accounts.branch',
@@ -1433,6 +1438,9 @@ class LoloPinoyLechonDeCebuController extends Controller
                                       'lechon_de_cebu_statement_of_accounts.description',
                                       'lechon_de_cebu_statement_of_accounts.amount',
                                       'lechon_de_cebu_statement_of_accounts.paid_amount',
+                                      'lechon_de_cebu_statement_of_accounts.status',
+                                      'lechon_de_cebu_statement_of_accounts.total_amount',
+                                      'lechon_de_cebu_statement_of_accounts.total_remaining_balance',
                                       'lechon_de_cebu_statement_of_accounts.created_by',
                                       'lechon_de_cebu_codes.lechon_de_cebu_code',
                                       'lechon_de_cebu_codes.module_id',
@@ -2046,6 +2054,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_statement_of_accounts.user_id',
                                     'lechon_de_cebu_statement_of_accounts.billing_statement_id',
                                     'lechon_de_cebu_statement_of_accounts.bill_to',
+                                    'lechon_de_cebu_statement_of_accounts.bs_no',
                                     'lechon_de_cebu_statement_of_accounts.address',
                                     'lechon_de_cebu_statement_of_accounts.date',
                                     'lechon_de_cebu_statement_of_accounts.branch',
@@ -2058,6 +2067,9 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_statement_of_accounts.description',
                                     'lechon_de_cebu_statement_of_accounts.amount',
                                     'lechon_de_cebu_statement_of_accounts.paid_amount',
+                                    'lechon_de_cebu_statement_of_accounts.status',
+                                    'lechon_de_cebu_statement_of_accounts.total_amount',
+                                    'lechon_de_cebu_statement_of_accounts.total_remaining_balance',
                                     'lechon_de_cebu_statement_of_accounts.created_by',
                                     'lechon_de_cebu_codes.lechon_de_cebu_code',
                                     'lechon_de_cebu_codes.module_id',
@@ -3191,10 +3203,151 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     }
 
+    public function printMultipleSummarySOA(Request $request, $date){
+        $urlSegment = \Request::segment(3);
+        $uri = explode("TO", $urlSegment);
+        $uri0 = $uri[0];
+        $uri1 = $uri[1];  
+
+        $moduleNameSOA = "Statement Of Account";
+
+        $statementOfAccounts = DB::table(
+                                'lechon_de_cebu_statement_of_accounts')
+                                ->select(
+                                    'lechon_de_cebu_statement_of_accounts.id',
+                                    'lechon_de_cebu_statement_of_accounts.user_id',
+                                    'lechon_de_cebu_statement_of_accounts.billing_statement_id',
+                                    'lechon_de_cebu_statement_of_accounts.bill_to',
+                                    'lechon_de_cebu_statement_of_accounts.bs_no',
+                                    'lechon_de_cebu_statement_of_accounts.address',
+                                    'lechon_de_cebu_statement_of_accounts.date',
+                                    'lechon_de_cebu_statement_of_accounts.branch',
+                                    'lechon_de_cebu_statement_of_accounts.period_cover',
+                                    'lechon_de_cebu_statement_of_accounts.terms',
+                                    'lechon_de_cebu_statement_of_accounts.transaction_date',
+                                    'lechon_de_cebu_statement_of_accounts.invoice_number',
+                                    'lechon_de_cebu_statement_of_accounts.order',
+                                    'lechon_de_cebu_statement_of_accounts.whole_lechon',
+                                    'lechon_de_cebu_statement_of_accounts.description',
+                                    'lechon_de_cebu_statement_of_accounts.amount',
+                                    'lechon_de_cebu_statement_of_accounts.paid_amount',
+                                    'lechon_de_cebu_statement_of_accounts.status',
+                                    'lechon_de_cebu_statement_of_accounts.total_amount',
+                                    'lechon_de_cebu_statement_of_accounts.total_remaining_balance',
+                                    'lechon_de_cebu_statement_of_accounts.created_by',
+                                    'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                    'lechon_de_cebu_codes.module_id',
+                                    'lechon_de_cebu_codes.module_code',
+                                    'lechon_de_cebu_codes.module_name')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_statement_of_accounts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->where('lechon_de_cebu_statement_of_accounts.bill_to', '!=', NULL)
+                                ->where('lechon_de_cebu_codes.module_name', $moduleNameSOA)
+                                ->whereBetween('lechon_de_cebu_statement_of_accounts.created_at', [$uri0, $uri1])
+                                ->orderBy('lechon_de_cebu_statement_of_accounts.id', 'desc')
+                                ->get()->toArray();
+
+
+
+        $pdf = PDF::loadView('printSummarySOA',  compact('date', 'uri0', 'uri1', 
+        'statementOfAccounts'));
+        
+        return $pdf->download('lechon-de-cebu-summary-report-soa.pdf');
+
+    }
+
+    public function printGetSummarySOA($date){
+        $moduleNameSOA = "Statement Of Account";
+
+        $statementOfAccounts = DB::table(
+                                'lechon_de_cebu_statement_of_accounts')
+                                ->select(
+                                    'lechon_de_cebu_statement_of_accounts.id',
+                                    'lechon_de_cebu_statement_of_accounts.user_id',
+                                    'lechon_de_cebu_statement_of_accounts.billing_statement_id',
+                                    'lechon_de_cebu_statement_of_accounts.bill_to',
+                                    'lechon_de_cebu_statement_of_accounts.bs_no',
+                                    'lechon_de_cebu_statement_of_accounts.address',
+                                    'lechon_de_cebu_statement_of_accounts.date',
+                                    'lechon_de_cebu_statement_of_accounts.branch',
+                                    'lechon_de_cebu_statement_of_accounts.period_cover',
+                                    'lechon_de_cebu_statement_of_accounts.terms',
+                                    'lechon_de_cebu_statement_of_accounts.transaction_date',
+                                    'lechon_de_cebu_statement_of_accounts.invoice_number',
+                                    'lechon_de_cebu_statement_of_accounts.order',
+                                    'lechon_de_cebu_statement_of_accounts.whole_lechon',
+                                    'lechon_de_cebu_statement_of_accounts.description',
+                                    'lechon_de_cebu_statement_of_accounts.amount',
+                                    'lechon_de_cebu_statement_of_accounts.paid_amount',
+                                    'lechon_de_cebu_statement_of_accounts.status',
+                                    'lechon_de_cebu_statement_of_accounts.total_amount',
+                                    'lechon_de_cebu_statement_of_accounts.total_remaining_balance',
+                                    'lechon_de_cebu_statement_of_accounts.created_by',
+                                    'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                    'lechon_de_cebu_codes.module_id',
+                                    'lechon_de_cebu_codes.module_code',
+                                    'lechon_de_cebu_codes.module_name')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_statement_of_accounts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->where('lechon_de_cebu_statement_of_accounts.bill_to', '!=', NULL)
+                                ->where('lechon_de_cebu_codes.module_name', $moduleNameSOA)
+                                ->whereDate('lechon_de_cebu_statement_of_accounts.created_at', '=', date($date))
+                                ->orderBy('lechon_de_cebu_statement_of_accounts.id', 'desc')
+                                ->get()->toArray();
+
+        $getDateToday = "";
+        $uri0 ="";
+        $uri1 = "";
+        $pdf = PDF::loadView('printSummarySOA',  compact('date', 'uri0', 'uri1', 'getDateToday',
+        'statementOfAccounts'));
+        
+        return $pdf->download('lechon-de-cebu-summary-report-soa.pdf');
+           
+    }
+
 
     public function printSummarySOA(){
         
-         $getDateToday = date("Y-m-d");
+        $getDateToday = date("Y-m-d");
+        
+        $moduleNameSOA = "Statement Of Account";
+        $statementOfAccounts = DB::table(
+                                'lechon_de_cebu_statement_of_accounts')
+                                ->select(
+                                    'lechon_de_cebu_statement_of_accounts.id',
+                                    'lechon_de_cebu_statement_of_accounts.user_id',
+                                    'lechon_de_cebu_statement_of_accounts.billing_statement_id',
+                                    'lechon_de_cebu_statement_of_accounts.bill_to',
+                                    'lechon_de_cebu_statement_of_accounts.bs_no',
+                                    'lechon_de_cebu_statement_of_accounts.address',
+                                    'lechon_de_cebu_statement_of_accounts.date',
+                                    'lechon_de_cebu_statement_of_accounts.branch',
+                                    'lechon_de_cebu_statement_of_accounts.period_cover',
+                                    'lechon_de_cebu_statement_of_accounts.terms',
+                                    'lechon_de_cebu_statement_of_accounts.transaction_date',
+                                    'lechon_de_cebu_statement_of_accounts.invoice_number',
+                                    'lechon_de_cebu_statement_of_accounts.order',
+                                    'lechon_de_cebu_statement_of_accounts.whole_lechon',
+                                    'lechon_de_cebu_statement_of_accounts.description',
+                                    'lechon_de_cebu_statement_of_accounts.amount',
+                                    'lechon_de_cebu_statement_of_accounts.paid_amount',
+                                    'lechon_de_cebu_statement_of_accounts.status',
+                                    'lechon_de_cebu_statement_of_accounts.total_amount',
+                                    'lechon_de_cebu_statement_of_accounts.total_remaining_balance',
+                                    'lechon_de_cebu_statement_of_accounts.created_by',
+                                    'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                    'lechon_de_cebu_codes.module_id',
+                                    'lechon_de_cebu_codes.module_code',
+                                    'lechon_de_cebu_codes.module_name')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_statement_of_accounts.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->where('lechon_de_cebu_statement_of_accounts.bill_to', '!=', NULL)
+                                ->where('lechon_de_cebu_codes.module_name', $moduleNameSOA)
+                                ->whereDate('lechon_de_cebu_statement_of_accounts.created_at', '=', date($getDateToday))
+                                ->orderBy('lechon_de_cebu_statement_of_accounts.id', 'desc')
+                                ->get()->toArray();
+           
+        $uri0 = "";
+        $uri1 = "";
+        $pdf = PDF::loadView('printSummarySOA',  compact('uri0', 'uri1','date', 'getDateToday', 'statementOfAccounts'));
+        return $pdf->download('lechon-de-cebu-summary-report-SOA.pdf');
 
 
     }
@@ -3946,7 +4099,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $uri0 = "";
         $uri1 = "";
         $pdf = PDF::loadView('printSummarySalesInvoice',  compact('uri0', 'uri1','date', 'getDateToday', 'getAllSalesInvoices', 
-       'totalSalesInvoice'));
+       'totalSalesInvoice'));   
         
         return $pdf->download('lechon-de-cebu-summary-report-sales-invoice.pdf');
 
@@ -5014,6 +5167,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_statement_of_accounts.user_id',
                                     'lechon_de_cebu_statement_of_accounts.billing_statement_id',
                                     'lechon_de_cebu_statement_of_accounts.bill_to',
+                                    'lechon_de_cebu_statement_of_accounts.bs_no',
                                     'lechon_de_cebu_statement_of_accounts.address',
                                     'lechon_de_cebu_statement_of_accounts.date',
                                     'lechon_de_cebu_statement_of_accounts.branch',
@@ -5026,6 +5180,9 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_statement_of_accounts.description',
                                     'lechon_de_cebu_statement_of_accounts.amount',
                                     'lechon_de_cebu_statement_of_accounts.paid_amount',
+                                    'lechon_de_cebu_statement_of_accounts.status',
+                                    'lechon_de_cebu_statement_of_accounts.total_amount',
+                                    'lechon_de_cebu_statement_of_accounts.total_remaining_balance',
                                     'lechon_de_cebu_statement_of_accounts.created_by',
                                     'lechon_de_cebu_codes.lechon_de_cebu_code',
                                     'lechon_de_cebu_codes.module_id',
