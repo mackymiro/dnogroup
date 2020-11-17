@@ -2960,6 +2960,8 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     }
 
+  
+
     public function printMultipleSummaryBillingStatement(Request $request, $date){
         $urlSegment = \Request::segment(3);
         $uri = explode("TO", $urlSegment);

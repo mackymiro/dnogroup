@@ -1414,6 +1414,8 @@ Route::group(['middleware' =>['sales']], function(){
 			->name('printMultipleSummaryBillingStatement')
 			->middleware(['cashier']);
 
+		
+
 		Route::get(
 				'/lolo-pinoy-lechon-de-cebu/printGetSummarySalesInvoice/{date}',
 				'LoloPinoyLechonDeCebuController@printGetSummarySalesInvoice')
