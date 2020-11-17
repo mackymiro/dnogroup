@@ -357,7 +357,14 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="billingStatement" role="tabpanel" aria-labelledby="billingStatement-tab">
-                                        <br>
+                                    <br>
+                                       
+                                       <div class="float-right">
+                                           <a href="{{ action('LoloPinoyLechonDeCebuController@printMultipleSummaryBillingStatement', $startDate.'TO'.$endDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                       </div>
+                                       <br>
+                                       <br>
+                                       <br>
                                         <div class="table-responsive">
                                             <table class="table table-bordered display"  width="100%" cellspacing="0">
                                             <thead>

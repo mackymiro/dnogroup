@@ -2948,6 +2948,257 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     }
 
+    public function printMultipleSummaryBillingStatement(Request $request, $date){
+        $urlSegment = \Request::segment(3);
+        $uri = explode("TO", $urlSegment);
+        $uri0 = $uri[0];
+        $uri1 = $uri[1];  
+
+        $moduleNameBillingStatement = "Billing Statement";
+        $billingStatements = DB::table(
+                                'lechon_de_cebu_billing_statements')
+                                ->select(
+                                    'lechon_de_cebu_billing_statements.id',
+                                    'lechon_de_cebu_billing_statements.user_id',
+                                    'lechon_de_cebu_billing_statements.billing_statement_id',
+                                    'lechon_de_cebu_billing_statements.bill_to',
+                                    'lechon_de_cebu_billing_statements.address',
+                                    'lechon_de_cebu_billing_statements.date',
+                                    'lechon_de_cebu_billing_statements.branch',
+                                    'lechon_de_cebu_billing_statements.period_cover',
+                                    'lechon_de_cebu_billing_statements.terms',
+                                    'lechon_de_cebu_billing_statements.date_of_transaction',
+                                    'lechon_de_cebu_billing_statements.invoice_number',
+                                    'lechon_de_cebu_billing_statements.order',
+                                    'lechon_de_cebu_billing_statements.whole_lechon',
+                                    'lechon_de_cebu_billing_statements.description',
+                                    'lechon_de_cebu_billing_statements.amount',
+                                    'lechon_de_cebu_billing_statements.total_amount',
+                                    'lechon_de_cebu_billing_statements.paid_amount',
+                                    'lechon_de_cebu_billing_statements.created_by',
+                                    'lechon_de_cebu_billing_statements.deleted_at',
+                                    'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                    'lechon_de_cebu_codes.module_id',
+                                    'lechon_de_cebu_codes.module_code',
+                                    'lechon_de_cebu_codes.module_name')
+                                ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                ->where('lechon_de_cebu_billing_statements.billing_statement_id', NULL)
+                                ->where('lechon_de_cebu_codes.module_name', $moduleNameBillingStatement)
+                                ->where('lechon_de_cebu_billing_statements.deleted_at', NULL)
+                                ->whereBetween('lechon_de_cebu_billing_statements.created_at', [$uri0, $uri1])
+                                ->orderBy('lechon_de_cebu_billing_statements.id', 'desc')
+                                ->get()->toArray();
+        
+       $totalBStatement = DB::table(
+                                    'lechon_de_cebu_billing_statements')
+                                    ->select(
+                                        'lechon_de_cebu_billing_statements.id',
+                                        'lechon_de_cebu_billing_statements.user_id',
+                                        'lechon_de_cebu_billing_statements.billing_statement_id',
+                                        'lechon_de_cebu_billing_statements.bill_to',
+                                        'lechon_de_cebu_billing_statements.address',
+                                        'lechon_de_cebu_billing_statements.date',
+                                        'lechon_de_cebu_billing_statements.branch',
+                                        'lechon_de_cebu_billing_statements.period_cover',
+                                        'lechon_de_cebu_billing_statements.terms',
+                                        'lechon_de_cebu_billing_statements.date_of_transaction',
+                                        'lechon_de_cebu_billing_statements.invoice_number',
+                                        'lechon_de_cebu_billing_statements.order',
+                                        'lechon_de_cebu_billing_statements.whole_lechon',
+                                        'lechon_de_cebu_billing_statements.description',
+                                        'lechon_de_cebu_billing_statements.amount',
+                                        'lechon_de_cebu_billing_statements.total_amount',
+                                        'lechon_de_cebu_billing_statements.paid_amount',
+                                        'lechon_de_cebu_billing_statements.created_by',
+                                        'lechon_de_cebu_billing_statements.deleted_at',
+                                        'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                        'lechon_de_cebu_codes.module_id',
+                                        'lechon_de_cebu_codes.module_code',
+                                        'lechon_de_cebu_codes.module_name')
+                                    ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                    ->where('lechon_de_cebu_billing_statements.billing_statement_id', NULL)
+                                    ->where('lechon_de_cebu_codes.module_name', $moduleNameBillingStatement)
+                                    ->where('lechon_de_cebu_billing_statements.deleted_at', NULL)
+                                    ->whereBetween('lechon_de_cebu_billing_statements.created_at', [$uri0, $uri1])
+                                    ->sum('lechon_de_cebu_billing_statements.total_amount');
+            
+
+        $pdf = PDF::loadView('printSummaryBillingStatement',  compact('date', 'uri0', 'uri1', 
+        'billingStatements', 'totalBStatement'));
+        
+        return $pdf->download('lechon-de-cebu-summary-report-billing-statement.pdf');
+
+    }
+
+    public function printGetSummaryBillingStatement($date){ 
+        //billing statement
+         $moduleNameBillingStatement = "Billing Statement";
+         $billingStatements = DB::table(
+                                 'lechon_de_cebu_billing_statements')
+                                 ->select(
+                                     'lechon_de_cebu_billing_statements.id',
+                                     'lechon_de_cebu_billing_statements.user_id',
+                                     'lechon_de_cebu_billing_statements.billing_statement_id',
+                                     'lechon_de_cebu_billing_statements.bill_to',
+                                     'lechon_de_cebu_billing_statements.address',
+                                     'lechon_de_cebu_billing_statements.date',
+                                     'lechon_de_cebu_billing_statements.branch',
+                                     'lechon_de_cebu_billing_statements.period_cover',
+                                     'lechon_de_cebu_billing_statements.terms',
+                                     'lechon_de_cebu_billing_statements.date_of_transaction',
+                                     'lechon_de_cebu_billing_statements.invoice_number',
+                                     'lechon_de_cebu_billing_statements.order',
+                                     'lechon_de_cebu_billing_statements.whole_lechon',
+                                     'lechon_de_cebu_billing_statements.description',
+                                     'lechon_de_cebu_billing_statements.amount',
+                                     'lechon_de_cebu_billing_statements.total_amount',
+                                     'lechon_de_cebu_billing_statements.paid_amount',
+                                     'lechon_de_cebu_billing_statements.created_by',
+                                     'lechon_de_cebu_billing_statements.deleted_at',
+                                     'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                     'lechon_de_cebu_codes.module_id',
+                                     'lechon_de_cebu_codes.module_code',
+                                     'lechon_de_cebu_codes.module_name')
+                                 ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                 ->where('lechon_de_cebu_billing_statements.billing_statement_id', NULL)
+                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameBillingStatement)
+                                 ->where('lechon_de_cebu_billing_statements.deleted_at', NULL)
+                                 ->whereDate('lechon_de_cebu_billing_statements.created_at', '=', date($date))
+                                 ->orderBy('lechon_de_cebu_billing_statements.id', 'desc')
+                                 ->get()->toArray();
+         
+        $totalBStatement = DB::table(
+                                     'lechon_de_cebu_billing_statements')
+                                     ->select(
+                                         'lechon_de_cebu_billing_statements.id',
+                                         'lechon_de_cebu_billing_statements.user_id',
+                                         'lechon_de_cebu_billing_statements.billing_statement_id',
+                                         'lechon_de_cebu_billing_statements.bill_to',
+                                         'lechon_de_cebu_billing_statements.address',
+                                         'lechon_de_cebu_billing_statements.date',
+                                         'lechon_de_cebu_billing_statements.branch',
+                                         'lechon_de_cebu_billing_statements.period_cover',
+                                         'lechon_de_cebu_billing_statements.terms',
+                                         'lechon_de_cebu_billing_statements.date_of_transaction',
+                                         'lechon_de_cebu_billing_statements.invoice_number',
+                                         'lechon_de_cebu_billing_statements.order',
+                                         'lechon_de_cebu_billing_statements.whole_lechon',
+                                         'lechon_de_cebu_billing_statements.description',
+                                         'lechon_de_cebu_billing_statements.amount',
+                                         'lechon_de_cebu_billing_statements.total_amount',
+                                         'lechon_de_cebu_billing_statements.paid_amount',
+                                         'lechon_de_cebu_billing_statements.created_by',
+                                         'lechon_de_cebu_billing_statements.deleted_at',
+                                         'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                         'lechon_de_cebu_codes.module_id',
+                                         'lechon_de_cebu_codes.module_code',
+                                         'lechon_de_cebu_codes.module_name')
+                                     ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                     ->where('lechon_de_cebu_billing_statements.billing_statement_id', NULL)
+                                     ->where('lechon_de_cebu_codes.module_name', $moduleNameBillingStatement)
+                                     ->where('lechon_de_cebu_billing_statements.deleted_at', NULL)
+                                     ->whereDate('lechon_de_cebu_billing_statements.created_at', '=', date($date))
+                                     ->sum('lechon_de_cebu_billing_statements.total_amount');
+
+        $getDateToday = "";
+        $uri0 ="";
+        $uri1 = "";
+        $pdf = PDF::loadView('printSummaryBillingStatement',  compact('date', 'uri0', 'uri1', 'getDateToday',
+        'billingStatements', 'totalBStatement'));
+        
+        return $pdf->download('lechon-de-cebu-summary-report-billing-statement.pdf');
+    }
+
+    public function printSummaryBillingStatement(){
+        $getDateToday = date("Y-m-d");
+
+         //billing statement
+         $moduleNameBillingStatement = "Billing Statement";
+         $billingStatements = DB::table(
+                                 'lechon_de_cebu_billing_statements')
+                                 ->select(
+                                     'lechon_de_cebu_billing_statements.id',
+                                     'lechon_de_cebu_billing_statements.user_id',
+                                     'lechon_de_cebu_billing_statements.billing_statement_id',
+                                     'lechon_de_cebu_billing_statements.bill_to',
+                                     'lechon_de_cebu_billing_statements.address',
+                                     'lechon_de_cebu_billing_statements.date',
+                                     'lechon_de_cebu_billing_statements.branch',
+                                     'lechon_de_cebu_billing_statements.period_cover',
+                                     'lechon_de_cebu_billing_statements.terms',
+                                     'lechon_de_cebu_billing_statements.date_of_transaction',
+                                     'lechon_de_cebu_billing_statements.invoice_number',
+                                     'lechon_de_cebu_billing_statements.order',
+                                     'lechon_de_cebu_billing_statements.whole_lechon',
+                                     'lechon_de_cebu_billing_statements.description',
+                                     'lechon_de_cebu_billing_statements.amount',
+                                     'lechon_de_cebu_billing_statements.total_amount',
+                                     'lechon_de_cebu_billing_statements.paid_amount',
+                                     'lechon_de_cebu_billing_statements.created_by',
+                                     'lechon_de_cebu_billing_statements.deleted_at',
+                                     'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                     'lechon_de_cebu_codes.module_id',
+                                     'lechon_de_cebu_codes.module_code',
+                                     'lechon_de_cebu_codes.module_name')
+                                 ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                 ->where('lechon_de_cebu_billing_statements.billing_statement_id', NULL)
+                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameBillingStatement)
+                                 ->where('lechon_de_cebu_billing_statements.deleted_at', NULL)
+                                 ->whereDate('lechon_de_cebu_billing_statements.created_at', '=', date($getDateToday))
+                                 ->orderBy('lechon_de_cebu_billing_statements.id', 'desc')
+                                 ->get()->toArray();
+         
+            $totalBStatement = DB::table(
+                                     'lechon_de_cebu_billing_statements')
+                                     ->select(
+                                         'lechon_de_cebu_billing_statements.id',
+                                         'lechon_de_cebu_billing_statements.user_id',
+                                         'lechon_de_cebu_billing_statements.billing_statement_id',
+                                         'lechon_de_cebu_billing_statements.bill_to',
+                                         'lechon_de_cebu_billing_statements.address',
+                                         'lechon_de_cebu_billing_statements.date',
+                                         'lechon_de_cebu_billing_statements.branch',
+                                         'lechon_de_cebu_billing_statements.period_cover',
+                                         'lechon_de_cebu_billing_statements.terms',
+                                         'lechon_de_cebu_billing_statements.date_of_transaction',
+                                         'lechon_de_cebu_billing_statements.invoice_number',
+                                         'lechon_de_cebu_billing_statements.order',
+                                         'lechon_de_cebu_billing_statements.whole_lechon',
+                                         'lechon_de_cebu_billing_statements.description',
+                                         'lechon_de_cebu_billing_statements.amount',
+                                         'lechon_de_cebu_billing_statements.total_amount',
+                                         'lechon_de_cebu_billing_statements.paid_amount',
+                                         'lechon_de_cebu_billing_statements.created_by',
+                                         'lechon_de_cebu_billing_statements.deleted_at',
+                                         'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                         'lechon_de_cebu_codes.module_id',
+                                         'lechon_de_cebu_codes.module_code',
+                                         'lechon_de_cebu_codes.module_name')
+                                     ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_billing_statements.id', '=', 'lechon_de_cebu_codes.module_id')
+                                     ->where('lechon_de_cebu_billing_statements.billing_statement_id', NULL)
+                                     ->where('lechon_de_cebu_codes.module_name', $moduleNameBillingStatement)
+                                     ->where('lechon_de_cebu_billing_statements.deleted_at', NULL)
+                                     ->whereDate('lechon_de_cebu_billing_statements.created_at', '=', date($getDateToday))
+                                     ->sum('lechon_de_cebu_billing_statements.total_amount');
+         
+        $uri0 = "";
+        $uri1 = "";
+        $pdf = PDF::loadView('printSummaryBillingStatement',  compact('uri0', 'uri1','date', 'getDateToday', 
+        'billingStatements', 'totalBStatement'));
+                            
+        return $pdf->download('lechon-de-cebu-summary-report-billing-statement.pdf');
+
+
+    }
+
+
+    public function printSummarySOA(){
+        
+         $getDateToday = date("Y-m-d");
+
+
+    }
+
     public function printMultipleSummaryPurchaseOrder(Request $request, $date){
         $urlSegment = \Request::segment(3);
         $uri = explode("TO", $urlSegment);

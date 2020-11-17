@@ -308,7 +308,7 @@
                                         <br>
                                        
                                         <div class="float-right">
-                                            <a href="{{ action('LoloPinoyLechonDeCebuController@printSummary') }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                            <a href="{{ action('LoloPinoyLechonDeCebuController@printSummarySOA') }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
                                         </div>
                                         <br>
                                         <br>
@@ -365,7 +365,7 @@
                                         <br>
                                        
                                         <div class="float-right">
-                                            <a href="{{ action('LoloPinoyLechonDeCebuController@printSummary') }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                            <a href="{{ action('LoloPinoyLechonDeCebuController@printSummaryBillingStatement') }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
                                         </div>
                                         <br>
                                         <br>
