@@ -257,6 +257,13 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="purchaseOrder" role="tabpanel" aria-labelledby="purchaseOrder-tab">
+                                          <br>
+                                       
+                                       <div class="float-right">
+                                           <a href="{{ action('LoloPinoyLechonDeCebuController@printGetSummaryPurchaseOrder', $getDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                       </div>
+                                       <br>
+                                       <br>
                                        <br>
                                        <div class="table-responsive">
                                             <table class="table table-bordered display" width="100%" cellspacing="0">

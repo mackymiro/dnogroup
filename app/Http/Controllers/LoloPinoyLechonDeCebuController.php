@@ -2948,6 +2948,242 @@ class LoloPinoyLechonDeCebuController extends Controller
 
     }
 
+    public function printMultipleSummaryPurchaseOrder(Request $request, $date){
+        $urlSegment = \Request::segment(3);
+        $uri = explode("TO", $urlSegment);
+        $uri0 = $uri[0];
+        $uri1 = $uri[1];  
+
+         //purchase order
+         $moduleNamePurchaseOrder = "Purchase Order";
+         $purchaseOrders = DB::table(
+                         'lechon_de_cebu_purchase_orders')
+                         ->select(
+                             'lechon_de_cebu_purchase_orders.id',
+                             'lechon_de_cebu_purchase_orders.user_id',
+                             'lechon_de_cebu_purchase_orders.po_id',
+                             'lechon_de_cebu_purchase_orders.paid_to',
+                             'lechon_de_cebu_purchase_orders.address',
+                             'lechon_de_cebu_purchase_orders.date',
+                             'lechon_de_cebu_purchase_orders.quantity',
+                             'lechon_de_cebu_purchase_orders.total_kls',
+                             'lechon_de_cebu_purchase_orders.description',
+                             'lechon_de_cebu_purchase_orders.unit_price',
+                             'lechon_de_cebu_purchase_orders.amount',
+                             'lechon_de_cebu_purchase_orders.total_price',
+                             'lechon_de_cebu_purchase_orders.requested_by',
+                             'lechon_de_cebu_purchase_orders.prepared_by',
+                             'lechon_de_cebu_purchase_orders.checked_by',
+                             'lechon_de_cebu_purchase_orders.created_by',
+                             'lechon_de_cebu_purchase_orders.deleted_at',
+                             'lechon_de_cebu_codes.lechon_de_cebu_code',
+                             'lechon_de_cebu_codes.module_id',
+                             'lechon_de_cebu_codes.module_code',
+                             'lechon_de_cebu_codes.module_name')
+                         ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                         ->where('lechon_de_cebu_purchase_orders.po_id', NULL)
+                         ->where('lechon_de_cebu_codes.module_name', $moduleNamePurchaseOrder)
+                         ->where('lechon_de_cebu_purchase_orders.deleted_at', NULL)
+                         ->whereBetween('lechon_de_cebu_purchase_orders.created_at', [$uri0, $uri1])
+                         ->orderBy('lechon_de_cebu_purchase_orders.id', 'desc')
+                         ->get()->toArray();
+ 
+             $totalPOrder = DB::table(
+                             'lechon_de_cebu_purchase_orders')
+                             ->select(
+                                 'lechon_de_cebu_purchase_orders.id',
+                                 'lechon_de_cebu_purchase_orders.user_id',
+                                 'lechon_de_cebu_purchase_orders.po_id',
+                                 'lechon_de_cebu_purchase_orders.paid_to',
+                                 'lechon_de_cebu_purchase_orders.address',
+                                 'lechon_de_cebu_purchase_orders.date',
+                                 'lechon_de_cebu_purchase_orders.quantity',
+                                 'lechon_de_cebu_purchase_orders.total_kls',
+                                 'lechon_de_cebu_purchase_orders.description',
+                                 'lechon_de_cebu_purchase_orders.unit_price',
+                                 'lechon_de_cebu_purchase_orders.amount',
+                                 'lechon_de_cebu_purchase_orders.total_price',
+                                 'lechon_de_cebu_purchase_orders.requested_by',
+                                 'lechon_de_cebu_purchase_orders.prepared_by',
+                                 'lechon_de_cebu_purchase_orders.checked_by',
+                                 'lechon_de_cebu_purchase_orders.created_by',
+                                  'lechon_de_cebu_purchase_orders.created_by',
+                                 'lechon_de_cebu_purchase_orders.deleted_at',
+                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                 'lechon_de_cebu_codes.module_id',
+                                 'lechon_de_cebu_codes.module_code',
+                                 'lechon_de_cebu_codes.module_name')
+                             ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                             ->where('lechon_de_cebu_purchase_orders.po_id', NULL)
+                             ->where('lechon_de_cebu_codes.module_name', $moduleNamePurchaseOrder)
+                             ->where('lechon_de_cebu_purchase_orders.deleted_at', NULL)
+                             ->whereBetween('lechon_de_cebu_purchase_orders.created_at', [$uri0, $uri1])
+                             ->sum('lechon_de_cebu_purchase_orders.total_price');
+
+        
+            $pdf = PDF::loadView('printSummaryPurchaseOrder',  compact('date', 'uri0', 'uri1', 
+            'purchaseOrders', 'totalPOrder'));
+            
+            return $pdf->download('lechon-de-cebu-summary-report-purchase-order.pdf');
+
+    }
+
+    public function printGetSummaryPurchaseOrder($date){
+         //purchase order
+         $moduleNamePurchaseOrder = "Purchase Order";
+         $purchaseOrders = DB::table(
+                         'lechon_de_cebu_purchase_orders')
+                         ->select(
+                             'lechon_de_cebu_purchase_orders.id',
+                             'lechon_de_cebu_purchase_orders.user_id',
+                             'lechon_de_cebu_purchase_orders.po_id',
+                             'lechon_de_cebu_purchase_orders.paid_to',
+                             'lechon_de_cebu_purchase_orders.address',
+                             'lechon_de_cebu_purchase_orders.date',
+                             'lechon_de_cebu_purchase_orders.quantity',
+                             'lechon_de_cebu_purchase_orders.total_kls',
+                             'lechon_de_cebu_purchase_orders.description',
+                             'lechon_de_cebu_purchase_orders.unit_price',
+                             'lechon_de_cebu_purchase_orders.amount',
+                             'lechon_de_cebu_purchase_orders.total_price',
+                             'lechon_de_cebu_purchase_orders.requested_by',
+                             'lechon_de_cebu_purchase_orders.prepared_by',
+                             'lechon_de_cebu_purchase_orders.checked_by',
+                             'lechon_de_cebu_purchase_orders.created_by',
+                             'lechon_de_cebu_purchase_orders.deleted_at',
+                             'lechon_de_cebu_codes.lechon_de_cebu_code',
+                             'lechon_de_cebu_codes.module_id',
+                             'lechon_de_cebu_codes.module_code',
+                             'lechon_de_cebu_codes.module_name')
+                         ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                         ->where('lechon_de_cebu_purchase_orders.po_id', NULL)
+                         ->where('lechon_de_cebu_codes.module_name', $moduleNamePurchaseOrder)
+                         ->where('lechon_de_cebu_purchase_orders.deleted_at', NULL)
+                         ->whereDate('lechon_de_cebu_purchase_orders.created_at', '=', date($date))
+                         ->orderBy('lechon_de_cebu_purchase_orders.id', 'desc')
+                         ->get()->toArray();
+ 
+             $totalPOrder = DB::table(
+                             'lechon_de_cebu_purchase_orders')
+                             ->select(
+                                 'lechon_de_cebu_purchase_orders.id',
+                                 'lechon_de_cebu_purchase_orders.user_id',
+                                 'lechon_de_cebu_purchase_orders.po_id',
+                                 'lechon_de_cebu_purchase_orders.paid_to',
+                                 'lechon_de_cebu_purchase_orders.address',
+                                 'lechon_de_cebu_purchase_orders.date',
+                                 'lechon_de_cebu_purchase_orders.quantity',
+                                 'lechon_de_cebu_purchase_orders.total_kls',
+                                 'lechon_de_cebu_purchase_orders.description',
+                                 'lechon_de_cebu_purchase_orders.unit_price',
+                                 'lechon_de_cebu_purchase_orders.amount',
+                                 'lechon_de_cebu_purchase_orders.total_price',
+                                 'lechon_de_cebu_purchase_orders.requested_by',
+                                 'lechon_de_cebu_purchase_orders.prepared_by',
+                                 'lechon_de_cebu_purchase_orders.checked_by',
+                                 'lechon_de_cebu_purchase_orders.created_by',
+                                  'lechon_de_cebu_purchase_orders.created_by',
+                                 'lechon_de_cebu_purchase_orders.deleted_at',
+                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                 'lechon_de_cebu_codes.module_id',
+                                 'lechon_de_cebu_codes.module_code',
+                                 'lechon_de_cebu_codes.module_name')
+                             ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                             ->where('lechon_de_cebu_purchase_orders.po_id', NULL)
+                             ->where('lechon_de_cebu_codes.module_name', $moduleNamePurchaseOrder)
+                             ->where('lechon_de_cebu_purchase_orders.deleted_at', NULL)
+                             ->whereDate('lechon_de_cebu_purchase_orders.created_at', '=', date($date))
+                             ->sum('lechon_de_cebu_purchase_orders.total_price');
+
+        $getDateToday = "";
+        $uri0 ="";
+        $uri1 = "";
+        $pdf = PDF::loadView('printSummaryPurchaseOrder',  compact('date', 'uri0', 'uri1', 'getDateToday',
+        'purchaseOrders', 'totalPOrder'));
+        
+        return $pdf->download('lechon-de-cebu-summary-report-purchase-order.pdf');
+
+    }
+
+    public function printSummaryPurchaseOrder(){
+        $getDateToday = date("Y-m-d");
+
+         //purchase order
+         $moduleNamePurchaseOrder = "Purchase Order";
+         $purchaseOrders = DB::table(
+                         'lechon_de_cebu_purchase_orders')
+                         ->select(
+                             'lechon_de_cebu_purchase_orders.id',
+                             'lechon_de_cebu_purchase_orders.user_id',
+                             'lechon_de_cebu_purchase_orders.po_id',
+                             'lechon_de_cebu_purchase_orders.paid_to',
+                             'lechon_de_cebu_purchase_orders.address',
+                             'lechon_de_cebu_purchase_orders.date',
+                             'lechon_de_cebu_purchase_orders.quantity',
+                             'lechon_de_cebu_purchase_orders.total_kls',
+                             'lechon_de_cebu_purchase_orders.description',
+                             'lechon_de_cebu_purchase_orders.unit_price',
+                             'lechon_de_cebu_purchase_orders.amount',
+                             'lechon_de_cebu_purchase_orders.total_price',
+                             'lechon_de_cebu_purchase_orders.requested_by',
+                             'lechon_de_cebu_purchase_orders.prepared_by',
+                             'lechon_de_cebu_purchase_orders.checked_by',
+                             'lechon_de_cebu_purchase_orders.created_by',
+                             'lechon_de_cebu_purchase_orders.deleted_at',
+                             'lechon_de_cebu_codes.lechon_de_cebu_code',
+                             'lechon_de_cebu_codes.module_id',
+                             'lechon_de_cebu_codes.module_code',
+                             'lechon_de_cebu_codes.module_name')
+                         ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                         ->where('lechon_de_cebu_purchase_orders.po_id', NULL)
+                         ->where('lechon_de_cebu_codes.module_name', $moduleNamePurchaseOrder)
+                         ->where('lechon_de_cebu_purchase_orders.deleted_at', NULL)
+                         ->whereDate('lechon_de_cebu_purchase_orders.created_at', '=', date($getDateToday))
+                         ->orderBy('lechon_de_cebu_purchase_orders.id', 'desc')
+                         ->get()->toArray();
+ 
+             $totalPOrder = DB::table(
+                             'lechon_de_cebu_purchase_orders')
+                             ->select(
+                                 'lechon_de_cebu_purchase_orders.id',
+                                 'lechon_de_cebu_purchase_orders.user_id',
+                                 'lechon_de_cebu_purchase_orders.po_id',
+                                 'lechon_de_cebu_purchase_orders.paid_to',
+                                 'lechon_de_cebu_purchase_orders.address',
+                                 'lechon_de_cebu_purchase_orders.date',
+                                 'lechon_de_cebu_purchase_orders.quantity',
+                                 'lechon_de_cebu_purchase_orders.total_kls',
+                                 'lechon_de_cebu_purchase_orders.description',
+                                 'lechon_de_cebu_purchase_orders.unit_price',
+                                 'lechon_de_cebu_purchase_orders.amount',
+                                 'lechon_de_cebu_purchase_orders.total_price',
+                                 'lechon_de_cebu_purchase_orders.requested_by',
+                                 'lechon_de_cebu_purchase_orders.prepared_by',
+                                 'lechon_de_cebu_purchase_orders.checked_by',
+                                 'lechon_de_cebu_purchase_orders.created_by',
+                                  'lechon_de_cebu_purchase_orders.created_by',
+                                 'lechon_de_cebu_purchase_orders.deleted_at',
+                                 'lechon_de_cebu_codes.lechon_de_cebu_code',
+                                 'lechon_de_cebu_codes.module_id',
+                                 'lechon_de_cebu_codes.module_code',
+                                 'lechon_de_cebu_codes.module_name')
+                             ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                             ->where('lechon_de_cebu_purchase_orders.po_id', NULL)
+                             ->where('lechon_de_cebu_codes.module_name', $moduleNamePurchaseOrder)
+                             ->where('lechon_de_cebu_purchase_orders.deleted_at', NULL)
+                             ->whereDate('lechon_de_cebu_purchase_orders.created_at', '=', date($getDateToday))
+                             ->sum('lechon_de_cebu_purchase_orders.total_price');
+
+            $uri0 = "";
+            $uri1 = "";
+            $pdf = PDF::loadView('printSummaryPurchaseOrder',  compact('uri0', 'uri1','date', 'getDateToday', 
+            'purchaseOrders', 'totalPOrder'));
+            
+            return $pdf->download('lechon-de-cebu-summary-report-purchase-order.pdf');
+
+
+    }
+
     public function printMultipleSummaryDeliveryReceipt(Request $request, $date){
         $urlSegment = \Request::segment(3);
         $uri = explode("TO", $urlSegment);
