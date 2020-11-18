@@ -24,12 +24,9 @@
 	 <div id="content-wrapper">
  		<div class="container-fluid">
  				<div  style="margin-top:-10px;">
-                 <img style="margin-left: 5px;" src="{{ asset('images/digitized-logos/lolo-pinoy-lechon-de-cebu-pdf-small.png')}}"   alt="Lechon de Cebu">
-            	 	 <p style="margin-top:-50px; margin-left:110px;text-align:left;">
-					  Dino Compound
-						Ground & 3rd Floors, Dino Group Administration Building,
-						No. 88 Labogon Road, Barangay Labogon, Mandaue City, Cebu 6014
-						Philippines<br>
+            	 <img style="margin-left: 5px;" src="{{ asset('images/digitized-logos/lolo-pinoy-grill-pdf.png' )}}" alt="Lolo Pinoy Grill">
+					 	 <p style="margin-top:-50px; margin-left:110px;text-align:left;">
+		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
 						Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
 
 						Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
@@ -44,7 +41,7 @@
                             {{ $date}}
                         <?php endif; ?>
                     <?php endif; ?>
-                     </u></h4>
+                     </u><br>Lolo Pinoy Grill Commissary</h4>
 	            </div>
 				<div class="row">
 					<div class="col-lg-12">
@@ -71,7 +68,7 @@
 									@foreach($getAllSalesInvoices as $getAllSalesInvoice)
 									<tr style="border:1px solid black;">
                                         <td style="text-align:center; border: 1px solid black;">{{ $getAllSalesInvoice->invoice_number}}</td>
-										<td style="text-align:center; border: 1px solid black;">{{ $getAllSalesInvoice->module_code}}{{ $getAllSalesInvoice->lechon_de_cebu_code}}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $getAllSalesInvoice->module_code}}{{ $getAllSalesInvoice->lolo_pinoy_grill_code}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $getAllSalesInvoice->date}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getAllSalesInvoice->ordered_by}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getAllSalesInvoice->address}}</td>
@@ -94,7 +91,7 @@
                                 </tr>
                             </thead>
                         </table>
-                                            
+                                     
 						 </div>
 					</div>
 				</div>

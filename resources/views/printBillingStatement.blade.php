@@ -23,10 +23,13 @@
 <div id="wrapper">
 	 <div id="content-wrapper">
  		<div class="container-fluid">
- 				<div  style="margin-top:60px;">
-            	 <img style="margin-left: 170px;" src="{{ asset('images/lolo-pinoys-lechon-de-cebu.png')}}"   alt="Lechon de Cebu">
-            	 	 <p >
-		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
+ 				<div  style="margin-top:-10px;">
+				 <img style="margin-left: 5px;" src="{{ asset('images/digitized-logos/lolo-pinoy-lechon-de-cebu-pdf-small.png')}}"   alt="Lechon de Cebu">
+            	 	 <p style="margin-top:-50px; margin-left:110px;text-align:left;">
+					  	Dino Compound
+						Ground & 3rd Floors, Dino Group Administration Building,
+						No. 88 Labogon Road, Barangay Labogon, Mandaue City, Cebu 6014
+						Philippines<br>
 						Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
 
 						Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
@@ -118,7 +121,7 @@
 									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->whole_lechon }}</td>
                                       @endif
 									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->description }}</td>
-                                      <td style="text-align:center; border: 1px solid black;"><?php echo number_format($printBillingStatement[0]->amount, 2); ?></td>
+                                      <td style="text-align:center; border: 1px solid black;"><?= number_format($printBillingStatement[0]->amount, 2); ?></td>
                                   	 	</tr>
                                   	 	 @foreach($billingStatements as $billingStatement)
                                         <tr style="border:1px solid black;">
@@ -136,7 +139,7 @@
 										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['whole_lechon'] }}</td>
                                           @endif
 										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['description'] }}</td>
-                                          <td style="text-align:center; border: 1px solid black;"><?php echo number_format($billingStatement['amount'], 2);?></td>
+                                          <td style="text-align:center; border: 1px solid black;"><?= number_format($billingStatement['amount'], 2);?></td>
                                         </tr> 
                                         @endforeach
                                       
@@ -147,7 +150,7 @@
                                           	<td style=" border: 1px solid black;"></td>
 											<td style=" border: 1px solid black;"></td>
 	                                        <td style=" border: 1px solid black;"><strong>Total</strong></td>
-	                                        <td style=" text-align:center; border: 1px solid black;"> <?php echo number_format($sum, 2)?></td>
+	                                        <td style=" text-align:center; border: 1px solid black;"> <?= number_format($sum, 2)?></td>
 	                                      </tr>
                                   </tbody>
                           </table>

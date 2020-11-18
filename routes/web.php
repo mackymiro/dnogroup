@@ -550,6 +550,12 @@ Route::group(['middleware' =>['user']], function(){
 		->middleware(['cashier']);
 
 	Route::get(
+		'/lolo-pinoy-grill-commissary/printSummarySalesInvoice',
+		'LoloPinoyGrillCommissaryController@printSummarySalesInvoice')
+		->name('printSummarySalesInvoice')
+		->middleware(['cashier']);
+
+	Route::get(
 		'/lolo-pinoy-grill-commissary/printMultipleSummary/{date}',
 		'LoloPinoyGrillCommissaryController@printMultipleSummary')
 		->name('printMultipleSummary')

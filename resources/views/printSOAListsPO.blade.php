@@ -23,10 +23,13 @@
 <div id="wrapper">
 	 <div id="content-wrapper">
  		<div class="container-fluid">
- 				<div  style="margin-top:60px;">
-            	 <img style="margin-left: 170px;"src="{{ asset('images/digitized-logos/lolo-pinoy-lechon-de-cebu.png')}}"  width="366" height="178" alt="Lechon de Cebu">
-            	 	 <p >
-		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
+ 				<div  style="margin-top:-10px;">
+				 <img style="margin-left: 5px;" src="{{ asset('images/digitized-logos/lolo-pinoy-lechon-de-cebu-pdf-small.png')}}"   alt="Lechon de Cebu">
+            	 	 <p style="margin-top:-50px; margin-left:110px;text-align:left;">
+					  	Dino Compound
+						Ground & 3rd Floors, Dino Group Administration Building,
+						No. 88 Labogon Road, Barangay Labogon, Mandaue City, Cebu 6014
+						Philippines<br>
 						Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
 
 						Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
@@ -65,8 +68,8 @@
 												PAID
 											@endif
 										  </td>
-                                          <td style="text-align:center; border: 1px solid black;"><?php echo number_format($printSOAStatement->total_amount, 2);?></td>
-                                         <td style="text-align:center; border: 1px solid black;"><?php echo number_format($printSOAStatement->total_remaining_balance, 2);?></td>
+                                          <td style="text-align:center; border: 1px solid black;"><?= number_format($printSOAStatement->total_amount, 2);?></td>
+                                         <td style="text-align:center; border: 1px solid black;"><?= number_format($printSOAStatement->total_remaining_balance, 2);?></td>
                                          <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->created_by }}</td>
                                         </tr> 
                                         @endforeach
@@ -81,13 +84,13 @@
 									<tr>
 										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%;"><strong>Total Paid Amount</strong></td>
 										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%; font-size:18px;">
-										 <?php echo number_format($totalAmount, 2)?>
+										 <?= number_format($totalAmount, 2)?>
 										</td>
 									</tr>
 									<tr>
 										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%;"><strong>Total Unpaid Amount</strong></td>
 										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%; font-size:18px;">
-											<?php echo number_format($totalRemainingBalance, 2);?>
+											<?= number_format($totalRemainingBalance, 2);?>
 										</td>
 									</tr>
 								</thead>
