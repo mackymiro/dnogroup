@@ -2850,7 +2850,7 @@ Route::group(['middleware' => ['auth']], function(){
 
 	Route::get(
 		'/lolo-pinoy-grill-branches/printSummary',
-		'LoloPinoyGrillBranchesController@printSummary')
+		'LoloPinoyGrillBranchesController@mr-')
 		->name('printSummary')
 		->middleware(['cashier']);
 

@@ -23,20 +23,19 @@
 <div id="wrapper">
 	 <div id="content-wrapper">
  		<div class="container-fluid">
- 				<div  style="margin-top:60px;">
-				 	
-					<div style="flaot:left; margin-right:50px;">
-						<img style="margin-left:250px;" src="{{ asset('images/pdf/mr-potato.png')}}"   alt="Mr Potato">
-					</div>
-            	 	
-            	 	 <p >
-		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
+ 				<div  style="margin-top:-10px;">
+					<img style="margin-left: -30px;" src="{{ asset('images/pdf/mr-potato.png')}}"   alt="Mr Potato"> 
+                		 <p  style="margin-top:-100px; margin-left:165px;text-align:left;">
+						 Dino Compound
+						Ground & 3rd Floors, Dino Group Administration Building,
+						No. 88 Labogon Road, Barangay Labogon, Mandaue City, Cebu 6014
+						Philippines<br>
 						Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
 
 						Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
             	 	 </p>
 	            	 <h4 ><u>PURCHASE ORDER</u></h4>
-        </div>
+       			 </div>
 				<div class="row">
 					<div class="col-lg-12">
 						 <div class="card-body">
