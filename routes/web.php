@@ -6568,6 +6568,12 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('purchaseOrderList')
 		->middleware(['cashier']);
 
+	Route::put(
+		'/dno-holdings-co/{id}/update',
+		'DnoHoldingsCoController@update')
+		->name('update')
+		->middleware(['cashier']);
+
 	Route::delete(
 		'/dno-holdings-co/delete/PO/{id}',
 		'DnoHoldingsCoController@destroyPO')

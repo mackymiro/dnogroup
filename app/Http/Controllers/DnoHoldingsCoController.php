@@ -3064,6 +3064,40 @@ class DnoHoldingsCoController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $paidTo = $request->get('paidTo');
+        $address = $request->get('address');
+        $quantity = $request->get('quantity');
+        $description = $request->get('description');
+        $date = $request->get('date');
+        $unitPrice = $request->get('unitPrice');
+        $amount = $request->get('amount');
+
+        $purchaseOrder = DnoHoldingsCoPurchaseOrder::find($id);
+        
+        $purchaseOrder->paid_to = $paidTo;
+        $purchaseOrder->address = $address;
+        $purchaseOrder->date = $date;
+        $purchaseOrder->description = $description;
+        $purchaseOrder->quantity = $quantity;
+        $purchaseOrder->unit_price = $unitPrice;
+        $purchaseOrder->amount = $amount;
+
+        $purchaseOrder->save();
+
+
+        Session::flash('SuccessE', 'Successfully updated');
+
+        return redirect()->route('editDnoHoldingsCo', ['id'=>$id]);
+
+
     }
 
     public function destroyBillingStatement($id){
