@@ -4595,6 +4595,12 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('viewBillingStatementDnoFoodVenture')
 		->middleware(['cashier']);
 
+	Route::get(
+		'/dno-food-ventures/{id}/printBillingStatement',
+		'DnoFoodVenturesController@printBillingStatement')
+		->name('printBillingStatement')
+		->middleware(['cashier']);
+
 
 	Route::post(
 		'/dno-food-ventures/{id}/add-new-billing-data',

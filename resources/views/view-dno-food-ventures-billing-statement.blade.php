@@ -27,7 +27,7 @@
 		                              View Billing Statement
 		                         <div class="float-right">
                                
-                                 	<a href="{{ action('LoloPinoyGrillCommissaryController@printBillingStatement', $viewBillingStatement[0]->id) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                                 	<a href="{{ action('DnoFoodVenturesController@printBillingStatement', $viewBillingStatement[0]->id) }}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                                
                              	 </div>
 		                    </div>

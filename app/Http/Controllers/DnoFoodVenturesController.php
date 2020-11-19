@@ -25,6 +25,26 @@ use App\DnoFoodVenturesStatementOfAccount;
 class DnoFoodVenturesController extends Controller
 {
 
+    public function printBillingStatement($id){
+        $printBillingStatement = DnoFoodVenturesBillingStatement::with(['user', 'billing_statements'])
+                                                                    ->where('id', $id)
+                                                                    ->get();
+
+        $billingStatements = DnoFoodVenturesBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+        //count the total amount 
+        $countTotalAmount = DnoFoodVenturesBillingStatement::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = DnoFoodVenturesBillingStatement::where('billing_statement_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        $pdf = PDF::loadView('printBillingStatementDnoFoodVentures', compact('printBillingStatement', 'billingStatements', 'sum'));
+
+        return $pdf->download('dno-food-ventures-billing-statement.pdf');  
+    }
+
     public function printSOAListsDR(){
         $sDr = "Delivery Receipt";
         $printSOAStatementsDRs = DnoFoodVenturesStatementOfAccount::with(['user', 'statement_of_accounts'])
