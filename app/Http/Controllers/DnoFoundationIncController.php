@@ -20,6 +20,90 @@ use App\DnoFoundationIncStatementOfAccount;
 class DnoFoundationIncController extends Controller
 {
 
+    public function printSupplier($id){
+        $viewSupplier = DnoFoundationIncSupplier::where('id', $id)->get();
+
+        
+        $printSuppliers  = DB::table(
+                'dno_foundation_inc_payment_vouchers')
+                ->select( 
+                'dno_foundation_inc_payment_vouchers.id',
+                'dno_foundation_inc_payment_vouchers.user_id',
+                'dno_foundation_inc_payment_vouchers.pv_id',
+                'dno_foundation_inc_payment_vouchers.date',
+                'dno_foundation_inc_payment_vouchers.paid_to',
+                'dno_foundation_inc_payment_vouchers.account_no',
+                'dno_foundation_inc_payment_vouchers.account_name',
+                'dno_foundation_inc_payment_vouchers.particulars',
+                'dno_foundation_inc_payment_vouchers.amount',
+                'dno_foundation_inc_payment_vouchers.method_of_payment',
+                'dno_foundation_inc_payment_vouchers.prepared_by',
+                'dno_foundation_inc_payment_vouchers.approved_by',
+                'dno_foundation_inc_payment_vouchers.date_approved',
+                'dno_foundation_inc_payment_vouchers.received_by_date',
+                'dno_foundation_inc_payment_vouchers.created_by',
+                'dno_foundation_inc_payment_vouchers.invoice_number',
+                'dno_foundation_inc_payment_vouchers.issued_date',
+                'dno_foundation_inc_payment_vouchers.category',
+                'dno_foundation_inc_payment_vouchers.amount_due',
+                'dno_foundation_inc_payment_vouchers.delivered_date',
+                'dno_foundation_inc_payment_vouchers.status',
+                'dno_foundation_inc_payment_vouchers.cheque_number',
+                'dno_foundation_inc_payment_vouchers.cheque_amount',
+                'dno_foundation_inc_payment_vouchers.sub_category',
+                'dno_foundation_inc_payment_vouchers.sub_category_account_id',
+                'dno_foundation_inc_payment_vouchers.deleted_at',
+                'dno_foundation_inc_suppliers.id',
+                'dno_foundation_inc_suppliers.date',
+                'dno_foundation_inc_suppliers.supplier_name')
+                ->leftJoin('dno_foundation_inc_suppliers', 'dno_foundation_inc_payment_vouchers.supplier_id', '=', 'dno_foundation_inc_suppliers.id')
+                ->where('dno_foundation_inc_suppliers.id', $id)
+                ->get();
+
+        $status = "FULLY PAID AND RELEASED";  
+
+        $totalAmountDue  = DB::table(
+                    'dno_foundation_inc_payment_vouchers')
+                    ->select( 
+                    'dno_foundation_inc_payment_vouchers.id',
+                    'dno_foundation_inc_payment_vouchers.user_id',
+                    'dno_foundation_inc_payment_vouchers.pv_id',
+                    'dno_foundation_inc_payment_vouchers.date',
+                    'dno_foundation_inc_payment_vouchers.paid_to',
+                    'dno_foundation_inc_payment_vouchers.account_no',
+                    'dno_foundation_inc_payment_vouchers.account_name',
+                    'dno_foundation_inc_payment_vouchers.particulars',
+                    'dno_foundation_inc_payment_vouchers.amount',
+                    'dno_foundation_inc_payment_vouchers.method_of_payment',
+                    'dno_foundation_inc_payment_vouchers.prepared_by',
+                    'dno_foundation_inc_payment_vouchers.approved_by',
+                    'dno_foundation_inc_payment_vouchers.date_approved',
+                    'dno_foundation_inc_payment_vouchers.received_by_date',
+                    'dno_foundation_inc_payment_vouchers.created_by',
+                    'dno_foundation_inc_payment_vouchers.invoice_number',
+                    'dno_foundation_inc_payment_vouchers.issued_date',
+                    'dno_foundation_inc_payment_vouchers.category',
+                    'dno_foundation_inc_payment_vouchers.amount_due',
+                    'dno_foundation_inc_payment_vouchers.delivered_date',
+                    'dno_foundation_inc_payment_vouchers.status',
+                    'dno_foundation_inc_payment_vouchers.cheque_number',
+                    'dno_foundation_inc_payment_vouchers.cheque_amount',
+                    'dno_foundation_inc_payment_vouchers.sub_category',
+                    'dno_foundation_inc_payment_vouchers.sub_category_account_id',
+                    'dno_foundation_inc_payment_vouchers.deleted_at',
+                    'dno_foundation_inc_suppliers.id',
+                    'dno_foundation_inc_suppliers.date',
+                    'dno_foundation_inc_suppliers.supplier_name')
+                    ->leftJoin('dno_foundation_inc_suppliers', 'dno_foundation_inc_payment_vouchers.supplier_id', '=', 'dno_foundation_inc_suppliers.id')
+                    ->where('dno_foundation_inc_suppliers.id', $id)
+                    ->where('dno_foundation_inc_payment_vouchers.status', '!=', $status)
+                    ->sum('dno_foundation_inc_payment_vouchers.amount_due');
+
+        $pdf = PDF::loadView('printSupplierDnoFoundationInc', compact('viewSupplier', 'printSuppliers', 'totalAmountDue'));
+
+        return $pdf->download('dno-foundation-inc-supplier.pdf');
+    }   
+
     public function printSOAList(){
         $printSOAStatements = DnoFoundationIncStatementOfAccount::with(['user', 'statement_of_accounts'])
                                                                 ->where('billing_statement_id', NULL)

@@ -13,8 +13,9 @@
 
 Route::get('/', function () {
     //return view('welcome');
-    return redirect(route('login'));
+	return redirect(route('login'));
 });
+
 
 Auth::routes();
 
@@ -7232,6 +7233,12 @@ Route::group(['middleware' => ['auth']], function(){
 		'/dno-foundation-inc/suppliers/view/{id}',
 		'DnoFoundationIncController@viewSupplier')
 		->name('viewSupplier')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/dno-foundation-inc/supplier/print/{id}',
+		'DnoFoundationIncController@printSupplier')
+		->name('printSupplier')
 		->middleware(['cashier']);
 
 	Route::get(
