@@ -117,7 +117,14 @@
                                  </nav>
                                  <div class="tab-content" id="nav-tabContent">
                                      <div class="tab-pane fade show active" id="salesInvoice" role="tabpanel" aria-labelledby="salesInvoice-tab">
-                                        	<br>
+                                        	 <br>
+                                       
+                                            <div class="float-right">
+                                                <a href="{{ action('LoloPinoyGrillCommissaryController@printMultipleSummarySalesInvoice', $startDate.'TO'.$endDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                            </div>
+                                            <br>
+                                            <br>
+                                            <br>
                                             <div class="table-responsive">
                                                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                                     <thead>

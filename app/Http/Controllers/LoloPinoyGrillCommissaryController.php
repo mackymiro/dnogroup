@@ -1812,6 +1812,150 @@ class LoloPinoyGrillCommissaryController extends Controller
         return view('lolo-pinoy-grill-commissary-search-number-code', compact('getAllCodes'));
     }
 
+    public function printMultipleSummarySalesInvoice(Request $request, $date){
+        $urlSegment = \Request::segment(3);
+        $uri = explode("TO", $urlSegment);
+        $uri0 = $uri[0];
+        $uri1 = $uri[1];
+
+        $moduleName = "Sales Invoice";
+
+        $getAllSalesInvoices  = DB::table(
+                    'lolo_pinoy_grill_commissary_sales_invoices')
+                    ->select(
+                        'lolo_pinoy_grill_commissary_sales_invoices.id',
+                        'lolo_pinoy_grill_commissary_sales_invoices.user_id',
+                        'lolo_pinoy_grill_commissary_sales_invoices.si_id',
+                        'lolo_pinoy_grill_commissary_sales_invoices.invoice_number',
+                        'lolo_pinoy_grill_commissary_sales_invoices.date',
+                        'lolo_pinoy_grill_commissary_sales_invoices.ordered_by',
+                        'lolo_pinoy_grill_commissary_sales_invoices.address',
+                        'lolo_pinoy_grill_commissary_sales_invoices.qty',
+                        'lolo_pinoy_grill_commissary_sales_invoices.total_kls',
+                        'lolo_pinoy_grill_commissary_sales_invoices.item_description',
+                        'lolo_pinoy_grill_commissary_sales_invoices.unit_price',
+                        'lolo_pinoy_grill_commissary_sales_invoices.amount',
+                        'lolo_pinoy_grill_commissary_sales_invoices.created_by',
+                        'lolo_pinoy_grill_commissary_sales_invoices.created_at',
+                        'lolo_pinoy_grill_commissary_sales_invoices.deleted_at',
+                        'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                        'lolo_pinoy_grill_commissary_codes.module_id',
+                        'lolo_pinoy_grill_commissary_codes.module_code',
+                        'lolo_pinoy_grill_commissary_codes.module_name')
+                    ->leftJoin('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_sales_invoices.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                    ->where('lolo_pinoy_grill_commissary_sales_invoices.si_id', NULL)
+                    ->where('lolo_pinoy_grill_commissary_sales_invoices.deleted_at', NULL)
+                    ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                    ->whereBetween('lolo_pinoy_grill_commissary_sales_invoices.created_at', [$uri0, $uri1])
+                    ->orderBy('lolo_pinoy_grill_commissary_sales_invoices.id', 'desc')
+                    ->get()->toArray();
+        
+        $totalSalesInvoice  = DB::table(
+                        'lolo_pinoy_grill_commissary_sales_invoices')
+                        ->select(
+                            'lolo_pinoy_grill_commissary_sales_invoices.id',
+                            'lolo_pinoy_grill_commissary_sales_invoices.user_id',
+                            'lolo_pinoy_grill_commissary_sales_invoices.si_id',
+                            'lolo_pinoy_grill_commissary_sales_invoices.invoice_number',
+                            'lolo_pinoy_grill_commissary_sales_invoices.date',
+                            'lolo_pinoy_grill_commissary_sales_invoices.ordered_by',
+                            'lolo_pinoy_grill_commissary_sales_invoices.address',
+                            'lolo_pinoy_grill_commissary_sales_invoices.qty',
+                            'lolo_pinoy_grill_commissary_sales_invoices.total_kls',
+                            'lolo_pinoy_grill_commissary_sales_invoices.item_description',
+                            'lolo_pinoy_grill_commissary_sales_invoices.unit_price',
+                            'lolo_pinoy_grill_commissary_sales_invoices.amount',
+                            'lolo_pinoy_grill_commissary_sales_invoices.created_by',
+                            'lolo_pinoy_grill_commissary_sales_invoices.created_at',
+                            'lolo_pinoy_grill_commissary_sales_invoices.deleted_at',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                        ->leftJoin('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_sales_invoices.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                        ->where('lolo_pinoy_grill_commissary_sales_invoices.si_id', NULL)
+                        ->where('lolo_pinoy_grill_commissary_sales_invoices.deleted_at', NULL)
+                        ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                        ->whereBetween('lolo_pinoy_grill_commissary_sales_invoices.created_at', [$uri0, $uri1])
+                        ->sum('lolo_pinoy_grill_commissary_sales_invoices.amount');
+
+        $pdf = PDF::loadView('printSummaryLoloPinoyGrillSalesInvoice',  compact('date', 'uri0', 'uri1', 'getAllSalesInvoices', 
+        'totalSalesInvoice'));
+        
+        return $pdf->download('lechon-de-cebu-summary-report-sales-report.pdf');
+    }   
+
+    public function printGetSummarySalesInvoice($date){
+        $moduleName = "Sales Invoice";
+        $getAllSalesInvoices  = DB::table(
+                        'lolo_pinoy_grill_commissary_sales_invoices')
+                        ->select(
+                            'lolo_pinoy_grill_commissary_sales_invoices.id',
+                            'lolo_pinoy_grill_commissary_sales_invoices.user_id',
+                            'lolo_pinoy_grill_commissary_sales_invoices.si_id',
+                            'lolo_pinoy_grill_commissary_sales_invoices.invoice_number',
+                            'lolo_pinoy_grill_commissary_sales_invoices.date',
+                            'lolo_pinoy_grill_commissary_sales_invoices.ordered_by',
+                            'lolo_pinoy_grill_commissary_sales_invoices.address',
+                            'lolo_pinoy_grill_commissary_sales_invoices.qty',
+                            'lolo_pinoy_grill_commissary_sales_invoices.total_kls',
+                            'lolo_pinoy_grill_commissary_sales_invoices.item_description',
+                            'lolo_pinoy_grill_commissary_sales_invoices.unit_price',
+                            'lolo_pinoy_grill_commissary_sales_invoices.amount',
+                            'lolo_pinoy_grill_commissary_sales_invoices.created_by',
+                            'lolo_pinoy_grill_commissary_sales_invoices.created_at',
+                            'lolo_pinoy_grill_commissary_sales_invoices.deleted_at',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                        ->leftJoin('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_sales_invoices.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                        ->where('lolo_pinoy_grill_commissary_sales_invoices.si_id', NULL)
+                        ->where('lolo_pinoy_grill_commissary_sales_invoices.deleted_at', NULL)
+                        ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                        ->whereDate('lolo_pinoy_grill_commissary_sales_invoices.created_at', '=', date($date))
+                        ->orderBy('lolo_pinoy_grill_commissary_sales_invoices.id', 'desc')
+                        ->get()->toArray();
+            
+        $totalSalesInvoice  = DB::table(
+                            'lolo_pinoy_grill_commissary_sales_invoices')
+                            ->select(
+                                'lolo_pinoy_grill_commissary_sales_invoices.id',
+                                'lolo_pinoy_grill_commissary_sales_invoices.user_id',
+                                'lolo_pinoy_grill_commissary_sales_invoices.si_id',
+                                'lolo_pinoy_grill_commissary_sales_invoices.invoice_number',
+                                'lolo_pinoy_grill_commissary_sales_invoices.date',
+                                'lolo_pinoy_grill_commissary_sales_invoices.ordered_by',
+                                'lolo_pinoy_grill_commissary_sales_invoices.address',
+                                'lolo_pinoy_grill_commissary_sales_invoices.qty',
+                                'lolo_pinoy_grill_commissary_sales_invoices.total_kls',
+                                'lolo_pinoy_grill_commissary_sales_invoices.item_description',
+                                'lolo_pinoy_grill_commissary_sales_invoices.unit_price',
+                                'lolo_pinoy_grill_commissary_sales_invoices.amount',
+                                'lolo_pinoy_grill_commissary_sales_invoices.created_by',
+                                'lolo_pinoy_grill_commissary_sales_invoices.created_at',
+                                'lolo_pinoy_grill_commissary_sales_invoices.deleted_at',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                            ->leftJoin('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_sales_invoices.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                            ->where('lolo_pinoy_grill_commissary_sales_invoices.si_id', NULL)
+                            ->where('lolo_pinoy_grill_commissary_sales_invoices.deleted_at', NULL)
+                            ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                            ->whereDate('lolo_pinoy_grill_commissary_sales_invoices.created_at', '=', date($date))
+                            ->sum('lolo_pinoy_grill_commissary_sales_invoices.amount');
+
+                            
+        $getDateToday = "";
+        $uri0 ="";
+        $uri1 = "";
+        $pdf = PDF::loadView('printSummaryLoloPinoyGrillSalesInvoice',  compact('date', 'uri0', 'uri1', 'getDateToday', 'getAllSalesInvoices', 
+        'totalSalesInvoice'));
+        
+        return $pdf->download('lolo-pinoy-grill-commissary-summary-report-sales-invoice.pdf');
+    }
+
     public function printSummarySalesInvoice(){
           //sales invoice
         $getDateToday = date("Y-m-d");
@@ -1878,7 +2022,7 @@ class LoloPinoyGrillCommissaryController extends Controller
 
         $uri0 = "";
         $uri1 = "";
-        $pdf = PDF::loadView('printSummaryLoloPinoyGrillSalesInvoice', compact('uri0', 'uri1', 'date', 'getDateToday', 'getAllSalesInvoices', 
+        $pdf = PDF::loadView('printSummaryLoloPinoyGrillSalesInvoice', compact('uri0', 'uri1', 'getDateToday', 'getAllSalesInvoices', 
         'totalSalesInvoice'));
         
         return $pdf->download('lolo-pinoy-grill-commissary-summary-report-sales-invoice.pdf');
