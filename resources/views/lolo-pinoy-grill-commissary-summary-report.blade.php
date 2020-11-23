@@ -188,6 +188,13 @@
                                      </div>
                                     <div class="tab-pane fade" id="deliveryReceipt" role="tabpanel" aria-labelledby="deliveryReceipt-tab">
                                         <br>
+                                       
+                                       <div class="float-right">
+                                           <a href="{{ action('LoloPinoyGrillCommissaryController@printSummaryDeliveryReceipt') }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                       </div>
+                                       <br>
+                                       <br>
+                                       <br>
                                         <div class="table-responsive">
                                             <table class="table table-bordered display"  width="100%" cellspacing="0">
                                                  <thead>

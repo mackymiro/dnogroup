@@ -3131,13 +3131,18 @@ class WlgCorporationController extends Controller
         if($request->get('category') == "Payroll"){
             $subCat = NULL;
             $supplierExp = NULL;
+            $supplierExp1 = NULL;
         }else if($request->get('category') == "None"){
             $subCat = NULL;
             $supplierExp = NULL;
+            $supplierExp1 = NULL;
 
         }else if($request->get('category') == "Supplier"){
             $supplier = $request->get('supplierName');
-            $supplierExp = explode("-", $supplier);
+            $supplierExps = explode("-", $supplier);
+
+            $supplierExp =  $supplierExps[0];
+            $supplierExp1 = $supplierExps[1];
 
             $subCat = "NULL";
        }
@@ -3162,8 +3167,8 @@ class WlgCorporationController extends Controller
                 'particulars'=>$request->get('particulars'),
                 'category'=>$request->get('category'),
                 'sub_category'=>$subCat,
-                'supplier_id'=>$supplierExp[0],
-                'supplier_name'=>$supplierExp[1],  
+                'supplier_id'=>$supplierExp,
+                'supplier_name'=>$supplierExp1,  
                 'prepared_by'=>$name,
                 'created_by'=>$name,
             ]);

@@ -569,6 +569,24 @@ Route::group(['middleware' =>['user']], function(){
 		->middleware(['cashier']);
 
 	Route::get(
+		'/lolo-pinoy-grill-commissary/printSummaryDeliveryReceipt',
+		'LoloPinoyGrillCommissaryController@printSummaryDeliveryReceipt')
+		->name('printSummaryDeliveryReceipt')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/printGetSummaryDeliveryReceipt/{date}',
+		'LoloPinoyGrillCommissaryController@printGetSummaryDeliveryReceipt')
+		->name('printGetSummaryDeliveryReceipt')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/printMultipleSummaryDeliveryReceipt/{date}',
+		'LoloPinoyGrillCommissaryController@printMultipleSummaryDeliveryReceipt')
+		->name('printMultipleSummaryDeliveryReceipt')
+		->middleware(['cashier']);
+
+	Route::get(
 		'/lolo-pinoy-grill-commissary/printMultipleSummary/{date}',
 		'LoloPinoyGrillCommissaryController@printMultipleSummary')
 		->name('printMultipleSummary')

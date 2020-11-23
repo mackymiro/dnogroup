@@ -4190,8 +4190,10 @@ class DnoPersonalController extends Controller
 
             //supplier/service provider
             $supplier = $request->get('supplierName');
-            $supplierExp = explode("-", $supplier);
+            $supplierExps = explode("-", $supplier);
           
+            $supplierExp =  $supplierExps[0];
+            $supplierExp1 = $supplierExps[1];
            
         }elseif($request->get('category') === "Manila Properties"){
             $subCatExp = explode("-", $request->get('subCatManila'));
@@ -4203,7 +4205,10 @@ class DnoPersonalController extends Controller
 
              //supplier/service provider
              $supplier = $request->get('supplierName');
-             $supplierExp = explode("-", $supplier);
+             $supplierExps = explode("-", $supplier);
+
+             $supplierExp =  $supplierExps[0];
+             $supplierExp1 = $supplierExps[1];
         
         }elseif($request->get('category') === "Vehicles"){
 
@@ -4214,6 +4219,7 @@ class DnoPersonalController extends Controller
             $selectAccountID = "NULL";
             $bills = NULL;
             $supplierExp = NULL;
+            $supplierExp1 = NULL;
           
         }else{
             $subCat = "NULL";
@@ -4221,6 +4227,7 @@ class DnoPersonalController extends Controller
             $bills = "NULL";
             $selectAccountID = "NULL";
             $supplierExp = NULL;
+            $supplierExp1 = NULL;
         }
 
       
@@ -4253,8 +4260,8 @@ class DnoPersonalController extends Controller
                     'sub_category_name'=>$subCatName,
                     'sub_category_bill_name'=>$bills,
                     'sub_category_account_id'=>$selectAccountID,
-                    'supplier_id'=>$supplierExp[0],
-                    'supplier_name'=>$supplierExp[1],
+                    'supplier_id'=>$supplierExp,
+                    'supplier_name'=>$supplierExp1,
                     'utility_sub_category'=>$request->get('documentList'),
                     'prepared_by'=>$name,
                     'created_by'=>$name,

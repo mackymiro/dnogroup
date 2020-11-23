@@ -3652,24 +3652,31 @@ class DnoResourcesDevelopmentController extends Controller
             $subCat = NULL;
             $subCatAccountId = NULL;
             $supplierExp = NULL;
+            $supplierExp1 = NULL;
         }elseif($request->get('category') === "Petty Cash"){
 
             $subCat = $request->get('pettyCashNo');
             $subCatAccountId = NULL;    
 
             $supplierExp = NULL;
+            $supplierExp1 = NULL;
         }else if($request->get('category') === "Utility"){
             $subCat = $request->get('utility');
             $subCatAccountId = $request->get('accountId');
 
             $supplierExp = NULL;
+            $supplierExp1 = NULL;
         }else if($request->get('category') === "Payroll"){  
             $subCat = NULL;
             $subCatAccountId = NULL;
             $supplierExp = NULL;
+            $supplierExp1 = NULL;
         }else if($request->get('category') == "Supplier"){
             $supplier = $request->get('supplierName');
-            $supplierExp = explode("-", $supplier);
+            $supplierExps = explode("-", $supplier);
+
+            $supplierExp =  $supplierExps[0];
+            $supplierExp1 = $supplierExps[1];
 
             $subCat = "NULL";
             $subCatAccountId = "NULL";
@@ -3697,8 +3704,8 @@ class DnoResourcesDevelopmentController extends Controller
                     'category'=>$request->get('category'),
                     'sub_category'=>$subCat,
                     'sub_category_account_id'=>$subCatAccountId,
-                    'supplier_id'=>$supplierExp[0],
-                    'supplier_name'=>$supplierExp[1],  
+                    'supplier_id'=>$supplierExp,
+                    'supplier_name'=>$supplierExp1,  
                     'prepared_by'=>$name,
                     'created_by'=>$name,
             ]);
