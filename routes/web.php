@@ -605,6 +605,25 @@ Route::group(['middleware' =>['user']], function(){
 		->middleware(['cashier']);
 
 	Route::get(
+		'/lolo-pinoy-grill-commissary/printStatementOfAccount',
+		'LoloPinoyGrillCommissaryController@printSummaryStatementOfAccount')
+		->name('printStatementOfAccount')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/printGetSummaryStatementOfAccount/{date}',
+		'LoloPinoyGrillCommissaryController@printGetSummaryStatementOfAccount')
+		->name('printGetSummaryStatementOfAccount')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/lolo-pinoy-grill-commissary/printMultipleSummaryStatementOfAccount/{date}',
+		'LoloPinoyGrillCommissaryController@printMultipleSummaryStatementOfAccount')
+		->name('printMultipleSummaryStatementOfAccount')
+		->middleware(['cashier']);
+		
+
+	Route::get(
 		'/lolo-pinoy-grill-commissary/printMultipleSummary/{date}',
 		'LoloPinoyGrillCommissaryController@printMultipleSummary')
 		->name('printMultipleSummary')
@@ -7575,6 +7594,12 @@ Route::group(['middleware' => ['auth']], function(){
 		'/wimpys-food-express/{id}/edit',
 		'WimpysFoodExpressController@edit')
 		->name('editWimpysFoodExpress')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/wimpys-food-express/{id}/update',
+		'WimpysFoodExpressController@update')
+		->name('update')	
 		->middleware(['cashier']);
 
 	Route::post(

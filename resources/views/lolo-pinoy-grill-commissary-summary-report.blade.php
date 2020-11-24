@@ -317,31 +317,65 @@
                                        </div>
                                     </div>
                                     <div class="tab-pane fade" id="SOA" role="tabpanel" aria-labelledby="SOA-tab">
-                                        <br>
+                                            <br>
+                                       
+                                       <div class="float-right">
+                                           <a href="{{ action('LoloPinoyGrillCommissaryController@printSummaryStatementOfAccount') }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                       </div>
+                                       <br>
+                                       <br>
+                                       <br>
                                         <div class="table-responsive">
                                               <table class="table table-bordered display"  width="100%" cellspacing="0">
                                                 <thead>
                                                     <th>Action</th>
                                                     <th>Date</th>
+                                                    <th>SOA No</th>
+                                                    <th>BS No</th>
                                                     <th>Bill To</th>
-                                                    <th>Branch</th>
-                                                    <th>Reference #</th>
-                                                    <th>Invoice#</th>
-                                                    <th  class="bg-info" style="color:white;">Period Covered</th>
+                                                    <th>Order</th>
+                                                    <th>Status</th>
+                                                    <th class="bg-info" style="color:white;">Period Covered</th>
+                                                    <th>Total Amount</th>
+                                                    <th>Total Remaining Balance</th>
                                                     <th>Created By</th>
                                                 </thead>
                                                 <tfoot>
                                                     <th>Action</th>
                                                     <th>Date</th>
+                                                    <th>SOA No</th>
+                                                    <th>BS No</th>
                                                     <th>Bill To</th>
-                                                    <th>Branch</th>
-                                                    <th>Reference #</th>
-                                                    <th>Invoice#</th>
-                                                    <th  class="bg-info" style="color:white;">Period Covered</th>
+                                                    <th>Order</th>
+                                                    <th>Status</th>
+                                                    <th class="bg-info" style="color:white;">Period Covered</th>
+                                                    <th>Total Amount</th>
+                                                    <th>Total Remaining Balance</th>
                                                     <th>Created By</th>
                                                 </tfoot>
                                                 <tbody>
+                                                @foreach($statementOfAccounts as $statementOfAccount)
+                                                <tr id="deletedId{{ $statementOfAccount->id}}">
+                                                    <td>
+                                                        @if(Auth::user()['role_type'] !== 3)
+                                                        <a href="{{ url('lolo-pinoy-grill-commissary/edit-statement-of-account/'.$statementOfAccount->id ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                                        @endif
                                                         
+                                                        <a href="{{ url('lolo-pinoy-grill-commissary/view-statement-account/'.$statementOfAccount->id) }}" title="View"><i class="fas fa-low-vision"></i></a>
+
+                                                    </td>
+                                                    <td>{{ $statementOfAccount->date }}</td>
+                                                    <td>SOA-{{ $statementOfAccount->lechon_de_cebu_code}}</td>
+                                                    <td>{{ $statementOfAccount->bs_no}}</td>
+                                                    <td>{{ $statementOfAccount->bill_to}}</td> 
+                                                    <td>{{ $statementOfAccount->order}}</td> 
+                                                    <td>{{ $statementOfAccount->status}}</td> 
+                                                    <td class="bg-info" style="color:white;">{{ $statementOfAccount->period_cover}}</td>
+                                                     <td><?= number_format($statementOfAccount->total_amount, 2)?></td>
+                                                     <td><?= number_format($statementOfAccount->total_remaining_balance, 2)?></td>
+                                                    <td>{{ $statementOfAccount->created_by}}</td>
+                                                    </tr>
+                                                    @endforeach
                                                 </tbody>
                                               </table>
                                         </div>

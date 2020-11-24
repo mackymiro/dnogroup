@@ -3197,7 +3197,7 @@ class LoloPinoyLechonDeCebuController extends Controller
          
         $uri0 = "";
         $uri1 = "";
-        $pdf = PDF::loadView('printSummaryBillingStatement',  compact('uri0', 'uri1','date', 'getDateToday', 
+        $pdf = PDF::loadView('printSummaryBillingStatement',  compact('uri0', 'uri1', 'getDateToday', 
         'billingStatements', 'totalBStatement'));
                             
         return $pdf->download('lechon-de-cebu-summary-report-billing-statement.pdf');
@@ -3348,7 +3348,7 @@ class LoloPinoyLechonDeCebuController extends Controller
            
         $uri0 = "";
         $uri1 = "";
-        $pdf = PDF::loadView('printSummarySOA',  compact('uri0', 'uri1','date', 'getDateToday', 'statementOfAccounts'));
+        $pdf = PDF::loadView('printSummarySOA',  compact('uri0', 'uri1', 'getDateToday', 'statementOfAccounts'));
         return $pdf->download('lechon-de-cebu-summary-report-SOA.pdf');
 
 
@@ -3582,7 +3582,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
             $uri0 = "";
             $uri1 = "";
-            $pdf = PDF::loadView('printSummaryPurchaseOrder',  compact('uri0', 'uri1','date', 'getDateToday', 
+            $pdf = PDF::loadView('printSummaryPurchaseOrder',  compact('uri0', 'uri1', 'getDateToday', 
             'purchaseOrders', 'totalPOrder'));
             
             return $pdf->download('lechon-de-cebu-summary-report-purchase-order.pdf');
@@ -4100,7 +4100,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $uri0 = "";
         $uri1 = "";
-        $pdf = PDF::loadView('printSummarySalesInvoice',  compact('uri0', 'uri1','date', 'getDateToday', 'getAllSalesInvoices', 
+        $pdf = PDF::loadView('printSummarySalesInvoice',  compact('uri0', 'uri1', 'getDateToday', 'getAllSalesInvoices', 
        'totalSalesInvoice'));   
         
         return $pdf->download('lechon-de-cebu-summary-report-sales-invoice.pdf');
@@ -4653,9 +4653,9 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $uri0 = "";
         $uri1 = "";
-         $pdf = PDF::loadView('printSummary',  compact('uri0', 'uri1','date', 'getDateToday', 'getAllSalesInvoices', 
-        'getAllDeliveryReceipts', 'purchaseOrders', 'statementOfAccounts', 'billingStatements', 
-        'pettyCashLists',  'getTransactionLists', 'getTransactionListCashes', 'getTransactionListChecks', 'totalSalesInvoice', 'totalDeliveryReceipt', 'totalPOrder', 'totalBStatement', 
+         $pdf = PDF::loadView('printSummary',  compact('uri0', 'uri1', 'getDateToday', 'getAllSalesInvoices', 
+        'getAllDeliveryReceipts', 'purchaseOrders', 'billingStatements', 
+        'pettyCashLists',  'getTransactionListCashes', 'getTransactionListChecks', 'totalSalesInvoice', 'totalDeliveryReceipt', 'totalPOrder', 'totalBStatement', 
         'totalPaymentVoucherCash','totalPaymentVoucherCheck', 'totalPaidAmountCheck'));
         
         return $pdf->download('lechon-de-cebu-summary-report.pdf');
