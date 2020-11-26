@@ -428,6 +428,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                             'lechon_de_cebu_payment_vouchers.amount_due',
                             'lechon_de_cebu_payment_vouchers.delivered_date',
                             'lechon_de_cebu_payment_vouchers.status',
+                            'lechon_de_cebu_payment_vouchers.supplier_id',
                             'lechon_de_cebu_payment_vouchers.cheque_number',
                             'lechon_de_cebu_payment_vouchers.cheque_amount',
                             'lechon_de_cebu_payment_vouchers.cheque_total_amount',
@@ -435,7 +436,6 @@ class LoloPinoyLechonDeCebuController extends Controller
                             'lechon_de_cebu_payment_vouchers.sub_category_account_id',
                             'lechon_de_cebu_payment_vouchers.supplier_name',
                             'lechon_de_cebu_payment_vouchers.deleted_at',
-                            'lechon_de_cebu_suppliers.id',
                             'lechon_de_cebu_suppliers.date',
                             'lechon_de_cebu_suppliers.supplier_name')
                             ->leftJoin('lechon_de_cebu_suppliers', 'lechon_de_cebu_payment_vouchers.supplier_id', '=', 'lechon_de_cebu_suppliers.id')
@@ -483,6 +483,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 ->where('lechon_de_cebu_suppliers.id', $id)
                                 ->where('lechon_de_cebu_payment_vouchers.status', '!=', $status)
                                 ->sum('lechon_de_cebu_payment_vouchers.amount_due');
+
+      
     
         return view('view-lechon-de-cebu-supplier', compact('viewSupplier', 'supplierLists', 'totalAmountDue'));
     }
@@ -574,6 +576,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         
        
          $uIdParticular->date  = $request->date;
+         $uIdParticular->invoice_number = $request->invoiceN;
          $uIdParticular->particulars = $request->particulars;
          $uIdParticular->amount = $amount; 
          $uIdParticular->save();
@@ -595,6 +598,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $sum = $amount + $tot; 
  
         $updateParticular->date = $request->date;
+        $updateParticular->invoice_number = $request->invoiceN;
         $updateParticular->particulars = $request->particulars;
         $updateParticular->amount = $amount;
         $updateParticular->amount_due = $sum;
@@ -6268,10 +6272,12 @@ class LoloPinoyLechonDeCebuController extends Controller
          //add current amount
         $add = $particulars['amount_due'] + $request->get('amount');
 
+
         $addParticulars = new LechonDeCebuPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
             'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNo'),
             'particulars'=>$request->get('particulars'),
             'amount'=>$request->get('amount'),
             'created_by'=>$name,

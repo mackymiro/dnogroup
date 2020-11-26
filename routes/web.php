@@ -304,12 +304,12 @@ Route::group(['middleware' =>['user']], function(){
 			'LoloPinoyLechonDeCebuController@editPayablesDetail')
 			->name('editPayablesDetailLechonDeCebu');
 
-	Route::patch(
+	Route::put(
 		'/lechon-de-cebu/payables/update-particulars/{id}',
 		'LoloPinoyLechonDeCebuController@updateParticulars')
 		->name('updateParticulars');
 
-	Route::patch(
+	Route::put(
 		'/lechon-de-cebu/payables/updateP/{id}',
 		'LoloPinoyLechonDeCebuController@updateP')
 		->name('updateP');

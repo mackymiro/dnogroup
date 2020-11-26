@@ -109,6 +109,7 @@
                                       @endforeach
                                     </select>
                                 </div>  
+                                
                                 <div id="utility" class="col-md-2">
                                     <label>&nbsp</label>
                                     <div id="app-bill">
