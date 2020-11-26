@@ -288,7 +288,7 @@ class LoloPinoyGrillCommissaryController extends Controller
                         'lolo_pinoy_grill_commissary_payment_vouchers.sub_category_account_id',
                         'lolo_pinoy_grill_commissary_payment_vouchers.supplier_name',
                         'lolo_pinoy_grill_commissary_payment_vouchers.deleted_at',
-                        'lolo_pinoy_grill_commissary_suppliers.id',
+                       
                         'lolo_pinoy_grill_commissary_suppliers.date',
                         'lolo_pinoy_grill_commissary_suppliers.supplier_name')
                         ->leftJoin('lolo_pinoy_grill_commissary_suppliers', 'lolo_pinoy_grill_commissary_payment_vouchers.supplier_id', '=', 'lolo_pinoy_grill_commissary_suppliers.id')
@@ -577,6 +577,7 @@ class LoloPinoyGrillCommissaryController extends Controller
         
        
          $uIdParticular->date  = $request->date;
+         $uIdParticular->invoice_number = $request->invoiceN;
          $uIdParticular->particulars = $request->particulars;
          $uIdParticular->amount = $amount; 
          $uIdParticular->save();
@@ -598,6 +599,7 @@ class LoloPinoyGrillCommissaryController extends Controller
         $sum = $amount + $tot; 
  
         $updateParticular->date = $request->date;
+        $updateParticular->invoice_number = $request->invoiceNo;
         $updateParticular->particulars = $request->particulars;
         $updateParticular->amount = $amount;
         $updateParticular->amount_due = $sum;
@@ -6982,20 +6984,14 @@ class LoloPinoyGrillCommissaryController extends Controller
        //add current amount
         $add = $particulars['amount_due'] + $request->get('amount');
 
-        //get Category
-        $cat = $particulars['category'];
-
-        //get current voucher ref number
-        $voucherRef = $particulars['voucher_ref_number'];
     
         $addParticulars = new LoloPinoyGrillCommissaryPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
-            'voucher_ref_number'=>$voucherRef,
+            'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNo'),
             'particulars'=>$request->get('particulars'),
             'amount'=>$request->get('amount'),
-            'category'=>$cat,
-            'date'=>$request->get('date'),
             'created_by'=>$name,
 
         ]);
@@ -7008,7 +7004,7 @@ class LoloPinoyGrillCommissaryController extends Controller
         
         Session::flash('particularsAdded', 'Particulars added.');
 
-        return redirect('lolo-pinoy-grill-commissary/edit-lolo-pinoy-grill-payables-detail/'.$id);
+        return redirect()->route('editPayablesDetailLoloPinoyGrill', ['id'=>$id]);
 
     }
 

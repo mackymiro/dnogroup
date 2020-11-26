@@ -198,7 +198,7 @@
         <div style="float:left; width:50%; margin-top:-40px; ">
             <p style="font-size: 16px;">MAKE CHECK PAYMENTS PAYABLE TO  <u>RIBO'S FOOD CORPORATION</u></p>
         </div>
-        <div style="float:right; width:50%; margin-top:15px;">
+        <div style="float:right; width:50%; margin-top:-4px;">
             <p style="font-size: 14px; margin-top:-30px;">Received the above merchandise in good order and condition<br>
             ___________________________<br>
             Print Name and Signature/Date</p>

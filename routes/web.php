@@ -709,13 +709,13 @@ Route::group(['middleware' =>['user']], function(){
 		->name('editPayablesDetailLoloPinoyGrill')
 		->middleware(['cashier']);
 
-	Route::patch(
+	Route::put(
 		'/lolo-pinoy-grill-commissary/payables/update-particulars/{id}',
 		'LoloPinoyGrillCommissaryController@updateParticulars')
 		->name('updateParticulars')
 		->middleware(['cashier']);
 
-	Route::patch(
+	Route::put(
 		'/lolo-pinoy-grill-commissary/payables/updateP/{id}',
 		'LoloPinoyGrillCommissaryController@updateP')
 		->name('updateP')
