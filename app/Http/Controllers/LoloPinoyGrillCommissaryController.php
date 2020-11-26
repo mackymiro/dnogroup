@@ -1358,6 +1358,10 @@ class LoloPinoyGrillCommissaryController extends Controller
                             'lolo_pinoy_grill_commissary_statement_of_accounts.date_of_transaction',
                             'lolo_pinoy_grill_commissary_statement_of_accounts.invoice_number',
                             'lolo_pinoy_grill_commissary_statement_of_accounts.description',
+                            'lolo_pinoy_grill_commissary_statement_of_accounts.order',
+                            'lolo_pinoy_grill_commissary_statement_of_accounts.status',
+                            'lolo_pinoy_grill_commissary_statement_of_accounts.dr_no',
+                            'lolo_pinoy_grill_commissary_statement_of_accounts.dr_list_id',
                             'lolo_pinoy_grill_commissary_statement_of_accounts.amount',
                             'lolo_pinoy_grill_commissary_statement_of_accounts.total_amount',
                             'lolo_pinoy_grill_commissary_statement_of_accounts.total_remaining_balance',
@@ -1843,6 +1847,234 @@ class LoloPinoyGrillCommissaryController extends Controller
         return view('lolo-pinoy-grill-commissary-search-number-code', compact('getAllCodes'));
     }
 
+    public function printMultipleSummaryBillingStatement(Request $request, $date){
+        $urlSegment = \Request::segment(3);
+        $uri = explode("TO", $urlSegment);
+        $uri0 = $uri[0];
+        $uri1 = $uri[1]; 
+
+        $moduleName = "Billing Statement";
+        $billingStatements = DB::table(
+                        'lolo_pinoy_grill_commissary_billing_statements')
+                        ->select(
+                            'lolo_pinoy_grill_commissary_billing_statements.id',
+                            'lolo_pinoy_grill_commissary_billing_statements.user_id',
+                            'lolo_pinoy_grill_commissary_billing_statements.billing_statement_id',
+                            'lolo_pinoy_grill_commissary_billing_statements.bill_to',
+                            'lolo_pinoy_grill_commissary_billing_statements.address',
+                            'lolo_pinoy_grill_commissary_billing_statements.date',
+                            'lolo_pinoy_grill_commissary_billing_statements.branch',
+                            'lolo_pinoy_grill_commissary_billing_statements.period_cover',
+                            'lolo_pinoy_grill_commissary_billing_statements.terms',
+                            'lolo_pinoy_grill_commissary_billing_statements.date_of_transaction',
+                            'lolo_pinoy_grill_commissary_billing_statements.invoice_number',
+                            'lolo_pinoy_grill_commissary_billing_statements.description',
+                            'lolo_pinoy_grill_commissary_billing_statements.amount',
+                            'lolo_pinoy_grill_commissary_billing_statements.total_amount',
+                            'lolo_pinoy_grill_commissary_billing_statements.created_by',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                        ->leftJoin('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_billing_statements.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                        ->where('lolo_pinoy_grill_commissary_billing_statements.billing_statement_id', NULL)
+                        ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                        ->whereBetween('lolo_pinoy_grill_commissary_billing_statements.created_at', [$uri0, $uri1])
+                        ->orderBy('lolo_pinoy_grill_commissary_billing_statements.id', 'desc')
+                        ->get(); 
+                        
+        
+        $totalBStatement = DB::table(
+                            'lolo_pinoy_grill_commissary_billing_statements')
+                            ->select(
+                                'lolo_pinoy_grill_commissary_billing_statements.id',
+                                'lolo_pinoy_grill_commissary_billing_statements.user_id',
+                                'lolo_pinoy_grill_commissary_billing_statements.billing_statement_id',
+                                'lolo_pinoy_grill_commissary_billing_statements.bill_to',
+                                'lolo_pinoy_grill_commissary_billing_statements.address',
+                                'lolo_pinoy_grill_commissary_billing_statements.date',
+                                'lolo_pinoy_grill_commissary_billing_statements.branch',
+                                'lolo_pinoy_grill_commissary_billing_statements.period_cover',
+                                'lolo_pinoy_grill_commissary_billing_statements.terms',
+                                'lolo_pinoy_grill_commissary_billing_statements.date_of_transaction',
+                                'lolo_pinoy_grill_commissary_billing_statements.invoice_number',
+                                'lolo_pinoy_grill_commissary_billing_statements.order',
+                                'lolo_pinoy_grill_commissary_billing_statements.whole_lechon',
+                                'lolo_pinoy_grill_commissary_billing_statements.description',
+                                'lolo_pinoy_grill_commissary_billing_statements.amount',
+                                'lolo_pinoy_grill_commissary_billing_statements.total_amount',
+                                'lolo_pinoy_grill_commissary_billing_statements.paid_amount',
+                                'lolo_pinoy_grill_commissary_billing_statements.created_by',
+                                'lolo_pinoy_grill_commissary_billing_statements.deleted_at',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                            ->leftJoin('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_billing_statements.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                            ->where('lolo_pinoy_grill_commissary_billing_statements.billing_statement_id', NULL)
+                            ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                            ->where('lolo_pinoy_grill_commissary_billing_statements.deleted_at', NULL)
+                            ->whereBetween('lolo_pinoy_grill_commissary_billing_statements.created_at', [$uri0, $uri1])
+                            ->sum('lolo_pinoy_grill_commissary_billing_statements.total_amount');
+
+        $pdf = PDF::loadView('printSummaryLoloPinoyGrillBillingStatement',  compact('date', 'uri0', 'uri1', 
+        'billingStatements', 'totalBStatement'));
+        
+        return $pdf->download('lolo-pinoy-grill-commissary-summary-report-billing-statement.pdf');
+
+    }
+
+    public function printGetSummaryBillingStatement($date){
+        
+        $moduleName = "Billing Statement";
+        $billingStatements = DB::table(
+                        'lolo_pinoy_grill_commissary_billing_statements')
+                        ->select(
+                            'lolo_pinoy_grill_commissary_billing_statements.id',
+                            'lolo_pinoy_grill_commissary_billing_statements.user_id',
+                            'lolo_pinoy_grill_commissary_billing_statements.billing_statement_id',
+                            'lolo_pinoy_grill_commissary_billing_statements.bill_to',
+                            'lolo_pinoy_grill_commissary_billing_statements.address',
+                            'lolo_pinoy_grill_commissary_billing_statements.date',
+                            'lolo_pinoy_grill_commissary_billing_statements.branch',
+                            'lolo_pinoy_grill_commissary_billing_statements.period_cover',
+                            'lolo_pinoy_grill_commissary_billing_statements.terms',
+                            'lolo_pinoy_grill_commissary_billing_statements.date_of_transaction',
+                            'lolo_pinoy_grill_commissary_billing_statements.invoice_number',
+                            'lolo_pinoy_grill_commissary_billing_statements.description',
+                            'lolo_pinoy_grill_commissary_billing_statements.amount',
+                            'lolo_pinoy_grill_commissary_billing_statements.created_by',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                        ->leftJoin('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_billing_statements.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                        ->where('lolo_pinoy_grill_commissary_billing_statements.billing_statement_id', NULL)
+                        ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                        ->whereDate('lolo_pinoy_grill_commissary_billing_statements.created_at', '=', date($date))
+                        ->orderBy('lolo_pinoy_grill_commissary_billing_statements.id', 'desc')
+                        ->get();
+
+        $totalBStatement = DB::table(
+                            'lolo_pinoy_grill_commissary_billing_statements')
+                            ->select(
+                                'lolo_pinoy_grill_commissary_billing_statements.id',
+                                'lolo_pinoy_grill_commissary_billing_statements.user_id',
+                                'lolo_pinoy_grill_commissary_billing_statements.billing_statement_id',
+                                'lolo_pinoy_grill_commissary_billing_statements.bill_to',
+                                'lolo_pinoy_grill_commissary_billing_statements.address',
+                                'lolo_pinoy_grill_commissary_billing_statements.date',
+                                'lolo_pinoy_grill_commissary_billing_statements.branch',
+                                'lolo_pinoy_grill_commissary_billing_statements.period_cover',
+                                'lolo_pinoy_grill_commissary_billing_statements.terms',
+                                'lolo_pinoy_grill_commissary_billing_statements.date_of_transaction',
+                                'lolo_pinoy_grill_commissary_billing_statements.invoice_number',
+                                'lolo_pinoy_grill_commissary_billing_statements.order',
+                                'lolo_pinoy_grill_commissary_billing_statements.whole_lechon',
+                                'lolo_pinoy_grill_commissary_billing_statements.description',
+                                'lolo_pinoy_grill_commissary_billing_statements.amount',
+                                'lolo_pinoy_grill_commissary_billing_statements.total_amount',
+                                'lolo_pinoy_grill_commissary_billing_statements.paid_amount',
+                                'lolo_pinoy_grill_commissary_billing_statements.created_by',
+                                'lolo_pinoy_grill_commissary_billing_statements.deleted_at',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                            ->leftJoin('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_billing_statements.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                            ->where('lolo_pinoy_grill_commissary_billing_statements.billing_statement_id', NULL)
+                            ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNameBillingStatement)
+                            ->where('lolo_pinoy_grill_commissary_billing_statements.deleted_at', NULL)
+                            ->whereDate('lolo_pinoy_grill_commissary_billing_statements.created_at', '=', date($date))
+                            ->sum('lolo_pinoy_grill_commissary_billing_statements.total_amount');
+
+            $getDateToday = "";
+            $uri0 ="";
+            $uri1 = "";
+            $pdf = PDF::loadView('printSummaryLoloPinoyGrillBillingStatement',  compact('date', 'uri0', 'uri1', 'getDateToday',
+            'billingStatements', 'totalBStatement'));
+                            
+        return $pdf->download('lolo-pinoy-grill-commissary-summary-report-billing-statement.pdf');
+    }
+
+    public function printSummaryBillingStatement(){
+        $getDateToday = date("Y-m-d");
+        
+        $moduleName = "Billing Statement";
+        $billingStatements = DB::table(
+                        'lolo_pinoy_grill_commissary_billing_statements')
+                        ->select(
+                            'lolo_pinoy_grill_commissary_billing_statements.id',
+                            'lolo_pinoy_grill_commissary_billing_statements.user_id',
+                            'lolo_pinoy_grill_commissary_billing_statements.billing_statement_id',
+                            'lolo_pinoy_grill_commissary_billing_statements.bill_to',
+                            'lolo_pinoy_grill_commissary_billing_statements.address',
+                            'lolo_pinoy_grill_commissary_billing_statements.date',
+                            'lolo_pinoy_grill_commissary_billing_statements.branch',
+                            'lolo_pinoy_grill_commissary_billing_statements.period_cover',
+                            'lolo_pinoy_grill_commissary_billing_statements.terms',
+                            'lolo_pinoy_grill_commissary_billing_statements.date_of_transaction',
+                            'lolo_pinoy_grill_commissary_billing_statements.invoice_number',
+                            'lolo_pinoy_grill_commissary_billing_statements.description',
+                            'lolo_pinoy_grill_commissary_billing_statements.amount',
+                            'lolo_pinoy_grill_commissary_billing_statements.total_amount',
+                            'lolo_pinoy_grill_commissary_billing_statements.created_by',
+                            'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                            'lolo_pinoy_grill_commissary_codes.module_id',
+                            'lolo_pinoy_grill_commissary_codes.module_code',
+                            'lolo_pinoy_grill_commissary_codes.module_name')
+                        ->leftJoin('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_billing_statements.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                        ->where('lolo_pinoy_grill_commissary_billing_statements.billing_statement_id', NULL)
+                        ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                        ->whereDate('lolo_pinoy_grill_commissary_billing_statements.created_at', '=', date($getDateToday))
+                        ->orderBy('lolo_pinoy_grill_commissary_billing_statements.id', 'desc')
+                        ->get();
+
+        $totalBStatement = DB::table(
+                            'lolo_pinoy_grill_commissary_billing_statements')
+                            ->select(
+                                'lolo_pinoy_grill_commissary_billing_statements.id',
+                                'lolo_pinoy_grill_commissary_billing_statements.user_id',
+                                'lolo_pinoy_grill_commissary_billing_statements.billing_statement_id',
+                                'lolo_pinoy_grill_commissary_billing_statements.bill_to',
+                                'lolo_pinoy_grill_commissary_billing_statements.address',
+                                'lolo_pinoy_grill_commissary_billing_statements.date',
+                                'lolo_pinoy_grill_commissary_billing_statements.branch',
+                                'lolo_pinoy_grill_commissary_billing_statements.period_cover',
+                                'lolo_pinoy_grill_commissary_billing_statements.terms',
+                                'lolo_pinoy_grill_commissary_billing_statements.date_of_transaction',
+                                'lolo_pinoy_grill_commissary_billing_statements.invoice_number',
+                                'lolo_pinoy_grill_commissary_billing_statements.order',
+                                'lolo_pinoy_grill_commissary_billing_statements.whole_lechon',
+                                'lolo_pinoy_grill_commissary_billing_statements.description',
+                                'lolo_pinoy_grill_commissary_billing_statements.amount',
+                                'lolo_pinoy_grill_commissary_billing_statements.total_amount',
+                                'lolo_pinoy_grill_commissary_billing_statements.paid_amount',
+                                'lolo_pinoy_grill_commissary_billing_statements.created_by',
+                                'lolo_pinoy_grill_commissary_billing_statements.deleted_at',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                            ->leftJoin('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_billing_statements.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                            ->where('lolo_pinoy_grill_commissary_billing_statements.billing_statement_id', NULL)
+                            ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                            ->where('lolo_pinoy_grill_commissary_billing_statements.deleted_at', NULL)
+                            ->whereDate('lolo_pinoy_grill_commissary_billing_statements.created_at', '=', date($getDateToday))
+                            ->sum('lolo_pinoy_grill_commissary_billing_statements.total_amount');
+
+            
+        $uri0 = "";
+        $uri1 = "";
+        $pdf = PDF::loadView('printSummaryLoloPinoyGrillBillingStatement',  compact('uri0', 'uri1', 'getDateToday', 
+        'billingStatements', 'totalBStatement'));
+                            
+        return $pdf->download('lolo-pinoy-grill-commissary-summary-report-billing-statement.pdf');
+                    
+
+
+    }
+
     public function printGetSummaryStatementOfAccount($date){
         $moduleName = "Statement Of Account";
         $statementOfAccounts = DB::table(
@@ -1906,6 +2138,10 @@ class LoloPinoyGrillCommissaryController extends Controller
                             'lolo_pinoy_grill_commissary_statement_of_accounts.date_of_transaction',
                             'lolo_pinoy_grill_commissary_statement_of_accounts.invoice_number',
                             'lolo_pinoy_grill_commissary_statement_of_accounts.description',
+                            'lolo_pinoy_grill_commissary_statement_of_accounts.order',
+                            'lolo_pinoy_grill_commissary_statement_of_accounts.status',
+                            'lolo_pinoy_grill_commissary_statement_of_accounts.dr_no',
+                            'lolo_pinoy_grill_commissary_statement_of_accounts.dr_list_id',
                             'lolo_pinoy_grill_commissary_statement_of_accounts.amount',
                             'lolo_pinoy_grill_commissary_statement_of_accounts.total_amount',
                             'lolo_pinoy_grill_commissary_statement_of_accounts.total_remaining_balance',
@@ -1923,7 +2159,7 @@ class LoloPinoyGrillCommissaryController extends Controller
                         ->get()->toArray();
 
         $pdf = PDF::loadView('printSummaryLoloPinoyGrillStatementOfAccount',  compact('date', 'uri0', 'uri1', 
-        'purchaseOrders', 'totalPOrder'));
+        'statementOfAccounts'));
         
         return $pdf->download('lolo-pinoy-grill-commissary-multiple-summary-report-soa.pdf');
                
@@ -3418,7 +3654,7 @@ class LoloPinoyGrillCommissaryController extends Controller
                                     ->sum('lolo_pinoy_grill_commissary_purchase_orders.total_price');
     
         //
-        $moduleName = "Statement Of Account";
+        $moduleNameSOA = "Statement Of Account";
         $statementOfAccounts = DB::table(
                         'lolo_pinoy_grill_commissary_statement_of_accounts')
                         ->select(
@@ -3444,12 +3680,12 @@ class LoloPinoyGrillCommissaryController extends Controller
                             'lolo_pinoy_grill_commissary_codes.module_name')
                         ->join('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_statement_of_accounts.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
                         ->where('lolo_pinoy_grill_commissary_statement_of_accounts.bill_to', '!=', NULL)
-                        ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleName)
+                        ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNameSOA)
                         ->whereDate('lolo_pinoy_grill_commissary_statement_of_accounts.created_at', '=', date($getDate))
                         ->orderBy('lolo_pinoy_grill_commissary_statement_of_accounts.id', 'desc')
                         ->get()->toArray();
 
-
+        
 
         $moduleNamePettyCash = "Petty Cash";
         $pettyCashLists = DB::table(
@@ -4475,6 +4711,67 @@ class LoloPinoyGrillCommissaryController extends Controller
                         ->get()->toArray();
 
 
+            $moduleNameBS = "Billing Statement";
+            $billingStatements = DB::table(
+                            'lolo_pinoy_grill_commissary_billing_statements')
+                            ->select(
+                                'lolo_pinoy_grill_commissary_billing_statements.id',
+                                'lolo_pinoy_grill_commissary_billing_statements.user_id',
+                                'lolo_pinoy_grill_commissary_billing_statements.billing_statement_id',
+                                'lolo_pinoy_grill_commissary_billing_statements.bill_to',
+                                'lolo_pinoy_grill_commissary_billing_statements.address',
+                                'lolo_pinoy_grill_commissary_billing_statements.date',
+                                'lolo_pinoy_grill_commissary_billing_statements.branch',
+                                'lolo_pinoy_grill_commissary_billing_statements.period_cover',
+                                'lolo_pinoy_grill_commissary_billing_statements.terms',
+                                'lolo_pinoy_grill_commissary_billing_statements.date_of_transaction',
+                                'lolo_pinoy_grill_commissary_billing_statements.invoice_number',
+                                'lolo_pinoy_grill_commissary_billing_statements.description',
+                                'lolo_pinoy_grill_commissary_billing_statements.amount',
+                                'lolo_pinoy_grill_commissary_billing_statements.created_by',
+                                'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                'lolo_pinoy_grill_commissary_codes.module_id',
+                                'lolo_pinoy_grill_commissary_codes.module_code',
+                                'lolo_pinoy_grill_commissary_codes.module_name')
+                            ->leftJoin('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_billing_statements.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                            ->where('lolo_pinoy_grill_commissary_billing_statements.billing_statement_id', NULL)
+                            ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNameBS)
+                            ->whereDate('lolo_pinoy_grill_commissary_billing_statements.created_at', '=', date($getDateToday))
+                            ->orderBy('lolo_pinoy_grill_commissary_billing_statements.id', 'desc')
+                            ->get();
+                
+            $totalBStatement = DB::table(
+                                'lolo_pinoy_grill_commissary_billing_statements')
+                                ->select(
+                                    'lolo_pinoy_grill_commissary_billing_statements.id',
+                                    'lolo_pinoy_grill_commissary_billing_statements.user_id',
+                                    'lolo_pinoy_grill_commissary_billing_statements.billing_statement_id',
+                                    'lolo_pinoy_grill_commissary_billing_statements.bill_to',
+                                    'lolo_pinoy_grill_commissary_billing_statements.address',
+                                    'lolo_pinoy_grill_commissary_billing_statements.date',
+                                    'lolo_pinoy_grill_commissary_billing_statements.branch',
+                                    'lolo_pinoy_grill_commissary_billing_statements.period_cover',
+                                    'lolo_pinoy_grill_commissary_billing_statements.terms',
+                                    'lolo_pinoy_grill_commissary_billing_statements.date_of_transaction',
+                                    'lolo_pinoy_grill_commissary_billing_statements.invoice_number',
+                                    'lolo_pinoy_grill_commissary_billing_statements.order',
+                                    'lolo_pinoy_grill_commissary_billing_statements.whole_lechon',
+                                    'lolo_pinoy_grill_commissary_billing_statements.description',
+                                    'lolo_pinoy_grill_commissary_billing_statements.amount',
+                                    'lolo_pinoy_grill_commissary_billing_statements.total_amount',
+                                    'lolo_pinoy_grill_commissary_billing_statements.paid_amount',
+                                    'lolo_pinoy_grill_commissary_billing_statements.created_by',
+                                    'lolo_pinoy_grill_commissary_codes.lolo_pinoy_grill_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_id',
+                                    'lolo_pinoy_grill_commissary_codes.module_code',
+                                    'lolo_pinoy_grill_commissary_codes.module_name')
+                                ->leftJoin('lolo_pinoy_grill_commissary_codes', 'lolo_pinoy_grill_commissary_billing_statements.id', '=', 'lolo_pinoy_grill_commissary_codes.module_id')
+                                ->where('lolo_pinoy_grill_commissary_billing_statements.billing_statement_id', NULL)
+                                ->where('lolo_pinoy_grill_commissary_codes.module_name', $moduleNameBS)
+                                ->whereDate('lolo_pinoy_grill_commissary_billing_statements.created_at', '=', date($getDateToday))
+                                ->sum('lolo_pinoy_grill_commissary_billing_statements.total_amount');
+                
+
         $moduleNamePettyCash = "Petty Cash";
         $pettyCashLists = DB::table(
                                 'lolo_pinoy_grill_commissary_petty_cashes')
@@ -4732,7 +5029,7 @@ class LoloPinoyGrillCommissaryController extends Controller
 
         return view('lolo-pinoy-grill-commissary-summary-report', compact('getAllSalesInvoices', 
         'totalSalesInvoice', 'getAllDeliveryReceipts', 'totalDeliveryReceipt', 'purchaseOrders', 
-        'totalPOrder', 'statementOfAccounts',
+        'totalPOrder', 'statementOfAccounts', 'billingStatements', 'totalBStatement', 
         'pettyCashLists', 'getTransactionLists', 'getTransactionListCashes', 'totalAmountCash' , 
         'getTransactionListChecks', 'totalAmountCheck'));
     }

@@ -367,7 +367,7 @@
 
                                                     </td>
                                                     <td>{{ $statementOfAccount->date }}</td>
-                                                    <td>SOA-{{ $statementOfAccount->lechon_de_cebu_code}}</td>
+                                                    <td>SOA-{{ $statementOfAccount->lolo_pinoy_grill_code}}</td>
                                                     <td>{{ $statementOfAccount->bs_no}}</td>
                                                     <td>{{ $statementOfAccount->bill_to}}</td> 
                                                     <td>{{ $statementOfAccount->order}}</td> 
@@ -383,6 +383,13 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="billingStatement" role="tabpanel" aria-labelledby="billingStatement-tab">
+                                          <br>
+                                       
+                                        <div class="float-right">
+                                            <a href="{{ action('LoloPinoyGrillCommissaryController@printMultipleSummaryBillingStatement', $startDate.'TO'.$endDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                        </div>
+                                        <br>
+                                        <br>
                                         <br>
                                         <div class="table-responsive">
                                              <table class="table table-bordered display"  width="100%" cellspacing="0">

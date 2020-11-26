@@ -71,7 +71,7 @@
                                   @foreach($statementOfAccounts as $statementOfAccount)
 									<tr style="border:1px solid black;">
                                         <td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->date}}</td>
-										<td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->module_code}}{{ $statementOfAccount->lechon_de_cebu_code}}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->module_code}}{{ $statementOfAccount->lolo_pinoy_grill_code}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->bs_no}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->bill_to}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->order}}</td>

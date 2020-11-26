@@ -381,7 +381,14 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane fade" id="billingStatement" role="tabpanel" aria-labelledby="billingStatement-tab">
-                                        <br>
+                                              <br>
+                                       
+                                       <div class="float-right">
+                                           <a href="{{ action('LoloPinoyGrillCommissaryController@printSummaryBillingStatement') }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                       </div>
+                                       <br>
+                                       <br>
+                                       <br>
                                         <div class="table-responsive">
                                              <table class="table table-bordered display"  width="100%" cellspacing="0">
                                                 <thead>
@@ -404,7 +411,26 @@
 
                                                 </tfoot>
                                                 <tbody>
+                                                    @foreach($billingStatements as $billingStatement)
+                                                    <tr id="deletedId{{ $billingStatement->id }}">
+                                                        <td>
+                                                            @if(Auth::user()['role_type'] !== 3)
+                                                            <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-billing-statement/'.$billingStatement->id ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                                            @endif
+                                                            @if(Auth::user()['role_type'] == 1)
+                                                            <a id="delete" onClick="confirmDelete('{{ $billingStatement->id }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                                                            @endif
+                                                            <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-billing-statement/'.$billingStatement->id) }}" title="View"><i class="fas fa-low-vision"></i></a>
 
+                                                        </td>
+                                                        <td>{{ $billingStatement->module_code}}{{ $billingStatement->lechon_de_cebu_code }}</td>
+                
+                                                        <td>{{ $billingStatement->bill_to }}</td>
+                                                        <td>{{ $billingStatement->date }}</td>
+                                                        <td>{{ $billingStatement->period_cover }}</td>
+                                                        <td>{{ $billingStatement->created_by }}</td>
+                                                    </tr>
+                                                    @endforeach
                                                 </tbody>
                                              </table>
                                         </div>
