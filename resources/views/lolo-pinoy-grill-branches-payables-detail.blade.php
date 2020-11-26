@@ -167,6 +167,11 @@
 											<input type="text" name="date" class="datepicker form-control" required="required" />
 										
 										</div>
+										<div class="col-lg-12">
+  											<label>Invoice No</label>
+											<input type="text" name="invoiceNo" class="form-control" required />
+										
+										</div>
   										<div class="col-lg-12">
   											<label>Particulars</label>
 											<input type="text" name="particulars" class="form-control" required="required" />
@@ -261,6 +266,10 @@
 		  									<label>Payment Method</label>
 		  									<input type="text" name="paymentMethod" class="form-control" value="{{ $transactionList[0]->method_of_payment }}" disabled="disabled" />
 			  							</div>
+										<div class="col-lg-4">
+		  									<label>Category</label>
+		  									<input type="text" name="category" class="form-control" value="{{ $transactionList[0]->category }}" disabled="disabled" />
+			  							</div>
 			  							<div class="col-lg-4">
 		  									<label>Status</label>
 		  									<div id="app-status">
@@ -280,6 +289,7 @@
   									<thead>
   										<tr>
   											<th>ACTION</th>
+											<th>INVOICE NO</th>
   											<th>DATE</th>
   											<th>PARTICULARS</th>
 											<th>AMOUNT</th>
@@ -299,6 +309,7 @@
 
 											  @endif
 											</td>
+											<td>{{ $transactionList[0]->invoice_number}}</td>
   											<td>{{ $transactionList[0]->issued_date}}</td>
   											<td>{{ $transactionList[0]->particulars}}</td>
 											<td><?php echo number_format($transactionList[0]->amount, 2); ?></td>
@@ -315,6 +326,7 @@
   											 
 											 @endif
 											</td>
+											<td>{{ $getParticular['invoice_number']}}</td>
   											<td>{{ $getParticular['date']}}</td>
   											<td>{{ $getParticular['particulars']}}</td>
 											<td><?php echo number_format($getParticular['amount'], 2); ?></td>
@@ -545,15 +557,19 @@
 						<div id="editParticularP" class="col-lg-12"></div>
 						<div class="col-lg-4">
 							<label>Date</label>
-							<input type="text" id="dateP<?php echo $getParticular['id']?>" name="date" class="datepicker form-control"  value="{{ $getParticular['date']}}" />
+							<input type="text" id="dateP<?= $getParticular['id']?>" name="date" class="datepicker form-control"  value="{{ $getParticular['date']}}" />
+						</div>
+						<div class="col-lg-4">
+							<label>Invoice No</label>
+							<input type="text" id="invoiceN<?= $getParticular['id']?>" name="invoiceN" class="form-control"  value="{{ $getParticular['invoice_number']}}" />
 						</div>
 						<div class="col-lg-4">
 							<label>Particulars</label>
-							<textarea id="particularsP<?php echo $getParticular['id']?>" name="particulars" class="form-control">{{ $getParticular['particulars'] }}</textarea>
+							<textarea id="particularsP<?= $getParticular['id']?>" name="particulars" class="form-control">{{ $getParticular['particulars'] }}</textarea>
 						</div>
 						<div class="col-lg-4">
 							<label>Amount</label>
-							<input type="text" id="amountP<?php echo $getParticular['id']?>" name="amount" class="form-control" value="{{ $getParticular['amount'] }}" />
+							<input type="text" id="amountP<?= $getParticular['id']?>" name="amount" class="form-control" value="{{ $getParticular['amount'] }}" />
 						</div>
 						
 					</div>
@@ -561,8 +577,8 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-				<input type="hidden" id="transId<?php echo $getParticular['id']?>" value="{{ $transactionList[0]->id }}" />
-				<button type="button" onclick="updateP(<?php echo $getParticular['id'];?>)" class="btn btn-success">Update changes</button>
+				<input type="hidden" id="transId<?= $getParticular['id']?>" value="{{ $transactionList[0]->id }}" />
+				<button type="button" onclick="updateP(<?= $getParticular['id'];?>)" class="btn btn-success">Update changes</button>
 			</div>
 			</div>
 		</div>
@@ -570,7 +586,7 @@
 	@endforeach
 
 	   <!-- Modal -->
-	   <div class="modal fade" id="editParticulars<?php echo $transactionList[0]->id ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	   <div class="modal fade" id="editParticulars<?= $transactionList[0]->id ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
 			<div class="modal-header">
@@ -588,6 +604,10 @@
 							<input type="text" id="date" name="date" class="datepicker form-control"  value="{{ $transactionList[0]->issued_date}}" />
 						</div>
 						<div class="col-lg-4">
+							<label>Invoice No</label>
+							<input type="text" id="invoiceNo" name="invoiceNo" class=" form-control"  value="{{ $transactionList[0]->invoice_number}}" />
+						</div>
+						<div class="col-lg-4">
 							<label>Particulars</label>
 							<textarea id="particulars" name="particulars" class="form-control">{{ $transactionList[0]->particulars}}</textarea>
 						</div>
@@ -601,7 +621,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-				<button type="button" onclick="updateParticular(<?php echo $transactionList[0]->id; ?>)" class="btn btn-success">Update changes</button>
+				<button type="button" onclick="updateParticular(<?= $transactionList[0]->id; ?>)" class="btn btn-success">Update changes</button>
 			</div>
 			</div>
 		</div>
@@ -753,19 +773,21 @@
 
 	const updateP = (id) =>{
 		const dateP = $("#dateP"+id).val();
+		const invoiceN =  $("#invoiceN"+id).val();
 		const particularsP = $("#particularsP"+id).val();
 		const amountP = $("#amountP"+id).val();
 		const transId = $("#transId"+id).val();
 
 		//make ajax call
 		$.ajax({
-			type:"PATCH",
+			type:"PUT",
             url:'/lolo-pinoy-grill-branches/payables/updateP/' + id,
 			data:{
-                _method:'patch',
+                _method:'put',
                 "_token":"{{ csrf_token() }}",
                 "id":id,
                 "date":dateP,
+				"invoiceN":invoiceN,
                 "particulars":particularsP,
 				"amount":amountP,
 				"transId":transId,
@@ -792,18 +814,20 @@
 
 	const updateParticular = (id) =>{
 		const date = $("#date").val();
+		const invoiceNo = $("#invoiceNo").val();
 		const particulars = $("#particulars").val();
 		const amount = $("#amount").val();
 
 		 //make ajax call
 		 $.ajax({
-			type:"PATCH",
+			type:"PUT",
             url:'/lolo-pinoy-grill-branches/payables/update-particulars/' + id,
 			data:{
-                _method:'patch',
+                _method:'put',
                 "_token":"{{ csrf_token() }}",
                 "id":id,
                 "date":date,
+				"invoiceNo":invoiceNo,
                 "particulars":particulars,
 				"amount":amount,
             },

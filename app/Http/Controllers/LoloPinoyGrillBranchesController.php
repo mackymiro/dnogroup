@@ -821,7 +821,6 @@ class LoloPinoyGrillBranchesController extends Controller
                         'lolo_pinoy_grill_branches_payment_vouchers.supplier_id',
                         'lolo_pinoy_grill_branches_payment_vouchers.supplier_name',
                         'lolo_pinoy_grill_branches_payment_vouchers.deleted_at',
-                        'lolo_pinoy_grill_branches_suppliers.id',
                         'lolo_pinoy_grill_branches_suppliers.date',
                         'lolo_pinoy_grill_branches_suppliers.supplier_name')
                         ->leftJoin('lolo_pinoy_grill_branches_suppliers', 'lolo_pinoy_grill_branches_payment_vouchers.supplier_id', '=', 'lolo_pinoy_grill_branches_suppliers.id')
@@ -958,6 +957,7 @@ class LoloPinoyGrillBranchesController extends Controller
          
         
           $uIdParticular->date  = $request->date;
+          $uIdParticular->invoice_number = $request->invoiceN;
           $uIdParticular->particulars = $request->particulars;
           $uIdParticular->amount = $amount; 
           $uIdParticular->save();
@@ -979,6 +979,7 @@ class LoloPinoyGrillBranchesController extends Controller
         $sum = $amount + $tot; 
  
         $updateParticular->date = $request->date;
+        $updateParticular->invoice_number = $request->invoiceNo;
         $updateParticular->particulars = $request->particulars;
         $updateParticular->amount = $amount;
         $updateParticular->amount_due = $sum;
@@ -4241,8 +4242,7 @@ class LoloPinoyGrillBranchesController extends Controller
         //add current amount
         $add = $particulars['amount_due'] + $request->get('amount');
 
-        //get Category
-        $cat = $particulars['category'];
+
 
         //get current voucher ref number
         $voucherRef = $particulars['voucher_ref_number'];
@@ -4252,12 +4252,10 @@ class LoloPinoyGrillBranchesController extends Controller
         $addParticulars = new LoloPinoyGrillBranchesPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
+            'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNo'),
             'particulars'=>$request->get('particulars'),
             'amount'=>$request->get('amount'),
-            'voucher_ref_number'=>$voucherRef,
-            'category'=>$cat,
-            'sub_category_account_id'=>$subAccountId,
-            'date'=>$request->get('date'),
             'created_by'=>$name,
 
         ]);

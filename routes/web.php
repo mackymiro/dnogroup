@@ -810,13 +810,13 @@ Route::group(['middleware' =>['user']], function(){
 		'LoloPinoyGrillBranchesController@editPayablesDetail')
 		->name('editPayablesDetailLpBranches');
 
-	Route::patch(
+	Route::put(
 		'/lolo-pinoy-grill-branches/payables/update-particulars/{id}',
 		'LoloPinoyGrillBranchesController@updateParticulars')
 		->name('updateParticulars');
 
 
-	Route::patch(
+	Route::put(
 		'/lolo-pinoy-grill-branches/payables/updateP/{id}',
 		'LoloPinoyGrillBranchesController@updateP')
 		->name('updateP');

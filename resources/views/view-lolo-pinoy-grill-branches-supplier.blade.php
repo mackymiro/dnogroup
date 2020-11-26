@@ -73,7 +73,7 @@
                                         <tbody>
                                            @foreach($supplierLists as $supplierList)
                                             <tr>
-                                                <td>{{ $supplierList->invoice_number }}</td>
+                                                <td><a href="/lolo-pinoy-grill-branches/edit-lolo-pinoy-grill-branches-payables-detail/{{ $supplierList->id }}" target="_blank">{{ $supplierList->invoice_number }}</a></td>
                                                 <td>{{ $supplierList->paid_to }}</td>
                                                 <td>{{ $supplierList->issued_date }}</td>
                                                 <?php if($supplierList->status === "FOR APPROVAL"): ?>
