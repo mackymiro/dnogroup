@@ -186,7 +186,6 @@ class MrPotatoController extends Controller
                             'mr_potato_payment_vouchers.sub_category_account_id',
                             'mr_potato_payment_vouchers.supplier_name',
                             'mr_potato_payment_vouchers.deleted_at',
-                            'mr_potato_suppliers.id',
                             'mr_potato_suppliers.date',
                             'mr_potato_suppliers.supplier_name')
                             ->leftJoin('mr_potato_suppliers', 'mr_potato_payment_vouchers.supplier_id', '=', 'mr_potato_suppliers.id')
@@ -324,6 +323,7 @@ class MrPotatoController extends Controller
         
        
          $uIdParticular->date  = $request->date;
+         $uIdParticular->invoice_number  = $request->invoiceN;
          $uIdParticular->particulars = $request->particulars;
          $uIdParticular->amount = $amount; 
          $uIdParticular->save();
@@ -345,6 +345,7 @@ class MrPotatoController extends Controller
         $sum = $amount + $tot; 
  
         $updateParticular->date = $request->date;
+        $updateParticular->invpice_number = $request->invoiceNo;
         $updateParticular->particulars = $request->particulars;
         $updateParticular->amount = $amount;
         $updateParticular->amount_due = $sum;
@@ -3746,23 +3747,14 @@ class MrPotatoController extends Controller
         //add current amount
         $add = $particulars['amount_due'] + $request->get('amount');
 
-        //get Category
-        $cat = $particulars['category'];
-
-        //get current voucher ref number
-        $voucherRef = $particulars['voucher_ref_number'];
-
-        $subAccountId = $particulars['sub_category_account_id'];
 
         $addParticulars = new MrPotatoPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
+            'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNo'),
             'particulars'=>$request->get('particulars'),
             'amount'=>$request->get('amount'),
-            'voucher_ref_number'=>$voucherRef,
-            'category'=>$cat,
-            'sub_category_account_id'=>$subAccountId,
-            'date'=>$request->get('date'),
             'created_by'=>$name,
         ]);
 

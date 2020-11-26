@@ -252,7 +252,7 @@
 			  							<div class="col-lg-2">
 		  									<label>Amount Due</label>
 		  									<input type="text" name="amountDue" style="color:white;" class="bg-danger form-control" 
-											  	value="<?php echo number_format($sum, 2); ?>" />
+											  	value="<?= number_format($sum, 2); ?>" />
 			  							</div>
 			  							<div class="col-lg-4">
 		  									<label>Pv #</label>

@@ -886,13 +886,13 @@ Route::group(['middleware' =>['user']], function(){
 		->name('editPayablesDetailMrPotato')
 		->middleware(['cashier']);
 
-	Route::patch(
+	Route::put(
 		'/mr-potato/payables/update-particulars/{id}',
 		'MrPotatoController@updateParticulars')
 		->name('updateParticulars')
 		->middleware(['cashier']);
 		
-	Route::patch(
+	Route::put(
 		'/mr-potato/payables/updateP/{id}',
 		'MrPotatoController@updateP')
 		->name('updateP')
