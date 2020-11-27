@@ -2063,7 +2063,6 @@ class DnoFoodVenturesController extends Controller
                     'dno_food_ventures_payment_vouchers.sub_category_account_id',
                     'dno_food_ventures_payment_vouchers.supplier_name',
                     'dno_food_ventures_payment_vouchers.deleted_at',
-                    'dno_food_ventures_suppliers.id',
                     'dno_food_ventures_suppliers.date',
                     'dno_food_ventures_suppliers.supplier_name')
                     ->leftJoin('dno_food_ventures_suppliers', 'dno_food_ventures_payment_vouchers.supplier_id', '=', 'dno_food_ventures_suppliers.id')
@@ -2201,6 +2200,7 @@ class DnoFoodVenturesController extends Controller
         
        
          $uIdParticular->date  = $request->date;
+         $uIdParticular->invoice_number = $request->invoiceN;
          $uIdParticular->particulars = $request->particulars;
          $uIdParticular->amount = $amount; 
          $uIdParticular->save();
@@ -2222,6 +2222,7 @@ class DnoFoodVenturesController extends Controller
         $sum = $amount + $tot; 
  
         $updateParticular->date = $request->date;
+        $updateParticular->invoice_number = $request->invoiceNo;
         $updateParticular->particulars = $request->particulars;
         $updateParticular->amount = $amount;
         $updateParticular->amount_due = $sum;
@@ -4484,6 +4485,7 @@ class DnoFoodVenturesController extends Controller
             'user_id'=>$user->id,
             'pv_id'=>$id,
             'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNo'),
             'particulars'=>$request->get('particulars'),
             'amount'=>$request->get('amount'),
             'created_by'=>$name,

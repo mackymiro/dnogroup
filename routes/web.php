@@ -4991,7 +4991,7 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('updateParticulars')
 		->middleware(['cashier']);
 
-	Route::patch(
+	Route::put(
 		'/dno-food-ventures/payables/updateP/{id}',
 		'DnoFoodVenturesController@updateP')
 		->name('updateP')
