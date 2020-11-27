@@ -73,7 +73,7 @@
                                         <tbody>
                                            @foreach($supplierLists as $supplierList)
                                             <tr>
-                                                <td>{{ $supplierList->invoice_number }}</td>
+                                                <td><a href="/dno-foundation-inc/edit-dno-foundation-inc-payable-detail/{{ $supplierList->id}}" target="_blank">{{ $supplierList->invoice_number }}</a></td>
                                                 <td>{{ $supplierList->paid_to }}</td>
                                                 <td>{{ $supplierList->issued_date }}</td>
                                                 <?php if($supplierList->status === "FOR APPROVAL"): ?>
@@ -85,7 +85,7 @@
                                                 <?php else: ?>
                                                     <td class="bg-danger" style="color:#fff;">UNPAID</td>
                                                 <?php endif;?>
-                                                <td><?php echo number_format($supplierList->amount_due, 2);?></td>
+                                                <td><?= number_format($supplierList->amount_due, 2);?></td>
                                                 <td>{{ $supplierList->created_by }}</td>
                                             </tr>
                                             @endforeach
