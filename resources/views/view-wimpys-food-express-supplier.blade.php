@@ -77,7 +77,7 @@
                                         <tbody>
                                             @foreach($viewSuppliers[0]->suppliers as $viewSupplier)
                                             <tr>
-                                                <td>{{ $viewSupplier->invoice_number }}</td>
+                                                <td><a href="/wimpys-food-express/{{ $viewSupplier->id }}/edit-wimpys-food-express-payables-detail" target="_blank">{{ $viewSupplier->invoice_number }}</a></td>
                                                 <td>{{ $viewSupplier->paid_to }}</td>
                                                
                                                 <td>{{ $viewSupplier->issued_date }}</td>

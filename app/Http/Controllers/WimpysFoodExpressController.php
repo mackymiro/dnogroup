@@ -2504,6 +2504,7 @@ class WimpysFoodExpressController extends Controller
             'user_id'=>$user->id,
             'pv_id'=>$id,
             'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNo'),
             'account_name_no'=>$request->get('accountNameNo'),
             'cheque_number'=>$request->get('chequeNumber'),
             'cheque_amount'=>$request->get('chequeAmount'),
@@ -2540,8 +2541,8 @@ class WimpysFoodExpressController extends Controller
         $addParticulars = new WimpysFoodExpressPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
-            'voucher_ref_number'=>$particulars['voucher_ref_number'],
             'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNo'),
             'particulars'=>$request->get('particulars'),
             'amount'=>$request->get('amount'),
             'created_by'=>$name,
@@ -2565,8 +2566,6 @@ class WimpysFoodExpressController extends Controller
                                 ->where('id', $id)
                                 ->get();
 
-      
-       
         $getChequeNumbers = WimpysFoodExpressPaymentVoucher::where('pv_id', $id)->where('cheque_number', '!=', NUll)->get()->toArray();
 
 
