@@ -137,7 +137,6 @@ class DinoIndustrialCorporationController extends Controller
                     'dino_industrial_corporation_payment_vouchers.sub_category_account_id',
                     'dino_industrial_corporation_payment_vouchers.supplier_name',
                     'dino_industrial_corporation_payment_vouchers.deleted_at', 
-                    'dino_industrial_corporation_suppliers.id',
                     'dino_industrial_corporation_suppliers.date',
                     'dino_industrial_corporation_suppliers.supplier_name')
                     ->leftJoin('dino_industrial_corporation_suppliers', 'dino_industrial_corporation_payment_vouchers.supplier_id', '=', 'dino_industrial_corporation_suppliers.id')
@@ -1931,6 +1930,7 @@ class DinoIndustrialCorporationController extends Controller
             'user_id'=>$user->id,
             'pv_id'=>$id,
             'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNo'),
             'account_name_no'=>$request->get('accountNameNo'),
             'cheque_number'=>$request->get('chequeNumber'),
             'cheque_amount'=>$request->get('chequeAmount'),
@@ -1966,9 +1966,10 @@ class DinoIndustrialCorporationController extends Controller
         $addParticulars = new DinoIndustrialCorporationPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
+            'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNo'),
             'particulars'=>$request->get('particulars'),
             'amount'=>$request->get('amount'),
-            'date'=>$request->get('date'),
             'created_by'=>$name,
         ]);
 
