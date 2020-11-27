@@ -1098,13 +1098,13 @@ Route::group(['middleware' =>['user']], function(){
 		->name('editPayablesDetailRibosBar')
 		->middleware(['cashier']);
 
-	Route::patch(
+	Route::put(
 		'/ribos-bar/payables/update-particulars/{id}',
 		'RibosBarController@updateParticulars')
 		->name('updateParticulars')
 		->middleware(['cashier']);
 
-	Route::patch(
+	Route::put(
 		'/ribos-bar/payables/updateP/{id}',
 		'RibosBarController@updateP')
 		->name('updateP')

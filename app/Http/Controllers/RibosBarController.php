@@ -173,7 +173,6 @@ class RibosBarController extends Controller
                         'ribos_bar_payment_vouchers.sub_category_account_id',
                         'ribos_bar_payment_vouchers.supplier_name',
                         'ribos_bar_payment_vouchers.deleted_at',
-                        'ribos_bar_suppliers.id',
                         'ribos_bar_suppliers.date',
                         'ribos_bar_suppliers.supplier_name')
                         ->leftJoin('ribos_bar_suppliers', 'ribos_bar_payment_vouchers.supplier_id', '=', 'ribos_bar_suppliers.id')
@@ -312,6 +311,7 @@ class RibosBarController extends Controller
         
        
          $uIdParticular->date  = $request->date;
+         $uIdParticular->invoice_number = $request->invoiceN;
          $uIdParticular->particulars = $request->particulars;
          $uIdParticular->amount = $amount; 
          $uIdParticular->save();
@@ -333,6 +333,7 @@ class RibosBarController extends Controller
         $sum = $amount + $tot; 
  
         $updateParticular->date = $request->date;
+        $updateParticular->invoice_number = $request->invoiceNo;
         $updateParticular->particulars = $request->particulars;
         $updateParticular->amount = $amount;
         $updateParticular->amount_due = $sum;
@@ -3757,24 +3758,14 @@ class RibosBarController extends Controller
          //add current amount
         $add = $particulars['amount_due'] + $request->get('amount');
 
-         //get Category
-        $cat = $particulars['category'];
-
-        //get current voucher ref number
-        $voucherRef = $particulars['voucher_ref_number'];
-
-        $subAccountId = $particulars['sub_category_account_id'];
 
         $addParticulars = new RibosBarPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
+            'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNo'),
             'particulars'=>$request->get('particulars'),
-            'date'=>$request->get('date'),
             'amount'=>$request->get('amount'),
-            'voucher_ref_number'=>$voucherRef,
-            'category'=>$cat,
-            'sub_category_account_id'=>$subAccountId,
-            'date'=>$request->get('date'),
             'created_by'=>$name,
 
         ]);
