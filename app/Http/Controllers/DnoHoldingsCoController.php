@@ -2234,7 +2234,6 @@ class DnoHoldingsCoController extends Controller
                     'dno_holdings_co_payment_vouchers.sub_category',
                     'dno_holdings_co_payment_vouchers.sub_category_account_id',
                     'dno_holdings_co_payment_vouchers.deleted_at',
-                    'dno_holdings_co_suppliers.id',
                     'dno_holdings_co_suppliers.date',
                     'dno_holdings_co_suppliers.supplier_name')
                     ->leftJoin('dno_holdings_co_suppliers', 'dno_holdings_co_payment_vouchers.supplier_id', '=', 'dno_holdings_co_suppliers.id')
@@ -2662,20 +2661,15 @@ class DnoHoldingsCoController extends Controller
          //add current amount
         $add = $particulars['amount_due'] + $request->get('amount');
 
-           //get Category
-        $cat = $particulars['category'];
-  
-        $subAccountId = $particulars['sub_category_account_id'];
+           //get Categor
 
         $addParticulars = new DnoHoldingsCoPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
+            'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNo'),
             'particulars'=>$request->get('particulars'),
-            'date'=>$request->get('date'),
             'amount'=>$request->get('amount'),
-            'category'=>$cat,
-            'sub_category_account_id'=>$subAccountId,
-            'date'=>$request->get('date'),
             'created_by'=>$name,
 
         ]);
@@ -2711,6 +2705,7 @@ class DnoHoldingsCoController extends Controller
             'pv_id'=>$id,
             'account_name_no'=>$request->get('accountNameNo'),
             'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNo'),
             'cheque_number'=>$request->get('chequeNumber'),
             'cheque_amount'=>$request->get('chequeAmount'),
             'created_by'=>$name,
