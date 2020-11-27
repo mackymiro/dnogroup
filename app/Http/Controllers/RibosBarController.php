@@ -3798,6 +3798,7 @@ class RibosBarController extends Controller
         $addPayment = new RibosBarPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
+            'invoice_number'=>$request->get('invoiceNo'),
             'account_name_no'=>$request->get('accountNameNo'),
             'date'=>$request->get('date'),
             'cheque_number'=>$request->get('chequeNumber'),
