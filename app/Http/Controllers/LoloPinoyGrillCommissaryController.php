@@ -5893,6 +5893,7 @@ class LoloPinoyGrillCommissaryController extends Controller
         $addPayment = new LoloPinoyGrillCommissaryPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
+            'invoice_number'=>$request->get('invoiceNo'),
             'account_name_no'=>$request->get('accountNameNo'),
             'cheque_number'=>$request->get('chequeNumber'),
             'cheque_amount'=>$request->get('chequeAmount'),
