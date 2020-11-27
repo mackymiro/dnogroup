@@ -143,7 +143,6 @@ class WlgCorporationController extends Controller
                     'wlg_corporation_payment_vouchers.sub_category_account_id',
                     'wlg_corporation_payment_vouchers.supplier_name',
                     'wlg_corporation_payment_vouchers.deleted_at',
-                    'wlg_corporation_suppliers.id',
                     'wlg_corporation_suppliers.date',
                     'wlg_corporation_suppliers.supplier_name')
                     ->leftJoin('wlg_corporation_suppliers', 'wlg_corporation_payment_vouchers.supplier_id', '=', 'wlg_corporation_suppliers.id')
@@ -2915,8 +2914,8 @@ class WlgCorporationController extends Controller
          $addPayment = new WlgCorporationPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
-            
             'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNo'),
             'account_name_no'=>$request->get('accountNameNo'),
             'cheque_number'=>$request->get('chequeNumber'),
             'cheque_amount'=>$request->get('chequeAmount'),
@@ -3015,16 +3014,15 @@ class WlgCorporationController extends Controller
         //add current amount
          $add = $particulars['amount_due'] + $request->get('amount');
 
-        //get current voucher ref number
-        $voucherRef = $particulars['voucher_ref_number'];
+    
 
         $addParticulars = new WlgCorporationPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
             'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNo'),
             'particulars'=>$request->get('particulars'),
             'amount'=>$request->get('amount'),
-            'voucher_ref_number'=>$voucherRef,
             'date'=>$request->get('date'),
             'created_by'=>$name,
         ]);

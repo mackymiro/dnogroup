@@ -52,7 +52,15 @@
 
     					  				</div>
 	    					  		</div>
-	    					  		
+	    					  		<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-12">
+				  								<label>Invoice No</label>
+				  								<input type="text" name="invoiceNo" class=" form-control" required />
+					  						</div> 
+
+    					  				</div>
+	    					  		</div>
 	    					  		<div class="form-group">
     					  				<div class="form-row">
 					  						<div class="col-lg-12">
@@ -90,6 +98,15 @@
 					  						<div class="col-lg-12">
 				  								<label>Date</label>
 				  								<input type="text" name="date" class="datepicker form-control" required="required" />
+					  						</div> 
+
+    					  				</div>
+	    					  		</div>
+									<div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-12">
+				  								<label>Invoice No</label>
+				  								<input type="text" name="invoiceNo" class=" form-control" required />
 					  						</div> 
 
     					  				</div>
@@ -151,6 +168,11 @@
                                     <div class="col-lg-12">
                                         <label>Date</label>
                                         <input type="text" name="date" class="datepicker form-control" required="required" />
+                                    
+                                    </div>
+									<div class="col-lg-12">
+                                        <label>Invoice No</label>
+                                        <input type="text" name="invoiceNo" class="form-control"  />
                                     
                                     </div>
                                     <div class="col-lg-12">
@@ -241,8 +263,12 @@
                                         <input type="text" name="accountName" class="form-control" value="{{ $transactionList[0]->account_name }}" disabled="disabled" />
                                     </div>
                                     <div class="col-lg-4">
-		  									<label>Payment Method</label>
-		  									<input type="text" name="paymentMethod" class="form-control" value="{{ $transactionList[0]->method_of_payment }}" disabled="disabled" />
+										<label>Payment Method</label>
+										<input type="text" name="paymentMethod" class="form-control" value="{{ $transactionList[0]->method_of_payment }}" disabled="disabled" />
+			  						</div>
+									  <div class="col-lg-4">
+										<label>Category</label>
+										<input type="text" name="category" class="form-control" value="{{ $transactionList[0]->category }}" disabled="disabled" />
 			  						</div>
                                     <div class="col-lg-4">
                                         <label>Status</label>
@@ -262,6 +288,7 @@
                                 <thead>
                                     <tr>
                                         <th>ACTION</th>
+										<th>INVOICE NO</th>
                                         <th>DATE</th>
                                         <th>PARTICULARS</th>
                                         <th>AMOUNT</th>
@@ -272,7 +299,7 @@
                                         <td>
                                             @if($transactionList[0]->status != "FULLY PAID AND RELEASED")
                                             <!-- Button trigger modal -->
-                                            <a  data-toggle="modal" data-target="#editParticulars<?php echo $transactionList[0]->id ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
+                                            <a  data-toggle="modal" data-target="#editParticulars<?= $transactionList[0]->id ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
                                             @else
                                                 <!-- Button trigger modal -->
                                             <i class="fas fa-edit" style="font-size:24px"></i>
@@ -280,22 +307,24 @@
 
                                             @endif
                                         </td>
+										<td>{{ $transactionList[0]->invoice_number }}</td>
                                         <td>{{ $transactionList[0]->issued_date}}</td>
                                         <td>{{ $transactionList[0]->particulars}}</td>
-                                        <td><?php echo number_format($transactionList[0]->amount, 2); ?></td>
+                                        <td><?= number_format($transactionList[0]->amount, 2); ?></td>
                                     </tr>
                                     @foreach($getParticulars as $getParticular)
                                     <tr>
                                         <td>
 											 @if($transactionList[0]->status != "FULLY PAID AND RELEASED")
 											  <!-- Button trigger modal -->
-											  <a data-toggle="modal" data-target="#editP<?php echo $getParticular['id'] ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
+											  <a data-toggle="modal" data-target="#editP<?= $getParticular['id'] ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
 											 @else
 											   
 												<i class="fas fa-edit" style="font-size:24px"></i>
   											 
 											 @endif
                                         </td>
+										<td>{{ $getParticular['invoice_number']}}</td>
                                         <td>{{ $getParticular['date']}}</td>
                                         <td>{{ $getParticular['particulars']}}</td>
                                         <td><?php echo number_format($getParticular['amount'], 2); ?></td>
@@ -308,8 +337,10 @@
                                     <tr>
                                         @if($transactionList[0]->method_of_payment === "CASH")
                                         <th>ACTON</th>
+										<th>INVOICE NO</th>
                                         @else
                                         <th>ACTON</th>
+										<th>INVOICE NO</th>
                                         <th>ACCOUNT NAME/NO</th>
                                         <th>PAYMENT CHECK NUMBER</th>
                                         @endif
@@ -327,20 +358,20 @@
   												<td>
 												@if($transactionList[0]->status != "FULLY PAID AND RELEASED")
 													<!-- Button trigger modal -->
-													<a  data-toggle="modal" data-target="#editCash<?php echo $getCashAmount['id'] ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
+													<a  data-toggle="modal" data-target="#editCash<?= $getCashAmount['id'] ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
 												@else
 													
 													<i class="fas fa-edit" style="font-size:24px"></i>
 												@endif	
 												</td>
-												<td><?php echo number_format($getCashAmount['cheque_amount'], 2); ?></td>
+												<td><?= number_format($getCashAmount['cheque_amount'], 2); ?></td>
 											</tr>
 											@endforeach
 											<tr>
 												<td class="bg-info" style="color:white;">Total</td>
 											
 												
-												<td class="bg-success" style="color:white;"><?php echo number_format($sumCheque, 2);?></td>
+												<td class="bg-success" style="color:white;"><?= number_format($sumCheque, 2);?></td>
 											</tr>
 										@else
                                     	@foreach($getChequeNumbers as $getChequeNumber)
@@ -348,20 +379,22 @@
                                              <td>
 											  @if($transactionList[0]->status != "FULLY PAID AND RELEASED")
 												<!-- Button trigger modal -->
-												<a  data-toggle="modal" data-target="#editCheck<?php echo $getChequeNumber['id'] ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
+												<a  data-toggle="modal" data-target="#editCheck<?= $getChequeNumber['id'] ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
   											  @else
   												
 												<i class="fas fa-edit" style="font-size:24px"></i>
 											  @endif	
 											</td>
+											<td>{{ $getChequeNumber['invoice_number']}}</td>
 											<td>{{ $getChequeNumber['account_name_no']}}</td>
 				  							<td>{{ $getChequeNumber['cheque_number']}}</td>
-				  							<td><?php echo number_format($getChequeNumber['cheque_amount'], 2); ?></td>
+				  							<td><?= number_format($getChequeNumber['cheque_amount'], 2); ?></td>
 				  						</tr>
 				  						@endforeach
 				  						<tr>
 				  							<td class="bg-info" style="color:white;">Total</td>
                                             <td class="bg-info" style="color:white;"></td>
+											<td class="bg-info" style="color:white;"></td>
 											<td class="bg-info" style="color:white;"></td>
 				  							<td class="bg-success" style="color:white;"><?php echo number_format($sumCheque, 2);?></td>
 				  						</tr>
