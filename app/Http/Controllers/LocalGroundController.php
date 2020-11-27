@@ -138,7 +138,6 @@ class LocalGroundController extends Controller
                     'local_ground_payment_vouchers.supplier_name',
                     'local_ground_payment_vouchers.created_at',
                     'local_ground_payment_vouchers.deleted_at',
-                    'local_ground_suppliers.id',
                     'local_ground_suppliers.date',
                     'local_ground_suppliers.supplier_name')
                     ->leftJoin('local_ground_suppliers', 'local_ground_payment_vouchers.supplier_id', '=', 'local_ground_suppliers.id')
@@ -2518,9 +2517,10 @@ class LocalGroundController extends Controller
         $addParticulars = new LocalGroundPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
+            'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNo'),
             'particulars'=>$request->get('particulars'),
             'amount'=>$request->get('amount'),
-            'date'=>$request->get('date'),
             'created_by'=>$name,
         ]);
 
@@ -2554,6 +2554,7 @@ class LocalGroundController extends Controller
             'user_id'=>$user->id,
             'pv_id'=>$id,
             'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNo'),
             'account_name_no'=>$request->get('accountNameNo'),
             'cheque_number'=>$request->get('chequeNumber'),
             'cheque_amount'=>$request->get('chequeAmount'),
