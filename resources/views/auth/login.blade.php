@@ -1,5 +1,5 @@
 @extends('layouts.login')
-
+@section('title', 'Login | DNO Holdings & Co')
 @section('loginContent')
 <div class="container" >
     <div class="card card-login mx-auto mt-5">

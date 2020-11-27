@@ -1239,13 +1239,13 @@ Route::group(['middleware' =>['user']], function(){
 		->name('editPayablesDetailDnoPersonal')
 		->middleware(['cashier']);
 
-	Route::patch(
+	Route::put(
 		'/dno-personal/payables/update-particulars/{id}',
 		'DnoPersonalController@updateParticulars')
 		->name('updateParticulars')
 		->middleware(['cashier']);
 
-	Route::patch(
+	Route::put(
 		'/dno-personal/payables/updateP/{id}',
 		'DnoPersonalController@updateP')
 		->name('updateP')

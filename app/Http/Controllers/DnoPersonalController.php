@@ -158,7 +158,6 @@ class DnoPersonalController extends Controller
                             'dno_personal_payment_vouchers.supplier_id',
                             'dno_personal_payment_vouchers.supplier_name',
                             'dno_personal_payment_vouchers.deleted_at',
-                            'dno_personal_suppliers.id',
                             'dno_personal_suppliers.date',
                             'dno_personal_suppliers.supplier_name')
                             ->leftJoin('dno_personal_suppliers', 'dno_personal_payment_vouchers.supplier_id', '=', 'dno_personal_suppliers.id')
@@ -318,6 +317,7 @@ class DnoPersonalController extends Controller
        
       
         $uIdParticular->date  = $request->date;
+        $uIdParticular->invoice_number = $request->invoiceN;
         $uIdParticular->particulars = $request->particulars;
         $uIdParticular->amount = $amount; 
         $uIdParticular->save();
@@ -338,6 +338,7 @@ class DnoPersonalController extends Controller
        $sum = $amount + $tot; 
 
        $updateParticular->date = $request->date;
+       $updateParticular->invoice_number = $request->invoiceNo;
        $updateParticular->particulars = $request->particulars;
        $updateParticular->amount = $amount;
        $updateParticular->amount_due = $sum;
@@ -3934,8 +3935,8 @@ class DnoPersonalController extends Controller
         $addParticulars = new DnoPersonalPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
-            'voucher_ref_number'=>$particulars['voucher_ref_number'],
             'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNo'),
             'particulars'=>$request->get('particulars'),
             'sub_category_account_id'=>$subCatId,
             'utility_sub_category'=>$util,
