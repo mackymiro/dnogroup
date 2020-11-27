@@ -967,7 +967,6 @@ class DnoResourcesDevelopmentController extends Controller
                         'dno_resources_development_corp_payment_vouchers.sub_category_account_id',
                         'dno_resources_development_corp_payment_vouchers.supplier_name',
                         'dno_resources_development_corp_payment_vouchers.deleted_at',
-                        'dno_resources_development_corp_suppliers.id',
                         'dno_resources_development_corp_suppliers.date',
                         'dno_resources_development_corp_suppliers.supplier_name')
                         ->leftJoin('dno_resources_development_corp_suppliers', 'dno_resources_development_corp_payment_vouchers.supplier_id', '=', 'dno_resources_development_corp_suppliers.id')
@@ -1104,6 +1103,7 @@ class DnoResourcesDevelopmentController extends Controller
          
         
           $uIdParticular->date  = $request->date;
+          $uIdParticular->invoice_number = $request->invoiceN;
           $uIdParticular->particulars = $request->particulars;
           $uIdParticular->amount = $amount; 
           $uIdParticular->save();
@@ -3440,6 +3440,7 @@ class DnoResourcesDevelopmentController extends Controller
             'user_id'=>$user->id,
             'pv_id'=>$id,
             'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNo'),
             'particulars'=>$request->get('particulars'),
             'amount'=>$request->get('amount'),
             'created_by'=>$name,

@@ -156,6 +156,11 @@
 											<input type="text" name="date" class="datepicker form-control" required="required" />
 										
 										</div>
+										<div class="col-lg-12">
+  											<label>Invoice No</label>
+											<input type="text" name="invoiceNo" class="form-control" required />
+										
+										</div>
   										<div class="col-lg-12">
   											<label>Particulars</label>
 											<textarea name="particulars" class="form-control"></textarea>
@@ -268,6 +273,7 @@
   									<thead>
   										<tr>
 											<th>ACTION</th>
+											<th>INVOICE NO</th>
   											<th>DATE</th>
   											<th>PARTICULARS</th>
 											<th>AMOUNT</th>
@@ -279,7 +285,7 @@
   											<td>
 											  @if($transactionList[0]->status != "FULLY PAID AND RELEASED")
 											   <!-- Button trigger modal -->
-											   <a  data-toggle="modal" data-target="#editParticulars<?php echo $transactionList[0]->id ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
+											   <a  data-toggle="modal" data-target="#editParticulars<?= $transactionList[0]->id ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
   											  @else
   												  <!-- Button trigger modal -->
 												<i class="fas fa-edit" style="font-size:24px"></i>
@@ -287,6 +293,7 @@
 
 											  @endif
 											</td>
+											<td>{{ $transactionList[0]->invoice_number }}</td>
 											<td>{{ $transactionList[0]->issued_date }}</td>
   											<td>{{ $transactionList[0]->particulars}}</td>
 											<td>
@@ -296,23 +303,24 @@
 												$
 
 												@endif
-												<?php echo number_format($transactionList[0]->amount, 2); ?></td>
+												<?= number_format($transactionList[0]->amount, 2); ?></td>
 										</tr>
 										@foreach($getParticulars as $getParticular)
 										<tr>
   											<td>
 											 @if($transactionList[0]->status != "FULLY PAID AND RELEASED")
 											  <!-- Button trigger modal -->
-											  <a data-toggle="modal" data-target="#editP<?php echo $getParticular['id'] ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
+											  <a data-toggle="modal" data-target="#editP<?= $getParticular['id'] ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
 											 @else
 											   
 												<i class="fas fa-edit" style="font-size:24px"></i>
   											 
 											 @endif
 											</td>
+											<td>{{ $getParticular['invoice_number']}}</td>
   											<td>{{ $getParticular['date'] }}</td>
   											<td>{{ $getParticular['particulars']}}</td>
-											<td><?php echo number_format($getParticular['amount'], 2); ?></td>
+											<td><?= number_format($getParticular['amount'], 2); ?></td>
 										</tr>
 										@endforeach
 									</tbody>
@@ -341,7 +349,7 @@
   												<td>
 												@if($transactionList[0]->status != "FULLY PAID AND RELEASED")
 													<!-- Button trigger modal -->
-													<a  data-toggle="modal" data-target="#editCash<?php echo $getCashAmount['id'] ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
+													<a  data-toggle="modal" data-target="#editCash<?= $getCashAmount['id'] ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
 												@else
 													
 													<i class="fas fa-edit" style="font-size:24px"></i>
@@ -354,7 +362,7 @@
 												<td class="bg-info" style="color:white;">Total</td>
 											
 												
-												<td class="bg-success" style="color:white;"><?php echo number_format($sumCheque, 2);?></td>
+												<td class="bg-success" style="color:white;"><?= number_format($sumCheque, 2);?></td>
 											</tr>
 										@else
 				  						@foreach($getChequeNumbers as $getChequeNumber)
@@ -362,7 +370,7 @@
   											 <td>
 											  @if($transactionList[0]->status != "FULLY PAID AND RELEASED")
 												<!-- Button trigger modal -->
-												<a  data-toggle="modal" data-target="#editCheck<?php echo $getChequeNumber['id'] ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
+												<a  data-toggle="modal" data-target="#editCheck<?= $getChequeNumber['id'] ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
   											  @else
   												
 												<i class="fas fa-edit" style="font-size:24px"></i>
@@ -384,7 +392,7 @@
 				  							<td class="bg-info" style="color:white;">Total</td>
 											<td class="bg-info" style="color:white;"></td>
 											<td class="bg-info" style="color:white;"></td>
-				  							<td class="bg-success" style="color:white;"><?php echo number_format($sumCheque, 2); ?></td>
+				  							<td class="bg-success" style="color:white;"><?= number_format($sumCheque, 2); ?></td>
 				  						</tr>
 										@endif
 				  					</tbody>
@@ -449,7 +457,7 @@
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
 				
-					<button type="button" onclick="updateDetailsPayable(<?php echo $transactionList[0]->id; ?>)" class="btn btn-success">Update changes</button>
+					<button type="button" onclick="updateDetailsPayable(<?= $transactionList[0]->id; ?>)" class="btn btn-success">Update changes</button>
 			
 				
 			</div>
@@ -459,7 +467,7 @@
 
 	<!-- Modal -->
 	@foreach($getCashAmounts as $getCashAmount)
-	<div class="modal fade" id="editCash<?php echo $getCashAmount['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal fade" id="editCash<?= $getCashAmount['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog modal-dialog-centered " role="document">
 			<div class="modal-content">
 			<div class="modal-header">
@@ -471,11 +479,11 @@
 			<div class="modal-body">
 				<div class="form-group">
 					<div class="form-row">
-						<div id="editCashSucc<?php echo $getCashAmount['id']?>" class="col-lg-12"></div>
+						<div id="editCashSucc<?= $getCashAmount['id']?>" class="col-lg-12"></div>
 						
 						<div class="col-lg-4">
 							<label>Cash Amount</label>
-							<input type="text" id="cashAmount<?php echo $getCashAmount['id']?>" name="cashAmount" class="form-control" value="{{ $getCashAmount['cheque_amount']}}" />
+							<input type="text" id="cashAmount<?= $getCashAmount['id']?>" name="cashAmount" class="form-control" value="{{ $getCashAmount['cheque_amount']}}" />
 						</div>
 						
 					</div>
@@ -483,7 +491,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-				<button type="button" onclick="updateCash(<?php echo $getCashAmount['id']; ?>)" class="btn btn-success">Update cash</button>
+				<button type="button" onclick="updateCash(<?= $getCashAmount['id']; ?>)" class="btn btn-success">Update cash</button>
 			</div>
 			</div>
 		</div>
@@ -492,7 +500,7 @@
 	
 	<!-- Modal -->
 	@foreach($getChequeNumbers as $getChequeNumber)
-	<div class="modal fade" id="editCheck<?php echo $getChequeNumber['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	<div class="modal fade" id="editCheck<?= $getChequeNumber['id']?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
 			<div class="modal-header">
@@ -507,16 +515,16 @@
 						<div id="editCheck" class="col-lg-12"></div>
 						<div class="col-lg-4">
 							<label>Account Name/No</label>
-							<input type="text" id="accountNameNo<?php echo $getChequeNumber['id']?>" name="accountNameNo" class="form-control"  value="{{ $getChequeNumber['account_name_no']}}" />
+							<input type="text" id="accountNameNo<?= $getChequeNumber['id']?>" name="accountNameNo" class="form-control"  value="{{ $getChequeNumber['account_name_no']}}" />
 						</div>
 						<div class="col-lg-4">
 							<label>Payment Check Number</label>
-							<input type="text" id="checkNumber<?php echo $getChequeNumber['id']?>" name="checkNumber" class="form-control"  value="{{ $getChequeNumber['cheque_number']}}" />
+							<input type="text" id="checkNumber<?= $getChequeNumber['id']?>" name="checkNumber" class="form-control"  value="{{ $getChequeNumber['cheque_number']}}" />
 						
 						</div>
 						<div class="col-lg-4">
 							<label>Check Amount</label>
-							<input type="text" id="checkAmount<?php echo $getChequeNumber['id']?>" name="amount" class="form-control" value="{{ $getChequeNumber['cheque_amount']}}" />
+							<input type="text" id="checkAmount<?= $getChequeNumber['id']?>" name="amount" class="form-control" value="{{ $getChequeNumber['cheque_amount']}}" />
 						</div>
 						
 					</div>
@@ -524,7 +532,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-				<button type="button" onclick="updateCheck(<?php echo $getChequeNumber['id']; ?>)" class="btn btn-success">Update check</button>
+				<button type="button" onclick="updateCheck(<?= $getChequeNumber['id']; ?>)" class="btn btn-success">Update check</button>
 			</div>
 			</div>
 		</div>
@@ -534,7 +542,7 @@
 
 	  <!-- Modal -->
 	  @foreach($getParticulars as $getParticular)
-	 <div class="modal fade" id="editP<?php echo $getParticular['id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	 <div class="modal fade" id="editP<?= $getParticular['id'] ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
 			<div class="modal-header">
@@ -546,18 +554,22 @@
 			<div class="modal-body">
 				<div class="form-group">
 					<div class="form-row">
-						<div id="editParticularP<?php echo $getParticular['id']?>" class="col-lg-12"></div>
+						<div id="editParticularP<?= $getParticular['id']?>" class="col-lg-12"></div>
 						<div class="col-lg-4">
 							<label>Date</label>
-							<input type="text" id="dateP<?php echo $getParticular['id']?>" name="date" class="datepicker form-control"  value="{{ $getParticular['date']}}" />
+							<input type="text" id="dateP<?= $getParticular['id']?>" name="date" class="datepicker form-control"  value="{{ $getParticular['date']}}" />
+						</div>
+						<div class="col-lg-4">
+							<label>Invoice No</label>
+							<input type="text" id="invoiceN<?= $getParticular['id']?>" name="invoiceN" class="form-control"  value="{{ $getParticular['invoice_number']}}" />
 						</div>
 						<div class="col-lg-4">
 							<label>Particulars</label>
-							<textarea id="particularsP<?php echo $getParticular['id']?>" name="particulars" class="form-control">{{ $getParticular['particulars'] }}</textarea>
+							<textarea id="particularsP<?= $getParticular['id']?>" name="particulars" class="form-control">{{ $getParticular['particulars'] }}</textarea>
 						</div>
 						<div class="col-lg-4">
 							<label>Amount</label>
-							<input type="text" id="amountP<?php echo $getParticular['id']?>" name="amount" class="form-control" value="{{ $getParticular['amount'] }}" />
+							<input type="text" id="amountP<?= $getParticular['id']?>" name="amount" class="form-control" value="{{ $getParticular['amount'] }}" />
 						</div>
 						
 					</div>
@@ -565,8 +577,8 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-				<input type="hidden" id="transId<?php echo $getParticular['id']?>" value="{{ $transactionList[0]->id }}" />
-				<button type="button" onclick="updateP(<?php echo $getParticular['id'];?>)" class="btn btn-success">Update changes</button>
+				<input type="hidden" id="transId<?= $getParticular['id']?>" value="{{ $transactionList[0]->id }}" />
+				<button type="button" onclick="updateP(<?= $getParticular['id'];?>)" class="btn btn-success">Update changes</button>
 			</div>
 			</div>
 		</div>
@@ -574,7 +586,7 @@
 	@endforeach
 
 	  <!-- Modal -->
-	  <div class="modal fade" id="editParticulars<?php echo $transactionList[0]->id ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+	  <div class="modal fade" id="editParticulars<?= $transactionList[0]->id ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
 			<div class="modal-header">
@@ -591,6 +603,7 @@
 							<label>Date</label>
 							<input type="text" id="date" name="date" class="datepicker form-control"  value="{{ $transactionList[0]->issued_date}}" />
 						</div>
+						
 						<div class="col-lg-4">
 							<label>Particulars</label>
 							<textarea id="particulars" name="particulars" class="form-control">{{ $transactionList[0]->particulars}}</textarea>
@@ -605,7 +618,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-				<button type="button" onclick="updateParticular(<?php echo $transactionList[0]->id; ?>)" class="btn btn-success">Update changes</button>
+				<button type="button" onclick="updateParticular(<?= $transactionList[0]->id; ?>)" class="btn btn-success">Update changes</button>
 			</div>
 			</div>
 		</div>
@@ -758,19 +771,21 @@
 
 	const updateP = (id) =>{
 		const dateP = $("#dateP"+id).val();
+		const invoiceN = $("#invoiceN"+id).val();
 		const particularsP = $("#particularsP"+id).val();
 		const amountP = $("#amountP"+id).val();
 		const transId = $("#transId"+id).val();
 
 		//make ajax call
 		$.ajax({
-			type:"PATCH",
+			type:"PUT",
             url:'/dno-resources-development/payables/updateP/' + id,
 			data:{
-                _method:'patch',
+                _method:'put',
                 "_token":"{{ csrf_token() }}",
                 "id":id,
                 "date":dateP,
+				"invoiceN":invoiceN,
                 "particulars":particularsP,
 				"amount":amountP,
 				"transId":transId,
@@ -803,10 +818,10 @@
 
 		 //make ajax call
 		 $.ajax({
-			type:"PATCH",
+			type:"PUT",
             url:'/dno-resources-development/payables/update-particulars/' + id,
 			data:{
-                _method:'patch',
+                _method:'put',
                 "_token":"{{ csrf_token() }}",
                 "id":id,
                 "date":date,
