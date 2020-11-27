@@ -318,7 +318,6 @@ class DongFangCorporationController extends Controller
                         'dong_fang_corporation_payment_vouchers.sub_category_account_id',
                         'dong_fang_corporation_payment_vouchers.supplier_name',
                         'dong_fang_corporation_payment_vouchers.deleted_at',
-                        'dong_fang_corporation_suppliers.id',
                         'dong_fang_corporation_suppliers.date',
                         'dong_fang_corporation_suppliers.supplier_name')
                         ->leftJoin('dong_fang_corporation_suppliers', 'dong_fang_corporation_payment_vouchers.supplier_id', '=', 'dong_fang_corporation_suppliers.id')
@@ -2578,16 +2577,14 @@ class DongFangCorporationController extends Controller
          //add current amount
          $add = $particulars['amount_due'] + $request->get('amount');
 
-        //get current voucher ref number
-        $voucherRef = $particulars['voucher_ref_number'];
 
         $addParticulars = new DongFangCorporationPaymentVoucher([
             'user_id'=>$user->id,
             'pv_id'=>$id,
             'date'=>$request->get('date'),
+            'invoice_number'=>$request->get('invoiceNo'),
             'particulars'=>$request->get('particulars'),
             'amount'=>$request->get('amount'),
-            'voucher_ref_number'=>$voucherRef,
             'date'=>$request->get('date'),
             'created_by'=>$name,
         ]);
