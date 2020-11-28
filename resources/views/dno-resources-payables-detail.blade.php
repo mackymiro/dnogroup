@@ -53,6 +53,15 @@
 
     					  				</div>
 	    					  		</div>
+									  <div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-12">
+				  								<label>Invoice No</label>
+				  								<input type="text" name="invoiceNo" class="form-control" required="required" />
+					  						</div> 
+
+    					  				</div>
+	    					  		</div>
 	    					  	
 	    					  		<div class="form-group">
     					  				<div class="form-row">
@@ -91,6 +100,15 @@
 					  						<div class="col-lg-12">
 				  								<label>Date</label>
 				  								<input type="text" name="date" class="datepicker form-control" required="required" />
+					  						</div> 
+
+    					  				</div>
+	    					  		</div>
+									  <div class="form-group">
+    					  				<div class="form-row">
+					  						<div class="col-lg-12">
+				  								<label>Invoice No</label>
+				  								<input type="text" name="invoiceNo" class="form-control" required="required" />
 					  						</div> 
 
     					  				</div>
@@ -330,8 +348,10 @@
 				  						<tr>
 										  	@if($transactionList[0]->method_of_payment == "CASH")
 											<th>ACTON</th>
+											<th>INVOICE NO</th>
 											@else
 											<th>ACTON</th>
+											<th>INVOICE NO</th>
 											<th>ACCOUNT NAME/NO</th>
 											<th>PAYMENT CHECK NUMBER</th>
 											@endif
@@ -355,12 +375,13 @@
 													<i class="fas fa-edit" style="font-size:24px"></i>
 												@endif	
 												</td>
-												<td><?php echo number_format($getCashAmount['cheque_amount'], 2); ?></td>
+												<td>{{ $getCashAmount['invoice_number']}}</td>
+												<td><?= number_format($getCashAmount['cheque_amount'], 2); ?></td>
 											</tr>
 											@endforeach
 											<tr>
 												<td class="bg-info" style="color:white;">Total</td>
-											
+												<td class="bg-info" style="color:white;"></td>
 												
 												<td class="bg-success" style="color:white;"><?= number_format($sumCheque, 2);?></td>
 											</tr>
@@ -376,6 +397,7 @@
 												<i class="fas fa-edit" style="font-size:24px"></i>
 											  @endif	
 											</td>
+											<td>{{ $getChequeNumber['invoice_number']}}</td>
 											<td>{{ $getChequeNumber['account_name_no']}}</td>
 				  							<td>{{ $getChequeNumber['cheque_number']}}</td>
 				  							<td>
@@ -385,11 +407,12 @@
 												$
 
 												@endif 
-											  <?php echo number_format($getChequeNumber['cheque_amount'], 2); ?></td>
+											  <?= number_format($getChequeNumber['cheque_amount'], 2); ?></td>
 				  						</tr>
 				  						@endforeach
 				  						<tr>
 				  							<td class="bg-info" style="color:white;">Total</td>
+											<td class="bg-info" style="color:white;"></td>
 											<td class="bg-info" style="color:white;"></td>
 											<td class="bg-info" style="color:white;"></td>
 				  							<td class="bg-success" style="color:white;"><?= number_format($sumCheque, 2); ?></td>
