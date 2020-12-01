@@ -7048,6 +7048,9 @@ class LoloPinoyLechonDeCebuController extends Controller
         $compute  = $qty * $rawMaterial->unit_price;
         $sum = $compute;
 
+          //add the product IN
+        $addProduct = $rawMaterial->in + $qty;
+
         if($request->requestingBranch === NULL){
             $reqBranch = NULL;
         }else{
@@ -7072,7 +7075,15 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $addDeliveryIn->save();
 
-        return response()->json('Success: Delivery In/Request Stock Out Successfully Added.'); 
+        $outProduct = 0.00;
+         //update IN number of products
+         $rawMaterial->in = $addProduct;
+         $rawMaterial->out = $outProduct;
+         $rawMaterial->remaining_stock = $addProduct;
+         $rawMaterial->save();
+
+
+        return response()->json('Success: Delivery In Successfully Added.'); 
 
     }
 

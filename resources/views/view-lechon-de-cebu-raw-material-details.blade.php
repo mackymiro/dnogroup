@@ -155,7 +155,7 @@ $(function() {
 		            	 				<td>{{ $getViewRawDetail['item']}}</td>
 		            	 				<td>{{ $getViewRawDetail['qty']}}</td>
 		            	 				<td>{{ $getViewRawDetail['unit']}}</td>
-		            	 				<td><?php echo number_format($getViewRawDetail['amount'], 2)?></td>
+		            	 				<td><?= number_format($getViewRawDetail['amount'], 2)?></td>
 		            	 				@if($getViewRawDetail['status'] == "Paid")
 		            	 					<td class="bg-success" style="color:white;">{{ $getViewRawDetail['status']}}</td>
 	            	 					@else
@@ -238,7 +238,7 @@ $(function() {
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
-				<button type="button" onclick="saveRequest(<?php echo $viewRawDetail[0]->id ?>)" class="btn btn-success btn-lg">Save Request Stock Out</button>
+				<button type="button" onclick="saveRequest(<?= $viewRawDetail[0]->id ?>)" class="btn btn-success btn-lg">Save Request Stock Out</button>
 			</div>
 			</div>
 		</div>
@@ -303,7 +303,7 @@ $(function() {
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
-				<button type="button" onclick="saveDelivery(<?php echo $viewRawDetail[0]->id ?>)" class="btn btn-success btn-lg">Save Delivery</button>
+				<button type="button" onclick="saveDelivery(<?= $viewRawDetail[0]->id ?>)" class="btn btn-success btn-lg">Save Delivery</button>
 			</div>
 			</div>
 		</div>
@@ -413,7 +413,7 @@ $(function() {
 
 					if(succDataArr == "Success"){
 						$(".succAdd").fadeIn().delay(3000).fadeOut();
-						$(".succAdd").html(`<p class="alert alert-success">Delivery In Successfully Added.</p>`);
+						$(".succAdd").html(`<p class="alert alert-success">${data}</p>`);
 						
 						setTimeout(function(){
 							location.reload('/lolo-pinoy-lechon-de-cebu/view-raw-material-details/'+id);
