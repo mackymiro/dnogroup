@@ -84,8 +84,21 @@
 											<td class="bg-success" style="color:white;">{{ $getRawMaterial->in }}</td>
 											<td>{{ $getRawMaterial->out }}</td>
 											<td><?= number_format($getRawMaterial->stock_amount, 2); ?></td>
-											<td class="bg-success" style="color:white;">{{ $getRawMaterial->remaining_stock}}</td>
-											<td><?= number_format($getRawMaterial->amount, 2);?></td>
+											<td class="bg-success" style="color:white;">
+												  <?php
+												  		$in = $getRawMaterial->in;
+														$out = $getRawMaterial->out;
+														$minus = $in - $out;
+												  ?>
+												{{ number_format($minus, 2) }}
+											</td>
+											<td>
+												  <?php
+													  $unitPrice = $getRawMaterial->unit_price;
+													  $in = $getRawMaterial->in;
+													  $amt = $unitPrice * $in;
+												  ?>
+												<?= number_format($amt, 2);?></td>
 											<td><p style="width:180px;">{{ $getRawMaterial->supplier}}</p></td>
 											<td><p style="width: 100px;">{{ $getRawMaterial->created_by }}</p></td>
 															

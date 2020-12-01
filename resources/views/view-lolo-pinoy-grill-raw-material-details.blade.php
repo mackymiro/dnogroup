@@ -119,7 +119,7 @@ $(function() {
 		            	 		</tbody>
 		            	 		
 		            	 	</table>
-		            	 	<table class="table table-bordered">
+		            	 	<table class="table table-bordered" id="dataTable" >
 		            	 		<thead>
 		            	 			<tr>
 		            	 				<th colspan="11" class="bg-info" style="color:white;">TRANSACTION</th>
@@ -235,7 +235,7 @@ $(function() {
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
-				<button type="button" onclick="saveRequest(<?php echo $viewRawDetail[0]->id ?>)" class="btn btn-success btn-lg">Save Request Stock Out</button>
+				<button type="button" onclick="saveRequest(<?= $viewRawDetail[0]->id ?>)" class="btn btn-success btn-lg">Save Request Stock Out</button>
 			</div>
 			</div>
 		</div>
@@ -300,7 +300,7 @@ $(function() {
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
-				<button type="button" onclick="saveDelivery(<?php echo $viewRawDetail[0]->id ?>)" class="btn btn-success btn-lg">Save Delivery</button>
+				<button type="button" onclick="saveDelivery(<?= $viewRawDetail[0]->id ?>)" class="btn btn-success btn-lg">Save Delivery</button>
 			</div>
 			</div>
 		</div>

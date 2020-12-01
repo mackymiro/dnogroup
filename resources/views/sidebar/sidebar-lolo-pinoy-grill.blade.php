@@ -132,7 +132,6 @@
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/commissary/raw-materials') }}">RAW Materials</a>
-          <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/commissary/production') }}">Production</a>
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/commissary/stocks-inventory') }}">Stocks Inventory</a>     
           <a class="dropdown-item" href="{{ url('lolo-pinoy-grill-commissary/commissary/delivery-outlets') }}">Delivery Outlets</a>
 

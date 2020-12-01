@@ -377,7 +377,11 @@ Route::group(['middleware' =>['user']], function(){
 	Route::delete('/lolo-pinoy-lechon-de-cebu/delete-raw-materials/{id}', 'LoloPinoyLechonDeCebuController@destroyRawMaterial')->name('lolo-pinoy-lechon-de-cebu.destroyRawMaterial');
 	
 	//destroy delivery receipt
-	Route::delete('/lolo-pinoy-grill-commissary/delete-delivery-receipt/{id}', 'LoloPinoyGrillCommissaryController@destroyDeliveryReceipt')->name('lolo-pinoy-grill-commissary.destroyDeliveryReceipt');
+	Route::delete(
+		'/lolo-pinoy-grill-commissary/delete-delivery-receipt/{id}', 
+		'LoloPinoyGrillCommissaryController@destroyDeliveryReceipt')
+		->name('lolo-pinoy-grill-commissary.destroyDeliveryReceipt')
+		->middleware(['cashier']);
 	
 	Route::delete(
 		'/lolo-pinoy-grill-commissary/delete/DR/{id}',
@@ -2356,7 +2360,7 @@ Route::group(['middleware' => ['auth']], function(){
 	//save add new delivery receipt lolo pinoy grill 
 	Route::post('/lolo-pinoy-grill-commissary/add-new-lolo-pinoy-grill-delivery-receipt-data/{id}', 
 	'LoloPinoyGrillCommissaryController@addNewDeliveryReceiptData')
-	->name('lolo-pinoy-grill-commissary.addNewDeliveryReceiptData')
+	->name('addNewDeliveryReceiptDataLoloPinoyGrillComm')
 	->middleware(['cashier']);
 
 	//

@@ -6074,6 +6074,9 @@ class LoloPinoyGrillCommissaryController extends Controller
         $compute  = $qty * $rawMaterial->unit_price;
         $sum = $compute;
 
+        //add the product IN
+        $addProduct = $rawMaterial->in + $qty;
+
         if($request->requestingBranch === NULL){
             $reqBranch = NULL;
         }else{
@@ -6097,6 +6100,13 @@ class LoloPinoyGrillCommissaryController extends Controller
         ]);
 
         $addDeliveryIn->save();
+
+        $outProduct = 0.00;
+        //update IN number of products
+        $rawMaterial->in = $addProduct;
+        $rawMaterial->out = $outProduct;
+        $rawMaterial->remaining_stock = $addProduct;
+        $rawMaterial->save();
 
         return response()->json('Success: Delivery In/Request Stock Out Successfully Added.'); 
 
@@ -8018,7 +8028,7 @@ class LoloPinoyGrillCommissaryController extends Controller
 
         Session::flash('addDeliveryReceiptSuccess', 'Successfully added.');
 
-        return redirect()->route('DnoFoodVentures.editDeliveryReceipt', ['id'=>$id]);
+        return redirect()->route('editDeliveryReceiptLoloPinoyGrillCommissary', ['id'=>$id]);
 
     }
 
@@ -8602,6 +8612,24 @@ class LoloPinoyGrillCommissaryController extends Controller
 
     public function destroyDR($id){
         $deliveryReceipt = LoloPinoyGrillCommissaryDeliveryReceipt::find($id);
+    
+
+        $dR = explode("-", $deliveryReceipt->product_id);
+        $expDr = $dR[1];
+
+
+        $rawMaterialProduct = LoloPinoyGrillCommissaryRawMaterialProduct::find($expDr);
+            
+        $rawMaterial = LoloPinoyGrillCommissaryRawMaterial::find($rawMaterialProduct->raw_materials_id);
+        $calcIn = $rawMaterial->in + $deliveryReceipt->qty;
+        $calc =  $rawMaterial->out - $deliveryReceipt->qty; 
+
+
+        $rawMaterial->out = $calc;
+        $rawMaterial->in = $calcIn;
+        $rawMaterial->remaining_stock = $calcIn;
+        $rawMaterial->save();
+
         $deliveryReceipt->delete();
     }
 
@@ -8610,6 +8638,21 @@ class LoloPinoyGrillCommissaryController extends Controller
         $drId = LoloPinoyGrillCommissaryDeliveryReceipt::find($request->drId);
       
         $deliveryReceipt = LoloPinoyGrillCommissaryDeliveryReceipt::find($id);
+        $dR = explode("-", $deliveryReceipt->product_id);
+        $expDr = $dR[1];
+        
+        $rawMaterialProduct = LoloPinoyGrillCommissaryRawMaterialProduct::find($expDr);
+            
+        $rawMaterial = LoloPinoyGrillCommissaryRawMaterial::find($rawMaterialProduct->raw_materials_id);
+        $calcIn = $rawMaterial->in + $deliveryReceipt->qty;
+        $calc =  $rawMaterial->out - $deliveryReceipt->qty; 
+
+
+        $rawMaterial->out = $calc;
+        $rawMaterial->in = $calcIn;
+        $rawMaterial->remaining_stock = $calcIn;
+        $rawMaterial->save();
+    
         $getAmount = $drId->total_amount - $deliveryReceipt->amount; 
 
         $drId->total_amount = $getAmount; 

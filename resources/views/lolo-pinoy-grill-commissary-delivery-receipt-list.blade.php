@@ -76,7 +76,7 @@
                                                         
                                                     ?>
 													<?php if(isset($prodExp)): ?>
-														<p style="width:180px;"></p>
+														<p style="width:180px;">{{ $prodExp[1] }}</p>
 													<?php else:?>
 														<p style="width:180px;">{{ $prodExp[1] }}</p>
 													<?php endif; ?>
