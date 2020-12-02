@@ -3003,6 +3003,9 @@ class RibosBarController extends Controller
          $compute  = $qty * $rawMaterial->unit_price;
          $sum = $compute;
 
+            //add the product IN
+        $addProduct = $rawMaterial->in + $qty;
+
         //get date today
         $getDateToday =  date('Y-m-d');
 
@@ -3037,6 +3040,13 @@ class RibosBarController extends Controller
             ]);
     
             $addDeliveryIn->save();
+
+            $outProduct = 0.00;
+            //update IN number of products
+            $rawMaterial->in = $addProduct;
+            $rawMaterial->out = $outProduct;
+            $rawMaterial->remaining_stock = $addProduct;
+            $rawMaterial->save();
     
             return response()->json('Success: successfull added a data');
         }else{
