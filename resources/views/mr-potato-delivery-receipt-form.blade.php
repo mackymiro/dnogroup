@@ -56,15 +56,7 @@
                           
                         	<div class="form-group">
                     			<div class="form-row">
-	                    				<div class="col-md-2">
-                    						<label>Product Id</label>
-                    						<input type="text" name="productId" class="form-control" required="required" />
-	                      				</div>
-	                      				@if ($errors->has('productId'))
-		                                  <span class="alert alert-danger">
-		                                    <strong>{{ $errors->first('productId') }}</strong>
-		                                  </span>
-		                                @endif
+	                    				
                         				<div class="col-md-1">
                     						<label>QTY</label>
                     						<input type="text" name="qty" class="form-control" required="required" />

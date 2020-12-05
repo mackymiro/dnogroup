@@ -1,4 +1,4 @@
-@extends('layouts.lolo-pinoy-lechon-de-cebu-app')
+@extends('layouts.mr-potato-app')
 @section('title', 'Billing Statement Form |')
 @section('content')
 <script>
@@ -90,13 +90,13 @@
                                         <div class="form-row">
                                             <div class="col-lg-2">
                                                 <label>Date</label>
-                                                <input type="text" name="dateTransaction" class="form-control" />
+                                                <input type="text" name="dateTransaction" class="datepicker form-control" />
                                             </div>
                                             <div class="col-lg-2">
                                                 <label>Order</label>
                                                     <select name="choose" class="chooseOption form-control" >
                                                     <option value="Sales Invoice">Sales Invoice</option>
-                                                    <option value="Private Order">Private Order</option> 
+                                                    <option value="Delivery Receipt">Delivery Receipt</option> 
                                                     </select>
                                                 
                                             </div>
@@ -128,11 +128,7 @@
                                                 <select id="dataInvoice" name="invoiceListId" class="chooseInvoice form-control "> 
                                                 </select>
                                             </div>
-                                            <div id="productId" class="col-lg-1">
-                                                <label>Product Id</label>
-                                                <input type="text" name="productId" class="form-control"  disabled />
-                                            
-                                            </div>
+                                          
                                             <div id="qty" class="col-lg-1">
                                                 <label>Qty</label>
                                                 <input type="text" name="qty" class="form-control"  disabled />
@@ -152,18 +148,24 @@
                                     </div>
                                     <div class="form-group">
                                         <div class="form-row">
-                                            <div class="col-lg-4">
+                                            <div id="description" class="col-lg-4">
                                                 <label>Item Description</label>
                                                 <input type="text" name="itemDescription" class="form-control" disabled/>
                                             </div>
-                                            <div class="col-lg-2">
+                                            <div id="descriptionDrNo" class="col-lg-4">
+                                                <label>Item Description</label>
+                                                <input type="text" name="descriptionDrNo" class="form-control"  disabled />
+                                            
+                                            </div>
+                                            <div id="unitPrice" class="col-lg-2">
                                                 <label>Unit Price</label>
                                                 <input type="text" name="unitPrice" class="form-control" disabled/>
                                             </div>
-                                            <div class="col-lg-2">
+                                            <div id="amount" class="col-lg-2">
                                                 <label>Amount</label>
                                                 <input type="text" name="amount" class="form-control" disabled/>
                                             </div>
+                                            
                                             
                                         </div>
                                     </div>
@@ -192,33 +194,196 @@
         </div>
       </footer>
 </div>
-<script type="text/javascript">
+<script>
      $("#drNo").hide();
      $("#drList").hide();
      $("#unit").hide();
-     $("#productId").hide();
+     $("#descriptionDrNo").hide();
+    
      $(".chooseOption").change(function(){
         const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
         if(cat === "Sales Invoice"){
             $("#totalKls").show();
             $("#invoiceNo").show();
             $("#invoiceList").show();
+            $("#description").show();
+
 
             $("#unit").hide();
             $("#drNo").hide();
             $("#drList").hide();
-            $("#productId").hide();
-        }else if(cat === "Private Order"){
+            $("#descriptionDrNo").hide();
+           
+        }else if(cat === "Delivery Receipt"){
             $("#unit").show();
             $("#drNo").show();
             $("#drList").show();
-            $("#productId").show();
+            $("#descriptionDrNo").show();
 
             $("#totalKls").hide();
             $("#invoiceNo").hide();
             $("#invoiceList").hide();
+            $("#description").hide();
 
         }
      });
+
+     $(".invoiceSelect").change(function(){
+        <?php
+          $moduleName = "Sales Invoice";
+          $salesInvoices = DB::table(
+                                  'mr_potato_sales_invoices')
+                                  ->select(
+                                      'mr_potato_sales_invoices.id',
+                                      'mr_potato_sales_invoices.user_id',
+                                      'mr_potato_sales_invoices.si_id',
+                                      'mr_potato_sales_invoices.invoice_number',
+                                      'mr_potato_sales_invoices.sales_invoice_number',
+                                      'mr_potato_sales_invoices.date',
+                                      'mr_potato_sales_invoices.ordered_by',
+                                      'mr_potato_sales_invoices.address',
+                                      'mr_potato_sales_invoices.qty',
+                                      'mr_potato_sales_invoices.total_kls',
+                                      'mr_potato_sales_invoices.item_description',
+                                      'mr_potato_sales_invoices.unit_price',
+                                      'mr_potato_sales_invoices.amount',
+                                      'mr_potato_sales_invoices.created_by',
+                                      'mr_potato_codes.mr_potato_code',
+                                      'mr_potato_codes.module_id',
+                                      'mr_potato_codes.module_code',
+                                      'mr_potato_codes.module_name')
+                                  ->join('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
+                                  ->where('mr_potato_sales_invoices.si_id', NULL)
+                                  ->orderBy('mr_potato_sales_invoices.id', 'desc')
+                                  ->where('mr_potato_codes.module_name', $moduleName)
+                                  ->get()->toArray();
+        
+        ?>
+        const invoice = $(this).children("option:selected").val();
+        <?php foreach($salesInvoices as $salesInvoice): ?>
+          if(invoice === "<?php echo $salesInvoice->mr_potato_code?>"){
+               <?php 
+                  $getSIInsides = DB::table(
+                                    'mr_potato_sales_invoices')
+                                    ->where('sales_invoice_number', $salesInvoice->sales_invoice_number)
+                                    ->get(); ?>
+              <?php foreach($getSIInsides as $getSIInside): ?>
+                 $("#dataInvoice").append(  
+                          `<option value="<?= $getSIInside->id?>"><?= $getSIInside->id?></option>
+                          `);
+                  $(".chooseInvoice").change(function(){
+                      const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
+                      <?php 
+                              $datas  = DB::table(
+                                      'mr_potato_sales_invoices')
+                                      ->where('id', $getSIInside->id)
+                                      ->get(); ?>
+
+                      <?php foreach($datas as $data): ?>
+                            if(cat === "<?= $data->id?>"){
+                              $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?= $data->qty; ?>" class="form-control" readonly="readonly" />');
+                              $("#totalKls").html('<label>Total Kls</label><input type="text" name="totalKls" value="<?= $data->total_kls; ?>" class="form-control" readonly="readonly" />');
+                              $("#unitPrice").html('<label>Unit Price</label><input type="text" name="unitPrice" value="<?= $data->unit_price; ?>" class="form-control" readonly="readonly" />');
+                            
+                              $("#description").html('<label>Description</label><input type="text" name="itemDescription" value="<?= $data->item_description; ?>" class="form-control" readonly="readonly" />');
+                              $("#amount").html('<label>Amount</label><input type="text" name="amount" value="<?= $data->amount; ?>" class="form-control" readonly="readonly" />');
+         
+                            }
+                      <?php endforeach;?>
+                  });
+              <?php endforeach; ?>
+
+            $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?= $salesInvoice->qty; ?>" class="form-control" readonly="readonly" />');
+            $("#totalKls").html('<label>Total Kls</label><input type="text" name="totalKls" value="<?= $salesInvoice->total_kls; ?>" class="form-control" readonly="readonly" />');
+            $("#unitPrice").html('<label>Unit Price</label><input type="text" name="unitPrice" value="<?= $salesInvoice->unit_price; ?>" class="form-control" readonly="readonly" />');
+        
+            $("#description").html('<label>Description</label><input type="text" name="itemDescription" value="<?= $salesInvoice->item_description; ?>" class="form-control" readonly="readonly" />');
+            $("#amount").html('<label>Amount</label><input type="text" name="amount" value="<?= $salesInvoice->amount; ?>" class="form-control" readonly="readonly" />');
+         
+          }
+        <?php endforeach; ?>
+        
+    });
+
+    $(".drSelect").change(function(){
+        <?php
+             $moduleName = "Delivery Receipt"; 
+             $getDrNos = DB::table(
+                             'mr_potato_delivery_receipts')
+                             ->select( 
+                             'mr_potato_delivery_receipts.id',
+                             'mr_potato_delivery_receipts.user_id',
+                             'mr_potato_delivery_receipts.dr_id',
+                             'mr_potato_delivery_receipts.dr_no',
+                             'mr_potato_delivery_receipts.delivered_to',
+                             'mr_potato_delivery_receipts.date',
+                             'mr_potato_delivery_receipts.qty',
+                             'mr_potato_delivery_receipts.unit',
+                             'mr_potato_delivery_receipts.item_description',
+                             'mr_potato_delivery_receipts.prepared_by',
+                             'mr_potato_delivery_receipts.checked_by',
+                             'mr_potato_delivery_receipts.received_by',
+                             'mr_potato_delivery_receipts.created_by',
+                             'mr_potato_codes.mr_potato_code',
+                             'mr_potato_codes.module_id',
+                             'mr_potato_codes.module_code',
+                             'mr_potato_codes.module_name')
+                             ->join('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
+                             ->where('mr_potato_delivery_receipts.dr_id', NULL)
+                             ->where('mr_potato_codes.module_name', $moduleName)
+                             ->get();
+     
+          ?>
+        const dr = $(this).children("option:selected").val();
+        <?php foreach($getDrNos as $getDrNo ): ?>
+             if(dr === "<?= $getDrNo->mr_potato_code?>"){
+                <?php 
+                    $getDrNosInsides = DB::table(
+                                    'mr_potato_delivery_receipts')
+                                    ->where('dr_no', $getDrNo->dr_no)
+                                    ->get(); ?>
+
+                 
+                  <?php foreach($getDrNosInsides as $getDrNosInside):?>
+                       $("#dataList").append(  
+                          `<option value="<?php echo $getDrNosInside->id?>"><?= $getDrNosInside->id?></option>
+                          `);
+                        
+                        $(".chooseDr").change(function(){
+                            const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
+                            <?php 
+                              $datas  = DB::table(
+                                      'mr_potato_delivery_receipts')
+                                      ->where('id', $getDrNosInside->id)
+                                      ->get(); ?>
+
+                               <?php foreach($datas as $data): ?>
+                                     if(cat === "<?= $data->id?>"){
+                                          $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?= $data->qty; ?>" class="form-control" readonly="readonly" />');
+                                          $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?= $data->unit; ?>" class="form-control" readonly="readonly" />');
+                                          $("#unitPrice").html('<label>Unit Price</label><input type="text" name="unitPrice" value="<?= $data->unit_price; ?>" class="form-control" readonly="readonly" />');
+                            
+                                          $("#descriptionDrNo").html('<label> Item Description</label><input type="text" name="descriptionDrNo" value="<?= $data->item_description; ?>" class="form-control" readonly="readonly" />');
+                                          $("#amount").html('<label>Amount</label><input type="text" name="amount" value="<?= $data->amount; ?>" class="form-control" readonly="readonly" />');
+         
+                                     }
+                               <?php endforeach;?>
+                        });       
+
+                    <?php endforeach; ?>    
+                $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?= $getDrNo->qty; ?>" class="form-control" readonly="readonly" />');
+                $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?= $getDrNo->unit; ?>" class="form-control" readonly="readonly" />');
+                $("#unitPrice").html('<label>Unit Price</label><input type="text" name="unitPrice" value="<?= $data->unit_price; ?>" class="form-control" readonly="readonly" />');
+                            
+                $("#descriptionDrNo").html('<label>Item Description</label><input type="text" name="descriptionDrNo" value="<?= $getDrNo->item_description; ?>" class="form-control" readonly="readonly" />');
+                $("#amount").html('<label>Amount</label><input type="text" name="amount" value="<?= $data->amount; ?>" class="form-control" readonly="readonly" />');
+         
+             }
+           
+        <?php endforeach; ?>
+        
+    
+    
+    });
 </script>
 @endsection

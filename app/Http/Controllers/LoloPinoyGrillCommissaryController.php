@@ -7257,9 +7257,8 @@ class LoloPinoyGrillCommissaryController extends Controller
             $qty = $request->get('qty');
             $totalKls = $request->get('totalKls');
             $unitPrice = $request->get('unitPrice');
-
+            $productId = $request->get('productId');
             $drNo = NULL;
-            $productId = NULL;
             $unit = NULL;
             $drList = NULL;
             $unit = NULL;
@@ -7268,10 +7267,11 @@ class LoloPinoyGrillCommissaryController extends Controller
             $qty = $request->get('qty');
             $unitPrice = $request->get('unitPrice');
             $drNo = $request->get('drNo');
-            $productId  = $request->get('productId');
             $unit = $request->get('unit'); 
             $drList = $request->get('drList');
             $unit = $request->get('unit');
+
+            $productId = $request->get('productId');
 
             $invoiceNo = NULL;
             $invoiceListId = NULL;
@@ -8602,6 +8602,18 @@ class LoloPinoyGrillCommissaryController extends Controller
         $billStatement->save();
 
         $billingStatement->delete();
+
+        //update statement of account table
+        $statementAccount = LoloPinoyGrillCommissaryStatementOfAccount::find($request->billingStatementId);
+
+        $stateAccount = LoloPinoyGrillCommissaryStatementOfAccount::find($id);
+
+        $getStateAmount = $statementAccount->total_amount - $stateAccount->amount; 
+        $statementAccount->total_amount = $getStateAmount;
+        $statementAccount->total_remaining_balance = $getStateAmount;
+        $statementAccount->save();
+
+        $stateAccount->delete();
 
     }
 

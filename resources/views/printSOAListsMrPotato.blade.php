@@ -23,9 +23,9 @@
 <div id="wrapper">
 	 <div id="content-wrapper">
  		<div class="container-fluid">
- 				<div  style="margin-top:60px;">
-            	 <img style="margin-left: 170px;"src="{{ asset('images/digitized-logos/lolo-pinoy-grill.png')}}"  width="366" height="178" alt="Lechon de Cebu">
-            	 	 <p >
+ 				<div  style="margin-top:-10px;" >
+                 <img style="margin-left: -30px;" src="{{ asset('images/pdf/mr-potato.png')}}"   alt="Mr Potato"> 
+             	 	 <p style="margin-top:-80px; margin-left:160px;text-align:left;">
 		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
 						Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
 
@@ -56,7 +56,7 @@
                                   	 	 @foreach($printSOAStatements as $printSOAStatement)
                                         <tr style="border:1px solid black;">
                                           <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->date }}</td>
-                                          <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->lolo_pinoy_grill_code }}</td>
+                                          <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->mr_potato_code }}</td>
 										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->bill_to }}</td>
 										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->bs_no }}</td>
 										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->period_cover }}</td>

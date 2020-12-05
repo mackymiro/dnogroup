@@ -18,6 +18,7 @@ use App\MrPotatoPettyCash;
 use App\MrPotatoCode;
 use App\MrPotatoBillingStatement; 
 use App\MrPotatoSupplier;
+use App\MrPotatoStatementOfAccount;
 
 class MrPotatoController extends Controller
 {   
@@ -3038,6 +3039,670 @@ class MrPotatoController extends Controller
         'getTransactionLists', 'getTransactionListCashes', 'totalAmountCashes', 'getTransactionListChecks', 'totalAmountCheck'));
     }
 
+    public function printSOALists(){
+        $moduleName = "Statement Of Account";
+        $printSOAStatements = DB::table(
+                        'mr_potato_statement_of_accounts')
+                        ->select(
+                            'mr_potato_statement_of_accounts.id',
+                            'mr_potato_statement_of_accounts.user_id',
+                            'mr_potato_statement_of_accounts.billing_statement_id',
+                            'mr_potato_statement_of_accounts.bs_no',
+                            'mr_potato_statement_of_accounts.bill_to',
+                            'mr_potato_statement_of_accounts.date',
+                            'mr_potato_statement_of_accounts.branch',
+                            'mr_potato_statement_of_accounts.period_cover',
+                            'mr_potato_statement_of_accounts.date_of_transaction',
+                            'mr_potato_statement_of_accounts.invoice_number',
+                            'mr_potato_statement_of_accounts.description',
+                            'mr_potato_statement_of_accounts.amount',
+                            'mr_potato_statement_of_accounts.total_amount',
+                            'mr_potato_statement_of_accounts.total_remaining_balance',
+                            'mr_potato_statement_of_accounts.paid_amount',
+                            'mr_potato_statement_of_accounts.created_by',
+                            'mr_potato_codes.mr_potato_code',
+                            'mr_potato_codes.module_id',
+                            'mr_potato_codes.module_code',
+                            'mr_potato_codes.module_name')
+                        ->join('mr_potato_codes', 'mr_potato_statement_of_accounts.id', '=', 'mr_potato_codes.module_id')
+                        ->where('mr_potato_statement_of_accounts.billing_statement_id', NULL)
+                        ->where('mr_potato_codes.module_name', $moduleName)
+                        ->orderBy('mr_potato_statement_of_accounts.id', 'desc')
+                        ->get()->toArray();
+
+        $status = "PAID";
+        $totalAmount = DB::table(
+                            'mr_potato_statement_of_accounts')
+                            ->select(
+                                'mr_potato_statement_of_accounts.id',
+                                'mr_potato_statement_of_accounts.user_id',
+                                'mr_potato_statement_of_accounts.billing_statement_id',
+                                'mr_potato_statement_of_accounts.bs_no',
+                                'mr_potato_statement_of_accounts.bill_to',
+                                'mr_potato_statement_of_accounts.date',
+                                'mr_potato_statement_of_accounts.branch',
+                                'mr_potato_statement_of_accounts.period_cover',
+                                'mr_potato_statement_of_accounts.date_of_transaction',
+                                'mr_potato_statement_of_accounts.invoice_number',
+                                'mr_potato_statement_of_accounts.description',
+                                'mr_potato_statement_of_accounts.amount',
+                                'mr_potato_statement_of_accounts.total_amount',
+                                'mr_potato_statement_of_accounts.total_remaining_balance',
+                                'mr_potato_statement_of_accounts.paid_amount',
+                                'mr_potato_statement_of_accounts.created_by',
+                                'mr_potato_codes.mr_potato_code',
+                                'mr_potato_codes.module_id',
+                                'mr_potato_codes.module_code',
+                                'mr_potato_codes.module_name')
+                            ->join('mr_potato_codes', 'mr_potato_statement_of_accounts.id', '=', 'mr_potato_codes.module_id')
+                            ->where('mr_potato_statement_of_accounts.bill_to', '!=', NULL)
+                            ->where('mr_potato_codes.module_name', $moduleName)
+                            ->where('mr_potato_statement_of_accounts.status', $status)
+                            ->sum('mr_potato_statement_of_accounts.total_amount');
+
+        $totalRemainingBalance = DB::table(
+                        'mr_potato_statement_of_accounts')
+                        ->select(
+                            'mr_potato_statement_of_accounts.id',
+                            'mr_potato_statement_of_accounts.user_id',
+                            'mr_potato_statement_of_accounts.billing_statement_id',
+                            'mr_potato_statement_of_accounts.bs_no',
+                            'mr_potato_statement_of_accounts.bill_to',
+                            'mr_potato_statement_of_accounts.date',
+                            'mr_potato_statement_of_accounts.branch',
+                            'mr_potato_statement_of_accounts.period_cover',
+                            'mr_potato_statement_of_accounts.date_of_transaction',
+                            'mr_potato_statement_of_accounts.invoice_number',
+                            'mr_potato_statement_of_accounts.description',
+                            'mr_potato_statement_of_accounts.amount',
+                            'mr_potato_statement_of_accounts.total_amount',
+                            'mr_potato_statement_of_accounts.total_remaining_balance',
+                            'mr_potato_statement_of_accounts.paid_amount',
+                            'mr_potato_statement_of_accounts.created_by',
+                            'mr_potato_codes.mr_potato_code',
+                            'mr_potato_codes.module_id',
+                            'mr_potato_codes.module_code',
+                            'mr_potato_codes.module_name')
+                        ->join('mr_potato_codes', 'mr_potato_statement_of_accounts.id', '=', 'mr_potato_codes.module_id')
+                        ->where('mr_potato_statement_of_accounts.bill_to', '!=', NULL)
+                        ->where('mr_potato_codes.module_name', $moduleName)
+                        ->where('mr_potato_statement_of_accounts.status', NULL)
+                        ->sum('mr_potato_statement_of_accounts.total_remaining_balance');
+
+        $pdf = PDF::loadView('printSOAListsMrPotato', compact('printSOAStatements', 'totalAmount', 'totalRemainingBalance'));
+
+        return $pdf->download('mr-potato-statement-of-account-list.pdf');
+    
+
+    }
+
+    public function printSOA($id){
+        $moduleName = "Statement Of Account";
+
+        $Soa = DB::table(
+                            'mr_potato_statement_of_accounts')
+                            ->select(
+                                'mr_potato_statement_of_accounts.id',
+                                'mr_potato_statement_of_accounts.user_id',
+                                'mr_potato_statement_of_accounts.billing_statement_id',
+                                'mr_potato_statement_of_accounts.address',
+                                'mr_potato_statement_of_accounts.bs_no',
+                                'mr_potato_statement_of_accounts.bill_to',
+                                'mr_potato_statement_of_accounts.date',
+                                'mr_potato_statement_of_accounts.branch',
+                                'mr_potato_statement_of_accounts.period_cover',
+                                'mr_potato_statement_of_accounts.date_of_transaction',
+                                'mr_potato_statement_of_accounts.invoice_number',
+                                'mr_potato_statement_of_accounts.terms',
+                                'mr_potato_statement_of_accounts.status',
+                                'mr_potato_statement_of_accounts.description',
+                                'mr_potato_statement_of_accounts.amount',
+                                'mr_potato_statement_of_accounts.total_amount',
+                                'mr_potato_statement_of_accounts.total_remaining_balance',
+                                'mr_potato_statement_of_accounts.collection_date',
+                                'mr_potato_statement_of_accounts.check_number',
+                                'mr_potato_statement_of_accounts.check_amount',
+                                'mr_potato_statement_of_accounts.or_number',
+                                'mr_potato_statement_of_accounts.payment_method',
+                                'mr_potato_statement_of_accounts.order',
+                                'mr_potato_statement_of_accounts.paid_amount',
+                                'mr_potato_statement_of_accounts.created_by',
+                                'mr_potato_codes.mr_potato_code',
+                                'mr_potato_codes.module_id',
+                                'mr_potato_codes.module_code',
+                                'mr_potato_codes.module_name')
+                            ->join('mr_potato_codes', 'mr_potato_statement_of_accounts.id', '=', 'mr_potato_codes.module_id')
+                            ->where('mr_potato_statement_of_accounts.id', $id)
+                            ->where('mr_potato_codes.module_name', $moduleName)
+                            ->get();
+
+        
+        $statementAccounts = MrPotatoStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->get();
+
+        //count the total amount 
+        $countTotalAmount = MrPotatoStatementOfAccount::where('id', $id)->sum('amount');
+
+            //
+        $countAmount = MrPotatoStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+
+            //count the total balance if there are paid amount
+        $paidAmountCount = MrPotatoStatementOfAccount::where('id', $id)->sum('paid_amount');
+        
+        //
+        $countAmountOthersPaid = MrPotatoStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('paid_amount');
+        
+        $compute  = $paidAmountCount + $countAmountOthersPaid;
+
+
+        //minus the total balance to paid amounts
+        $computeAll  = $sum - $compute;
+            
+    
+        $pdf = PDF::loadView('printSOA-mr-potato', compact('Soa', 'statementAccounts', 'sum'));
+    
+        return $pdf->download('mr-potato-statement-of-account.pdf');
+
+    }
+
+    public function viewStatementAccount($id){
+        $moduleName = "Statement Of Account";
+
+        $viewStatementAccount = DB::table(
+                            'mr_potato_statement_of_accounts')
+                            ->select(
+                                'mr_potato_statement_of_accounts.id',
+                                'mr_potato_statement_of_accounts.user_id',
+                                'mr_potato_statement_of_accounts.billing_statement_id',
+                                'mr_potato_statement_of_accounts.address',
+                                'mr_potato_statement_of_accounts.bs_no',
+                                'mr_potato_statement_of_accounts.bill_to',
+                                'mr_potato_statement_of_accounts.date',
+                                'mr_potato_statement_of_accounts.branch',
+                                'mr_potato_statement_of_accounts.period_cover',
+                                'mr_potato_statement_of_accounts.date_of_transaction',
+                                'mr_potato_statement_of_accounts.invoice_number',
+                                'mr_potato_statement_of_accounts.terms',
+                                'mr_potato_statement_of_accounts.status',
+                                'mr_potato_statement_of_accounts.description',
+                                'mr_potato_statement_of_accounts.amount',
+                                'mr_potato_statement_of_accounts.total_amount',
+                                'mr_potato_statement_of_accounts.total_remaining_balance',
+                                'mr_potato_statement_of_accounts.collection_date',
+                                'mr_potato_statement_of_accounts.check_number',
+                                'mr_potato_statement_of_accounts.check_amount',
+                                'mr_potato_statement_of_accounts.or_number',
+                                'mr_potato_statement_of_accounts.payment_method',
+                                'mr_potato_statement_of_accounts.order',
+                                'mr_potato_statement_of_accounts.paid_amount',
+                                'mr_potato_statement_of_accounts.created_by',
+                                'mr_potato_codes.mr_potato_code',
+                                'mr_potato_codes.module_id',
+                                'mr_potato_codes.module_code',
+                                'mr_potato_codes.module_name')
+                            ->join('mr_potato_codes', 'mr_potato_statement_of_accounts.id', '=', 'mr_potato_codes.module_id')
+                            ->where('mr_potato_statement_of_accounts.id', $id)
+                            ->where('mr_potato_codes.module_name', $moduleName)
+                            ->get();
+
+        $statementAccounts = MrPotatoStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->get();
+
+        //count the total amount 
+        $countTotalAmount = MrPotatoStatementOfAccount::where('id', $id)->sum('amount');
+
+            //
+        $countAmount = MrPotatoStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+
+            //count the total balance if there are paid amount
+        $paidAmountCount = MrPotatoStatementOfAccount::where('id', $id)->sum('paid_amount');
+        
+        //
+        $countAmountOthersPaid = MrPotatoStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('paid_amount');
+        
+        $compute  = $paidAmountCount + $countAmountOthersPaid;
+
+
+        //minus the total balance to paid amounts
+        $computeAll  = $sum - $compute;
+
+        return view('view-mr-potato-statement-account', compact('viewStatementAccount', 'statementAccounts', 'sum', 'computeAll'));
+ 
+
+    }
+
+    public function sAccountUpdate(Request $request, $id){
+         //get the main id
+         $mainIdSoa = MrPotatoStatementOfAccount::find($request->mainId);
+        
+         $compute = $mainIdSoa->total_remaining_balance - $request->paidAmount;
+ 
+         $mainIdSoa->total_remaining_balance = $compute; 
+         $mainIdSoa->save();
+
+         $statementAccountPaid = MrPotatoStatementOfAccount::find($request->id);
+
+         $statementAccountPaid->paid_amount = $request->paidAmount;
+         $statementAccountPaid->status = $request->status;
+         $statementAccountPaid->collection_date = $request->collectionDate;
+         $statementAccountPaid->check_number = $request->checkNumber;
+         $statementAccountPaid->check_amount = $request->checkAmount;
+         $statementAccountPaid->or_number = $request->orNumber;
+         $statementAccountPaid->payment_method = $request->payment;
+ 
+         $statementAccountPaid->save();
+         
+         return response()->json('Success: paid successfully');
+    }
+
+    public function editStatementOfAccount($id){
+        $moduleName = "Statement Of Account";
+
+        $getStatementOfAccount = DB::table(
+                            'mr_potato_statement_of_accounts')
+                            ->select(
+                                'mr_potato_statement_of_accounts.id',
+                                'mr_potato_statement_of_accounts.user_id',
+                                'mr_potato_statement_of_accounts.billing_statement_id',
+                                'mr_potato_statement_of_accounts.dr_no',
+                                'mr_potato_statement_of_accounts.bs_no',
+                                'mr_potato_statement_of_accounts.bill_to',
+                                'mr_potato_statement_of_accounts.date',
+                                'mr_potato_statement_of_accounts.branch',
+                                'mr_potato_statement_of_accounts.period_cover',
+                                'mr_potato_statement_of_accounts.date_of_transaction',
+                                'mr_potato_statement_of_accounts.invoice_number',
+                                'mr_potato_statement_of_accounts.terms',
+                                'mr_potato_statement_of_accounts.unit',
+                                'mr_potato_statement_of_accounts.status',
+                                'mr_potato_statement_of_accounts.description',
+                                'mr_potato_statement_of_accounts.amount',
+                                'mr_potato_statement_of_accounts.total_amount',
+                                'mr_potato_statement_of_accounts.total_remaining_balance',
+                                'mr_potato_statement_of_accounts.collection_date',
+                                'mr_potato_statement_of_accounts.check_number',
+                                'mr_potato_statement_of_accounts.check_amount',
+                                'mr_potato_statement_of_accounts.or_number',
+                                'mr_potato_statement_of_accounts.payment_method',
+                                'mr_potato_statement_of_accounts.order',
+                                'mr_potato_statement_of_accounts.paid_amount',
+                                'mr_potato_statement_of_accounts.created_by',
+                                'mr_potato_codes.mr_potato_code',
+                                'mr_potato_codes.module_id',
+                                'mr_potato_codes.module_code',
+                                'mr_potato_codes.module_name')
+                            ->join('mr_potato_codes', 'mr_potato_statement_of_accounts.id', '=', 'mr_potato_codes.module_id')
+                            ->where('mr_potato_statement_of_accounts.id', $id)
+                            ->where('mr_potato_codes.module_name', $moduleName)
+                            ->get();
+
+          //AllAcounts not yet paid
+       $allAccounts = MrPotatoStatementOfAccount::where('billing_statement_id', $id)->where('status', NULL)->get()->toArray();
+
+       $stat = "PAID";
+       $allAccountsPaids = MrPotatoStatementOfAccount::where('billing_statement_id', $id)->where('status', $stat)->get()->toArray();  
+
+        //count the total amount 
+        $countTotalAmount = MrPotatoStatementOfAccount::where('id', $id)->sum('amount');
+
+          //
+        $countAmount = MrPotatoStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        //count the total balance if there are paid amount
+        $paidAmountCount = MrPotatoStatementOfAccount::where('id', $id)->sum('paid_amount');
+       
+        //
+        $countAmountOthersPaid = MrPotatoStatementOfAccount::where('billing_statement_id', $id)->where('bill_to', NULL)->sum('paid_amount');
+        
+        $compute  = $paidAmountCount + $countAmountOthersPaid;
+
+        //minus the total balance to paid amounts
+        $computeAll  = $sum - $compute;
+        
+        return view('edit-mr-potato-statement-of-account', compact('getStatementOfAccount', 'allAccounts', 'allAccountsPaids', 'sum', 'computeAll'));
+   
+    }
+
+    public function statementOfAccountList(){
+        $moduleName = "Statement Of Account";
+
+        $statementOfAccounts = DB::table(
+                        'mr_potato_statement_of_accounts')
+                        ->select(
+                            'mr_potato_statement_of_accounts.id',
+                            'mr_potato_statement_of_accounts.user_id',
+                            'mr_potato_statement_of_accounts.billing_statement_id',
+                            'mr_potato_statement_of_accounts.bs_no',
+                            'mr_potato_statement_of_accounts.bill_to',
+                            'mr_potato_statement_of_accounts.date',
+                            'mr_potato_statement_of_accounts.branch',
+                            'mr_potato_statement_of_accounts.period_cover',
+                            'mr_potato_statement_of_accounts.date_of_transaction',
+                            'mr_potato_statement_of_accounts.invoice_number',
+                            'mr_potato_statement_of_accounts.description',
+                            'mr_potato_statement_of_accounts.amount',
+                            'mr_potato_statement_of_accounts.total_amount',
+                            'mr_potato_statement_of_accounts.total_remaining_balance',
+                            'mr_potato_statement_of_accounts.paid_amount',
+                            'mr_potato_statement_of_accounts.created_by',
+                            'mr_potato_codes.mr_potato_code',
+                            'mr_potato_codes.module_id',
+                            'mr_potato_codes.module_code',
+                            'mr_potato_codes.module_name')
+                        ->join('mr_potato_codes', 'mr_potato_statement_of_accounts.id', '=', 'mr_potato_codes.module_id')
+                        ->where('mr_potato_statement_of_accounts.bill_to', '!=', NULL)
+                        ->where('mr_potato_codes.module_name', $moduleName)
+                        ->orderBy('mr_potato_statement_of_accounts.id', 'desc')
+                        ->get()->toArray();
+
+            $status = "PAID";
+            $totalAmount = DB::table(
+                        'mr_potato_statement_of_accounts')
+                        ->select(
+                            'mr_potato_statement_of_accounts.id',
+                            'mr_potato_statement_of_accounts.user_id',
+                            'mr_potato_statement_of_accounts.billing_statement_id',
+                            'mr_potato_statement_of_accounts.bs_no',
+                            'mr_potato_statement_of_accounts.bill_to',
+                            'mr_potato_statement_of_accounts.date',
+                            'mr_potato_statement_of_accounts.branch',
+                            'mr_potato_statement_of_accounts.period_cover',
+                            'mr_potato_statement_of_accounts.date_of_transaction',
+                            'mr_potato_statement_of_accounts.invoice_number',
+                            'mr_potato_statement_of_accounts.description',
+                            'mr_potato_statement_of_accounts.amount',
+                            'mr_potato_statement_of_accounts.total_amount',
+                            'mr_potato_statement_of_accounts.total_remaining_balance',
+                            'mr_potato_statement_of_accounts.paid_amount',
+                            'mr_potato_statement_of_accounts.created_by',
+                            'mr_potato_codes.mr_potato_code',
+                            'mr_potato_codes.module_id',
+                            'mr_potato_codes.module_code',
+                            'mr_potato_codes.module_name')
+                        ->join('mr_potato_codes', 'mr_potato_statement_of_accounts.id', '=', 'mr_potato_codes.module_id')
+                        ->where('mr_potato_statement_of_accounts.bill_to', '!=', NULL)
+                        ->where('mr_potato_codes.module_name', $moduleName)
+                        ->where('mr_potato_statement_of_accounts.status', $status)
+                        ->sum('mr_potato_statement_of_accounts.total_amount');
+
+        $totalRemainingBalance = DB::table(
+                        'mr_potato_statement_of_accounts')
+                        ->select(
+                            'mr_potato_statement_of_accounts.id',
+                            'mr_potato_statement_of_accounts.user_id',
+                            'mr_potato_statement_of_accounts.billing_statement_id',
+                            'mr_potato_statement_of_accounts.bs_no',
+                            'mr_potato_statement_of_accounts.bill_to',
+                            'mr_potato_statement_of_accounts.date',
+                            'mr_potato_statement_of_accounts.branch',
+                            'mr_potato_statement_of_accounts.period_cover',
+                            'mr_potato_statement_of_accounts.date_of_transaction',
+                            'mr_potato_statement_of_accounts.invoice_number',
+                            'mr_potato_statement_of_accounts.description',
+                            'mr_potato_statement_of_accounts.amount',
+                            'mr_potato_statement_of_accounts.total_amount',
+                            'mr_potato_statement_of_accounts.total_remaining_balance',
+                            'mr_potato_statement_of_accounts.paid_amount',
+                            'mr_potato_statement_of_accounts.created_by',
+                            'mr_potato_codes.mr_potato_code',
+                            'mr_potato_codes.module_id',
+                            'mr_potato_codes.module_code',
+                            'mr_potato_codes.module_name')
+                        ->join('mr_potato_codes', 'mr_potato_statement_of_accounts.id', '=', 'mr_potato_codes.module_id')
+                        ->where('mr_potato_statement_of_accounts.bill_to', '!=', NULL)
+                        ->where('mr_potato_codes.module_name', $moduleName)
+                        ->where('mr_potato_statement_of_accounts.status', NULL)
+                        ->sum('mr_potato_statement_of_accounts.total_remaining_balance');
+
+        return view('mr-potato-statement-of-account-lists', compact('statementOfAccounts', 
+        'totalAmount', 'totalRemainingBalance'));
+    
+    }
+
+    public function viewBillingStatement($id){
+        $moduleName = "Billing Statement";
+        $viewBillingStatement = DB::table(
+                            'mr_potato_billing_statements')
+                            ->select(
+                                'mr_potato_billing_statements.id',
+                                'mr_potato_billing_statements.user_id',
+                                'mr_potato_billing_statements.billing_statement_id',
+                                'mr_potato_billing_statements.bill_to',
+                                'mr_potato_billing_statements.address',
+                                'mr_potato_billing_statements.date',
+                                'mr_potato_billing_statements.period_covered',
+                                'mr_potato_billing_statements.terms',
+                                'mr_potato_billing_statements.date_of_transaction',
+                                'mr_potato_billing_statements.invoice_no',
+                                'mr_potato_billing_statements.item_description',
+                                'mr_potato_billing_statements.amount',
+                                'mr_potato_billing_statements.created_by',
+                                'mr_potato_codes.mr_potato_code',
+                                'mr_potato_codes.module_id',
+                                'mr_potato_codes.module_code',
+                                'mr_potato_codes.module_name')
+                            ->leftJoin('mr_potato_codes', 'mr_potato_billing_statements.id', '=', 'mr_potato_codes.module_id')
+                            ->where('mr_potato_billing_statements.id', $id)
+                            ->where('mr_potato_codes.module_name', $moduleName)
+                            ->get();
+
+        $billingStatements = MrPotatoBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+            //count the total amount 
+        $countTotalAmount = MrPotatoBillingStatement::where('id', $id)->sum('amount');
+
+        //
+        $countAmount = MrPotatoBillingStatement::where('billing_statement_id', $id)->sum('amount');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        return view('view-mr-potato-billing-statement', compact('viewBillingStatement', 'billingStatements', 'sum'));
+
+    }
+
+    public function billingStatementList(){
+        $moduleName = "Billing Statement";
+        $billingStatements = DB::table(
+                    'mr_potato_billing_statements')
+                    ->select(
+                        'mr_potato_billing_statements.id',
+                        'mr_potato_billing_statements.user_id',
+                        'mr_potato_billing_statements.billing_statement_id',
+                        'mr_potato_billing_statements.bill_to',
+                        'mr_potato_billing_statements.address',
+                        'mr_potato_billing_statements.date',
+                        'mr_potato_billing_statements.period_covered',
+                        'mr_potato_billing_statements.terms',
+                        'mr_potato_billing_statements.date_of_transaction',
+                        'mr_potato_billing_statements.invoice_no',
+                        'mr_potato_billing_statements.item_description',
+                        'mr_potato_billing_statements.amount',
+                        'mr_potato_billing_statements.created_by',
+                        'mr_potato_codes.mr_potato_code',
+                        'mr_potato_codes.module_id',
+                        'mr_potato_codes.module_code',
+                        'mr_potato_codes.module_name')
+                    ->leftJoin('mr_potato_codes', 'mr_potato_billing_statements.id', '=', 'mr_potato_codes.module_id')
+                    ->where('mr_potato_billing_statements.billing_statement_id', NULL)
+                    ->where('mr_potato_codes.module_name', $moduleName)
+                    ->orderBy('mr_potato_billing_statements.id', 'desc')
+                    ->get();
+
+        return view('mr-potato-billing-statement-lists', compact('billingStatements'));
+    }
+
+    public function addNewBillingData(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $billingOrder = MrPotatoBillingStatement::find($id);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+        $amount = $request->get('amount');
+        $tot = $billingOrder->total_amount + $amount;
+       
+
+        if($request->get('choose') === "Sales Invoice"){
+            $order = $request->get('choose');
+            $invoiceNo = $request->get('invoiceNumber');
+            $invoiceListId = $request->get('invoiceListId');
+            $qty = $request->get('qty');
+            $totalKls = $request->get('totalKls');
+            $unitPrice = $request->get('unitPrice');
+
+            $drNo = NULL;
+            $unit = NULL;
+            $drList = NULL;
+            $unit = NULL;
+        }else{
+            $order = $request->get('choose');
+            $qty = $request->get('qty');
+            $unitPrice = $request->get('unitPrice');
+            $drNo = $request->get('drNo');
+            $unit = $request->get('unit'); 
+            $drList = $request->get('drList');
+            $unit = $request->get('unit');
+
+            $invoiceNo = NULL;
+            $invoiceListId = NULL;
+            $totalKls = NULL; 
+        }
+
+        $addNewBillingStatement = new MrPotatoBillingStatement([
+            'user_id'=>$user->id,
+            'billing_statement_id'=>$id,
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'order'=>$order,
+            'invoice_list_id'=>$invoiceListId,
+            'qty'=>$qty,
+            'dr_no'=>$drNo,
+            'dr_list_id'=>$drList,
+            'total_kls'=>$totalKls,
+            'invoice_number'=>$request->get('invoiceNumber'),
+            'item_description'=>$request->get('description'),
+            'unit_price'=>$unitPrice,
+            'unit'=>$unit,
+            'amount'=>$request->get('amount'),
+            'total_amount'=>$request->get('amount'),
+            'created_by'=>$name,
+       
+        ]);
+
+        $addNewBillingStatement->save();
+
+        $addStatementAccount =  new MrPotatoStatementOfAccount([
+            'user_id'=>$user->id,
+            'billing_statement_id'=>$id,
+            'date_of_transaction'=>$request->get('transactionDate'),
+            'invoice_number'=>$request->get('invoiceNumber'),
+            'description'=>$request->get('description'),
+            'order'=>$order,
+            'invoice_list_id'=>$invoiceListId,
+            'qty'=>$qty,
+            'dr_no'=>$drNo,
+            'dr_list_id'=>$drList,
+            'total_kls'=>$totalKls,
+            'amount'=>$amount,
+            'created_by'=>$name,
+        ]);
+
+        $addStatementAccount->save();
+
+        $statementOrder = MrPotatoStatementOfAccount::find($id);
+
+        //update
+        $billingOrder->total_amount = $tot;
+        $billingOrder->save();
+
+         //update soa table
+         $statementOrder->total_amount  = $tot;
+         $statementOrder->total_remaining_balance = $tot;
+         $statementOrder->save();
+   
+         Session::flash('addBillingSuccess', 'Successfully added.');
+
+         return redirect()->route('editBillingStatementMrPotato', ['id'=>$id]);
+    }
+
+    public function editBillingStatement($id){
+        $ids =  Auth::user()->id;
+        $user = User::find($ids);
+
+        $billingStatement = MrPotatoBillingStatement::find($id);
+       
+        $bStatements = MrPotatoBillingStatement::where('billing_statement_id', $id)->get()->toArray();
+
+        $moduleNameDelivery = "Delivery Receipt";
+        $drNos = DB::table(
+                                'mr_potato_delivery_receipts')
+                                ->select( 
+                                'mr_potato_delivery_receipts.id',
+                                'mr_potato_delivery_receipts.user_id',
+                                'mr_potato_delivery_receipts.dr_id',
+                                'mr_potato_delivery_receipts.delivered_to',
+                                'mr_potato_delivery_receipts.date',
+                                'mr_potato_delivery_receipts.address',
+                                'mr_potato_delivery_receipts.product_id',
+                                'mr_potato_delivery_receipts.unit',
+                                'mr_potato_delivery_receipts.item_description',
+                                'mr_potato_delivery_receipts.unit_price',
+                                'mr_potato_delivery_receipts.amount',
+                                'mr_potato_delivery_receipts.qty',
+                                'mr_potato_delivery_receipts.prepared_by',
+                                'mr_potato_delivery_receipts.checked_by',
+                                'mr_potato_delivery_receipts.received_by',
+                                'mr_potato_delivery_receipts.created_by',
+                                'mr_potato_codes.mr_potato_code',
+                                'mr_potato_codes.module_id',
+                                'mr_potato_codes.module_code',
+                                'mr_potato_codes.module_name')
+                                ->join('mr_potato_codes', 'mr_potato_delivery_receipts.id', '=', 'mr_potato_codes.module_id')
+                                ->where('mr_potato_delivery_receipts.dr_id', NULL)
+                                ->where('mr_potato_codes.module_name', $moduleNameDelivery)
+                                ->get();
+
+        $moduleName = "Sales Invoice";
+        $getAllSalesInvoices = DB::table(
+                                'mr_potato_sales_invoices')
+                                ->select(
+                                    'mr_potato_sales_invoices.id',
+                                    'mr_potato_sales_invoices.user_id',
+                                    'mr_potato_sales_invoices.si_id',
+                                    'mr_potato_sales_invoices.invoice_number',
+                                    'mr_potato_sales_invoices.date',
+                                    'mr_potato_sales_invoices.ordered_by',
+                                    'mr_potato_sales_invoices.address',
+                                    'mr_potato_sales_invoices.qty',
+                                    'mr_potato_sales_invoices.total_kls',
+                                    'mr_potato_sales_invoices.item_description',
+                                    'mr_potato_sales_invoices.unit_price',
+                                    'mr_potato_sales_invoices.amount',
+                                    'mr_potato_sales_invoices.created_by',
+                                    'mr_potato_codes.mr_potato_code',
+                                    'mr_potato_codes.module_id',
+                                    'mr_potato_codes.module_code',
+                                    'mr_potato_codes.module_name')
+                                ->join('mr_potato_codes', 'mr_potato_sales_invoices.id', '=', 'mr_potato_codes.module_id')
+                                ->where('mr_potato_sales_invoices.si_id', NULL)
+                                ->orderBy('mr_potato_sales_invoices.id', 'desc')
+                                ->where('mr_potato_codes.module_name', $moduleName)
+                                ->get()->toArray();
+
+
+        return view('edit-mr-potato-billing-statement-form', compact('id', 'billingStatement', 'bStatements', 
+        'drNos', 'getAllSalesInvoices'));
+    }
+
     public function storeBillingStatement(Request $request){
         $ids =  Auth::user()->id;
         $user = User::find($ids);
@@ -3060,16 +3725,15 @@ class MrPotatoController extends Controller
 
             $drNo = NULL;
             $drList = NULL;
-            $productId = NULL;
             $unit = NULL;
             
         }else{
             $drNo = $request->get('drNo');
             $drList = $request->get('drList');
-            $productId = $request->get('productId');
+
             $qty = $request->get('qty');
             $unit = $request->get('unit');
-            $itemDesc = $request->get('itemDescription');
+            $itemDesc = $request->get('descriptionDrNo');
             $unitPrice = $request->get('unitPrice');
             $amount = $request->get('amount');
 
@@ -3096,9 +3760,10 @@ class MrPotatoController extends Controller
 
           $billingStatement = new MrPotatoBillingStatement([
                 'user_id'=>$user->id,
-                'bill_to'=>$request->get('bill_to'),
+                'bill_to'=>$request->get('billTo'),
                 'address'=>$request->get('address'),
                 'period_covered'=>$request->get('periodCovered'),
+                'date'=>$request->get('date'),
                 'terms'=>$request->get('terms'),
                 'date_of_transaction'=>$request->get('dateTransaction'),
                 'order'=>$request->get('choose'),
@@ -3109,9 +3774,9 @@ class MrPotatoController extends Controller
                 'item_description'=>$itemDesc,
                 'unit_price'=>$unitPrice,
                 'amount'=>$amount,
+                'total_amount'=>$amount,
                 'dr_no'=>$drNo,
                 'dr_list_id'=>$drList,
-                'product_id'=>$productId,
                 'unit'=>$unit,
                 'created_by'=>$name,
           ]);
@@ -3120,7 +3785,65 @@ class MrPotatoController extends Controller
         
           $insertedId = $billingStatement->id;
 
+          $moduleCode = "BS-";
+          $moduleName = "Billing Statement";
 
+          $mrPotato = new MrPotatoCode([
+            'user_id'=>$user->id,
+            'mr_potato_code'=>$uRef,
+            'module_id'=>$insertedId,
+            'module_code'=>$moduleCode,
+            'module_name'=>$moduleName,
+          ]);
+
+          $mrPotato->save();
+          $bsNo = $mrPotato->id; 
+          $bsNoId = MrPotatoCode::find($bsNo);
+
+          $statementAccount = new MrPotatoStatementOfAccount([
+                'user_id'=>$user->id,
+                'bs_no'=>$bsNoId->mr_potato_code,
+                'bill_to'=>$request->get('billTo'),
+                'address'=>$request->get('address'),
+                'period_cover'=>$request->get('periodCovered'),
+                'date'=>$request->get('date'),
+                'invoice_number'=>$invoiceNo,
+                'order'=>$request->get('choose'),
+                'terms'=>$request->get('terms'),
+                'date_of_transaction'=>$request->get('transactionDate'),
+                'description'=>$itemDesc,
+                'dr_no'=>$drNo,
+                'qty'=>$qty,
+                'unit'=>$unitPrice,
+                'amount'=>$amount,
+                'total_amount'=>$amount,
+                'total_remaining_balance'=>$amount,
+                'created_by'=>$name,
+                'prepared_by'=>$name,
+          ]);
+
+        $statementAccount->save();
+
+        $insertedIdStatement = $statementAccount->id;
+
+        $moduleCodeSOA = "SOA-";
+        $moduleNameSOA = "Statement Of Account";
+
+        $uRefStatement = $uRef + 1; 
+        $uRefState = sprintf("%06d",$uRefStatement);
+
+        
+        $statement = new MrPotatoCode([
+            'user_id'=>$user->id,
+            'mr_potato_code'=>$uRefState,
+            'module_id'=>$insertedIdStatement,
+            'module_code'=>$moduleCodeSOA,
+            'module_name'=>$moduleNameSOA,
+
+        ]);
+        $statement->save();
+        
+        return redirect()->route('editBillingStatementMrPotato', ['id'=>$insertedId]);
 
     }
 
@@ -4088,6 +4811,7 @@ class MrPotatoController extends Controller
             'date'=>$getDateToday,
             'qty'=>$request->get('qty'),
             'total_kls'=>$kls,
+            'sales_invoice_number'=>$salesInvoiceData->sales_invoice_number,
             'item_description'=>$request->get('itemDescription'),
             'unit_price'=>$unitPrice,
             'amount'=>$sum,
@@ -4199,6 +4923,7 @@ class MrPotatoController extends Controller
         $addSalesInvoice = new MrPotatoSalesInvoice([
             'user_id'=>$user->id,
             'invoice_number'=>$request->get('invoiceNum'),
+            'sales_invoice_number'=>$uSI,
             'ordered_by'=>$request->get('orderedBy'),
             'address'=>$request->get('address'),
             'date'=>$request->get('date'),
@@ -4699,7 +5424,6 @@ class MrPotatoController extends Controller
         //validate
         $this->validate($request, [
             'deliveredTo' =>'required',
-            'productId' =>'required',
             'qty'=>'required',
             'unit'=>'required',
             'itemDescription'=>'required',
@@ -4734,7 +5458,6 @@ class MrPotatoController extends Controller
             'dr_no'=>$uDr,
             'date'=>$request->get('date'),
             'delivered_to'=>$request->get('deliveredTo'),
-            'product_id'=>$request->get('productId'),
             'qty'=>$qty,
             'unit'=>$request->get('unit'),
             'item_description'=>$request->get('itemDescription'),
@@ -5125,6 +5848,40 @@ class MrPotatoController extends Controller
         //
         $purchaseOrder = MrPotatoPurchaseOrder::find($id);
         $purchaseOrder->delete();
+    }
+
+    public function destroyBillingStatement($id){
+        $billingStatement = MrPotatoBillingStatement::find($id);
+        $billingStatement->delete();
+
+        //delete SOA 
+        $soa = MrPotatoStatementOfAccount::find($id);
+        $soa->delete();
+    }
+
+    public function destroyBillingDataStatement(Request $request, $id){
+        $billStatement = MrPotatoBillingStatement::find($request->billingStatementId);
+
+        $billingStatement = MrPotatoBillingStatement::find($id);
+
+        $getAmount = $billStatement->total_amount - $billingStatement->amount;
+        $billStatement->total_amount = $getAmount;
+        $billStatement->save();
+
+        $billingStatement->delete();
+
+        //update statement of account table
+        $statementAccount = MrPotatoStatementOfAccount::find($request->billingStatementId);
+
+        $stateAccount = MrPotatoStatementOfAccount::find($id);
+
+        $getStateAmount = $statementAccount->total_amount - $stateAccount->amount; 
+        $statementAccount->total_amount = $getStateAmount;
+        $statementAccount->total_remaining_balance = $getStateAmount;
+        $statementAccount->save();
+
+        $stateAccount->delete();
+
     }
 
 

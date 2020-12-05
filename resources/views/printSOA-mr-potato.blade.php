@@ -23,9 +23,9 @@
 <div id="wrapper">
 	 <div id="content-wrapper">
  		<div class="container-fluid">
- 				<div  style="margin-top:-10px;">
-                 <img style="margin-left: 5px;" src="{{ asset('images/digitized-logos/lolo-pinoy-grill-pdf.png' )}}" alt="Lolo Pinoy Grill">
-					 	 <p style="margin-top:-50px; margin-left:110px;text-align:left;">
+ 				<div  style="margin-top:-10px;" >
+                 <img style="margin-left: -30px;" src="{{ asset('images/pdf/mr-potato.png')}}"   alt="Mr Potato"> 
+             	 	 <p style="margin-top:-80px; margin-left:160px;text-align:left;">
 		 	 			Dino Compound
                         Ground & 3rd Floors, Dino Group Administration Building,
                         No. 88 Labogon Road, Barangay Labogon, Mandaue City, Cebu 6014
@@ -40,7 +40,7 @@
 					<div class="col-lg-12">
 						 <div class="card-body">
 				 			<div class="form-group">
-                  <div clsass="form-row">
+                            <div clsass="form-row">
                               <div style="width:980px; margin:0 auto;">
                                    <div style="float:left; width:50%">
                                     <table >
@@ -84,7 +84,7 @@
 	                                   <thead>
                                             <tr>
                                                 <th width="20%">SOA No</th>
-                                                <th>{{ $Soa[0]->module_code }}{{ $Soa[0]->lolo_pinoy_grill_code }}</th>
+                                                <th>{{ $Soa[0]->module_code }}{{ $Soa[0]->mr_potato_code }}</th>
                                             </tr>
                                           
                                             <tr>
@@ -111,7 +111,7 @@
                           		  <thead>
                                       <tr>
                                         <th style="height: 1%; text-align: center;">DATE</th>
-                                        <th style="height: 1%; text-align: center;">INVOICE #</th>
+                                        <th style="height: 1%; text-align: center;">ORDER</th>
                                         <th style="height: 1%; text-align: center;">DESCRIPTION</th>
                                         <th style="height: 1%; text-align: center;">AMOUNT</th>
                                         <th style="height: 1%; text-align: center;">STATUS</th>
@@ -119,20 +119,20 @@
                                     </thead>
                                   <tbody>
                                   		<tr style="border:1px solid black;">
-                                      <td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->date_of_transaction }}</td>
-                                      <td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->invoice_number }}</td>
+                                      <td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->date }}</td>
+                                      <td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->order }}</td>
                                       <td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->description }}</td>
-                                      <td style="text-align:center; border: 1px solid black;"><?php echo number_format($Soa[0]->amount, 2); ?></td>
+                                      <td style="text-align:center; border: 1px solid black;"><?= number_format($Soa[0]->amount, 2); ?></td>
                                        <td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->status }}</td>
                                   	 	</tr>
                                   	 	 @foreach($statementAccounts as $statementAccount)
                                         <tr style="border:1px solid black;">
                                           <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['date_of_transaction'] }}</td>
-                                          <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['invoice_number'] }}</td>
-                                          <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['whole_lechon'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['order'] }}</td>
+            
                                           <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['description'] }}</td>
-                                          <td style="text-align:center; border: 1px solid black;"><?php echo number_format($statementAccount['amount'], 2);?></td>
-                                           <td style="text-align:center; border: 1px solid black;">{{ $Soa['status'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;"><?= number_format($statementAccount['amount'], 2);?></td>
+                                           <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['status'] }}</td>
                                         </tr> 
                                         @endforeach
                                       
@@ -140,9 +140,8 @@
                                         <tr style="border:1px solid black;">
 	                                        <td style=" border: 1px solid black;"></td>
 	                                        <td style=" border: 1px solid black;"></td>
-                                            <td style=" border: 1px solid black;"></td>
 	                                        <td style="text-align:center; border: 1px solid black;"><strong>Total</strong></td>
-	                                        <td style=" text-align:center; border: 1px solid black;"> <?php echo number_format($sum, 2)?></td>
+	                                        <td style=" text-align:center; border: 1px solid black;"> <?= number_format($sum, 2)?></td>
                                           <td  style=" border: 1px solid black;"></td>
                                         </tr>
                                   </tbody>

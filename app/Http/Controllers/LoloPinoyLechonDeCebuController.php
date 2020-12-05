@@ -9526,7 +9526,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 ->get()->toArray();
             
         
-        return view('edit-billing-statement-form', compact('user', 'billingStatement', 'bStatements', 
+        return view('edit-billing-statement-form', compact('billingStatement', 'bStatements', 
         'getPurchaseOrders', 'drNos', 'getAllSalesInvoices'));
     }
 

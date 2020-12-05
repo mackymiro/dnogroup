@@ -213,7 +213,7 @@
         </div>
       </footer>
 </div>
-<script type="text/javascript">
+<script>
     $("#drNo").hide();
     $("#wholeLechon6000").hide();
     $("#descriptionDrNo").hide();
@@ -291,7 +291,7 @@
         ?>
         const invoice = $(this).children("option:selected").val();
         <?php foreach($salesInvoices as $salesInvoice): ?>
-          if(invoice === "<?php echo $salesInvoice->lechon_de_cebu_code?>"){
+          if(invoice === "<?= $salesInvoice->lechon_de_cebu_code?>"){
                <?php 
                   $getSIInsides = DB::table(
                                     'lechon_de_cebu_sales_invoices')
@@ -299,7 +299,7 @@
                                     ->get(); ?>
               <?php foreach($getSIInsides as $getSIInside): ?>
                  $("#dataInvoice").append(  
-                          `<option value="<?php echo $getSIInside->id?>"><?php echo $getSIInside->id?></option>
+                          `<option value="<?php echo $getSIInside->id?>"><?= $getSIInside->id?></option>
                           `);
                   $(".chooseInvoice").change(function(){
                       const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
@@ -311,24 +311,24 @@
 
                       <?php foreach($datas as $data): ?>
                             if(cat === "<?php echo $data->id?>"){
-                              $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $data->qty; ?>" class="form-control" readonly="readonly" />');
-                              $("#body").html('<label> Body 400/kls</label><input type="text" name="body" value="<?php echo $data->body; ?>" class="form-control" readonly="readonly" />');
-                              $("#headFeet").html('<label> Head & Feet 200/KLS</label><input type="text" name="headFeet" value="<?php echo $data->head_and_feet; ?>" class="form-control" readonly="readonly" />');
+                              $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?= $data->qty; ?>" class="form-control" readonly="readonly" />');
+                              $("#body").html('<label> Body 400/kls</label><input type="text" name="body" value="<?= $data->body; ?>" class="form-control" readonly="readonly" />');
+                              $("#headFeet").html('<label> Head & Feet 200/KLS</label><input type="text" name="headFeet" value="<?= $data->head_and_feet; ?>" class="form-control" readonly="readonly" />');
                               
-                              $("#description").html('<label>Description</label><input type="text" name="description" value="<?php echo $data->item_description; ?>" class="form-control" readonly="readonly" />');
-                              $("#amount").html('<label>Amount</label><input type="text" name="amount" value="<?php echo $data->amount; ?>" class="form-control" readonly="readonly" />');
+                              $("#description").html('<label>Description</label><input type="text" name="description" value="<?= $data->item_description; ?>" class="form-control" readonly="readonly" />');
+                              $("#amount").html('<label>Amount</label><input type="text" name="amount" value="<?= $data->amount; ?>" class="form-control" readonly="readonly" />');
          
                             }
                       <?php endforeach;?>
                   });
               <?php endforeach; ?>
 
-            $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $salesInvoice->qty; ?>" class="form-control" readonly="readonly" />');
-            $("#body").html('<label> Body 400/kls</label><input type="text" name="body" value="<?php echo $salesInvoice->body; ?>" class="form-control" readonly="readonly" />');
-            $("#headFeet").html('<label> Head & Feet 200/KLS</label><input type="text" name="headFeet" value="<?php echo $salesInvoice->head_and_feet; ?>" class="form-control" readonly="readonly" />');
+            $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?= $salesInvoice->qty; ?>" class="form-control" readonly="readonly" />');
+            $("#body").html('<label> Body 400/kls</label><input type="text" name="body" value="<?= $salesInvoice->body; ?>" class="form-control" readonly="readonly" />');
+            $("#headFeet").html('<label> Head & Feet 200/KLS</label><input type="text" name="headFeet" value="<?= $salesInvoice->head_and_feet; ?>" class="form-control" readonly="readonly" />');
             
-            $("#description").html('<label>Description</label><input type="text" name="description" value="<?php echo $salesInvoice->item_description; ?>" class="form-control" readonly="readonly" />');
-            $("#amount").html('<label>Amount</label><input type="text" name="amount" value="<?php echo $salesInvoice->amount; ?>" class="form-control" readonly="readonly" />');
+            $("#description").html('<label>Description</label><input type="text" name="description" value="<?= $salesInvoice->item_description; ?>" class="form-control" readonly="readonly" />');
+            $("#amount").html('<label>Amount</label><input type="text" name="amount" value="<?= $salesInvoice->amount; ?>" class="form-control" readonly="readonly" />');
          
           }
         <?php endforeach; ?>
@@ -377,7 +377,7 @@
           ?>
         const dr = $(this).children("option:selected").val();
         <?php foreach($getDrNos as $getDrNo ): ?>
-             if(dr === "<?php echo $getDrNo->lechon_de_cebu_code?>"){
+             if(dr === "<?= $getDrNo->lechon_de_cebu_code?>"){
                 <?php 
                     $getDrNosInsides = DB::table(
                                     'lechon_de_cebu_delivery_receipts')
@@ -387,7 +387,7 @@
                  
                   <?php foreach($getDrNosInsides as $getDrNosInside):?>
                        $("#dataList").append(  
-                          `<option value="<?php echo $getDrNosInside->id?>"><?php echo $getDrNosInside->id?></option>
+                          `<option value="<?php echo $getDrNosInside->id?>"><?= $getDrNosInside->id?></option>
                           `);
                         
                         $(".chooseDr").change(function(){
@@ -399,23 +399,23 @@
                                       ->get(); ?>
 
                                <?php foreach($datas as $data): ?>
-                                     if(cat === "<?php echo $data->id?>"){
-                                          $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $data->qty; ?>" class="form-control" readonly="readonly" />');
-                                          $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?php echo $data->unit; ?>" class="form-control" readonly="readonly" />');
+                                     if(cat === "<?= $data->id?>"){
+                                          $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?= $data->qty; ?>" class="form-control" readonly="readonly" />');
+                                          $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?= $data->unit; ?>" class="form-control" readonly="readonly" />');
                                          
-                                          $("#wholeLechon6000").html('<label>Whole Lechon</label><input type="text" name="wholeLechon6000" value="<?php echo $data->price; ?>" class="form-control" readonly="readonly" />');
-                                          $("#descriptionDrNo").html('<label>Description</label><input type="text" name="descriptionDrNo" value="<?php echo $data->description; ?>" class="form-control" readonly="readonly" />');
+                                          $("#wholeLechon6000").html('<label>Whole Lechon</label><input type="text" name="wholeLechon6000" value="<?= $data->price; ?>" class="form-control" readonly="readonly" />');
+                                          $("#descriptionDrNo").html('<label>Description</label><input type="text" name="descriptionDrNo" value="<?=       $data->description; ?>" class="form-control" readonly="readonly" />');
             
                                      }
                                <?php endforeach;?>
                         });       
 
                     <?php endforeach; ?>    
-                $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $getDrNo->qty; ?>" class="form-control" readonly="readonly" />');
-                $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?php echo $getDrNo->unit; ?>" class="form-control" readonly="readonly" />');
+                $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?= $getDrNo->qty; ?>" class="form-control" readonly="readonly" />');
+                $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?= $getDrNo->unit; ?>" class="form-control" readonly="readonly" />');
                                         
-                $("#wholeLechon6000").html('<label>Whole Lechon</label><input type="text" name="wholeLechon6000" value="<?php echo $getDrNo->price; ?>" class="form-control" readonly="readonly" />');
-                $("#descriptionDrNo").html('<label>Description</label><input type="text" name="descriptionDrNo" value="<?php echo $getDrNo->description; ?>" class="form-control" readonly="readonly" />');
+                $("#wholeLechon6000").html('<label>Whole Lechon</label><input type="text" name="wholeLechon6000" value="<?= $getDrNo->price; ?>" class="form-control" readonly="readonly" />');
+                $("#descriptionDrNo").html('<label>Description</label><input type="text" name="descriptionDrNo" value="<?= $getDrNo->description; ?>" class="form-control" readonly="readonly" />');
              }
            
         <?php endforeach; ?>

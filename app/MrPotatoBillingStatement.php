@@ -24,6 +24,7 @@ class MrPotatoBillingStatement extends Model
         'item_description',
         'unit_price',
         'amount',
+        'total_amount',
         'dr_no',
         'dr_list_id',
         'product_id',

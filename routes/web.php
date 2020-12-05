@@ -2179,8 +2179,8 @@ Route::group(['middleware' => ['auth']], function(){
 	->middleware(['cashier']);
 
 	//update edit sales invoice lechon de cebu
-	Route::patch('/lolo-pinoy-lechon-de-cebu/update-sales-invoice/{id}', '
-	LoloPinoyLechonDeCebuController@updateSalesInvoice')
+	Route::patch('/lolo-pinoy-lechon-de-cebu/update-sales-invoice/{id}', 
+	'LoloPinoyLechonDeCebuController@updateSalesInvoice')
 	->name('lolo-pinoy-lechon-de-cebu.updateSalesInvoice')
 	->middleware(['cashier']);
 
@@ -3338,16 +3338,90 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('billingStatementFormMrPotato')
 		->middleware(['cashier']);
 
+
 	Route::get(
 		'/mr-potato/billing-statement-lists',
 		'MrPotatoController@billingStatementList')
 		->name('billingStatementList')
 		->middleware(['cashier']);
 
+	Route::get(
+		'/mr-potato/{id}/view-mr-potato-billing-statement',
+		'MrPotatoController@viewBillingStatement')
+		->name('viewBillingStatement')
+		->middleware(['cashier']);
+		
+
 	Route::post(
 		'/mr-potato/store-billing-statement',
 		'MrPotatoController@storeBillingStatement')
 		->name('storeBillingStatement')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/mr-potato/{id}/edit-billing-statement',
+		'MrPotatoController@editBillingStatement')
+		->name('editBillingStatementMrPotato')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/mr-potato/{id}/add-new-billing-data',
+		'MrPotatoController@addNewBillingData')
+		->name('addNewBillingData')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/mr-potato/{id}/printBillingStatement',
+		'MrPotatoController@printBillingStatement')
+		->name('printBillingStatement')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/mr-potato/delete-data-billing-statement/{id}',
+		'MrPotatoController@destroyBillingDataStatement')
+		->name('destroyBillingDataStatement')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/mr-potato/delete-billing-statement/{id}',
+		'MrPotatoController@destroyBillingStatement')
+		->name('destroyBillingStatement')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/mr-potato/statement-of-account-lists',
+		'MrPotatoController@statementOfAccountList')
+		->name('statementOfAccountList')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/mr-potato/{id}/edit-mr-potato-statement-of-account',
+		'MrPotatoController@editStatementOfAccount')
+		->name('editStatementOfAccount')
+		->middleware(['cashier']);
+	
+	Route::put(
+		'/mr-potato/s-account/{id}',
+		'MrPotatoController@sAccountUpdate')
+		->name('sAccountUpdate')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/mr-potato/{id}/view-statement-account',
+		'MrPotatoController@viewStatementAccount')
+		->name('viewStatementAccount')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/mr-potato/{id}/printSOA',
+		'MrPotatoController@printSOA')
+		->name('printSOA')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/mr-potato/printSOALists',
+		'MrPotatoController@printSOALists')
+		->name('printSOALists')
 		->middleware(['cashier']);
 
 	Route::get(
