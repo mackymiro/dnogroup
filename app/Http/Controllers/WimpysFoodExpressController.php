@@ -1255,6 +1255,147 @@ class WimpysFoodExpressController extends Controller
 
     }
 
+    public function orderFormLists(){
+        $moduleName = "Order Form";
+        $orderForms =  DB::table(
+                    'wimpys_food_express_order_forms')
+                    ->select( 
+                    'wimpys_food_express_order_forms.id',
+                    'wimpys_food_express_order_forms.user_id',
+                    'wimpys_food_express_order_forms.order_id',
+                    'wimpys_food_express_order_forms.date',
+                    'wimpys_food_express_order_forms.time',
+                    'wimpys_food_express_order_forms.no_of_people',
+                    'wimpys_food_express_order_forms.ordered_by',
+                    'wimpys_food_express_order_forms.noted_by',
+                    'wimpys_food_express_order_forms.items',
+                    'wimpys_food_express_order_forms.qty',
+                    'wimpys_food_express_order_forms.unit',
+                    'wimpys_food_express_order_forms.price',
+                    'wimpys_food_express_order_forms.total',
+                    'wimpys_food_express_order_forms.created_by',
+                    'wimpys_food_express_codes.wimpys_food_express_code',
+                    'wimpys_food_express_codes.module_id',
+                    'wimpys_food_express_codes.module_code',
+                    'wimpys_food_express_codes.module_name')
+                    ->join('wimpys_food_express_codes', 'wimpys_food_express_order_forms.id', '=', 'wimpys_food_express_codes.module_id')
+                    ->where('wimpys_food_express_order_forms.order_id', NULL)
+                    ->where('wimpys_food_express_codes.module_name', $moduleName)
+                    ->where('wimpys_food_express_order_forms.deleted_at', NULL)
+                    ->orderBy('wimpys_food_express_order_forms.id', 'desc')
+                    ->get()->toArray();
+
+        return view('wimpys-food-express-order-form-list', compact('orderForms'));
+    }
+
+    public function printOrderForm($id){
+        $moduleName = "Order Form";
+
+        $viewOrder =  DB::table(
+            'wimpys_food_express_order_forms')
+            ->select( 
+            'wimpys_food_express_order_forms.id',
+            'wimpys_food_express_order_forms.user_id',
+            'wimpys_food_express_order_forms.order_id',
+            'wimpys_food_express_order_forms.date',
+            'wimpys_food_express_order_forms.time',
+            'wimpys_food_express_order_forms.no_of_people',
+            'wimpys_food_express_order_forms.ordered_by',
+            'wimpys_food_express_order_forms.noted_by',
+            'wimpys_food_express_order_forms.items',
+            'wimpys_food_express_order_forms.qty',
+            'wimpys_food_express_order_forms.unit',
+            'wimpys_food_express_order_forms.price',
+            'wimpys_food_express_order_forms.total',
+            'wimpys_food_express_order_forms.created_by',
+            'wimpys_food_express_codes.wimpys_food_express_code',
+            'wimpys_food_express_codes.module_id',
+            'wimpys_food_express_codes.module_code',
+            'wimpys_food_express_codes.module_name')
+            ->join('wimpys_food_express_codes', 'wimpys_food_express_order_forms.id', '=', 'wimpys_food_express_codes.module_id')
+            ->where('wimpys_food_express_order_forms.id', $id)
+            ->where('wimpys_food_express_codes.module_name', $moduleName)
+            ->where('wimpys_food_express_order_forms.deleted_at', NULL)
+            ->get()->toArray();
+
+        $viewOtherOrders = WimpysFoodExpressOrderForm::where('order_id', $id)->get()->toArray();
+
+
+        //count the total amount 
+        $countTotalAmount = WimpysFoodExpressOrderForm::where('id', $id)->sum('total');
+
+        //
+        $countAmount = WimpysFoodExpressOrderForm::where('order_id', $id)->sum('total');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        $pdf = PDF::loadView('printOrderFormWimpys', compact('viewOrder', 'viewOtherOrders', 'sum'));
+
+        return $pdf->download('wimpys-food-express-order-form.pdf'); 
+
+
+        
+    }
+
+    public function viewOrderForm($id){
+        $moduleName = "Order Form";
+        $viewOrder =  DB::table(
+                    'wimpys_food_express_order_forms')
+                    ->select( 
+                    'wimpys_food_express_order_forms.id',
+                    'wimpys_food_express_order_forms.user_id',
+                    'wimpys_food_express_order_forms.order_id',
+                    'wimpys_food_express_order_forms.date',
+                    'wimpys_food_express_order_forms.time',
+                    'wimpys_food_express_order_forms.no_of_people',
+                    'wimpys_food_express_order_forms.ordered_by',
+                    'wimpys_food_express_order_forms.noted_by',
+                    'wimpys_food_express_order_forms.items',
+                    'wimpys_food_express_order_forms.qty',
+                    'wimpys_food_express_order_forms.unit',
+                    'wimpys_food_express_order_forms.price',
+                    'wimpys_food_express_order_forms.total',
+                    'wimpys_food_express_order_forms.created_by',
+                    'wimpys_food_express_codes.wimpys_food_express_code',
+                    'wimpys_food_express_codes.module_id',
+                    'wimpys_food_express_codes.module_code',
+                    'wimpys_food_express_codes.module_name')
+                    ->join('wimpys_food_express_codes', 'wimpys_food_express_order_forms.id', '=', 'wimpys_food_express_codes.module_id')
+                    ->where('wimpys_food_express_order_forms.id', $id)
+                    ->where('wimpys_food_express_codes.module_name', $moduleName)
+                    ->where('wimpys_food_express_order_forms.deleted_at', NULL)
+                    ->get()->toArray();
+
+        $viewOtherOrders = WimpysFoodExpressOrderForm::where('order_id', $id)->get()->toArray();
+
+
+         //count the total amount 
+         $countTotalAmount = WimpysFoodExpressOrderForm::where('id', $id)->sum('total');
+
+         //
+         $countAmount = WimpysFoodExpressOrderForm::where('order_id', $id)->sum('total');
+ 
+         $sum  = $countTotalAmount + $countAmount;
+
+
+        return view('view-order-form-wimpys-food-express', compact('viewOrder', 'viewOtherOrders', 'sum'));
+    }
+
+    public function storeOrder(Request $request, $id){
+       
+        $storeOrder = WimpysFoodExpressOrderForm::find($id);
+        $storeOrder->date = $request->get('date');
+        $storeOrder->time = $request->get('time');
+        $storeOrder->no_of_people = $request->get('noOfPeople');
+        $storeOrder->ordered_by = $request->get('orderedBy');
+        $storeOrder->noted_by = $request->get('notedBy');
+        $storeOrder->save();
+
+        return redirect()->route('viewOrderFormWimpys', ['id'=>$id]);
+
+
+    }
+
     public function transactionOrder($id){
         
         $categoryKitchen = "Kitchen";
@@ -1273,11 +1414,14 @@ class WimpysFoodExpressController extends Controller
         $transaction = DB::table(
                         'wimpys_food_express_order_forms')
                         ->select(
+                        'wimpys_food_express_order_forms.id',    
                         'wimpys_food_express_order_forms.user_id',
                         'wimpys_food_express_order_forms.order_id',
                         'wimpys_food_express_order_forms.date',
                         'wimpys_food_express_order_forms.time',
                         'wimpys_food_express_order_forms.no_of_people',
+                        'wimpys_food_express_order_forms.ordered_by',
+                        'wimpys_food_express_order_forms.noted_by',
                         'wimpys_food_express_order_forms.items',
                         'wimpys_food_express_order_forms.qty',
                         'wimpys_food_express_order_forms.unit',
@@ -1285,11 +1429,69 @@ class WimpysFoodExpressController extends Controller
                         'wimpys_food_express_order_forms.total',
                         'wimpys_food_express_order_forms.deleted_at')
                         ->where('wimpys_food_express_order_forms.id', $id)
+                        
                         ->get();
+
+        $transactionOtherDetails = DB::table(
+                            'wimpys_food_express_order_forms')
+                            ->select(
+                            'wimpys_food_express_order_forms.id',    
+                            'wimpys_food_express_order_forms.user_id',
+                            'wimpys_food_express_order_forms.order_id',
+                            'wimpys_food_express_order_forms.date',
+                            'wimpys_food_express_order_forms.time',
+                            'wimpys_food_express_order_forms.no_of_people',
+                            'wimpys_food_express_order_forms.ordered_by',
+                            'wimpys_food_express_order_forms.noted_by',
+                            'wimpys_food_express_order_forms.items',
+                            'wimpys_food_express_order_forms.qty',
+                            'wimpys_food_express_order_forms.unit',
+                            'wimpys_food_express_order_forms.price',
+                            'wimpys_food_express_order_forms.total',
+                            'wimpys_food_express_order_forms.deleted_at')
+                            ->where('wimpys_food_express_order_forms.order_id', $id)
+                            ->where('wimpys_food_express_order_forms.deleted_at', NULL)
+                            ->get()->toArray();
+        
+     
+        return view('wimpys-food-express-order-form-transactions', compact('id','getMaterials', 
+        'getMaterials2', 'getMaterials3', 'getMaterials4', 'transaction', 'transactionOtherDetails'));
+    }
+
+    public function additionalTransactionForm(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //get the date today
+         $getDate =  date("Y-m-d");
         
 
-        return view('wimpys-food-express-order-form-transactions', compact('id','getMaterials', 
-        'getMaterials2', 'getMaterials3', 'getMaterials4', 'transaction'));
+         
+         $addItem = new WimpysFoodExpressOrderForm([
+            'user_id'=>$user->id,
+            'order_id'=>$request->ids,
+            'date'=>$getDate,
+            'items'=>$request->productName,
+            'qty'=>$request->quantity,
+            'unit'=>$request->unit,
+            'price'=>$request->price,
+            'total'=>$request->total,
+            'created_by'=>$name,
+        ]);
+
+
+        $addItem->save();   
+        $insertId = $addItem->id; 
+            
+        
+        return response()->json($request->ids);
+
+
     }
 
     public function addForm(Request $request){
@@ -1304,11 +1506,25 @@ class WimpysFoodExpressController extends Controller
          //get the date today
         $getDate =  date("Y-m-d");
 
+        $dataReferenceNum = DB::select('SELECT id, wimpys_food_express_code FROM wimpys_food_express_codes ORDER BY id DESC LIMIT 1');
+
+        //if code is not zero add plus 1 reference number
+        if(isset($dataReferenceNum[0]->wimpys_food_express_code) != 0){
+            //if code is not 0
+            $newRefNum = $dataReferenceNum[0]->wimpys_food_express_code +1;
+            $uRef = sprintf("%06d",$newRefNum);   
+        }else{
+            //if code is 0 
+            $newRefNum = 1;
+            $uRef = sprintf("%06d",$newRefNum);
+        } 
+
         if($request->quantity == 1){
-            $priceT = $request->price;
+            $total = $request->price;
              
         }else{
-            $priceT = $request->total;
+            $total = $request->total;
+           
         }
 
 
@@ -1319,15 +1535,30 @@ class WimpysFoodExpressController extends Controller
             'qty'=>$request->quantity,
             'unit'=>$request->unit,
             'price'=>$request->price,
-            'total'=>$priceT,
+            'total'=>$total,
             'created_by'=>$name,
         ]);
 
         $addItem->save();   
-        $insertId = $addItem->id; 
-        
-        return response()->json($insertId);
+        $insertedId = $addItem->id; 
+            
+        $moduleCode = "OF-";
+        $moduleName = "Order Form";
 
+        $wimpysFoodExp = new WimpysFoodExpressCode([
+            'user_id'=>$user->id,
+            'wimpys_food_express_code'=>$uRef,
+            'module_id'=>$insertedId,
+            'module_code'=>$moduleCode,
+            'module_name'=>$moduleName,
+
+        ]);
+
+        $wimpysFoodExp->save();
+
+
+        return response()->json($insertedId);
+       
         
     }
 
@@ -1394,7 +1625,7 @@ class WimpysFoodExpressController extends Controller
         }
     }
 
-    public function rawMaterials(){
+    public function menuOrder(){
         $getMaterials = WimpysFoodExpressStockInventory::get()->toArray();
 
         return view('wimpys-food-express-raw-materials', ['getMaterials'=>$getMaterials]);
@@ -2888,6 +3119,17 @@ class WimpysFoodExpressController extends Controller
         Session::flash('SuccessE', 'Successfully updated');
 
         return redirect()->route('editWimpysFoodExpress', ['id'=>$id]);
+    }
+
+    public function destroyMenuList($id){
+        $stockMenu = WimpysFoodExpressStockInventory::find($id);
+        $stockMenu->delete();
+    }
+
+    public function destroyOrderForm($id){
+        $orderForm = WimpysFoodExpressOrderForm::find($id);
+
+        $orderForm->delete();
     }
 
     public function destroyBillingStatement($id){

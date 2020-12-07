@@ -1,13 +1,21 @@
 @extends('layouts.wimpys-food-express-app')
 @section('title', 'Order Form |')
 @section('content')
+<script>
+     $(function() {
+        $(".datepicker").datepicker();
+      });
+</script>
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <div id="wrapper">
 	<!-- Sidebar -->
     @include('sidebar.sidebar-wimpys-food-express')
     <div id="content-wrapper">
-      <form action="{{ action('WimpysFoodExpressController@storeBillingStatement') }}" method="post">
-          {{csrf_field()}}
     	<div class="container-fluid">
     		 <!-- Breadcrumbs-->
             <ol class="breadcrumb">
@@ -136,23 +144,40 @@
                         Order Form
                     </div>
                     <div class="card-body">
+                        <form action="{{ action('WimpysFoodExpressController@storeOrder', $id)}}" method="post">
+                        {{ csrf_field() }}
                        <div class="form-group">
                             <div class="form-row">
+                               
                                 <div class="col-lg-2">
                                     <label>Date</label>
-                                    <input type="text" name="date" class="form-control" />
+                                    <input type="text" name="date" class="datepicker form-control" value="{{ $transaction[0]->date}}"/>
                                 </div>
                                 <div class="col-lg-2">
                                     <label>Time</label>
-                                    <input type="text" name="time" class="form-control" />
+                                    <input type="text" name="time" class="form-control" value="{{ $transaction[0]->time}}"/>
                                 </div>
                                 <div class="col-lg-2">
                                     <label>No Of People</label>
-                                    <input type="text" name="noOfPeople" class="form-control" />
+                                    <input type="text" name="noOfPeople" class="form-control" value="{{ $transaction[0]->no_of_people}}" />
                                 </div>
+                                <div class="col-lg-2">
+                                    <label>Ordered By</label>
+                                    <input type="text" name="orderedBy" class="form-control" value="{{ $transaction[0]->ordered_by }}" />
+                                </div>
+                                <div class="col-lg-2">
+                                    <label>Noted By</label>
+                                    <input type="text" name="notedBy" class="form-control" value="{{ $transaction[0]->noted_by }}" />
+                                </div>
+                                <div class="col-lg-2">
+                                    <br>
+                                    <button typpe="submit" class="btn btn-success btn-lg">Process Order Form</button>
+                                </div>
+                                
                             </div>
                        </div>
-                       <table id="output"  class="table table-bordered">
+                       </form>
+                       <table  id="output" class="table table-bordered">
                           <thead>
                               
                               <th>ITEMS</th>
@@ -164,16 +189,25 @@
                           </thead>
                           <tbody id="rows">
                              @if($transaction[0]->deleted_at == NULL)
-                            <tr>
+                            <tr class="deletedId{{ $transaction[0]->id}}">
                                 <td>{{ $transaction[0]->items}}</td>
                                 <td>{{ $transaction[0]->qty }}</td>
                                 <td>{{ $transaction[0]->unit }}</td>
                                 <td><?= number_format($transaction[0]->price, 2)?></td>
                                 <td><?= number_format($transaction[0]->total, 2)?></td>
-                                <td><a href="#" class="btn btn-danger">Delete</a></td>
+                                <td><a href="javascript:void"  onclick="confirmDelete('{{ $transaction[0]->id }}')" class="btn btn-danger">Delete</a></td>
                             </tr>
                             @endif
-                          
+                            @foreach($transactionOtherDetails as $transactionOtherDetail)
+                            <tr class="deletedId{{ $transactionOtherDetail->id }}">
+                                <td>{{ $transactionOtherDetail->items}}</td>
+                                <td>{{ $transactionOtherDetail->qty}}</td>
+                                <td>{{ $transactionOtherDetail->unit}}</td>
+                                <td><?= number_format($transactionOtherDetail->price, 2)?></td>
+                                <td><?= number_format($transactionOtherDetail->total, 2)?></td>
+                                <td><a href="javascript:void" onclick="confirmDelete('{{ $transactionOtherDetail->id }}')" class="btn btn-danger">Delete</a></td>
+                            </tr>
+                            @endforeach
                           </tbody>
                           
                        </table>
@@ -182,7 +216,7 @@
                 </div>
             </div>
         </div>
-     </form>  
+    
     </div>
     <!-- Modal -->
     <div class="modal fade" id="orderForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
@@ -214,10 +248,12 @@
                       <div id="priceOrder"></div>
                       <input type="text" id="price" name="price" class="form-control" readonly/>
                   </div>
+                
               </div>
             </div>
         </div>
         <div class="modal-footer">
+            <input type="hidden" id="ids" value="{{ $id}}" />
             <button type="button" onclick="closeOrder()" class="btn btn-danger btn-lg" data-dismiss="modal" >Close</button>
             <button type="button" onclick="addMaterial()" class="btn btn-success btn-lg" >Add Item</button>
         </div>
@@ -237,7 +273,7 @@
         </div>
       </footer>
 </div>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
 <script type="text/javascript">
   
 
@@ -292,10 +328,39 @@
 
     }
 
+    const confirmDelete = (id) =>{
+        var x = confirm("Do you want to delete this?");
+        if(x){
+            $.ajax({
+              type: "DELETE",
+              url: '/wimpys-food-express/delete/order-form/' + id,
+              data:{
+                _method: 'delete', 
+                "_token": "{{ csrf_token() }}",
+                "id": id
+              },
+              success: function(data){
+                console.log(data);
+                $(".deletedId"+id).fadeOut('slow');
+               
+              },
+              error: function(data){
+                console.log('Error:', data);
+              }
+
+            });
+        }else{
+            return false;
+        }
+    }
+
     const addMaterial = () =>{
+        const ids = $("#ids").val();
         const productName = $("#productName").val();
         const quantity = parseInt($("#quantity").val());
-        const price = $("#price").val();
+        const price = parseInt($("#price").val());
+
+        const total = quantity * price;
         const unit = $("#unit").val();
       
         const newPrice = $("#newPrice").val();
@@ -335,21 +400,23 @@
             //make ajax call
             $.ajax({
                 type: 'POST',
-                url: '/wimpys-food-express/transaction/additional',
+                url: '/wimpys-food-express/transaction/additional/' + ids,
                 data:{
                     _method:'post',
                     "_token":"{{ csrf_token() }}",
+                    "ids":ids,
                     "productName":productName,
                     "quantity":quantity,
                     "unit":unit,
                     "price":price,
+                    "total":total,
 
                 },
                 success:function(data){
                     console.log(data);
                     setTimeout(function(){
                         window.location = "/wimpys-food-express/order-form/" + data + "/transaction";
-                    }, 1000);
+                    }, 500);
                 
                 },
                 error:function(data){
@@ -362,7 +429,7 @@
             $('#orderForm').modal('hide');
             
         }else{
-        
+               
             const table =  document.getElementById("output");
             const row = document.createElement("tr");
             
@@ -370,7 +437,7 @@
             const qty = row.insertCell(1);
             const units = row.insertCell(2);
             const priceT = row.insertCell(3);
-            const priceNew = row.insertCell(4);
+            const totT = row.insertCell(4);
             const del = row.insertCell(5);
     
     
@@ -378,17 +445,43 @@
             qty.innerHTML = `${quantity}`;
             units.innerHTML = `${unit}`;
             priceT.innerHTML = `${price}`;
-            priceNew.innerHTML = `${newPrice}`;
+            totT.innerHTML = `${total}`;
             del.innerHTML = `${delt}`;
-
 
             row.append(nameOfProduct);  
             row.append(qty);
             row.append(units);
             row.append(priceT);
-            row.append(priceNew);
+            row.append(totT);
             row.append(del);
             document.getElementById("rows").appendChild(row);
+
+             //make ajax call
+             $.ajax({
+                type: 'POST',
+                url: '/wimpys-food-express/transaction/additional/' + ids,
+                data:{
+                    _method:'post',
+                    "_token":"{{ csrf_token() }}",
+                    "ids":ids,
+                    "productName":productName,
+                    "quantity":quantity,
+                    "unit":unit,
+                    "price":price,
+                    "total":total,
+
+                },
+                success:function(data){
+                    console.log(data);
+                    setTimeout(function(){
+                        window.location = "/wimpys-food-express/order-form/" + data + "/transaction";
+                    }, 500);
+                
+                },
+                error:function(data){
+                    console.log('Error', data);
+                }
+             });
 
 
             $('#orderForm').modal('hide');

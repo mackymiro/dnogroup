@@ -135,7 +135,7 @@
                         Order Form
                     </div>
                     <div class="card-body">
-                       <table id="output"  class="table table-bordered">
+                       <table id="output" class="table table-bordered">
                           <thead>
                               <th>ITEMS</th>
                               <th>QUANTITY</th>
@@ -271,12 +271,43 @@
     const addMaterial = () =>{
         const productName = $("#productName").val();
         const quantity = parseInt($("#quantity").val());
-        const price = $("#price").val();
+        const price = parseInt($("#price").val());
+
+        const total = quantity * price;
         const unit = $("#unit").val();
       
         const newPrice = $("#newPrice").val();
 
+        const text = "<a href='#' class='btn btn-danger'>Delete</a>";
+        const delt =  text;
+
         if(quantity === 1){
+
+            const table =  document.getElementById("output");
+            const row = document.createElement("tr");
+            
+            const nameOfProduct = row.insertCell(0);
+            const qty = row.insertCell(1);
+            const units = row.insertCell(2);
+            const priceT = row.insertCell(3);
+            const totT = row.insertCell(4);
+            const del = row.insertCell(5);
+    
+    
+            nameOfProduct.innerHTML = `${productName}`;
+            qty.innerHTML = `${quantity}`;
+            units.innerHTML = `${unit}`;
+            priceT.innerHTML = `${price}`;
+            totT.innerHTML = `${price}`;
+            del.innerHTML = `${delt}`;
+
+            row.append(nameOfProduct);  
+            row.append(qty);
+            row.append(units);
+            row.append(priceT);
+            row.append(totT);
+            row.append(del);
+            document.getElementById("rows").appendChild(row);
 
             //make ajax call
             $.ajax({
@@ -289,6 +320,7 @@
                     "quantity":quantity,
                     "unit":unit,
                     "price":price,
+                    "total":total,
 
                 },
                 success:function(data){
@@ -306,26 +338,58 @@
             $('#orderForm').modal('hide');
             
         }else{
-
             const table =  document.getElementById("output");
             const row = document.createElement("tr");
             
-            const productName = row.insertCell(0);
+            const nameOfProduct = row.insertCell(0);
             const qty = row.insertCell(1);
-            const unit = row.insertCell(2);
-           
-
+            const units = row.insertCell(2);
+            const priceT = row.insertCell(3);
+            const totT = row.insertCell(4);
+            const del = row.insertCell(5);
     
-            productName.innerHTML = `${productName}`;
-            qty.innerHTML = `${qty}`;
-            unit.innerHTML = `${unit}`;
-          
+    
+            nameOfProduct.innerHTML = `${productName}`;
+            qty.innerHTML = `${quantity}`;
+            units.innerHTML = `${unit}`;
+            priceT.innerHTML = `${price}`;
+            totT.innerHTML = `${total}`;
+            del.innerHTML = `${delt}`;
 
-            row.append(productName);  
+            row.append(nameOfProduct);  
             row.append(qty);
-            row.append(unit);
-         
+            row.append(units);
+            row.append(priceT);
+            row.append(totT);
+            row.append(del);
             document.getElementById("rows").appendChild(row);
+
+              //make ajax call
+              $.ajax({
+                type: 'POST',
+                url: '/wimpys-food-express/add-form',
+                data:{
+                    _method:'post',
+                    "_token":"{{ csrf_token() }}",
+                    "productName":productName,
+                    "quantity":quantity,
+                    "unit":unit,
+                    "price":price,
+                    "total":total,
+
+                },
+                success:function(data){
+                    console.log(data);
+                    setTimeout(function(){
+                        window.location = "/wimpys-food-express/order-form/" + data + "/transaction";
+                    }, 1000);
+                
+                },
+                error:function(data){
+                    console.log('Error', data);
+                }
+             });
+
         
            
 

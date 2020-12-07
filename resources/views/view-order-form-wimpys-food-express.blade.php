@@ -1,5 +1,5 @@
 @extends('layouts.wimpys-food-express-app')
-@section('title', 'View Billing Statement |')
+@section('title', 'View Order Form |')
 @section('content')
 
 <div id="wrapper">
@@ -12,51 +12,44 @@
               <li class="breadcrumb-item">
                 <a href="#">Wimpy's Food Express</a>
               </li>
-              <li class="breadcrumb-item active">View Billing Statement</li>
+              <li class="breadcrumb-item active">View Order Form</li>
             </ol>
-              <a href="{{ url('wimpys-food-express/billing-statement-lists') }}">Back to Lists</a>
+              <a href="{{ url('wimpys-food-express/order-form/lists') }}">Back to Lists</a>
           	<div class="col-lg-12">
               <img src="{{ asset('images/digitized-logos/wimpys-logo1.jpg')}}" width="350" height="178" class="img-responsive mx-auto d-block" alt="Wimpy's Food Express">
             		 	  
-            	 <h4 class="text-center"><u>VIEW BILLING STATEMENT</u></h4>
+            	 <h4 class="text-center"><u>VIEW ORDER FORM</u></h4>
             </div>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card mb-3">
                         <div class="card-header">
                               <i class="fas fa-receipt" aria-hidden="true"></i>
-                            View Billing Statment
-                            @if($viewBillingStatement[0]->deleted_at == NULL)
+                            View Order Form
                             <div class="float-right">
-                               <a href="{{ action('WimpysFoodExpressController@printBillingStatement', $viewBillingStatement[0]->id)}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
+                               <a href="{{ action('WimpysFoodExpressController@printOrderForm', $viewOrder[0]->id)}}"><i class="fa fa-print fa-2x" aria-hidden="true"></i></a>
                              </div>
-                             @endif
                         </div>
                         <div class="card-body">
-                        @if($viewBillingStatement[0]->deleted_at != NULL)
-                          <h1 style="color:red; font-size:28px; font-weight:bold">This Item Has Been Deleted! (CLERICAL ERROR)</h1>
-                          @endif
+                      
                              <div class="form-group">
                                 <div class="form-row">
                                   <div class="col-lg-6">
                                     <table class="table table-bordered">  
                                         <thead>
                                             <tr>
-                                                <th width="30%">Bill To</th>
-                                                <th> {{ $viewBillingStatement[0]->bill_to }}</th>
+                                                <th width="30%">Date</th>
+                                                <th>{{ $viewOrder[0]->date}}</th>
                                             </tr>
                                             <tr>
-                                                <th>Address</th>
-                                                <th>{{ $viewBillingStatement[0]->address }}</th>
+                                                <th>Time</th>
+                                                <th>{{ $viewOrder[0]->time}}</th>
                                             </tr>
                                             <tr>
-                                                <th>Period Covered</th>
-                                                <th> {{ $viewBillingStatement[0]->period_cover }} </th>
+                                                <th>No of people</th>
+                                                <th>{{ $viewOrder[0]->no_of_people}}</th>
                                             </tr>
-                                            <tr>
-                                                <th>Date</th>
-                                                <th>{{ $viewBillingStatement[0]->date }}</th>
-                                            </tr>
+                                          
                                         </thead>
                                     </table>
                                   
@@ -65,20 +58,13 @@
                                     <table class="table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th width="20%">BS #</th>
+                                                <th width="30%">Order Form #</th>
                                                 <th>
-                                                    @foreach($viewBillingStatement[0]->billing_statements as $statement)
-                                                        @if($statement->module_name === "Billing Statement")
-                                                            {{ $statement->module_code }}{{ $statement->wimpys_food_express_code}}
-                                                        @endif
-                                                    @endforeach
+                                                  {{ $viewOrder[0]->module_code}}{{ $viewOrder[0]->wimpys_food_express_code}}
                                                 </th>
                                             </tr>
                                            
-                                            <tr>
-                                                <th>Terms</th>
-                                                <th>{{ $viewBillingStatement[0]->terms }}</th>
-                                            </tr>
+                                           
                                         </thead>
 
                                     </table>
@@ -89,39 +75,38 @@
                                 <table class="table table-striped">
                                     <thead>
                                       <tr>
-                                        <th class="bg-info" style="color:white;">DATE</th>
-                                        <th class="bg-info" style="color:white;">DR #</th>
-                                        <th class="bg-info" style="color:white;">ITEM DESCRIPTION</th>
-                                        <th class="bg-info" style="color:white;">UNIT PRICE</th>
-                                        <th class="bg-info" style="color:white;">AMOUNT</th>
+                                        <th class="bg-info" style="color:white;">ITEMS</th>
+                                        <th class="bg-info" style="color:white;">QUANTITY</th>
+                                        <th class="bg-info" style="color:white;">UNIT</th>
+                                        <th class="bg-info" style="color:white;">PRICE</th>
+                                        <th class="bg-info" style="color:white;">TOTAL</th>
                                       </tr>
                                     </thead>
                                     <tbody>
+                                     
                                       <tr>
-                                        <td>{{ $viewBillingStatement[0]->date_of_transaction }}</td>                  
-                                        
-                                        <td>{{ $viewBillingStatement[0]->dr_no }}</td>
-                                        <td>{{ $viewBillingStatement[0]->description}}</td>
-                                        <td>{{ $viewBillingStatement[0]->unit_price }}</td>
-                                        <td><?= number_format($viewBillingStatement[0]->amount, 2); ?></td>
-
+                                        <td>{{ $viewOrder[0]->items}}</td>
+                                        <td>{{ $viewOrder[0]->qty}}</td>
+                                        <td>{{ $viewOrder[0]->unit}}</td>
+                                        <td><?= number_format($viewOrder[0]->price, 2)?></td>
+                                        <td><?= number_format($viewOrder[0]->total, 2)?></td>
+                                       
                                       </tr>
-                                      @foreach($billingStatements as $billingStatement)
+                                      @foreach($viewOtherOrders as $viewOtherOrder)
                                       <tr>
-                                        <td>{{ $billingStatement['date_of_transaction'] }}</td>
-                                        <td>{{ $billingStatement['dr_no'] }}</td>
-                                        <td>{{ $billingStatement['description'] }}</td>
-                                        <td>{{ $billingStatement['unit_price'] }}</td>
-                                        <td><?= number_format($billingStatement['amount'], 2);?></td>
+                                          <td>{{ $viewOtherOrder['items'] }}</td>
+                                          <td>{{ $viewOtherOrder['qty'] }}</td>
+                                          <td>{{ $viewOtherOrder['unit']}}</td>
+                                          <td><?= number_format($viewOtherOrder['price'], 2)?></td>
+                                        <td><?= number_format($viewOtherOrder['total'], 2)?></td>
                                       </tr>
                                       @endforeach
                                       <tr>
                                         <td></td>
                                         <td></td>
                                         <td></td>
-                                      
                                         <td><strong>Total</strong></td>
-                                        <td>₱ <?= number_format($sum, 2)?></td>
+                                        <td><?= number_format($sum, 2)?></td>
                                       </tr>
                                     </tbody>
                               </table>
@@ -131,14 +116,14 @@
                                             <table class="table table-bordered">
                                                 <thead>
                                                     <tr>
-                                                        <th>Prepared By</th>
-                                                        <th>Approved By</th>
+                                                        <th>Ordered By</th>
+                                                        <th>Note By</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td>{{ $viewBillingStatement[0]->created_by }}</td>
-                                                        <td></td>
+                                                        <td>{{ $viewOrder[0]->ordered_by }}</td>
+                                                        <td>{{ $viewOrder[0]->noted_by }}</td>
                                                     </tr>
                                                 </tbody>
                                             </table>

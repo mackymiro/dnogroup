@@ -1,5 +1,5 @@
 @extends('layouts.wimpys-food-express-app')
-@section('title', 'RAW Materials |')
+@section('title', 'Menu Order |')
 @section('content')
 <script>
   $(document).ready(function(){
@@ -16,8 +16,8 @@
                 <li class="breadcrumb-item">
                   <a href="#">Wimpy's Food Express</a>
                 </li>
-                <li class="breadcrumb-item ">Stock Inventory</li>
-                <li class="breadcrumb-item active">RAW Order Form Materials</li>
+                <li class="breadcrumb-item ">Menu</li>
+                <li class="breadcrumb-item active">Menu Order Form</li>
               </ol>
               <div class="row">
               		<div class="col-lg-12">
@@ -28,7 +28,7 @@
       					  	<div class="card-body">
 								<!-- Button trigger modal -->
 								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createRaw">
-									Create RAW Order Form Materials
+									Create Menu Order Form
 								</button>
 			                     <br>
                     			 <br>
@@ -52,11 +52,12 @@
 										</tfoot>
 										<tbody>
                       						@foreach($getMaterials as $getMaterial)
-                      						<tr>
+                      						<tr id="deletedId{{ $getMaterial['id'] }}">
   												<td>
-  													 <!-- Button trigger modal -->
+													<!-- Button trigger modal -->
 													<a data-toggle="modal" data-target="" href="#rawM<?= $getMaterial['id']?>" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-										
+													<a id="delete" onclick="confirmDelete('{{ $getMaterial['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                        
 												</td>
 												<td>{{ $getMaterial['product_name'] }}</td>
 												<td>{{ $getMaterial['unit']}}</td>
@@ -80,7 +81,7 @@
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLongTitle">Update RAW Materials</h5>
+				<h5 class="modal-title" id="exampleModalLongTitle">Update Menu Form</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 				</button>
@@ -133,7 +134,7 @@
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLongTitle">Add RAW Materials</h5>
+				<h5 class="modal-title" id="exampleModalLongTitle">Add Menu Form </h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 				</button>
@@ -307,7 +308,7 @@
         if(x){
             $.ajax({
               type: "DELETE",
-              url: '/lolo-pinoy-lechon-de-cebu/delete-raw-materials/' + id,
+              url: '/wimpys-food-express/delete-menu-list/' + id,
               data:{
                 _method: 'delete', 
                 "_token": "{{ csrf_token() }}",

@@ -18,6 +18,8 @@ class WimpysFoodExpressOrderForm extends Model
         'date',
         'time',
         'no_of_people',
+        'ordered_by',
+        'noted_by',
         'items',
         'qty',
         'unit',

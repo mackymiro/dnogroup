@@ -1,5 +1,5 @@
 @extends('layouts.wimpys-food-express-app')
-@section('title', 'Purchase Order Lists |')
+@section('title', 'Order Form Lists |')
 @section('content')
 <div id="wrapper">
 	<!-- Sidebar -->
@@ -12,7 +12,7 @@
               <li class="breadcrumb-item">
                 <a href="#">Wimpy's Food Express    </a>
               </li>
-              <li class="breadcrumb-item active">Purchase Order All Lists</li>
+              <li class="breadcrumb-item active">Order Form Lists</li>
             </ol>
             <div class="row">
             	<div class="col-lg-12">
@@ -26,47 +26,39 @@
 				  					<thead>
 				  						<tr>
 				  							<th>Action</th>
-			  								<th>PO #</th>
 			  								<th>Date</th>
-                                            <th>Paid to</th>
-			  								
+			  								<th>Time</th>
+                                            <th>No of people</th>
+                                            <th class="bg-info" style="color:white">Order form #</th>
 			  								<th>Created by</th>
 				  						</tr>
 				  					</thead>
 				  					<tfoot>
 				  						<tr>
 				  							<th>Action</th>
-			  								<th>PO Number</th>
 			  								<th>Date</th>
-                        <th>Paid to</th>
-			  							
+			  								<th>Time</th>
+                                            <th>No of people</th>
+                                            <th class="bg-info" style="color:white">Order form #</th>
 			  								<th>Created by</th>
 				  						</tr>
 				  					</tfoot>
 				  					<tbody>
-                      @foreach($purchaseOrders as $purchaseOrder)
-                      <tr id="deletedId{{ $purchaseOrder->id }}">
-                          <td>
-                          
-                          <a href="/wimpys-food-express/{{ $purchaseOrder->id }}/edit " title="Edit"><i class="fas fa-pencil-alt"></i></a>
-                          @if(Auth::user()['role_type'] == 1)
-                              <a id="delete" onClick="confirmDelete('{{ $purchaseOrder->id }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
-                          @endif
-                              <a href="/wimpys-food-express/{{ $purchaseOrder->id }}/view" title="View"><i class="fas fa-low-vision"></i></a>
-                          </td>
-                          <td>
-                              @foreach($purchaseOrder->purchase_orders as $po)
-                                  @if($po->module_name === "Purchase Order")
-                                      {{ $po->module_code }} {{ $po->wimpys_food_express_code  }}
-                                  @endif
-                              @endforeach    
-                          </td>
-                          <td>{{ $purchaseOrder->date }}</td>
-                          <td>{{ $purchaseOrder->paid_to }}</td>
-                          
-                          <td>{{ $purchaseOrder->created_by }}</td>
-                                          </tr>
-                      @endforeach
+                                        @foreach($orderForms as $orderForm)
+                                        <tr>
+                                            <td>
+                                            <a href="/wimpys-food-express/order-form/{{ $orderForm->id}}/transaction" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                               
+                                            <a href="/wimpys-food-express/{{ $orderForm->id}}/view/order-form" title="View"><i class="fas fa-low-vision"></i></a>
+
+                                            </td>
+                                            <td>{{ $orderForm->date }}</td>
+                                            <td>{{ $orderForm->time }}</td>
+                                            <td>{{ $orderForm->no_of_people }}</td>
+                                            <td class="bg-info" style="color:white">{{ $orderForm->module_code }}{{ $orderForm->wimpys_food_express_code}}</td>
+                                            <td>{{ $orderForm->created_by }}</td>
+                                        </tr>
+                                        @endforeach
 				  					</tbody>
 				  				</table>
 					  		</div>

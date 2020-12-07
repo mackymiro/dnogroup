@@ -26,7 +26,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <a class="dropdown-item" href="{{ url('wimpys-food-express/order-form') }}">Order Form</a>
-          <a class="dropdown-item" href="{{ url('wimpys-food-express') }}">Lists</a>
+          <a class="dropdown-item" href="{{ url('wimpys-food-express/order-form/lists') }}">Lists</a>
           
         </div>
       </li>
@@ -118,12 +118,12 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-apple-alt"></i>
-          <span>Stock Inventory</span>
+          <span>Menu</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           
-          <a class="dropdown-item" href="{{ url('wimpys-food-express/raw-materials') }}">RAW Materials</a>
-          <a class="dropdown-item" href="{{ url('wimpys-food-express/stocks-inventory') }}">Stocks Inventory</a>       
+          <a class="dropdown-item" href="{{ url('wimpys-food-express/menu-order') }}">Menu Order</a>
+               
         </div>
       </li>
  </ul>
