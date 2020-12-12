@@ -303,7 +303,8 @@
 											  @if($transactionList[0]->status != "FULLY PAID AND RELEASED")
 											   <!-- Button trigger modal -->
 											   <a  data-toggle="modal" data-target="#editParticulars<?= $transactionList[0]->id ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
-  											  @else
+  											 	 
+											 @else
   												  <!-- Button trigger modal -->
 												<i class="fas fa-edit" style="font-size:24px"></i>
   											 
@@ -384,7 +385,8 @@
 											  @if($transactionList[0]->status != "FULLY PAID AND RELEASED")
 												<!-- Button trigger modal -->
 												<a  data-toggle="modal" data-target="#editCheck<?= $getChequeNumber['id'] ?>" href="#" title="Edit"><i class="fas fa-edit" style="font-size:24px"></i></a>
-  											  @else
+  											 	 
+											 @else
   												
 												<i class="fas fa-edit" style="font-size:24px"></i>
 											  @endif	
@@ -607,19 +609,19 @@
 						<div id="succEditParticular" class="col-lg-12"></div>
 						<div class="col-lg-4">
 							<label>Date</label>
-							<input type="text" id="date" name="date" class="datepicker form-control"  value="{{ $transactionList[0]->issued_date}}" />
+							<input type="text" id="dateParticular" name="date" class="datepicker form-control"  value="{{ $transactionList[0]->issued_date}}" />
 						</div>
 						<div class="col-lg-4">
 							<label>Invoice No</label>
-							<input type="text" id="invoiceNo" name="invoiceNo" class="form-control"  value="{{ $transactionList[0]->invoice_number}}" />
+							<input type="text" id="invoiceNoParticular" name="invoiceNo" class="form-control"  value="{{ $transactionList[0]->invoice_number}}" />
 						</div>
 						<div class="col-lg-4">
 							<label>Particulars</label>
-							<textarea id="particulars" name="particulars" class="form-control">{{ $transactionList[0]->particulars}}</textarea>
+							<textarea id="particularsParticular" name="particulars" class="form-control">{{ $transactionList[0]->particulars}}</textarea>
 						</div>
 						<div class="col-lg-4">
 							<label>Amount</label>
-							<input type="text" id="amount" name="amount" class="form-control" value="{{ $transactionList[0]->amount }}" />
+							<input type="text" id="amountParticular" name="amount" class="form-control" value="{{ $transactionList[0]->amount }}" />
 						</div>
 						
 					</div>
@@ -821,10 +823,10 @@
 	}
 
 	const updateParticular = (id) =>{
-		const date = $("#date").val();
-		const invoiceNo = $("#invoiceNo").val();
-		const particulars = $("#particulars").val();
-		const amount = $("#amount").val();
+		const date = $("#dateParticular").val();
+		const invoiceNo = $("#invoiceNoParticular").val();
+		const particulars = $("#particularsParticular").val();
+		const amount = $("#amountParticular").val();
 
 		 //make ajax call
 		 $.ajax({

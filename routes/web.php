@@ -5063,7 +5063,7 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('editPayablesDetailDNOFoodVentures')
 		->middleware(['cashier']);
 
-	Route::patch(
+	Route::put(
 		'/dno-food-ventures/payables/update-particulars/{id}',
 		'DnoFoodVenturesController@updateParticulars')
 		->name('updateParticulars')
@@ -7752,6 +7752,12 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('destroyMenuList')
 		->middleware(['cashier']);
 
+	Route::delete(
+		'/wimpys-food-express/delete-menu/{id}',
+		'WimpysFoodExpressController@destroyMenu')
+		->name('destroyMenu')
+		->middleware(['cashier']);
+
 	Route::post(
 		'/wimpys-food-express/add-raw-material',
 		'WimpysFoodExpressController@addRawMaterial')
@@ -7763,6 +7769,24 @@ Route::group(['middleware' => ['auth']], function(){
 		'WimpysFoodExpressController@updateRawMaterial')
 		->name('updateRawMaterial')
 		->middleware(['cashier']);	
+
+	Route::get(
+		'/wimpys-food-express/menu-lists',
+		'WimpysFoodExpressController@menuLists')
+		->name('menuLists')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/wimpys-food-express/add-menu-list',
+		'WimpysFoodExpressController@addMenuList')
+		->name('addMenuList')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/wimpys-food-express/update-menu/{id}',
+		'WimpysFoodExpressController@updateMenu')
+		->name('updateMenu')
+		->middleware(['cashier']);
 
 	Route::get(
 		'/wimpys-food-express/order-form',
@@ -7817,6 +7841,12 @@ Route::group(['middleware' => ['auth']], function(){
 		'/wimpys-food-express/delete/order-form/{id}',
 		'WimpysFoodExpressController@destroyOrderForm')
 		->name('destroyOrderForm')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/client-booking-form',
+		'WimpysFoodExpressController@clientBookingForm')
+		->name('clientBookingForm')
 		->middleware(['cashier']);
 		
 	Route::get(

@@ -44,21 +44,23 @@
 				  						</tr>
 				  					</tfoot>
 				  					<tbody>
-                                        @foreach($orderForms as $orderForm)
-                                        <tr>
-                                            <td>
-                                            <a href="/wimpys-food-express/order-form/{{ $orderForm->id}}/transaction" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-                               
-                                            <a href="/wimpys-food-express/{{ $orderForm->id}}/view/order-form" title="View"><i class="fas fa-low-vision"></i></a>
+                      @foreach($orderForms as $orderForm)
+                      <tr id="deletedId{{ $orderForm->id }}">
+                          <td>
+                          <a href="/wimpys-food-express/order-form/{{ $orderForm->id}}/transaction" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                            @if(Auth::user()['role_type'] == 1)
+                              <a id="delete" onclick="confirmDelete('{{ $orderForm->id }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                          @endif
+                          <a href="/wimpys-food-express/{{ $orderForm->id}}/view/order-form" title="View"><i class="fas fa-low-vision"></i></a>
 
-                                            </td>
-                                            <td>{{ $orderForm->date }}</td>
-                                            <td>{{ $orderForm->time }}</td>
-                                            <td>{{ $orderForm->no_of_people }}</td>
-                                            <td class="bg-info" style="color:white">{{ $orderForm->module_code }}{{ $orderForm->wimpys_food_express_code}}</td>
-                                            <td>{{ $orderForm->created_by }}</td>
-                                        </tr>
-                                        @endforeach
+                          </td>
+                          <td>{{ $orderForm->date }}</td>
+                          <td>{{ $orderForm->time }}</td>
+                          <td>{{ $orderForm->no_of_people }}</td>
+                          <td class="bg-info" style="color:white">{{ $orderForm->module_code }}{{ $orderForm->wimpys_food_express_code}}</td>
+                          <td>{{ $orderForm->created_by }}</td>
+                      </tr>
+                      @endforeach
 				  					</tbody>
 				  				</table>
 					  		</div>
@@ -88,7 +90,7 @@
         if(x){
             $.ajax({
               type: "DELETE",
-              url: '/wimpys-food-express/delete/PO/' + id,
+              url: '/wimpys-food-express/delete/order-form/' + id,
               data:{
                 _method: 'delete', 
                 "_token": "{{ csrf_token() }}",

@@ -36,7 +36,7 @@
           <span>Client Booking Form</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          <a class="dropdown-item" href="">Order Form</a>
+          <a class="dropdown-item" href="{{ url('wimpys-food-express/client-booking-form') }}">Client Booking Form</a>
           <a class="dropdown-item" href="{{ url('wimpys-food-express') }}">Lists</a>
           
         </div>
@@ -118,12 +118,12 @@
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-apple-alt"></i>
-          <span>Menu</span>
+          <span>Menu List</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           
           <a class="dropdown-item" href="{{ url('wimpys-food-express/menu-order') }}">Menu Order</a>
-               
+          <a class="dropdown-item" href="{{ url('wimpys-food-express/menu-lists') }}">Menu Lists</a>
         </div>
       </li>
  </ul>

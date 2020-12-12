@@ -17,9 +17,67 @@ use App\WimpysFoodExpressBillingStatement;
 use App\WimpysFoodExpressStatementOfAccount;
 use App\WimpysFoodExpressStockInventory; 
 use App\WimpysFoodExpressOrderForm;
+use App\WimpysFoodExpressMenuList;
 
 class WimpysFoodExpressController extends Controller
 {
+
+
+    public function updateMenu(Request $request){
+        $updateMenu = WimpysFoodExpressMenuList::find($request->id);
+        $updateMenu->name = $request->name;
+        $updateMenu->category = $request->category;
+        $updateMenu->save();
+
+        return response()->json('Success: succefully updated.');
+        
+    }
+
+    public function addMenuList(Request $request){  
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $target = DB::table(
+            'wimpys_food_express_menu_lists')
+            ->where('name', $request->name)
+            ->get()->first(); 
+
+        if($target === NULL){
+            $addMenu = new WimpysFoodExpressMenuList([
+                'user_id'=>$user->id,
+                'name'=>$request->name,
+                'category'=>$request->cat,
+                'created_by'=>$name,
+            ]);
+    
+            $addMenu->save();
+    
+            return response()->json('Success: successfully added a menu.');     
+        }else{
+            return response()->json('Failed: menu already exists'); 
+        }
+       
+
+    }   
+
+    public function menuLists(){
+       
+
+        $getAllMenus = WimpysFoodExpressMenuList::orderBy('id', 'desc')->get()->toArray();
+
+    
+        return view('wimpys-food-express-menu-lists', compact('getAllMenus'));
+    }
+
+    public function clientBookingForm(){
+
+        return view('wimpys-food-express-client-booking-form');
+    }
 
     public function search(Request $request){
         $getSearchResults = WimpysFoodExpressCode::where('wimpys_food_express_code', $request->get('searchCode'))->get();
@@ -3119,6 +3177,11 @@ class WimpysFoodExpressController extends Controller
         Session::flash('SuccessE', 'Successfully updated');
 
         return redirect()->route('editWimpysFoodExpress', ['id'=>$id]);
+    }
+
+    public function destroyMenu($id){
+        $menu = WimpysFoodExpressMenuList::find($id);
+        $menu->delete();
     }
 
     public function destroyMenuList($id){
