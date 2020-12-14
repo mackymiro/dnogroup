@@ -69,6 +69,92 @@
               		</div>
               </div>
               <div class="row">
+                <div class="col-lg-12">
+                     <div class="card mb-3">
+                        <div class="card-header">
+          					  <i class="fa fa-hamburger" aria-hidden="true"></i>
+          					  Soup</div>
+                         <div class="card-body">
+                            <div class="table-responsive">
+                			 		<table class="display table table-bordered" width="100%" cellspacing="0">
+                			 			<thead>
+	  				  						<th>Action</th>
+	  				  						<th class="bg-info" style="color:white">Name</th>
+										
+	  				  						<th>Created By</th>
+			  						   </thead>
+			  						   <tfoot>
+				  							<th>Action</th>
+                                              <th class="bg-info" style="color:white">Name</th>
+	  				  						<th>Created By</th>
+										</tfoot>
+										<tbody>
+                      					     @foreach($getAllMenus as $getAllMenu)
+                                                @if($getAllMenu['category'] === "Soup")
+                      					    <tr id="deletedId<?= $getAllMenu['id']?>">
+                                                <td>
+                                                     <!-- Button trigger modal -->
+											   <a data-toggle="modal" data-target="#menu<?= $getAllMenu['id']?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                               <a id="delete" onclick="confirmDelete('<?= $getAllMenu['id']?>')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                         
+                                                </td>
+                                                <td class="bg-info" style="color:white">{{ $getAllMenu['name'] }}</td>
+                                                <td>{{ $getAllMenu['created_by'] }}</td>
+                                            </tr>
+                                              @endif
+                                            @endforeach
+			  							</tbody>
+                			 		</table>
+                			 	</div>
+                         </div>
+                     </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-12">
+                    <div class="card mb-3">
+                        <div class="card-header">
+          					  <i class="fa fa-hamburger" aria-hidden="true"></i>
+          					  Drinks</div>
+                            <div class="card-body">
+							
+                            <div class="table-responsive">
+                                <table class="display table table-bordered" width="100%" cellspacing="0">
+                                    <thead>
+                                           <th>Action</th>
+                                           <th class="bg-info" style="color:white">Name</th>
+                                   
+                                           <th>Created By</th>
+                                    </thead>
+                                    <tfoot>
+                                         <th>Action</th>
+                                         <th class="bg-info" style="color:white">Name</th>
+                                           <th>Created By</th>
+                                   </tfoot>
+                                   <tbody>
+                                          @foreach($getAllMenus as $getAllMenu)
+                                           @if($getAllMenu['category'] === "Drinks")
+                                         <tr id="deletedId<?= $getAllMenu['id']?>">
+                                           <td>
+                                                <!-- Button trigger modal -->
+                                          <a data-toggle="modal" data-target="#menu<?= $getAllMenu['id']?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                          <a id="delete" onclick="confirmDelete('<?= $getAllMenu['id']?>')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                    
+                                           </td>
+                                           <td class="bg-info" style="color:white">{{ $getAllMenu['name'] }}</td>
+                                           <td>{{ $getAllMenu['created_by'] }}</td>
+                                       </tr>
+                                         @endif
+                                       @endforeach
+                                     </tbody>
+                                </table>
+                            </div>
+                           </div>
+                    </div>
+                </div>  
+              
+              </div>
+              <div class="row">
                     <div class="col-lg-12">
                         <div class="card mb-3">
                             <div class="card-header">
@@ -915,6 +1001,9 @@
                             <label>Category</label>
                             <select class="form-control" id="categoryUpdate<?= $getAllMenu['id'] ?>" name="category">
                                 <option value="Packed Meals" {{ ( "Packed Meals"  == $getAllMenu['category']) ? 'selected' : '' }}>Packed Meals</option>
+                                <option value="Soup" {{ ( "Soup"  == $getAllMenu['category']) ? 'selected' : '' }}>Packed Meals</option>
+                                <option value="Drinks" {{ ( "Drinks"  == $getAllMenu['category']) ? 'selected' : '' }}>Packed Meals</option>
+                               
                                 <option value="Desserts" {{ ( "Desserts"  == $getAllMenu['category']) ? 'selected' : '' }}>Desserts</option>
                                 <option value="Salads" {{ ( "Salads"  == $getAllMenu['category']) ? 'selected' : '' }}>Salads</option>
                                 <option value="Rice" {{ ( "Rice"  == $getAllMenu['category']) ? 'selected' : '' }}>Rice</option>
@@ -979,6 +1068,8 @@
                             <label>Category</label>
                             <select class="form-control" id="category" name="category">
                                 <option value="Packed Meals">Packed Meals</option>
+                                <option value="Soup">Soup</option>
+                                <option value="Drinks">Drinks</option>
                                 <option value="Desserts">Desserts</option>
                                 <option value="Salads">Salads</option>
                                 <option value="Rice">Rice</option>

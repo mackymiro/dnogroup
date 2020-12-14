@@ -36,13 +36,13 @@
                               <i class="fa fa-receipt" aria-hidden="true"></i>
                             Client Booking Form</div>
                           <div class="card-body">
-                                <form action="{{ action('WimpysFoodExpressController@store') }}" method="post">
+                                <form action="{{ action('WimpysFoodExpressController@storeBookingForm') }}" method="post">
                                 {{csrf_field()}}
                               <div class="form-group">
                                   <div class="form-row">
                                     <div class="col-lg-2">
                                       <label>Date of Event</label>
-                                      <input type="text" name="dateOfEvent" class="form-control" required />
+                                      <input type="text" name="dateOfEvent" class="datepicker form-control" required />
                                     </div>
                                     <div class="col-lg-2">
                                       <label>Time of Event</label>
@@ -74,22 +74,22 @@
                                 <div class="form-row">
                                   <div class="col-lg-4">
                                       <label>Client</label>
-                                      <input type="text" name="client" class="form-control" />
+                                      <input type="text" name="client" class="form-control" required/>
                                   </div>
                                   <div class="col-lg-4">
                                     <label>Place of Event</label>
-                                    <input type="text" name="placeOfEvent" class="form-control" />
+                                    <input type="text" name="placeOfEvent" class="form-control" required />
                                    
                                   </div>
                                  
                                   <div class="col-lg-2">
                                     <label>Mobile Number</label>
-                                    <input type="text" name="unitPrice" class="form-control" required="required" />
+                                    <input type="text" name="mobileNumber" class="form-control" required="required" />
                                     
                                   </div>
                                   <div class="col-lg-2">
                                     <label>Email Address</label>
-                                    <input typeE="text" name="emailAddress" class="form-control" required="required" />
+                                    <input typeE="text" name="emailAddress" class="form-control"  />
                                     
                                   </div>            
                                 </div>
@@ -97,7 +97,7 @@
                                   <div class="form-row">
                                     <div class="col-lg-4">
                                       <label>Special Requests</label>
-                                      <input typeE="text" name="specialRequests" class="form-control" required="required" />
+                                      <input typeE="text" name="specialRequests" class="form-control"  />
                                       
                                     </div>
                                   </div>
@@ -112,98 +112,9 @@
                           </div>
                       </div>  
                  </div>
-               
-                
+                           
             </div>
-            <div class="row">
-                 <div class="col-lg-4">
-                      <div class="card mb-3">
-                            <div class="card-header">
-                            <i class="fas fa-soup"></i>
-                              Soup</div>
-                            <div class="card-body">
-
-                            </div>
-                      </div>
-                      <div class="card mb-3">
-                            <div class="card-header">
-                            <i class="fas fa-soup"></i>
-                              Salad</div>
-                            <div class="card-body">
-
-                            </div>
-                      </div>
-                      <div class="card mb-3">
-                            <div class="card-header">
-                            <i class="fas fa-soup"></i>
-                              Entrees</div>
-                            <div class="card-body">
-
-                            </div>
-                      </div>
-                      <div class="card mb-3">
-                            <div class="card-header">
-                            <i class="fas fa-soup"></i>
-                              Vegetables</div>
-                            <div class="card-body">
-
-                            </div>
-                      </div>
-                      <div class="card mb-3">
-                            <div class="card-header">
-                            <i class="fas fa-soup"></i>
-                              Noodles</div>
-                            <div class="card-body">
-
-                            </div>
-                      </div>
-                      <div class="card mb-3">
-                            <div class="card-header">
-                            <i class="fas fa-soup"></i>
-                              Rice</div>
-                            <div class="card-body">
-
-                            </div>
-                      </div>
-                      <div class="card mb-3">
-                            <div class="card-header">
-                            <i class="fas fa-soup"></i>
-                              Dessert</div>
-                            <div class="card-body">
-
-                            </div>
-                      </div>
-                      <div class="card mb-3">
-                            <div class="card-header">
-                            <i class="fas fa-soup"></i>
-                              Drinks</div>
-                            <div class="card-body">
-
-                            </div>
-                      </div>
-                      <div class="card mb-3">
-                            <div class="card-header">
-                            <i class="fas fa-soup"></i>
-                              Additional Orders</div>
-                            <div class="card-body">
-
-                            </div>
-                      </div>
-                 </div>
-                 
-                 <div class="col-lg-8">
-                      <div class="card mb-3">
-                            <div class="card-header">
-                            <i class="fas fa-hamburger"></i>
-                              Menu</div>
-                            <div class="card-body">
-
-                            </div>
-                      </div>
-                 </div>
-            </div>
-
-        
+    
 
         </div>
 

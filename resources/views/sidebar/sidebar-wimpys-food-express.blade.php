@@ -37,7 +37,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
           <a class="dropdown-item" href="{{ url('wimpys-food-express/client-booking-form') }}">Client Booking Form</a>
-          <a class="dropdown-item" href="{{ url('wimpys-food-express') }}">Lists</a>
+          <a class="dropdown-item" href="{{ url('wimpys-food-express/client-booking-form/lists') }}">Lists</a>
           
         </div>
       </li>

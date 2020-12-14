@@ -7848,6 +7848,54 @@ Route::group(['middleware' => ['auth']], function(){
 		'WimpysFoodExpressController@clientBookingForm')
 		->name('clientBookingForm')
 		->middleware(['cashier']);
+
+	Route::post(
+		'/wimpys-food-express/storeBookingForm',
+		'WimpysFoodExpressController@storeBookingForm')
+		->name('storeBookingForm')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/wimpys-food-express/{id}/update-client-booking',
+		'WimpysFoodExpressController@updateClientBooking')
+		->name('updateClientBooking')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/edit-client-booking-form',
+		'WimpysFoodExpressController@editClientBookingForm')
+		->name('editClientBookingFormWimpys')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/wimpys-food-express/{id}/addItem',
+		'WimpysFoodExpressController@addItem')
+		->name('addItem')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/wimpys-food-express/delete-client-booking/{id}',
+		'WimpysFoodExpressController@destroyClientBooking')
+		->name('destroyClientBooking')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/client-booking-form/lists',
+		'WimpysFoodExpressController@clientBookingLists')
+		->name('clientBookingLists')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/view-client-booking',
+		'WimpysFoodExpressController@viewClientBooking')
+		->name('viewClientBooking')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/printClientBooking',
+		'WimpysFoodExpressController@printClientBooking')
+		->name('printClientBooking')
+		->middleware(['cashier']);
 		
 	Route::get(
 		'/wimpys-food-express/summary-report',

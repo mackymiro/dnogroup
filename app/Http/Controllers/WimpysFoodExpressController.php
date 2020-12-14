@@ -18,6 +18,7 @@ use App\WimpysFoodExpressStatementOfAccount;
 use App\WimpysFoodExpressStockInventory; 
 use App\WimpysFoodExpressOrderForm;
 use App\WimpysFoodExpressMenuList;
+use App\WimpysFoodExpressClientBookingForm;
 
 class WimpysFoodExpressController extends Controller
 {
@@ -72,6 +73,155 @@ class WimpysFoodExpressController extends Controller
 
     
         return view('wimpys-food-express-menu-lists', compact('getAllMenus'));
+    }
+
+    public function printClientBooking($id){
+        $printCB =  WimpysFoodExpressClientBookingForm::with(['user', 'client_bookings'])
+                                                                        ->where('id', $id)
+                                                                        ->get();
+
+        $getMenuItems = WimpysFoodExpressClientBookingForm::where('bf_id', $id)->get()->toArray();
+
+        $pdf = PDF::loadView('printClientBookingWimpys', compact('printCB', 'getMenuItems'));
+    
+        return $pdf->download('wimpys-food-express-client-booking.pdf');
+    }
+
+    public function viewClientBooking($id){
+        $viewClientBooking =  WimpysFoodExpressClientBookingForm::with(['user', 'client_bookings'])
+                                                                ->where('id', $id)
+                                                                ->get();
+        $getMenuItems = WimpysFoodExpressClientBookingForm::where('bf_id', $id)->get()->toArray();
+
+
+
+        return view('view-wimpys-food-express-client-booking', compact('id','viewClientBooking', 'getMenuItems'));
+    }
+
+    public function clientBookingLists(){
+        $clientBookingLists =  WimpysFoodExpressClientBookingForm::with(['user', 'client_bookings'])
+                                                            ->where('bf_id', NULL)
+                                                            ->where('deleted_at', NULL)
+                                                            ->orderBy('id', 'desc')
+                                                            ->get(); 
+
+        return view('wimpys-food-express-client-booking-list', compact('clientBookingLists'));
+    }
+
+    public function updateClientBooking(Request $request, $id){
+        $updateBooking = WimpysFoodExpressClientBookingForm::find($id);
+        $updateBooking->date_of_event = $request->get('dateOfEvent');
+        $updateBooking->time_of_event = $request->get('timeOfEvent');
+        $updateBooking->no_of_people = $request->get('noOfPeople');
+        $updateBooking->motiff =  $request->get('motiff');
+        $updateBooking->type_of_package = $request->get('package');
+        $updateBooking->client = $request->get('client');
+        $updateBooking->place_of_event = $request->get('placeOfEvent');
+        $updateBooking->mobile_number = $request->get('mobileNumber');
+        $updateBooking->email = $request->get('emailAddress');
+        $updateBooking->special_requests = $request->get('specialRequests');
+
+        $updateBooking->save();
+
+        Session::flash('updateItem', 'Successfully updated');
+
+        return redirect()->route('editClientBookingFormWimpys', ['id'=>$id]);
+    }
+
+    public function addItem(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $addItem = new WimpysFoodExpressClientBookingForm([
+            'user_id'=>$user->id,
+            'bf_id'=>$id,
+            'menu_cat'=>$request->get('menuCat'),
+            'menu'=>$request->get('entrees'),
+            'created_by'=>$name,
+        ]);
+
+        $addItem->save();
+        
+        Session::flash('addItem', 'Successfully added');
+
+        return redirect()->route('editClientBookingFormWimpys', ['id'=>$id]);
+
+    }
+
+    public function editClientBookingForm(Request $request, $id){
+        $menuItem = WimpysFoodExpressClientBookingForm::find($id);
+
+        $menuLists = WimpysFoodExpressMenuList::get()->toArray();
+
+        $getMenuItems = WimpysFoodExpressClientBookingForm::where('bf_id', $id)->get()->toArray();
+
+
+        return view('edit-wimpys-client-booking-form', compact('menuLists', 'menuItem', 'getMenuItems'));
+    }
+
+    public function storeBookingForm(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        //get the latest insert id query in table lechon de cebu
+        $dataCode = DB::select('SELECT id, wimpys_food_express_code FROM wimpys_food_express_codes ORDER BY id DESC LIMIT 1');
+
+        //if code is not zero add plus 1 reference number
+        if(isset($dataCode[0]->wimpys_food_express_code) != 0){
+            //if code is not 0
+            $newCode= $dataCode[0]->wimpys_food_express_code +1;
+            $uCode = sprintf("%06d",$newCode);   
+
+        }else{
+            //if code is 0 
+            $newCode = 1;
+            $uCode = sprintf("%06d",$newCode);
+        } 
+
+
+        $addClientBooking = new WimpysFoodExpressClientBookingForm([
+            'user_id'=>$user->id,
+            'date_of_event'=>$request->get('dateOfEvent'),
+            'time_of_event'=>$request->get('timeOfEvent'),
+            'no_of_people'=>$request->get('noOfPeople'),
+            'motiff'=>$request->get('motiff'),
+            'type_of_package'=>$request->get('package'),
+            'client'=>$request->get('client'),
+            'place_of_event'=>$request->get('placeOfEvent'),
+            'mobile_number'=>$request->get('mobileNumber'),
+            'email'=>$request->get('emailAddress'),
+            'special_requests'=>$request->get('specialRequests'),
+            'created_by'=>$name,
+        ]);
+
+        $addClientBooking->save();
+        $insertedId = $addClientBooking->id;
+
+        $moduleCode = "CB-";
+        $moduleName = "Client Booking";
+
+        $wimpysCode = new WimpysFoodExpressCode([
+            'user_id'=>$user->id,
+            'wimpys_food_express_code'=>$uCode,
+            'module_id'=>$insertedId,
+            'module_code'=>$moduleCode,
+            'module_name'=>$moduleName,
+
+        ]);
+        $wimpysCode->save();
+
+        return redirect()->route('editClientBookingFormWimpys', ['id'=>$insertedId]);
+
     }
 
     public function clientBookingForm(){
@@ -3177,6 +3327,11 @@ class WimpysFoodExpressController extends Controller
         Session::flash('SuccessE', 'Successfully updated');
 
         return redirect()->route('editWimpysFoodExpress', ['id'=>$id]);
+    }
+
+    public function destroyClientBooking($id){
+        $clientBooking = WimpysFoodExpressClientBookingForm::find($id);
+        $clientBooking->delete();
     }
 
     public function destroyMenu($id){
