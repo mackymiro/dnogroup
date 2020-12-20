@@ -2219,6 +2219,7 @@ class WimpysFoodExpressController extends Controller
         }
      
 
+        $updateBillingOrder->date = $request->get('date');
         $updateBillingOrder->bill_to = $request->get('billTo');
         $updateBillingOrder->address = $request->get('address');
         $updateBillingOrder->period_cover = $request->get('periodCovered');

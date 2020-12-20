@@ -7922,6 +7922,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $updateDeliveryReceipt = LechonDeCebuDeliveryReceipt::find($id);
 
+        $updateDeliveryReceipt->date = $request->get('date');
         $updateDeliveryReceipt->sold_to = $request->get('soldTo');
         $updateDeliveryReceipt->time = $request->get('time');
         $updateDeliveryReceipt->delivered_to = $request->get('deliveredTo');

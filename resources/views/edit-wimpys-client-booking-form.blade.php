@@ -175,7 +175,9 @@
                                             {{csrf_field()}}
                                             <select data-live-search="true"  name="entrees" class="selectpicker form-control">
                                                 @foreach($menuLists as $menuList)
-                                                <option value="{{ $menuList['name'] }}">{{ $menuList['name']}}</option>
+                                                @if($menuList['category'] === "Salads")
+                                                  <option value="{{ $menuList['name'] }}">{{ $menuList['name']}}</option>
+                                                @endif
                                                 @endforeach
                                             </select>
                                             <br>
@@ -233,7 +235,9 @@
                                             {{csrf_field()}}
                                             <select data-live-search="true"  name="entrees" class="selectpicker form-control">
                                                 @foreach($menuLists as $menuList)
-                                                <option value="{{ $menuList['name'] }}">{{ $menuList['name']}}</option>
+                                                @if($menuList['category'] === "Vegetables")
+                                                  <option value="{{ $menuList['name'] }}">{{ $menuList['name']}}</option>
+                                                @endif
                                                 @endforeach
                                             </select>
                                             <br>
@@ -261,7 +265,9 @@
                                             {{csrf_field()}}
                                             <select data-live-search="true"  name="entrees" class="selectpicker form-control">
                                                 @foreach($menuLists as $menuList)
-                                                <option value="{{ $menuList['name'] }}">{{ $menuList['name']}}</option>
+                                                @if($menuList['category'] === "Noodles")
+                                                  <option value="{{ $menuList['name'] }}">{{ $menuList['name']}}</option>
+                                                @endif
                                                 @endforeach
                                             </select>
                                             <br>
@@ -289,7 +295,9 @@
                                             {{csrf_field()}}
                                             <select data-live-search="true"  name="entrees" class="selectpicker form-control">
                                                 @foreach($menuLists as $menuList)
-                                                <option value="{{ $menuList['name'] }}">{{ $menuList['name']}}</option>
+                                                @if($menuList['category'] === "Rice")
+                                                  <option value="{{ $menuList['name'] }}">{{ $menuList['name']}}</option>
+                                                @endif
                                                 @endforeach
                                             </select>
                                             <br>
@@ -317,7 +325,9 @@
                                             {{csrf_field()}}
                                             <select data-live-search="true"  name="entrees" class="selectpicker form-control">
                                                 @foreach($menuLists as $menuList)
-                                                <option value="{{ $menuList['name'] }}">{{ $menuList['name']}}</option>
+                                                @if($menuList['category'] === "Desserts")
+                                                  <option value="{{ $menuList['name'] }}">{{ $menuList['name']}}</option>
+                                                @endif
                                                 @endforeach
                                             </select>
                                             <br>

@@ -48,6 +48,11 @@
                              <div class="card-body">
                              	<div class="form-group">
                              		<div class="form-row">
+                                 <div class="col-md-2">
+                                    <label>Date</label>
+                                    <input type="text" name="date" class="datepicker form-control" value="{{ $getDeliveryReceipt['date']}}" />
+                                    
+                                </div>
                      				  	<div class="col-md-4">
 	                    					<label>Sold To</label>
 	                    					<input type="text" name="soldTo" class="form-control" value="{{ $getDeliveryReceipt['sold_to']}}" />
