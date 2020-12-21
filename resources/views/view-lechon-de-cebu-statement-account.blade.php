@@ -128,8 +128,14 @@
                                      <thead>
                                         <tr>
                                           <th class="bg-info" style="color:white;">DATE</th>
-                                          <th class="bg-info" style="color:white;">INVOICE #</th>
+                                          @if($viewStatementAccount[0]->order === "Private Order")
+                                          <th class="bg-info" style="color:white;">DR No</th>
+                                          @else
+                                          <th class="bg-info" style="color:white;">Invoice No</th>
+                                          @endif
+                                          @if($viewStatementAccount[0]->order == "Private Order")
                                           <th class="bg-info" style="color:white;">WHOLE LECHON 500/KL</th>
+                                          @endif
                                           <th class="bg-info" style="color:white;">DESCRIPTION</th>
                                           <th class="bg-info" style="color:white;">AMOUNT</th>
                                           <th class="bg-info" style="color:white;">STATUS</th>
@@ -137,18 +143,30 @@
                                       </thead>
                                       <tbody>
                                           <tr>
-                                          <td>{{ $viewStatementAccount[0]->transaction_date }}</td>
-                                          <td>{{ $viewStatementAccount[0]->invoice_number }}</td>
+                                          <td>{{ $viewStatementAccount[0]->date }}</td>
+                                          @if($viewStatementAccount[0]->order === "Private Order")
+                                          <td>DR-{{ $viewStatementAccount[0]->dr_no }}</td>
+                                          @else
+                                          <td>{{ $viewStatementAccount[0]->invoice_number}}</td>
+                                          @endif
+                                          @if($viewStatementAccount[0]->order == "Private Order")
                                           <td>{{ $viewStatementAccount[0]->whole_lechon }}</td>
+                                          @endif
                                           <td>{{ $viewStatementAccount[0]->description }}</td>
                                           <td><?= number_format($viewStatementAccount[0]->amount, 2); ?></td>
                                           <td>{{ $viewStatementAccount[0]->status }}</td>
                                           </tr>
                                           @foreach($statementAccounts as $statementAccount)
                                           <tr>
-                                            <td>{{ $statementAccount['transaction_date'] }}</td>
-                                            <td>{{ $statementAccount['invoice_number'] }}</td>
+                                            <td>{{ $statementAccount['date_of_transaction'] }}</td>
+                                            @if($statementAccount['order'] === "Private Order")
+                                            <td>DR-{{ $statementAccount['dr_no'] }}</td>
+                                            @else
+                                            <td>{{ $statementAccount['invoice_number']}}</td>
+                                            @endif
+                                            @if($statementAccount['order'] == "Private Order")
                                             <td>{{ $statementAccount['whole_lechon'] }}</td>
+                                            @endif
                                             <td>{{ $statementAccount['description'] }}</td>
                                             <td><?= number_format($statementAccount['amount'], 2);?></td>
                                             <td>{{ $statementAccount['status']}}</td>

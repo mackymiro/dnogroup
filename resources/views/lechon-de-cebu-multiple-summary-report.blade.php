@@ -162,9 +162,7 @@
                                                     
                                                         <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-sales-invoice/'.$getAllSalesInvoice->id ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                                         
-                                                        @if(Auth::user()['role_type'] == 1)
-                                                        <a id="delete" onClick="confirmDelete('{{ $getAllSalesInvoice->id}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
-                                                        @endif
+                                                     
                                                         <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-sales-invoice/'.$getAllSalesInvoice->id) }}" title="View"><i class="fas fa-low-vision"></i></a>
                                                     
                                                     </td>
@@ -230,9 +228,7 @@
                                     
                                                     <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-delivery-receipt/'.$getAllDeliveryReceipt->id ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                     
-                                                    @if(Auth::user()['role_type'] == 1)
-                                                    <a id="delete" onClick="confirmDelete('{{ $getAllDeliveryReceipt->id}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
-                                                    @endif
+                                                    
                                                     <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-delivery-receipt/'.$getAllDeliveryReceipt->id)}}" title="View"><i class="fas fa-low-vision"></i></a>
                                                 
                                                     </td>
@@ -245,7 +241,7 @@
                                                     <td><p style="width: 200px;">{{ $getAllDeliveryReceipt->delivered_to}}</p></td>
                                                     <td>{{ $getAllDeliveryReceipt->qty}}</td>
                                                     <td><p style="width: 200px;">{{ $getAllDeliveryReceipt->description}}</p></td>
-                                                    <td><?php echo number_format($getAllDeliveryReceipt->price);?></td>
+                                                    <td><?php echo number_format($getAllDeliveryReceipt->total);?></td>
                                                     <td><p style="width: 120px;">{{ $getAllDeliveryReceipt->created_by}}</p></td>
                                                     
                                                     </tr>
@@ -289,9 +285,7 @@
                                                     <td>
                                                     
                                                     <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit/'.$purchaseOrder->id) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-                                                    @if(Auth::user()['role_type'] == 1)
-                                                        <a id="delete" onClick="confirmDelete('{{ $purchaseOrder->id }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
-                                                    @endif
+                                                   
                                                         <a href="{{ url('lolo-pinoy-lechon-de-cebu/view/'.$purchaseOrder->id) }}" title="View"><i class="fas fa-low-vision"></i></a>
                                                     </td>
                                                     <td>{{ $purchaseOrder->module_code }}{{ $purchaseOrder->lechon_de_cebu_code }}</td>
@@ -320,8 +314,10 @@
                                                 <thead>
                                                     <th>Action</th>
                                                     <th>Date</th>
+                                                    <th>Ref DR No</th>
                                                     <th>SOA No</th>
                                                     <th>BS No</th>
+                                                    <th>Delivered To</th>
                                                     <th>Bill To</th>
                                                     <th>Order</th>
                                                     <th>Status</th>
@@ -333,8 +329,10 @@
                                                 <tfoot>
                                                     <th>Action</th>
                                                     <th>Date</th>
+                                                    <th>Ref DR No</th>
                                                     <th>SOA No</th>
                                                     <th>BS No</th>
+                                                    <th>Delivered To</th>
                                                     <th>Bill To</th>
                                                     <th>Order</th>
                                                     <th>Status</th>
@@ -345,7 +343,7 @@
                                                 </tfoot>
                                                 <tbody>
                                                 @foreach($statementOfAccounts as $statementOfAccount)
-                                                <tr id="deletedId{{ $statementOfAccount->id}}">
+                                                <tr >
                                                     <td>
                                                         @if(Auth::user()['role_type'] !== 3)
                                                         <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-statement-of-account/'.$statementOfAccount->id ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
@@ -355,8 +353,10 @@
 
                                                     </td>
                                                     <td>{{ $statementOfAccount->date }}</td>
+                                                    <td>{{ $statementOfAccount->dr_no}}</td>
                                                     <td>SOA-{{ $statementOfAccount->lechon_de_cebu_code}}</td>
                                                     <td>{{ $statementOfAccount->bs_no}}</td>
+                                                    <td>{{ $statementOfAccount->address }}</td>
                                                     <td>{{ $statementOfAccount->bill_to}}</td> 
                                                     <td>{{ $statementOfAccount->order}}</td> 
                                                     <td>{{ $statementOfAccount->status}}</td> 
@@ -408,9 +408,7 @@
                                                         @if(Auth::user()['role_type'] !== 3)
                                                         <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-billing-statement/'.$billingStatement->id ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                                         @endif
-                                                        @if(Auth::user()['role_type'] == 1)
-                                                        <a id="delete" onClick="confirmDelete('{{ $billingStatement->id }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
-                                                        @endif
+                                                      
                                                         <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-billing-statement/'.$billingStatement->id) }}" title="View"><i class="fas fa-low-vision"></i></a>
 
                                                     </td>
@@ -457,9 +455,7 @@
                                                     @if(Auth::user()['role_type'] != 3)
                                                         <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-petty-cash/'.$pettyCashList->id) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
                                                         @endif
-                                                    @if(Auth::user()['role_type'] == 1)
-                                                        <a id="delete" onClick="confirmDelete('{{ $pettyCashList->id}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
-                                                    @endif
+                                                  
                                                     </td>
                                                     <td>{{ $pettyCashList->date}}</td>
                                                     <td>{{ $pettyCashList->module_code}}{{ $pettyCashList->lechon_de_cebu_code}}</td>
@@ -477,7 +473,7 @@
                                             <table class="table table-bordered display" width="100%" cellspacing="0">
                                             <thead>
 					  						<tr>
-				  								<th>Action</th>
+				  							
 				  								<th>Invoice #</th>
 				  								<th>PV No</th>
 												<th  class="bg-info" style="color:#fff;">Category</th>
@@ -493,7 +489,7 @@
                                             </thead>
 				  						<tfoot>
 				  							<tr>
-				  								<th>Action</th>
+				  							
 				  								<th>Invoice #</th>
 				  								<th>PV No</th>
 												<th class="bg-info" style="color:#fff;">Category</th>
@@ -526,11 +522,7 @@
 									
 											
 				  							<tr id="deletedId{{ $getTransactionList->id }}">
-			  									<td width="2%">
-			  										@if(Auth::user()['role_type'] == 1 || Auth::user()['role_type'] == 2)
-					  									<a id="delete" onClick="confirmDelete('{{ $getTransactionList->id}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
-				              						@endif
-			  									</td>
+			  									
 			  									<td>
 											    @if($getTransactionList->status != "FULLY PAID AND RELEASED")
                                                 <p style="width:250px;">	

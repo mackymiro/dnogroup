@@ -83,6 +83,10 @@
                                           <th>Date To Be Delivered</th>
                                           <th>{{ $viewDeliveryReceipt[0]->date_to_be_delivered }}</th>
                                        </tr>
+                                       <tr>
+                                          <th>Special Instructions</th>
+                                          <th>{{ $viewDeliveryReceipt[0]->special_instruction }}</th>
+                                       </tr>
                                   </thead>
                               </table>
                           </div>

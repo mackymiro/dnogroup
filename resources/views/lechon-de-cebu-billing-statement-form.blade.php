@@ -46,7 +46,7 @@
                             <div class="form-row">
                               <div class="col-lg-6">
                                
-                                <label>Bill To</label>
+                                <label id="hidePls">Bill To</label>
                                 <input type="text" name="billTo" class="form-control" required="required" />
                                 @if ($errors->has('billTo'))
                                     <span class="alert alert-danger">
@@ -214,12 +214,14 @@
       </footer>
 </div>
 <script>
+
     $("#drNo").hide();
     $("#wholeLechon6000").hide();
     $("#descriptionDrNo").hide();
     $("#drList").hide();
     $("#unit").hide();
     $("#wholeLechon").hide();
+
     $(".chooseOption").change(function(){
          const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
          if(cat === "Ssp"){

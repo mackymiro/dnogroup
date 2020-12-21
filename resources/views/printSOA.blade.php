@@ -42,37 +42,31 @@
 				 			<div class="form-group">
                   <div clsass="form-row">
                               <div style="width:980px; margin:0 auto;">
-                                   <div style="float:left; width:50%">
+                                   <div style="float:left; width:30%">
                                     <table >
                                           <thead>
                                             <tr>
-                                                <th width="25%">Bill To</th>
+                                                <th width="25%">Bill To:</th>
                                                 <th> {{ $soa[0]->bill_to }}</th>
                                             </tr>
                                             <tr>
-                                                <th>Address</th>
-                                                <th>{{ $soa[0]->address }}</th>
+                                                <th>Address:</th>
+                                                <th>{{ $soa[0]->address }}<br>
+                                                </th>
                                             </tr>
                                             <tr>
-                                                <th>Period Covered</th>
+                                                <th>Period Covered:</th>
                                                 <th> {{ $soa[0]->period_cover }} </th>
                                             </tr>
                                             <tr>
-                                                <th>Date</th>
+                                                <th>Date:</th>
                                                 <th>{{ $soa[0]->date }}</th>
                                             </tr>
                                              <tr>
-                                                <th>Branch</th>
+                                                <th>Branch:</th>
                                                 <th>{{ $soa[0]->branch }}</th>
                                             </tr>
-                                             <tr>
-                                                <th>Payment Method</th>
-                                                <th>{{ $soa[0]->payment_method }}</th>
-                                            </tr>
-                                            <tr>
-                                                <th>Total Amount</th>
-                                                <th><?php echo number_format($sum, 2);?></th>
-                                            </tr>
+                                            
                                            
                                         </thead>
                                       
@@ -84,16 +78,24 @@
 	                                   <thead>
                                            
                                             <tr>
-                                                <th>SOA No</th>
+                                                <th>SOA No:</th>
                                                 <th> {{ $soa[0]->lechon_de_cebu_code }}</th>
                                             </tr>
                                             <tr>
-                                                <th>Terms</th>
+                                                <th>Terms:</th>
                                                 <th>{{ $soa[0]->terms }}</th>
                                             </tr>
                                              <tr>
-                                                <th>Collection Date</th>
+                                                <th>Collection Date:</th>
                                                 <th>{{ $soa[0]->collection_date }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Payment Method:</th>
+                                                <th>{{ $soa[0]->payment_method }}</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Total Amount:</th>
+                                                <th><?php echo number_format($sum, 2);?></th>
                                             </tr>
                                         </thead>
 	                              </table>
@@ -111,8 +113,14 @@
                           		  <thead>
                                       <tr>
                                         <th style="height: 1%; text-align: center;">DATE</th>
-                                        <th style="height: 1%; text-align: center;">INVOICE #</th>
+                                        @if($soa[0]->order === "Private Order")
+                                        <th style="height: 1%; text-align: center;">DR No</th>
+                                        @else
+                                        <th style="height: 1%; text-align: center;">Invoice No</th>
+                                        @endif
+                                        @if($soa[0]->order === "Private Order")
                                         <th style="height: 1%; text-align: center;">WHOLE LECHON 500/KL</th>
+                                        @endif
                                         <th style="height: 1%; text-align: center;">DESCRIPTION</th>
                                         <th style="height: 1%; text-align: center;">AMOUNT</th>
                                         <th style="height: 1%; text-align: center;">STATUS</th>
@@ -120,9 +128,15 @@
                                     </thead>
                                   <tbody>
                                   		<tr style="border:1px solid black;">
-                                      <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->transaction_date }}</td>
+                                      <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->date }}</td>
+                                      @if($soa[0]->order === "Private Order")
+                                      <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->dr_no }}</td>
+                                      @else
                                       <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->invoice_number }}</td>
+                                      @endif
+                                      @if($soa[0]->order === "Private Order")
                                       <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->whole_lechon }}</td>
+                                      @endif
                                       <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->description }}</td>
                                       <td style="text-align:center; border: 1px solid black;"><?php echo number_format($soa[0]->amount, 2); ?></td>
                                        <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->status }}</td>
@@ -130,8 +144,14 @@
                                   	 	 @foreach($statementAccounts as $statementAccount)
                                         <tr style="border:1px solid black;">
                                           <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['date_of_transaction'] }}</td>
+                                          @if($statementAccount['order'] === "Private Order")
+                                          <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['dr_no'] }}</td>
+                                          @else 
                                           <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['invoice_number'] }}</td>
+                                          @endif
+                                          @if($statementAccount['order'] === "Private Order")
                                           <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['whole_lechon'] }}</td>
+                                          @endif
                                           <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['description'] }}</td>
                                           <td style="text-align:center; border: 1px solid black;"><?php echo number_format($statementAccount['amount'], 2);?></td>
                                            <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->status }}</td>
@@ -142,7 +162,7 @@
 	                                       <tr style="border:1px solid black;">
 	                                        <td style=" border: 1px solid black;"></td>
 	                                        <td style=" border: 1px solid black;"></td>
-                                          <td style=" border: 1px solid black;"></td>
+                                            <td style=" border: 1px solid black;"></td>
 	                                        <td style="text-align:center; border: 1px solid black;"><strong>Total</strong></td>
 	                                        <td style=" text-align:center; border: 1px solid black;"> <?php echo number_format($sum, 2)?></td>
                                           <td  style=" border: 1px solid black;"></td>

@@ -83,7 +83,7 @@
 			  									<td><p style="width: 200px;">{{ $getAllDeliveryReceipt->delivered_to}}</p></td>
 			  									<td>{{ $getAllDeliveryReceipt->qty}}</td>
 			  									<td><p style="width: 200px;">{{ $getAllDeliveryReceipt->description}}</p></td>
-			  									<td><?php echo number_format($getAllDeliveryReceipt->price);?></td>
+			  									<td><?php echo number_format($getAllDeliveryReceipt->total);?></td>
 			  									<td><p style="width: 120px;">{{ $getAllDeliveryReceipt->created_by}}</p></td>
 			  									
 			  								</tr>

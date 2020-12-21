@@ -33,10 +33,12 @@
       				  					<thead>
       			  							<th>Action</th>
       			  							<th>Date</th>
+                            <th>Invoice No</th>
                             <th>SOA No</th>
                             <th>Order</th>
                             <th>Bill To</th>
                             <th>BS No</th>
+                            <th>Delivered To</th>
                             <th  class="bg-info" style="color:white;">Period Covered</th>
                             <th class="bg-success" style="color:white;">Status</th>
                             <th>Total Amount</th>
@@ -47,10 +49,12 @@
       				  					<tfoot>
       			  							<th>Action</th>
                             <th>Date</th>
+                            <th>Invoice No</th>
                             <th>SOA No</th>
                             <th>Order</th>
                             <th>Bill To</th>
                             <th>BS No</th>
+                            <th>Delivered To</th>
                             <th  class="bg-info" style="color:white;">Period Covered</th>
                             <th class="bg-success" style="color:white;">Status</th>
                             <th>Total Amount</th>
@@ -69,10 +73,12 @@
 
                               </td>
                               <td>{{ $statementOfAccount->date }}</td>
+                              <td>{{ $statementOfAccount->invoice_number}}</td>
                               <td>SOA-{{ $statementOfAccount->lechon_de_cebu_code}}</td>
                               <td>{{ $statementOfAccount->order }}</td>
                               <td>{{ $statementOfAccount->bill_to}}</td> 
                               <td><p style="width:140px;">{{ $statementOfAccount->bs_no }}</p></td>
+                              <td>{{ $statementOfAccount->address}}</td>
                               <td class="bg-info" style="color:white;">{{ $statementOfAccount->period_cover}}</td>
                              
                               <td class="bg-success" style="color:white;">
@@ -124,10 +130,12 @@
                                   <thead>
                                     <th>Action</th>
                                     <th>Date</th>
+                                    <th>Ref DR No</th>
                                     <th>SOA No</th>
                                     <th>Order</th>
                                     <th>Bill To</th>
                                     <th>BS No</th>
+                                    <th>Delivered To</th>
                                     <th  class="bg-info" style="color:white;">Period Covered</th>
                                     <th class="bg-success" style="color:white;">Status</th>
                                     <th>Total Amount</th>
@@ -138,10 +146,12 @@
                                   <tfoot>
                                     <th>Action</th>
                                     <th>Date</th>
+                                    <th>Ref DR No</th>
                                     <th>SOA No</th>
                                     <th>Order</th>
                                     <th>Bill To</th>
                                     <th>BS No</th>
+                                    <th>Delivered To</th>
                                     <th  class="bg-info" style="color:white;">Period Covered</th>
                                     <th class="bg-success" style="color:white;">Status</th>
                                     <th>Total Amount</th>
@@ -160,10 +170,12 @@
 
                                           </td>
                                           <td>{{ $privateOrder->date }}</td>
+                                          <td>{{ $privateOrder->dr_no}}</td>
                                           <td>SOA-{{ $privateOrder->lechon_de_cebu_code}}</td>
                                           <td>{{ $privateOrder->order }}</td>
                                           <td>{{ $privateOrder->bill_to}}</td> 
                                           <td><p style="width:140px;">{{ $privateOrder->bs_no }}</p></td>
+                                          <td>{{ $privateOrder->address }}</td>
                                           <td class="bg-info" style="color:white;">{{ $privateOrder->period_cover}}</td>
                                         
                                           <td class="bg-success" style="color:white;">

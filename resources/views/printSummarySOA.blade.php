@@ -57,8 +57,10 @@
 								<thead>
 									<tr>
 										<th style="height: 1%; text-align: center;">DATE</th>
+										<th style="height: 1%; text-align: center;">REF DR No</th>
                                         <th style="height: 1%; text-align: center;">SOA NO</th>
                                         <th style="height: 1%; text-align: center;">BS NO</th>
+										<th style="height: 1%; text-align: center;">DELIVERED TO</th>
                                         <th style="height: 1%; text-align: center;">BILL TO</th>
                                         <th style="height: 1%; text-align: center;">ORDER</th>
                                         <th style="height: 1%; text-align: center;">STATUS</th>
@@ -72,8 +74,10 @@
                                 @foreach($statementOfAccounts as $statementOfAccount)
 									<tr style="border:1px solid black;">
                                         <td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->date}}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->dr_no}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->module_code}}{{ $statementOfAccount->lechon_de_cebu_code}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->bs_no}}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->address }}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->bill_to}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->order}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->status}}</td>
@@ -86,7 +90,30 @@
 									@endforeach
 								</tbody>	
 						    </table>
-                            
+							<br>
+						  <br>
+						  <table style="border:1px solid black">
+								<thead>
+									<tr>
+										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%;"><strong>Total Balance</strong></td>
+										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%; font-size:18px;">
+										 <?= number_format($totalBalance, 2)?>
+										</td>
+									</tr>
+									<tr>
+										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%;"><strong>Total Paid Amount</strong></td>
+										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%; font-size:18px;">
+										 <?= number_format($totalAmount, 2)?>
+										</td>
+									</tr>
+									<tr>
+										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%;"><strong>Total Unpaid Amount</strong></td>
+										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%; font-size:18px;">
+											<?= number_format($totalRemainingBalance, 2);?>
+										</td>
+									</tr>
+								</thead>
+							</table>
                         
 						 </div>
 					</div>

@@ -62,10 +62,7 @@
                         <th style="font-size:16px; height: 1%; ">Delivered To: </th>
                         <th style="font-size:16px;">{{ $deliveryId[0]->delivered_to}}</th>
                     </tr>
-                    <tr  > 
-                        <th style="font-size:16px; height: 1%; ">Contact Person: </th>
-                        <th style="font-size:16px; height: 1%; ">{{ $deliveryId[0]->contact_person }}</th>
-                    </tr>
+                  
                      <tr >
                           <th style="font-size:16px; height: 1%; ">Mobile #: </th>
                           <th style="font-size:16px; height: 1%; ">{{ $deliveryId[0]->mobile_num}}</th>
@@ -74,6 +71,10 @@
                         <th style="font-size:16px; height: 1%; ">Time: </th>
                         <th style="font-size:16px; height: 1%; ">{{ $deliveryId[0]->time }}</th>
                     </tr>
+                    <tr >
+                          <th style="font-size:16px; height: 1%; ">Special Instruction: </th>
+                          <th style="font-size:16px; height: 1%; ">{{ $deliveryId[0]->special_instruction }}</th>
+                       </tr>
                    
                 </thead>
                 
@@ -97,6 +98,10 @@
                           <th style="font-size:16px; height: 1%; ">Date To Be Delivered: </th>
                           <th style="font-size:16px; height: 1%; ">{{ $deliveryId[0]->date_to_be_delivered }}</th>
                        </tr>
+                       <tr  > 
+                        <th style="font-size:16px; height: 1%; ">Contact Person: </th>
+                        <th style="font-size:16px; height: 1%; ">{{ $deliveryId[0]->contact_person }}</th>
+                    </tr>
                         
                   </thead>
               </table>

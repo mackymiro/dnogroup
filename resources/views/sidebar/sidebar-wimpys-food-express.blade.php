@@ -19,7 +19,7 @@
         </div>
       </li>
       @endif
-      <li class="nav-item dropdown">
+      <!--<li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-receipt"></i>
           <span>Order Form</span>
@@ -29,8 +29,8 @@
           <a class="dropdown-item" href="{{ url('wimpys-food-express/order-form/lists') }}">Lists</a>
           
         </div>
-      </li>
-      <li class="nav-item dropdown">
+      </li>-->
+     <!-- <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-receipt"></i>
           <span>Client Booking Form</span>
@@ -51,7 +51,7 @@
           <a class="dropdown-item" href="{{ url('wimpys-food-express') }}">Lists</a>
           
         </div>
-      </li>
+      </li>-->
       <li class="nav-item dropdown ">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
            <i class="fab fa-first-order"></i>

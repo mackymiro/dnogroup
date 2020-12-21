@@ -44,14 +44,16 @@
                           		  <thead>
                                       <tr>
                                         <th style="height: 1%; text-align: center;">DATE</th>
+										<th style="height: 1%; text-align: center;">REF DR NO</th>
                                         <th style="height: 1%; text-align: center;">SOA NO</th>
                                         <th style="height: 1%; text-align: center;">BILL TO</th>
 										<th style="height: 1%; text-align: center;">BS NO</th>
+										<th style="height: 1%; text-align: center;">DELIVERED TO</th>
                                         <th style="height: 1%; text-align: center;">PERIOD COVERED</th>
                                         <th style="height: 1%; text-align: center;">STATUS</th>
                                         <th style="height: 1%; text-align: center;">TOTAL AMOUNT</th>
                                         <th style="height: 1%; text-align: center;">TOTAL BALANCE REMAINING</th>
-                                        <th style="height: 1%; text-align: center;">CREATED BY</th>
+                                        
                                       </tr>
                                     </thead>
                                   <tbody>
@@ -59,9 +61,11 @@
                                   	 	 @foreach($printSOAStatements as $printSOAStatement)
                                         <tr style="border:1px solid black;">
                                           <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->date }}</td>
+										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->dr_no }}</td>
                                           <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->lechon_de_cebu_code }}</td>
 										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->bill_to }}</td>
 										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->bs_no }}</td>
+										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->address }}</td>
 										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->period_cover }}</td>
                                           <td style="text-align:center; border: 1px solid black;">
 										 	 @if($printSOAStatement->total_remaining_balance == 0.00)
@@ -70,7 +74,7 @@
 										  </td>
                                           <td style="text-align:center; border: 1px solid black;"><?= number_format($printSOAStatement->total_amount, 2);?></td>
                                          <td style="text-align:center; border: 1px solid black;"><?= number_format($printSOAStatement->total_remaining_balance, 2);?></td>
-                                         <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->created_by }}</td>
+                                         
                                         </tr> 
                                         @endforeach
                                       
@@ -81,6 +85,12 @@
 						  <br>
 						  <table style="border:1px solid black">
 								<thead>
+									<tr>
+										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%;"><strong>Total Balance</strong></td>
+										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%; font-size:18px;">
+										 <?= number_format($totalBalance, 2)?>
+										</td>
+									</tr>
 									<tr>
 										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%;"><strong>Total Paid Amount</strong></td>
 										<td style="height: 1%; text-align: center; border: 1px solid black; width:50%; font-size:18px;">
