@@ -78,7 +78,7 @@
                               <td>{{ $statementOfAccount->order }}</td>
                               <td>{{ $statementOfAccount->bill_to}}</td> 
                               <td><p style="width:140px;">{{ $statementOfAccount->bs_no }}</p></td>
-                              <td>{{ $statementOfAccount->address}}</td>
+                              <td><p style="width:140px;">{{ $statementOfAccount->address}}</p></td>
                               <td class="bg-info" style="color:white;">{{ $statementOfAccount->period_cover}}</td>
                              
                               <td class="bg-success" style="color:white;">
@@ -170,12 +170,12 @@
 
                                           </td>
                                           <td>{{ $privateOrder->date }}</td>
-                                          <td>{{ $privateOrder->dr_no}}</td>
+                                          <td><p style="width:140px;">{{ $privateOrder->dr_no}}</p></td>
                                           <td>SOA-{{ $privateOrder->lechon_de_cebu_code}}</td>
                                           <td>{{ $privateOrder->order }}</td>
-                                          <td>{{ $privateOrder->bill_to}}</td> 
+                                          <td><p style="width:140px;">{{ $privateOrder->bill_to}}</p></td> 
                                           <td><p style="width:140px;">{{ $privateOrder->bs_no }}</p></td>
-                                          <td>{{ $privateOrder->address }}</td>
+                                          <td><p style="width:140px;">{{ $privateOrder->address }}</p></td>
                                           <td class="bg-info" style="color:white;">{{ $privateOrder->period_cover}}</td>
                                         
                                           <td class="bg-success" style="color:white;">

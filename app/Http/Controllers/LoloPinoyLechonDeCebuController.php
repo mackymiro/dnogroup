@@ -9559,7 +9559,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 ->get()->toArray();
 
 
-        return view('lechon-de-cebu-view-per-accounts-billing-statement', compact('user', 'statementOfAccountT1s', 'statementOfAccountT2s', 'getAllDeliveryReceipts'));
+        return view('lechon-de-cebu-view-per-accounts-billing-statement', compact('statementOfAccountT1s', 'statementOfAccountT2s', 'getAllDeliveryReceipts'));
     }
 
 
@@ -9949,6 +9949,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             $invoiceNum = NULL;
             $wholeLechon = $request->get('wholeLechon6000');
             $description = $request->get('descriptionDrNo');
+          
             $drNo = $request->get('drNo');
             $qty = $request->get('qty');
             $unit = $request->get('unit');
@@ -9958,6 +9959,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             $headFeet = NULL;
         }
 
+     
         //get the latest insert id query in table lechon_de_cebu_codes
         $dataReferenceNum = DB::select('SELECT id, lechon_de_cebu_code FROM lechon_de_cebu_codes ORDER BY id DESC LIMIT 1');
 
@@ -10577,7 +10579,6 @@ class LoloPinoyLechonDeCebuController extends Controller
 
 
     public function destroyBillingDataStatement(Request $request, $id){
-        
         $billStatement = LechonDeCebuBillingStatement::find($request->billingStatementId);
 
         $billingStatement = LechonDeCebuBillingStatement::find($id);
@@ -10589,10 +10590,11 @@ class LoloPinoyLechonDeCebuController extends Controller
         $billingStatement->delete();
 
          //update statement of account table
-         $statementAccount = LechoDeCebuStatementOfAccount::find($request->billingStatementId);
+         $statementAccount = LechonDeCebuStatementOfAccount::find($request->billingStatementId);
 
-         $stateAccount = LechoDeCebuStatementOfAccount::find($id);
- 
+         $stateAccount = LechonDeCebuStatementOfAccount::find($id);
+
+
          $getStateAmount = $statementAccount->total_amount - $stateAccount->amount; 
          $statementAccount->total_amount = $getStateAmount;
          $statementAccount->total_remaining_balance = $getStateAmount;

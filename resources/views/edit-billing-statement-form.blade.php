@@ -216,6 +216,7 @@
                                         <div id="drList" class="col-lg-12">
                                             <label>DR Lists Id</label>
                                             <select id="dataList" name="drList" class="chooseDr form-control "> 
+                                              <option value="0">--Please Select--</option>
                                             </select>
                                         </div>
                                         <div id="qty" class="col-lg-12">
@@ -340,12 +341,13 @@
                                         <div class="col-lg-4">
                                           <br>
                                           <input type="hidden" id="billingStatementId" name="billingStatementId" value="{{ $billingStatement['id'] }}" />
+                                         
                                           @if($bStatement['order'] != "Private Order")
                                           <input type="submit" class="btn btn-success" value="Update" />
                                           @endif
                                           @if(Auth::user()['role_type'] == 1)
                                          
-                                          <a id="delete" onClick="confirmDelete('{{ $bStatement['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
+                                          <a id="delete" onclick="confirmDelete('{{ $bStatement['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
                                           @endif
                                         </div>
                                     </div>
@@ -386,6 +388,35 @@
   }) 
 </script>
 <script type="text/javascript">
+   const confirmDelete = (id) =>{
+     const billingStatementId =  $("#billingStatementId").val();
+      var x = confirm("Do you want to delete this?");
+        if(x){
+            $.ajax({
+              type: "DELETE",
+              url: '/lolo-pinoy-lechon-de-cebu/delete-data-billing-statement/' + id,
+              data:{
+                _method: 'delete', 
+                "_token": "{{ csrf_token() }}",
+                "id": id,
+                "billingStatementId":billingStatementId,
+                
+              },
+              success: function(data){
+                console.log(data);
+                $("#deletedId"+id).fadeOut('slow');
+              },
+              error: function(data){
+                console.log('Error:', data);
+              }
+
+            });
+
+        }else{
+            return false;
+        }
+   }
+
    $("#drNo").hide();
     $("#price").hide();
     $("#descriptionDrNo").hide();
@@ -559,7 +590,8 @@
                 
                 <?php foreach($getDrNosInsides as $getDrNosInside):?>
                       $("#dataList").append(  
-                          `<option value="<?php echo $getDrNosInside->id?>"><?php echo $getDrNosInside->id?></option>
+                          `
+                           <option value="<?php echo $getDrNosInside->id?>"><?php echo $getDrNosInside->id?></option>
                           `);
                         
                         $(".chooseDr").change(function(){
@@ -576,7 +608,7 @@
                                           $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?php echo $data->unit; ?>" class="form-control" readonly="readonly" />');
                                          
                                           $("#price").html('<label>Whole Lechon</label><input type="text" name="price" value="<?php echo $data->price; ?>" class="form-control" readonly="readonly" />');
-                                          $("#descriptionAdd").html('<label>Description</label><input type="text" name="description" value="<?php echo $data->description; ?>" class="form-control" readonly="readonly" />');
+                                          $("#descriptionAdd").html(`<label>Description</label><input type="text" name="description" value="<?php echo $data->description; ?>" class="form-control" readonly="readonly" />`);
             
                                      }
                                <?php endforeach;?>
@@ -587,39 +619,11 @@
                 $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?php echo $data->unit; ?>" class="form-control" readonly="readonly" />');
                                          
                 $("#price").html('<label>Whole Lechon</label><input type="text" name="price" value="<?php echo $getDrNo->price; ?>" class="form-control" readonly="readonly" />');
-                $("#descriptionAdd").html('<label>Description</label><input type="text" name="description" value="<?php echo $getDrNo->description; ?>" class="form-control" readonly="readonly" />');
+                $("#descriptionAdd").html(`<label>Description</label><input type="text" name="description" value="<?php echo $getDrNo->description; ?>" class="form-control" readonly="readonly" />`);
              }
            
         <?php endforeach; ?>
     });
 
-   const confirmDelete = (id) =>{
-     const billingStatementId =  $("#billingStatementId").val();
-      var x = confirm("Do you want to delete this?");
-        if(x){
-            $.ajax({
-              type: "DELETE",
-              url: '/lolo-pinoy-lechon-de-cebu/delete-data-billing-statement/' + id,
-              data:{
-                _method: 'delete', 
-                "_token": "{{ csrf_token() }}",
-                "id": id,
-                "billingStatementId":billingStatementId
-                
-              },
-              success: function(data){
-                console.log(data);
-                $("#deletedId"+id).fadeOut('slow');
-              },
-              error: function(data){
-                console.log('Error:', data);
-              }
-
-            });
-
-        }else{
-            return false;
-        }
-   }
 </script>
 @endsection

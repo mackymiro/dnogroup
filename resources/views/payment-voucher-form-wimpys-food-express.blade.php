@@ -58,9 +58,12 @@
                                   <div id="app-payment-method">
                                       <select name="paymentMethod" class="payment form-control">
                                           <option value="0">--Please Select--</option>
-                                          <option v-for="payment in payments" v-bind:value="payment.value">
-                                            @{{ payment.text }}
-                                          </option>
+                                           <!--<option v-for="payment in payments" v-bind:value="payment.value">
+                                              @{{ payment.text }}
+                                            
+                                            </option>-->
+                                            <option value="CASH">CASH</option>
+                                            <option value="CHECK">CHECK</option>
                                       </select>
                                   </div>
                               </div>

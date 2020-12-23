@@ -331,12 +331,15 @@
 			  							<div class="col-lg-4">
 		  									<label>Status</label>
 		  									<div id="app-status">
-	  											<select name="status" class="form-control">
-	  												<option value="0">--Please Select--</option>
-													<option v-for="status in statuses" v-bind:value="status.value"
+											    <select name="status" class="form-control">
+	  											<!--<option v-for="status in statuses" v-bind:value="status.value"
 													:selected="status.value=={{json_encode($transactionList[0]->status)}}?true : false">
 													@{{ status.text }}
-												</option>
+													</option>-->
+													<option value="FULLY PAID AND RELEASED" {{ ( "FULLY PAID AND RELEASED"  == $transactionList[0]->status) ? 'selected' : '' }} >FULLY PAID AND RELEASED</option>
+													<option value="FOR APPROVAL" {{ ( "FOR APPROVAL"  == $transactionList[0]->status) ? 'selected' : '' }} >FOR APPROVAL</option>
+													<option value="FOR CONFIRMATION" {{ ( "FOR CONFIRMATION"  == $transactionList[0]->status) ? 'selected' : '' }} >FOR CONFIRMATION</option>
+	  											
 	  											</select>
 		  									</div>
 			  							</div>

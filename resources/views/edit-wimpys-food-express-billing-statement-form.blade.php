@@ -223,7 +223,7 @@
                                          
                                           @if(Auth::user()['role_type'] == 1)
                                          
-                                          <a id="delete" onClick="confirmDelete('{{ $bStatement['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
+                                          <a id="delete" onclick="confirmDelete('{{ $bStatement['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
                                           @endif
                                         </div>
                                     </div>

@@ -60,9 +60,12 @@
                                           <div id="app-payment-method">
                                               <select name="paymentMethod" class="payment form-control">
                                                   <option value="0">--Please Select--</option>
-                                                  <option v-for="payment in payments" v-bind:value="payment.value">
+                                                  <!--<option v-for="payment in payments" v-bind:value="payment.value">
                                                     @{{ payment.text }}
-                                                  </option>
+                                                  
+                                                  </option>-->
+                                                  <option value="CASH">CASH</option>
+                                                  <option value="CHECK">CHECK</option>
                                               </select>
                                           </div>
                                       </div>
@@ -70,9 +73,11 @@
                                           <label>Use Credit Card</label>
                                           <div id="app-use-card">
                                               <select name="useCC" class="use-card form-control"> 
-                                                  <option v-for="card in cards" v-bind:value="card.value">
+                                                  <!--<option v-for="card in cards" v-bind:value="card.value">
                                                     @{{ card.text }}
-                                                  </option>
+                                                  </option>-->
+                                                  <option value="No">No</option>
+                                                  <option value="Use Card">Use Card</option>
                                               </select>
                                           </div>
                                       </div>
@@ -234,9 +239,11 @@
                                               <label>Currency</label>
                                               <div id="app-currency">
                                                   <select name="currency" class=" form-control"> 
-                                                      <option v-for="currency in currencies" v-bind:value="currency.value">
+                                                      <!--<option v-for="currency in currencies" v-bind:value="currency.value">
                                                         @{{ currency.text }}
-                                                      </option>
+                                                      </option>-->
+                                                      <option value="PHP">₱-PHP</option>
+                                                      <option value="USD">$-USD</option>
                                                   </select>
                                               </div>
                                           </div>

@@ -173,14 +173,15 @@
                                 </div>
                                 <div id="description" class="col-lg-4">
                                   <label>Description</label>
-                                  <input type="text" name="description" class="form-control" />
+                                  <input type="text" name="description" class="form-control"  disabled/>
                                 
                                 </div>
                                 <div id="descriptionDrNo" class="col-lg-4">
                                   <label>Description</label>
-                                  <input type="text" name="descriptionDrNo" class="form-control"  disabled />
-                                  
+                                  <input type="text" name="descriptionDrNo" class="form-control" disabled/>
+                                
                                 </div>
+                              
                                 <div id="amount" class="col-lg-1">
                                   <label>Amount</label>
                                   <input type="text" name="amount" class="form-control"  disabled />
@@ -213,7 +214,7 @@
         </div>
       </footer>
 </div>
-<script>
+<script type="text/javascript">
 
     $("#drNo").hide();
     $("#wholeLechon6000").hide();
@@ -379,6 +380,7 @@
           ?>
         const dr = $(this).children("option:selected").val();
         <?php foreach($getDrNos as $getDrNo ): ?>
+            
              if(dr === "<?= $getDrNo->lechon_de_cebu_code?>"){
                 <?php 
                     $getDrNosInsides = DB::table(
@@ -406,7 +408,8 @@
                                           $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?= $data->unit; ?>" class="form-control" readonly="readonly" />');
                                          
                                           $("#wholeLechon6000").html('<label>Whole Lechon</label><input type="text" name="wholeLechon6000" value="<?= $data->price; ?>" class="form-control" readonly="readonly" />');
-                                          $("#descriptionDrNo").html('<label>Description</label><input type="text" name="descriptionDrNo" value="<?=       $data->description; ?>" class="form-control" readonly="readonly" />');
+                                          $("#descriptionDrNo").html(`<label>Description</label><input type="text" name="descriptionDrNo" value="<?= $data->description; ?>" class="form-control" readonly="readonly" />`);
+                                       
             
                                      }
                                <?php endforeach;?>
@@ -417,7 +420,8 @@
                 $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?= $getDrNo->unit; ?>" class="form-control" readonly="readonly" />');
                                         
                 $("#wholeLechon6000").html('<label>Whole Lechon</label><input type="text" name="wholeLechon6000" value="<?= $getDrNo->price; ?>" class="form-control" readonly="readonly" />');
-                $("#descriptionDrNo").html('<label>Description</label><input type="text" name="descriptionDrNo" value="<?= $getDrNo->description; ?>" class="form-control" readonly="readonly" />');
+                $("#descriptionDrNo").html(`<label>Description</label><input type="text" name="descriptionDrNo" value="<?= $getDrNo->description; ?>" class="form-control" readonly="readonly" />`);
+              
              }
            
         <?php endforeach; ?>
