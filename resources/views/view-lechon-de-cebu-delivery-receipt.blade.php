@@ -59,6 +59,10 @@
                                               <th>Time</th>
                                               <th>{{ $viewDeliveryReceipt[0]->time }}</th>
                                           </tr>
+                                          <tr>
+                                              <th>Delivered For</th>
+                                              <th>{{ $viewDeliveryReceipt[0]->delivered_for }}</th>
+                                          </tr>
                                          
                                       </thead>
                                       

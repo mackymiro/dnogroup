@@ -59,7 +59,7 @@
                                         <label>Bill to</label>
                                         <input type="text" name="billTo" class="form-control" value="{{ $billingStatement['bill_to'] }}" />
                                         <label>Address</label>
-                                        <input type="text" name="address" class="form-control" value="{{ $billingStatement['date'] }}" />
+                                        <input type="text" name="address" class="form-control" value="{{ $billingStatement['address'] }}" />
                                         <label>Period Covered</label>
                                         <input type="text" name="periodCovered" class="form-control" value="{{ $billingStatement['period_cover'] }}" />
                                           </div>
@@ -105,6 +105,14 @@
                                       <div class="col-lg-2">
                                         <label>DR No</label>
                                           <input type="text" name="invoiceNumber" class="form-control"  value="{{ $billingStatement['dr_no'] }}" readonly="readonly" />
+                                      </div>
+                                      <div class="col-lg-4">
+                                        <label>DR Address</label>
+                                          <input type="text" name="drAddress" class="form-control"  value="{{ $billingStatement['dr_address'] }}" readonly="readonly" />
+                                      </div>
+                                      <div class="col-lg-4">
+                                        <label>DR Delivered For</label>
+                                          <input type="text" name="drDeliveredFor" class="form-control"  value="{{ $billingStatement['dr_delivered_for'] }}" readonly="readonly" />
                                       </div>
                                       @endif
                                       @if($billingStatement['order'] == "Private Order")

@@ -78,6 +78,10 @@
 	                    					<label>Delivered To</label>
 	                    					<input type="text" name="deliveredTo" class="form-control" value="{{ $getDeliveryReceipt['delivered_to']}}" />
 	                    				</div>
+                              <div class="col-md-4">
+	                    					<label>Delivered For </label>
+	                    					<input type="text" name="deliveredFor" class="form-control" value="{{ $getDeliveryReceipt['delivered_for']}}" />
+	                    				</div>
                              		</div>
                              	</div>
                              	<div class="form-group">

@@ -39,6 +39,8 @@ class LechonDeCebuStatementOfAccount extends Model
 		'amount_statement_account',
 		'order',
 		'dr_no',
+		'dr_address',
+		'dr_delivered_for',
 		'qty',
 		'unit',
 		'body',

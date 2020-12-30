@@ -86,6 +86,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_statement_of_accounts.date',
                                     'lechon_de_cebu_statement_of_accounts.branch',
                                     'lechon_de_cebu_statement_of_accounts.dr_no',
+                                    'lechon_de_cebu_statement_of_accounts.dr_address',
+                                    'lechon_de_cebu_statement_of_accounts.dr_delivered_for',
                                     'lechon_de_cebu_statement_of_accounts.whole_lechon',
                                     'lechon_de_cebu_statement_of_accounts.period_cover',
                                     'lechon_de_cebu_statement_of_accounts.terms',
@@ -1469,6 +1471,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                       'lechon_de_cebu_statement_of_accounts.billing_statement_id',
                                       'lechon_de_cebu_statement_of_accounts.bill_to',
                                       'lechon_de_cebu_statement_of_accounts.bs_no',
+                                      'lechon_de_cebu_statement_of_accounts.dr_address',
+                                      'lechon_de_cebu_statement_of_accounts.dr_delivered_for',
                                       'lechon_de_cebu_statement_of_accounts.address',
                                       'lechon_de_cebu_statement_of_accounts.date',
                                       'lechon_de_cebu_statement_of_accounts.branch',
@@ -1506,6 +1510,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_billing_statements.user_id',
                                     'lechon_de_cebu_billing_statements.billing_statement_id',
                                     'lechon_de_cebu_billing_statements.bill_to',
+                                    'lechon_de_cebu_billing_statements.dr_address',
+                                    'lechon_de_cebu_billing_statements.dr_delivered_for',
                                     'lechon_de_cebu_billing_statements.address',
                                     'lechon_de_cebu_billing_statements.date',
                                     'lechon_de_cebu_billing_statements.branch',
@@ -2099,6 +2105,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_statement_of_accounts.billing_statement_id',
                                     'lechon_de_cebu_statement_of_accounts.bill_to',
                                     'lechon_de_cebu_statement_of_accounts.bs_no',
+                                    'lechon_de_cebu_statement_of_accounts.dr_address',
+                                    'lechon_de_cebu_statement_of_accounts.dr_delivered_for',
                                     'lechon_de_cebu_statement_of_accounts.address',
                                     'lechon_de_cebu_statement_of_accounts.date',
                                     'lechon_de_cebu_statement_of_accounts.branch',
@@ -2137,6 +2145,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_billing_statements.billing_statement_id',
                                     'lechon_de_cebu_billing_statements.bill_to',
                                     'lechon_de_cebu_billing_statements.address',
+                                    'lechon_de_cebu_billing_statements.dr_address',
+                                    'lechon_de_cebu_billing_statements.dr_delivered_for',
                                     'lechon_de_cebu_billing_statements.date',
                                     'lechon_de_cebu_billing_statements.branch',
                                     'lechon_de_cebu_billing_statements.period_cover',
@@ -3266,6 +3276,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_statement_of_accounts.billing_statement_id',
                                     'lechon_de_cebu_statement_of_accounts.bill_to',
                                     'lechon_de_cebu_statement_of_accounts.bs_no',
+                                    'lechon_de_cebu_statement_of_accounts.dr_address',
+                                    'lechon_de_cebu_statement_of_accounts.dr_delivered_for',
                                     'lechon_de_cebu_statement_of_accounts.address',
                                     'lechon_de_cebu_statement_of_accounts.date',
                                     'lechon_de_cebu_statement_of_accounts.branch',
@@ -3581,6 +3593,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_statement_of_accounts.billing_statement_id',
                                     'lechon_de_cebu_statement_of_accounts.bill_to',
                                     'lechon_de_cebu_statement_of_accounts.bs_no',
+                                    'lechon_de_cebu_statement_of_accounts.dr_address',
+                                    'lechon_de_cebu_statement_of_accounts.dr_delivered_for',
                                     'lechon_de_cebu_statement_of_accounts.address',
                                     'lechon_de_cebu_statement_of_accounts.date',
                                     'lechon_de_cebu_statement_of_accounts.branch',
@@ -5544,6 +5558,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_statement_of_accounts.billing_statement_id',
                                     'lechon_de_cebu_statement_of_accounts.bill_to',
                                     'lechon_de_cebu_statement_of_accounts.bs_no',
+                                    'lechon_de_cebu_statement_of_accounts.dr_address',
+                                    'lechon_de_cebu_statement_of_accounts.dr_delivered_for',
                                     'lechon_de_cebu_statement_of_accounts.address',
                                     'lechon_de_cebu_statement_of_accounts.date',
                                     'lechon_de_cebu_statement_of_accounts.branch',
@@ -5589,6 +5605,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_billing_statements.date_of_transaction',
                                     'lechon_de_cebu_billing_statements.invoice_number',
                                     'lechon_de_cebu_billing_statements.order',
+                                    'lechon_de_cebu_billing_statements.dr_address',
+                                    'lechon_de_cebu_billing_statements.dr_delivered_for',
                                     'lechon_de_cebu_billing_statements.whole_lechon',
                                     'lechon_de_cebu_billing_statements.description',
                                     'lechon_de_cebu_billing_statements.amount',
@@ -7118,6 +7136,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_billing_statements.bill_to',
                                     'lechon_de_cebu_billing_statements.address',
                                     'lechon_de_cebu_billing_statements.dr_no',
+                                    'lechon_de_cebu_billing_statements.dr_address',
+                                    'lechon_de_cebu_billing_statements.dr_delivered_for',
                                     'lechon_de_cebu_billing_statements.qty',
                                     'lechon_de_cebu_billing_statements.unit',
                                     'lechon_de_cebu_billing_statements.date',
@@ -7246,6 +7266,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_delivery_receipts.time',
                                 'lechon_de_cebu_delivery_receipts.date',
                                 'lechon_de_cebu_delivery_receipts.date_to_be_delivered',
+                                'lechon_de_cebu_delivery_receipts.delivered_for',
                                 'lechon_de_cebu_delivery_receipts.contact_person',
                                 'lechon_de_cebu_delivery_receipts.mobile_num',
                                 'lechon_de_cebu_delivery_receipts.qty',
@@ -7785,8 +7806,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         Session::flash('addSalesInvoiceSuccess', 'Successfully added.');
 
-
-        return redirect('lolo-pinoy-lechon-de-cebu/add-new-sales-invoice/'. $id);
+        return redirect()->route('editSalesInvoiceLechonDeCebu', ['id'=>$id]);
     }
 
     //add new sales invoice
@@ -7866,7 +7886,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $sInvoices  = LechonDeCebuSalesInvoice::where('si_id', $id)->get()->toArray();
 
-        return view('edit-lechon-de-cebu-sales-invoice', compact('user', 'getSalesInvoice', 'sInvoices'));
+        return view('edit-lechon-de-cebu-sales-invoice', compact('id', 'getSalesInvoice', 'sInvoices'));
     }
 
     //store sales invoice
@@ -8086,6 +8106,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_delivery_receipts.time',
                                 'lechon_de_cebu_delivery_receipts.date',
                                 'lechon_de_cebu_delivery_receipts.date_to_be_delivered',
+                                'lechon_de_cebu_delivery_receipts.delivered_for',
                                 'lechon_de_cebu_delivery_receipts.contact_person',
                                 'lechon_de_cebu_delivery_receipts.mobile_num',
                                 'lechon_de_cebu_delivery_receipts.qty',
@@ -8297,6 +8318,7 @@ class LoloPinoyLechonDeCebuController extends Controller
         $updateDeliveryReceipt->sold_to = $request->get('soldTo');
         $updateDeliveryReceipt->time = $request->get('time');
         $updateDeliveryReceipt->delivered_to = $request->get('deliveredTo');
+        $updateDeliveryReceipt->delivered_for = $request->get('deliveredFor');
         $updateDeliveryReceipt->contact_person = $request->get('contactPerson');
         $updateDeliveryReceipt->mobile_num = $request->get('mobile');
         $updateDeliveryReceipt->special_instruction = $request->get('specialInstruction');
@@ -8415,6 +8437,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'time'=>$request->get('time'),
             'date'=>$request->get('date'),
             'date_to_be_delivered'=>$request->get('dateDelivered'),
+            'delivered_for'=>$request->get('deliveredFor'),
             'dr_no'=>$uDr,
             'delivered_to'=>$request->get('deliveredTo'),
             'contact_person'=>$request->get('contactPerson'),
@@ -9172,6 +9195,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_statement_of_accounts.invoice_number',
                                 'lechon_de_cebu_statement_of_accounts.order',
                                 'lechon_de_cebu_statement_of_accounts.whole_lechon',
+                                'lechon_de_cebu_statement_of_accounts.dr_address',
+                                'lechon_de_cebu_statement_of_accounts.dr_delivered_for',
                                 'lechon_de_cebu_statement_of_accounts.description',
                                 'lechon_de_cebu_statement_of_accounts.amount',
                                 'lechon_de_cebu_statement_of_accounts.total_amount',
@@ -9575,6 +9600,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_billing_statements.bill_to',
                                     'lechon_de_cebu_billing_statements.address',
                                     'lechon_de_cebu_billing_statements.dr_no',
+                                    'lechon_de_cebu_billing_statements.dr_address',
+                                    'lechon_de_cebu_billing_statements.dr_delivered_for',
                                     'lechon_de_cebu_billing_statements.date',
                                     'lechon_de_cebu_billing_statements.branch',
                                     'lechon_de_cebu_billing_statements.period_cover',
@@ -9849,6 +9876,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                         'lechon_de_cebu_delivery_receipts.time',
                         'lechon_de_cebu_delivery_receipts.date',
                         'lechon_de_cebu_delivery_receipts.date_to_be_delivered',
+                        'lechon_de_cebu_delivery_receipts.delivered_for',
                         'lechon_de_cebu_delivery_receipts.contact_person',
                         'lechon_de_cebu_delivery_receipts.mobile_num',
                         'lechon_de_cebu_delivery_receipts.qty',
@@ -9940,6 +9968,9 @@ class LoloPinoyLechonDeCebuController extends Controller
             $drNo = NULL;
             $descriptionDrNo = NULL;
             $wholeLechon = 0; 
+
+            $drAddress = NULL;
+            $drDeliveredFor = NULL;
            
             $qty = $request->get('qty');
             $body = $request->get('body');
@@ -9949,6 +9980,9 @@ class LoloPinoyLechonDeCebuController extends Controller
             $invoiceNum = NULL;
             $wholeLechon = $request->get('wholeLechon6000');
             $description = $request->get('descriptionDrNo');
+
+            $drAddress = $request->get('drAddress');
+            $drDeliveredFor = $request->get('drDeliveredFor');
           
             $drNo = $request->get('drNo');
             $qty = $request->get('qty');
@@ -9981,6 +10015,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'bill_to'=>$request->get('billTo'),
             'address'=>$request->get('address'),
             'period_cover'=>$request->get('periodCovered'),
+            'address'=>$request->get('address'),
             'date'=>$request->get('date'),
             'invoice_number'=>$invoiceNum,
             'order'=>$request->get('choose'),
@@ -9990,6 +10025,8 @@ class LoloPinoyLechonDeCebuController extends Controller
             'whole_lechon'=>$wholeLechon,
             'description'=>$description,
             'dr_no'=>$drNo,
+            'dr_address'=>$drAddress,
+            'dr_delivered_for'=>$drDeliveredFor,
             'qty'=>$qty,
             'unit'=>$unit,
             'body'=>$body,
@@ -10035,6 +10072,8 @@ class LoloPinoyLechonDeCebuController extends Controller
             'whole_lechon'=>$wholeLechon,
             'description'=>$description,
             'dr_no'=>$drNo,
+            'dr_address'=>$drAddress,
+            'dr_delivered_for'=>$drDeliveredFor,
             'qty'=>$qty,
             'unit'=>$unit,
             'body'=>$body,

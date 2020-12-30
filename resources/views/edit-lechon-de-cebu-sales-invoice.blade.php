@@ -92,7 +92,7 @@
 		                         				<input type="text" name="itemDescription" class="selcls form-control" value="{{ $getSalesInvoice['item_description']}}" />
 		                         			</div>
 		                         		
-		                         			<div class="col-md-1">
+		                         			<div class="col-md-4">
 		                         				<label>Amount</label>
 		                         				<input type="text" name="amount" class="selcls form-control" disabled="disabled" value="<?php echo number_format($getSalesInvoice['amount'], 2)?>" />
 		                         			</div>
@@ -117,13 +117,53 @@
     		  		</div>
     		  </div>
     		  <div class="row">
-    		  		<div class="col-lg-12">
+    		  		<div class="col-lg-4">
 		  				<div class="card mb-3">
 		  					<div class="card-header">
-                              <i class="fas fa-cash-register" aria-hidden="true"></i>
-                            Edit Sales Invoice</div>
+							  <i class="fas fa-plus" aria-hidden="true"></i>
+                            Add</div>
                              <div class="card-body">
-                             	 @if(session('SuccessEdit'))
+                             	 @if(session('addSalesInvoiceSuccess'))
+		                       <p class="alert alert-success">{{ Session::get('addSalesInvoiceSuccess') }}</p>
+		                      @endif 
+								<form action="{{ action('LoloPinoyLechonDeCebuController@addNewSalesInvoiceData', $id)}}" method="post">
+									{{csrf_field()}}
+								<div class="form-group">
+									<div class="form-row">
+										<div class="col-md-12">
+											<label>Qty</label>
+											<input type="text" name="qty" class="form-control" required="required"  />
+										</div>
+										<div class="col-md-12">
+											<label>Body 400/KLS</label>
+											<input type="text" name="body" class="form-control" />
+										</div>
+										<div class="col-md-12">
+											<label>Head & Feet 200/KLS</label>
+											<input type="text" name="headFeet" class="form-control" />
+										</div>
+										<div class="col-md-12">
+											<label>Item Description</label>
+											<input type="text" name="itemDescription" class="form-control"/>
+										</div>
+										
+									</div>
+								</div>
+                             	 <div>
+	                              <button type="submit" class="btn btn-primary btn-lg"><i class="fas fa-plus"></i> Add</button>
+                     
+	                            </div>
+								</form>
+                             </div>
+		  				</div>
+    		  		</div>
+					<div class="col-lg-8">
+						<div class="card mb-3">
+							<div class="card-header">
+							  <i class="fa fa-pencil" aria-hidden="true"></i>
+                            Edit Sales Invoices</div>
+  							<div class="card-body">
+  								 @if(session('SuccessEdit'))
                                      <p class="alert alert-success">{{ Session::get('SuccessEdit') }}</p>
                                   @endif 
                              	@foreach($sInvoices as $sInvoice)
@@ -140,40 +180,35 @@
 		                                        <label>Body 400/KLS</label>
 		                                        <input type="text" name="body" class="selcls form-control" value="{{ $sInvoice['body']}}" />
 		                                    </div>
-		                                    <div class="col-md-2">
+		                                    <div class="col-md-4">
 		                                        <label>Head & Feet 200/KLS</label>
 		                                        <input type="text" name="headFeet" class="selcls form-control" value="{{ $sInvoice['head_and_feet']}}" />
 		                                    </div>
-		                         			<div class="col-md-4">
+		                         			<div class="col-md-6">
 		                         				<label>Item Description</label>
 		                         				<input type="text" name="itemDescription" class="selcls form-control" value="{{ $sInvoice['item_description'] }}" />
 		                         			</div>
 		                         			
-		                         			<div class="col-md-1">
+		                         			<div class="col-md-4">
 		                         				<label>Amount</label>
 		                         				<input type="text" name="ampunt" class="selcls form-control" disabled="disabled" value="<?php echo number_format(
 		                         				$sInvoice['amount'], 2)?>" />
 		                         			</div>
-	                         				 <div class="col-lg-2">
+	                         				 <div class="col-lg-4">
 	                                          <br>
 	                                          <input type="hidden" id="siId" name="siId" value="{{ $getSalesInvoice['id'] }}" />
 	                                          <input type="submit" class="btn btn-success" value="Update" />
-	                                          @if($user->role_type == 1)
-	                                          <a id="delete" onClick="confirmDelete('{{ $sInvoice['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
-	                                          @endif
+	                                         
+	                                          <a id="delete" onclick="confirmDelete('{{ $sInvoice['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
+	                                         
 	                                        </div>
                              		</div>
                              	</div>
                              	</form>
                              	@endforeach
-                             	 <div>
-	                              @if($user->role_type == 1)
-	                              <a href="{{ url('lolo-pinoy-lechon-de-cebu/add-new-sales-invoice/'.$getSalesInvoice['id'] ) }}" class="btn btn-primary">Add New</a>
-	                              @endif
-	                            </div>
-                             </div>
-		  				</div>
-    		  		</div>
+							</div>
+						</div>
+					</div>
     		  </div>
  		</div>
 	 </div>

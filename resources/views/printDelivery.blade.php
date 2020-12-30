@@ -102,6 +102,10 @@
                         <th style="font-size:16px; height: 1%; ">Contact Person: </th>
                         <th style="font-size:16px; height: 1%; ">{{ $deliveryId[0]->contact_person }}</th>
                     </tr>
+                    <tr  > 
+                        <th style="font-size:16px; height: 1%; ">Delivered For: </th>
+                        <th style="font-size:16px; height: 1%; ">{{ $deliveryId[0]->delivered_for }}</th>
+                    </tr>
                         
                   </thead>
               </table>

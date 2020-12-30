@@ -62,6 +62,8 @@
                                         <th style="height: 1%; text-align: center;">BS NO</th>
 										<th style="height: 1%; text-align: center;">DELIVERED TO</th>
                                         <th style="height: 1%; text-align: center;">BILL TO</th>
+										<th style="height: 1%; text-align: center;">DR ADDRESS</th>
+										<th style="height: 1%; text-align: center;">DR DELIVERED FOR</th>
                                         <th style="height: 1%; text-align: center;">ORDER</th>
                                         <th style="height: 1%; text-align: center;">STATUS</th>
                                         <th style="height: 1%; text-align: center;">PERIOD COVERED</th>
@@ -79,6 +81,8 @@
 										<td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->bs_no}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->address }}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->bill_to}}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->dr_address}}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->dr_delivered_for}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->order}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->status}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->period_cover}}</td>

@@ -136,6 +136,8 @@
                                     <th>Bill To</th>
                                     <th>BS No</th>
                                     <th>Delivered To</th>
+                                    <th>DR Address</th>
+                                    <th>DR Delivered For</th>
                                     <th  class="bg-info" style="color:white;">Period Covered</th>
                                     <th class="bg-success" style="color:white;">Status</th>
                                     <th>Total Amount</th>
@@ -152,6 +154,8 @@
                                     <th>Bill To</th>
                                     <th>BS No</th>
                                     <th>Delivered To</th>
+                                    <th>DR Address</th>
+                                    <th>DR Delivered For</th>
                                     <th  class="bg-info" style="color:white;">Period Covered</th>
                                     <th class="bg-success" style="color:white;">Status</th>
                                     <th>Total Amount</th>
@@ -176,6 +180,8 @@
                                           <td><p style="width:140px;">{{ $privateOrder->bill_to}}</p></td> 
                                           <td><p style="width:140px;">{{ $privateOrder->bs_no }}</p></td>
                                           <td><p style="width:140px;">{{ $privateOrder->address }}</p></td>
+                                          <td><p style="width:140px;">{{ $privateOrder->dr_address }}</p></td>
+                                          <td><p style="width:140px;">{{ $privateOrder->dr_delivered_for }}</p></td>
                                           <td class="bg-info" style="color:white;">{{ $privateOrder->period_cover}}</td>
                                         
                                           <td class="bg-success" style="color:white;">

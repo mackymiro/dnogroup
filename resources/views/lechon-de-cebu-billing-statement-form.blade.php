@@ -140,10 +140,19 @@
                                     <select id="dataList" name="drList" class="chooseDr form-control "> 
                                     </select>
                                 </div>
+                              
                                 <div id="invoiceList" class="col-lg-2">
                                     <label>Invoice List Id</label>
                                     <select id="dataInvoice" name="drList" class="chooseInvoice form-control "> 
                                     </select>
+                                </div>
+                                <div id="drAdd" class="col-lg-4">
+                                    <label>DR Address</label>
+                                    <input type="text" nam="drAddress" class="form-control" disabled />
+                                </div>
+                                <div id="drDeliveredFor" class="col-lg-4">
+                                    <label>DR Delivered For</label>
+                                    <input type="text" name="drDeliveredFor" class="form-control" disabled />
                                 </div>
                       
                                 <div id="qty" class="col-lg-1">
@@ -223,6 +232,9 @@
     $("#unit").hide();
     $("#wholeLechon").hide();
 
+    $("#drAdd").hide();
+    $("#drDeliveredFor").hide();
+
     $(".chooseOption").change(function(){
          const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
          if(cat === "Ssp"){
@@ -248,6 +260,8 @@
              $("#drList").show();
              $("#qty").show();
              $("#unit").show();
+             $("#drAdd").show();
+             $("#drDeliveredFor").show();
 
              $("#invoiceNo").hide();
              $("#body").hide();
@@ -287,7 +301,6 @@
                                       'lechon_de_cebu_codes.module_name')
                                   ->join('lechon_de_cebu_codes', 'lechon_de_cebu_sales_invoices.id', '=', 'lechon_de_cebu_codes.module_id')
                                   ->where('lechon_de_cebu_sales_invoices.si_id', NULL)
-                                  ->orderBy('lechon_de_cebu_sales_invoices.id', 'desc')
                                   ->where('lechon_de_cebu_codes.module_name', $moduleName)
                                   ->get()->toArray();
         
@@ -299,10 +312,12 @@
                   $getSIInsides = DB::table(
                                     'lechon_de_cebu_sales_invoices')
                                     ->where('sales_invoice_number', $salesInvoice->sales_invoice_number)
-                                    ->get(); ?>
+                                    ->get(); 
+                                    
+              ?>
               <?php foreach($getSIInsides as $getSIInside): ?>
                  $("#dataInvoice").append(  
-                          `<option value="<?php echo $getSIInside->id?>"><?= $getSIInside->id?></option>
+                          `<option value="<?= $getSIInside->id?>"><?= $getSIInside->id?></option>
                           `);
                   $(".chooseInvoice").change(function(){
                       const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
@@ -353,6 +368,7 @@
                              'lechon_de_cebu_delivery_receipts.time',
                              'lechon_de_cebu_delivery_receipts.date',
                              'lechon_de_cebu_delivery_receipts.date_to_be_delivered',
+                             'lechon_de_cebu_delivery_receipts.delivered_for',
                              'lechon_de_cebu_delivery_receipts.contact_person',
                              'lechon_de_cebu_delivery_receipts.mobile_num',
                              'lechon_de_cebu_delivery_receipts.qty',
@@ -416,6 +432,9 @@
                         });       
 
                     <?php endforeach; ?>    
+                 $("#drAdd").html('<label>DR Address</label><input type="text" name="drAddress" value="<?= $getDrNo->delivered_to; ?>" class="form-control" readonly="readonly" />');
+                 $("#drDeliveredFor").html('<label>DR Delivered For</label><input type="text" name="drDeliveredFor" value="<?= $getDrNo->delivered_for; ?>" class="form-control" readonly="readonly" />');
+               
                 $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?= $getDrNo->qty; ?>" class="form-control" readonly="readonly" />');
                 $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?= $getDrNo->unit; ?>" class="form-control" readonly="readonly" />');
                                         

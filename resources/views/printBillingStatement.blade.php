@@ -75,6 +75,14 @@
                                                 <th>Terms:</th>
                                                 <th>{{ $printBillingStatement[0]->terms }}</th>
                                             </tr>
+											<tr>
+                                                <th>DR Address:</th>
+                                                <th>{{ $printBillingStatement[0]->dr_address }}</th>
+                                            </tr>
+											<tr>
+                                                <th>DR Delivered For:</th>
+                                                <th>{{ $printBillingStatement[0]->dr_delivered_for }}</th>
+                                            </tr>
                                         </thead>
 	                              </table>
 	                          </div>

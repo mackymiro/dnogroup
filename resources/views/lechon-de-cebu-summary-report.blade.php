@@ -317,6 +317,8 @@
                                                     <th>BS No</th>
                                                     <th>Delivered To</th>
                                                     <th>Bill To</th>
+                                                    <th>DR Address</th>
+                                                    <th>DR Delivered For</th>
                                                     <th>Order</th>
                                                     <th>Status</th>
                                                     <th class="bg-info" style="color:white;">Period Covered</th>
@@ -332,6 +334,8 @@
                                                     <th>BS No</th>
                                                     <th>Delivered To</th>
                                                     <th>Bill To</th>
+                                                    <th>DR Address</th>
+                                                    <th>DR Delivered For</th>
                                                     <th>Order</th>
                                                     <th>Status</th>
                                                     <th class="bg-info" style="color:white;">Period Covered</th>
@@ -354,8 +358,10 @@
                                                     <td>{{ $statementOfAccount->dr_no}}</td>
                                                     <td>SOA-{{ $statementOfAccount->lechon_de_cebu_code}}</td>
                                                     <td>{{ $statementOfAccount->bs_no}}</td>
-                                                    <td>{{ $statementOfAccount->delivered_to}}</td>
+                                                    <td>{{ $statementOfAccount->address}}</td>
                                                     <td>{{ $statementOfAccount->bill_to}}</td> 
+                                                    <td>{{ $statementOfAccount->dr_address}}</td>
+                                                    <td>{{ $statementOfAccount->dr_delivered_for}}</td>
                                                     <td>{{ $statementOfAccount->order}}</td> 
                                                     <td>{{ $statementOfAccount->status}}</td> 
                                                     <td class="bg-info" style="color:white;">{{ $statementOfAccount->period_cover}}</td>

@@ -49,6 +49,8 @@
                                         <th style="height: 1%; text-align: center;">BILL TO</th>
 										<th style="height: 1%; text-align: center;">BS NO</th>
 										<th style="height: 1%; text-align: center;">DELIVERED TO</th>
+										<th style="height: 1%; text-align: center;">DR ADDRESS</th>
+										<th style="height: 1%; text-align: center;">DR DELIVERED FOR</th>
                                         <th style="height: 1%; text-align: center;">PERIOD COVERED</th>
                                         <th style="height: 1%; text-align: center;">STATUS</th>
                                         <th style="height: 1%; text-align: center;">TOTAL AMOUNT</th>
@@ -66,6 +68,8 @@
 										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->bill_to }}</td>
 										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->bs_no }}</td>
 										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->address }}</td>
+										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->dr_address }}</td>
+										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->dr_delivered_for }}</td>
 										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->period_cover }}</td>
                                           <td style="text-align:center; border: 1px solid black;">
 										 	 @if($printSOAStatement->total_remaining_balance == 0.00)

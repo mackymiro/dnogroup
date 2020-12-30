@@ -40,6 +40,8 @@ class LechonDeCebuBillingStatement extends Model
 		'or_number',
 		'order',
 		'dr_no',
+		'dr_address',
+		'dr_delivered_for',
 		'qty',
 		'unit',
 		'body',

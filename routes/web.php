@@ -2175,7 +2175,7 @@ Route::group(['middleware' => ['auth']], function(){
 	//route for edit sales invoice lechon de cebu
 	Route::get('/lolo-pinoy-lechon-de-cebu/edit-sales-invoice/{id}', 
 	'LoloPinoyLechonDeCebuController@editSalesInvoice')
-	->name('lolo-pinoy-lechon-de-cebu.editSalesInvoice')
+	->name('editSalesInvoiceLechonDeCebu')
 	->middleware(['cashier']);
 
 	//update edit sales invoice lechon de cebu

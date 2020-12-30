@@ -101,6 +101,10 @@
                         				<label>Special Instruction/Request</label>
                         				<input type="text" name="specialInstruction" class="selcls form-control" />
                         			</div>
+                                    <div class="col-md-4">
+                        				<label>Delivered For:</label>
+                        				<input type="text" name="deliveredFor" class="selcls form-control" />
+                        			</div>
                         		</div>
                         	</div>
                             <div class="form-group">
