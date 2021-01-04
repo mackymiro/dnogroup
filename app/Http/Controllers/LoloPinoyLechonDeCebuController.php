@@ -1233,7 +1233,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $pdf = PDF::loadView('printSummary',  compact('date', 'uri0', 'uri1', 'getAllSalesInvoices', 
         'getAllDeliveryReceipts', 'purchaseOrders', 'statementOfAccounts', 'billingStatements', 
-        'pettyCashLists',  'getTransactionLists', 'getTransactionListCashes', 'getTransactionListChecks', 'totalSalesInvoice', 'totalDeliveryReceipt', 'totalPOrder', 'totalBStatement', 
+        'pettyCashLists', 'getTransactionListCashes', 'getTransactionListChecks', 'totalSalesInvoice', 'totalDeliveryReceipt', 'totalPOrder', 'totalBStatement', 
         'totalPaymentVoucherCash','totalPaymentVoucherCheck', 'totalPaidAmountCheck'));
         
         return $pdf->download('lechon-de-cebu-summary-report.pdf');
@@ -3593,6 +3593,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_statement_of_accounts.billing_statement_id',
                                     'lechon_de_cebu_statement_of_accounts.bill_to',
                                     'lechon_de_cebu_statement_of_accounts.bs_no',
+                                    'lechon_de_cebu_statement_of_accounts.dr_no',
                                     'lechon_de_cebu_statement_of_accounts.dr_address',
                                     'lechon_de_cebu_statement_of_accounts.dr_delivered_for',
                                     'lechon_de_cebu_statement_of_accounts.address',

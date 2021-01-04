@@ -138,6 +138,7 @@
                                     <th>Delivered To</th>
                                     <th>DR Address</th>
                                     <th>DR Delivered For</th>
+                                    <th>Items</th>
                                     <th  class="bg-info" style="color:white;">Period Covered</th>
                                     <th class="bg-success" style="color:white;">Status</th>
                                     <th>Total Amount</th>
@@ -156,6 +157,7 @@
                                     <th>Delivered To</th>
                                     <th>DR Address</th>
                                     <th>DR Delivered For</th>
+                                    <th>Items</th>
                                     <th  class="bg-info" style="color:white;">Period Covered</th>
                                     <th class="bg-success" style="color:white;">Status</th>
                                     <th>Total Amount</th>
@@ -164,6 +166,19 @@
                                   </tfoot>
                                   <tbody>
                                       @foreach($privateOrders as $privateOrder)
+                                      <?php $id = $privateOrder->id;  ?>
+                                      <?php
+                                        $getRefDrNos =  DB::table('lechon_de_cebu_statement_of_accounts')
+                                                      ->select('*')
+                                                      ->where('billing_statement_id', $id)
+                                                      ->get()->toArray();
+
+                                         $getDescriptions =  DB::table('lechon_de_cebu_statement_of_accounts')
+                                                            ->select('*')
+                                                            ->where('billing_statement_id', $id)
+                                                            ->get()->toArray();
+                                      
+                                      ?>
                                       <tr id="deletedId{{ $privateOrder->id}}">
                                           <td>
                                             @if(Auth::user()['role_type'] !== 3)
@@ -174,7 +189,14 @@
 
                                           </td>
                                           <td>{{ $privateOrder->date }}</td>
-                                          <td><p style="width:140px;">{{ $privateOrder->dr_no}}</p></td>
+                                          <td>
+                                            <p style="width:140px;">{{ $privateOrder->dr_no}}, 
+                                              <?php foreach($getRefDrNos as $getRefDrNo): ?>
+                                                    <?= $getRefDrNo->dr_no;?>, 
+                                              <?php endforeach; ?>
+                                            </p>
+                                            
+                                          </td>
                                           <td>SOA-{{ $privateOrder->lechon_de_cebu_code}}</td>
                                           <td>{{ $privateOrder->order }}</td>
                                           <td><p style="width:140px;">{{ $privateOrder->bill_to}}</p></td> 
@@ -182,6 +204,15 @@
                                           <td><p style="width:140px;">{{ $privateOrder->address }}</p></td>
                                           <td><p style="width:140px;">{{ $privateOrder->dr_address }}</p></td>
                                           <td><p style="width:140px;">{{ $privateOrder->dr_delivered_for }}</p></td>
+                                          <td>
+                                              <p style="width:140px;">{{ $privateOrder->description}}, 
+                                              <?php foreach($getDescriptions as $getDescription): ?>
+                                                    <?= $getDescription->description;?>, 
+                                              <?php endforeach; ?>
+                                              </p>
+                                              
+                                              
+                                          </td>
                                           <td class="bg-info" style="color:white;">{{ $privateOrder->period_cover}}</td>
                                         
                                           <td class="bg-success" style="color:white;">

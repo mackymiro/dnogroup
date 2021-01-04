@@ -432,8 +432,8 @@
                         });       
 
                     <?php endforeach; ?>    
-                 $("#drAdd").html('<label>DR Address</label><input type="text" name="drAddress" value="<?= $getDrNo->delivered_to; ?>" class="form-control" readonly="readonly" />');
-                 $("#drDeliveredFor").html('<label>DR Delivered For</label><input type="text" name="drDeliveredFor" value="<?= $getDrNo->delivered_for; ?>" class="form-control" readonly="readonly" />');
+                 $("#drAdd").html(`<label>DR Address</label><input type="text" name="drAddress" value="<?= $getDrNo->delivered_to; ?>" class="form-control" readonly="readonly" />`);
+                 $("#drDeliveredFor").html(`<label>DR Delivered For</label><input type="text" name="drDeliveredFor" value="<?= $getDrNo->delivered_for; ?>" class="form-control" readonly="readonly" />`);
                
                 $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?= $getDrNo->qty; ?>" class="form-control" readonly="readonly" />');
                 $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?= $getDrNo->unit; ?>" class="form-control" readonly="readonly" />');

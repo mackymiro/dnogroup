@@ -3,9 +3,15 @@
 		border-collapse: collapse;
 		width:100%;
 		margin:0 auto;
+		table-layout: fixed;
 	}
 	table, td, th{
-		font-size:12px;
+		font-size:10px;
+		padding:10px;
+		max-width: 200px;
+		max-height: 150px;
+		overflow: hidden;
+		text-align:left;
 	}
 	
 	p{
@@ -56,40 +62,64 @@
                             <table style="border:1px solid black;">
 								<thead>
 									<tr>
-										<th style="height: 1%; text-align: center;">DATE</th>
+										
 										<th style="height: 1%; text-align: center;">REF DR No</th>
                                         <th style="height: 1%; text-align: center;">SOA NO</th>
                                         <th style="height: 1%; text-align: center;">BS NO</th>
-										<th style="height: 1%; text-align: center;">DELIVERED TO</th>
                                         <th style="height: 1%; text-align: center;">BILL TO</th>
 										<th style="height: 1%; text-align: center;">DR ADDRESS</th>
 										<th style="height: 1%; text-align: center;">DR DELIVERED FOR</th>
-                                        <th style="height: 1%; text-align: center;">ORDER</th>
+										<th style="height: 1%; text-align: center;">ITEMS</th>
+                                        
                                         <th style="height: 1%; text-align: center;">STATUS</th>
                                         <th style="height: 1%; text-align: center;">PERIOD COVERED</th>
                                         <th style="height: 1%; text-align: center;">TOTAL AMOUNT</th>
                                         <th style="height: 1%; text-align: center;">TOTAL REMAINING BALANCE</th>
-                                        <th style="height: 1%; text-align: center;">CREATED BY</th>
+                                        
 									</tr>
 								</thead>
 								<tbody>
                                 @foreach($statementOfAccounts as $statementOfAccount)
+									<?php $id = $statementOfAccount->id;  ?>
+									<?php
+											$getRefDrNos =  DB::table('lechon_de_cebu_statement_of_accounts')
+														->select('*')
+														->where('billing_statement_id', $id)
+														->get()->toArray();
+
+											$getDescriptions =  DB::table('lechon_de_cebu_statement_of_accounts')
+																->select('*')
+																->where('billing_statement_id', $id)
+																->get()->toArray();
+                                      
+                                      ?>
 									<tr style="border:1px solid black;">
-                                        <td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->date}}</td>
-										<td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->dr_no}}</td>
+                                    
+										<td style="text-align:center; border: 1px solid black;">
+											{{ $statementOfAccount->dr_no}}, 
+											<?php foreach($getRefDrNos as $getRefDrNo): ?>
+													<?= $getRefDrNo->dr_no;?>, 
+                                              	<?php endforeach; ?>
+										</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->module_code}}{{ $statementOfAccount->lechon_de_cebu_code}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->bs_no}}</td>
-										<td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->address }}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->bill_to}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->dr_address}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->dr_delivered_for}}</td>
-                                        <td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->order}}</td>
+										<td style="text-align:center; border: 1px solid black;">
+										  {{ $statementOfAccount->description}}, 
+                                              <?php foreach($getDescriptions as $getDescription): ?>
+                                                    <?= $getDescription->description;?>, 
+                                              <?php endforeach; ?>
+                                            
+										  </td>
+                                        
                                         <td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->status}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->period_cover}}</td>
                                         <td style="text-align:center; border: 1px solid black;"><?= number_format($statementOfAccount->total_amount, 2);?></td>
                                         
                                         <td style="text-align:center; border: 1px solid black;"><?= number_format($statementOfAccount->total_remaining_balance, 2);?></td>
-                                        <td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->created_by }}</td>
+                      
 									</tr>
 									@endforeach
 								</tbody>	

@@ -3,9 +3,16 @@
 		border-collapse: collapse;
 		width:100%;
 		margin:0 auto;
+		table-layout: fixed;
 	}
 	table, td, th{
-		font-size:12px;
+		font-size:10px;
+		padding:10px;
+		max-width: 200px;
+		max-height: 150px;
+		overflow: hidden;
+		text-align:left;
+		
 	}
 	
 	p{
@@ -40,36 +47,61 @@
 					<div class="col-lg-12">
 						 <div class="card-body">
 				 			
-                          <table style="margin-top:30px;border:1px solid black;">
+                          <table style="margin-top:30px;border:1px solid black; width:100%; ">
                           		  <thead>
                                       <tr>
-                                        <th style="height: 1%; text-align: center;">DATE</th>
-										<th style="height: 1%; text-align: center;">REF DR NO</th>
-                                        <th style="height: 1%; text-align: center;">SOA NO</th>
-                                        <th style="height: 1%; text-align: center;">BILL TO</th>
-										<th style="height: 1%; text-align: center;">BS NO</th>
-										<th style="height: 1%; text-align: center;">DELIVERED TO</th>
-										<th style="height: 1%; text-align: center;">DR ADDRESS</th>
-										<th style="height: 1%; text-align: center;">DR DELIVERED FOR</th>
-                                        <th style="height: 1%; text-align: center;">PERIOD COVERED</th>
-                                        <th style="height: 1%; text-align: center;">STATUS</th>
-                                        <th style="height: 1%; text-align: center;">TOTAL AMOUNT</th>
-                                        <th style="height: 1%; text-align: center;">TOTAL BALANCE REMAINING</th>
+                                       	<th style="height: 1%; text-align: center; border: 1px solid black;">REF DR NO</th>
+                                        <th style="height: 1%; text-align: center; border: 1px solid black;">SOA NO</th>
+                                        <th style="height: 1%; text-align: center; border: 1px solid black;">BILL TO</th>
+										<th style="height: 1%; text-align: center; border: 1px solid black;">BS NO</th>
+										<th style="height: 1%; text-align: center;border: 1px solid black;">DR ADDRESS</th>
+										<th style="height: 1%; text-align: center;border: 1px solid black;">DR DELIVERED FOR</th>
+										<th style="height: 1%; text-align: center;border: 1px solid black;">ITEMS</th>
+                                        <th style="height: 1%; text-align: center;border: 1px solid black;">PERIOD COVERED</th>
+                                        <th style="height: 1%; text-align: center;border: 1px solid black;">STATUS</th>
+                                        <th style="height: 1%; text-align: center;border: 1px solid black;">TOTAL AMOUNT</th>
+                                        <th style="height: 1%; text-align: center;border: 1px solid black;">TOTAL BALANCE REMAINING</th>
                                         
                                       </tr>
                                     </thead>
                                   <tbody>
                                   	
                                   	 	 @foreach($printSOAStatements as $printSOAStatement)
+										<?php $id = $printSOAStatement->id;  ?>
+										<?php
+											$getRefDrNos =  DB::table('lechon_de_cebu_statement_of_accounts')
+														->select('*')
+														->where('billing_statement_id', $id)
+														->get()->toArray();
+
+											$getDescriptions =  DB::table('lechon_de_cebu_statement_of_accounts')
+																->select('*')
+																->where('billing_statement_id', $id)
+																->get()->toArray();
+                                      
+                                      ?>
                                         <tr style="border:1px solid black;">
-                                          <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->date }}</td>
-										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->dr_no }}</td>
+                                         
+										  <td style="text-align:center; border: 1px solid black;">
+										  		{{ $printSOAStatement->dr_no }},
+												<?php foreach($getRefDrNos as $getRefDrNo): ?>
+													<?= $getRefDrNo->dr_no;?>, 
+                                              	<?php endforeach; ?>
+												  
+										</td>
                                           <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->lechon_de_cebu_code }}</td>
 										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->bill_to }}</td>
 										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->bs_no }}</td>
-										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->address }}</td>
+										
 										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->dr_address }}</td>
 										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->dr_delivered_for }}</td>
+										  <td style="text-align:center; border: 1px solid black;">
+										  {{ $printSOAStatement->description}}, 
+                                              <?php foreach($getDescriptions as $getDescription): ?>
+                                                    <?= $getDescription->description;?>, 
+                                              <?php endforeach; ?>
+                                            
+										  </td>
 										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->period_cover }}</td>
                                           <td style="text-align:center; border: 1px solid black;">
 										 	 @if($printSOAStatement->total_remaining_balance == 0.00)

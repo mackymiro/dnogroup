@@ -102,10 +102,7 @@
                         <th style="font-size:16px; height: 1%; ">Contact Person: </th>
                         <th style="font-size:16px; height: 1%; ">{{ $deliveryId[0]->contact_person }}</th>
                     </tr>
-                    <tr  > 
-                        <th style="font-size:16px; height: 1%; ">Delivered For: </th>
-                        <th style="font-size:16px; height: 1%; ">{{ $deliveryId[0]->delivered_for }}</th>
-                    </tr>
+                  
                         
                   </thead>
               </table>
@@ -123,6 +120,10 @@
                     <tr  style="border:1px solid black;">
                         <th style="font-size:16px">Consignee Contact #: </th>
                          <th style="font-size:16px">{{ $deliveryId[0]->consignee_contact_num }}</th>
+                    </tr>
+                    <tr  > 
+                        <th style="font-size:16px;  ">Delivered For: </th>
+                        <th style="font-size:16px;">{{ $deliveryId[0]->delivered_for }}</th>
                     </tr>
                 </thead>
                

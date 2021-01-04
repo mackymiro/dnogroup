@@ -59,6 +59,14 @@
                                                 <th style="border:1px solid black;" width="15%">Date:</th>
                                                 <th style="border:1px solid black">{{ $printBillingStatement[0]->date }}</th>
                                             </tr>
+											<tr>
+                                                <th  style="border:1px solid black;">DR Address:</th>
+                                                <th  style="border:1px solid black;">{{ $printBillingStatement[0]->dr_address }}</th>
+                                            </tr>
+											<tr>
+                                                <th  style="border:1px solid black;">DR Delivered For:</th>
+                                                <th  style="border:1px solid black;">{{ $printBillingStatement[0]->dr_delivered_for }}</th>
+                                            </tr>
                                         </thead>
                                       
                                   </table>   
@@ -75,14 +83,7 @@
                                                 <th>Terms:</th>
                                                 <th>{{ $printBillingStatement[0]->terms }}</th>
                                             </tr>
-											<tr>
-                                                <th>DR Address:</th>
-                                                <th>{{ $printBillingStatement[0]->dr_address }}</th>
-                                            </tr>
-											<tr>
-                                                <th>DR Delivered For:</th>
-                                                <th>{{ $printBillingStatement[0]->dr_delivered_for }}</th>
-                                            </tr>
+											
                                         </thead>
 	                              </table>
 	                          </div>

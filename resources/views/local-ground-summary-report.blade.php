@@ -374,13 +374,13 @@
                                                             <td><p style="width:200px;">{{ $getTransactionListCheck->paid_to}}</p></td>
                                                             <td>
                                                                 <?php foreach($getChecks as $getCheck): ?>
-                                                                    <?php echo $getCheck->account_name_no; ?>
+                                                                    <?= $getCheck->account_name_no; ?>
                                                                 <?php endforeach; ?>
                                                             </td>
                                                             <td>
                                                                 <p style="width:190px;">
                                                                 <?php foreach($getChecks as $getCheck): ?>
-                                                                        <?php echo $getCheck->cheque_number; ?>
+                                                                        <?= $getCheck->cheque_number; ?>
                                                                     <?php endforeach; ?>
                                                                 </p>
                                                             </td>
