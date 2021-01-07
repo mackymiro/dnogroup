@@ -56,7 +56,7 @@
 										<th style="height: 1%; text-align: center; border: 1px solid black;">BS NO</th>
 										<th style="height: 1%; text-align: center;border: 1px solid black;">DR ADDRESS</th>
 										<th style="height: 1%; text-align: center;border: 1px solid black;">DR DELIVERED FOR</th>
-										<th style="height: 1%; text-align: center;border: 1px solid black;">ITEMS</th>
+										<th style="height: 1%; text-align: center;border: 1px solid black;">QTY</th>
                                         <th style="height: 1%; text-align: center;border: 1px solid black;">PERIOD COVERED</th>
                                         <th style="height: 1%; text-align: center;border: 1px solid black;">STATUS</th>
                                         <th style="height: 1%; text-align: center;border: 1px solid black;">TOTAL AMOUNT</th>
@@ -73,11 +73,17 @@
 														->select('*')
 														->where('billing_statement_id', $id)
 														->get()->toArray();
+											
+											$getDeliveredFors =  DB::table('lechon_de_cebu_statement_of_accounts')
+														->select('*')
+														->where('billing_statement_id', $id)
+														->get()->toArray();	
 
-											$getDescriptions =  DB::table('lechon_de_cebu_statement_of_accounts')
-																->select('*')
-																->where('billing_statement_id', $id)
-																->get()->toArray();
+											$getQty =  DB::table('lechon_de_cebu_statement_of_accounts')
+														->select('*')
+														->where('billing_statement_id', $id)
+														->sum('lechon_de_cebu_statement_of_accounts.qty');
+
                                       
                                       ?>
                                         <tr style="border:1px solid black;">
@@ -94,12 +100,19 @@
 										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->bs_no }}</td>
 										
 										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->dr_address }}</td>
-										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->dr_delivered_for }}</td>
 										  <td style="text-align:center; border: 1px solid black;">
-										  {{ $printSOAStatement->description}}, 
-                                              <?php foreach($getDescriptions as $getDescription): ?>
-                                                    <?= $getDescription->description;?>, 
+										  
+										  	{{ $printSOAStatement->dr_delivered_for }},
+											<?php foreach($getDeliveredFors as $getDeliveredFor): ?>
+                                                    <?= $getDeliveredFor->dr_delivered_for;?>, 
                                               <?php endforeach; ?>
+										  </td>
+										  <td style="text-align:center; border: 1px solid black;">
+											<p>
+                                             
+                                              <?php $totl = $printSOAStatement->qty + $getQty;?>
+                                              <?= $totl; ?>
+                                              </p>
                                             
 										  </td>
 										  <td style="text-align:center; border: 1px solid black;">{{ $printSOAStatement->period_cover }}</td>

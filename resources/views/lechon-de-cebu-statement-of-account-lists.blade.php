@@ -138,7 +138,7 @@
                                     <th>Delivered To</th>
                                     <th>DR Address</th>
                                     <th>DR Delivered For</th>
-                                    <th>Items</th>
+                                    <th>QTY</th>
                                     <th  class="bg-info" style="color:white;">Period Covered</th>
                                     <th class="bg-success" style="color:white;">Status</th>
                                     <th>Total Amount</th>
@@ -157,7 +157,7 @@
                                     <th>Delivered To</th>
                                     <th>DR Address</th>
                                     <th>DR Delivered For</th>
-                                    <th>Items</th>
+                                    <th>QTY</th>
                                     <th  class="bg-info" style="color:white;">Period Covered</th>
                                     <th class="bg-success" style="color:white;">Status</th>
                                     <th>Total Amount</th>
@@ -173,10 +173,16 @@
                                                       ->where('billing_statement_id', $id)
                                                       ->get()->toArray();
 
-                                         $getDescriptions =  DB::table('lechon_de_cebu_statement_of_accounts')
+                                        $getDeliveredFors =  DB::table('lechon_de_cebu_statement_of_accounts')
+                                                      ->select('*')
+                                                      ->where('billing_statement_id', $id)
+                                                      ->get()->toArray();
+
+                                         $getQty =  DB::table('lechon_de_cebu_statement_of_accounts')
                                                             ->select('*')
                                                             ->where('billing_statement_id', $id)
-                                                            ->get()->toArray();
+                                                            ->sum('lechon_de_cebu_statement_of_accounts.qty');
+
                                       
                                       ?>
                                       <tr id="deletedId{{ $privateOrder->id}}">
@@ -203,12 +209,20 @@
                                           <td><p style="width:140px;">{{ $privateOrder->bs_no }}</p></td>
                                           <td><p style="width:140px;">{{ $privateOrder->address }}</p></td>
                                           <td><p style="width:140px;">{{ $privateOrder->dr_address }}</p></td>
-                                          <td><p style="width:140px;">{{ $privateOrder->dr_delivered_for }}</p></td>
                                           <td>
-                                              <p style="width:140px;">{{ $privateOrder->description}}, 
-                                              <?php foreach($getDescriptions as $getDescription): ?>
-                                                    <?= $getDescription->description;?>, 
+                                            <p style="width:140px;">{{ $privateOrder->dr_delivered_for }},
+                                                <?php foreach($getDeliveredFors as $getDeliveredFor): ?>
+                                                    <?= $getDeliveredFor->dr_delivered_for;?>, 
                                               <?php endforeach; ?>
+                                                
+                                            </p>
+                                              
+                                          </td>
+                                          <td>
+                                             <p>
+                                             
+                                              <?php $totl = $privateOrder->qty + $getQty;?>
+                                              <?= $totl; ?>
                                               </p>
                                               
                                               

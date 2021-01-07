@@ -69,7 +69,7 @@
                                         <th style="height: 1%; text-align: center;">BILL TO</th>
 										<th style="height: 1%; text-align: center;">DR ADDRESS</th>
 										<th style="height: 1%; text-align: center;">DR DELIVERED FOR</th>
-										<th style="height: 1%; text-align: center;">ITEMS</th>
+										<th style="height: 1%; text-align: center;">QTY</th>
                                         
                                         <th style="height: 1%; text-align: center;">STATUS</th>
                                         <th style="height: 1%; text-align: center;">PERIOD COVERED</th>
@@ -87,11 +87,17 @@
 														->where('billing_statement_id', $id)
 														->get()->toArray();
 
-											$getDescriptions =  DB::table('lechon_de_cebu_statement_of_accounts')
-																->select('*')
-																->where('billing_statement_id', $id)
-																->get()->toArray();
-                                      
+											$getDeliveredFors =  DB::table('lechon_de_cebu_statement_of_accounts')
+														->select('*')
+														->where('billing_statement_id', $id)
+														->get()->toArray();	
+
+											$getQty =  DB::table('lechon_de_cebu_statement_of_accounts')
+														->select('*')
+														->where('billing_statement_id', $id)
+														->sum('lechon_de_cebu_statement_of_accounts.qty');
+
+								  
                                       ?>
 									<tr style="border:1px solid black;">
                                     
@@ -105,12 +111,18 @@
 										<td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->bs_no}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->bill_to}}</td>
 										<td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->dr_address}}</td>
-										<td style="text-align:center; border: 1px solid black;">{{ $statementOfAccount->dr_delivered_for}}</td>
 										<td style="text-align:center; border: 1px solid black;">
-										  {{ $statementOfAccount->description}}, 
-                                              <?php foreach($getDescriptions as $getDescription): ?>
-                                                    <?= $getDescription->description;?>, 
+											{{ $statementOfAccount->dr_delivered_for}}
+											<?php foreach($getDeliveredFors as $getDeliveredFor): ?>
+                                                    <?= $getDeliveredFor->dr_delivered_for;?>, 
                                               <?php endforeach; ?>
+										</td>
+										<td style="text-align:center; border: 1px solid black;">
+												<p>
+                                             
+                                              <?php $totl = $statementOfAccount->qty + $getQty;?>
+                                              <?= $totl; ?>
+                                              </p>
                                             
 										  </td>
                                         
