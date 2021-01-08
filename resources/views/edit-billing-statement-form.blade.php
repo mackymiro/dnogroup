@@ -227,6 +227,15 @@
                                               <option value="0">--Please Select--</option>
                                             </select>
                                         </div>
+                                        <div id="drAdd" class="col-lg-12">
+                                            <label>DR Address</label>
+                                            <input type="text" nam="drAddress" class="form-control" disabled />
+                                        </div>
+                                        <div id="drDeliveredFor" class="col-lg-12">
+                                            <label>DR Delivered For</label>
+                                            <input type="text" name="drDeliveredFor" class="form-control" disabled />
+                                        </div>
+                      
                                         <div id="qty" class="col-lg-12">
                                           <label>Qty</label>
                                           <input type="text" name="qty" class="form-control"  readonly="readonly" />
@@ -308,6 +317,14 @@
                                         <div class="col-lg-2">
                                             <label>DR No</label>
                                             <input type="text" name="drNo" class="form-control" disabled="disbled" value="{{ $bStatement['dr_no'] }}" />
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <label>DR Address</label>
+                                            <input type="text" name="drAddress" class="form-control" disabled="disbled" value="{{ $bStatement['dr_address'] }}" />
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <label>DR Delivered For</label>
+                                            <input type="text" name="drDeliveredFor" class="form-control" disabled="disbled" value="{{ $bStatement['dr_delivered_for'] }}" />
                                         </div>
                                        @endif
                                        <div class="col-lg-2">
@@ -425,11 +442,14 @@
         }
    }
 
-   $("#drNo").hide();
+    $("#drNo").hide();
     $("#price").hide();
     $("#descriptionDrNo").hide();
     $("#drList").hide();
     $("#unit").hide();
+
+    $("#drAdd").hide();
+    $("#drDeliveredFor").hide();  
 
     $(".chooseOption").change(function(){
          const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
@@ -447,6 +467,8 @@
              $("#description").hide();
              $("#drList").hide();
              $("#unit").hide();
+             $("#drAdd").hide();
+             $("#drDeliveredFor").hide();
          }else if(cat === "Private Order"){
              $("#drNo").show();
              $("#price").show();
@@ -454,6 +476,9 @@
              $("#drList").show();
              $("#qty").show();
              $("#unit").show();
+
+             $("#drAdd").show();
+             $("#drDeliveredFor").show();
 
              $("#invoiceNo").hide();
              $("#invoiceList").hide();
@@ -557,6 +582,7 @@
                              'lechon_de_cebu_delivery_receipts.dr_no',
                              'lechon_de_cebu_delivery_receipts.sold_to',
                              'lechon_de_cebu_delivery_receipts.delivered_to',
+                             'lechon_de_cebu_delivery_receipts.delivered_for',
                              'lechon_de_cebu_delivery_receipts.time',
                              'lechon_de_cebu_delivery_receipts.date',
                              'lechon_de_cebu_delivery_receipts.date_to_be_delivered',
@@ -612,22 +638,26 @@
 
                                <?php foreach($datas as $data): ?>
                                      if(cat === "<?php echo $data->id?>"){
-                                          $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $data->qty; ?>" class="form-control" readonly="readonly" />');
-                                          $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?php echo $data->unit; ?>" class="form-control" readonly="readonly" />');
+                                          $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?= $data->qty; ?>" class="form-control" readonly="readonly" />');
+                                          $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?= $data->unit; ?>" class="form-control" readonly="readonly" />');
                                          
-                                          $("#price").html('<label>Whole Lechon</label><input type="text" name="price" value="<?php echo $data->price; ?>" class="form-control" readonly="readonly" />');
-                                          $("#descriptionAdd").html(`<label>Description</label><input type="text" name="description" value="<?php echo $data->description; ?>" class="form-control" readonly="readonly" />`);
+                                          $("#price").html('<label>Whole Lechon</label><input type="text" name="price" value="<?= $data->price; ?>" class="form-control" readonly="readonly" />');
+                                          $("#descriptionAdd").html(`<label>Description</label><input type="text" name="description" value="<?= $data->description; ?>" class="form-control" readonly="readonly" />`);
             
                                      }
                                <?php endforeach;?>
                         });       
 
                   <?php endforeach; ?>  
-                $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $data->qty; ?>" class="form-control" readonly="readonly" />');
-                $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?php echo $data->unit; ?>" class="form-control" readonly="readonly" />');
+
+                $("#drAdd").html(`<label>DR Address</label><input type="text" name="drAddress" value="<?= $getDrNo->delivered_to; ?>" class="form-control" readonly="readonly" />`);
+                 $("#drDeliveredFor").html(`<label>DR Delivered For</label><input type="text" name="drDeliveredFor" value="<?= $getDrNo->delivered_for; ?>" class="form-control" readonly="readonly" />`);
+               
+                $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?= $data->qty; ?>" class="form-control" readonly="readonly" />');
+                $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?= $data->unit; ?>" class="form-control" readonly="readonly" />');
                                          
-                $("#price").html('<label>Whole Lechon</label><input type="text" name="price" value="<?php echo $getDrNo->price; ?>" class="form-control" readonly="readonly" />');
-                $("#descriptionAdd").html(`<label>Description</label><input type="text" name="description" value="<?php echo $getDrNo->description; ?>" class="form-control" readonly="readonly" />`);
+                $("#price").html('<label>Whole Lechon</label><input type="text" name="price" value="<?= $getDrNo->price; ?>" class="form-control" readonly="readonly" />');
+                $("#descriptionAdd").html(`<label>Description</label><input type="text" name="description" value="<?= $getDrNo->description; ?>" class="form-control" readonly="readonly" />`);
              }
            
         <?php endforeach; ?>

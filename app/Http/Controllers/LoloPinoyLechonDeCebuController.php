@@ -9813,6 +9813,11 @@ class LoloPinoyLechonDeCebuController extends Controller
 
             $drNo = NULL;
             $descriptionDrNo = NULL;
+
+            $drAddress = NULL;
+            $drDeliveredFor = NULL;
+
+
             $qty = $request->get('qty');
             $body = $request->get('body');
             $headFeet = $request->get('headFeet');
@@ -9830,6 +9835,9 @@ class LoloPinoyLechonDeCebuController extends Controller
             $amount = $request->get('price');
             $unit = $request->get('unit');
 
+            $drAddress = $request->get('drAddress');
+            $drDeliveredFor = $request->get('drDeliveredFor');
+
             $tot = $billingOrder->total_amount + $amount;
             $body = 0;
             $headFeet = 0;
@@ -9845,6 +9853,8 @@ class LoloPinoyLechonDeCebuController extends Controller
             'whole_lechon'=>$wholeLechon,
             'description'=>$description,
             'order'=>$request->get('choose'),
+            'dr_address'=>$drAddress,
+            'dr_delivered_for'=>$drDeliveredFor,
             'qty'=>$qty,
             'unit'=>$unit,
             'dr_no'=>$drNo,
@@ -9867,6 +9877,8 @@ class LoloPinoyLechonDeCebuController extends Controller
             'description'=>$description,
             'order'=>$request->get('choose'),
             'qty'=>$request->get('qty'),
+            'dr_address'=>$drAddress,
+            'dr_delivered_for'=>$drDeliveredFor,
             'qty'=>$qty,
             'unit'=>$unit,
             'dr_no'=>$drNo,

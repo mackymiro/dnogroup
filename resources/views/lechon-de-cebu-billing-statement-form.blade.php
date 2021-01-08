@@ -253,6 +253,8 @@
              $("#descriptionDrNo").hide();
              $("#drList").hide();
              $("#unit").hide();
+             $("#drAdd").hide();
+             $("#drDeliveredFor").hide();
          }else if(cat === "Private Order"){
              $("#drNo").show();
              $("#wholeLechon6000").show();

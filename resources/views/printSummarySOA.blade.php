@@ -75,7 +75,7 @@
                                         <th style="height: 1%; text-align: center;">PERIOD COVERED</th>
                                         <th style="height: 1%; text-align: center;">TOTAL AMOUNT</th>
                                         <th style="height: 1%; text-align: center;">TOTAL REMAINING BALANCE</th>
-                                        
+										<th style="height: 1%; text-align: center;">REMARKS</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -85,11 +85,13 @@
 											$getRefDrNos =  DB::table('lechon_de_cebu_statement_of_accounts')
 														->select('*')
 														->where('billing_statement_id', $id)
+														->where('qty', '!=', '.')
 														->get()->toArray();
 
 											$getDeliveredFors =  DB::table('lechon_de_cebu_statement_of_accounts')
 														->select('*')
 														->where('billing_statement_id', $id)
+														->where('qty', '!=', '.')
 														->get()->toArray();	
 
 											$getQty =  DB::table('lechon_de_cebu_statement_of_accounts')
@@ -131,6 +133,7 @@
                                         <td style="text-align:center; border: 1px solid black;"><?= number_format($statementOfAccount->total_amount, 2);?></td>
                                         
                                         <td style="text-align:center; border: 1px solid black;"><?= number_format($statementOfAccount->total_remaining_balance, 2);?></td>
+										<td style="text-align:center; border: 1px solid black;"></td>
                       
 									</tr>
 									@endforeach
