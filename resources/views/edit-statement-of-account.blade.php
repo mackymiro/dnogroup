@@ -45,12 +45,12 @@
                                     <div class="form-row">
                                          <div class="col-lg-4">
                                               <label><strong style="font-size: 20px;">Total Remaining Balance</strong></label>
-                                              <p class="bg-danger" style="color:white; border-radius: 3px; padding:5px;">₱ <?php echo number_format($computeAll, 2);?></p>
+                                              <p class="bg-danger btn-lg" style="color:white; border-radius: 3px; padding:5px;">₱ <?= number_format($computeAll, 2);?></p>
                                              
                                           </div>
                                            <div class="col-lg-4">
                                               <label><strong style="font-size: 20px;">Total Balance</strong></label>
-                                              <p class="bg-success" style="color:white; border-radius: 3px; padding:5px;">₱ <?php echo number_format($sum, 2);?></p>
+                                              <p class="bg-success btn-lg" style="color:white; border-radius: 3px; padding:5px;">₱ <?= number_format($sum, 2);?></p>
                                              
                                           </div>       
                                     </div>
@@ -109,6 +109,9 @@
                                     <i class="fas fa-tasks" aria-hidden="true"></i>
                                   Lists (Unpaid)</div>
                               <div class="card-body">
+                                  <button data-toggle="modal" data-target="#payAll" class="btn btn-primary btn-lg">PAY ALL</button>
+                                  <br>
+                                  <br>
                                   <div class="table-responsive">
                                       <table class="table table-bordered display" width="100%" cellspacing="0">
                                           <thead>
@@ -144,27 +147,30 @@
                                               </tr>
                                           </tfoot>
                                           <tbody>
-                                             @if($getStatementOfAccount[0]->status != "PAID")
-                                             <tr>
-                                                  <td>
-                                                    <!-- Button trigger modal -->
-                                                
+                                            
+                                                @if($getStatementOfAccount[0]->status != "PAID")
+                                                <tr>
+                                                    <td>
+                                                        <!-- Button trigger modal -->
+                                                    
                                                     <a data-toggle="modal" data-target="#listPop{{ $getStatementOfAccount[0]->id }}" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>  
-                                                  </td>
-                                                  <td ><p style="width: 110px;">{{ $getStatementOfAccount[0]->date }}</p></td>
-                                                  <td><p style="width: 300px;">{{ $getStatementOfAccount[0]->description}}</p></td>
-                                                  <td class="bg-danger" style="color:white;"><?php echo number_format($getStatementOfAccount[0]->amount, 2)?></td>
-                                                  <td><?php echo number_format($getStatementOfAccount[0]->paid_amount, 2) ?></td>
-                                                  <td>{{ $getStatementOfAccount[0]->status }}</td>
-                                                  <td>{{ $getStatementOfAccount[0]->collection_date}}</td>
-                                                  <td>{{ $getStatementOfAccount[0]->check_number}}</td>
-                                                  <td>{{ $getStatementOfAccount[0]->check_amount}}</td>
-                                                  <td>{{ $getStatementOfAccount[0]->or_number}}</td>
-                                                  <td><p style="width:110px;">{{ $getStatementOfAccount[0]->payment_method}}</p></td>
-                                                  <td>{{ $getStatementOfAccount[0]->created_by }}</td>
-                                              </tr>
-                                              @endif
+                                                    </td>
+                                                    <td ><p style="width: 110px;">{{ $getStatementOfAccount[0]->date }}</p></td>
+                                                    <td><p style="width: 300px;">{{ $getStatementOfAccount[0]->description}}</p></td>
+                                                    <td class="bg-danger" style="color:white;"><?= number_format($getStatementOfAccount[0]->amount, 2)?></td>
+                                                    <td><?= number_format($getStatementOfAccount[0]->paid_amount, 2) ?></td>
+                                                    <td>{{ $getStatementOfAccount[0]->status }}</td>
+                                                    <td>{{ $getStatementOfAccount[0]->collection_date}}</td>
+                                                    <td>{{ $getStatementOfAccount[0]->check_number}}</td>
+                                                    <td>{{ $getStatementOfAccount[0]->check_amount}}</td>
+                                                    <td>{{ $getStatementOfAccount[0]->or_number}}</td>
+                                                    <td><p style="width:110px;">{{ $getStatementOfAccount[0]->payment_method}}</p></td>
+                                                    <td>{{ $getStatementOfAccount[0]->created_by }}</td>
+                                                </tr>
+                                                @endif
+                                             
                                               @foreach($allAccounts as $allAccount)
+                                             
                                               <tr>
                                                   <td>
                                                      <!-- Button trigger modal -->
@@ -174,8 +180,8 @@
                                                   <td ><p style="width: 110px;">{{ $allAccount['transaction_date']}}</p></td>
                                                  
                                                   <td><p style="width: 300px;">{{ $allAccount['description']}}</p></td>
-                                                  <td class="bg-danger" style="color:white;"><?php echo number_format($allAccount['amount'], 2)?></td>
-                                                  <td><?php echo number_format($allAccount['paid_amount'], 2) ?></td>
+                                                  <td class="bg-danger" style="color:white;"><?= number_format($allAccount['amount'], 2)?></td>
+                                                  <td><?= number_format($allAccount['paid_amount'], 2) ?></td>
                                                   <td>{{ $allAccount['status'] }}</td>
                                                   <td>{{ $allAccount['collection_date']}}</td>
                                                   <td>{{ $allAccount['check_number']}}</td>
@@ -184,6 +190,7 @@
                                                   <td><p style="width:110px;">{{ $allAccount['payment_method']}}</p></td>
                                                   <td>{{ $allAccount['created_by']}}</td>
                                               </tr>
+                                             
                                               @endforeach
                                           </tbody>
                                       </table>
@@ -234,19 +241,21 @@
                                           </tfoot>
                                           <tbody>
                                                @if($getStatementOfAccount[0]->status == "PAID")
-                                             <tr>
-                                                  <td ><p style="width: 110px;">{{ $getStatementOfAccount[0]->date}}</p></td>
-                                                  <td><p style="width: 300px;">{{ $getStatementOfAccount[0]->description}}</p></td>
-                                                  <td class="bg-success" style="color:white;"><?php echo number_format($getStatementOfAccount[0]->amount, 2)?></td>
-                                                  <td><?php echo number_format($getStatementOfAccount[0]->paid_amount, 2) ?></td>
-                                                  <td class="bg-success" style="color:white;">{{ $getStatementOfAccount[0]->status }}</td>
-                                                  <td>{{ $getStatementOfAccount[0]->collection_date}}</td>
-                                                  <td>{{ $getStatementOfAccount[0]->check_number}}</td>
-                                                  <td>{{ $getStatementOfAccount[0]->check_amount}}</td>
-                                                  <td>{{ $getStatementOfAccount[0]->or_number}}</td>
-                                                  <td><p style="width:110px;">{{ $getStatementOfAccount[0]->payment_method}}</p></td>
-                                                  <td>{{ $getStatementOfAccount[0]->created_by }}</td>
-                                              </tr>
+                                               
+                                                <tr>
+                                                    <td ><p style="width: 110px;">{{ $getStatementOfAccount[0]->date}}</p></td>
+                                                    <td><p style="width: 300px;">{{ $getStatementOfAccount[0]->description}}</p></td>
+                                                    <td class="bg-success" style="color:white;"><?= number_format($getStatementOfAccount[0]->amount, 2)?></td>
+                                                    <td><?= number_format($getStatementOfAccount[0]->paid_amount, 2) ?></td>
+                                                    <td class="bg-success" style="color:white;">{{ $getStatementOfAccount[0]->status }}</td>
+                                                    <td>{{ $getStatementOfAccount[0]->collection_date}}</td>
+                                                    <td>{{ $getStatementOfAccount[0]->check_number}}</td>
+                                                    <td>{{ $getStatementOfAccount[0]->check_amount}}</td>
+                                                    <td>{{ $getStatementOfAccount[0]->or_number}}</td>
+                                                    <td><p style="width:110px;">{{ $getStatementOfAccount[0]->payment_method}}</p></td>
+                                                    <td>{{ $getStatementOfAccount[0]->created_by }}</td>
+                                                </tr>
+                                               
                                               @endif
                                               @foreach($allAccountsPaids as $allAccountsPaid)
                                               <tr>
@@ -254,8 +263,8 @@
                                                   <td ><p style="width: 110px;">{{ $allAccountsPaid['transaction_date']}}</p></td>
                                                 
                                                   <td><p style="width: 300px;">{{ $allAccountsPaid['description']}}</p></td>
-                                                  <td class="bg-success" style="color:white;"><?php echo number_format($allAccountsPaid['amount'], 2)?></td>
-                                                  <td><?php echo number_format($allAccountsPaid['paid_amount'], 2) ?></td>
+                                                  <td class="bg-success" style="color:white;"><?= number_format($allAccountsPaid['amount'], 2)?></td>
+                                                  <td><?= number_format($allAccountsPaid['paid_amount'], 2) ?></td>
                                                   <td class="bg-success" style="color:white;">{{ $allAccountsPaid['status'] }}</td>
                                                   <td>{{ $allAccountsPaid['collection_date']}}</td>
                                                   <td>{{ $allAccountsPaid['check_number']}}</td>
@@ -274,6 +283,71 @@
               </div>
           </div>
     </div>
+     <!-- Modal -->
+    <div class="modal fade" id="payAll" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">PAY ALL</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">    
+                <div  class="validate col-lg-12">
+                    <p class="alert alert-danger">Please Fill up the fields</p>
+                </div>
+                <div id="succUp<?= $getStatementOfAccount[0]->id?>" class="col-lg-12"></div>
+                <div class="form-group">
+                    <div class="form-row">
+                       
+                        <div class="col-lg-4">
+                            <label>Total Remaining Balance</label>
+                            <input type="text" name="totalRemainingBalance" class="form-control" value="<?= number_format($computeAll, 2);?>" disabled />
+                        </div>
+                        <div class="col-lg-2">
+                            <label>Paid Amount</label>
+                            <input type="text"  name="paidAmount" class="paidAmount{{ $getStatementOfAccount[0]->id}} form-control"  />
+                        </div>
+                      
+                      
+                        <div class="col-lg-2">
+                            <label>Collection Date</label>
+                            <input type="text"  name="collectionDate" class="collectionDate{{ $getStatementOfAccount[0]->id }} datepicker form-control"  />
+                        </div>
+                        <div class="col-lg-4">
+                            <label>Check Number</label>
+                            <input type="text" name="checkNumber" class="checkNumber{{ $getStatementOfAccount[0]->id }} form-control" />
+                        </div>
+                        <div class="col-lg-4">
+                            <label>Check Amount</label>
+                            <input type="text" name="checkAmount" class="checkAmount{{ $getStatementOfAccount[0]->id }} form-control"   />
+                        </div>
+                        <div class="col-lg-4">
+                            <label>OR Number</label>
+                            <input type="text"  name="orNumber" class="orNumber{{ $getStatementOfAccount[0]->id }} form-control"  />
+                        </div>
+                        <div class="col-lg-4">
+                            <label>Payment Method</label>
+                            <div id="app-payment1">
+                                <select  name="payment" class="payment{{ $getStatementOfAccount[0]->id }} form-control"> 
+                                    <option v-for="payment in payments" v-bind:value="payment.value">
+                                    @{{ payment.text }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden"  class="mainId{{ $getStatementOfAccount[0]->id}}" value="{{ $getStatementOfAccount[0]->id }}" />
+                <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
+                <button type="button" onclick="payAll(<?= $getStatementOfAccount[0]->id ?>)" class="btn btn-success btn-lg">Paid</button>
+            </div>
+            </div>
+        </div>
+        </div>
      <!-- Modal -->
      @foreach($allAccounts as $allAccount)
      <div class="modal fade" id="listPopUp{{ $allAccount['id'] }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
@@ -336,7 +410,7 @@
                         @endif
                         <div class="col-lg-2">
                             <label>Amount</label>
-                            <input type="text" name="amount" class="form-control" value="<?php echo number_format($allAccount['amount'], 2)?>" disabled />
+                            <input type="text" name="amount" class="form-control" value="<?= number_format($allAccount['amount'], 2)?>" disabled />
                         </div>
                         <div class="col-lg-2">
                             <label>Paid Amount</label>
@@ -382,7 +456,7 @@
             <div class="modal-footer">
                  <input type="hidden" class="mainId{{ $allAccount['id']}}" value="{{ $getStatementOfAccount[0]->id }}" />
                 <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
-                <button type="button" onclick="updatePaid(<?php echo $allAccount['id']?>)" class="btn btn-success btn-lg">Paid</button>
+                <button type="button" onclick="updatePaid(<?= $allAccount['id']?>)" class="btn btn-success btn-lg">Paid</button>
             </div>
             </div>
         </div>
@@ -437,7 +511,7 @@
                         @endif
                         <div class="col-lg-2">
                             <label>Amount</label>
-                            <input type="text" name="amount" class="form-control" value="<?php echo number_format($getStatementOfAccount[0]->amount, 2)?>" disabled />
+                            <input type="text" name="amount" class="form-control" value="<?= number_format($getStatementOfAccount[0]->amount, 2)?>" disabled />
                         </div>
                         <div class="col-lg-2">
                             <label>Paid Amount</label>
@@ -485,7 +559,7 @@
             <div class="modal-footer">
                 <input type="hidden"  class="mainId{{ $getStatementOfAccount[0]->id}}" value="{{ $getStatementOfAccount[0]->id }}" />
                 <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
-                <button type="button" onclick="updatePaid(<?php echo $getStatementOfAccount[0]->id ?>)" class="btn btn-success btn-lg">Paid</button>
+                <button type="button" onclick="updatePaid(<?= $getStatementOfAccount[0]->id ?>)" class="btn btn-success btn-lg">Paid</button>
             </div>
             </div>
         </div>
@@ -504,6 +578,57 @@
   </div>
   <script type="text/javascript">
      $(".validate").hide();
+
+
+     const payAll = (id) => {
+        const paidAmount = $(".paidAmount"+id).val();
+        const collectionDate = $(".collectionDate"+id).val();
+        const checkNumber = $(".checkNumber"+id).val();
+        const checkAmount = $(".checkAmount"+id).val();
+        const orNumber = $(".orNumber"+id).val();
+        const payment = $(".payment"+id).val();
+
+        if(paidAmount.length === 0 || collectionDate.length === 0){
+            $(".validate").fadeIn().delay(3000).fadeOut();
+        }else{
+            //make ajax call
+            $.ajax({
+                type: "PUT",
+                url: '/lolo-pinoy-lechon-de-cebu/pay-all/' + id,
+                data:{
+                    _method: 'put', 
+                    "_token": "{{ csrf_token() }}",
+                    "id":id,
+                    "paidAmount":paidAmount,
+                    "status":status,
+                    "collectionDate":collectionDate,
+                    "checkNumber":checkNumber,
+                    "checkAmount":checkAmount,
+                    "orNumber":orNumber,
+                    "payment":payment,
+                },
+                success: function(data){
+                    console.log(data);
+                    const getData = data;
+                    const succData = getData.split(":");
+                    const succDataArr = succData[0];
+                    if(succDataArr == "Success"){
+                        $("#succUp"+id).fadeIn().delay(3000).fadeOut();
+                        $("#succUp"+id).html(`<p class="alert alert-success"> ${data}</p>`);
+                        
+                        setTimeout(function(){
+                            document.location.reload();
+                        }, 3000);
+                    }
+                
+                },
+                error: function(data){
+                    console.log('Error:', data);
+                }
+
+                });
+        }
+     }
      
      const updatePaid = (id) =>{
         const paidAmount = $(".paidAmount"+id).val();
@@ -520,10 +645,10 @@
         }else{
               //make ajax call
             $.ajax({
-                type: "PATCH",
+                type: "PUT",
                 url: '/lolo-pinoy-lechon-de-cebu/s-account/' + id,
                 data:{
-                    _method: 'patch', 
+                    _method: 'put', 
                     "_token": "{{ csrf_token() }}",
                     "id":id,
                     "mainId":mainId,

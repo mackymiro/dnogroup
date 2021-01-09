@@ -7079,6 +7079,40 @@ class LoloPinoyLechonDeCebuController extends Controller
         return view('lechon-de-cebu-sales-invoice-sales-per-outlet', compact('statementOfAccountT1s', 'totalSalesInTerminal1', 'statementOfAccountT2s', 'totalSalesInTerminal2'));
     }
 
+    public function soaPayAll(Request $request, $id){
+         
+        $statementAccountPaid = LechonDeCebuStatementOfAccount::find($request->id);
+        
+        $subStatementIds = LechonDeCebuStatementOfAccount::where('billing_statement_id', $id)->get()->toArray();
+         
+        if($subStatementIds != ""){
+            $stat = "PAID";
+            foreach($subStatementIds as $subStatementId){
+                $status1 = $subStatementId['status'] = $stat;
+                
+                $updateStat = LechonDeCebuStatementOfAccount::find($subStatementId['id']);
+                $updateStat->status = $status1; 
+                $updateStat->save();
+    
+            }
+        }
+       
+
+        $statementAccountPaid->paid_amount = $request->paidAmount;
+        $statementAccountPaid->status = "PAID";
+        $statementAccountPaid->collection_date = $request->collectionDate;
+        $statementAccountPaid->check_number = $request->checkNumber;
+        $statementAccountPaid->check_amount = $request->checkAmount;
+        $statementAccountPaid->or_number = $request->orNumber;
+        $statementAccountPaid->payment_method = $request->payment;
+        $statementAccountPaid->total_remaining_balance = 0.00;
+
+        $statementAccountPaid->save();
+
+        return response()->json('Success: fully paid successfully');
+
+    }
+
     //
     public function sAccountUpdate(Request $request, $id){
        

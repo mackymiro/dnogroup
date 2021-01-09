@@ -2319,11 +2319,18 @@ Route::group(['middleware' => ['auth']], function(){
 	->name('lolo-pinoy-lechon-de-cebu.printPaymentVoucher')
 	->middleware(['cashier']);
 
-	Route::patch(
+	Route::put(
 		'/lolo-pinoy-lechon-de-cebu/s-account/{id}',
 		'LoloPinoyLechonDeCebuController@sAccountUpdate')
 		->name('sAccountUpdate')
 		->middleware(['cashier']);
+
+	Route::put(
+		'/lolo-pinoy-lechon-de-cebu/pay-all/{id}',
+		'LoloPinoyLechonDeCebuController@soaPayAll')
+		->name('soaPayAll')
+		->middleware(['cashier']);
+		
 
 	//Lolo Pinoy Grill Commissary
 	Route::get('/lolo-pinoy-grill-commissary', 
