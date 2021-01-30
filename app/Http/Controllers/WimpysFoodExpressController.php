@@ -19,10 +19,338 @@ use App\WimpysFoodExpressStockInventory;
 use App\WimpysFoodExpressOrderForm;
 use App\WimpysFoodExpressMenuList;
 use App\WimpysFoodExpressClientBookingForm;
+use App\WimpysFoodExpressDeliveryReceipt;
 
 class WimpysFoodExpressController extends Controller
 {
 
+    public function printDelivery($id){
+        $moduleName = "Delivery Receipt";
+        $deliveryId = DB::table(
+                        'wimpys_food_express_delivery_receipts')
+                        ->select( 
+                        'wimpys_food_express_delivery_receipts.id',
+                        'wimpys_food_express_delivery_receipts.user_id',
+                        'wimpys_food_express_delivery_receipts.dr_id',
+                        'wimpys_food_express_delivery_receipts.sold_to',
+                        'wimpys_food_express_delivery_receipts.delivered_to',
+                        'wimpys_food_express_delivery_receipts.time',
+                        'wimpys_food_express_delivery_receipts.date',
+                        'wimpys_food_express_delivery_receipts.unit',
+                        'wimpys_food_express_delivery_receipts.date_to_be_delivered',
+                        'wimpys_food_express_delivery_receipts.contact_person',
+                        'wimpys_food_express_delivery_receipts.mobile_num',
+                        'wimpys_food_express_delivery_receipts.qty',
+                        'wimpys_food_express_delivery_receipts.description',
+                        'wimpys_food_express_delivery_receipts.price',
+                        'wimpys_food_express_delivery_receipts.total',
+                        'wimpys_food_express_delivery_receipts.special_instruction',
+                        'wimpys_food_express_delivery_receipts.consignee_name',
+                        'wimpys_food_express_delivery_receipts.consignee_contact_num',
+                        'wimpys_food_express_delivery_receipts.status',
+                        'wimpys_food_express_delivery_receipts.prepared_by',
+                        'wimpys_food_express_delivery_receipts.checked_by',
+                        'wimpys_food_express_delivery_receipts.received_by',
+                        'wimpys_food_express_delivery_receipts.created_by',
+                        'wimpys_food_express_delivery_receipts.deleted_at',
+                        'wimpys_food_express_codes.wimpys_food_express_code',
+                        'wimpys_food_express_codes.module_id',
+                        'wimpys_food_express_codes.module_code',
+                        'wimpys_food_express_codes.module_name')
+                        ->join('wimpys_food_express_codes', 'wimpys_food_express_delivery_receipts.id', '=', 'wimpys_food_express_codes.module_id')
+                        ->where('wimpys_food_express_delivery_receipts.id', $id)
+                        ->where('wimpys_food_express_codes.module_name', $moduleName)
+                    
+                        ->get()->toArray();
+
+
+        $deliveryReceipts = WimpysFoodExpressDeliveryReceipt::where('dr_id', $id)->get()->toArray();
+
+        //count the total amount 
+        $countTotalAmount = WimpysFoodExpressDeliveryReceipt::where('id', $id)->sum('price');
+
+        $countAmount = WimpysFoodExpressDeliveryReceipt::where('dr_id', $id)->sum('price');
+
+        $sum  = $countTotalAmount + $countAmount;
+
+        //count the kilos 
+        $countKls = WimpysFoodExpressDeliveryReceipt::where('id', $id)->sum('qty');
+        $countAmountKls = WimpysFoodExpressDeliveryReceipt::where('dr_id', $id)->sum('qty');
+        
+        $sumQty = $countKls + $countAmountKls;
+
+        $pdf = PDF::loadView('printDeliveryWimpys', compact('deliveryId', 'deliveryReceipts', 'sum', 'sumQty'));
+
+        return $pdf->download('wimpys-food-express-delivery-receipt.pdf');
+    }
+
+    public function viewDeliveryReceipt($id){
+        $moduleName = "Delivery Receipt";
+        $viewDeliveryReceipt = DB::table(
+                            'wimpys_food_express_delivery_receipts')
+                            ->select( 
+                            'wimpys_food_express_delivery_receipts.id',
+                            'wimpys_food_express_delivery_receipts.user_id',
+                            'wimpys_food_express_delivery_receipts.dr_id',
+                            'wimpys_food_express_delivery_receipts.sold_to',
+                            'wimpys_food_express_delivery_receipts.delivered_to',
+                            'wimpys_food_express_delivery_receipts.time',
+                            'wimpys_food_express_delivery_receipts.date',
+                            'wimpys_food_express_delivery_receipts.unit',
+                            'wimpys_food_express_delivery_receipts.date_to_be_delivered',
+                            'wimpys_food_express_delivery_receipts.contact_person',
+                            'wimpys_food_express_delivery_receipts.mobile_num',
+                            'wimpys_food_express_delivery_receipts.qty',
+                            'wimpys_food_express_delivery_receipts.description',
+                            'wimpys_food_express_delivery_receipts.price',
+                            'wimpys_food_express_delivery_receipts.total',
+                            'wimpys_food_express_delivery_receipts.special_instruction',
+                            'wimpys_food_express_delivery_receipts.consignee_name',
+                            'wimpys_food_express_delivery_receipts.consignee_contact_num',
+                            'wimpys_food_express_delivery_receipts.status',
+                            'wimpys_food_express_delivery_receipts.prepared_by',
+                            'wimpys_food_express_delivery_receipts.checked_by',
+                            'wimpys_food_express_delivery_receipts.received_by',
+                            'wimpys_food_express_delivery_receipts.created_by',
+                            'wimpys_food_express_delivery_receipts.deleted_at',
+                            'wimpys_food_express_codes.wimpys_food_express_code',
+                            'wimpys_food_express_codes.module_id',
+                            'wimpys_food_express_codes.module_code',
+                            'wimpys_food_express_codes.module_name')
+                            ->join('wimpys_food_express_codes', 'wimpys_food_express_delivery_receipts.id', '=', 'wimpys_food_express_codes.module_id')
+                            ->where('wimpys_food_express_delivery_receipts.id', $id)
+                            ->where('wimpys_food_express_codes.module_name', $moduleName)
+                           
+                            ->get()->toArray();
+
+        $deliveryReceipts = WimpysFoodExpressDeliveryReceipt::where('dr_id', $id)->get()->toArray();
+      
+
+        //count the total amount 
+        $countTotalAmount = WimpysFoodExpressDeliveryReceipt::where('id', $id)->sum('price');
+      
+
+        //
+         $countAmount = WimpysFoodExpressDeliveryReceipt::where('dr_id', $id)->sum('price');
+
+         $sum  = $countTotalAmount + $countAmount;
+
+         return view('view-wimpys-food-express-delivery-receipt', compact('viewDeliveryReceipt', 'deliveryReceipts', 'sum'));
+
+    }
+
+    public function deliveryReceiptLists(){
+         //getAllDeliveryReceipt
+         $moduleName = "Delivery Receipt";
+         $getAllDeliveryReceipts = DB::table(
+                                 'wimpys_food_express_delivery_receipts')
+                                 ->select( 
+                                 'wimpys_food_express_delivery_receipts.id',
+                                 'wimpys_food_express_delivery_receipts.user_id',
+                                 'wimpys_food_express_delivery_receipts.dr_id',
+                                 'wimpys_food_express_delivery_receipts.sold_to',
+                                 'wimpys_food_express_delivery_receipts.delivered_to',
+                                 'wimpys_food_express_delivery_receipts.time',
+                                 'wimpys_food_express_delivery_receipts.date',
+                                 'wimpys_food_express_delivery_receipts.date_to_be_delivered',
+                                 'wimpys_food_express_delivery_receipts.contact_person',
+                                 'wimpys_food_express_delivery_receipts.mobile_num',
+                                 'wimpys_food_express_delivery_receipts.qty',
+                                 'wimpys_food_express_delivery_receipts.description',
+                                 'wimpys_food_express_delivery_receipts.price',
+                                 'wimpys_food_express_delivery_receipts.total',
+                                 'wimpys_food_express_delivery_receipts.special_instruction',
+                                 'wimpys_food_express_delivery_receipts.consignee_name',
+                                 'wimpys_food_express_delivery_receipts.consignee_contact_num',
+                                 'wimpys_food_express_delivery_receipts.status',
+                                 'wimpys_food_express_delivery_receipts.prepared_by',
+                                 'wimpys_food_express_delivery_receipts.checked_by',
+                                 'wimpys_food_express_delivery_receipts.received_by',
+                                 'wimpys_food_express_delivery_receipts.created_by',
+                                 'wimpys_food_express_delivery_receipts.deleted_at',
+                                 'wimpys_food_express_codes.wimpys_food_express_code',
+                                 'wimpys_food_express_codes.module_id',
+                                 'wimpys_food_express_codes.module_code',
+                                 'wimpys_food_express_codes.module_name')
+                                 ->join('wimpys_food_express_codes', 'wimpys_food_express_delivery_receipts.id', '=', 'wimpys_food_express_codes.module_id')
+                                 ->where('wimpys_food_express_delivery_receipts.dr_id', NULL)
+                                 ->where('wimpys_food_express_codes.module_name', $moduleName)
+                                 ->where('wimpys_food_express_delivery_receipts.deleted_at', NULL)
+                                 ->orderBy('wimpys_food_express_delivery_receipts.id', 'desc')
+                                 ->get()->toArray();
+ 
+        
+     
+         return view('wimpys-food-express-delivery-receipt-lists', compact('getAllDeliveryReceipts'));
+    
+    }
+
+    public function updateDr(Request $request, $id){
+        
+        $delivery = WimpysFoodExpressDeliveryReceipt::find($id);
+        $delivery->qty = $request->get('qty');
+        $delivery->unit = $request->get('unit');
+        $delivery->description = $request->get('description');
+        $delivery->price = $request->get('price');
+        $delivery->save();
+
+
+        Session::flash('SuccessEdit', 'Successfully updated');
+
+       return redirect()->route('editDeliveryReceiptWimpys', ['id'=>$request->get('drId')]);
+    }
+
+    public function updateDeliveryReceipt(Request $request, $id){
+
+        $updateDeliveryReceipt = WimpysFoodExpressDeliveryReceipt::find($id);
+
+        $updateDeliveryReceipt->date = $request->get('date');
+        $updateDeliveryReceipt->sold_to = $request->get('soldTo');
+        $updateDeliveryReceipt->time = $request->get('time');
+        $updateDeliveryReceipt->delivered_to = $request->get('deliveredTo');
+        $updateDeliveryReceipt->delivered_for = $request->get('deliveredFor');
+        $updateDeliveryReceipt->contact_person = $request->get('contactPerson');
+        $updateDeliveryReceipt->mobile_num = $request->get('mobile');
+        $updateDeliveryReceipt->special_instruction = $request->get('specialInstruction');
+        $updateDeliveryReceipt->consignee_name = $request->get('consigneeName');
+        $updateDeliveryReceipt->consignee_contact_num = $request->get('consigneeContact');
+        $updateDeliveryReceipt->date_to_be_delivered = $request->get('dateDelivered');
+        $updateDeliveryReceipt->qty = $request->get('qty');
+        $updateDeliveryReceipt->unit = $request->get('unit');
+        $updateDeliveryReceipt->description = $request->get('description');
+        $updateDeliveryReceipt->price = $request->get('price');
+
+        $updateDeliveryReceipt->save();
+    }
+
+    public function addNewDeliveryReceiptData(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName.$lastName;
+
+        $deliveryReceipt = WimpysFoodExpressDeliveryReceipt::find($id);
+
+        $tot = $deliveryReceipt->total + $request->get('price');
+
+        $addNewDeliveryReceipt = new WimpysFoodExpressDeliveryReceipt([
+            'user_id'=>$user->id,
+            'dr_id'=>$id,
+            'dr_no'=>$deliveryReceipt['dr_no'],
+            'qty'=>$request->get('qty'),
+            'unit'=>$request->get('unit'),
+            'description'=>$request->get('description'),
+            'price'=>$request->get('price'),
+            'prepared_by'=>$name,
+            'created_by'=>$name,
+
+        ]);
+
+        $addNewDeliveryReceipt->save();
+
+        //update 
+        $deliveryReceipt->total = $tot; 
+        $deliveryReceipt->save();
+
+        Session::flash('addDeliveryReceiptSuccess', 'Successfully added.');
+
+        return redirect()->route('editDeliveryReceiptWimpys', ['id'=>$id]);
+    }
+
+    public function editDeliveryReceipt($id){
+        $getDeliveryReceipt = WimpysFoodExpressDeliveryReceipt::find($id);
+
+         //dReceipts
+         $dReceipts = WimpysFoodExpressDeliveryReceipt::where('dr_id', $id)->get()->toArray();
+
+        return view('edit-wimpys-food-express-delivery-receipt', compact('id', 'getDeliveryReceipt', 'dReceipts'));
+    }
+
+    public function storeDeliveryReceipt(Request $request){
+        //validate
+          $this->validate($request, [
+            'soldTo' =>'required',
+           
+        ]);
+
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        //get the latest insert id query in table lechon_de_cebu_codes
+        $dataDrNo = DB::select('SELECT id, wimpys_food_express_code FROM wimpys_food_express_codes ORDER BY id DESC LIMIT 1');
+
+        //if code is not zero add plus 1 dr_no
+        if(isset($dataDrNo[0]->wimpys_food_express_code) != 0){
+            //if code is not 0
+            $newDr = $dataDrNo[0]->wimpys_food_express_code +1;
+            $uDr = sprintf("%06d",$newDr);   
+
+        }else{
+            //if code is 0 
+            $newDr = 1;
+            $uDr = sprintf("%06d",$newDr);
+        } 
+
+        $storeDeliveryReceipt = new WimpysFoodExpressDeliveryReceipt([
+            'user_id'=>$user->id,
+            'sold_to'=>$request->get('soldTo'),
+            'time'=>$request->get('time'),
+            'date'=>$request->get('date'),
+            'date_to_be_delivered'=>$request->get('dateDelivered'),
+            'delivered_to'=>$request->get('deliveredFor'),
+            'dr_no'=>$uDr,
+            'delivered_to'=>$request->get('deliveredTo'),
+            'contact_person'=>$request->get('contactPerson'),
+            'mobile_num'=>$request->get('mobile'),
+            'special_instruction'=>$request->get('specialInstruction'),
+            'consignee_name'=>$request->get('consigneeName'),
+            'consignee_contact_num'=>$request->get('consigneeContact'),
+            'qty'=>$request->get('qty'),
+            'unit'=>$request->get('unit'),
+            'description'=>$request->get('description'),
+            'price'=>$request->get('price'),
+            'total'=>$request->get('price'),
+            'prepared_by'=>$name,
+            'created_by'=>$name,
+        ]);
+
+        $storeDeliveryReceipt->save();
+        $insertedId  = $storeDeliveryReceipt->id;
+
+
+
+
+        $moduleCode = "DR-";
+        $moduleName = "Delivery Receipt";
+
+        $wimpysCode = new WimpysFoodExpressCode([
+            'user_id'=>$user->id,
+            'wimpys_food_express_code'=>$uDr,
+            'module_id'=>$insertedId,
+            'module_code'=>$moduleCode,
+            'module_name'=>$moduleName,
+
+        ]);
+        $wimpysCode->save();
+
+        return redirect()->route('editDeliveryReceiptWimpys', ['id'=>$insertedId]);
+
+        return response()->json($storeDeliveryReceipt);
+
+    }
+
+    public function deliveryReceiptForm(){
+        
+        return view('wimpys-food-express-delivery-receipt-form');
+    }
 
     public function updateMenu(Request $request){
         $updateMenu = WimpysFoodExpressMenuList::find($request->id);
@@ -137,11 +465,32 @@ class WimpysFoodExpressController extends Controller
 
         $name  = $firstName." ".$lastName;
 
+        if($request->get('menuCat') == "Additional Order"){
+            $qty = $request->get('qty');
+            $amount = $request->get('amount');
+
+            $getMenu = WimpysFoodExpressClientBookingForm::find($request->get('menuId'));
+           
+            $total = $getMenu->total; 
+            $totAmount = $total + $amount;
+           
+            $getMenu->total = $totAmount; 
+            $getMenu->save();
+
+            
+        }else{
+            $qty = NULL;
+            $amount = NULL;
+        }
+
+
         $addItem = new WimpysFoodExpressClientBookingForm([
             'user_id'=>$user->id,
             'bf_id'=>$id,
             'menu_cat'=>$request->get('menuCat'),
             'menu'=>$request->get('entrees'),
+            'qty'=>$qty,
+            'amount'=>$amount,
             'created_by'=>$name,
         ]);
 
@@ -162,11 +511,19 @@ class WimpysFoodExpressController extends Controller
 
 
         return view('edit-wimpys-client-booking-form', compact('menuLists', 'menuItem', 'getMenuItems'));
+        
     }
+
+    
+    CONST PACK_PRICEA = 300;
+    CONST PACK_PRICEB = 350;
+    CONST PACK_PRICEC = 400;
+    CONST PACK_EXEC = 600;
 
     public function storeBookingForm(Request $request){
         $ids = Auth::user()->id;
         $user = User::find($ids);
+        
 
         $firstName = $user->first_name;
         $lastName = $user->last_name;
@@ -189,6 +546,23 @@ class WimpysFoodExpressController extends Controller
         } 
 
 
+        if($request->get('noOfPeople') && $request->get('package')){
+            $pax = $request->get('noOfPeople');
+            $package = $request->get('package');
+            if($package == "SET A - 300"){
+               $total = $pax * self::PACK_PRICEA;
+                
+            }else if($package == "SET B - 350"){
+               $total = $pax * self::PACK_PRICEB;
+
+            }else if($package == "SET C - 400"){
+               $total  = $pax * self::PACK_PRICEC;
+
+            }else if($package == "EXECUTIVE SET - 600"){
+                $total = $pax * self::PACK_EXEC;
+            } 
+        }
+
         $addClientBooking = new WimpysFoodExpressClientBookingForm([
             'user_id'=>$user->id,
             'date_of_event'=>$request->get('dateOfEvent'),
@@ -201,6 +575,7 @@ class WimpysFoodExpressController extends Controller
             'mobile_number'=>$request->get('mobileNumber'),
             'email'=>$request->get('emailAddress'),
             'special_requests'=>$request->get('specialRequests'),
+            'total'=>$total,
             'created_by'=>$name,
         ]);
 
@@ -2464,6 +2839,7 @@ class WimpysFoodExpressController extends Controller
     }
 
     public function billingStatementForm(){
+
         return view('wimpys-food-exoress-billing-statement-form');
     }
 
@@ -3151,7 +3527,8 @@ class WimpysFoodExpressController extends Controller
     public function index()
     {
         //
-        return view('wimpys-food-express');
+        //return view('wimpys-food-express');
+        return redirect()->route('orderFormLists');
     }
 
     /**
@@ -3330,8 +3707,31 @@ class WimpysFoodExpressController extends Controller
         return redirect()->route('editWimpysFoodExpress', ['id'=>$id]);
     }
 
-    public function destroyClientBooking($id){
+    public function destroyDeliveryReceipt(Request $request, $id){
+        $drId = WimpysFoodExpressDeliveryReceipt::find($request->drId);
+ 
+        $deliveryReceipt = WimpysFoodExpressDeliveryReceipt::find($id);
+        $getAmount = $drId->total - $deliveryReceipt->price;
+
+        $drId->total = $getAmount; 
+        $drId->save();
+
+        $deliveryReceipt->delete();
+    }
+
+    public function destroyClientBooking(Request $request, $id){
         $clientBooking = WimpysFoodExpressClientBookingForm::find($id);
+
+        $menuId = WimpysFoodExpressClientBookingForm::find($request->menuId);
+
+
+        if($clientBooking->amount){
+
+            $amount = $menuId->total - $clientBooking->amount; 
+            $menuId->total = $amount;
+            $menuId->save();
+        }
+
         $clientBooking->delete();
     }
 

@@ -116,30 +116,30 @@
 					<div class="form-row">
 						<div class="col-md-4">
 							<label>Branch </label>
-							<input type="text" id="branch1<?php echo $getRawMaterial->id?>" name="branch" class="form-control" value="{{ $getRawMaterial->branch }}" disabled />
+							<input type="text" id="branch1<?= $getRawMaterial->id?>" name="branch" class="form-control" value="{{ $getRawMaterial->branch }}" disabled />
 						</div>
 						
 						<div class="col-md-4">
 							<label>Product Name</label>
-							<input type="text" id="productName1<?php echo $getRawMaterial->id?>" name="productName" class="form-control" value="{{ $getRawMaterial->product_name }}" />
+							<input type="text" id="productName1<?= $getRawMaterial->id?>" name="productName" class="form-control" value="{{ $getRawMaterial->product_name }}" />
 							
 						</div>
 						<div class="col-md-2">
 							<label>Unit Price</label>
-							<input type="text"  id="unitPrice1<?php echo $getRawMaterial->id?>" name="unitPrice" class="form-control" onkeypress="return isNumber(event)" value="{{ $getRawMaterial->unit_price }}"/>
+							<input type="text"  id="unitPrice1<?= $getRawMaterial->id?>" name="unitPrice" class="form-control" onkeypress="return isNumber(event)" value="{{ $getRawMaterial->unit_price }}"/>
 						</div>
 						<div class="col-md-2">
 							<label>Unit</label>
-							<input type="text" id="unit1<?php echo $getRawMaterial->id?>" name="unit" class="form-control" value="{{ $getRawMaterial->unit }}"  />
+							<input type="text" id="unit1<?= $getRawMaterial->id?>" name="unit" class="form-control" value="{{ $getRawMaterial->unit }}"  />
 						</div>
 						<div class="col-md-4">
 							<label>IN (input number only)</label>
-							<input type="text" id="in1<?php echo $getRawMaterial->id?>" name="in" class="form-control" onkeypress="return isNumber(event)" value="{{ $getRawMaterial->in }}" />
+							<input type="text" id="in1<?= $getRawMaterial->id?>" name="in" class="form-control" onkeypress="return isNumber(event)" value="{{ $getRawMaterial->in }}" />
 						</div>
 					
 						<div class="col-md-4">
 							<label>Supplier</label>
-							<input type="text" id="supplier1<?php echo $getRawMaterial->id?>" name="supplier" class="form-control" value="{{ $getRawMaterial->supplier }}" />
+							<input type="text" id="supplier1<?= $getRawMaterial->id?>" name="supplier" class="form-control" value="{{ $getRawMaterial->supplier }}" />
 						</div>					
 						
 					</div>
@@ -147,7 +147,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
-				<button type="button" onclick="updateRaw(<?php echo $getRawMaterial->id?>)" class="btn btn-success btn-lg">Update</button>
+				<button type="button" onclick="updateRaw(<?= $getRawMaterial->id?>)" class="btn btn-success btn-lg">Update</button>
 			</div>
 			</div>
 		</div>

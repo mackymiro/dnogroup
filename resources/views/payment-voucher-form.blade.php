@@ -99,6 +99,7 @@
                                         <option value="Utility">Utility</option>
                                         <option value="Payroll">Payroll</option>
                                         <option value="Supplier">Supplier</option>
+                                        <!--<option value="Contractor">Contractor</option>-->
                                       </select>
                                 </div> 
                                 <div id="pettyCashNo" class="col-md-2">
@@ -129,7 +130,7 @@
                                       @endforeach
                                     </select>
                                 </div> 
-                                <div id="supplierList" class="col-lg-2">
+                                <div id="supplierName" class="col-lg-2">
                                       <label>Supplier Name</label>
                                       <select data-live-search="true" id="supplierName" name="supplierName" class="form-control selectpicker">
                                           @foreach($suppliers as $supplier)
@@ -137,6 +138,14 @@
                                           @endforeach
                                       </select>
                                   </div>    
+                                  <!--<div id="contractorlist" class="col-lg-2">
+                                      <label>Contractor Name</label>
+                                      <select data-live-search="true" id="supplierName" name="supplierName" class="form-control selectpicker">
+                                          @foreach($suppliers as $supplier)
+                                            <option value="{{ $supplier['id']}}-{{ $supplier['supplier_name']}}">{{ $supplier['supplier_name']}}</option>
+                                          @endforeach
+                                      </select>
+                                  </div>    -->
                             </div>
                          </div>
                         
@@ -180,11 +189,13 @@
       </footer>
 
 </div>
-<script type="text/javascript">
+<script>
+     $("#supplierName").hide();
+
     $("#pettyCashNo").hide();
     $("#utility").hide();
     $("#accountId").hide();
-    $("#supplierList").hide();
+   
 
     const bills = () =>{
       $("#accountId").show();
@@ -197,19 +208,21 @@
             $("#pettyCashNo").hide();
             $("#utility").hide();
             $("#accountId").hide();
-            $("#supplierList").hide();
+            $("#supplierName").hide();
+          
         }else if(cat === "Petty Cash"){
             $("#pettyCashNo").show();
             $("#utility").hide();
             $("#accountId").hide();
-            $("#supplierList").hide();
+            $("#supplierName").hide();
+
         }else if(cat === "Utility"){  
             $("#pettyCashNo").hide();
-            $("#supplierList").hide();
+            $("#supplierName").hide();
             $("#utility").show();
             bills();
         }else if(cat === "Supplier"){
-            $("#supplierList").show();
+            $("#supplierName").show();
 
             $("#pettyCashNo").hide();
             $("#utility").hide();
@@ -218,7 +231,7 @@
             $("#pettyCashNo").hide();
             $("#utility").hide();
             $("#accountId").hide();
-            $("#supplierList").hide();
+            $("#supplierName").hide();
         }
     });
 </script>

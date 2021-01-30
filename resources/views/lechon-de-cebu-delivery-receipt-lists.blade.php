@@ -41,6 +41,7 @@
 					  						<th>Qty</th>
 					  						<th>Description</th>
 					  						<th>Price</th>
+                        <th>Status</th>
 					  						<th>Created By</th>
 				  						</thead>
 			  							<tfoot>
@@ -55,36 +56,69 @@
 					  						<th>Qty</th>
 					  						<th>Description</th>
 					  						<th>Price</th>
+                        <th>Status</th>
 					  						<th>Created By</th>
 
 			  							</tfoot>
 			  							<tbody>
 			  								@foreach($getAllDeliveryReceipts as $getAllDeliveryReceipt)
+                       
 			  								<tr id="deletedId{{ $getAllDeliveryReceipt->id }}">
-			  									<td>
-               					
-			  									<a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-delivery-receipt/'.$getAllDeliveryReceipt->id ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-               					
-              						@if(Auth::user()['role_type'] == 1)
-				  								<a id="delete" onClick="confirmDelete('{{ $getAllDeliveryReceipt->id}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
-              						@endif
-				  								<a href="{{ url('lolo-pinoy-lechon-de-cebu/view-delivery-receipt/'.$getAllDeliveryReceipt->id)}}" title="View"><i class="fas fa-low-vision"></i></a>
-                          @if(Auth::user()['role_type'] == 1)
-                            @if($getAllDeliveryReceipt->duplicate_status != 1) 
-                            <a href="{{ url('lolo-pinoy-lechon-de-cebu/duplicate-copy/'.$getAllDeliveryReceipt->id) }}" title="Duplicate Copy"><i class="fas fa-clone"></i></a>
+                            <td>
+                            @if($getAllDeliveryReceipt->status != "PAID")
+                            <a href="{{ url('lolo-pinoy-lechon-de-cebu/edit-delivery-receipt/'.$getAllDeliveryReceipt->id ) }}" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                          
+                                @if(Auth::user()['role_type'] == 1)
+                                <a id="delete" onClick="confirmDelete('{{ $getAllDeliveryReceipt->id}}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                                @endif
+                                <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-delivery-receipt/'.$getAllDeliveryReceipt->id)}}" title="View"><i class="fas fa-low-vision"></i></a>
+                              @if(Auth::user()['role_type'] == 1)
+                                @if($getAllDeliveryReceipt->duplicate_status != 1) 
+                                <a href="{{ url('lolo-pinoy-lechon-de-cebu/duplicate-copy/'.$getAllDeliveryReceipt->id) }}" title="Duplicate Copy"><i class="fas fa-clone"></i></a>
+                                @endif
+                              @endif
                             @endif
-                          @endif
+                            <a href="{{ url('lolo-pinoy-lechon-de-cebu/view-delivery-receipt/'.$getAllDeliveryReceipt->id)}}" title="View"><i class="fas fa-low-vision"></i></a>
+                            
 			  									</td>
-                          <td>{{ $getAllDeliveryReceipt->date}}</td>
-			  									<td>{{ $getAllDeliveryReceipt->module_code}}{{ $getAllDeliveryReceipt->lechon_de_cebu_code}}</td>
-			  									<td><p style="width: 170px;">{{ $getAllDeliveryReceipt->sold_to}}</p></td>
+                          @if($getAllDeliveryReceipt->status == "PAID")
+                          <td class="bg bg-success" style="color:white">{{ $getAllDeliveryReceipt->date}}</td>
+			  									<td class="bg bg-success" style="color:white">{{ $getAllDeliveryReceipt->module_code}}{{ $getAllDeliveryReceipt->lechon_de_cebu_code}}</td>
+			  									<td class="bg bg-success" style="color:white"><p style="width: 170px;">{{ $getAllDeliveryReceipt->sold_to}}</p></td>
+			  									<td class="bg bg-success" style="color:white"><p style="width: 110px;">{{ $getAllDeliveryReceipt->time}}</p></td>
+                          <td class="bg bg-success" style="color:white"><p style="width: 140px;">{{ $getAllDeliveryReceipt->date_to_be_delivered}}</p></td>
+			  									<td class="bg bg-success" style="color:white"><p style="width: 200px;">{{ $getAllDeliveryReceipt->delivered_to}}</p></td>
+			  									<td class="bg bg-success" style="color:white">{{ $getAllDeliveryReceipt->qty}}</td>
+			  									<td class="bg bg-success" style="color:white"><p style="width: 200px;">{{ $getAllDeliveryReceipt->description}}</p></td>
+			  									<td class="bg bg-success" style="color:white"><?= number_format($getAllDeliveryReceipt->total);?></td>
+                         
+                         
+                          <td class="bg bg-success" style="color:white">
+                             {{ $getAllDeliveryReceipt->status }}
+                          </td>
+                          <td class="bg bg-success" style="color:white"><p style="width: 120px;">{{ $getAllDeliveryReceipt->created_by}}</p></td>
+			  								
+                          @else
+                          
+                         
+                          <td >{{ $getAllDeliveryReceipt->date}}</td>
+			  									<td >{{ $getAllDeliveryReceipt->module_code}}{{ $getAllDeliveryReceipt->lechon_de_cebu_code}}</td>
+			  									<td ><p style="width: 170px;">{{ $getAllDeliveryReceipt->sold_to}}</p></td>
 			  									<td><p style="width: 110px;">{{ $getAllDeliveryReceipt->time}}</p></td>
-                          <td><p style="width: 140px;">{{ $getAllDeliveryReceipt->date_to_be_delivered}}</p></td>
-			  									<td><p style="width: 200px;">{{ $getAllDeliveryReceipt->delivered_to}}</p></td>
+                          <td ><p style="width: 140px;">{{ $getAllDeliveryReceipt->date_to_be_delivered}}</p></td>
+			  									<td ><p style="width: 200px;">{{ $getAllDeliveryReceipt->delivered_to}}</p></td>
 			  									<td>{{ $getAllDeliveryReceipt->qty}}</td>
-			  									<td><p style="width: 200px;">{{ $getAllDeliveryReceipt->description}}</p></td>
-			  									<td><?php echo number_format($getAllDeliveryReceipt->total);?></td>
-			  									<td><p style="width: 120px;">{{ $getAllDeliveryReceipt->created_by}}</p></td>
+			  									<td ><p style="width: 200px;">{{ $getAllDeliveryReceipt->description}}</p></td>
+			  									<td ><?= number_format($getAllDeliveryReceipt->total);?></td>
+                         
+                         
+                          <td >
+                             {{ $getAllDeliveryReceipt->status }}
+                          </td>
+                          <td ><p style="width: 120px;">{{ $getAllDeliveryReceipt->created_by}}</p></td>
+			  								 
+                          @endif
+                         
 			  									
 			  								</tr>
 			  								@endforeach

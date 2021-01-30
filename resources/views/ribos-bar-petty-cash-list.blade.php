@@ -175,11 +175,11 @@
      }
 
      const addPettyCash = () =>{
-        const reqDate = $("#date").val();
+        const date = $("#date").val();
         const pettyCashName = $("#pettyCashName").val();
         const pettyCashSummary = $("#pettyCashSummary").val();
        
-        if(reqDate.length === 0 || pettyCashName.length === 0 || pettyCashSummary.length === 0 ){
+        if(date.length === 0 || pettyCashName.length === 0 || pettyCashSummary.length === 0 ){
             $("#validate").fadeIn().delay(3000).fadeOut();
         }else{
            //make ajax all
@@ -189,7 +189,7 @@
                 data:{
                     _method:'post',
                     "_token":"{{ csrf_token() }}",
-                    "date":reqDate,
+                    "date":date,
                     "pettyCashName":pettyCashName,
                     "pettyCashSummary":pettyCashSummary,
                 },

@@ -2783,7 +2783,26 @@ class RibosBarController extends Controller
     }
 
     public function printPettyCash($id){
-        $getPettyCash = RibosBarPettyCash::find($id);
+        $moduleName = "Petty Cash";
+        $getPettyCash =  DB::table(
+                            'ribos_bar_petty_cashes')
+                            ->select( 
+                            'ribos_bar_petty_cashes.id',
+                            'ribos_bar_petty_cashes.user_id',
+                            'ribos_bar_petty_cashes.pc_id',
+                            'ribos_bar_petty_cashes.date',
+                            'ribos_bar_petty_cashes.petty_cash_name',
+                            'ribos_bar_petty_cashes.petty_cash_summary',
+                            'ribos_bar_petty_cashes.amount',
+                            'ribos_bar_petty_cashes.created_by',
+                            'ribos_bar_codes.ribos_bar_code',
+                            'ribos_bar_codes.module_id',
+                            'ribos_bar_codes.module_code',
+                            'ribos_bar_codes.module_name')
+                            ->join('ribos_bar_codes', 'ribos_bar_petty_cashes.id', '=', 'ribos_bar_codes.module_id')
+                            ->where('ribos_bar_petty_cashes.id', $id)
+                            ->where('ribos_bar_codes.module_name', $moduleName)
+                            ->get();
 
         $getPettyCashSummaries = RibosBarPettyCash::where('pc_id', $id)->get()->toArray();
 
@@ -2900,6 +2919,7 @@ class RibosBarController extends Controller
             $newProd = 1;
             $uPetty = sprintf("%06d",$newProd);
         } 
+ 
 
         $addPettyCash = new RibosBarPettyCash([
             'user_id'=>$user->id,

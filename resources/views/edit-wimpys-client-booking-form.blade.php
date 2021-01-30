@@ -64,8 +64,8 @@
                                       <input type="text" name="timeOfEvent" class="form-control" value="{{ $menuItem->time_of_event }}" />
                                     </div>
                                     <div class="col-lg-2">
-                                      <label>No of People</label>
-                                      <input type="text" name="noOfPeople" class="form-control"  value="{{ $menuItem->no_of_people }}" />
+                                      <label>No of People (PAX)</label>
+                                      <input type="text" name="noOfPeople" class="form-control"  value="{{ $menuItem->no_of_people }}"  onkeypress="return isNumber(event)" autocomplete="off" />
                                     </div>
                                     <div class="col-lg-2">
                                       <label>Motiff</label>
@@ -114,6 +114,11 @@
                                     <div class="col-lg-4">
                                       <label>Special Requests</label>
                                       <input typeE="text" name="specialRequests" class="form-control"  value="{{ $menuItem->special_requests }}"/>
+                                      
+                                    </div>
+                                    <div class="col-lg-4">
+                                      <label>Total Amount</label>
+                                      <input typeE="text" name="totalAmount" class="form-control bg-success" style="color:white;" disabled value="<?= number_format($menuItem->total, 2)?>"/>
                                       
                                     </div>
                                   </div>
@@ -383,6 +388,12 @@
                                         <div class="col-lg-12">
                                            <form action="{{ action('WimpysFoodExpressController@addItem', $menuItem->id)}}" method="post">
                                             {{csrf_field()}}
+                                            <label>Qty</label>
+                                            <input type="text" name="qty" class="form-control"  onkeypress="return isNumber(event)" autocomplete="off"/>
+                                            <br>
+                                            <label>Amount</label>
+                                            <input type="text" name="amount" class="form-control" onkeypress="return isNumber(event)" autocomplete="off" />
+                                            <br>
                                             <select data-live-search="true"  name="entrees" class="selectpicker form-control">
                                                
                                                @foreach($menuLists as $menuList)
@@ -394,6 +405,7 @@
                                             <br>
                                             	<div>
                                                 <input type="hidden" name="menuCat" value="Additional Order" />
+                                                <input type="hidden" name="menuId" value="{{ $menuItem->id }}" />
                                                 <button type="submit" class="btn btn-primary btn-lg float-right">Add</button>
                                               
                                             </div>
@@ -508,12 +520,15 @@
                                           <th style="width:20%">Additional Orders</th>
                                           <td>
                                               @foreach($getMenuItems as $getMenuItem)
-                                              @if($getMenuItem['menu_cat'] == "Additional Orders")
-                                                <p id="deletedId<?= $getMenuItem['id']?>">{{ $getMenuItem['menu']}} <a href="javascript:void" onclick="confirmDelete('{{ $getMenuItem['id']}}')"><i class="fas fa-times-circle" style="font-size:20px;"></i></a></p>
+                                              @if($getMenuItem['menu_cat'] == "Additional Order")
+                                                <p id="deletedId<?= $getMenuItem['id']?>">
+                                                  {{ $getMenuItem['menu']}} , 
+                                                  Qty - {{ $getMenuItem['qty']}}, 
+                                                  Amount - {{ $getMenuItem['amount']}} <a href="javascript:void" onclick="confirmDelete('{{ $getMenuItem['id']}}')"><i class="fas fa-times-circle" style="font-size:20px;"></i></a></p>
                                               @endif
                                             @endforeach
                                           </td>
-                                          
+                                          <input type="hidden" id="menuId" name="menuId" value="{{ $menuItem->id }}" />
                                         </tr>
                                     </thead>
                                 </table>
@@ -557,7 +572,9 @@
 <script>
   
   const confirmDelete = (id) =>{
-    const x = confirm("Do you want to delete this?");
+    const x = confirm("Do you want to delete this?"); 
+    const menuId = $("#menuId").val();
+
     if(x){
       $.ajax({
           type: "DELETE",
@@ -565,7 +582,8 @@
           data:{
             _method: 'delete', 
             "_token": "{{ csrf_token() }}",
-            "id": id
+            "id": id,
+            "menuId":menuId,
           },
           success: function(data){
             console.log(data);
@@ -584,5 +602,15 @@
 
 
   }
+
+  const isNumber =(evt) => {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+          return false;
+        }
+        return true;
+      }
+      
 </script>
 @endsection

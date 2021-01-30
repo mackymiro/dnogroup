@@ -25,7 +25,7 @@
  		<div class="container-fluid"">
  				 <div style="width:50%; float:left;">
              <div style="float:left;">
-               <img  src="{{ asset('images/pdf/lolo-pinoys-lechon-de-cebu(6).png')}}"   alt="Lechon de Cebu">
+               <img  src="{{ asset('images/digitized-logos/wimpys-logo1.png')}}"   alt="Wimpys Food Express">
                <br> 
                <span style="width: 200px;">A Subsidiary of Ribo's Food <br> Corporation</span>   
             </div>
@@ -87,7 +87,7 @@
                   <thead>
                      <tr >
                           <th style="font-size:16px; height: 1%; width: 25%;">DR No: </th>
-                          <th style="font-size:30px; height: 1%; "><span style="color:black;">{{ $deliveryId[0]->lechon_de_cebu_code }}</span></th>
+                          <th style="font-size:30px; height: 1%; "><span style="color:black;">{{ $deliveryId[0]->wimpys_food_express_code }}</span></th>
                        </tr>
                      
                       <tr >
@@ -121,10 +121,7 @@
                         <th style="font-size:16px">Consignee Contact #: </th>
                          <th style="font-size:16px">{{ $deliveryId[0]->consignee_contact_num }}</th>
                     </tr>
-                    <tr  > 
-                        <th style="font-size:16px;  ">Delivered For: </th>
-                        <th style="font-size:16px;">{{ $deliveryId[0]->delivered_for }}</th>
-                    </tr>
+                  
                 </thead>
                
           </table>

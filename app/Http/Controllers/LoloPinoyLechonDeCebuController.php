@@ -22,11 +22,59 @@ use App\LechonDeCebuPettyCash;
 use App\LechonDeCebuUtility;
 use App\LechonDeCebuCode;
 use App\LechonDeCebuSupplier;
+use App\LechonDeCebuContractor;
 use Session;
 
 
 class LoloPinoyLechonDeCebuController extends Controller
 { 
+
+    public function viewContractor($id){
+        $viewContractor = LechonDeCebuContractor::where('id', $id)->get();
+
+        return view('view-lechon-de-cebu-contractor', compact('viewContractor'));
+
+    }
+
+    public function addContractor(Request $request){    
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+          //check if contractor name exits
+        $target = DB::table(
+            'lechon_de_cebu_contractors')
+            ->where('contractor_name', $request->supplierName)
+            ->get()->first();
+
+        if($target === NULL){
+            $supplier = new LechonDeCebuContractor([
+                'user_id'=>$user->id,
+                'date'=>$request->date,
+                'contractor_name'=>$request->contractorName, 
+                'amount'=>$request->amount,
+                'contract_date'=>$request->contractDate,
+                'created_by'=>$name,
+            ]);
+    
+            $supplier->save();
+            return response()->json('Success: successfully added.');        
+        }else{
+            return response()->json('Failed: Already exist.');
+        }
+
+        
+    }
+
+    public function contractors(){
+        $contractors = LechonDeCebuContractor::orderBy('id', 'desc')->get()->toArray();
+
+        return view('lechon-de-cebu-contractors', compact('contractors'));
+    }
     
     public function printStocksInventory(){
         $getStockInventories = DB::table(
@@ -7080,7 +7128,7 @@ class LoloPinoyLechonDeCebuController extends Controller
     }
 
     public function soaPayAll(Request $request, $id){
-         
+        
         $statementAccountPaid = LechonDeCebuStatementOfAccount::find($request->id);
         
         $subStatementIds = LechonDeCebuStatementOfAccount::where('billing_statement_id', $id)->get()->toArray();
@@ -7095,6 +7143,17 @@ class LoloPinoyLechonDeCebuController extends Controller
                 $updateStat->save();
     
             }
+
+            $drUpdate2s = LechonDeCebuDeliveryReceipt::where('dr_no', $statementAccountPaid->dr_no)
+                                                    ->where('price', $statementAccountPaid->amount)
+                                                    ->get();
+            $stat2 = "PAID";
+            foreach($drUpdate2s as $drUpdate2){
+                $status2 = $drUpdate2->status = $stat2;
+                $updateStat = LechonDeCebuDeliveryReceipt::find($drUpdate2->id);
+                $updateStat->status = $stat2;
+                $updateStat->save();
+            }
         }
        
 
@@ -7108,6 +7167,22 @@ class LoloPinoyLechonDeCebuController extends Controller
         $statementAccountPaid->total_remaining_balance = 0.00;
 
         $statementAccountPaid->save();
+
+        //update the DR delivery receipts table to paid 
+        if($request->id){
+            $drUpdate1s = LechonDeCebuDeliveryReceipt::where('dr_no', $statementAccountPaid->dr_no)
+                                                        ->where('price', $statementAccountPaid->amount)
+                                                        ->get();
+            $stat1 = "PAID";
+            foreach($drUpdate1s as $drUpdate1){
+                    $status1 =  $drUpdate1->status = $stat1;
+                    $updateStat = LechonDeCebuDeliveryReceipt::find($drUpdate1->id);
+                    $updateStat->status = $status1;
+                    $updateStat->save();
+
+            }
+        }
+
 
         return response()->json('Success: fully paid successfully');
 
@@ -7134,6 +7209,37 @@ class LoloPinoyLechonDeCebuController extends Controller
         $statementAccountPaid->payment_method = $request->payment;
 
         $statementAccountPaid->save();
+
+        //update the DR delivery receipts table to paid 
+        if($request->mainId){
+            $drUpdate1s = LechonDeCebuDeliveryReceipt::where('dr_no', $mainIdSoa->dr_no)
+                                                        ->where('price', $mainIdSoa->amount)
+                                                        ->get();
+            $stat1 = "PAID";
+            foreach($drUpdate1s as $drUpdate1){
+                $status1 =  $drUpdate1->status = $stat1;
+                $updateStat = LechonDeCebuDeliveryReceipt::find($drUpdate1->id);
+                $updateStat->status = $status1;
+                $updateStat->save();
+
+            }
+        }
+      
+
+        if($request->id){
+            $drUpdate2s = LechonDeCebuDeliveryReceipt::where('dr_no', $statementAccountPaid->dr_no)
+                                                        ->where('price', $statementAccountPaid->amount)
+                                                        ->get();
+
+            $stat2 = "PAID";
+            foreach($drUpdate2s as $drUpdate2){
+            $status2 = $drUpdate2->status = $stat2;
+            $updateStat = LechonDeCebuDeliveryReceipt::find($drUpdate2->id);
+            $updateStat->status = $stat2;
+            $updateStat->save();
+            }
+        }
+      
 
         return response()->json('Success: paid successfully');
 
@@ -8233,6 +8339,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 'lechon_de_cebu_delivery_receipts.special_instruction',
                                 'lechon_de_cebu_delivery_receipts.consignee_name',
                                 'lechon_de_cebu_delivery_receipts.consignee_contact_num',
+                                'lechon_de_cebu_delivery_receipts.status',
                                 'lechon_de_cebu_delivery_receipts.prepared_by',
                                 'lechon_de_cebu_delivery_receipts.checked_by',
                                 'lechon_de_cebu_delivery_receipts.received_by',
@@ -8249,6 +8356,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 ->where('lechon_de_cebu_delivery_receipts.deleted_at', NULL)
                                 ->orderBy('lechon_de_cebu_delivery_receipts.id', 'desc')
                                 ->get()->toArray();
+
+       
       
         //getDuplicateCopy
         $getDuplicateCopies = LechonDeCebuDeliveryReceiptDuplicateCopy::where('dr_id', NULL)->get()->toArray();
@@ -8815,7 +8924,10 @@ class LoloPinoyLechonDeCebuController extends Controller
          //get suppliers
          $suppliers = LechonDeCebuSupplier::get()->toArray();
 
-        return view('payment-voucher-form',compact('pettyCashes', 'getAllFlags', 'suppliers'));
+         //get contractor
+         $contractors = LechonDeCebuContractor::get()->toArray();
+
+        return view('payment-voucher-form',compact('pettyCashes', 'getAllFlags', 'suppliers', 'contractors'));
         
     }
 
@@ -10209,6 +10321,7 @@ class LoloPinoyLechonDeCebuController extends Controller
     //billing statement form
     public function billingStatementForm(){
        $moduleName = "Delivery Receipt"; 
+      
         $drNos = DB::table(
                         'lechon_de_cebu_delivery_receipts')
                         ->select( 
@@ -10229,6 +10342,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                         'lechon_de_cebu_delivery_receipts.special_instruction',
                         'lechon_de_cebu_delivery_receipts.consignee_name',
                         'lechon_de_cebu_delivery_receipts.consignee_contact_num',
+                        'lechon_de_cebu_delivery_receipts.status',
                         'lechon_de_cebu_delivery_receipts.prepared_by',
                         'lechon_de_cebu_delivery_receipts.checked_by',
                         'lechon_de_cebu_delivery_receipts.received_by',
@@ -10240,6 +10354,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                         'lechon_de_cebu_codes.module_name')
                         ->join('lechon_de_cebu_codes', 'lechon_de_cebu_delivery_receipts.id', '=', 'lechon_de_cebu_codes.module_id')
                         ->where('lechon_de_cebu_delivery_receipts.dr_id', NULL)
+                        ->where('lechon_de_cebu_delivery_receipts.status', NULL)
                         ->where('lechon_de_cebu_codes.module_name', $moduleName)
                         ->get()->toArray();
         

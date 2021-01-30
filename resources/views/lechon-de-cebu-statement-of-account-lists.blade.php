@@ -169,15 +169,17 @@
                                       <?php $id = $privateOrder->id;  ?>
                                       <?php
                                         $getRefDrNos =  DB::table('lechon_de_cebu_statement_of_accounts')
-                                                      ->select('*')
+                                                      ->select('lechon_de_cebu_statement_of_accounts.dr_no')
                                                       ->where('billing_statement_id', $id)
                                                       ->where('qty', '!=', '.')
+                                                      ->groupBy('lechon_de_cebu_statement_of_accounts.dr_no')
                                                       ->get();
 
                                         $getDeliveredFors =  DB::table('lechon_de_cebu_statement_of_accounts')
-                                                      ->select('*')
+                                                      ->select('lechon_de_cebu_statement_of_accounts.dr_delivered_for')
                                                       ->where('billing_statement_id', $id)
                                                       ->where('qty', '!=', '.')
+                                                      ->groupBy('dr_delivered_for')
                                                       ->get()->toArray();
 
                                          $getQty =  DB::table('lechon_de_cebu_statement_of_accounts')
@@ -212,11 +214,11 @@
                                           <td><p style="width:140px;">{{ $privateOrder->address }}</p></td>
                                           <td><p style="width:140px;">{{ $privateOrder->dr_address }}</p></td>
                                           <td>
-                                            <p style="width:140px;">{{ $privateOrder->dr_delivered_for }},
-                                                <?php foreach($getDeliveredFors as $getDeliveredFor): ?>
+                                            <p style="width:140px;">
+                                              {{ $privateOrder->dr_delivered_for }},
+                                              <?php foreach($getDeliveredFors as $getDeliveredFor): ?>
                                                     <?= $getDeliveredFor->dr_delivered_for;?>, 
-                                              <?php endforeach; ?>
-                                                
+                                              <?php endforeach; ?>            
                                             </p>
                                               
                                           </td>

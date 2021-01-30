@@ -107,7 +107,7 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
             <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/suppliers') }}"> Suppliers</a>
-            
+            <a class="dropdown-item" href="{{ url('lolo-pinoy-lechon-de-cebu/contractor') }}"> Contractors</a>
         </div>
       </li>
       @if(Auth::user()['role_type'] != 3)

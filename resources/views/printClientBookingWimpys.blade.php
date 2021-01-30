@@ -99,6 +99,10 @@
                                                 <th>Special Requests</th>
                                                 <th>{{ $printCB[0]->special_requests }}</th>
                                             </tr>
+                                            <tr>
+                                                <th>Total Amount</th>
+                                                <th><?= number_format( $printCB[0]->total, 2) ?></th>
+                                            </tr>
                                         </thead>
 	                              </table>
 	                          </div>
@@ -220,8 +224,8 @@
                                            <th style="text-align:center; border: 1px solid black; width:20%">Additional Orders</th>
                                            <td style="text-align:center; border: 1px solid black;">
                                                @foreach($getMenuItems as $getMenuItem)
-                                               @if($getMenuItem['menu_cat'] === "Additional Orders")
-                                               <p >{{ $getMenuItem['menu']}} </p>
+                                               @if($getMenuItem['menu_cat'] === "Additional Order")
+                                               <p >{{ $getMenuItem['menu']}}, Qty - {{ $getMenuItem['qty']}}, Amount - {{ $getMenuItem['amount']}} </p>
                                                @endif
                                                @endforeach
                                            </td>

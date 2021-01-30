@@ -168,6 +168,23 @@ Route::group(['middleware' =>['user']], function(){
 		->name('printSupplier')
 		->middleware(['cashier']);
 
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/contractor',
+		'LoloPinoyLechonDeCebuController@contractors')
+		->name('contractors')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/lolo-pinoy-lechon-de-cebu/contractor/add',
+		'LoloPinoyLechonDeCebuController@addContractor')
+		->name('addContractor')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/lolo-pinoy-lechon-de-cebu/contractor/{id}/view',
+		'LoloPinoyLechonDeCebuController@viewContractor')
+		->name('viewContractor')
+		->middleware(['cashier']);
 
 	Route::get(
 		'/lolo-pinoy-lechon-de-cebu/utilities',
@@ -7472,6 +7489,67 @@ Route::group(['middleware' => ['auth']], function(){
 		->middleware(['cashier']);
 
 	Route::get(
+		'/wimpys-food-express/delivery-receipt-form',
+		'WimpysFoodExpressController@deliveryReceiptForm')
+		->name('deliveryReceiptForm')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/wimpys-food-express/store-delivery-receipt',
+		'WimpysFoodExpressController@storeDeliveryReceipt')
+		->name('storeDeliveryReceipt')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/edit-delivery-receipt',
+		'WimpysFoodExpressController@editDeliveryReceipt')
+		->name('editDeliveryReceiptWimpys')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/wimpys-food-express/{id}/update-delivery-receipt',
+		'WimpysFoodExpressController@updateDeliveryReceipt')
+		->name('updateDeliveryReceiptWimpysFoodExpress')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/wimpys-food-express/{id}/add-new-delivery-receipt-data',
+		'WimpysFoodExpressController@addNewDeliveryReceiptData')
+		->name('addNewDeliveryReceiptData')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/wimpys-food-express/{id}/update-dr',
+		'WimpysFoodExpressController@updateDr')
+		->name('updateDr')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/wimpys-food-express/delete-delivery-receipt/{id}',
+		'WimpysFoodExpressController@destroyDeliveryReceipt')
+		->name('destroyDeliveryReceipt')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/delivery-receipt/lists',
+		'WimpysFoodExpressController@deliveryReceiptLists')
+		->name('deliveryReceiptLists')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/view-delivery-receipt',
+		'WimpysFoodExpressController@viewDeliveryReceipt')
+		->name('viewDeliveryReceiptWimpys')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/printDelivery',
+		'WimpysFoodExpressController@printDelivery')
+		->name('printDelivery')
+		->middleware(['cashier']);
+
+
+	Route::get(
 		'/wimpys-food-express/billing-statement-form',
 		'WimpysFoodExpressController@billingStatementForm')
 		->name('billingStatementFormWimpysFoodExp')
@@ -7488,6 +7566,7 @@ Route::group(['middleware' => ['auth']], function(){
 		'WimpysFoodExpressController@editBillingStatement')
 		->name('editBillingStatementWimpysFoodExp')
 		->middleware(['cashier']);
+
 
 	Route::post(
 		'/wimpys-food-express/{id}/add-new-billing',

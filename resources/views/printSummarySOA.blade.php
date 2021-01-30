@@ -83,16 +83,18 @@
 									<?php $id = $statementOfAccount->id;  ?>
 									<?php
 											$getRefDrNos =  DB::table('lechon_de_cebu_statement_of_accounts')
-														->select('*')
-														->where('billing_statement_id', $id)
-														->where('qty', '!=', '.')
-														->get()->toArray();
+															->select('lechon_de_cebu_statement_of_accounts.dr_no')
+															->where('billing_statement_id', $id)
+															->where('qty', '!=', '.')
+															->groupBy('lechon_de_cebu_statement_of_accounts.dr_no')
+															->get();
 
 											$getDeliveredFors =  DB::table('lechon_de_cebu_statement_of_accounts')
-														->select('*')
-														->where('billing_statement_id', $id)
-														->where('qty', '!=', '.')
-														->get()->toArray();	
+															->select('lechon_de_cebu_statement_of_accounts.dr_delivered_for')
+															->where('billing_statement_id', $id)
+															->where('qty', '!=', '.')
+															->groupBy('dr_delivered_for')
+														->get()->toArray();
 
 											$getQty =  DB::table('lechon_de_cebu_statement_of_accounts')
 														->select('*')

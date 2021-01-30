@@ -5,17 +5,18 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class LechonDeCebuDeliveryReceipt extends Model
+class WimpysFoodExpressDeliveryReceipt extends Model
 {
-	use SoftDeletes;
+    //
+    use SoftDeletes;
 	
-	protected $dates = ['deleted_at'];
-	
+    protected $dates = ['deleted_at'];
+    
     protected $fillable = [
-    	'user_id',
-    	'dr_id',
-    	'sold_to',
-    	'delivered_to',
+        'user_id',
+        'dr_id',
+        'sold_to',
+        'delivered_to',
     	'time',
     	'dr_no',
     	'date',
@@ -36,6 +37,6 @@ class LechonDeCebuDeliveryReceipt extends Model
     	'checked_by',
     	'received_by',
     	'created_by',
-        'duplicate_status',
     ];
+
 }

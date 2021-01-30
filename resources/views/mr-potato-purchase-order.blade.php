@@ -176,7 +176,9 @@
 				{text:'Bottle', value:'Bottle'},
 				{text:'PACK', value:'PACK'},
 				{text:'KILO', value:'KILO'},
-				{text:'BOX', value:'BOX'}
+				{text:'BOX', value:'BOX'},
+				{text:'MEGA', value:'MEGA'},
+				{text:'GIANT', value:'GIANT'},
 			]
 		}
 	});

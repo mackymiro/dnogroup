@@ -26,53 +26,56 @@
 				  					<thead>
 				  						<tr>
 				  							<th>Action</th>
-                                              <th>Client Booking No</th>
+                        <th>Client Booking No</th>
 			  								<th>Date of Event</th>
 			  								<th>Time of Event</th>
-                                            <th>No of People</th>
-                                            <th>Motiff</th>
-                                            <th>Type of Pacakge</th>
+                        <th>No of People</th>
+                        <th>Motiff</th>
+                        <th>Type of Pacakge</th>
+                        <th>Total Amount</th>
 			  								<th>Created by</th>
 				  						</tr>
 				  					</thead>
 				  					<tfoot>
-                                        <tr>
+                      <tr>
 				  							<th>Action</th>
-                                            <th>Client Booking No</th>
+                        <th>Client Booking No</th>
 			  								<th>Date of Event</th>
 			  								<th>Time of Event</th>
-                                            <th>No of People</th>
-                                            <th>Motiff</th>
-                                            <th>Type of Pacakge</th>
+                        <th>No of People</th>
+                        <th>Motiff</th>
+                        <th>Type of Pacakge</th>
+                        <th>Total Amount</th>
 			  								<th>Created by</th>
 				  						</tr>
 				  					</tfoot>
 				  					<tbody>
-                                        @foreach($clientBookingLists as $clientBookingList)
-                                        <tr>
-                                            <td>
-                                            <a href="/wimpys-food-express/{{ $clientBookingList['id'] }}/edit-client-booking-form " title="Edit"><i class="fas fa-pencil-alt"></i></a>
-                                            @if(Auth::user()['role_type'] == 1)
-                                                <a id="delete" onclick="confirmDelete('{{ $clientBookingList['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
-                                            @endif
-                                                <a href="/wimpys-food-express/{{ $clientBookingList['id']}}/view-client-booking" title="View"><i class="fas fa-low-vision"></i></a>
-                       
-                                            </td>
-                                            <td>
-                                                 @foreach($clientBookingList->client_bookings as $clientBooking)
-                                                    @if($clientBooking->module_name === "Client Booking")
-                                                        {{ $clientBooking->module_code }} {{ $clientBooking->wimpys_food_express_code  }}
-                                                    @endif
-                                                @endforeach    
-                                            </td>
-                                            <td>{{ $clientBookingList['date_of_event'] }}</td>
-                                            <td>{{ $clientBookingList['time_of_event']}}</td>
-                                            <td>{{ $clientBookingList['no_of_people']}}</td>
-                                            <td>{{ $clientBookingList['motiff']}}</td>
-                                            <td>{{ $clientBookingList['type_of_package']}}</td>
-                                            <td>{{ $clientBookingList['created_by']}}</td>
-                                        </tr>
-                                        @endforeach
+                    @foreach($clientBookingLists as $clientBookingList)
+                    <tr>
+                        <td>
+                        <a href="/wimpys-food-express/{{ $clientBookingList['id'] }}/edit-client-booking-form " title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                        @if(Auth::user()['role_type'] == 1)
+                            <a id="delete" onclick="confirmDelete('{{ $clientBookingList['id'] }}')" href="javascript:void" title="Delete"><i class="fas fa-trash"></i></a>
+                        @endif
+                            <a href="/wimpys-food-express/{{ $clientBookingList['id']}}/view-client-booking" title="View"><i class="fas fa-low-vision"></i></a>
+    
+                        </td>
+                        <td>
+                              @foreach($clientBookingList->client_bookings as $clientBooking)
+                                @if($clientBooking->module_name === "Client Booking")
+                                    {{ $clientBooking->module_code }} {{ $clientBooking->wimpys_food_express_code  }}
+                                @endif
+                            @endforeach    
+                        </td>
+                        <td>{{ $clientBookingList['date_of_event'] }}</td>
+                        <td>{{ $clientBookingList['time_of_event']}}</td>
+                        <td>{{ $clientBookingList['no_of_people']}}</td>
+                        <td>{{ $clientBookingList['motiff']}}</td>
+                        <td>{{ $clientBookingList['type_of_package']}}</td>
+                        <td><?= number_format($clientBookingList['total'], 2)?></td>
+                        <td>{{ $clientBookingList['created_by']}}</td>
+                    </tr>
+                    @endforeach
 				  					</tbody>
 				  				</table>
 					  		</div>

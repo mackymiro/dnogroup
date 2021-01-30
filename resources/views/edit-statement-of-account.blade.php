@@ -331,7 +331,7 @@
                             <label>Payment Method</label>
                             <div id="app-payment1">
                                 <select  name="payment" class="payment{{ $getStatementOfAccount[0]->id }} form-control"> 
-                                    <option v-for="payment in payments" v-bind:value="payment.value">
+                                    <option v-for="payment in payments1" v-bind:value="payment.value">
                                     @{{ payment.text }}
                                     </option>
                                 </select>
@@ -363,7 +363,7 @@
                  <div  class="validate col-lg-12">
                     <p class="alert alert-danger">Please Fill up the fields</p>
                 </div>
-                <div id="succUp<?php echo $allAccount['id'] ?>" class="col-lg-12"></div>
+                <div  class="col-lg-12 succUp<?= $allAccount['id'] ?>"></div>
                 <div class="form-group">
                     <div class="form-row">
                         <div class="col-lg-2">
@@ -476,7 +476,7 @@
                 <div  class="validate col-lg-12">
                     <p class="alert alert-danger">Please Fill up the fields</p>
                 </div>
-                 <div id="succUp<?php echo $getStatementOfAccount[0]->id?>" class="col-lg-12"></div>
+                <div  class="col-lg-12 succUp<?= $getStatementOfAccount[0]->id ?>"></div>
                 <div class="form-group">
                     <div class="form-row">
                         <div class="col-lg-2">
@@ -515,7 +515,7 @@
                         </div>
                         <div class="col-lg-2">
                             <label>Paid Amount</label>
-                            <input type="text"  name="paidAmount" class="paidAmount{{ $getStatementOfAccount[0]->id}} form-control"  />
+                            <input type="text"  name="paidAmount" class="paidAmount form-control"  />
                         </div>
                         <div class="col-lg-2">
                             <label>Status</label>
@@ -529,24 +529,24 @@
                         </div>
                         <div class="col-lg-2">
                             <label>Collection Date</label>
-                            <input type="text"  name="collectionDate" class="collectionDate{{ $getStatementOfAccount[0]->id }} datepicker form-control"  />
+                            <input type="text"  name="collectionDate" class="collectionDate datepicker form-control"  />
                         </div>
                         <div class="col-lg-4">
                             <label>Check Number</label>
-                            <input type="text" name="checkNumber" class="checkNumber{{ $getStatementOfAccount[0]->id }} form-control" />
+                            <input type="text" name="checkNumber" class="checkNumber form-control" />
                         </div>
                         <div class="col-lg-4">
                             <label>Check Amount</label>
-                            <input type="text" name="checkAmount" class="checkAmount{{ $getStatementOfAccount[0]->id }} form-control"   />
+                            <input type="text" name="checkAmount" class="checkAmount form-control"   />
                         </div>
                         <div class="col-lg-4">
                             <label>OR Number</label>
-                            <input type="text"  name="orNumber" class="orNumber{{ $getStatementOfAccount[0]->id }} form-control"  />
+                            <input type="text"  name="orNumber" class="orNumber form-control"  />
                         </div>
                         <div class="col-lg-4">
                             <label>Payment Method</label>
                             <div id="app-payment">
-                                <select  name="payment" class="payment{{ $getStatementOfAccount[0]->id }} form-control"> 
+                                <select  name="payment" class="payment form-control"> 
                                     <option v-for="payment in payments" v-bind:value="payment.value">
                                     @{{ payment.text }}
                                     </option>
@@ -559,7 +559,7 @@
             <div class="modal-footer">
                 <input type="hidden"  class="mainId{{ $getStatementOfAccount[0]->id}}" value="{{ $getStatementOfAccount[0]->id }}" />
                 <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
-                <button type="button" onclick="updatePaid(<?= $getStatementOfAccount[0]->id ?>)" class="btn btn-success btn-lg">Paid</button>
+                <button type="button" onclick="updatePaidFirstLine(<?= $getStatementOfAccount[0]->id ?>)" class="btn btn-success btn-lg">Paid</button>
             </div>
             </div>
         </div>
@@ -629,6 +629,61 @@
                 });
         }
      }
+
+     const updatePaidFirstLine = (id) =>{
+        const paidAmount = $(".paidAmount").val();
+        const status = $(".status"+id).val();
+        const collectionDate = $(".collectionDate").val();
+        const checkNumber = $(".checkNumber").val();
+        const checkAmount = $(".checkAmount").val();
+        const orNumber = $(".orNumber").val();
+        const payment = $(".payment").val();
+        const mainId = $(".mainId"+id).val();
+     
+
+        if(paidAmount.length === 0 || collectionDate.length === 0){
+            $(".validate").fadeIn().delay(3000).fadeOut();
+        }else{
+              //make ajax call
+            $.ajax({
+                type: "PUT",
+                url: '/lolo-pinoy-lechon-de-cebu/s-account/' + id,
+                data:{
+                    _method: 'put', 
+                    "_token": "{{ csrf_token() }}",
+                    "id":id,
+                    "mainId":mainId,
+                    "paidAmount":paidAmount,
+                    "status":status,
+                    "collectionDate":collectionDate,
+                    "checkNumber":checkNumber,
+                    "checkAmount":checkAmount,
+                    "orNumber":orNumber,
+                    "payment":payment,
+                },
+                success: function(data){
+                    console.log(data);
+                    const getData = data;
+                    const succData = getData.split(":");
+                    const succDataArr = succData[0];
+                    if(succDataArr == "Success"){
+                        $(".succUp"+id).fadeIn().delay(3000).fadeOut();
+                        $(".succUp"+id).html(`<p class="alert alert-success"> ${data}</p>`);
+                        
+                        setTimeout(function(){
+                            document.location.reload();
+                        }, 3000);
+                    }
+                
+                },
+                error: function(data){
+                    console.log('Error:', data);
+                }
+
+                });
+        }
+      
+     }
      
      const updatePaid = (id) =>{
         const paidAmount = $(".paidAmount"+id).val();
@@ -666,8 +721,8 @@
                     const succData = getData.split(":");
                     const succDataArr = succData[0];
                     if(succDataArr == "Success"){
-                        $("#succUp"+id).fadeIn().delay(3000).fadeOut();
-                        $("#succUp"+id).html(`<p class="alert alert-success"> ${data}</p>`);
+                        $(".succUp"+id).fadeIn().delay(3000).fadeOut();
+                        $(".succUp"+id).html(`<p class="alert alert-success"> ${data}</p>`);
                         
                         setTimeout(function(){
                             document.location.reload();

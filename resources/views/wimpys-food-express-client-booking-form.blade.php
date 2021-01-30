@@ -49,8 +49,8 @@
                                       <input type="text" name="timeOfEvent" class="form-control" required />
                                     </div>
                                     <div class="col-lg-2">
-                                      <label>No of People</label>
-                                      <input type="text" name="noOfPeople" class="form-control"  required/>
+                                      <label>No of People (PAX)</label>
+                                      <input type="text" name="noOfPeople" class="form-control"  onkeypress="return isNumber(event)" required autocomplete="off"/>
                                     </div>
                                     <div class="col-lg-2">
                                       <label>Motiff</label>
@@ -145,5 +145,16 @@
           ]
       }
     })
+</script>
+<script>
+    const isNumber =(evt) => {
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+          return false;
+        }
+        return true;
+      }
+      
 </script>
 @endsection

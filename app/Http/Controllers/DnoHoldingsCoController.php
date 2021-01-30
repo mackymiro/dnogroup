@@ -16,6 +16,7 @@ use App\DnoHoldingsCoPurchaseOrder;
 use App\DnoHoldingsCoPettyCash;
 use App\DnoHoldingsCoBillingStatement; 
 use App\DnoHoldingsCoStatementOfAccount;
+use App\DnoPersonalPettyCash;
 
 
 class DnoHoldingsCoController extends Controller
@@ -652,12 +653,12 @@ class DnoHoldingsCoController extends Controller
                                                 ->where('id', $id)
                                                 ->get();
 
-        $getPettyCashSummaries = DnoPersonalPettyCash::where('pc_id', $id)->get()->toArray();
+        $getPettyCashSummaries = DnoHoldingsCoPettyCash::where('pc_id', $id)->get()->toArray();
 
         //total
-        $totalPettyCash = DnoPersonalPettyCash::where('id', $id)->where('pc_id', NULL)->sum('amount');
+        $totalPettyCash = DnoHoldingsCoPettyCash::where('id', $id)->where('pc_id', NULL)->sum('amount');
 
-        $pettyCashSummaryTotal = DnoPersonalPettyCash::where('pc_id', $id)->sum('amount');
+        $pettyCashSummaryTotal = DnoHoldingsCoPettyCash::where('pc_id', $id)->sum('amount');
 
         $sum = $totalPettyCash + $pettyCashSummaryTotal;
 
