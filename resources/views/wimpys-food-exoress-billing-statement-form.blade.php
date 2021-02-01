@@ -11,6 +11,13 @@
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css" >
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+
 <div id="wrapper">
 	<!-- Sidebar -->
     @include('sidebar.sidebar-wimpys-food-express')
@@ -104,15 +111,67 @@
             	 						</div>
                                       
                         <div class="col-lg-2">
-                          <label>DR #</label>
-                          <input type="text" name="drNo" class="form-control" />
+                          <label>Order </label>
+                          <select name="choose" class="chooseOption form-control" >
+                            <option value="Client Booking Form">Client Booking Form</option>
+                            <option value="DR">DR</option> 
+                            </select>
                         
+                        </div>
+                        <div id="cbf" class="col-lg-2">
+                            <label>CBF #</label>
+                            <select data-live-search="true" name="cbf" class="cbfSelect form-control selectpicker">
+                              <option value="0">--Please Select--</option>
+                              @foreach($getAllCbfs as $getAllCbf)
+                                <option value="{{ $getAllCbf->wimpys_food_express_code}}">{{ $getAllCbf->wimpys_food_express_code}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div  id="dateOfEvent" class="col-lg-2">
+        	 								<label>Date Of Event</label>
+        	 								<input type="text" name="dateOfEvent" class="form-control" disabled/>
+        	 							
+                        </div>
+                        <div  id="timeOfEvent" class="col-lg-2">
+        	 								<label>Time Of Event</label>
+        	 								<input type="text" name="timeOfEvent" class="form-control" disabled/>
+        	 							
+                        </div>
+                        <div  id="noOfPax" class="col-lg-2">
+        	 								<label>No Of People (Pax)</label>
+        	 								<input type="text" name="noOfPax" class="form-control" disabled />
+        	 							
+                        </div>
+                        <div  id="motiff" class="col-lg-2">
+        	 								<label>Motiff</label>
+        	 								<input type="text" name="motiff" class="form-control" disabled />
+        	 							
+                        </div>
+                        <div  id="typeOfPackage" class="col-lg-4">
+        	 								<label>Type Of Package</label>
+        	 								<input type="text" name="typeOfPackage" class="form-control" disabled />
+        	 							
+                        </div>
+                        <div  id="client" class="col-lg-4">
+        	 								<label>Client</label>
+        	 								<input type="text" name="client" class="form-control" disabled />
+        	 							
+                        </div>
+                        <div  id="placeOfEvent" class="col-lg-4">
+        	 								<label>Place Of Event</label>
+        	 								<input type="text" name="placeOfEvent" class="form-control" disabled />
+        	 							
+                        </div>
+                        <div  id="totalAmount" class="col-lg-2">
+        	 								<label>Total Amount</label>
+        	 								<input type="text" name="totalAmount" class="form-control" disabled />
+        	 							
                         </div>
 										    <div  class="col-lg-4">
         	 								<label>Item Description</label>
         	 								<input type="text" name="description" class="form-control"/>
         	 							
-            	 						</div>
+                        </div>
 										      <div  class="col-lg-2">
             	 							<label>Unit Price</label>
             	 							<input type="text" name="unitPrice" class="form-control"/>

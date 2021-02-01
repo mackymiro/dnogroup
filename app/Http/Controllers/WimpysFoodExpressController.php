@@ -2840,7 +2840,41 @@ class WimpysFoodExpressController extends Controller
 
     public function billingStatementForm(){
 
-        return view('wimpys-food-exoress-billing-statement-form');
+        //getAllCbf
+        $moduleNameCbf = "Client Booking";
+        $getAllCbfs = DB::table(
+                            'wimpys_food_express_client_booking_forms')
+                            ->select(
+                                'wimpys_food_express_client_booking_forms.id',
+                                'wimpys_food_express_client_booking_forms.user_id',
+                                'wimpys_food_express_client_booking_forms.bf_id',
+                                'wimpys_food_express_client_booking_forms.date_of_event',
+                                'wimpys_food_express_client_booking_forms.time_of_event',
+                                'wimpys_food_express_client_booking_forms.no_of_people',
+                                'wimpys_food_express_client_booking_forms.motiff',
+                                'wimpys_food_express_client_booking_forms.qty',
+                                'wimpys_food_express_client_booking_forms.amount',
+                                'wimpys_food_express_client_booking_forms.type_of_package',
+                                'wimpys_food_express_client_booking_forms.total',
+                                'wimpys_food_express_client_booking_forms.client',
+                                'wimpys_food_express_client_booking_forms.place_of_event',
+                                'wimpys_food_express_client_booking_forms.mobile_number',
+                                'wimpys_food_express_client_booking_forms.email',
+                                'wimpys_food_express_client_booking_forms.special_requests',
+                                'wimpys_food_express_client_booking_forms.menu',
+                                'wimpys_food_express_client_booking_forms.menu_cat',
+                                'wimpys_food_express_codes.wimpys_food_express_code',
+                                'wimpys_food_express_codes.module_id',
+                                'wimpys_food_express_codes.module_code',
+                                'wimpys_food_express_codes.module_name')
+                            ->leftJoin('wimpys_food_express_codes', 'wimpys_food_express_client_booking_forms.id', '=', 'wimpys_food_express_codes.module_id')
+                            ->where('wimpys_food_express_client_booking_forms.bf_id', NULL)
+                            ->orderBy('wimpys_food_express_client_booking_forms.id', 'desc')
+                            ->where('wimpys_food_express_client_booking_forms.deleted_at', NULL)
+                            ->where('wimpys_food_express_codes.module_name', $moduleNameCbf)
+                            ->get()->toArray();
+
+        return view('wimpys-food-exoress-billing-statement-form', compact('getAllCbfs'));
     }
 
     public function printPO($id){

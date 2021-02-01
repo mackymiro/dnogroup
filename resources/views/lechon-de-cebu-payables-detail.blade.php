@@ -567,19 +567,19 @@
 						<div id="editParticularP" class="col-lg-12"></div>
 						<div class="col-lg-4">
 							<label>Date</label>
-							<input type="text" id="dateP<?php echo $getParticular['id']?>" name="date" class="datepicker form-control"  value="{{ $getParticular['date']}}" />
+							<input type="text" id="dateP<?= $getParticular['id']?>" name="date" class="datepicker form-control"  value="{{ $getParticular['date']}}" />
 						</div>
 						<div class="col-lg-4">
 							<label>Invoice No</label>
-							<input type="text" id="invoiceN<?php echo $getParticular['id']?>" name="invoiceN" class=" form-control"  value="{{ $getParticular['invoice_number']}}" />
+							<input type="text" id="invoiceN<?= $getParticular['id']?>" name="invoiceN" class=" form-control"  value="{{ $getParticular['invoice_number']}}" />
 						</div>
 						<div class="col-lg-4">
 							<label>Particulars</label>
-							<textarea id="particularsP<?php echo $getParticular['id']?>" name="particulars" class="form-control">{{ $getParticular['particulars'] }}</textarea>
+							<textarea id="particularsP<?= $getParticular['id']?>" name="particulars" class="form-control">{{ $getParticular['particulars'] }}</textarea>
 						</div>
 						<div class="col-lg-4">
 							<label>Amount</label>
-							<input type="text" id="amountP<?php echo $getParticular['id']?>" name="amount" class="form-control" value="{{ $getParticular['amount'] }}" />
+							<input type="text" id="amountP<?= $getParticular['id']?>" name="amount" class="form-control" value="{{ $getParticular['amount'] }}" />
 						</div>
 						
 					</div>
@@ -631,7 +631,7 @@
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-				<button type="button" onclick="updateParticular(<?php echo $transactionList[0]->id; ?>)" class="btn btn-success">Update changes</button>
+				<button type="button" onclick="updateParticular(<?= $transactionList[0]->id; ?>)" class="btn btn-success">Update changes</button>
 			</div>
 			</div>
 		</div>

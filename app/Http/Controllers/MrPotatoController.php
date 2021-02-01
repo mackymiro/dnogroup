@@ -346,7 +346,7 @@ class MrPotatoController extends Controller
         $sum = $amount + $tot; 
  
         $updateParticular->date = $request->date;
-        $updateParticular->invpice_number = $request->invoiceNo;
+        $updateParticular->invoice_number = $request->invoiceN;
         $updateParticular->particulars = $request->particulars;
         $updateParticular->amount = $amount;
         $updateParticular->amount_due = $sum;

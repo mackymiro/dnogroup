@@ -625,7 +625,7 @@
 						</div>
 						<div class="col-lg-4">
 							<label>Invoice No</label>
-							<input type="text" id="invoiceNo" name="invoiceNo" class="form-control"  value="{{ $transactionList[0]->invoice_number}}" />
+							<input type="text" id="invoiceN" name="invoiceN" class="form-control"  value="{{ $transactionList[0]->invoice_number}}" />
 						</div>
 						<div class="col-lg-4">
 							<label>Particulars</label>
@@ -835,11 +835,11 @@
 	
 	const updateParticular = (id) =>{
 		const date = $("#date").val();
-		const invoiceNo = $("#invoiceNo").val();
+		const invoiceN = $("#invoiceN").val();
 		const particulars = $("#particulars").val();
 		const amount = $("#amount").val();
-
-		 //make ajax call
+		
+		//make ajax call
 		 $.ajax({
 			type:"PUT",
             url:'/mr-potato/payables/update-particulars/' + id,
@@ -848,7 +848,7 @@
                 "_token":"{{ csrf_token() }}",
                 "id":id,
                 "date":date,
-				"invoiceNo":invoiceNo,
+				"invoiceN":invoiceN,
                 "particulars":particulars,
 				"amount":amount,
             },
