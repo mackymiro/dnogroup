@@ -2,3 +2,6 @@
 
 <p>Technologies Used</p>
 <p>Laravel Framework</p>
+<p>Javascript ES6</p>
+<p>Ajax</p>
+<p>Jquery</p>
