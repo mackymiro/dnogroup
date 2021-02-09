@@ -92,6 +92,10 @@
                                                 <th>Collection Date</th>
                                                 <th>{{ $soa[0]->collection_date }}</th>
                                             </tr>
+                                            <tr>
+                                                <th>Order Type</th>
+                                                <th>{{ $soa[0]->order }}</th>
+                                            </tr>
                                         </thead>
 	                              </table>
 	                          </div>
@@ -104,11 +108,65 @@
                           <br>
                           <br>
                           <br>
+                          @if($soa[0]->order === $orFormCBF)
+                          <table style="margin-top:80px;border:1px solid black;">
+                          		  <thead>
+                                      <tr>
+                                        <th style="height: 1%; text-align: center;">DATE OF EVENT</th>
+                                        <th style="height: 1%; text-align: center;">NO OF PEOPLE</th>
+                                        <th style="height: 1%; text-align: center;">MOTIFF</th>
+                                        <th style="height: 1%; text-align: center;">TYPE OF PACKAGE</th>
+                                        <th style="height: 1%; text-align: center;">CLIENT</th>
+                                        <th style="height: 1%; text-align: center;">PLACE OF EVENT</th>
+                                        <th style="height: 1%; text-align: center;">AMOUNT</th>
+                                        <th style="height: 1%; text-align: center;">STATUS</th>
+                                      </tr>
+                                    </thead>
+                                  <tbody>
+                                  		<tr style="border:1px solid black;">
+                                            <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->date_of_event }}</td>
+                                            <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->no_of_people }}</td>
+                                            <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->motiff }}</td>
+                                            <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->type_of_package }}</td>
+                                            <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->client }}</td>
+                                            <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->place_of_event }}</td>
+                                            <td style="text-align:center; border: 1px solid black;"><?= number_format($soa[0]->amount, 2); ?></td>
+                                            <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->status }}</td>
+                                  	 	</tr>
+                                  	 	 @foreach($statementAccounts as $statementAccount)
+                                        <tr style="border:1px solid black;">
+                                         <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['date_of_event'] }}</td>
+                                         <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['no_of_people'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['motiff'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['type_of_package'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['client'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['place_of_event'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;"><?= number_format($statementAccount['amount'], 2);?></td>
+                                           <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->status }}</td>
+                                        </tr> 
+                                        @endforeach
+                                      
+	                                      
+                                        <tr style="border:1px solid black;">
+	                                        <td style=" border: 1px solid black;"></td>
+	                                        <td style=" border: 1px solid black;"></td>
+                                            <td style=" border: 1px solid black;"></td>
+                                            <td style=" border: 1px solid black;"></td>
+                                            <td style=" border: 1px solid black;"></td>
+	                                        <td style="text-align:center; border: 1px solid black;"><strong>Total</strong></td>
+	                                        <td style=" text-align:center; border: 1px solid black;"> <?= number_format($sum, 2)?></td>
+                                          <td  style=" border: 1px solid black;"></td>
+	                                      </tr>
+                                  </tbody>
+                          </table>
+
+
+                          @elseif($soa[0]->order === $orFormDR)
                           <table style="margin-top:80px;border:1px solid black;">
                           		  <thead>
                                       <tr>
                                         <th style="height: 1%; text-align: center;">DATE</th>
-                                      
+                                        <th style="height: 1%; text-align: center;">DR #</th>
                                         <th style="height: 1%; text-align: center;">DESCRIPTION</th>
                                         <th style="height: 1%; text-align: center;">UNIT PRICE</th>
                                         <th style="height: 1%; text-align: center;">AMOUNT</th>
@@ -118,17 +176,18 @@
                                   <tbody>
                                   		<tr style="border:1px solid black;">
                                             <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->date_of_transaction }}</td>
+                                            <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->dr_no }}</td>
                                             <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->description }}</td>
-                                            <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->unit_price }}</td>
+                                            <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->unit }}</td>
                                             <td style="text-align:center; border: 1px solid black;"><?= number_format($soa[0]->amount, 2); ?></td>
                                             <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->status }}</td>
                                   	 	</tr>
                                   	 	 @foreach($statementAccounts as $statementAccount)
                                         <tr style="border:1px solid black;">
                                          <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['date_of_transaction'] }}</td>
-                                            
+                                         <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['dr_no'] }}</td>
                                           <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['description'] }}</td>
-                                          <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['unit_price'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['unit'] }}</td>
                                           <td style="text-align:center; border: 1px solid black;"><?= number_format($statementAccount['amount'], 2);?></td>
                                            <td style="text-align:center; border: 1px solid black;">{{ $soa[0]->status }}</td>
                                         </tr> 
@@ -145,6 +204,9 @@
 	                                      </tr>
                                   </tbody>
                           </table>
+
+
+                          @endif
                            <div style="margin-top:100px;">
                            		<table  >
                            			<thead>

@@ -409,7 +409,7 @@ $(function() {
 
 					if(succDataArr == "Success"){
 						$(".succAdd").fadeIn().delay(3000).fadeOut();
-						$(".succAdd").html(`<p class="alert alert-success">Delivery In Successfully Added.</p>`);
+						$(".succAdd").html(`<p class="alert alert-success">${data}</p>`);
 						
 						setTimeout(function(){
 							location.reload('/lolo-pinoy-grill-commissary/view-raw-material-details/'+id);

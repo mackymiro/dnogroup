@@ -94,8 +94,8 @@
 	                    					<td>{{ $viewDeliveryReceipt[0]->qty}}</td>
 	                    					<td>{{ $viewDeliveryReceipt[0]->unit}}</td>
 	                    					<td>{{ $viewDeliveryReceipt[0]->item_description}}</td>
-	                    					<td><?php echo number_format($viewDeliveryReceipt[0]->unit_price, 2)?></td>
-	                    					<td><?php echo number_format($viewDeliveryReceipt[0]->amount, 2)?></td>
+	                    					<td><?= number_format($viewDeliveryReceipt[0]->unit_price, 2)?></td>
+	                    					<td><?= number_format($viewDeliveryReceipt[0]->amount, 2)?></td>
 	                    				</tr>
 
 	                    				@foreach($deliveryReceipts as $deliveryReceipt)
@@ -104,8 +104,8 @@
 	                    					<td>{{ $deliveryReceipt['qty'] }}</td>
 	                    					<td>{{ $deliveryReceipt['unit'] }}</td>
 	                    					<td>{{ $deliveryReceipt['item_description'] }}</td>
-	                    					<td><?php echo number_format($deliveryReceipt['unit_price'], 2)?></td>
-	                    					<td><?php echo number_format($deliveryReceipt['amount'], 2)?></td>
+	                    					<td><?= number_format($deliveryReceipt['unit_price'], 2)?></td>
+	                    					<td><?= number_format($deliveryReceipt['amount'], 2)?></td>
 	                    				</tr>
 	                    				@endforeach
 	                    				 <tr>
@@ -113,8 +113,8 @@
 	                                        <td></td>
 	                                        <td></td>
 	                                        <td><strong>Total</strong></td>
-	                                        <td>₱ <?php echo number_format($sum, 2)?></td>
-	                                        <td>₱ <?php echo number_format($sum2, 2)?></td>
+	                                        <td>₱ <?= number_format($sum, 2)?></td>
+	                                        <td>₱ <?= number_format($sum2, 2)?></td>
                                       	</tr>
 	                    			</tbody>
 	                    		</table>

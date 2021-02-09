@@ -70,6 +70,10 @@
                                                 <th>Terms</th>
                                                 <th>{{ $viewStatementAccount[0]->terms }}</th>
                                             </tr>
+                                            <tr>
+                                                <th>Order Type</th>
+                                                <th>{{ $viewStatementAccount[0]->order }}</th>
+                                            </tr>
                                         </thead>
 
                                     </table>
@@ -123,12 +127,63 @@
                                         </div>
                                     </div>
                                 </div>
+                                @if($viewStatementAccount[0]->order === $orFormCBF)
+                                <table class="table table-striped">
+                                     <thead>
+                                        <tr>
+                                          <th class="bg-info" style="color:white;">DATE OF EVENT</th>
+                                          <th class="bg-info" style="color:white;">NO OF PEOPLE</th>
+                                          <th class="bg-info" style="color:white;">MOTIFF</th>
+                                          <th class="bg-info" style="color:white;">TYPE OF PACKAGE</th>
+                                          <th class="bg-info" style="color:white;">CLIENT</th>
+                                          <th class="bg-info" style="color:white;">PLACE OF EVENT</th>
+                                          <th class="bg-info" style="color:white;">AMOUNT</th>
+                                          <th class="bg-info" style="color:white;">STATUS</th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                          <tr>
+                                          <td>{{ $viewStatementAccount[0]->date_of_event }}</td>
+                                          <td>{{ $viewStatementAccount[0]->no_of_people }}</td>
+                                          <td>{{ $viewStatementAccount[0]->motiff }}</td>
+                                          <td>{{ $viewStatementAccount[0]->type_of_package }}</td>
+                                          <td>{{ $viewStatementAccount[0]->client }}</td>
+                                          <td>{{ $viewStatementAccount[0]->place_of_event }}</td>
+                                          <td><?php echo number_format($viewStatementAccount[0]->amount, 2); ?></td>
+                                          <td>{{ $viewStatementAccount[0]->status }}</td>
+                                          </tr>
+                                          @foreach($statementAccounts as $statementAccount)
+                                          <tr>
+                                            <td>{{ $statementAccount['date_of_event'] }}</td>
+                                            <td>{{ $statementAccount['no_of_people'] }}</td>
+                                            <td>{{ $statementAccount['motiff'] }}</td>
+                                            <td>{{ $statementAccount['type_of_package'] }}</td>
+                                            <td>{{ $statementAccount['client'] }}</td>
+                                            
+                                            <td>{{ $statementAccount['place_of_event'] }}</td>
+                                            <td><?= number_format($statementAccount['amount'], 2);?></td>
+                                            <td>{{ $statementAccount['status'] }}</td>
+                                          </tr>
+                                          @endforeach
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td><strong>Total</strong></td>
+                                            <td style="width:70px;"><strong>₱ <?= number_format($sum, 2)?></strong></td>
+                                            <td></td>
+                                          </tr>
+                                        </tbody>
+                                </table>
+                                @elseif($viewStatementAccount[0]->order === $orFormDR)
                                 <table class="table table-striped">
                                      <thead>
                                         <tr>
                                           <th class="bg-info" style="color:white;">DATE</th>
+                                          <th class="bg-info" style="color:white;">DR #</th>
                                           <th class="bg-info" style="color:white;">DESCRIPTION</th>
-                                          <th class="bg-info" style="color:white;">UNIT PRICE</th>
+                                          <th class="bg-info" style="color:white;">UNIT</th>
                                           <th class="bg-info" style="color:white;">AMOUNT</th>
                                           <th class="bg-info" style="color:white;">STATUS</th>
                                         </tr>
@@ -136,18 +191,20 @@
                                       <tbody>
                                           <tr>
                                           <td>{{ $viewStatementAccount[0]->date_of_transaction }}</td>
+                                          <td>{{ $viewStatementAccount[0]->dr_no }}</td>
                                           <td>{{ $viewStatementAccount[0]->description }}</td>
-                                          <td>{{ $viewStatementAccount[0]->unit_price }}</td>
+                                          <td>{{ $viewStatementAccount[0]->unit }}</td>
                                           <td><?php echo number_format($viewStatementAccount[0]->amount, 2); ?></td>
                                           <td>{{ $viewStatementAccount[0]->status }}</td>
                                           </tr>
                                           @foreach($statementAccounts as $statementAccount)
                                           <tr>
                                             <td>{{ $statementAccount['date_of_transaction'] }}</td>
+                                            <td>{{ $statementAccount['dr_no'] }}</td>
                                             <td>{{ $statementAccount['description'] }}</td>
-                                            <td>{{ $statementAccount['unit_price'] }}</td>
+                                            <td>{{ $statementAccount['unit'] }}</td>
                                             <td><?= number_format($statementAccount['amount'], 2);?></td>
-                                            <td>{{ $statementAccount['status']}}</td>
+                                            <td>{{ $statementAccount['status'] }}</td>
                                           </tr>
                                           @endforeach
                                             <td></td>
@@ -158,6 +215,7 @@
                                           </tr>
                                         </tbody>
                                 </table>
+                                @endif
                         </div>
         			 </div>
         		</div>

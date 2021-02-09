@@ -79,6 +79,10 @@
                                                 <th>Terms</th>
                                                 <th>{{ $viewBillingStatement[0]->terms }}</th>
                                             </tr>
+                                            <tr>
+                                                <th>Order Type</th>
+                                                <th>{{ $viewBillingStatement[0]->order }}</th>
+                                            </tr>
                                         </thead>
 
                                     </table>
@@ -86,7 +90,56 @@
                                   </div>
                                 </div>
                                 </div>
+                                @if($viewBillingStatement[0]->order === $orFormCBF)
                                 <table class="table table-striped">
+                                    <thead>
+                                      <tr>
+                                       <th class="bg-info" style="color:white;">DATE OF EVENT</th>
+                                          <th class="bg-info" style="color:white;">NO OF PEOPLE</th>
+                                          <th class="bg-info" style="color:white;">MOTIFF</th>
+                                          <th class="bg-info" style="color:white;">TYPE OF PACKAGE</th>
+                                          <th class="bg-info" style="color:white;">CLIENT</th>
+                                          <th class="bg-info" style="color:white;">PLACE OF EVENT</th>
+                                          <th class="bg-info" style="color:white;">AMOUNT</th>
+                                          
+                                      </tr>
+                                    </thead>
+                                    <tbody>
+                                      <tr>
+                                        <td>{{ $viewBillingStatement[0]->date_of_event }}</td>                  
+                                        <td>{{ $viewBillingStatement[0]->no_of_people }}</td>                  
+                                        <td>{{ $viewBillingStatement[0]->motiff }}</td> 
+                                        <td>{{ $viewBillingStatement[0]->type_of_package }}</td> 
+                                        <td>{{ $viewBillingStatement[0]->client }}</td>
+                                        <td>{{ $viewBillingStatement[0]->place_of_event}}</td>
+                                      
+                                        <td><?= number_format($viewBillingStatement[0]->amount, 2); ?></td>
+
+                                      </tr>
+                                      @foreach($billingStatements as $billingStatement)
+                                      <tr>
+                                        <td>{{ $billingStatement['date_of_event'] }}</td>
+                                        <td>{{ $billingStatement['no_of_people'] }}</td>
+                                        <td>{{ $billingStatement['motiff'] }}</td>
+                                        <td>{{ $billingStatement['type_of_package'] }}</td>
+                                        <td>{{ $billingStatement['client'] }}</td>
+                                        <td>{{ $billingStatement['place_of_event'] }}</td>
+                                        <td><?= number_format($billingStatement['amount'], 2);?></td>
+                                      </tr>
+                                      @endforeach
+                                      <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><strong>Total</strong></td>
+                                        <td>₱ <?= number_format($sum, 2)?></td>
+                                      </tr>
+                                    </tbody>
+                              </table>
+                              @elseif($viewBillingStatement[0]->order === $orFormDR)
+                              <table class="table table-striped">
                                     <thead>
                                       <tr>
                                         <th class="bg-info" style="color:white;">DATE</th>
@@ -102,7 +155,7 @@
                                         
                                         <td>{{ $viewBillingStatement[0]->dr_no }}</td>
                                         <td>{{ $viewBillingStatement[0]->description}}</td>
-                                        <td>{{ $viewBillingStatement[0]->unit_price }}</td>
+                                        <td>{{ $viewBillingStatement[0]->unit }}</td>
                                         <td><?= number_format($viewBillingStatement[0]->amount, 2); ?></td>
 
                                       </tr>
@@ -111,7 +164,7 @@
                                         <td>{{ $billingStatement['date_of_transaction'] }}</td>
                                         <td>{{ $billingStatement['dr_no'] }}</td>
                                         <td>{{ $billingStatement['description'] }}</td>
-                                        <td>{{ $billingStatement['unit_price'] }}</td>
+                                        <td>{{ $billingStatement['unit'] }}</td>
                                         <td><?= number_format($billingStatement['amount'], 2);?></td>
                                       </tr>
                                       @endforeach
@@ -125,6 +178,9 @@
                                       </tr>
                                     </tbody>
                               </table>
+
+
+                              @endif
                                <div class="form-group">
                                     <div class="form-row">
                                         <div class="col-lg-12">

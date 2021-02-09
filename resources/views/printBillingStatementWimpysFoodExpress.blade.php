@@ -78,6 +78,10 @@
                                                 <th>Terms:</th>
                                                 <th>{{ $printBillingStatement[0]->terms }}</th>
                                             </tr>
+											<tr>
+                                                <th>Order Type:</th>
+                                                <th>{{ $printBillingStatement[0]->order }}</th>
+                                            </tr>
                                         </thead>
 	                              </table>
 	                          </div>
@@ -89,12 +93,60 @@
                           <br>
                           <br>
                           <br>
-                          <table style="border:1px solid black;">
+						  @if($printBillingStatement[0]->order === $orFormCBF)
+						  <table style="border:1px solid black;">
+                          		  <thead>
+                                      <tr>
+                                        <th style="height: 1%; text-align: center;">DATE OF EVENT</th>
+										<th style="height: 1%; text-align: center;">NO OF PEOPLE</th>
+									
+                                        <th style="height: 1%; text-align: center;">MOTIFF</th>
+                                        <th style="height: 1%; text-align: center;">TYPE OF PACKAGE</th>
+                                        <th style="height: 1%; text-align: center;">CLIENT</th>
+										<th style="height: 1%; text-align: center;">PLACE OF EVENT</th>
+										<th style="height: 1%; text-align: center;">AMOUNT</th>
+                                      </tr>
+                                    </thead>
+                                  <tbody>
+                                  		<tr style="border:1px solid black;">
+                                      <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->date_of_event }}</td>
+                                      <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->no_of_people }}</td>
+									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->motiff }}</td>
+                                      <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->type_of_package }}</td>
+									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->client }}</td>
+									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->place_of_event }}</td>
+                                      <td style="text-align:center; border: 1px solid black;"><?= number_format($printBillingStatement[0]->amount, 2); ?></td>
+                                  	 	</tr>
+                                  	 	 @foreach($billingStatements as $billingStatement)
+                                        <tr style="border:1px solid black;">
+                                          <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['date_of_event'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['no_of_people'] }}</td>
+										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['motiff'] }}</td>
+										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['type_of_package'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['client'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['place_of_event'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;"><?= number_format($billingStatement['amount'], 2);?></td>
+                                        </tr> 
+                                        @endforeach
+                                      
+	                                      
+	                                       <tr style="border:1px solid black;">
+	                                        <td style=" border: 1px solid black;"></td>
+	                                        <td style=" border: 1px solid black;"></td>
+                                          	<td style=" border: 1px solid black;"></td>
+											  <td style=" border: 1px solid black;"></td>
+											  <td style=" border: 1px solid black;"></td>
+	                                        <td style=" border: 1px solid black;"><strong>Total</strong></td>
+	                                        <td style=" text-align:center; border: 1px solid black;"> <?= number_format($sum, 2)?></td>
+	                                      </tr>
+                                  </tbody>
+                          </table>
+						  @elseif($printBillingStatement[0]->order === $orFormDR)
+						  <table style="border:1px solid black;">
                           		  <thead>
                                       <tr>
                                         <th style="height: 1%; text-align: center;">DATE</th>
-									
-                                        <th style="height: 1%; text-align: center;">DR #</th>
+										<th style="height: 1%; text-align: center;">DR #</th>
 									
                                         <th style="height: 1%; text-align: center;">ITEM DESCRIPTION</th>
                                         <th style="height: 1%; text-align: center;">UNIT PRICE</th>
@@ -106,7 +158,7 @@
                                       <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->date_of_transaction }}</td>
                                       <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->dr_no }}</td>
 									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->description }}</td>
-                                      <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->unit_price }}</td>
+                                      <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->unit }}</td>
                                       <td style="text-align:center; border: 1px solid black;"><?= number_format($printBillingStatement[0]->amount, 2); ?></td>
                                   	 	</tr>
                                   	 	 @foreach($billingStatements as $billingStatement)
@@ -114,7 +166,7 @@
                                           <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['date_of_transaction'] }}</td>
                                           <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['dr_no'] }}</td>
 										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['description'] }}</td>
-                                          <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['unit_price'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['unit'] }}</td>
                                           <td style="text-align:center; border: 1px solid black;"><?= number_format($billingStatement['amount'], 2);?></td>
                                         </tr> 
                                         @endforeach
@@ -129,6 +181,9 @@
 	                                      </tr>
                                   </tbody>
                           </table>
+
+
+						  @endif
                            <div style="margin-top:100px;">
                            		<table  >
                            			<thead>

@@ -131,27 +131,32 @@
           <div style="border-style: groove; width: 700px; height: 300px; margin-top: -40px;">
           <table  style="margin-top:20px;">
                <thead>
-                  <tr>
-                    <th style="height: 1%; text-align: center;" >QTY</th>
-                    <th style="height: 1%; text-align: center;" >UNIT</th>
-                    <th style="height: 1%; text-align: center;">DESCRIPTION</th>
-                    <th style="height: 1%; text-align: center;">PRICE</th>
-                  
+                 <tr>
+                    <th style="height: 1%; text-align: center;" >PRODUCT ID</th>
+                    <th style="height: 1%; text-align: center;">QTY</th>
+                    <th style="height: 1%; text-align: center;">UNIT</th>
+                    <th style="height: 1%; text-align: center;">ITEM DESCRIPTION</th>
+                    <th style="height: 1%; text-align: center;">UNIT PRICE</th>
+                    <th style="height: 1%; text-align: center;">AMOUNT</th>
                   </tr>
                 </thead>
                 <tbody >
-                   <tr style="border:1px solid black;">
-                      <td style="text-align:center; font-size:16px; ">{{ $deliveryId[0]->qty}}</td>
-                      <td style="text-align:center; font-size:16px; ">{{ $deliveryId[0]->unit}}</td>
-                      <td style="text-align:center; font-size:16px; ">{{ $deliveryId[0]->description}}</td>
-                      <td style="text-align:center; font-size:16px; "><?= number_format($deliveryId[0]->price, 2); ?></td>
+                    <tr style="border:1px solid black;">
+                      <td style="text-align:center; font-size:16px; ">{{ $deliveryId[0]->product_id}}</td>
+                      <td style="text-align:center; font-size:16px; ">{{ $deliveryId[0]->qty }}</td>
+                      <td style="text-align:center; font-size:16px; ">{{ $deliveryId[0]->unit }}</td>
+                      <td style="text-align:center; font-size:16px; ">{{ $deliveryId[0]->description }}</td>
+                      <td style="text-align:center; font-size:16px; ">{{ $deliveryId[0]->unit_price}}</td>
+                      <td style="text-align:center; font-size:16px; "><?= number_format($deliveryId[0]->total, 2); ?></td>
                     </tr>
                      @foreach($deliveryReceipts as $deliveryReceipt)
                      <tr style="border:1px solid black;">
+                        <td style="text-align:center; font-size:16px; ">{{ $deliveryReceipt['product_id']}}</td>
                         <td style="text-align:center; font-size:16px; ">{{ $deliveryReceipt['qty']}}</td>
                         <td style="text-align:center; font-size:16px; ">{{ $deliveryReceipt['unit']}}</td>
-                        <td style=" text-align:center; font-size:16px; ">{{ $deliveryReceipt['description']}}</td>
-                        <td style=" text-align:center; font-size:16px;"><?= number_format($deliveryReceipt['price'], 2)?></td>
+                        <td style="text-align:center; font-size:16px; ">{{ $deliveryReceipt['description']}}</td>
+                        <td style="text-align:center; font-size:16px; ">{{ $deliveryReceipt['unit_price']}}</td>
+                        <td style="text-align:center; font-size:16px; "><?= number_format($deliveryReceipt['total'], 2); ?></td>
                      </tr>
                      @endforeach
                 </tbody>
@@ -159,7 +164,6 @@
           <br>
           <br>
           <br>
-          <p style="font-size:16px; float:left; margin-left:10px; margin-top:120px;"><strong>Total Kilos: {{ $sumQty }}</strong></p>
           <div style="clear:both; "></div>
           </div>
           
@@ -193,7 +197,7 @@
                   <thead>
                       <tr >
                           <th style="font-size:16px; height: 1%; ">Total</th>
-                          <th style="font-size:16px; height: 1%; "><?= number_format($sum, 2)?></th>
+                          <th style="font-size:16px; height: 1%; "><?= number_format($sum2, 2)?></th>
                       </tr>
                      
                   </thead>

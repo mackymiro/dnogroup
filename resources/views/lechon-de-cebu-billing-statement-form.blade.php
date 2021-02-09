@@ -223,7 +223,9 @@
         </div>
       </footer>
 </div>
-<script type="text/javascript">
+<script>
+    const ORDER_FORM_SSP = "Ssp";
+    const ORDER_FORM_PRIVATE = "Private Order";
 
     $("#drNo").hide();
     $("#wholeLechon6000").hide();
@@ -237,7 +239,7 @@
 
     $(".chooseOption").change(function(){
          const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
-         if(cat === "Ssp"){
+         if(cat === ORDER_FORM_SSP){
              $("#invoiceNo").show();
              $("#wholeLechon").show();
              $("#description").show();
@@ -255,7 +257,7 @@
              $("#unit").hide();
              $("#drAdd").hide();
              $("#drDeliveredFor").hide();
-         }else if(cat === "Private Order"){
+         }else if(cat === ORDER_FORM_PRIVATE){
              $("#drNo").show();
              $("#wholeLechon6000").show();
              $("#descriptionDrNo").show();

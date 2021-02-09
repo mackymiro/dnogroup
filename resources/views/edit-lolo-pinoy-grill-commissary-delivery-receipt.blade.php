@@ -310,7 +310,7 @@
         </div>
       </footer>
 </div>
-<script type="text/javascript">
+<script>
      const confirmDelete = (id) => {
         var x = confirm("Do you want to delete this?");
         const drId = $("#drId").val();
@@ -370,7 +370,7 @@
               }
   
               <?php endforeach; ?>
-        }); 
+    }); 
 
     $(document).ready(function(){
         $("#prod").change(function(){

@@ -1,4 +1,4 @@
-@extends('layouts.lolo-pinoy-lechon-de-cebu-app')
+@extends('layouts.wimpys-food-express-app')
 @section('title', 'RAW Materials |')
 @section('content')
 <script>
@@ -7,34 +7,33 @@
   });
 </script>
 <div id="wrapper">
-	 @include('sidebar.sidebar')
-	 <div id="content-wrapper">
-
-		<div class="container-fluid">
-			 <!-- Breadcrumbs-->
-              <ol class="breadcrumb">
+     @include('sidebar.sidebar-wimpys-food-express')
+     <div id="content-wrapper">
+        <div class="container-fluid">
+             <!-- Breadcrumbs-->
+             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                  <a href="#">Lechon de Cebu</a>
+                  <a href="#">Wimpy's Food Express</a>
                 </li>
-                <li class="breadcrumb-item ">Commissary</li>
+                
                 <li class="breadcrumb-item active">RAW Materials</li>
               </ol>
               <div class="row">
-              		<div class="col-lg-12">
-              			<div class="card mb-3">
-              				<div class="card-header">
+                    <div class="col-lg-12">
+                        <div class="card mb-3">
+                            <div class="card-header">
           					  <i class="fa fa-tasks" aria-hidden="true"></i>
           					  All Lists</div>
-      					  	<div class="card-body">
-								<!-- Button trigger modal -->
+                            <div class="card-body">
+                                <!-- Button trigger modal -->
 								<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createRaw">
 									Create RAW Materials
 								</button>
-			                     <br>
-                    			 <br>
-                			 	<div class="table-responsive">
-                			 		<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                			 			<thead>
+                                <br>
+                    			<br>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
 	  				  						<th>Action</th>
 	  				  						<th>Product Id No</th>
 	  				  						<th>Product Name</th>
@@ -48,7 +47,7 @@
                                  	 		<th>Supplier</th>
 	  				  						<th>Created By</th>
 			  						   </thead>
-			  						   <tfoot>
+                                        <tfoot>
 				  							<th>Action</th>
 					  						<th>Product Id No</th>
 					  						<th>Product Name</th>
@@ -63,7 +62,7 @@
 					  						<th>Created By</th>
 										</tfoot>
 										<tbody>
-                      					@foreach($getRawMaterials as $getRawMaterial)
+										@foreach($getRawMaterials as $getRawMaterial)
 			  							<tr id="deletedId{{ $getRawMaterial->id}}">
 		  									<td>
 											  <!-- Button trigger modal -->
@@ -75,7 +74,7 @@
 											  <?php endif;?>
 		  									</td>
 					                        <td>{{ $getRawMaterial->product_id_no }}</td>
-					                        <td ><p style="width:200px;"><a  href="{{ url('lolo-pinoy-lechon-de-cebu/view-raw-material-details/'.$getRawMaterial->id) }}">{{ $getRawMaterial->product_name }}</a></p></td>
+					                        <td ><p style="width:200px;"><a  href="/wimpys-food-express/{{ $getRawMaterial->id }}/view-raw-material-details">{{ $getRawMaterial->product_name }}</a></p></td>
 					                        <td>{{ $getRawMaterial->unit_price }}</td>
 					                        <td>{{ $getRawMaterial->unit }}</td>
 					                        <td class="bg-success" style="color:white;">{{ $getRawMaterial->in }}</td>
@@ -88,18 +87,17 @@
 					                        
 		  								</tr>
                       					@endforeach
-                      
-			  						</tbody>
-                			 		</table>
-                			 	</div>
-      					  	</div>
-              			</div>
-              		</div>
+										</tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
               </div>
-		</div>
-	 </div>
+        </div>
+     </div>
 	 @foreach($getRawMaterials as $getRawMaterial)
-  	<!-- Modal -->
+			<!-- Modal -->
 	<div class="modal fade" id="rawM<?php echo $getRawMaterial->id; ?>" tabindex="<?php echo $getRawMaterial->id?>" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
@@ -153,10 +151,9 @@
 		</div>
 		</div>
 
-
 	 @endforeach
-	  <!-- Modal -->
-	<div class="modal fade" id="createRaw" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <!-- Modal -->
+    <div class="modal fade" id="createRaw" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
 		<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
 			<div class="modal-content">
 			<div class="modal-header">
@@ -213,7 +210,7 @@
 			</div>
 		</div>
 	</div>
-	  <!-- Sticky Footer -->
+      <!-- Sticky Footer -->
       <footer class="sticky-footer">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
@@ -226,9 +223,9 @@
       </footer>
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-<script type="text/javascript">
-	$("#validate").hide();
-	
+<script>
+    $("#validate").hide();
+
 	const updateRaw = (id) =>{
 		const productName1 = $("#productName1" +id).val();
 		const unitPrice1 = $("#unitPrice1" +id).val();
@@ -239,7 +236,7 @@
 		//make ajax call
 		$.ajax({
 			type: "PATCH",
-			url: '/lolo-pinoy-lechon-de-cebu/commissary/update-raw-material/' + id,
+			url: '/wimpys-food-express/update-raw-material/' + id,
 			data:{
 				_method: 'patch',
 				"_token": "{{ csrf_token() }}",
@@ -258,7 +255,7 @@
 
 				if(succDataArr == "Success"){
 					$("#success"+id).fadeIn().delay(3000).fadeOut();
-					$("#success"+id).html(`<p class="alert alert-success">Succesfully updated.</p>`);
+					$("#success"+id).html(`<p class="alert alert-success">${data}</p>`);
 					
 					setTimeout(function(){
 						document.location.reload();
@@ -273,21 +270,22 @@
 
 	}
 
-	const saveRaw = () =>{
-		const branch = $("#branch").val();
+    const saveRaw = () => {
+        const branch = $("#branch").val();
 		const productName = $("#productName").val();
 		const unitPrice = $("#unitPrice").val();
 		const unit = $("#unit").val();
 		const stockIn = $("#in").val();
 		const supplier = $("#supplier").val();
 
-		if(branch.length === 0 || productName.length === 0){
-			$("#validate").fadeIn().delay(3000).fadeOut();
-		}else{
-			//make ajax call
-			$.ajax({
+        if(branch.length === 0 || productName.length === 0){
+            $("#validate").fadeIn().delay(3000).fadeOut();
+        }else{
+            //make ajax call
+
+            $.ajax({
                 type:"POST",
-                url:'/lolo-pinoy-lechon-de-cebu/commissary/add-raw-material',
+                url:'/wimpys-food-express/add-raw-material',
                 data:{
                     _method:'post',
                     "_token":"{{ csrf_token() }}",
@@ -306,14 +304,14 @@
 
 					if(succDataArr == "Success"){
 						$("#succAdd").fadeIn().delay(3000).fadeOut();
-						$("#succAdd").html(`<p class="alert alert-success">Succesfully added.</p>`);
+						$("#succAdd").html(`<p class="alert alert-success">${data}</p>`);
 						
 						setTimeout(function(){
 							document.location.reload();
 						}, 3000);
 					}else{
 						$("#succExists").fadeIn().delay(3000).fadeOut();
-                        $("#succExists").html(`<p class="alert alert-danger">Supplier already exists.</p>`);
+                        $("#succExists").html(`<p class="alert alert-danger">${data}</p>`);
 					}
                     
                     
@@ -322,21 +320,11 @@
                     console.log('Error:', data);
                 }
            });
-		   $("#branch").val('');
-			$("#productName").val('');
-			$("#unitPrice").val('');
-			$("#unit").val('');
-			$("#in").val('');
-			$("#out").val('');
-			$("#stockAmount").val('');
-			$("#remainingStock").val('');
-			$("#amount").val('');
-			$("#supplier").val('');
+        }
 
-		}
-	}
+    }
 
-	const isNumber =(evt) => {
+    const isNumber =(evt) => {
 		evt = (evt) ? evt : window.event;
 		var charCode = (evt.which) ? evt.which : evt.keyCode;
 		if (charCode > 31 && (charCode < 48 || charCode > 57)) {
@@ -345,32 +333,5 @@
 		return true;
 	}
 	
-
-	const confirmDelete = (id) =>{
-        const x = confirm("Do you want to delete this?");
-        if(x){
-            $.ajax({
-              type: "DELETE",
-              url: '/lolo-pinoy-lechon-de-cebu/delete-raw-materials/' + id,
-              data:{
-                _method: 'delete', 
-                "_token": "{{ csrf_token() }}",
-                "id": id
-              },
-              success: function(data){
-                console.log(data);
-                $("#deletedId"+id).fadeOut('slow');
-               
-              },
-              error: function(data){
-                console.log('Error:', data);
-              }
-
-            });
-
-        }else{
-            return false;
-        }
-    }
 </script>
 @endsection

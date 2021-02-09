@@ -34,6 +34,7 @@
                         
                                             <th>Sold To</th>
                                             <th>Time</th>
+                                            <th>Product Id</th>
                                                 <th>Date To Be Delivered</th>
                                             <th>Delivered To</th>
                                             <th>Qty</th>
@@ -49,6 +50,7 @@
                         
                                             <th>Sold To</th>
                                             <th>Time</th>
+                                            <th>Product Id</th>
                                             <th>Date To Be Delivered</th>
                                             <th>Delivered To</th>
                                             <th>Qty</th>
@@ -78,6 +80,19 @@
                                                     <td >{{ $getAllDeliveryReceipt->module_code}}{{ $getAllDeliveryReceipt->wimpys_food_express_code}}</td>
                                                     <td ><p style="width: 170px;">{{ $getAllDeliveryReceipt->sold_to}}</p></td>
                                                     <td ><p style="width: 110px;">{{ $getAllDeliveryReceipt->time}}</p></td>
+                                                    <td>
+                                                        <?php
+                                                            $prodArr = $getAllDeliveryReceipt->product_id;
+                                                            $prodExp = explode("-", $prodArr);
+                                                        
+                                                                                  ?>
+                                                        <?php if(isset($prodExp)): ?>
+                                                          <p style="width:180px;">{{ $prodExp[1] }}</p>
+                                                        <?php else:?>
+                                                          <p style="width:180px;">{{ $prodExp[1] }}</p>
+                                                        <?php endif; ?>
+				  									
+                                                    </td>
                                                     <td ><p style="width: 140px;">{{ $getAllDeliveryReceipt->date_to_be_delivered}}</p></td>
                                                     <td ><p style="width: 200px;">{{ $getAllDeliveryReceipt->delivered_to}}</p></td>
                                                     <td >{{ $getAllDeliveryReceipt->qty}}</td>

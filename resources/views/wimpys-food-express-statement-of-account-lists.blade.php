@@ -30,33 +30,36 @@
     					  <div class="card-body">
     					  		<div class="table-responsive">
       				  			      	<table class="table table-bordered display"  width="100%" cellspacing="0">
-                                            <thead>
-                                            <th>Action</th>
-                                            <th>Date</th>
-                                            <th>SOA No</th>
-                                            
-                                            <th>Bill To</th>
-                                            <th>BS No</th>
-                                            <th  class="bg-info" style="color:white;">Period Covered</th>
-                                            <th class="bg-success" style="color:white;">Status</th>
-                                            <th>Total Amount</th>
-                                            <th>Total Remaining Balance</th>
-      			  							              <th>Created By</th>
+                                    <thead>
+                                        <th>Action</th>
+                                        <th>Date</th>
+                                      
+                                        <th>SOA No</th>
+                                        <th>Order</th>
+                                        <th>Bill To</th>
+                                        <th>BS No</th>
+                                        <th  class="bg-info" style="color:white;">Period Covered</th>
+                                        <th class="bg-success" style="color:white;">Status</th>
+                                        <th>Total Amount</th>
+                                        <th>Total Remaining Balance</th>
+                                        <th>Created By</th>
 
-                                          </thead>
-                                          <tfoot>
-                                            <th>Action</th>
-                                            <th>Date</th>
-                                            <th>SOA No</th>
-                                           
-                                            <th>Bill To</th>
-                                            <th>BS No</th>
-                                            <th  class="bg-info" style="color:white;">Period Covered</th>
-                                            <th class="bg-success" style="color:white;">Status</th>
-                                            <th>Total Amount</th>
-                                            <th>Total Remaining Balance</th>
-                                            <th>Created By</th>
-                                      </tfoot>
+
+                                    </thead>
+                                    <tfoot>
+                                        <th>Action</th>
+                                        <th>Date</th>
+                                        
+                                        <th>SOA No</th>
+                                        <th>Order</th>
+                                        <th>Bill To</th>
+                                        <th>BS No</th>
+                                        <th  class="bg-info" style="color:white;">Period Covered</th>
+                                        <th class="bg-success" style="color:white;">Status</th>
+                                        <th>Total Amount</th>
+                                        <th>Total Remaining Balance</th>
+                                        <th>Created By</th>
+                                     </tfoot>
                                       <tbody>
                                             @foreach($statementOfAccounts as $statementOfAccount)
                                             <tr id="deletedId{{ $statementOfAccount->id}}">
@@ -76,8 +79,10 @@
                                                         @endif
                                                     @endforeach
                                                 </td>
-                                                <td>{{ $statementOfAccount->bill_to}}</td> 
+                                                <td><p style="width:160px;">{{ $statementOfAccount->order }}</p></td>
+                                                <td><p style="width:160px;">{{ $statementOfAccount->bill_to}}</p></td> 
                                                 <td><p style="width:140px;">{{ $statementOfAccount->bs_no }}</p></td>
+                                               
                                                 <td class="bg-info" style="color:white;">{{ $statementOfAccount->period_cover}}</td>
                                                 
                                                 <td class="bg-success" style="color:white;">

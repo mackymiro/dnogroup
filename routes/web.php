@@ -7875,6 +7875,48 @@ Route::group(['middleware' => ['auth']], function(){
 		->middleware(['cashier']);
 
 	Route::get(
+		'/wimpys-food-express/raw-materials',
+		'WimpysFoodExpressController@rawMaterials')
+		->name('rawMaterialsWimpys')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/wimpys-food-express/add-raw-material',
+		'WimpysFoodExpressController@addProductRawMaterial')
+		->name('addRawMaterialWimpys')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/view-raw-material-details',
+		'WimpysFoodExpressController@viewRawMaterialDetails')
+		->name('viewRawMaterialDetails')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/wimpys-food-express/add-delivery-in-raw-material/{id}',
+		'WimpysFoodExpressController@addDIRST')
+		->name('addDIRST')
+		->middleware(['cashier']);
+
+	Route::patch(
+		'/wimpys-food-express/update-raw-material/{id}',
+		'WimpysFoodExpressController@updateRawMaterialProducts')
+		->name('updateRawMaterial')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/stock-inventory',
+		'WimpysFoodExpressController@stockInventoryProducts')
+		->name('stockInventoryProducts')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/view-stock-inventory/',
+		'WimpysFoodExpressController@viewStockInventory')
+		->name('viewStockInventory')
+		->middleware(['cashier']);
+
+	Route::get(
 		'/wimpys-food-express/order-form',
 		'WimpysFoodExpressController@orderForm')
 		->name('orderForm')

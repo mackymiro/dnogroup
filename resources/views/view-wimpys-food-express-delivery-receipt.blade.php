@@ -96,37 +96,45 @@
                         	 <table class="table table-striped">
                         	 	     <thead>
 	                                  <tr>
-	                                    <th class="bg-info" style="color:white;">QTY</th>
-                                      <th class="bg-info" style="color:white;">UNIT</th>
-	                                    <th class="bg-info" style="color:white;">DESCRIPTION</th>
-	                                    <th class="bg-info" style="color:white;">PRICE</th>
+                                       <th class="bg-info" style="color:white;">Product ID</th>
+	                                    <th class="bg-info" style="color:white;">Qty</th>
+                                      <th class="bg-info" style="color:white;">Unit</th>
+	                                    <th class="bg-info" style="color:white;">Item Description</th>
+                                      <th class="bg-info" style="color:white;">Unit Price</th>
+	                                    <th class="bg-info" style="color:white;">Amount</th>
 	                                  
 	                                  </tr>
                                   </thead>
                                   <tbody>
-                                  	 <tr>
-                                  	 	<td>{{ $viewDeliveryReceipt[0]->qty}}</td>
-                                       <td>{{ $viewDeliveryReceipt[0]->unit}}</td>
-                                  	 	<td>{{ $viewDeliveryReceipt[0]->description}}</td>
-                                  	 	<td><?php echo number_format($viewDeliveryReceipt[0]->price, 2); ?></td>
-                                  	 </tr>
+                                      <tr>
+                                        <td>{{ $viewDeliveryReceipt[0]->product_id}}</td>
+                                        <td>{{ $viewDeliveryReceipt[0]->qty}}</td>
+                                        <td>{{ $viewDeliveryReceipt[0]->unit}}</td>
+                                        <td>{{ $viewDeliveryReceipt[0]->description}}</td>
+                                        <td><?= number_format($viewDeliveryReceipt[0]->unit_price, 2)?></td>
+                                        <td><?= number_format($viewDeliveryReceipt[0]->total, 2)?></td>
+                                    </tr>
 
                                   	 @foreach($deliveryReceipts as $deliveryReceipt)
                                      <tr>
-                                        <td>{{ $deliveryReceipt['qty']}}</td>
-                                        <td>{{ $deliveryReceipt['unit']}}</td>
-                                        <td>{{ $deliveryReceipt['description']}}</td>
-                                        <td><?php echo number_format($deliveryReceipt['price'], 2)?></td>
-                                     </tr>
+                                        <td>{{ $deliveryReceipt['product_id'] }}</td>
+                                        <td>{{ $deliveryReceipt['qty'] }}</td>
+                                        <td>{{ $deliveryReceipt['unit'] }}</td>
+                                        <td>{{ $deliveryReceipt['description'] }}</td>
+                                        <td><?= number_format($deliveryReceipt['unit_price'], 2)?></td>
+                                        <td><?= number_format($deliveryReceipt['total'], 2)?></td>
+                                      </tr>
                                   	
                                       
                                        @endforeach
                                        <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td><strong>Total</strong></td>
-                                        <td>₱ <?php echo number_format($sum, 2)?></td>
-                                      </tr>
+	                                        <td></td>
+	                                        <td></td>
+	                                        <td></td>
+	                                        <td><strong>Total</strong></td>
+	                                        <td>₱ <?= number_format($sum, 2)?></td>
+	                                        <td>₱ <?= number_format($sum2, 2)?></td>
+                                      	</tr>
                                   </tbody>
 
                         	 </table>
