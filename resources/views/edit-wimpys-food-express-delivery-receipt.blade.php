@@ -163,7 +163,7 @@
                               <div class="col-md-2">
                                 <label>Amount</label>
                                 <input type="text" name="unitPrice" class="form-control"  disabled="disabled"
-                                value="<?= number_format($getDeliveryReceipt['total'], 2)?>" />
+                                value="<?= number_format($getDeliveryReceipt['price'], 2)?>" />
                               </div>
                              		</div>
                              	</div>

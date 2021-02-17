@@ -134,12 +134,12 @@
 </div>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
-   function confirmDelete(id){
-      var x = confirm("Do you want to delete this?");
+   const confirmDelete = (id) => {
+        let x = confirm("Do you want to delete this?");
         if(x){
             $.ajax({
               type: "DELETE",
-              url: '/lolo-pinoy-lechon-de-cebu/delete/dr/' + id,
+              url: `/wimpys-food-express/${id}/delete/dr/`,
               data:{
                 _method: 'delete', 
                 "_token": "{{ csrf_token() }}",
@@ -160,5 +160,6 @@
             return false;
         }
    }
+   
 </script>
 @endsection

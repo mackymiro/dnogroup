@@ -28,8 +28,8 @@
 				  							<th>Action</th>
 			  								<th>PO #</th>
 			  								<th>Date</th>
-                                            <th>Paid to</th>
-			  								
+                        <th>Paid to</th>
+                        <th>Amount</th>
 			  								<th>Created by</th>
 				  						</tr>
 				  					</thead>
@@ -39,8 +39,8 @@
 			  								<th>PO Number</th>
 			  								<th>Date</th>
                         <th>Paid to</th>
-			  							
-			  								<th>Created by</th>
+                        <th>Amount</th>
+			  							  <th>Created by</th>
 				  						</tr>
 				  					</tfoot>
 				  					<tbody>
@@ -63,7 +63,7 @@
                           </td>
                           <td>{{ $purchaseOrder->date }}</td>
                           <td>{{ $purchaseOrder->paid_to }}</td>
-                          
+                          <td><?= number_format($purchaseOrder->total_price, 2)?></td>
                           <td>{{ $purchaseOrder->created_by }}</td>
                                           </tr>
                       @endforeach

@@ -107,13 +107,316 @@
                                 <br>
                                  <nav>
                                     <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                         <a class="nav-item nav-link active" id="nav-payables" data-toggle="tab" href="#payables" role="tab" aria-controls="payables" aria-selected="false">Payables</a>
+                                       <a class="nav-item nav-link active" id="nav-clientBookingForm" data-toggle="tab" href="#clientBookingForm" role="tab" aria-controls="clientBookingForm" aria-selected="false">Client Booking Form</a>
+                                      
+                                       <a class="nav-item nav-link " id="nav-deliveryReceipt" data-toggle="tab" href="#deliveryReceipt" role="tab" aria-controls="deliveryReceipt" aria-selected="false">Delivery Receipt</a>
+                                       <a class="nav-item nav-link" id="nav-purchaseOrder" data-toggle="tab" href="#purchaseOrder" role="tab" aria-controls="purchaseOrder" aria-selected="false">Purchase Order</a>
+                                       <a class="nav-item nav-link" id="nav-SOA" data-toggle="tab" href="#SOA" role="tab" aria-controls="SOA" aria-selected="false">Statement Of Account</a>
+                                        <a class="nav-item nav-link" id="nav-billingStatement" data-toggle="tab" href="#billingStatement" role="tab" aria-controls="billingStatement" aria-selected="false">Billing Statement</a>
+                                        
+                                        <a class="nav-item nav-link" id="nav-payables" data-toggle="tab" href="#payables" role="tab" aria-controls="payables" aria-selected="false">Payables</a>
                                         <a class="nav-item nav-link" id="nav-all" data-toggle="tab" href="#all" role="tab" aria-controls="all" aria-selected="false">All</a>
                                    
                                     </div>
                                 </nav>
                                 <div class="tab-content" id="nav-tabContent">
-                                <div class="tab-pane fade show active" id="payables" role="tabpanel" aria-labelledby="payables-tab">
+                                    <div class="tab-pane fade show active" id="clientBookingForm" role="tabpanel" aria-labelledby="clientBookingForm-tab">
+                                        <br>
+                                       
+                                        <div class="float-right">
+                                            <a href="{{ action('WimpysFoodExpressController@printSummaryGetClientBooking', $getDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                        </div>
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <div class="table-responsive">
+                                             <table class="table table-bordered display"  width="100%" cellspacing="0">
+                                                <thead>
+                                                    <th>Action</th>
+                                                    <th>Client Booking #</th>
+                                                    <th>Date of Event</th>
+                                                    <th>Time of Event</th>
+                                                    <th>No Of People</th>
+                                                    <th>Motiff</th>
+                                                    <th>Type of Package</th>
+                                                    <th>Total Amount</th>
+                                                    <th>Created By</th>
+                                                </thead>
+                                                <tfoot>
+                                                     <th>Action</th>
+                                                    <th>Client Booking #</th>
+                                                    <th>Date of Event</th>
+                                                    <th>Time of Event</th>
+                                                    <th>No Of People</th>
+                                                    <th>Motiff</th>
+                                                    <th>Type of Package</th>
+                                                    <th>Total Amount</th>
+                                                    <th>Created By</th>
+                                                </tfoot>
+                                                <tbody>
+                                                    @foreach($getTransactionCBFs as $getTransactionCBF)
+                                                    <tr>
+                                                        <td></td>
+                                                        <td>{{ $getTransactionCBF->module_code}}{{ $getTransactionCBF->wimpys_food_express_code}}</td>
+                                                        <td>{{ $getTransactionCBF->date_of_event}}</td>
+                                                        <td>{{ $getTransactionCBF->time_of_event}}</td>
+                                                        <td>{{ $getTransactionCBF->no_of_people}}</td>
+                                                        <td>{{ $getTransactionCBF->motiff}}</td>
+                                                        <td>{{ $getTransactionCBF->type_of_package}}</td>
+                                                        <td><?= number_format($getTransactionCBF->total, 2)?></td>
+                                                        <td>{{ $getTransactionCBF->created_by}}</td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                             </table>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade show " id="deliveryReceipt" role="tabpanel" aria-labelledby="deliveryReceipt-tab">
+                                        <br>
+                                        <div class="float-right">
+                                            <a href="{{ action('WimpysFoodExpressController@printSummaryGetDeliveryReceipt', $getDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                        </div>
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <div class="table-responsive">
+                                          <table class="table table-bordered display"  width="100%" cellspacing="0">
+                                             <thead>
+                                                    <th>Action</th>
+                                                    <th>Date</th>
+                                                    <th>DR No</th>
+                                                    <th>Sold To</th>
+                                                    <th>Time</th>
+                                                    <th>Product Id</th>
+                                                    <th>Date To be Delivered</th>
+                                                    <th>Delivered To</th>
+                                                    <th>Qty</th>   
+                                                    <th>Description</th>
+                                                    <th>Price</th>
+                                                    <th>Created By</th>
+                                             </thead>
+                                             <tfoot>
+                                                    <th>Action</th>
+                                                    <th>Date</th>
+                                                    <th>DR No</th>
+                                                    <th>Sold To</th>
+                                                    <th>Time</th>
+                                                    <th>Product Id</th>
+                                                    <th>Date To be Delivered</th>
+                                                    <th>Delivered To</th>
+                                                    <th>Qty</th>   
+                                                    <th>Description</th>
+                                                    <th>Price</th>
+                                                    <th>Created By</th>
+                                             </tfoot>
+                                             <tbody>
+                                                @foreach($deliveryReceipts as $deliveryReceipt)
+                                                <tr>
+                                                    <td></td>
+                                                    <td>{{ $deliveryReceipt->date}}</td>
+                                                    <td>{{ $deliveryReceipt->module_code}}{{ $deliveryReceipt->wimpys_food_express_code}}</td>
+                                                    <td>{{ $deliveryReceipt->sold_to }}</td>
+                                                    <td>{{ $deliveryReceipt->time }}</td>
+                                                    <td>{{ $deliveryReceipt->product_id}}</td>
+                                                    <td>{{ $deliveryReceipt->date_to_be_delivered}}</td>
+                                                    <td>{{ $deliveryReceipt->delivered_to}}</td>
+                                                    <td>{{ $deliveryReceipt->qty}}</td>
+                                                    <td>{{ $deliveryReceipt->description}}</td>
+                                                    <td><?= number_format($deliveryReceipt->total, 2)?></td>
+                                                    <td>{{ $deliveryReceipt->created_by }}</td>
+                                                </tr>
+                                                @endforeach
+                                             </tbody>
+                                           </table>
+                                        </div>
+
+                                    </div>
+                                    <div class="tab-pane fade show " id="purchaseOrder" role="tabpanel" aria-labelledby="purchaseOrder-tab">
+                                        <br>
+                                            <div class="float-right">
+                                                <a href="{{ action('WimpysFoodExpressController@printSummaryGetPO', $getDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                            </div>
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered display"  width="100%" cellspacing="0">
+                                                <thead>
+                                                    <th>Action</th>
+                                                    <th>PO</th>
+                                                    <th>Date</th>
+                                                    <th>Paid To</th>
+                                                    <th>Amount</th>
+                                                    <th>Created By</th>
+                                                </thead>
+                                                <tfoot>
+                                                   <th>Action</th>
+                                                    <th>PO</th>
+                                                    <th>Date</th>
+                                                    <th>Paid To</th>
+                                                    <th>Amount</th>
+                                                    <th>Created By</th>
+                                                </tfoot>
+                                                <tbody>
+                                                    @foreach($purchaseOrders as $purchaseOrder)
+                                                    <tr>
+                                                        <td></td>
+                                                        <td>{{ $purchaseOrder->module_code}}{{ $purchaseOrder->wimpys_food_express_code}}</td>
+                                                        <td>{{ $purchaseOrder->date}}</td>
+                                                        <td>{{ $purchaseOrder->paid_to }}</td>
+                                                        <td><?= number_format($purchaseOrder->total_price, 2)?></td>
+                                                        <td>{{ $purchaseOrder->created_by}}</td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                    <div class="tab-pane fade show " id="SOA" role="tabpanel" aria-labelledby="SOA-tab">
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <form action="{{ action('WimpysFoodExpressController@selectOrderSOA') }}" method="get">
+                                            {{csrf_field()}}
+                                        <div class="col-lg-4">
+                                            <label>Select Order</label>
+                                            <select name="selectOrder" class="form-control">
+                                                <option value="All" {{ ( "All" == $order) ? 'selected' : '' }}>All</option>
+                                                <option value="Client Booking Form" {{ ( "Client Booking Form" == $order) ? 'selected' : '' }}>Client Booking Form</option>
+                                                <option value="DR" {{ ( "DR" == $order) ? 'selected' : '' }}>DR</option>
+                                            </select>
+                                        </div>
+                                        <br>
+                                      
+                                        <div class="col-lg-4">
+                                            <button class="btn btn-success btn-lg">Search</button>
+                                        </div>
+                                        </form>
+                                        <br>
+                                        <h1>
+                                            {{ $order }}
+                                        </h1>
+                                        <?php if($order === "Client Booking Form"): ?>
+                                        <div class="float-right">
+                                            <a href="{{ action('WimpysFoodExpressController@printSummaryGetSOACBF', $getDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                        </div>
+                                        <?php elseif($order === "DR"): ?>
+                                        <div class="float-right">
+                                            <a href="{{ action('WimpysFoodExpressController@printSummaryGetSOADR', $getDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                        </div>
+
+                                        <?php else: ?>
+                                        <div class="float-right">
+                                            <a href="{{ action('WimpysFoodExpressController@printSummaryGetSOA', $getDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                        </div>
+                                        <?php endif; ?>
+                                      
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered display" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <th>Action</th>
+                                                    <th>Date</th>
+                                                    <th>SOA No</th>
+                                                    <th>Order</th>
+                                                    <th>Bill To</th>   
+                                                    <th>BS No</th>
+                                                    <th>Period Covered</th>
+                                                    <th>Status</th>
+                                                    <th>Total Amount</th>
+                                                    <th>Total Remaining Balance</th>
+                                                    <th>Created By</th> 
+                                                </thead>
+                                                <tfoot>
+                                                    <th>Action</th>
+                                                    <th>Date</th>
+                                                    <th>SOA No</th>
+                                                    <th>Order</th>
+                                                    <th>Bill To</th>   
+                                                    <th>BS No</th>
+                                                    <th>Period Covered</th>
+                                                    <th>Status</th>
+                                                    <th>Total Amount</th>
+                                                    <th>Total Remaining Balance</th>
+                                                    <th>Created By</th> 
+                                                </tfoot>
+                                                <tbody>
+                                                    @foreach($getStatementOfAccounts as $getStatementOfAccount)
+                                                    <tr>
+                                                        <td></td>
+                                                        <td>{{ $getStatementOfAccount->date }}</td>
+                                                        <td>{{ $getStatementOfAccount->module_code}}{{ $getStatementOfAccount->wimpys_food_express_code}}</td>
+                                                        <td>{{ $getStatementOfAccount->order}}</td>
+                                                        <td>{{ $getStatementOfAccount->bill_to}}</td>
+                                                        <td>{{ $getStatementOfAccount->bs_no}}</td>
+                                                        <td>{{ $getStatementOfAccount->period_cover }}</td>
+                                                        <td>{{ $getStatementOfAccount->status}}</td>
+                                                        <td>{{ $getStatementOfAccount->total_amount }}</td>
+                                                        <td>{{ $getStatementOfAccount->total_remaining_balance}}</td>
+                                                        <td>{{ $getStatementOfAccount->created_by }}</td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <br>
+                                        <br>
+                                        <br>
+                                        
+
+                                    </div>
+                                    <div class="tab-pane fade show " id="billingStatement" role="tabpanel" aria-labelledby="billingStatement-tab">
+                                        <br>
+                                        <div class="float-right">
+                                            <a href="{{ action('WimpysFoodExpressController@printSummaryGetBS', $getDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                        </div>
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered display" width="100%" cellspacing="0">
+                                                <thead>
+                                                    <th>Action</th>
+                                                    <th>BS No</th>
+                                                    <th>Date</th>
+                                                    <th>Bill To</th> 
+                                                    <th>Order</th> 
+                                                    <th>Period Covered</th>
+                                                    <th>Amount</th>
+                                                    <th>Created By</th> 
+                                                </thead>
+                                                <tfoot>
+                                                    <th>Action</th>
+                                                    <th>BS No</th>
+                                                    <th>Date</th>
+                                                    <th>Bill To</th>  
+                                                    <th>Order</th>
+                                                    <th>Period Covered</th>
+                                                    <th>Amount</th>
+                                                    <th>Created By</th> 
+                                                </tfoot>
+                                                <tbody>
+                                                    @foreach($getBillingStatements as $getBillingStatement)
+                                                    <tr>
+                                                        <td></td>
+                                                        <td>{{ $getBillingStatement->module_code}}{{ $getBillingStatement->wimpys_food_express_code}}</td>
+                                                        <td>{{ $getBillingStatement->date}}</td>
+                                                        <td>{{ $getBillingStatement->bill_to }}</td>
+                                                        <td>{{ $getBillingStatement->order }}</td>
+                                                        <td>{{ $getBillingStatement->period_cover}}</td>
+                                                        <td><?= number_format($getBillingStatement->total_amount, 2)?></td>
+                                                        <td>{{ $getBillingStatement->created_by }}</td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+
+                                            </table>
+                                        </div>
+                                     </div>
+                                    <div class="tab-pane fade show " id="payables" role="tabpanel" aria-labelledby="payables-tab">
                                         <br>
                                         <div class="table-responsive">
                                              <table class="table table-bordered display" width="100%" cellspacing="0">

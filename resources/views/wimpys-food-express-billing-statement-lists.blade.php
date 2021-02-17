@@ -26,7 +26,7 @@
 				  						<th>BS No</th>
 										<th>Date</th>
 				  						<th>Bill To</th>
-				  						
+				  						<th>Order</th>
 				  						<th>Period Covered</th>
 				  						<th>Created By</th>
 			  						</thead>
@@ -35,7 +35,7 @@
 				  						<th>BS No</th>
                       					<th>Date</th>
 				  						<th>Bill To</th>
-				  						
+				  						<th>Order</th>
 				  						<th>Period Covered</th>
 				  						<th>Created By</th>
 
@@ -62,7 +62,7 @@
                                             </td>
                                             <td>{{ $billingStatement->date }}</td>
 			  								<td>{{ $billingStatement->bill_to }}</td>
-			  								
+			  								<td>{{ $billingStatement->order }}</td>
 			  								<td>{{ $billingStatement->period_cover }}</td>
 			  								<td>{{ $billingStatement->created_by }}</td>
 			  							</tr>

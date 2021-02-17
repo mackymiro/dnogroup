@@ -61,7 +61,7 @@
     
                         </td>
                         <td>
-                              @foreach($clientBookingList->client_bookings as $clientBooking)
+                            @foreach($clientBookingList->client_bookings as $clientBooking)
                                 @if($clientBooking->module_name === "Client Booking")
                                     {{ $clientBooking->module_code }} {{ $clientBooking->wimpys_food_express_code  }}
                                 @endif

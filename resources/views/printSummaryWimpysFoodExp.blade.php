@@ -162,7 +162,7 @@
                                             @if($getTransactionListCheck->status === "FULLY PAID AND RELEASED")
                                              <p >0</p>
                                              @else
-                                            <?php echo number_format($compute, 2); ?>
+                                            <?= number_format($compute, 2); ?>
                                             @endif 
                                         </td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getTransactionListCheck->status }}</td>

@@ -353,7 +353,7 @@
                                             </div>
                                             <div class="col-lg-4">
                                               <label>Total Amount</label>
-                                              <input type="text" name="totalAmount" class="form-control" disabled="disabled" value="{{ $bStatement['total_amount'] }}" disabled/>
+                                              <input type="text" name="totalAmount" class="form-control" disabled="disabled" value="{{ $bStatement['amount'] }}" disabled/>
                                             </div>
                                             <br>
                                             
