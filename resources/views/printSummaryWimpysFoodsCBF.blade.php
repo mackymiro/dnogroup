@@ -82,7 +82,7 @@
                                 <thead>
                                     <tr>
                                         <th width="15%"  style="text-align:center; border: 1px solid black;">Total:</th>
-                                        <th  style="text-align:center; border: 1px solid black;"><?= number_format($totalDR, 2);?></th>
+                                        <th  style="text-align:center; border: 1px solid black;"><?= number_format($totalCBF, 2);?></th>
                                     </tr>
                                 </thead>
                             </table>

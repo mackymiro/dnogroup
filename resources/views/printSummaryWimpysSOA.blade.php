@@ -86,8 +86,12 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Total:</th>
-                                        <th  style="text-align:center; border: 1px solid black;"><?php //number_format($totalAmountCashes, 2);?></th>
+                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Total Amount:</th>
+                                        <th  style="text-align:center; border: 1px solid black;"><?= number_format($totalSOA, 2);?></th>
+                                    </tr>
+                                    <tr>
+                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Total Remaining Balance:</th>
+                                        <th  style="text-align:center; border: 1px solid black;"><?= number_format($totalRemainingBalance, 2);?></th>
                                     </tr>
                                 </thead>
                             </table>

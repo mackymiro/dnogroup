@@ -154,7 +154,10 @@
                                                 <tbody>
                                                     @foreach($getTransactionCBFs as $getTransactionCBF)
                                                     <tr>
-                                                        <td></td>
+                                                        <td>
+                                                         <a href="/wimpys-food-express/{{ $getTransactionCBF->id}}/view-client-booking" title="View"><i class="fas fa-low-vision"></i></a>
+
+                                                        </td>
                                                         <td>{{ $getTransactionCBF->module_code}}{{ $getTransactionCBF->wimpys_food_express_code}}</td>
                                                         <td>{{ $getTransactionCBF->date_of_event}}</td>
                                                         <td>{{ $getTransactionCBF->time_of_event}}</td>
@@ -210,7 +213,10 @@
                                              <tbody>
                                                 @foreach($deliveryReceipts as $deliveryReceipt)
                                                 <tr>
-                                                    <td></td>
+                                                    <td>
+                                                    <a href="/wimpys-food-express/{{ $deliveryReceipt->id}}/view-delivery-receipt" title="View"><i class="fas fa-low-vision"></i></a>
+
+                                                    </td>
                                                     <td>{{ $deliveryReceipt->date}}</td>
                                                     <td>{{ $deliveryReceipt->module_code}}{{ $deliveryReceipt->wimpys_food_express_code}}</td>
                                                     <td>{{ $deliveryReceipt->sold_to }}</td>
@@ -258,7 +264,10 @@
                                                 <tbody>
                                                     @foreach($purchaseOrders as $purchaseOrder)
                                                     <tr>
-                                                        <td></td>
+                                                        <td>
+                                                        <a href="/wimpys-food-express/{{ $purchaseOrder->id}}/view" title="View"><i class="fas fa-low-vision"></i></a>
+
+                                                        </td>
                                                         <td>{{ $purchaseOrder->module_code}}{{ $purchaseOrder->wimpys_food_express_code}}</td>
                                                         <td>{{ $purchaseOrder->date}}</td>
                                                         <td>{{ $purchaseOrder->paid_to }}</td>
@@ -343,14 +352,21 @@
                                                 <tbody>
                                                     @foreach($getStatementOfAccounts as $getStatementOfAccount)
                                                     <tr>
-                                                        <td></td>
+                                                        <td>
+                                                        <a href="/wimpys-food-express/{{ $getStatementOfAccount->id}}/view-statement-account" title="View"><i class="fas fa-low-vision"></i></a>
+
+                                                        </td>
                                                         <td>{{ $getStatementOfAccount->date }}</td>
                                                         <td>{{ $getStatementOfAccount->module_code}}{{ $getStatementOfAccount->wimpys_food_express_code}}</td>
                                                         <td>{{ $getStatementOfAccount->order}}</td>
                                                         <td>{{ $getStatementOfAccount->bill_to}}</td>
                                                         <td>{{ $getStatementOfAccount->bs_no}}</td>
                                                         <td>{{ $getStatementOfAccount->period_cover }}</td>
-                                                        <td>{{ $getStatementOfAccount->status}}</td>
+                                                        <td>
+                                                        @if($getStatementOfAccount->total_remaining_balance == 0.00)
+                                                            PAID
+                                                        @endif 
+                                                        </td>
                                                         <td>{{ $getStatementOfAccount->total_amount }}</td>
                                                         <td>{{ $getStatementOfAccount->total_remaining_balance}}</td>
                                                         <td>{{ $getStatementOfAccount->created_by }}</td>
@@ -367,9 +383,43 @@
                                     </div>
                                     <div class="tab-pane fade show " id="billingStatement" role="tabpanel" aria-labelledby="billingStatement-tab">
                                         <br>
+                                        <br>
+                                        <br>
+                                        <br>
+                                        <form action="{{ action('WimpysFoodExpressController@selectOrderBSMultiple',  $startDate.'TO'.$endDate) }}" method="get">
+                                            {{csrf_field()}}
+                                        <div class="col-lg-4">
+                                            <label>Select Order</label>
+                                            <select name="selectOrder" class="form-control">
+                                               <option value="All" {{ ( "All" == $order) ? 'selected' : '' }}>All</option>
+                                                <option value="Client Booking Form" {{ ( "Client Booking Form" == $order) ? 'selected' : '' }}>Client Booking Form</option>
+                                                <option value="DR" {{ ( "DR" == $order) ? 'selected' : '' }}>DR</option>
+                                            </select>
+                                        </div>
+                                        <br>
+                                      
+                                        <div class="col-lg-4">
+                                            <button class="btn btn-success btn-lg">Search</button>
+                                        </div>
+                                        </form>
+                                        <br>
+                                    
+                                        <h1>{{ $order }}</h1>
+                                        <?php if($order === "Client Booking Form"): ?>
                                         <div class="float-right">
+                                            <a href="{{ action('WimpysFoodExpressController@printMultipleSummaryGetBSCBF', $startDate.'TO'.$endDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                        </div>
+                                        <?php elseif($order === "DR"): ?>
+                                        <div class="float-right">
+                                            <a href="{{ action('WimpysFoodExpressController@printMultipleSummaryGetBSDR', $startDate.'TO'.$endDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                        </div>
+
+                                        <?php else: ?>
+                                            <div class="float-right">
                                             <a href="{{ action('WimpysFoodExpressController@printMulitpleSummaryGetBS', $startDate.'TO'.$endDate) }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
                                         </div>
+                                        <?php endif; ?>
+                                       
                                         <br>
                                         <br>
                                         <br>
@@ -398,7 +448,10 @@
                                                 <tbody>
                                                     @foreach($getBillingStatements as $getBillingStatement)
                                                     <tr>
-                                                        <td></td>
+                                                        <td>
+                                                        <a href="/wimpys-food-express/{{ $getBillingStatement->id}}/view-billing-statement" title="View"><i class="fas fa-low-vision"></i></a>
+
+                                                        </td>
                                                         <td>{{ $getBillingStatement->module_code}}{{ $getBillingStatement->wimpys_food_express_code}}</td>
                                                         <td>{{ $getBillingStatement->date}}</td>
                                                         <td>{{ $getBillingStatement->bill_to }}</td>

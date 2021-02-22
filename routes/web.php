@@ -8162,6 +8162,42 @@ Route::group(['middleware' => ['auth']], function(){
 		'WimpysFoodExpressController@printMultipleSummaryGetSOADR')
 		->name('printMultipleSummaryGetSOADR')
 		->middleware(['cashier']);
+	
+	Route::get(
+		'/wimpys-food-express/selectOrderBS',
+		'WimpysFoodExpressController@selectOrderBS')
+		->name('selectOrderBS')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{date}/printSummaryGetBSCBF',
+		'WimpysFoodExpressController@printSummaryGetBSCBF')
+		->name('printSummaryGetBSCBF')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{date}/printSummaryGetBSDR',
+		'WimpysFoodExpressController@printSummaryGetBSDR')
+		->name('printSummaryGetBSDR')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{date}/selectOrderBSMultiple',
+		'WimpysFoodExpressController@selectOrderBSMultiple')
+		->name('selectOrderBSMultiple')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{date}/printMultipleSummaryGetBSCBF',
+		'WimpysFoodExpressController@printMultipleSummaryGetBSCBF')
+		->name('printMultipleSummaryGetBSCBF')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{date}/printMultipleSummaryGetBSDR',
+		'WimpysFoodExpressController@printMultipleSummaryGetBSDR')
+		->name('printMultipleSummaryGetBSDR')
+		->middleware(['cashier']);
 
 	Route::get(
 		'/wimpys-food-express/summary-report',

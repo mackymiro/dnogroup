@@ -625,10 +625,10 @@
                       });
                         
                   <?php endforeach; ?>
-                  $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?= $data->qty; ?>" class="form-control" readonly="readonly" />');
-                  $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?= $data->unit; ?>" class="form-control" readonly="readonly" />');
-                  $("#description").html('<label>Description</label><input type="text" name="description" value="<?= $data->description; ?>" class="form-control" readonly="readonly" />');
-                  $("#price").html('<label>Price</label><input type="text" name="price" value="<?= $data->price; ?>" class="form-control" readonly="readonly" />');
+                  $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?= $getDrNo->qty; ?>" class="form-control" readonly="readonly" />');
+                  $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?= $getDrNo->unit; ?>" class="form-control" readonly="readonly" />');
+                  $("#description").html('<label>Description</label><input type="text" name="description" value="<?= $getDrNo->description; ?>" class="form-control" readonly="readonly" />');
+                  $("#price").html('<label>Price</label><input type="text" name="price" value="<?= $getDrNo->price; ?>" class="form-control" readonly="readonly" />');
                                    
 
              }

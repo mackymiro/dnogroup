@@ -27,6 +27,7 @@
 				  						<tr>
 				  							<th>Action</th>
                         <th>Client Booking No</th>
+                        <th>Client Name</th>
 			  								<th>Date of Event</th>
 			  								<th>Time of Event</th>
                         <th>No of People</th>
@@ -40,6 +41,7 @@
                       <tr>
 				  							<th>Action</th>
                         <th>Client Booking No</th>
+                        <th>Client Name</th>
 			  								<th>Date of Event</th>
 			  								<th>Time of Event</th>
                         <th>No of People</th>
@@ -67,6 +69,7 @@
                                 @endif
                             @endforeach    
                         </td>
+                        <td>{{ $clientBookingList['client']}}</td>
                         <td>{{ $clientBookingList['date_of_event'] }}</td>
                         <td>{{ $clientBookingList['time_of_event']}}</td>
                         <td>{{ $clientBookingList['no_of_people']}}</td>

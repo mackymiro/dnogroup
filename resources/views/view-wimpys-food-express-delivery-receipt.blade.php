@@ -112,7 +112,7 @@
                                         <td>{{ $viewDeliveryReceipt[0]->unit}}</td>
                                         <td>{{ $viewDeliveryReceipt[0]->description}}</td>
                                         <td><?= number_format($viewDeliveryReceipt[0]->unit_price, 2)?></td>
-                                        <td><?= number_format($viewDeliveryReceipt[0]->total, 2)?></td>
+                                        <td><?= number_format($viewDeliveryReceipt[0]->price, 2)?></td>
                                     </tr>
 
                                   	 @foreach($deliveryReceipts as $deliveryReceipt)
@@ -122,7 +122,7 @@
                                         <td>{{ $deliveryReceipt['unit'] }}</td>
                                         <td>{{ $deliveryReceipt['description'] }}</td>
                                         <td><?= number_format($deliveryReceipt['unit_price'], 2)?></td>
-                                        <td><?= number_format($deliveryReceipt['total'], 2)?></td>
+                                        <td><?= number_format($deliveryReceipt['price'], 2)?></td>
                                       </tr>
                                   	
                                       
