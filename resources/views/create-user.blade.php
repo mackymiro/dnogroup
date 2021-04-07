@@ -176,10 +176,12 @@
   el: '#app-user-type',
     data: {
       userTypes:[
-        { text:'Admin', value: '1' },
-        { text:'Sales', value: '2'},
-        { text:'User',  value:'3' },
-        { text:'Cashier', value:'4'}
+        { text:'Admin', value: 1 },
+        { text:'Sales', value: 2},
+        { text:'User',  value: 3 },
+        { text:'Cashier', value: 4},
+        { text:'Wimpys', value: 5},
+        { text:'Mr Potato', value: 6},
       ]
     }
   })  

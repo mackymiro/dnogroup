@@ -1,35 +1,19 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('title', 'Edit Purchase Order |')
 @section('content')
-<script>
-	function addFunction(){
-	    var table = document.getElementById("textbox");
-	  	var rowlen = table.rows.length;
-	  	var row = table.insertRow(rowlen);
-	  	row.id = rowlen;
-	  	var arr = ['Quantity'];
-	  	for (i = 0; i < 2; i++) {
-	  		 var x = row.insertCell(i)
-	  		 if (i == 1) {
-	  		 	x.innerHTML = "<input class='btn btn-danger' type='button' onclick='removeCell(" + row.id + ")' value=Remove>"
-  		  	}else{
-  		  		x.innerHTML = "<div class='col-lg-12'><label>" + arr[i] + ":</label><br><input class='form-control' type='textbox' name='quantity[]'><label>Description</label><input type='textbox' class='form-control' name='description[]' ><label>Unit Price</label><input type='textbox' class='form-control' name='unitPrice[]' ><label>Amount</label><input type='textbox' class='form-control' name='amount[]' ></div>"
-  	
-  		  	}
-  		}
-	}
 
-
-
-	function removeCell(rowid) {
-      var table = document.getElementById(rowid).remove();
-	}
-</script>
 <script>
   $(document).ready(function(){
       $('.alert-success').fadeIn().delay(3000).fadeOut();
   });
 </script>
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css" >
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+
 <div id="wrapper">
 	 @include('sidebar.sidebar')
 
@@ -59,36 +43,30 @@
                                @if(session('SuccessE'))
                                  <p class="alert alert-success">{{ Session::get('SuccessE') }}</p>
                                 @endif 
-                               <form action="{{ action('LoloPinoyLechonDeCebuController@update', $purchaseOrder['id']) }}" method="post">
+                               <form action="{{ action('LoloPinoyLechonDeCebuController@update', $purchaseOrder[0]->id) }}" method="post">
                                {{csrf_field()}}
                               <input name="_method" type="hidden" value="PATCH">
                               <div class="form-group">
                                 <div class="form-row">
                                   <div class="col-lg-6">
                                     <label>Paid to</label>
-                                  <input type="text" name="paidTo" class="form-control"  value="{{ $purchaseOrder['paid_to'] }}" />
+                                  <input type="text" name="paidTo" class="form-control"  value="{{ $purchaseOrder[0]->paid_to }}" />
                                   <label>Address</label>
-                                  <input type="text" name="address" class="form-control"  value="{{ $purchaseOrder['address'] }}" />
-                                  <label>Checked By</label>
-                                  <select class="form-control" name="checkedBy">
-                                      <option value="0">--Please Select--</option>
-                                      @foreach($getUsers as $getUser)
-                                      <option value="{{ $getUser['first_name']}} {{ $getUser['last_name'] }}">{{ $getUser['first_name']}} {{ $getUser['last_name'] }}</option>
-                                      @endforeach
-                                  </select>
+                                  <input type="text" name="address" class="form-control"  value="{{ $purchaseOrder[0]->address }}" />
+                                 
                                   </div>
                                   <div class="col-lg-6">
                                     <label>P.O Number</label>
-                                    <input type="text" name="poNum" class="form-control" disabled="disabled"  value="{{ $purchaseOrder['p_o_number'] }}" />
+                                    <input type="text" name="poNum" class="form-control" disabled="disabled"  value="{{ $purchaseOrder[0]->lechon_de_cebu_code }}" />
                                     <label>Date</label>
-                                    <input type="text" name="date" id="datepicker" class="form-control"  value="{{ $purchaseOrder['date'] }}" />
-                                    <label>Requested By</label>
-                                    <select class="form-control" name="requestedBy">
-                                        <option value="0">--Please Select--</option>
-                                        @foreach($getUsers as $getUser)
-                                        <option value="{{ $getUser['first_name']}} {{ $getUser['last_name'] }}">{{ $getUser['first_name']}} {{ $getUser['last_name']}}</option>
-                                        @endforeach
-                                    </select>
+                                    <input type="text" name="date" id="datepicker" class="form-control"  value="{{ $purchaseOrder[0]->date }}" />
+                                   
+                                    <label>Received By</label>
+                                    <select data-live-search="true" name="recievedBy" class="form-control selectpicker">
+                                          @foreach($getSuppliers as $getSupplier)
+                                          <option value="{{ $getSupplier['supplier_name']}}">{{ $getSupplier['supplier_name']}}</option>
+                                          @endforeach
+                                      </select>
                                   </div>
                                 </div>
                               </div>
@@ -96,26 +74,26 @@
                                 <div class="form-row">
                                   <div class="col-lg-1">
                                     <label>Quantity</label>
-                                    <input type="text" name="quantity" class="form-control" required="required" value="{{ $purchaseOrder['quantity'] }}" />
+                                    <input type="text" name="quantity" class="form-control" required="required" value="{{ $purchaseOrder[0]->quantity }}" />
 
                                   </div>
                                   <div class="col-lg-4">
                                     <label>Description</label>
-                                    <input type="text" name="description" class="form-control" required="required" value="{{ $purchaseOrder['description'] }}" />
+                                    <input type="text" name="description" class="form-control" required="required" value="{{ $purchaseOrder[0]->description }}" />
                                   </div>
                                   <div class="col-lg-4">
                                     <label>Unit Price</label>
-                                    <input type="text" name="unitPrice" class="form-control" required="required" value="{{ $purchaseOrder['unit_price'] }}" />
+                                    <input type="text" name="unitPrice" class="form-control" required="required" value="{{ $purchaseOrder[0]->unit_price }}" />
                                   </div>
                                   <div class="col-lg-2">
                                     <label>Amount</label>
-                                    <input type="text" name="amount" class="form-control" required="required" value="{{ $purchaseOrder['amount'] }}" />
+                                    <input type="text" name="amount" class="form-control" required="required" value="{{ $purchaseOrder[0]->amount }}" />
                                   </div>
                                   <br>
                                   <div class="col-lg-12 float-right">
                                     <br>
                                     <br>
-                                    <input type="submit" class="btn btn-success"  value="Update Purchase Order" />
+                                    <input type="submit" class="btn btn-success btn-lg"  value="Update Purchase Order" />
                                   </div>
                                 </div>  
                               </div>
@@ -126,13 +104,51 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-12">
+                <div class="col-lg-4">
                      <div class="card mb-3">
                         <div class="card-header">
                        <i class="fab fa-first-order" aria-hidden="true"></i>
-                          Edit Purchase Order</div>
+                          Add Purchase Order</div>
                         <div class="card-body">
-                            @if(session('SuccessEdit'))
+                             <div class="form-group">
+                                <div class="form-row">  
+                                    <div class="col-lg-12">
+                                    
+                                      <label>Quantity</label>
+                                      <input type="text" name="quant" class="form-control" required="required"  />
+
+                                    </div>
+                                    <div class="col-lg-12">
+                                      <label>Description</label>
+                                      <input type="text" name="desc" class="form-control" required="required"  />
+                                    </div>
+                                    <div class="col-lg-12">
+                                      <label>Unit Price</label>
+                                      <input type="text" name="unitPrice" class="form-control" required="required"  />
+                                    </div>
+                                    <div class="col-lg-12">
+                                      <label>Amount</label>
+                                      <input type="text" name="amount" class="form-control" required="required" />
+                                    </div>
+                                  </div>
+                              </div>
+                          
+                            <div>
+                              @if(Auth::user()['role_type'] == 1)
+                              <a href="{{ url('lolo-pinoy-lechon-de-cebu/add-new/'.$purchaseOrder[0]->id) }}" class="btn btn-primary btn-lg">Add</a>
+                              @endif
+                            </div>
+                            
+                            <br>
+                        </div>
+                     </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="card mb-3">
+                          <div class="card-header">
+                          <i class="fab fa-first-order" aria-hidden="true"></i>
+                              Edit Purchase Order</div>
+                              @if(session('SuccessEdit'))
                                <p class="alert alert-success">{{ Session::get('SuccessEdit') }}</p>
                               @endif 
                             @foreach($pOrders as $pOrder)
@@ -167,7 +183,7 @@
                                     </div>
                                      <div class="col-lg-2">
                                       <br>
-                                      <input type="hidden" id="poId" name="poId" value="{{ $purchaseOrder['id'] }}" />
+                                      <input type="hidden" id="poId" name="poId" value="{{ $purchaseOrder[0]->id }}" />
                                       <input type="submit" class="btn btn-success" value="Update" />
                                       @if(Auth::user()['role_type'] == 1)
                                       <a id="delete" onClick="confirmDelete('{{ $pOrder['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
@@ -178,15 +194,11 @@
                             </div>
                           </form>
                             @endforeach
-                            <div>
-                              @if(Auth::user()['role_type'] == 1)
-                              <a href="{{ url('lolo-pinoy-lechon-de-cebu/add-new/'.$purchaseOrder['id']) }}" class="btn btn-primary">Add New</a>
-                              @endif
-                            </div>
+                           
                             
                             <br>
                         </div>
-                     </div>
+                    </div>
                 </div>
             </div>
              			
@@ -207,7 +219,6 @@
       </footer>
 
 </div>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
     const confirmDelete = (id) => {
         const x = confirm("Do you want to delete this?");

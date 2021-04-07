@@ -83,6 +83,15 @@
                                                 </th>
                                             </tr>
                                             <tr>
+                                                <th width="20%">CBF No</th>
+                                                <th>
+                                                   @foreach($printCB[0]->client_bookings as $clientBooking)
+                                                        @if($clientBooking->module_name === "Client Booking")          
+                                                            {{ $clientBooking->cbf_no }}                                                        @endif
+                                                    @endforeach
+                                                </th>
+                                            </tr>
+                                            <tr>
                                                 <th>Client</th>
                                                 <th> {{ $printCB[0]->client }}</th>
                                             </tr>
@@ -114,6 +123,7 @@
                           <br>
                           <br>
                           <br>
+                          @if($printCB[0]->type_of_package != "Cooking Charge - 0.00")
                           <table style="border:1px solid black;">
                           		  <thead>
 	                                  <tr>
@@ -234,7 +244,99 @@
 	                                   
                                   </tbody>
                           </table>
-                         
+                          @endif
+                          @if($printCB[0]->type_of_package === "Cooking Charge - 0.00")
+                            <table style="border:1px solid black;">
+                          		  <thead>
+	                                  <tr style="border:1px solid black;">
+	                                   <th style="text-align:center; border: 1px solid black;" >Qty</th>
+                                       <th style="text-align:center; border: 1px solid black;">Item</th>
+                                       <th style="text-align:center; border: 1px solid black;">Amount</th>
+	                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                   @foreach($getMenuItems as $getMenuItem)
+                                     <tr style="border:1px solid black;">
+                                        <td style="text-align:center; border: 1px solid black;">{{ $getMenuItem['qty']}}</td>
+                                        <td style="text-align:center; border: 1px solid black;">{{ $getMenuItem['item']}}</td>
+                                        <td style="text-align:center; border: 1px solid black;">
+                                            {{ $getMenuItem['amount'] }}
+
+                                        </td>
+
+                                       </tr>
+                                       @endforeach
+                                  </tbody>
+
+                            </table>
+                            <br>
+                            <br>
+                            <table style="border:1px solid black;">
+                                   <thead>
+	                                  <tr style="border:1px solid black;">
+	                                   <th width="25%" style="text-align:center; border: 1px solid black;" >Total</th>
+                                       <th style="text-align:right; border: 1px solid black;"></th>
+                                       <th style="text-align:right; border: 1px solid black;" >
+                                            <?= number_format($printCB[0]->total, 2)?>
+                                       </th>
+	                                  </tr>
+                                      <tr style="border:1px solid black;">
+	                                   <th width="25%" style="text-align:center; border: 1px solid black;" >Less</th>
+                                       <th style="text-align:right; border: 1px solid black;">{{ $printCB[0]->description }}</th>
+                                       <th style="text-align:right; border: 1px solid black;" >
+                                       
+                                        <?= number_format($printCB[0]->less, 2)?>
+                                       </th>
+                                    
+	                                  </tr>
+                                      <tr style="border:1px solid black;">
+                                        <?php
+                                            $total = $printCB[0]->total - $printCB[0]->less;
+                                          ?>
+                                       <th width="25%" style="text-align:center; border: 1px solid black;" >Balance</th>
+                                       <th style="text-align:right; border: 1px solid black;"></th>
+                                       <th style="text-align:right; border: 1px solid black;" >
+                                          <?= number_format($total, 2) ?>
+                                       </th>
+                                    
+	                                  </tr>
+                                  </thead>
+                            </table>
+                            @endif
+                            <br>
+                            <br>
+                            <br>
+                            <br>
+                            <table  >
+                           			<thead>
+                           				<tr>
+                       						<th style="width:30%;">Prepared By</th>
+                                            <th style="width:30%;">Checked By</th>
+                                            <th style="width:30%;">Conformed By</th>
+                           				</tr>
+                           			</thead>
+                           			<tbody>
+                           				<tr>
+                           					<td>
+                           						________________________<br>
+                           						{{ $printCB[0]->created_by}}
+
+                           					</td>
+                                               <td>
+                           						________________________<br>
+                           						
+
+                           					</td>
+                           					<td>
+                           						________________________<br>
+                           						Mr. Alan L. Dino
+                           					</td>
+											
+
+                           					
+                           				</tr>
+                           			</tbody>
+                           		</table>
 						 </div>
 					</div>
 				</div>

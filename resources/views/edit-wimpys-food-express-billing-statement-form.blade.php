@@ -140,6 +140,11 @@
                                             <input type="text" name="drNo" class="form-control"  value="{{ $billingStatement['dr_no'] }}" disabled/>
                                             
                                             </div>
+                                            <div  class="col-lg-2">
+                                              <label>Qty </label>
+                                              <input type="text" name="qty" class="form-control" value="{{ $billingStatement['qty'] }}" disabled />
+                                              
+                                            </div>
                                             <div  class="col-lg-4">
                                               <label>Item Description</label>
                                               <input type="text" name="description" class="form-control" value="{{ $billingStatement['description'] }}" disabled/>
@@ -150,6 +155,7 @@
                                               <input type="text" name="unit" class="form-control" value="{{ $billingStatement['unit'] }}" disabled />
                                               
                                             </div>
+                                         
                                             <div  class="col-lg-2">
                                               <label>Amount</label>
                                               <input type="text" name="amount" class="form-control" value="{{ $billingStatement['amount'] }}" disabled/>

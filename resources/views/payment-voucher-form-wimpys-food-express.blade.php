@@ -99,6 +99,7 @@
                                     <select  name="category" class="category form-control" > 
                                         <option value="None">None</option>
                                         <option value="Supplier">Supplier</option>
+                                        <option value="Payroll">Payroll</option>
                                       </select>
                                 </div> 
                                 <div id="supplierList" class="col-lg-2">

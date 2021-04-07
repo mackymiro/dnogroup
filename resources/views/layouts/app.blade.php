@@ -76,6 +76,11 @@
                     User
                   @elseif(Auth::user()['role_type'] === 4)
                     Cashier
+
+                  @elseif(Auth::user()['role_type'] === 5)
+                    Wimpy's
+                  @elseif(Auth::user()['role_type'] === 6)
+                    Mr Potato
                   @endif                  
            </strong>
            </div>

@@ -51,7 +51,7 @@
                             </button>
                             <br>
                     			 <br>
-                            @if($data === "Urgello")
+                            @if($data )
                 			 	    <div class="table-responsive">
                                   <table class="table table-bordered display"  width="100%" cellspacing="0">
                                       <thead>
@@ -83,202 +83,32 @@
                                           <th>Created By</th>
                                       </tfoot>
                                       <tbody>
-                                          @foreach($getDeliveryBranches as $getDeliveryBranchUrgello)
-                                          <tr id="deletedId{{ $getDeliveryBranchUrgello->id}}">
+                                          @foreach($getDeliveryBranches as $getDeliveryBranch)
+                                          <tr id="deletedId{{ $getDeliveryBranch->id}}">
                                             <td>
                                             	<!-- Button trigger modal -->
-									                            <a data-toggle="modal" data-target="#deliveryBranch<?php echo $getDeliveryBranchUrgello->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-											                        @if(Auth::user()['role_type'] != 3 && Auth::user()['role_type'] != 2)
-                                              <a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getDeliveryBranchUrgello->id }}')" title="Delete"><i class="fas fa-trash"></i></a>
+									                            <a data-toggle="modal" data-target="#deliveryBranch<?= $getDeliveryBranch->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+											                        @if(Auth::user()['role_type'] != 3 && Auth::user()['role_type'] != 2 && Auth::user()['role_type'] != 4)
+                                              <a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getDeliveryBranch->id }}')" title="Delete"><i class="fas fa-trash"></i></a>
                                               @endif
                                             </td>
-                                            <td>{{ $getDeliveryBranchUrgello->date}}</td>
-                                            <td>{{ $getDeliveryBranchUrgello->product_id_no}}</td>
-                                            <td>{{ $getDeliveryBranchUrgello->dr_no}}</td>
-                                            <td>{{ $getDeliveryBranchUrgello->supplier}}</td>
-                                            <td>{{ $getDeliveryBranchUrgello->product_name}}</td>
-                                            <td>₱ <?php echo number_format($getDeliveryBranchUrgello->price, 2)?></td>
-                                            <td>{{ $getDeliveryBranchUrgello->qty}}</td>
-                                            <td><?php echo number_format($getDeliveryBranchUrgello->product_in, 2)?></td>
-                                            <td>{{ $getDeliveryBranchUrgello->unit}}</td>
-                                            <td><?php echo number_format($getDeliveryBranchUrgello->amount, 2)?></td>
-                                            <td>{{ $getDeliveryBranchUrgello->created_by}}</td>
+                                            <td>{{ $getDeliveryBranch->date}}</td>
+                                            <td>{{ $getDeliveryBranch->product_id_no}}</td>
+                                            <td>{{ $getDeliveryBranch->dr_no}}</td>
+                                            <td>{{ $getDeliveryBranch->supplier}}</td>
+                                            <td>{{ $getDeliveryBranch->product_name}}</td>
+                                            <td>₱ <?= number_format($getDeliveryBranch->price, 2)?></td>
+                                            <td>{{ $getDeliveryBranch->qty}}</td>
+                                            <td><?= number_format($getDeliveryBranch->product_in, 2)?></td>
+                                            <td>{{ $getDeliveryBranch->unit}}</td>
+                                            <td><?= number_format($getDeliveryBranch->amount, 2)?></td>
+                                            <td>{{ $getDeliveryBranch->created_by}}</td>
                                           </tr>
                                           @endforeach
                                       </tbody>
                                   </table>
                             </div>
-                            @elseif($data === "Velez")
-                            <div class="table-responsive">
-                                  <table class="table table-bordered display"  width="100%" cellspacing="0">
-                                      <thead>
-                                          <th>Action</th>
-                                          <th>Date</th>
-                                          <th>Product ID</th>
-                                          <th>DR No</th>
-                                          <th>Supplier</th>
-                                          <th>Product Name</th>
-                                          <th>Price</th>
-                                          <th>Qty</th>
-                                          <th>IN</th>
-                                          <th>Unit</th>
-                                          <th>Amount</th>
-                                          <th>Created By</th>
-                                      </thead>
-                                      <tfoot>
-                                          <th>Action</th>
-                                          <th>Date</th>
-                                          <th>Product ID</th>
-                                          <th>DR No</th>
-                                          <th>Supplier</th>
-                                          <th>Product Name</th>
-                                          <th>Price</th>
-                                          <th>Qty</th>
-                                          <th>IN</th>
-                                          <th>Unit</th>
-                                          <th>Amount</th>
-                                          <th>Created By</th>
-                                      </tfoot>
-                                      <tbody>
-                                          @foreach($getDeliveryBranches as $getDeliveryBranchVelez)
-                                          <tr id="deletedId{{ $getDeliveryBranchVelez->id }}">
-                                            <td>
-                                            	<!-- Button trigger modal -->
-									                            <a data-toggle="modal" data-target="#deliveryBranch<?php echo $getDeliveryBranchVelez->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-											                        @if(Auth::user()['role_type'] != 3 && Auth::user()['role_type'] != 2)
-                                              <a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getDeliveryBranchVelez->id }}')" title="Delete"><i class="fas fa-trash"></i></a>
-                                              @endif
-                                            </td>
-                                            <td>{{ $getDeliveryBranchVelez->date}}</td>
-                                            <td>{{ $getDeliveryBranchVelez->product_id_no}}</td>
-                                            <td>{{ $getDeliveryBranchVelez->dr_no}}</td>
-                                            <td>{{ $getDeliveryBranchVelez->supplier}}</td>
-                                            <td>{{ $getDeliveryBranchVelez->product_name}}</td>
-                                            <td>₱ <?php echo number_format($getDeliveryBranchVelez->price, 2)?></td>
-                                            <td>{{ $getDeliveryBranchVelez->qty}}</td>
-                                            <td><?php echo number_format($getDeliveryBranchVelez->product_in, 2)?></td>
-                                            <td>{{ $getDeliveryBranchVelez->unit}}</td>
-                                            <td><?php echo number_format($getDeliveryBranchVelez->amount, 2)?></td>
-                                            <td>{{ $getDeliveryBranchVelez->created_by}}</td>
-                                          </tr>
-                                          @endforeach
-                                      </tbody>
-                                  </table>
-                            </div>
-                            @elseif($data == "Banilad")
-                            <div class="table-responsive">
-                                  <table class="table table-bordered display"  width="100%" cellspacing="0">
-                                      <thead>
-                                          <th>Action</th>
-                                          <th>Date</th>
-                                          <th>Product ID</th>
-                                          <th>DR No</th>
-                                          <th>Supplier</th>
-                                          <th>Product Name</th>
-                                          <th>Price</th>
-                                          <th>Qty</th>
-                                          <th>IN</th>
-                                          <th>Unit</th>
-                                          <th>Amount</th>
-                                          <th>Created By</th>
-                                      </thead>
-                                      <tfoot>
-                                          <th>Action</th>
-                                          <th>Date</th>
-                                          <th>Product ID</th>
-                                          <th>DR No</th>
-                                          <th>Supplier</th>
-                                          <th>Product Name</th>
-                                          <th>Price</th>
-                                          <th>Qty</th>
-                                          <th>IN</th>
-                                          <th>Unit</th>
-                                          <th>Amount</th>
-                                          <th>Created By</th>
-                                      </tfoot>
-                                      <tbody>
-                                          @foreach($getDeliveryBranches as $getDeliveryBranchBanilad)
-                                          <tr id="deletedId{{ $getDeliveryBranchBanilad->id }}">
-                                            <td>
-                                            	<!-- Button trigger modal -->
-									                            <a data-toggle="modal" data-target="#deliveryBranch<?php echo $getDeliveryBranchBanilad->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-											                        @if(Auth::user()['role_type'] != 3 && Auth::user()['role_type'] != 2)
-                                              <a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getDeliveryBranchBanilad->id }}')" title="Delete"><i class="fas fa-trash"></i></a>
-                                              @endif
-                                            </td>
-                                            <td>{{ $getDeliveryBranchBanilad->date}}</td>
-                                            <td>{{ $getDeliveryBranchBanilad->product_id_no}}</td>
-                                            <td>{{ $getDeliveryBranchBanilad->dr_no}}</td>
-                                            <td>{{ $getDeliveryBranchBanilad->supplier}}</td>
-                                            <td>{{ $getDeliveryBranchBanilad->product_name}}</td>
-                                            <td>₱ <?php echo number_format($getDeliveryBranchBanilad->price, 2)?></td>
-                                            <td>{{ $getDeliveryBranchBanilad->qty}}</td>
-                                            <td><?php echo number_format($getDeliveryBranchBanilad->product_in, 2)?></td>
-                                            <td>{{ $getDeliveryBranchBanilad->unit}}</td>
-                                            <td><?php echo number_format($getDeliveryBranchBanilad->amount, 2)?></td>
-                                            <td>{{ $getDeliveryBranchBanilad->created_by}}</td>
-                                          </tr>
-                                          @endforeach
-                                      </tbody>
-                                  </table>
-                            </div>
-                            @elseif($data  == "GQS")
-                            <div class="table-responsive">
-                                  <table class="table table-bordered display"  width="100%" cellspacing="0">
-                                      <thead>
-                                          <th>Action</th>
-                                          <th>Date</th>
-                                          <th>Product ID</th>
-                                          <th>DR No</th>
-                                          <th>Supplier</th>
-                                          <th>Product Name</th>
-                                          <th>Price</th>
-                                          <th>Qty</th>
-                                          <th>IN</th>
-                                          <th>Unit</th>
-                                          <th>Amount</th>
-                                          <th>Created By</th>
-                                      </thead>
-                                      <tfoot>
-                                          <th>Action</th>
-                                          <th>Date</th>
-                                          <th>Product ID</th>
-                                          <th>DR No</th>
-                                          <th>Supplier</th>
-                                          <th>Product Name</th>
-                                          <th>Price</th>
-                                          <th>Qty</th>
-                                          <th>IN</th>
-                                          <th>Unit</th>
-                                          <th>Amount</th>
-                                          <th>Created By</th>
-                                      </tfoot>
-                                      <tbody>
-                                          @foreach($getDeliveryBranches as $getDeliveryBranchGqs)
-                                          <tr id="deletedId{{ $getDeliveryBranchGqs->id }}">
-                                            <td>
-                                            	<!-- Button trigger modal -->
-									                            <a data-toggle="modal" data-target="#deliveryBranch<?php echo $getDeliveryBranchGqs->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-											                        @if(Auth::user()['role_type'] != 3 && Auth::user()['role_type'] != 2)
-                                              <a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getDeliveryBranchGqs->id }}')" title="Delete"><i class="fas fa-trash"></i></a>
-                                              @endif
-                                            </td>
-                                            <td>{{ $getDeliveryBranchGqs->date}}</td>
-                                            <td>{{ $getDeliveryBranchGqs->product_id_no}}</td>
-                                            <td>{{ $getDeliveryBranchGqs->dr_no}}</td>
-                                            <td>{{ $getDeliveryBranchGqs->supplier}}</td>
-                                            <td>{{ $getDeliveryBranchGqs->product_name}}</td>
-                                            <td>₱ <?php echo number_format($getDeliveryBranchGqs->price, 2)?></td>
-                                            <td>{{ $getDeliveryBranchGqs->qty}}</td>
-                                            <td><?php echo number_format($getDeliveryBranchGqs->product_in, 2)?></td>
-                                            <td>{{ $getDeliveryBranchGqs->unit}}</td>
-                                            <td><?php echo number_format($getDeliveryBranchGqs->amount, 2)?></td>
-                                            <td>{{ $getDeliveryBranchGqs->created_by}}</td>
-                                          </tr>
-                                          @endforeach
-                                      </tbody>
-                                  </table>
-                            </div>
+                            
                             @endif
                         </div>
                     </div>
@@ -298,7 +128,7 @@
                             </button>
                             <br>
                             <br>
-                            @if($data === "Urgello")
+                            @if($data)
                             <div class="table-responsive">
                                 <table class="table table-bordered display" width="100%" cellspacing="0">
                                        <thead>
@@ -330,202 +160,32 @@
                                           <th>Created By</th>
                                       </tfoot>
                                       <tbody>
-                                          @foreach($getDeliveryBranchDrinks as $getDeliveryBranchUrgello)
-                                          <tr id="deletedId{{ $getDeliveryBranchUrgello->id}}">
+                                          @foreach($getDeliveryBranchDrinks as $getDeliveryBranchDrink)
+                                          <tr id="deletedId{{ $getDeliveryBranchDrink->id}}">
                                             <td>
                                             	<!-- Button trigger modal -->
-									                            <a data-toggle="modal" data-target="#deliveryBranch<?php echo $getDeliveryBranchUrgello->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-											                        @if(Auth::user()['role_type'] != 3 && Auth::user()['role_type'] != 2)
-                                              <a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getDeliveryBranchUrgello->id }}')" title="Delete"><i class="fas fa-trash"></i></a>
+									                            <a data-toggle="modal" data-target="#getDeliveryBranchDrink<?= $getDeliveryBranchDrink->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+											                        @if(Auth::user()['role_type'] != 3 && Auth::user()['role_type'] != 2 && Auth::user()['role_type'] != 4)
+                                              <a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getDeliveryBranchDrink->id }}')" title="Delete"><i class="fas fa-trash"></i></a>
                                               @endif
                                             </td>
-                                            <td>{{ $getDeliveryBranchUrgello->date}}</td>
-                                            <td>{{ $getDeliveryBranchUrgello->product_id_no}}</td>
-                                            <td>{{ $getDeliveryBranchUrgello->dr_no}}</td>
-                                            <td>{{ $getDeliveryBranchUrgello->supplier}}</td>
-                                            <td>{{ $getDeliveryBranchUrgello->product_name}}</td>
-                                            <td>₱ <?php echo number_format($getDeliveryBranchUrgello->price, 2)?></td>
-                                            <td>{{ $getDeliveryBranchUrgello->qty}}</td>
-                                            <td><?php echo number_format($getDeliveryBranchUrgello->product_in, 2)?></td>
-                                            <td>{{ $getDeliveryBranchUrgello->unit}}</td>
-                                            <td><?php echo number_format($getDeliveryBranchUrgello->amount, 2)?></td>
-                                            <td>{{ $getDeliveryBranchUrgello->created_by}}</td>
+                                            <td>{{ $getDeliveryBranchDrink->date}}</td>
+                                            <td>{{ $getDeliveryBranchDrink->product_id_no}}</td>
+                                            <td>{{ $getDeliveryBranchDrink->dr_no}}</td>
+                                            <td>{{ $getDeliveryBranchDrink->supplier}}</td>
+                                            <td>{{ $getDeliveryBranchDrink->product_name}}</td>
+                                            <td>₱ <?= number_format($getDeliveryBranchDrink->price, 2)?></td>
+                                            <td>{{ $getDeliveryBranchDrink->qty}}</td>
+                                            <td><?= number_format($getDeliveryBranchDrink->product_in, 2)?></td>
+                                            <td>{{ $getDeliveryBranchDrink->unit}}</td>
+                                            <td><?= number_format($getDeliveryBranchDrink->amount, 2)?></td>
+                                            <td>{{ $getDeliveryBranchDrink->created_by}}</td>
                                           </tr>
                                           @endforeach
                                       </tbody>
                                 </table>
                             </div>
-                            @elseif($data === "Velez")
-                            <div class="table-responsive">
-                                  <table class="table table-bordered display"  width="100%" cellspacing="0">
-                                      <thead>
-                                          <th>Action</th>
-                                          <th>Date</th>
-                                          <th>Product ID</th>
-                                          <th>DR No</th>
-                                          <th>Supplier</th>
-                                          <th>Product Name</th>
-                                          <th>Price</th>
-                                          <th>Qty</th>
-                                          <th>IN</th>
-                                          <th>Unit</th>
-                                          <th>Amount</th>
-                                          <th>Created By</th>
-                                      </thead>
-                                      <tfoot>
-                                          <th>Action</th>
-                                          <th>Date</th>
-                                          <th>Product ID</th>
-                                          <th>DR No</th>
-                                          <th>Supplier</th>
-                                          <th>Product Name</th>
-                                          <th>Price</th>
-                                          <th>Qty</th>
-                                          <th>IN</th>
-                                          <th>Unit</th>
-                                          <th>Amount</th>
-                                          <th>Created By</th>
-                                      </tfoot>
-                                      <tbody>
-                                          @foreach($getDeliveryBranchDrinks as $getDeliveryBranchVelez)
-                                          <tr id="deletedId{{ $getDeliveryBranchVelez->id }}">
-                                            <td>
-                                            	<!-- Button trigger modal -->
-									                            <a data-toggle="modal" data-target="#deliveryBranch<?php echo $getDeliveryBranchVelez->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-											                        @if(Auth::user()['role_type'] != 3 && Auth::user()['role_type'] != 2)
-                                              <a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getDeliveryBranchVelez->id }}')" title="Delete"><i class="fas fa-trash"></i></a>
-                                              @endif
-                                            </td>
-                                            <td>{{ $getDeliveryBranchVelez->date}}</td>
-                                            <td>{{ $getDeliveryBranchVelez->product_id_no}}</td>
-                                            <td>{{ $getDeliveryBranchVelez->dr_no}}</td>
-                                            <td>{{ $getDeliveryBranchVelez->supplier}}</td>
-                                            <td>{{ $getDeliveryBranchVelez->product_name}}</td>
-                                            <td>₱ <?php echo number_format($getDeliveryBranchVelez->price, 2)?></td>
-                                            <td>{{ $getDeliveryBranchVelez->qty}}</td>
-                                            <td><?php echo number_format($getDeliveryBranchVelez->product_in, 2)?></td>
-                                            <td>{{ $getDeliveryBranchVelez->unit}}</td>
-                                            <td><?php echo number_format($getDeliveryBranchVelez->amount, 2)?></td>
-                                            <td>{{ $getDeliveryBranchVelez->created_by}}</td>
-                                          </tr>
-                                          @endforeach
-                                      </tbody>
-                                  </table>
-                            </div>
-                            @elseif($data == "Banilad")
-                            <div class="table-responsive">
-                                  <table class="table table-bordered display"  width="100%" cellspacing="0">
-                                      <thead>
-                                          <th>Action</th>
-                                          <th>Date</th>
-                                          <th>Product ID</th>
-                                          <th>DR No</th>
-                                          <th>Supplier</th>
-                                          <th>Product Name</th>
-                                          <th>Price</th>
-                                          <th>Qty</th>
-                                          <th>IN</th>
-                                          <th>Unit</th>
-                                          <th>Amount</th>
-                                          <th>Created By</th>
-                                      </thead>
-                                      <tfoot>
-                                          <th>Action</th>
-                                          <th>Date</th>
-                                          <th>Product ID</th>
-                                          <th>DR No</th>
-                                          <th>Supplier</th>
-                                          <th>Product Name</th>
-                                          <th>Price</th>
-                                          <th>Qty</th>
-                                          <th>IN</th>
-                                          <th>Unit</th>
-                                          <th>Amount</th>
-                                          <th>Created By</th>
-                                      </tfoot>
-                                      <tbody>
-                                          @foreach($getDeliveryBranchDrinks as $getDeliveryBranchBanilad)
-                                          <tr id="deletedId{{ $getDeliveryBranchBanilad->id }}">
-                                            <td>
-                                            	<!-- Button trigger modal -->
-									                            <a data-toggle="modal" data-target="#deliveryBranch<?php echo $getDeliveryBranchBanilad->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-											                        @if(Auth::user()['role_type'] != 3 && Auth::user()['role_type'] != 2)
-                                              <a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getDeliveryBranchBanilad->id }}')" title="Delete"><i class="fas fa-trash"></i></a>
-                                              @endif
-                                            </td>
-                                            <td>{{ $getDeliveryBranchBanilad->date}}</td>
-                                            <td>{{ $getDeliveryBranchBanilad->product_id_no}}</td>
-                                            <td>{{ $getDeliveryBranchBanilad->dr_no}}</td>
-                                            <td>{{ $getDeliveryBranchBanilad->supplier}}</td>
-                                            <td>{{ $getDeliveryBranchBanilad->product_name}}</td>
-                                            <td>₱ <?php echo number_format($getDeliveryBranchBanilad->price, 2)?></td>
-                                            <td>{{ $getDeliveryBranchBanilad->qty}}</td>
-                                            <td><?php echo number_format($getDeliveryBranchBanilad->product_in, 2)?></td>
-                                            <td>{{ $getDeliveryBranchBanilad->unit}}</td>
-                                            <td><?php echo number_format($getDeliveryBranchBanilad->amount, 2)?></td>
-                                            <td>{{ $getDeliveryBranchBanilad->created_by}}</td>
-                                          </tr>
-                                          @endforeach
-                                      </tbody>
-                                  </table>
-                            </div>
-                            @elseif($data  == "GQS")
-                            <div class="table-responsive">
-                                  <table class="table table-bordered display"  width="100%" cellspacing="0">
-                                      <thead>
-                                          <th>Action</th>
-                                          <th>Date</th>
-                                          <th>Product ID</th>
-                                          <th>DR No</th>
-                                          <th>Supplier</th>
-                                          <th>Product Name</th>
-                                          <th>Price</th>
-                                          <th>Qty</th>
-                                          <th>IN</th>
-                                          <th>Unit</th>
-                                          <th>Amount</th>
-                                          <th>Created By</th>
-                                      </thead>
-                                      <tfoot>
-                                          <th>Action</th>
-                                          <th>Date</th>
-                                          <th>Product ID</th>
-                                          <th>DR No</th>
-                                          <th>Supplier</th>
-                                          <th>Product Name</th>
-                                          <th>Price</th>
-                                          <th>Qty</th>
-                                          <th>IN</th>
-                                          <th>Unit</th>
-                                          <th>Amount</th>
-                                          <th>Created By</th>
-                                      </tfoot>
-                                      <tbody>
-                                          @foreach($getDeliveryBranchDrinks as $getDeliveryBranchGqs)
-                                          <tr id="deletedId{{ $getDeliveryBranchGqs->id }}">
-                                            <td>
-                                            	<!-- Button trigger modal -->
-									                            <a data-toggle="modal" data-target="#deliveryBranch<?php echo $getDeliveryBranchGqs->id?>" href="#" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-											                        @if(Auth::user()['role_type'] != 3 && Auth::user()['role_type'] != 2)
-                                              <a id="delete" href="javascript:void" onClick="confirmDelete('{{ $getDeliveryBranchGqs->id }}')" title="Delete"><i class="fas fa-trash"></i></a>
-                                              @endif
-                                            </td>
-                                            <td>{{ $getDeliveryBranchGqs->date}}</td>
-                                            <td>{{ $getDeliveryBranchGqs->product_id_no}}</td>
-                                            <td>{{ $getDeliveryBranchGqs->dr_no}}</td>
-                                            <td>{{ $getDeliveryBranchGqs->supplier}}</td>
-                                            <td>{{ $getDeliveryBranchGqs->product_name}}</td>
-                                            <td>₱ <?php echo number_format($getDeliveryBranchGqs->price, 2)?></td>
-                                            <td>{{ $getDeliveryBranchGqs->qty}}</td>
-                                            <td><?php echo number_format($getDeliveryBranchGqs->product_in, 2)?></td>
-                                            <td>{{ $getDeliveryBranchGqs->unit}}</td>
-                                            <td><?php echo number_format($getDeliveryBranchGqs->amount, 2)?></td>
-                                            <td>{{ $getDeliveryBranchGqs->created_by}}</td>
-                                          </tr>
-                                          @endforeach
-                                      </tbody>
-                                  </table>
-                            </div>
+                           
                             @endif
                         </div>  
                      </div>
@@ -534,8 +194,8 @@
         </div>
     </div>
        <!-- Modal -->
-    @foreach($getDeliveryBranches as $getDeliveryBranchGqs)
-    <div class="modal fade" id="deliveryBranch{{ $getDeliveryBranchGqs->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    @foreach($getDeliveryBranches as $getDeliveryBranch)
+    <div class="modal fade" id="deliveryBranch{{ $getDeliveryBranch->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -545,48 +205,56 @@
             </button>
           </div>
           <div class="modal-body">
-            <div id="succUp{{ $getDeliveryBranchGqs->id}}"></div>
+            <div id="succUp{{ $getDeliveryBranch->id}}"></div>
             <div class="form-group">
               <div class="form-row"> 
                 <div class="col-lg-2">
                   <label>Date</label>
-                  <input type="text" id="dateUpdate{{ $getDeliveryBranchGqs->id }}" name="date" class="datepicker form-control"  value="{{ $getDeliveryBranchGqs->date}}" />
+                  <input type="text" id="dateUpdate{{ $getDeliveryBranch->id }}" name="date" class="datepicker form-control"  value="{{ $getDeliveryBranch->date}}" />
                 </div>
                 <div class="col-lg-2">
                   <label>Product ID</label>
-                  <input type="text"  name="productId" class="form-control" value="{{ $getDeliveryBranchGqs->product_id_no}}" disabled />
+                  <input type="text"  name="productId" class="form-control" value="{{ $getDeliveryBranch->product_id_no}}" disabled />
                 </div>
                 <div class="col-lg-2">
                   <label>DR No</label>
-                  <input type="text" id="drNoUpdate{{ $getDeliveryBranchGqs->id }}" name="drNo" class="form-control" value="{{ $getDeliveryBranchGqs->dr_no }}" />
+                  <input type="text" id="drNoUpdate{{ $getDeliveryBranch->id }}" name="drNo" class="form-control" value="{{ $getDeliveryBranch->dr_no }}" />
                 </div>
                 <div class="col-lg-4">
                   <label>Supplier</label>
-                  <input type="text" id="supplierUpdate{{ $getDeliveryBranchGqs->id }}" name="supplier" class="form-control" value="{{ $getDeliveryBranchGqs->supplier}}" />
+                  <input type="text" id="supplierUpdate{{ $getDeliveryBranch->id }}" name="supplier" class="form-control" value="{{ $getDeliveryBranch->supplier}}" />
                 </div>
                 <div class="col-lg-4">
                   <label>Product Name</label>
-                  <input type="text" id="productNameUpdate{{ $getDeliveryBranchGqs->id }}" name="productName" class="form-control" value="{{ $getDeliveryBranchGqs->product_name }}" />
+                  <input type="text" id="productNameUpdate{{ $getDeliveryBranch->id }}" name="productName" class="form-control" value="{{ $getDeliveryBranch->product_name }}" />
                 </div>
+                @if(Auth::user()['role_type'] === 4)
                 <div class="col-lg-4">
                   <label>Price</label>
-                  <input type="text" id="priceUpdate{{ $getDeliveryBranchGqs->id }}" name="price" class="form-control" value="{{ $getDeliveryBranchGqs->price }}" onkeypress="return isNumber(event)" />
+                  <input type="text" name="price" class="form-control" value="{{ $getDeliveryBranch->price }}" onkeypress="return isNumber(event)" readonly />
                 </div>
+                @else 
+                <div class="col-lg-4">
+                  <label>Price</label>
+                  <input type="text" id="priceUpdate{{ $getDeliveryBranch->id }}" name="price" class="form-control" value="{{ $getDeliveryBranch->price }}" onkeypress="return isNumber(event)" />
+                </div>
+
+                @endif
                 <div class="col-lg-2">
                   <label>Qty</label>
-                  <input type="text" id="qtyUpdate{{ $getDeliveryBranchGqs->id}}" name="qty" class="form-control" value="{{ $getDeliveryBranchGqs->qty }}" onkeypress="return isNumber(event)" />
+                  <input type="text" id="qtyUpdate{{ $getDeliveryBranch->id}}" name="qty" class="form-control" value="{{ $getDeliveryBranch->qty }}" onkeypress="return isNumber(event)" />
                 </div>
                 <div class="col-lg-2">
                   <label>IN</label>
-                  <input type="text" id="productInUpdate{{ $getDeliveryBranchGqs->id}}" name="productIn" class="form-control" value="{{ $getDeliveryBranchGqs->product_in }}" onkeypress="return isNumber(event)" />
+                  <input type="text" id="productInUpdate{{ $getDeliveryBranch->id}}" name="productIn" class="form-control" value="{{ $getDeliveryBranch->product_in }}" onkeypress="return isNumber(event)" />
                 </div>
                 <div class="col-lg-4">
                   <label>Unit</label>
-                  <input type="text" id="unitUpdate{{ $getDeliveryBranchGqs->id}}" name="unit" class="form-control" value="{{ $getDeliveryBranchGqs->unit}}" />
+                  <input type="text" id="unitUpdate{{ $getDeliveryBranch->id}}" name="unit" class="form-control" value="{{ $getDeliveryBranch->unit}}" />
                 </div>
                 <div class="col-lg-4">
                   <label>Amount</label>
-                  <input type="text" id="amountUpdate{{ $getDeliveryBranchGqs->id}}" name="amount" class="form-control" value="{{ $getDeliveryBranchGqs->amount }}" onkeypress="return isNumber(event)" />
+                  <input type="text" id="amountUpdate{{ $getDeliveryBranch->id}}" name="amount" class="form-control" value="{{ $getDeliveryBranch->amount }}" onkeypress="return isNumber(event)" />
                 </div>
 
               </div>
@@ -594,15 +262,17 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
-            <button type="button" onclick="updateDeliveryIn(<?php echo $getDeliveryBranchGqs->id; ?>)" class="btn btn-success btn-lg">Update</button>
+            <button type="button" onclick="updateDeliveryIn(<?= $getDeliveryBranch->id; ?>)" class="btn btn-success btn-lg">Update</button>
           </div>
         </div>
       </div>
     </div>  
     @endforeach
-     <!-- Modal -->
-     @foreach($getDeliveryBranches as $getDeliveryBranchBanilad)
-    <div class="modal fade" id="deliveryBranch{{ $getDeliveryBranchBanilad->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+   
+
+
+    @foreach($getDeliveryBranchDrinks as $getDeliveryBranchDrink)
+    <div class="modal fade" id="getDeliveryBranchDrink{{ $getDeliveryBranchDrink->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -612,48 +282,55 @@
             </button>
           </div>
           <div class="modal-body">
-            <div id="succUp{{ $getDeliveryBranchBanilad->id}}"></div>
+            <div id="succUp{{ $getDeliveryBranchDrink->id}}"></div>
             <div class="form-group">
               <div class="form-row"> 
                 <div class="col-lg-2">
                   <label>Date</label>
-                  <input type="text" id="dateUpdate{{ $getDeliveryBranchBanilad->id }}" name="date" class="datepicker form-control"  value="{{ $getDeliveryBranchBanilad->date}}" />
+                  <input type="text" id="dateUpdate{{ $getDeliveryBranchDrink->id }}" name="date" class="datepicker form-control"  value="{{ $getDeliveryBranchDrink->date}}" />
                 </div>
                 <div class="col-lg-2">
                   <label>Product ID</label>
-                  <input type="text"  name="productId" class="form-control" value="{{ $getDeliveryBranchBanilad->product_id_no}}" disabled />
+                  <input type="text"  name="productId" class="form-control" value="{{ $getDeliveryBranchDrink->product_id_no}}" disabled />
                 </div>
                 <div class="col-lg-2">
                   <label>DR No</label>
-                  <input type="text" id="drNoUpdate{{ $getDeliveryBranchBanilad->id }}" name="drNo" class="form-control" value="{{ $getDeliveryBranchBanilad->dr_no }}" />
+                  <input type="text" id="drNoUpdate{{ $getDeliveryBranchDrink->id }}" name="drNo" class="form-control" value="{{ $getDeliveryBranchDrink->dr_no }}" />
                 </div>
                 <div class="col-lg-4">
                   <label>Supplier</label>
-                  <input type="text" id="supplierUpdate{{ $getDeliveryBranchBanilad->id }}" name="supplier" class="form-control" value="{{ $getDeliveryBranchBanilad->supplier}}" />
+                  <input type="text" id="supplierUpdate{{ $getDeliveryBranchDrink->id }}" name="supplier" class="form-control" value="{{ $getDeliveryBranchDrink->supplier}}" />
                 </div>
                 <div class="col-lg-4">
                   <label>Product Name</label>
-                  <input type="text" id="productNameUpdate{{ $getDeliveryBranchBanilad->id }}" name="productName" class="form-control" value="{{ $getDeliveryBranchBanilad->product_name }}" />
+                  <input type="text" id="productNameUpdate{{ $getDeliveryBranchDrink->id }}" name="productName" class="form-control" value="{{ $getDeliveryBranchDrink->product_name }}" />
                 </div>
+                @if(Auth::user()['role_type'] === 4)
                 <div class="col-lg-4">
                   <label>Price</label>
-                  <input type="text" id="priceUpdate{{ $getDeliveryBranchBanilad->id }}" name="price" class="form-control" value="{{ $getDeliveryBranchBanilad->price }}" onkeypress="return isNumber(event)"/>
+                  <input type="text" name="price" class="form-control" value="{{ $getDeliveryBranchDrink->price }}" onkeypress="return isNumber(event)" readonly/>
                 </div>
+                @else
+                <div class="col-lg-4">
+                  <label>Price</label>
+                  <input type="text" id="priceUpdate{{ $getDeliveryBranchDrink->id }}" name="price" class="form-control" value="{{ $getDeliveryBranchDrink->price }}" onkeypress="return isNumber(event)" />
+                </div>
+                @endif
                 <div class="col-lg-2">
                   <label>Qty</label>
-                  <input type="text" id="qtyUpdate{{ $getDeliveryBranchBanilad->id}}" name="qty" class="form-control" value="{{ $getDeliveryBranchBanilad->qty }}" onkeypress="return isNumber(event)" />
+                  <input type="text" id="qtyUpdate{{ $getDeliveryBranchDrink->id}}" name="qty" class="form-control" value="{{ $getDeliveryBranchDrink->qty }}" onkeypress="return isNumber(event)" />
                 </div>
                 <div class="col-lg-2">
                   <label>IN</label>
-                  <input type="text" id="productInUpdate{{ $getDeliveryBranchBanilad->id}}" name="productIn" class="form-control" value="{{ $getDeliveryBranchBanilad->product_in }}" onkeypress="return isNumber(event)" />
+                  <input type="text" id="productInUpdate{{ $getDeliveryBranchDrink->id}}" name="productIn" class="form-control" value="{{ $getDeliveryBranchDrink->product_in }}" onkeypress="return isNumber(event)" />
                 </div>
                 <div class="col-lg-4">
                   <label>Unit</label>
-                  <input type="text" id="unitUpdate{{ $getDeliveryBranchBanilad->id}}" name="unit" class="form-control" value="{{ $getDeliveryBranchBanilad->unit}}" />
+                  <input type="text" id="unitUpdate{{ $getDeliveryBranchDrink->id}}" name="unit" class="form-control" value="{{ $getDeliveryBranchDrink->unit}}" />
                 </div>
                 <div class="col-lg-4">
                   <label>Amount</label>
-                  <input type="text" id="amountUpdate{{ $getDeliveryBranchBanilad->id}}" name="amount" class="form-control" value="{{ $getDeliveryBranchBanilad->amount }}" onkeypress="return isNumber(event)" />
+                  <input type="text" id="amountUpdate{{ $getDeliveryBranchDrink->id}}" name="amount" class="form-control" value="{{ $getDeliveryBranchDrink->amount }}" onkeypress="return isNumber(event)" />
                 </div>
 
               </div>
@@ -661,142 +338,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
-            <button type="button" onclick="updateDeliveryIn(<?php echo $getDeliveryBranchBanilad->id; ?>)" class="btn btn-success btn-lg">Update</button>
-          </div>
-        </div>
-      </div>
-    </div>  
-    @endforeach
-
-     <!-- Modal -->
-     @foreach($getDeliveryBranches as $getDeliveryBranchVelez)
-    <div class="modal fade" id="deliveryBranch{{ $getDeliveryBranchVelez->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Edit Delivery In</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div id="succUp{{ $getDeliveryBranchVelez->id}}"></div>
-            <div class="form-group">
-              <div class="form-row"> 
-                <div class="col-lg-2">
-                  <label>Date</label>
-                  <input type="text" id="dateUpdate{{ $getDeliveryBranchVelez->id }}" name="date" class="datepicker form-control"  value="{{ $getDeliveryBranchVelez->date}}" />
-                </div>
-                <div class="col-lg-2">
-                  <label>Product ID</label>
-                  <input type="text"  name="productId" class="form-control" value="{{ $getDeliveryBranchVelez->product_id_no}}" disabled />
-                </div>
-                <div class="col-lg-2">
-                  <label>DR No</label>
-                  <input type="text" id="drNoUpdate{{ $getDeliveryBranchVelez->id }}" name="drNo" class="form-control" value="{{ $getDeliveryBranchVelez->dr_no }}" />
-                </div>
-                <div class="col-lg-4">
-                  <label>Supplier</label>
-                  <input type="text" id="supplierUpdate{{ $getDeliveryBranchVelez->id }}" name="supplier" class="form-control" value="{{ $getDeliveryBranchVelez->supplier}}" />
-                </div>
-                <div class="col-lg-4">
-                  <label>Product Name</label>
-                  <input type="text" id="productNameUpdate{{ $getDeliveryBranchVelez->id }}" name="productName" class="form-control" value="{{ $getDeliveryBranchVelez->product_name }}" />
-                </div>
-                <div class="col-lg-4">
-                  <label>Price</label>
-                  <input type="text" id="priceUpdate{{ $getDeliveryBranchVelez->id }}" name="price" class="form-control" value="{{ $getDeliveryBranchVelez->price }}" onkeypress="return isNumber(event)"/>
-                </div>
-                <div class="col-lg-2">
-                  <label>Qty</label>
-                  <input type="text" id="qtyUpdate{{ $getDeliveryBranchVelez->id}}" name="qty" class="form-control" value="{{ $getDeliveryBranchVelez->qty }}" onkeypress="return isNumber(event)" />
-                </div>
-                <div class="col-lg-2">
-                  <label>IN</label>
-                  <input type="text" id="productInUpdate{{ $getDeliveryBranchVelez->id}}" name="productIn" class="form-control" value="{{ $getDeliveryBranchVelez->product_in }}" onkeypress="return isNumber(event)" />
-                </div>
-                <div class="col-lg-4">
-                  <label>Unit</label>
-                  <input type="text" id="unitUpdate{{ $getDeliveryBranchVelez->id}}" name="unit" class="form-control" value="{{ $getDeliveryBranchVelez->unit}}" />
-                </div>
-                <div class="col-lg-4">
-                  <label>Amount</label>
-                  <input type="text" id="amountUpdate{{ $getDeliveryBranchVelez->id}}" name="amount" class="form-control" value="{{ $getDeliveryBranchVelez->amount }}" onkeypress="return isNumber(event)" />
-                </div>
-
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
-            <button type="button" onclick="updateDeliveryIn(<?php echo $getDeliveryBranchVelez->id; ?>)" class="btn btn-success btn-lg">Update</button>
-          </div>
-        </div>
-      </div>
-    </div>  
-    @endforeach
-    <!-- Modal -->
-    @foreach($getDeliveryBranches as $getDeliveryBranchUrgello)
-    <div class="modal fade" id="deliveryBranch{{ $getDeliveryBranchUrgello->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLongTitle">Edit Delivery In</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <div id="succUp{{ $getDeliveryBranchUrgello->id}}"></div>
-            <div class="form-group">
-              <div class="form-row"> 
-                <div class="col-lg-2">
-                  <label>Date</label>
-                  <input type="text" id="dateUpdate{{ $getDeliveryBranchUrgello->id }}" name="date" class="datepicker form-control"  value="{{ $getDeliveryBranchUrgello->date}}" />
-                </div>
-                <div class="col-lg-2">
-                  <label>Product ID</label>
-                  <input type="text"  name="productId" class="form-control" value="{{ $getDeliveryBranchUrgello->product_id_no}}" disabled />
-                </div>
-                <div class="col-lg-2">
-                  <label>DR No</label>
-                  <input type="text" id="drNoUpdate{{ $getDeliveryBranchUrgello->id }}" name="drNo" class="form-control" value="{{ $getDeliveryBranchUrgello->dr_no }}" />
-                </div>
-                <div class="col-lg-4">
-                  <label>Supplier</label>
-                  <input type="text" id="supplierUpdate{{ $getDeliveryBranchUrgello->id }}" name="supplier" class="form-control" value="{{ $getDeliveryBranchUrgello->supplier}}" />
-                </div>
-                <div class="col-lg-4">
-                  <label>Product Name</label>
-                  <input type="text" id="productNameUpdate{{ $getDeliveryBranchUrgello->id }}" name="productName" class="form-control" value="{{ $getDeliveryBranchUrgello->product_name }}" />
-                </div>
-                <div class="col-lg-4">
-                  <label>Price</label>
-                  <input type="text" id="priceUpdate{{ $getDeliveryBranchUrgello->id }}" name="price" class="form-control" value="{{ $getDeliveryBranchUrgello->price }}" onkeypress="return isNumber(event)" />
-                </div>
-                <div class="col-lg-2">
-                  <label>Qty</label>
-                  <input type="text" id="qtyUpdate{{ $getDeliveryBranchUrgello->id}}" name="qty" class="form-control" value="{{ $getDeliveryBranchUrgello->qty }}" onkeypress="return isNumber(event)" />
-                </div>
-                <div class="col-lg-2">
-                  <label>IN</label>
-                  <input type="text" id="productInUpdate{{ $getDeliveryBranchUrgello->id}}" name="productIn" class="form-control" value="{{ $getDeliveryBranchUrgello->product_in }}" onkeypress="return isNumber(event)" />
-                </div>
-                <div class="col-lg-4">
-                  <label>Unit</label>
-                  <input type="text" id="unitUpdate{{ $getDeliveryBranchUrgello->id}}" name="unit" class="form-control" value="{{ $getDeliveryBranchUrgello->unit}}" />
-                </div>
-                <div class="col-lg-4">
-                  <label>Amount</label>
-                  <input type="text" id="amountUpdate{{ $getDeliveryBranchUrgello->id}}" name="amount" class="form-control" value="{{ $getDeliveryBranchUrgello->amount }}" onkeypress="return isNumber(event)" />
-                </div>
-
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
-            <button type="button" onclick="updateDeliveryIn(<?php echo $getDeliveryBranchUrgello->id; ?>)" class="btn btn-success btn-lg">Update</button>
+            <button type="button" onclick="updateDeliveryIn(<?= $getDeliveryBranchDrink->id; ?>)" class="btn btn-success btn-lg">Update</button>
           </div>
         </div>
       </div>
@@ -1057,6 +599,7 @@
       const unitUpdate = $("#unitUpdate"+id).val();
       const amountUpdate = $("#amountUpdate"+id).val();
 
+  
       //make ajax call
       $.ajax({
               type: "PATCH",

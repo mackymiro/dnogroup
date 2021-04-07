@@ -5097,6 +5097,12 @@ class LoloPinoyGrillCommissaryController extends Controller
                                     'lolo_pinoy_grill_commissary_billing_statements.user_id',
                                     'lolo_pinoy_grill_commissary_billing_statements.billing_statement_id',
                                     'lolo_pinoy_grill_commissary_billing_statements.bill_to',
+                                    'lolo_pinoy_grill_commissary_billing_statements.order',
+                                    'lolo_pinoy_grill_commissary_billing_statements.qty',
+                                    'lolo_pinoy_grill_commissary_billing_statements.unit_price',
+                                    'lolo_pinoy_grill_commissary_billing_statements.unit',
+                                    'lolo_pinoy_grill_commissary_billing_statements.total_kls',
+                                    'lolo_pinoy_grill_commissary_billing_statements.dr_no',
                                     'lolo_pinoy_grill_commissary_billing_statements.address',
                                     'lolo_pinoy_grill_commissary_billing_statements.date',
                                     'lolo_pinoy_grill_commissary_billing_statements.branch',
@@ -5582,6 +5588,12 @@ class LoloPinoyGrillCommissaryController extends Controller
                             'lolo_pinoy_grill_commissary_statement_of_accounts.user_id',
                             'lolo_pinoy_grill_commissary_statement_of_accounts.billing_statement_id',
                             'lolo_pinoy_grill_commissary_statement_of_accounts.bill_to',
+                            'lolo_pinoy_grill_commissary_statement_of_accounts.order',
+                            'lolo_pinoy_grill_commissary_statement_of_accounts.dr_no',
+                            'lolo_pinoy_grill_commissary_statement_of_accounts.qty',
+                            'lolo_pinoy_grill_commissary_statement_of_accounts.unit_price',
+                            'lolo_pinoy_grill_commissary_statement_of_accounts.unit',
+                            'lolo_pinoy_grill_commissary_statement_of_accounts.total_kls',
                             'lolo_pinoy_grill_commissary_statement_of_accounts.address',
                             'lolo_pinoy_grill_commissary_statement_of_accounts.date',
                             'lolo_pinoy_grill_commissary_statement_of_accounts.branch',
@@ -5611,11 +5623,10 @@ class LoloPinoyGrillCommissaryController extends Controller
         $statementAccounts = LoloPinoyGrillCommissaryBillingStatement::where('billing_statement_id', $id)->get()->toArray();
 
           //count the total amount 
-        $countTotalAmount = LoloPinoyGrillCommissaryBillingStatement::where('id', $id)->sum('paid_amount');
-
+        $countTotalAmount = LoloPinoyGrillCommissaryBillingStatement::where('id', $id)->sum('amount');
 
           //
-        $countAmount = LoloPinoyGrillCommissaryBillingStatement::where('billing_statement_id', $id)->sum('paid_amount');
+        $countAmount = LoloPinoyGrillCommissaryBillingStatement::where('billing_statement_id', $id)->sum('amount');
 
         $sum  = $countTotalAmount + $countAmount;
        
@@ -6336,6 +6347,12 @@ class LoloPinoyGrillCommissaryController extends Controller
                             'lolo_pinoy_grill_commissary_statement_of_accounts.billing_statement_id',
                             'lolo_pinoy_grill_commissary_statement_of_accounts.bill_to',
                             'lolo_pinoy_grill_commissary_statement_of_accounts.address',
+                            'lolo_pinoy_grill_commissary_statement_of_accounts.order',
+                            'lolo_pinoy_grill_commissary_statement_of_accounts.qty',
+                            'lolo_pinoy_grill_commissary_statement_of_accounts.total_kls',
+                            'lolo_pinoy_grill_commissary_statement_of_accounts.dr_no',
+                            'lolo_pinoy_grill_commissary_statement_of_accounts.unit',
+                            'lolo_pinoy_grill_commissary_statement_of_accounts.unit_price',
                             'lolo_pinoy_grill_commissary_statement_of_accounts.date',
                             'lolo_pinoy_grill_commissary_statement_of_accounts.branch',
                             'lolo_pinoy_grill_commissary_statement_of_accounts.period_cover',
@@ -7167,6 +7184,12 @@ class LoloPinoyGrillCommissaryController extends Controller
                                     'lolo_pinoy_grill_commissary_billing_statements.user_id',
                                     'lolo_pinoy_grill_commissary_billing_statements.billing_statement_id',
                                     'lolo_pinoy_grill_commissary_billing_statements.bill_to',
+                                    'lolo_pinoy_grill_commissary_billing_statements.order',
+                                    'lolo_pinoy_grill_commissary_billing_statements.dr_no',
+                                    'lolo_pinoy_grill_commissary_billing_statements.qty',
+                                    'lolo_pinoy_grill_commissary_billing_statements.unit_price',
+                                    'lolo_pinoy_grill_commissary_billing_statements.unit',
+                                    'lolo_pinoy_grill_commissary_billing_statements.total_kls',
                                     'lolo_pinoy_grill_commissary_billing_statements.address',
                                     'lolo_pinoy_grill_commissary_billing_statements.date',
                                     'lolo_pinoy_grill_commissary_billing_statements.branch',
@@ -7487,7 +7510,7 @@ class LoloPinoyGrillCommissaryController extends Controller
             $totalKls = $request->get('totalKls');
             $unitPrice = $request->get('unitPrice');
 
-            $drno = NULL;
+            $drNo = NULL;
             $productId = NULL;
             $unit = NULL;
             $drList = NULL;
@@ -7556,6 +7579,7 @@ class LoloPinoyGrillCommissaryController extends Controller
         $statementAccount = new LoloPinoyGrillCommissaryStatementOfAccount([
             'user_id'=>$user->id,
             'bill_to'=>$request->get('billTo'),
+            'address'=>$request->get('address'),
             'bs_no'=>$bsNoId->lolo_pinoy_grill_code,
             'dr_no'=>$drNo,
             'product_id'=>$productId,
@@ -7565,7 +7589,9 @@ class LoloPinoyGrillCommissaryController extends Controller
             'terms'=>$request->get('terms'),
             'date_of_transaction'=>$request->get('transactionDate'),
             'qty'=>$qty,
+            'order'=>$order,
             'description'=>$request->get('description'),
+            'total_kls'=>$totalKls,
             'unit_price'=>$unitPrice,
             'unit'=>$unit,
             'amount'=>$request->get('amount'),

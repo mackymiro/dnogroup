@@ -20,9 +20,862 @@ use App\LoloPinoyGrillBranchesCode;
 use App\LoloPinoyGrillBranchesSupplier;
 use App\LoloPinoyGrillBranchesStoreStock;
 use App\LoloPinoyGrillBranchesStoreStockProduct;
+use App\LoloPinoyGrillBranchesStockInventory;
 
 class LoloPinoyGrillBranchesController extends Controller
 {   
+
+    CONST FOODS = "Foods";
+    CONST DRINKS = "Drinks";
+
+    public function printGetMultipleStockInventory(Request $request, $date){
+        $urlSegment = \Request::segment(3);
+        $uri = explode("&", $urlSegment);
+        $uri0 = $uri[0];
+        $uri1 = $uri[1];
+        $flag = $uri[2];
+
+        $data =  $request->session()->get('sessionDeliveryInTransaction');
+
+        if($flag === self::FOODS){
+            $getStockInventories = DB::table(
+                'lolo_pinoy_grill_branches_stock_inventories')
+                ->select(
+                'lolo_pinoy_grill_branches_stock_inventories.id',
+                'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                'lolo_pinoy_grill_branches_stock_inventories.date',
+                'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                'lolo_pinoy_grill_branches_stock_inventories.price',
+                'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                'lolo_pinoy_grill_branches_stock_inventories.sold',
+                'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.amount',
+                'lolo_pinoy_grill_branches_stock_inventories.flag',
+                'lolo_pinoy_grill_branches_stock_inventories.branch')
+                ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                ->whereBetween('lolo_pinoy_grill_branches_stock_inventories.date', [$uri0, $uri1])
+                ->where('lolo_pinoy_grill_branches_stock_inventories.flag', $flag)
+                ->orderBy('lolo_pinoy_grill_branches_stock_inventories.id', 'desc')
+                ->get()->toArray();
+    
+            $totalAmount = DB::table(
+                    'lolo_pinoy_grill_branches_stock_inventories')
+                    ->select(
+                    'lolo_pinoy_grill_branches_stock_inventories.id',
+                    'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                    'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                    'lolo_pinoy_grill_branches_stock_inventories.date',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                    'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                    'lolo_pinoy_grill_branches_stock_inventories.price',
+                    'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                    'lolo_pinoy_grill_branches_stock_inventories.sold',
+                    'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                    'lolo_pinoy_grill_branches_stock_inventories.amount',
+                    'lolo_pinoy_grill_branches_stock_inventories.flag',
+                    'lolo_pinoy_grill_branches_stock_inventories.branch')
+                    ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                    ->where('lolo_pinoy_grill_branches_stock_inventories.flag', $flag)
+                    ->whereBetween('lolo_pinoy_grill_branches_stock_inventories.date', [$uri0, $uri1])
+                    ->sum('lolo_pinoy_grill_branches_stock_inventories.amount');
+    
+        }else if($flag === self::DRINKS){
+            $getStockInventories = DB::table(
+                'lolo_pinoy_grill_branches_stock_inventories')
+                ->select(
+                'lolo_pinoy_grill_branches_stock_inventories.id',
+                'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                'lolo_pinoy_grill_branches_stock_inventories.date',
+                'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                'lolo_pinoy_grill_branches_stock_inventories.price',
+                'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                'lolo_pinoy_grill_branches_stock_inventories.sold',
+                'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.amount',
+                'lolo_pinoy_grill_branches_stock_inventories.flag',
+                'lolo_pinoy_grill_branches_stock_inventories.branch')
+                ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                ->whereBetween('lolo_pinoy_grill_branches_stock_inventories.date', [$uri0, $uri1])
+                ->where('lolo_pinoy_grill_branches_stock_inventories.flag', $flag)
+                ->orderBy('lolo_pinoy_grill_branches_stock_inventories.id', 'desc')
+                ->get()->toArray();
+    
+            $totalAmount = DB::table(
+                    'lolo_pinoy_grill_branches_stock_inventories')
+                    ->select(
+                    'lolo_pinoy_grill_branches_stock_inventories.id',
+                    'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                    'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                    'lolo_pinoy_grill_branches_stock_inventories.date',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                    'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                    'lolo_pinoy_grill_branches_stock_inventories.price',
+                    'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                    'lolo_pinoy_grill_branches_stock_inventories.sold',
+                    'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                    'lolo_pinoy_grill_branches_stock_inventories.amount',
+                    'lolo_pinoy_grill_branches_stock_inventories.flag',
+                    'lolo_pinoy_grill_branches_stock_inventories.branch')
+                    ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                    ->where('lolo_pinoy_grill_branches_stock_inventories.flag', $flag)
+                    ->whereBetween('lolo_pinoy_grill_branches_stock_inventories.date', [$uri0, $uri1])
+                    ->sum('lolo_pinoy_grill_branches_stock_inventories.amount');
+        }else{
+
+            $getStockInventories = DB::table(
+                'lolo_pinoy_grill_branches_stock_inventories')
+                ->select(
+                'lolo_pinoy_grill_branches_stock_inventories.id',
+                'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                'lolo_pinoy_grill_branches_stock_inventories.date',
+                'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                'lolo_pinoy_grill_branches_stock_inventories.price',
+                'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                'lolo_pinoy_grill_branches_stock_inventories.sold',
+                'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.amount',
+                'lolo_pinoy_grill_branches_stock_inventories.flag',
+                'lolo_pinoy_grill_branches_stock_inventories.branch')
+                ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                ->whereBetween('lolo_pinoy_grill_branches_stock_inventories.date', [$uri0, $uri1])
+                ->where('lolo_pinoy_grill_branches_stock_inventories.flag', $flag)
+                ->orderBy('lolo_pinoy_grill_branches_stock_inventories.id', 'desc')
+                ->get()->toArray();
+    
+            $totalAmount = DB::table(
+                    'lolo_pinoy_grill_branches_stock_inventories')
+                    ->select(
+                    'lolo_pinoy_grill_branches_stock_inventories.id',
+                    'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                    'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                    'lolo_pinoy_grill_branches_stock_inventories.date',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                    'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                    'lolo_pinoy_grill_branches_stock_inventories.price',
+                    'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                    'lolo_pinoy_grill_branches_stock_inventories.sold',
+                    'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                    'lolo_pinoy_grill_branches_stock_inventories.amount',
+                    'lolo_pinoy_grill_branches_stock_inventories.flag',
+                    'lolo_pinoy_grill_branches_stock_inventories.branch')
+                    ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                    ->whereBetween('lolo_pinoy_grill_branches_stock_inventories.date', [$uri0, $uri1])
+                    ->sum('lolo_pinoy_grill_branches_stock_inventories.amount');
+
+        }
+
+        $pdf = PDF::loadView('printStockInventory', compact('uri0', 'uri1', 'data', 'getStockInventories', 'totalAmount'));
+
+        return $pdf->download('lolo-pinoy-grill-branches-stock-inventories.pdf');
+
+       
+    }
+
+    public function printGetStockInventory(Request $request, $date){
+        $urlSegment = \Request::segment(3);
+        $uri = explode("&", $urlSegment);
+        $uri = $uri[0];
+        $flag = $uri[1];
+       
+        $data =  $request->session()->get('sessionDeliveryInTransaction');
+
+        if($flag === self::FOODS){
+            $getStockInventories = DB::table(
+                'lolo_pinoy_grill_branches_stock_inventories')
+                ->select(
+                'lolo_pinoy_grill_branches_stock_inventories.id',
+                'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                'lolo_pinoy_grill_branches_stock_inventories.date',
+                'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                'lolo_pinoy_grill_branches_stock_inventories.price',
+                'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                'lolo_pinoy_grill_branches_stock_inventories.sold',
+                'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.amount',
+                'lolo_pinoy_grill_branches_stock_inventories.flag',
+                'lolo_pinoy_grill_branches_stock_inventories.branch')
+                ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                ->whereDate('lolo_pinoy_grill_branches_stock_inventories.date', $uri)
+                ->where('lolo_pinoy_grill_branches_stock_inventories.flag', $flag)
+                ->orderBy('lolo_pinoy_grill_branches_stock_inventories.id', 'desc')
+                ->get()->toArray();
+    
+            $totalAmount = DB::table(
+                    'lolo_pinoy_grill_branches_stock_inventories')
+                    ->select(
+                    'lolo_pinoy_grill_branches_stock_inventories.id',
+                    'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                    'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                    'lolo_pinoy_grill_branches_stock_inventories.date',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                    'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                    'lolo_pinoy_grill_branches_stock_inventories.price',
+                    'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                    'lolo_pinoy_grill_branches_stock_inventories.sold',
+                    'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                    'lolo_pinoy_grill_branches_stock_inventories.amount',
+                    'lolo_pinoy_grill_branches_stock_inventories.flag',
+                    'lolo_pinoy_grill_branches_stock_inventories.branch')
+                    ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                    ->where('lolo_pinoy_grill_branches_stock_inventories.flag', $flag)
+                    ->whereDate('lolo_pinoy_grill_branches_stock_inventories.date', $uri)
+                    ->sum('lolo_pinoy_grill_branches_stock_inventories.amount');
+    
+         }else if($flag === self::DRINKS){
+            $getStockInventories = DB::table(
+                'lolo_pinoy_grill_branches_stock_inventories')
+                ->select(
+                'lolo_pinoy_grill_branches_stock_inventories.id',
+                'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                'lolo_pinoy_grill_branches_stock_inventories.date',
+                'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                'lolo_pinoy_grill_branches_stock_inventories.price',
+                'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                'lolo_pinoy_grill_branches_stock_inventories.sold',
+                'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.amount',
+                'lolo_pinoy_grill_branches_stock_inventories.flag',
+                'lolo_pinoy_grill_branches_stock_inventories.branch')
+                ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                ->whereDate('lolo_pinoy_grill_branches_stock_inventories.date', $uri)
+                ->where('lolo_pinoy_grill_branches_stock_inventories.flag', $flag)
+                ->orderBy('lolo_pinoy_grill_branches_stock_inventories.id', 'desc')
+                ->get()->toArray();
+    
+            $totalAmount = DB::table(
+                    'lolo_pinoy_grill_branches_stock_inventories')
+                    ->select(
+                    'lolo_pinoy_grill_branches_stock_inventories.id',
+                    'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                    'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                    'lolo_pinoy_grill_branches_stock_inventories.date',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                    'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                    'lolo_pinoy_grill_branches_stock_inventories.price',
+                    'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                    'lolo_pinoy_grill_branches_stock_inventories.sold',
+                    'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                    'lolo_pinoy_grill_branches_stock_inventories.amount',
+                    'lolo_pinoy_grill_branches_stock_inventories.flag',
+                    'lolo_pinoy_grill_branches_stock_inventories.branch')
+                    ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                    ->where('lolo_pinoy_grill_branches_stock_inventories.flag', $flag)
+                    ->whereDate('lolo_pinoy_grill_branches_stock_inventories.date', $uri)
+                    ->sum('lolo_pinoy_grill_branches_stock_inventories.amount');
+        }else{
+            
+            $getStockInventories = DB::table(
+                'lolo_pinoy_grill_branches_stock_inventories')
+                ->select(
+                'lolo_pinoy_grill_branches_stock_inventories.id',
+                'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                'lolo_pinoy_grill_branches_stock_inventories.date',
+                'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                'lolo_pinoy_grill_branches_stock_inventories.price',
+                'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                'lolo_pinoy_grill_branches_stock_inventories.sold',
+                'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.amount',
+                'lolo_pinoy_grill_branches_stock_inventories.flag',
+                'lolo_pinoy_grill_branches_stock_inventories.branch')
+                ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                ->whereDate('lolo_pinoy_grill_branches_stock_inventories.date', $uri)
+                ->orderBy('lolo_pinoy_grill_branches_stock_inventories.id', 'desc')
+                ->get()->toArray();
+    
+            $totalAmount = DB::table(
+                    'lolo_pinoy_grill_branches_stock_inventories')
+                    ->select(
+                    'lolo_pinoy_grill_branches_stock_inventories.id',
+                    'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                    'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                    'lolo_pinoy_grill_branches_stock_inventories.date',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                    'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                    'lolo_pinoy_grill_branches_stock_inventories.price',
+                    'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                    'lolo_pinoy_grill_branches_stock_inventories.sold',
+                    'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                    'lolo_pinoy_grill_branches_stock_inventories.amount',
+                    'lolo_pinoy_grill_branches_stock_inventories.flag',
+                    'lolo_pinoy_grill_branches_stock_inventories.branch')
+                    ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                    ->whereDate('lolo_pinoy_grill_branches_stock_inventories.date', $uri)
+                    ->sum('lolo_pinoy_grill_branches_stock_inventories.amount');
+        }
+
+        $uri1 = "";
+        $uri0 = "";
+
+        $pdf = PDF::loadView('printStockInventory', compact('uri', 'uri0','uri1', 'data', 'getStockInventories', 'totalAmount'));
+
+        return $pdf->download('lolo-pinoy-grill-branches-stock-inventories.pdf');
+
+    }
+
+    public function printStockInventory(Request $request){
+        $data =  $request->session()->get('sessionDeliveryInTransaction');
+        
+
+        $getStockInventories = DB::table(
+            'lolo_pinoy_grill_branches_stock_inventories')
+            ->select(
+            'lolo_pinoy_grill_branches_stock_inventories.id',
+            'lolo_pinoy_grill_branches_stock_inventories.user_id',
+            'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+            'lolo_pinoy_grill_branches_stock_inventories.date',
+            'lolo_pinoy_grill_branches_stock_inventories.product_name',
+            'lolo_pinoy_grill_branches_stock_inventories.flavor',
+            'lolo_pinoy_grill_branches_stock_inventories.price',
+            'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+            'lolo_pinoy_grill_branches_stock_inventories.product_in',
+            'lolo_pinoy_grill_branches_stock_inventories.product_out',
+            'lolo_pinoy_grill_branches_stock_inventories.sold',
+            'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+            'lolo_pinoy_grill_branches_stock_inventories.amount',
+            'lolo_pinoy_grill_branches_stock_inventories.flag',
+            'lolo_pinoy_grill_branches_stock_inventories.branch')
+            ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+            ->orderBy('lolo_pinoy_grill_branches_stock_inventories.id', 'desc')
+            ->get()->toArray();
+
+        $totalAmount = DB::table(
+                'lolo_pinoy_grill_branches_stock_inventories')
+                ->select(
+                'lolo_pinoy_grill_branches_stock_inventories.id',
+                'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                'lolo_pinoy_grill_branches_stock_inventories.date',
+                'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                'lolo_pinoy_grill_branches_stock_inventories.price',
+                'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                'lolo_pinoy_grill_branches_stock_inventories.sold',
+                'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.amount',
+                'lolo_pinoy_grill_branches_stock_inventories.flag',
+                'lolo_pinoy_grill_branches_stock_inventories.branch')
+                ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                ->sum('lolo_pinoy_grill_branches_stock_inventories.amount');
+
+        $uri0 = "";
+
+        $pdf = PDF::loadView('printStockInventory', compact('uri0','data', 'getStockInventories', 'totalAmount'));
+
+        return $pdf->download('lolo-pinoy-grill-branches-stock-inventories.pdf');
+        
+
+    }
+
+    public function getStockInventoryDateMultiple(Request $request){
+        $startDate = date("Y-m-d",strtotime($request->input('startDate')));
+        $endDate = date("Y-m-d",strtotime($request->input('endDate')."+1 day"));
+
+        $data =  $request->session()->get('sessionDeliveryInTransaction');
+
+        $flag = $request->get('chooseFlag');  
+        
+        if($flag === self::FOODS){
+            $getStockInventories = DB::table(
+                'lolo_pinoy_grill_branches_stock_inventories')
+                ->select(
+                'lolo_pinoy_grill_branches_stock_inventories.id',
+                'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                'lolo_pinoy_grill_branches_stock_inventories.date',
+                'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                'lolo_pinoy_grill_branches_stock_inventories.price',
+                'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                'lolo_pinoy_grill_branches_stock_inventories.sold',
+                'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.amount',
+                'lolo_pinoy_grill_branches_stock_inventories.flag',
+                'lolo_pinoy_grill_branches_stock_inventories.branch')
+                ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                ->where('lolo_pinoy_grill_branches_stock_inventories.flag', $flag)
+                ->whereBetween('lolo_pinoy_grill_branches_stock_inventories.date', [$startDate, $endDate])
+                ->orderBy('lolo_pinoy_grill_branches_stock_inventories.id', 'desc')
+                ->get()->toArray();
+
+            $totalAmount = DB::table(
+                    'lolo_pinoy_grill_branches_stock_inventories')
+                    ->select(
+                    'lolo_pinoy_grill_branches_stock_inventories.id',
+                    'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                    'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                    'lolo_pinoy_grill_branches_stock_inventories.date',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                    'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                    'lolo_pinoy_grill_branches_stock_inventories.price',
+                    'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                    'lolo_pinoy_grill_branches_stock_inventories.sold',
+                    'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                    'lolo_pinoy_grill_branches_stock_inventories.amount',
+                    'lolo_pinoy_grill_branches_stock_inventories.flag',
+                    'lolo_pinoy_grill_branches_stock_inventories.branch')
+                    ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                    ->where('lolo_pinoy_grill_branches_stock_inventories.flag', $flag)
+                    ->whereBetween('lolo_pinoy_grill_branches_stock_inventories.date', [$startDate, $endDate])
+                    ->sum('lolo_pinoy_grill_branches_stock_inventories.amount');
+
+        }else if($flag === self::DRINKS){
+          
+            $getStockInventories = DB::table(
+                'lolo_pinoy_grill_branches_stock_inventories')
+                ->select(
+                'lolo_pinoy_grill_branches_stock_inventories.id',
+                'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                'lolo_pinoy_grill_branches_stock_inventories.date',
+                'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                'lolo_pinoy_grill_branches_stock_inventories.price',
+                'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                'lolo_pinoy_grill_branches_stock_inventories.sold',
+                'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.amount',
+                'lolo_pinoy_grill_branches_stock_inventories.flag',
+                'lolo_pinoy_grill_branches_stock_inventories.branch')
+                ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                ->where('lolo_pinoy_grill_branches_stock_inventories.flag', $flag)
+                ->whereBetween('lolo_pinoy_grill_branches_stock_inventories.date', [$startDate, $endDate])
+                ->orderBy('lolo_pinoy_grill_branches_stock_inventories.id', 'desc')
+                ->get()->toArray();
+
+        $totalAmount = DB::table(
+                'lolo_pinoy_grill_branches_stock_inventories')
+                ->select(
+                'lolo_pinoy_grill_branches_stock_inventories.id',
+                'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                'lolo_pinoy_grill_branches_stock_inventories.date',
+                'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                'lolo_pinoy_grill_branches_stock_inventories.price',
+                'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                'lolo_pinoy_grill_branches_stock_inventories.sold',
+                'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.amount',
+                'lolo_pinoy_grill_branches_stock_inventories.flag',
+                'lolo_pinoy_grill_branches_stock_inventories.branch')
+                ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                ->whereBetween('lolo_pinoy_grill_branches_stock_inventories.date', [$startDate, $endDate])
+                ->where('lolo_pinoy_grill_branches_stock_inventories.flag', $flag)
+                ->sum('lolo_pinoy_grill_branches_stock_inventories.amount');
+
+        }else{  
+            
+            $getStockInventories = DB::table(
+                'lolo_pinoy_grill_branches_stock_inventories')
+                ->select(
+                'lolo_pinoy_grill_branches_stock_inventories.id',
+                'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                'lolo_pinoy_grill_branches_stock_inventories.date',
+                'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                'lolo_pinoy_grill_branches_stock_inventories.price',
+                'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                'lolo_pinoy_grill_branches_stock_inventories.sold',
+                'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.amount',
+                'lolo_pinoy_grill_branches_stock_inventories.flag',
+                'lolo_pinoy_grill_branches_stock_inventories.branch')
+                ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                ->whereBetween('lolo_pinoy_grill_branches_stock_inventories.date', [$startDate, $endDate])
+                ->orderBy('lolo_pinoy_grill_branches_stock_inventories.id', 'desc')
+                ->get()->toArray();
+
+        $totalAmount = DB::table(
+                'lolo_pinoy_grill_branches_stock_inventories')
+                ->select(
+                'lolo_pinoy_grill_branches_stock_inventories.id',
+                'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                'lolo_pinoy_grill_branches_stock_inventories.date',
+                'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                'lolo_pinoy_grill_branches_stock_inventories.price',
+                'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                'lolo_pinoy_grill_branches_stock_inventories.sold',
+                'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.amount',
+                'lolo_pinoy_grill_branches_stock_inventories.flag',
+                'lolo_pinoy_grill_branches_stock_inventories.branch')
+                ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                ->whereBetween('lolo_pinoy_grill_branches_stock_inventories.date', [$startDate, $endDate])
+                ->sum('lolo_pinoy_grill_branches_stock_inventories.amount');
+        }
+
+
+        return view('lolo-pinoy-grill-branches-get-multiple-stock-inventory', compact('flag','startDate', 'endDate', 'data','getStockInventories', 'totalAmount'));
+
+
+    }
+
+    public function getStockInventoryDate(Request $request){
+        $getDate = date("Y-m-d",strtotime($request->input('selectDate')));
+        $data =  $request->session()->get('sessionDeliveryInTransaction');
+
+        $flag = $request->get('chooseFlag');
+        if($flag === self::FOODS){
+            $getStockInventories = DB::table(
+                'lolo_pinoy_grill_branches_stock_inventories')
+                ->select(
+                'lolo_pinoy_grill_branches_stock_inventories.id',
+                'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                'lolo_pinoy_grill_branches_stock_inventories.date',
+                'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                'lolo_pinoy_grill_branches_stock_inventories.price',
+                'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                'lolo_pinoy_grill_branches_stock_inventories.sold',
+                'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.amount',
+                'lolo_pinoy_grill_branches_stock_inventories.flag',
+                'lolo_pinoy_grill_branches_stock_inventories.branch')
+                ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                ->where('lolo_pinoy_grill_branches_stock_inventories.flag', $flag)
+                ->whereDate('lolo_pinoy_grill_branches_stock_inventories.date', $getDate)
+                ->orderBy('lolo_pinoy_grill_branches_stock_inventories.id', 'desc')
+                ->get()->toArray();
+
+            $totalAmount = DB::table(
+                    'lolo_pinoy_grill_branches_stock_inventories')
+                    ->select(
+                    'lolo_pinoy_grill_branches_stock_inventories.id',
+                    'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                    'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                    'lolo_pinoy_grill_branches_stock_inventories.date',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                    'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                    'lolo_pinoy_grill_branches_stock_inventories.price',
+                    'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                    'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                    'lolo_pinoy_grill_branches_stock_inventories.sold',
+                    'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                    'lolo_pinoy_grill_branches_stock_inventories.amount',
+                    'lolo_pinoy_grill_branches_stock_inventories.flag',
+                    'lolo_pinoy_grill_branches_stock_inventories.branch')
+                    ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                    ->where('lolo_pinoy_grill_branches_stock_inventories.flag', $flag)
+                    ->whereDate('lolo_pinoy_grill_branches_stock_inventories.date', $getDate)
+                    ->sum('lolo_pinoy_grill_branches_stock_inventories.amount');
+
+        }else if($flag === self::DRINKS){
+          
+            $getStockInventories = DB::table(
+                'lolo_pinoy_grill_branches_stock_inventories')
+                ->select(
+                'lolo_pinoy_grill_branches_stock_inventories.id',
+                'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                'lolo_pinoy_grill_branches_stock_inventories.date',
+                'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                'lolo_pinoy_grill_branches_stock_inventories.price',
+                'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                'lolo_pinoy_grill_branches_stock_inventories.sold',
+                'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.amount',
+                'lolo_pinoy_grill_branches_stock_inventories.flag',
+                'lolo_pinoy_grill_branches_stock_inventories.branch')
+                ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                ->where('lolo_pinoy_grill_branches_stock_inventories.flag', $flag)
+                ->whereDate('lolo_pinoy_grill_branches_stock_inventories.date', $getDate)
+                ->orderBy('lolo_pinoy_grill_branches_stock_inventories.id', 'desc')
+                ->get()->toArray();
+
+        $totalAmount = DB::table(
+                'lolo_pinoy_grill_branches_stock_inventories')
+                ->select(
+                'lolo_pinoy_grill_branches_stock_inventories.id',
+                'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                'lolo_pinoy_grill_branches_stock_inventories.date',
+                'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                'lolo_pinoy_grill_branches_stock_inventories.price',
+                'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                'lolo_pinoy_grill_branches_stock_inventories.sold',
+                'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.amount',
+                'lolo_pinoy_grill_branches_stock_inventories.flag',
+                'lolo_pinoy_grill_branches_stock_inventories.branch')
+                ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                ->whereDate('lolo_pinoy_grill_branches_stock_inventories.date', $getDate)
+                ->where('lolo_pinoy_grill_branches_stock_inventories.flag', $flag)
+                ->sum('lolo_pinoy_grill_branches_stock_inventories.amount');
+
+        }else{  
+            
+            $getStockInventories = DB::table(
+                'lolo_pinoy_grill_branches_stock_inventories')
+                ->select(
+                'lolo_pinoy_grill_branches_stock_inventories.id',
+                'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                'lolo_pinoy_grill_branches_stock_inventories.date',
+                'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                'lolo_pinoy_grill_branches_stock_inventories.price',
+                'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                'lolo_pinoy_grill_branches_stock_inventories.sold',
+                'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.amount',
+                'lolo_pinoy_grill_branches_stock_inventories.flag',
+                'lolo_pinoy_grill_branches_stock_inventories.branch')
+                ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                ->whereDate('lolo_pinoy_grill_branches_stock_inventories.date', $getDate)
+                ->orderBy('lolo_pinoy_grill_branches_stock_inventories.id', 'desc')
+                ->get()->toArray();
+
+        $totalAmount = DB::table(
+                'lolo_pinoy_grill_branches_stock_inventories')
+                ->select(
+                'lolo_pinoy_grill_branches_stock_inventories.id',
+                'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                'lolo_pinoy_grill_branches_stock_inventories.date',
+                'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                'lolo_pinoy_grill_branches_stock_inventories.price',
+                'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                'lolo_pinoy_grill_branches_stock_inventories.sold',
+                'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.amount',
+                'lolo_pinoy_grill_branches_stock_inventories.flag',
+                'lolo_pinoy_grill_branches_stock_inventories.branch')
+                ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                ->whereDate('lolo_pinoy_grill_branches_stock_inventories.date', $getDate)
+                ->sum('lolo_pinoy_grill_branches_stock_inventories.amount');
+        }
+
+
+        return view('lolo-pinoy-grill-branches-get-stock-inventory', compact('flag','getDate', 'data','getStockInventories', 'totalAmount'));
+
+    }
+
+    public function getMultipleTransactionList(Request $request){
+        $startDate = date("Y-m-d",strtotime($request->input('startDate')));
+        $endDate = date("Y-m-d",strtotime($request->input('endDate')."+1 day"));
+        
+        $branch = $request->get('branch');
+
+        $getSalesItems = DB::table(
+                'lolo_pinoy_grill_branches_sales_forms')
+                ->select(
+                'lolo_pinoy_grill_branches_sales_forms.id',
+                'lolo_pinoy_grill_branches_sales_forms.user_id',
+                'lolo_pinoy_grill_branches_sales_forms.sf_id',
+                'lolo_pinoy_grill_branches_sales_forms.invoice_number',
+                'lolo_pinoy_grill_branches_sales_forms.ordered_by',
+                'lolo_pinoy_grill_branches_sales_forms.table_no',
+                'lolo_pinoy_grill_branches_sales_forms.date',
+                'lolo_pinoy_grill_branches_sales_forms.branch',
+                'lolo_pinoy_grill_branches_sales_forms.qty',
+                'lolo_pinoy_grill_branches_sales_forms.item_description',
+                'lolo_pinoy_grill_branches_sales_forms.amount',
+                'lolo_pinoy_grill_branches_sales_forms.total_discounts_seniors_pwds',
+                'lolo_pinoy_grill_branches_sales_forms.total_amount_of_sales',
+                'lolo_pinoy_grill_branches_sales_forms.senior_citizen_id',
+                'lolo_pinoy_grill_branches_sales_forms.senior_citizen_name',
+                'lolo_pinoy_grill_branches_sales_forms.senior_citizen_label',
+                'lolo_pinoy_grill_branches_sales_forms.senior_amount',
+                'lolo_pinoy_grill_branches_sales_forms.gift_cert',
+                'lolo_pinoy_grill_branches_sales_forms.cash_amount',
+                'lolo_pinoy_grill_branches_sales_forms.change',
+                'lolo_pinoy_grill_branches_sales_forms.created_by',
+                'lolo_pinoy_grill_branches_sales_forms.flag',
+                'lolo_pinoy_grill_branches_sales_forms.deleted_at')
+                ->where('lolo_pinoy_grill_branches_sales_forms.branch', $branch)
+                ->whereBetween('lolo_pinoy_grill_branches_sales_forms.date', [$startDate, $endDate])
+                ->where('lolo_pinoy_grill_branches_sales_forms.sf_id', NULL)
+                ->get()->toArray();
+
+        $sum = DB::table(
+                    'lolo_pinoy_grill_branches_sales_forms')
+                    ->select(
+                    'lolo_pinoy_grill_branches_sales_forms.id',
+                    'lolo_pinoy_grill_branches_sales_forms.user_id',
+                    'lolo_pinoy_grill_branches_sales_forms.sf_id',
+                    'lolo_pinoy_grill_branches_sales_forms.invoice_number',
+                    'lolo_pinoy_grill_branches_sales_forms.ordered_by',
+                    'lolo_pinoy_grill_branches_sales_forms.table_no',
+                    'lolo_pinoy_grill_branches_sales_forms.date',
+                    'lolo_pinoy_grill_branches_sales_forms.branch',
+                    'lolo_pinoy_grill_branches_sales_forms.qty',
+                    'lolo_pinoy_grill_branches_sales_forms.item_description',
+                    'lolo_pinoy_grill_branches_sales_forms.amount',
+                    'lolo_pinoy_grill_branches_sales_forms.total_discounts_seniors_pwds',
+                    'lolo_pinoy_grill_branches_sales_forms.total_amount_of_sales',
+                    'lolo_pinoy_grill_branches_sales_forms.senior_citizen_id',
+                    'lolo_pinoy_grill_branches_sales_forms.senior_citizen_name',
+                    'lolo_pinoy_grill_branches_sales_forms.senior_citizen_label',
+                    'lolo_pinoy_grill_branches_sales_forms.senior_amount',
+                    'lolo_pinoy_grill_branches_sales_forms.gift_cert',
+                    'lolo_pinoy_grill_branches_sales_forms.cash_amount',
+                    'lolo_pinoy_grill_branches_sales_forms.change',
+                    'lolo_pinoy_grill_branches_sales_forms.created_by',
+                    'lolo_pinoy_grill_branches_sales_forms.flag',
+                    'lolo_pinoy_grill_branches_sales_forms.deleted_at')
+                    ->where('lolo_pinoy_grill_branches_sales_forms.branch', $branch)
+                    ->whereBetween('lolo_pinoy_grill_branches_sales_forms.date', [$startDate, $endDate])
+                    ->where('lolo_pinoy_grill_branches_sales_forms.sf_id', NULL)
+                    ->sum('lolo_pinoy_grill_branches_sales_forms.total_amount_of_sales');
+
+        return view('lolo-pinoy-grill-branches-multiple-transaction-list-all', compact('getSalesItems', 'sum', 'startDate', 'endDate'));
+
+
+    }
+
+    public function getTransactionList(Request $request){
+        $getDate = $request->get('selectDate');
+       
+        $branch = $request->get('branch');
+        $getSalesItems = DB::table(
+                    'lolo_pinoy_grill_branches_sales_forms')
+                    ->select(
+                    'lolo_pinoy_grill_branches_sales_forms.id',
+                    'lolo_pinoy_grill_branches_sales_forms.user_id',
+                    'lolo_pinoy_grill_branches_sales_forms.sf_id',
+                    'lolo_pinoy_grill_branches_sales_forms.invoice_number',
+                    'lolo_pinoy_grill_branches_sales_forms.ordered_by',
+                    'lolo_pinoy_grill_branches_sales_forms.table_no',
+                    'lolo_pinoy_grill_branches_sales_forms.date',
+                    'lolo_pinoy_grill_branches_sales_forms.branch',
+                    'lolo_pinoy_grill_branches_sales_forms.qty',
+                    'lolo_pinoy_grill_branches_sales_forms.item_description',
+                    'lolo_pinoy_grill_branches_sales_forms.amount',
+                    'lolo_pinoy_grill_branches_sales_forms.total_discounts_seniors_pwds',
+                    'lolo_pinoy_grill_branches_sales_forms.total_amount_of_sales',
+                    'lolo_pinoy_grill_branches_sales_forms.senior_citizen_id',
+                    'lolo_pinoy_grill_branches_sales_forms.senior_citizen_name',
+                    'lolo_pinoy_grill_branches_sales_forms.senior_citizen_label',
+                    'lolo_pinoy_grill_branches_sales_forms.senior_amount',
+                    'lolo_pinoy_grill_branches_sales_forms.gift_cert',
+                    'lolo_pinoy_grill_branches_sales_forms.cash_amount',
+                    'lolo_pinoy_grill_branches_sales_forms.change',
+                    'lolo_pinoy_grill_branches_sales_forms.created_by',
+                    'lolo_pinoy_grill_branches_sales_forms.flag',
+                    'lolo_pinoy_grill_branches_sales_forms.deleted_at')
+                    ->where('lolo_pinoy_grill_branches_sales_forms.branch', $branch)
+                    ->whereDate('lolo_pinoy_grill_branches_sales_forms.date', $getDate)
+                    ->where('lolo_pinoy_grill_branches_sales_forms.sf_id', NULL)
+                    ->get()->toArray();
+
+        $sum = DB::table(
+                        'lolo_pinoy_grill_branches_sales_forms')
+                        ->select(
+                        'lolo_pinoy_grill_branches_sales_forms.id',
+                        'lolo_pinoy_grill_branches_sales_forms.user_id',
+                        'lolo_pinoy_grill_branches_sales_forms.sf_id',
+                        'lolo_pinoy_grill_branches_sales_forms.invoice_number',
+                        'lolo_pinoy_grill_branches_sales_forms.ordered_by',
+                        'lolo_pinoy_grill_branches_sales_forms.table_no',
+                        'lolo_pinoy_grill_branches_sales_forms.date',
+                        'lolo_pinoy_grill_branches_sales_forms.branch',
+                        'lolo_pinoy_grill_branches_sales_forms.qty',
+                        'lolo_pinoy_grill_branches_sales_forms.item_description',
+                        'lolo_pinoy_grill_branches_sales_forms.amount',
+                        'lolo_pinoy_grill_branches_sales_forms.total_discounts_seniors_pwds',
+                        'lolo_pinoy_grill_branches_sales_forms.total_amount_of_sales',
+                        'lolo_pinoy_grill_branches_sales_forms.senior_citizen_id',
+                        'lolo_pinoy_grill_branches_sales_forms.senior_citizen_name',
+                        'lolo_pinoy_grill_branches_sales_forms.senior_citizen_label',
+                        'lolo_pinoy_grill_branches_sales_forms.senior_amount',
+                        'lolo_pinoy_grill_branches_sales_forms.gift_cert',
+                        'lolo_pinoy_grill_branches_sales_forms.cash_amount',
+                        'lolo_pinoy_grill_branches_sales_forms.change',
+                        'lolo_pinoy_grill_branches_sales_forms.created_by',
+                        'lolo_pinoy_grill_branches_sales_forms.flag',
+                        'lolo_pinoy_grill_branches_sales_forms.deleted_at')
+                        ->where('lolo_pinoy_grill_branches_sales_forms.branch', $branch)
+                        ->whereDate('lolo_pinoy_grill_branches_sales_forms.date', $getDate)
+                        ->where('lolo_pinoy_grill_branches_sales_forms.sf_id', NULL)
+                        ->sum('lolo_pinoy_grill_branches_sales_forms.total_amount_of_sales');
+
+        return view('lolo-pinoy-grill-branches-get-transaction-list-all', compact('getSalesItems', 'sum', 'getDate'));
+   
+
+    }
+
+    public function addGC(Request $request, $id){
+        $addGC = LoloPinoyGrillBranchesSalesForm::withTrashed()->find($id);
+        $gc = $request->get('giftCert');
+    
+        $sum =  $addGC->total - $gc ;
+        $addGC->gift_cert = $gc;
+        $addGC->total = $sum;
+        $addGC->save();
+
+        return redirect()->route('detailTransactions', ['id'=>$id]);
+
+    }
+
     public function addSenior(Request $request, $id){    
         $addSenior = LoloPinoyGrillBranchesSalesForm::withTrashed()->find($id);
         
@@ -108,9 +961,11 @@ class LoloPinoyGrillBranchesController extends Controller
                         'lolo_pinoy_grill_branches_sales_forms.branch',
                         'lolo_pinoy_grill_branches_sales_forms.qty',
                         'lolo_pinoy_grill_branches_sales_forms.item_description',
+                        'lolo_pinoy_grill_branches_sales_forms.flavor',
                         'lolo_pinoy_grill_branches_sales_forms.amount',
                         'lolo_pinoy_grill_branches_sales_forms.total_discounts_seniors_pwds',
                         'lolo_pinoy_grill_branches_sales_forms.total_amount_of_sales',
+                        'lolo_pinoy_grill_branches_sales_forms.total',
                         'lolo_pinoy_grill_branches_sales_forms.senior_citizen_id',
                         'lolo_pinoy_grill_branches_sales_forms.senior_citizen_name',
                         'lolo_pinoy_grill_branches_sales_forms.senior_citizen_label',
@@ -140,9 +995,11 @@ class LoloPinoyGrillBranchesController extends Controller
                         'lolo_pinoy_grill_branches_sales_forms.branch',
                         'lolo_pinoy_grill_branches_sales_forms.qty',
                         'lolo_pinoy_grill_branches_sales_forms.item_description',
+                        'lolo_pinoy_grill_branches_sales_forms.flavor',
                         'lolo_pinoy_grill_branches_sales_forms.amount',
                         'lolo_pinoy_grill_branches_sales_forms.total_discounts_seniors_pwds',
                         'lolo_pinoy_grill_branches_sales_forms.total_amount_of_sales',
+                        'lolo_pinoy_grill_branches_sales_forms.total',
                         'lolo_pinoy_grill_branches_sales_forms.senior_citizen_id',
                         'lolo_pinoy_grill_branches_sales_forms.senior_citizen_name',
                         'lolo_pinoy_grill_branches_sales_forms.senior_citizen_label',
@@ -169,10 +1026,9 @@ class LoloPinoyGrillBranchesController extends Controller
     public function voidItemSecond(Request $request, $id){
           
         $getSalesInfo = LoloPinoyGrillBranchesSalesForm::where('id', $id)->get()->toArray();
-        $getItem = explode("-", $getSalesInfo[0]['item_description']);
-        $getItemExp = $getItem[0];
-       
-
+      
+        $getItemExp = $getSalesInfo[0]['item_description']; 
+    
         $qty = $getSalesInfo[0]['qty']; 
 
         $branch = $request->session()->get('sessionBranch');
@@ -228,6 +1084,7 @@ class LoloPinoyGrillBranchesController extends Controller
             //update the main food item id
             $updateMainFoodItem = LoloPinoyGrillBranchesSalesForm::find($request->get('mainId'));
             $updateMainFoodItem->total_amount_of_sales = $computeMainId;
+            $updateMainFoodItem->total = $computeMainId;
             $updateMainFoodItem->save();
     
             
@@ -286,9 +1143,8 @@ class LoloPinoyGrillBranchesController extends Controller
         //update the main food item id
         $updateMainFoodItem = LoloPinoyGrillBranchesSalesForm::find($request->get('mainId'));
         $updateMainFoodItem->total_amount_of_sales = $computeMainId;
-        $updateMainFoodItem->save();
-
-        
+        $updateMainFoodItem->total = $computeMainId;
+        $updateMainFoodItem->save();        
     
         return redirect()->route('transactionListDetailsLoloPinoyGrillBranches', ['id'=>$request->get('mainId')]);
 
@@ -300,9 +1156,8 @@ class LoloPinoyGrillBranchesController extends Controller
 
     public function voidItem(Request $request, $id){
         $getSalesInfo = LoloPinoyGrillBranchesSalesForm::where('id', $id)->get()->toArray();
-      
-        $getItem = explode("-", $getSalesInfo[0]['item_description']);
-        $getItemExp = $getItem[0];
+    
+        $getItemExp = $getSalesInfo[0]['item_description'];
        
         $qty = $getSalesInfo[0]['qty']; 
      
@@ -358,6 +1213,7 @@ class LoloPinoyGrillBranchesController extends Controller
             //update the main food item id
             $updateMainFoodItem = LoloPinoyGrillBranchesSalesForm::find($id);
             $updateMainFoodItem->total_amount_of_sales = $computeMainId;
+            $updateMainFoodItem->total = $computeMainId;
             $updateMainFoodItem->save();
             
             //delete the transction
@@ -418,6 +1274,7 @@ class LoloPinoyGrillBranchesController extends Controller
             //update the main food item id
             $updateMainFoodItem = LoloPinoyGrillBranchesSalesForm::find($id);
             $updateMainFoodItem->total_amount_of_sales = $computeMainId;
+            $updateMainFoodItem->total = $computeMainId; 
             $updateMainFoodItem->save();
     
     
@@ -437,10 +1294,14 @@ class LoloPinoyGrillBranchesController extends Controller
 
         $getTransactionBranches = LoloPinoyGrillBranchesSalesForm::where('sf_id', NULL)
                                 ->where('branch', $data)
+                                ->withTrashed()
+                                ->orderBy('date', 'asc')
                                 ->get()->toArray();
 
         $sum = LoloPinoyGrillBranchesSalesForm::where('sf_id', NULL)
                 ->where('branch', $data)
+                ->orderBy('id', 'desc')
+                ->withTrashed()
                 ->sum('total_amount_of_sales');
         return view('lolo-pinoy-grill-branches-transaction-list-all', compact('data', 'getTransactionBranches', 'sum'));
     }
@@ -461,9 +1322,11 @@ class LoloPinoyGrillBranchesController extends Controller
                         'lolo_pinoy_grill_branches_sales_forms.branch',
                         'lolo_pinoy_grill_branches_sales_forms.qty',
                         'lolo_pinoy_grill_branches_sales_forms.item_description',
+                        'lolo_pinoy_grill_branches_sales_forms.flavor',
                         'lolo_pinoy_grill_branches_sales_forms.amount',
                         'lolo_pinoy_grill_branches_sales_forms.total_discounts_seniors_pwds',
                         'lolo_pinoy_grill_branches_sales_forms.total_amount_of_sales',
+                        'lolo_pinoy_grill_branches_sales_forms.total',
                         'lolo_pinoy_grill_branches_sales_forms.senior_citizen_id',
                         'lolo_pinoy_grill_branches_sales_forms.senior_citizen_label',
                         'lolo_pinoy_grill_branches_sales_forms.senior_amount',
@@ -487,6 +1350,7 @@ class LoloPinoyGrillBranchesController extends Controller
                             'lolo_pinoy_grill_branches_sales_forms.branch',
                             'lolo_pinoy_grill_branches_sales_forms.qty',
                             'lolo_pinoy_grill_branches_sales_forms.item_description',
+                            'lolo_pinoy_grill_branches_sales_forms.flavor',
                             'lolo_pinoy_grill_branches_sales_forms.amount',
                             'lolo_pinoy_grill_branches_sales_forms.total_discounts_seniors_pwds',
                             'lolo_pinoy_grill_branches_sales_forms.total_amount_of_sales',
@@ -593,7 +1457,6 @@ class LoloPinoyGrillBranchesController extends Controller
             return redirect()->route('deliveryInTransactionLpGrillBranches');
         }else{
             $branch = $request->session()->get('sessionDeliveryInTransaction');
-            $flag = "Foods";
             $getDeliveryBranches = DB::table(
                                     'lolo_pinoy_grill_branches_store_stocks')
                                     ->select(
@@ -616,11 +1479,10 @@ class LoloPinoyGrillBranchesController extends Controller
                                     'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
                                     ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
                                     ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branch)
-                                    ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flag)
+                                    ->where('lolo_pinoy_grill_branches_store_stocks.flag', self::FOODS)
                                     ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'desc')
                                     ->get()->toArray();
 
-            $flagDrinks = "Drinks";
             $getDeliveryBranchDrinks = DB::table(
                                     'lolo_pinoy_grill_branches_store_stocks')
                                     ->select(
@@ -643,7 +1505,7 @@ class LoloPinoyGrillBranchesController extends Controller
                                     'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
                                     ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
                                     ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branch)
-                                    ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flagDrinks)
+                                    ->where('lolo_pinoy_grill_branches_store_stocks.flag', self::DRINKS)
                                     ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'desc')
                                     ->get()->toArray();
     
@@ -2946,7 +3808,6 @@ class LoloPinoyGrillBranchesController extends Controller
             return redirect()->route('salesInvoiceFormLoloPinoyGrillBranches');
         }else{
             $branch = $request->session()->get('sessionBranch');
-            $flag = "Foods";
             $getBranches = DB::table(
                                     'lolo_pinoy_grill_branches_store_stocks')
                                     ->select(
@@ -2969,11 +3830,10 @@ class LoloPinoyGrillBranchesController extends Controller
                                     'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
                                     ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
                                     ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branch)
-                                    ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flag)
+                                    ->where('lolo_pinoy_grill_branches_store_stocks.flag', self::FOODS)
                                     ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'asc')
                                     ->get()->toArray();
 
-            $flagDrinks = "Drinks";
             $getBranchDrinks = DB::table(
                                         'lolo_pinoy_grill_branches_store_stocks')
                                         ->select(
@@ -2996,7 +3856,7 @@ class LoloPinoyGrillBranchesController extends Controller
                                         'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
                                         ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
                                         ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branch)
-                                        ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flagDrinks)
+                                        ->where('lolo_pinoy_grill_branches_store_stocks.flag', self::DRINKS)
                                         ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'asc')
                                         ->get()->toArray();
 
@@ -3091,6 +3951,7 @@ class LoloPinoyGrillBranchesController extends Controller
                     'lolo_pinoy_grill_branches_sales_forms.branch',
                     'lolo_pinoy_grill_branches_sales_forms.qty',
                     'lolo_pinoy_grill_branches_sales_forms.item_description',
+                    'lolo_pinoy_grill_branches_sales_forms.flavor',
                     'lolo_pinoy_grill_branches_sales_forms.amount',
                     'lolo_pinoy_grill_branches_sales_forms.total_discounts_seniors_pwds',
                     'lolo_pinoy_grill_branches_sales_forms.total_amount_of_sales',
@@ -3126,6 +3987,313 @@ class LoloPinoyGrillBranchesController extends Controller
 
     }
 
+    public function destroyOrder1(Request $request, $id){
+       
+         $branch = $request->branch;
+        $deleteItem = LoloPinoyGrillBranchesSalesForm::find($id);
+       
+
+        $getBranch = DB::table(
+            'lolo_pinoy_grill_branches_store_stocks')
+            ->select(
+            'lolo_pinoy_grill_branches_store_stocks.id',
+            'lolo_pinoy_grill_branches_store_stocks.user_id',
+            'lolo_pinoy_grill_branches_store_stocks.date',
+            'lolo_pinoy_grill_branches_store_stocks.dr_no',
+            'lolo_pinoy_grill_branches_store_stocks.supplier',
+            'lolo_pinoy_grill_branches_store_stocks.product_name',
+            'lolo_pinoy_grill_branches_store_stocks.price',
+            'lolo_pinoy_grill_branches_store_stocks.qty',
+            'lolo_pinoy_grill_branches_store_stocks.unit',
+            'lolo_pinoy_grill_branches_store_stocks.product_in',
+            'lolo_pinoy_grill_branches_store_stocks.product_out',
+            'lolo_pinoy_grill_branches_store_stocks.amount',
+            'lolo_pinoy_grill_branches_store_stocks.branch',
+            'lolo_pinoy_grill_branches_store_stocks.flag',
+            'lolo_pinoy_grill_branches_store_stocks.created_by',
+            'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
+            'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
+            ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
+            ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branch)
+            ->where('lolo_pinoy_grill_branches_store_stocks.product_name', $deleteItem->item_description)
+            ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'asc')
+            ->get();
+
+
+        $addProductIn = $deleteItem->qty + $getBranch[0]->product_in;
+
+
+        $updateStocks = LoloPinoyGrillBranchesStoreStock::find($getBranch[0]->id);
+        $updateStocks->product_in = $addProductIn;
+        $updateStocks->save();
+
+        $deleteItem->delete();
+
+        $getSfIdAmount = LoloPinoyGrillBranchesSalesForm::where('sf_id', $id)
+                                            ->where('deleted_at', NULL)
+                                            ->sum('amount');
+
+        $updateMainId = LoloPinoyGrillBranchesSalesForm::withTrashed()->find($id);
+        $updateMainId->total_amount_of_sales = $getSfIdAmount;
+        $updateMainId->total = $getSfIdAmount;
+        $updateMainId->save();
+
+        return response()->json($getSfIdAmount);
+      
+     
+       
+    }
+
+    public function destroyOrder(Request $request, $id){
+        $branch = $request->branch;
+        $deleteItem = LoloPinoyGrillBranchesSalesForm::find($id);
+
+        $getBranch = DB::table(
+                                'lolo_pinoy_grill_branches_store_stocks')
+                                ->select(
+                                'lolo_pinoy_grill_branches_store_stocks.id',
+                                'lolo_pinoy_grill_branches_store_stocks.user_id',
+                                'lolo_pinoy_grill_branches_store_stocks.date',
+                                'lolo_pinoy_grill_branches_store_stocks.dr_no',
+                                'lolo_pinoy_grill_branches_store_stocks.supplier',
+                                'lolo_pinoy_grill_branches_store_stocks.product_name',
+                                'lolo_pinoy_grill_branches_store_stocks.price',
+                                'lolo_pinoy_grill_branches_store_stocks.qty',
+                                'lolo_pinoy_grill_branches_store_stocks.unit',
+                                'lolo_pinoy_grill_branches_store_stocks.product_in',
+                                'lolo_pinoy_grill_branches_store_stocks.product_out',
+                                'lolo_pinoy_grill_branches_store_stocks.amount',
+                                'lolo_pinoy_grill_branches_store_stocks.branch',
+                                'lolo_pinoy_grill_branches_store_stocks.flag',
+                                'lolo_pinoy_grill_branches_store_stocks.created_by',
+                                'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
+                                'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
+                                ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
+                                ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branch)
+                                ->where('lolo_pinoy_grill_branches_store_stocks.product_name', $deleteItem->item_description)
+                                ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'asc')
+                                ->get();
+       
+
+      
+        $addProductIn = $deleteItem->qty + $getBranch[0]->product_in;
+
+
+         //get the date today
+         $getDate =  date("Y-m-d");
+
+         //lp grill branches stock invetories table
+         $getStockInventory = DB::table(
+                     'lolo_pinoy_grill_branches_stock_inventories')
+                     ->select(
+                     'lolo_pinoy_grill_branches_stock_inventories.id',
+                     'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                     'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                     'lolo_pinoy_grill_branches_stock_inventories.date',
+                     'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                     'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                     'lolo_pinoy_grill_branches_stock_inventories.price',
+                     'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                     'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                     'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                     'lolo_pinoy_grill_branches_stock_inventories.sold',
+                     'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                     'lolo_pinoy_grill_branches_stock_inventories.amount',
+                     'lolo_pinoy_grill_branches_stock_inventories.flag',
+                     'lolo_pinoy_grill_branches_stock_inventories.branch')
+                     ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $branch)
+                     ->where('lolo_pinoy_grill_branches_stock_inventories.product_name', $getBranch[0]->product_name)
+                     ->where('lolo_pinoy_grill_branches_stock_inventories.date', $getDate)
+                     ->get();
+ 
+        $returnItem = $getStockInventory[0]->sold - $deleteItem->qty;
+ 
+        $returnRemainingStock = $getStockInventory[0]->remaining_stock + $deleteItem->qty;
+
+        $returnOriginalAmount = $getStockInventory[0]->price * $returnItem;
+
+        $updateStockInventory = LoloPinoyGrillBranchesStockInventory::find($getStockInventory[0]->id);
+        $updateStockInventory->product_out = $returnItem;
+        $updateStockInventory->sold = $returnItem;
+        $updateStockInventory->remaining_stock = $returnRemainingStock;
+        $updateStockInventory->amount = $returnOriginalAmount;
+        $updateStockInventory->save();
+
+        $updateStocks = LoloPinoyGrillBranchesStoreStock::find($getBranch[0]->id);
+        $updateStocks->product_in = $addProductIn;
+        $updateStocks->save();
+
+        $deleteItem->delete();
+
+       
+        
+        $getMainId = LoloPinoyGrillBranchesSalesForm::withTrashed()->where('id',$request->getMainId)->sum('amount');
+        $getSfIdAmount = LoloPinoyGrillBranchesSalesForm::where('sf_id', $request->getMainId)->sum('amount');
+
+        $sum = $getMainId + $getSfIdAmount;
+
+
+        $updateMainId = LoloPinoyGrillBranchesSalesForm::withTrashed()->find($request->getMainId);
+        $updateMainId->total_amount_of_sales = $sum;
+        $updateMainId->total = $sum;
+        $updateMainId->save();
+
+        return response()->json($sum);
+
+    }
+    
+
+    public function updateMenu(Request $request, $id){
+        $branch = $request->branch;
+       
+
+        if($request->flavor == ""){
+            $flavor = "NULL";
+        }else{
+           $flavor = $request->flavor;
+        }
+
+        if($request->price){
+            $amount = $request->price;
+        }elseif($request->originalPrice){
+            $amount = $request->originalPrice;
+        }
+
+        $updateMenu = LoloPinoyGrillBranchesSalesForm::find($id);
+        
+        $getBranch = DB::table(
+                'lolo_pinoy_grill_branches_store_stocks')
+                ->select(
+                'lolo_pinoy_grill_branches_store_stocks.id',
+                'lolo_pinoy_grill_branches_store_stocks.user_id',
+                'lolo_pinoy_grill_branches_store_stocks.date',
+                'lolo_pinoy_grill_branches_store_stocks.dr_no',
+                'lolo_pinoy_grill_branches_store_stocks.supplier',
+                'lolo_pinoy_grill_branches_store_stocks.product_name',
+                'lolo_pinoy_grill_branches_store_stocks.price',
+                'lolo_pinoy_grill_branches_store_stocks.qty',
+                'lolo_pinoy_grill_branches_store_stocks.unit',
+                'lolo_pinoy_grill_branches_store_stocks.product_in',
+                'lolo_pinoy_grill_branches_store_stocks.product_out',
+                'lolo_pinoy_grill_branches_store_stocks.amount',
+                'lolo_pinoy_grill_branches_store_stocks.branch',
+                'lolo_pinoy_grill_branches_store_stocks.flag',
+                'lolo_pinoy_grill_branches_store_stocks.created_by',
+                'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
+                'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
+                ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
+                ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branch)
+                ->where('lolo_pinoy_grill_branches_store_stocks.product_name', $updateMenu->item_description)
+                ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'asc')
+                ->get();
+
+        $sum =  $getBranch[0]->product_in + $updateMenu->qty;
+
+        //re save the stocks 
+        $updateStocks = LoloPinoyGrillBranchesStoreStock::find($getBranch[0]->id);
+        $updateStocks->product_in = $sum;
+        $updateStocks->save();
+
+        //get the date today
+        $getDate =  date("Y-m-d");
+        
+        //lp grill branches stock invetories table
+        $getStockInventory = DB::table(
+                'lolo_pinoy_grill_branches_stock_inventories')
+                ->select(
+                'lolo_pinoy_grill_branches_stock_inventories.id',
+                'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                'lolo_pinoy_grill_branches_stock_inventories.date',
+                'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                'lolo_pinoy_grill_branches_stock_inventories.price',
+                'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                'lolo_pinoy_grill_branches_stock_inventories.sold',
+                'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                'lolo_pinoy_grill_branches_stock_inventories.amount',
+                'lolo_pinoy_grill_branches_stock_inventories.flag',
+                'lolo_pinoy_grill_branches_stock_inventories.branch')
+                ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $branch)
+                ->where('lolo_pinoy_grill_branches_stock_inventories.product_name', $updateMenu->item_description)
+                ->where('lolo_pinoy_grill_branches_stock_inventories.date', $getDate)
+                ->get();
+
+
+        $computePriceQty = $getStockInventory[0]->price * $request->qty;
+
+        $computeRemainingStock = $getStockInventory[0]->product_in - $request->qty;
+
+        $compSold = $getStockInventory[0]->sold - $updateMenu->qty;
+
+        $getNewQty = $compSold + $request->qty;
+
+        $updateStockInventory = LoloPinoyGrillBranchesStockInventory::find($getStockInventory[0]->id);
+
+        $updateStockInventory->product_out = $getNewQty;
+        $updateStockInventory->sold = $getNewQty;
+        $updateStockInventory->remaining_stock = $computeRemainingStock;
+        $updateStockInventory->amount = $computePriceQty;
+        $updateStockInventory->save();
+
+
+        //get the stocks based on qty inputed
+        $getProductItem = DB::table(
+                    'lolo_pinoy_grill_branches_store_stocks')
+                    ->select(
+                    'lolo_pinoy_grill_branches_store_stocks.id',
+                    'lolo_pinoy_grill_branches_store_stocks.user_id',
+                    'lolo_pinoy_grill_branches_store_stocks.date',
+                    'lolo_pinoy_grill_branches_store_stocks.dr_no',
+                    'lolo_pinoy_grill_branches_store_stocks.supplier',
+                    'lolo_pinoy_grill_branches_store_stocks.product_name',
+                    'lolo_pinoy_grill_branches_store_stocks.price',
+                    'lolo_pinoy_grill_branches_store_stocks.qty',
+                    'lolo_pinoy_grill_branches_store_stocks.unit',
+                    'lolo_pinoy_grill_branches_store_stocks.product_in',
+                    'lolo_pinoy_grill_branches_store_stocks.product_out',
+                    'lolo_pinoy_grill_branches_store_stocks.amount',
+                    'lolo_pinoy_grill_branches_store_stocks.branch',
+                    'lolo_pinoy_grill_branches_store_stocks.flag',
+                    'lolo_pinoy_grill_branches_store_stocks.created_by',
+                    'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
+                    'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
+                    ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
+                    ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branch)
+                    ->where('lolo_pinoy_grill_branches_store_stocks.product_name', $updateMenu->item_description)
+                    ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'asc')
+                    ->get();
+
+        $calcProductOut = $getProductItem[0]->product_in - $request->qty;
+
+        $reUpdateStocks = LoloPinoyGrillBranchesStoreStock::find($getProductItem[0]->id);
+        $reUpdateStocks->product_in = $calcProductOut;
+        $reUpdateStocks->save();
+
+        
+        $updateMenu->flavor = $flavor;
+        $updateMenu->qty = $request->qty;
+        $updateMenu->amount = $amount; 
+        $updateMenu->save();
+
+
+        $getMainId = LoloPinoyGrillBranchesSalesForm::where('id',$request->mainId)->sum('amount');
+        $getSfIdAmount = LoloPinoyGrillBranchesSalesForm::where('sf_id', $request->mainId)->sum('amount');
+       
+        //compute 
+        $sum = $getMainId + $getSfIdAmount;
+      
+
+        $updateMainId = LoloPinoyGrillBranchesSalesForm::find($request->mainId);
+        $updateMainId->total_amount_of_sales = $sum;
+        $updateMainId->total = $sum;
+        $updateMainId->save();
+
+        return response()->json(['sum'=>$sum, 'qty'=>$request->qty, 'amt'=>$amount, 'flavor'=>$flavor]);
+    }
+
     //save additional transactions
     public function addSalesAdditional(Request $request){
         $ids = Auth::user()->id;
@@ -3139,7 +4307,7 @@ class LoloPinoyGrillBranchesController extends Controller
          //get the date today
         $getDate =  date("Y-m-d");
 
-        //get transaction id
+        //get transaction id with trashed
         $getTransId = LoloPinoyGrillBranchesSalesForm::withTrashed()->find($request->transactionId);
 
         //compute 
@@ -3156,20 +4324,87 @@ class LoloPinoyGrillBranchesController extends Controller
             'date'=>$getDate,
             'qty'=>$request->quantity,
             'item_description'=>$request->itemDescription,
+            "flavor"=>$request->flavor,
+            'original_price'=>$request->originalPrice,
             'amount'=>$request->amount,
             'branch'=>$request->branch,
             "flag"=>$request->flag,
             'created_by'=>$name,
         ]);
         $addAdditional->save();
-
-
+        $getId = $addAdditional->id;
+       
+        
         //update store stock 
-        $updateStoreStock = LoloPinoyGrillBranchesStoreStock::find($request->foodId);
+        $updateStoreStock = LoloPinoyGrillBranchesStoreStock::find($request->foodId);   
+
+        $findStoreStock = LoloPinoyGrillBranchesStoreStock::find($request->foodId);  
+       
+        $productName = $findStoreStock->product_name;
+        $price = $findStoreStock->price;
+        $productIn = $findStoreStock->product_in;
+        $productOut = $findStoreStock->quantity;
+    
+        $flag = $request->flag;
+        $amount = $request->amount;
+
+        $rStock = $productIn - $request->quantity;
+
+    
+        if(LoloPinoyGrillBranchesStockInventory::where('product_name', $productName)
+                                                ->where('date', $getDate)
+                                                ->where('branch', $request->branch)
+                                                ->exists()){
+            $checkProductName = LoloPinoyGrillBranchesStockInventory::where('product_name', $productName)
+                                                            ->where('date', $getDate)
+                                                            ->where('branch', $request->branch)
+                                                            ->get();
+
+            $getId =  $checkProductName[0]->id;
+            $getSold = $checkProductName[0]->sold + $request->quantity;
+
+
+            $amount = $checkProductName[0]->amount + $amount;
+
+            $remainingStock = $checkProductName[0]->remaining_stock;
+
+            $calc = $remainingStock - $request->quantity;
+
+            $updateStockInventory = LoloPinoyGrillBranchesStockInventory::find($getId);
+            $updateStockInventory->opening_stock = $remainingStock;
+            $updateStockInventory->product_out = $getSold;
+            $updateStockInventory->sold = $getSold;
+            $updateStockInventory->remaining_stock = $calc;
+            $updateStockInventory->amount = $amount;    
+            $updateStockInventory->save();
+
+        }else{
+             //add items to stock Inventories
+             $addStockInventories = new LoloPinoyGrillBranchesStockInventory([
+                'user_id'=>$user->id,
+                'transaction_id'=>$request->transactionId,
+                'date'=>$getDate,
+                'product_name'=>$productName,
+                'flavor'=>$request->flavor,
+                'price'=>$price,
+                'opening_stock'=>$productIn,
+                'product_in'=>$productIn,
+                'product_out'=>$request->quantity,
+                'sold'=>$request->quantity,
+                'remaining_stock'=>$rStock,
+                'flag'=>$flag,
+                'branch'=>$request->branch,
+                'amount'=>$amount,
+            ]);
+            $addStockInventories->save();
+           
+        }
+
+        
         $updateStoreStock->product_in = $request->compute;
         $updateStoreStock->save();
     
-        return response()->json($getTransId->total_amount_of_sales);
+        return response()->json(['getTotalSales'=>$getTransId->total_amount_of_sales, 'getId'=>$getId]);
 
     }
 
@@ -3188,6 +4423,8 @@ class LoloPinoyGrillBranchesController extends Controller
                         'lolo_pinoy_grill_branches_sales_forms.branch',
                         'lolo_pinoy_grill_branches_sales_forms.qty',
                         'lolo_pinoy_grill_branches_sales_forms.item_description',
+                        'lolo_pinoy_grill_branches_sales_forms.original_price',
+                        'lolo_pinoy_grill_branches_sales_forms.flavor',
                         'lolo_pinoy_grill_branches_sales_forms.amount',
                         'lolo_pinoy_grill_branches_sales_forms.total_discounts_seniors_pwds',
                         'lolo_pinoy_grill_branches_sales_forms.total_amount_of_sales',
@@ -3199,9 +4436,8 @@ class LoloPinoyGrillBranchesController extends Controller
                         ->get();
 
         //getTransactions
-        $getTransactions = LoloPinoyGrillBranchesSalesForm::where('sf_id', $id)->get()->toArray();
-       
-        $flag = "Foods";
+        $getTransactions = LoloPinoyGrillBranchesSalesForm::where('sf_id', $id)->where('deleted_at', NULL)->get()->toArray();
+        
         $getBranches = DB::table(
                                 'lolo_pinoy_grill_branches_store_stocks')
                                 ->select(
@@ -3224,11 +4460,11 @@ class LoloPinoyGrillBranchesController extends Controller
                                 'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
                                 ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
                                 ->where('lolo_pinoy_grill_branches_store_stocks.branch', $type)
-                                ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flag)
+                                ->where('lolo_pinoy_grill_branches_store_stocks.flag', self::FOODS)
                                 ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'asc')
                                 ->get()->toArray();
 
-        $flagDrinks = "Drinks";
+       
         $getBranchDrinks = DB::table(
                                     'lolo_pinoy_grill_branches_store_stocks')
                                     ->select(
@@ -3251,7 +4487,7 @@ class LoloPinoyGrillBranchesController extends Controller
                                     'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
                                     ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
                                     ->where('lolo_pinoy_grill_branches_store_stocks.branch', $type)
-                                    ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flagDrinks)
+                                    ->where('lolo_pinoy_grill_branches_store_stocks.flag', self::DRINKS)
                                     ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'asc')
                                     ->get()->toArray();
 
@@ -3278,6 +4514,8 @@ class LoloPinoyGrillBranchesController extends Controller
             'date'=>$getDate,
             'qty'=>$request->quantity,
             'item_description'=>$request->itemDescription,
+            "flavor"=>$request->flavor,
+            "original_price"=>$request->originalPrice,
             'amount'=>$request->amount,
             'total_amount_of_sales'=>$request->amount,
             'total'=>$request->amount,
@@ -3288,8 +4526,74 @@ class LoloPinoyGrillBranchesController extends Controller
         $addNewSales->save();
         $insertId = $addNewSales->id; 
 
+
+
         //update the store stock inventory 
         $updateStoreStock = LoloPinoyGrillBranchesStoreStock::find($request->foodId);
+
+        $findStoreStock = LoloPinoyGrillBranchesStoreStock::find($request->foodId); 
+
+        $productName = $findStoreStock->product_name;
+        $price = $findStoreStock->price;
+        $productIn = $findStoreStock->product_in;
+        $productOut = $findStoreStock->quantity;
+    
+        $flag = $request->flag;
+        $amount = $request->amount;
+
+        $rStock = $productIn - $request->quantity;
+
+        
+        if(LoloPinoyGrillBranchesStockInventory::where('product_name', $productName)
+                                                ->where('date', $getDate)
+                                                ->where('branch', $request->branch)
+                                                ->exists()){
+            $checkProductName = LoloPinoyGrillBranchesStockInventory::where('product_name', $productName)
+                                                    ->where('date', $getDate)
+                                                    ->where('branch', $request->branch)
+                                                    ->get();
+
+            $getId =  $checkProductName[0]->id;
+            $getSold = $checkProductName[0]->sold + $request->quantity;
+
+
+            $amount = $checkProductName[0]->amount + $amount;
+
+            $remainingStock = $checkProductName[0]->remaining_stock;
+
+            $calc = $remainingStock - $request->quantity;
+
+            $updateStockInventory = LoloPinoyGrillBranchesStockInventory::find($getId);
+            $updateStockInventory->opening_stock = $remainingStock;
+            $updateStockInventory->product_out = $getSold;
+            $updateStockInventory->sold = $getSold;
+            $updateStockInventory->remaining_stock = $calc;
+            $updateStockInventory->amount = $amount;    
+            $updateStockInventory->save();
+        }else{
+            //add items to stock Inventories
+            $addStockInventories = new LoloPinoyGrillBranchesStockInventory([
+                'user_id'=>$user->id,
+                'transaction_id'=>$request->transactionId,
+                'date'=>$getDate,
+                'product_name'=>$productName,
+                'flavor'=>$request->flavor,
+                'price'=>$price,
+                'opening_stock'=>$productIn,
+                'product_in'=>$productIn,
+                'product_out'=>$request->quantity,
+                'sold'=>$request->quantity,
+                'remaining_stock'=>$rStock,
+                'flag'=>$flag,
+                'branch'=>$request->branch,
+                'amount'=>$amount,
+            ]);
+            $addStockInventories->save();
+
+        }
+   
+
+
         $updateStoreStock->product_in = $request->compute;
         $updateStoreStock->save();
 
@@ -3307,228 +4611,60 @@ class LoloPinoyGrillBranchesController extends Controller
     public function stockInventory(Request $request){
         $data =  $request->session()->get('sessionDeliveryInTransaction');
         
-        $branchUrgello = "Urgello";
-        $flagUrgello = "Foods";
-        $getStockStatusUrgellos = DB::table(
-                            'lolo_pinoy_grill_branches_store_stocks')
+        $getStockInventories = DB::table(
+                            'lolo_pinoy_grill_branches_stock_inventories')
                             ->select(
-                            'lolo_pinoy_grill_branches_store_stocks.id',
-                            'lolo_pinoy_grill_branches_store_stocks.user_id',
-                            'lolo_pinoy_grill_branches_store_stocks.date',
-                            'lolo_pinoy_grill_branches_store_stocks.dr_no',
-                            'lolo_pinoy_grill_branches_store_stocks.supplier',
-                            'lolo_pinoy_grill_branches_store_stocks.product_name',
-                            'lolo_pinoy_grill_branches_store_stocks.price',
-                            'lolo_pinoy_grill_branches_store_stocks.qty',
-                            'lolo_pinoy_grill_branches_store_stocks.unit',
-                            'lolo_pinoy_grill_branches_store_stocks.product_in',
-                            'lolo_pinoy_grill_branches_store_stocks.product_out',
-                            'lolo_pinoy_grill_branches_store_stocks.amount',
-                            'lolo_pinoy_grill_branches_store_stocks.branch',
-                            'lolo_pinoy_grill_branches_store_stocks.created_by',
-                            'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
-                            'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
-                            ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
-                            ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branchUrgello)
-                            ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flagUrgello)
-                            ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'desc')
+                            'lolo_pinoy_grill_branches_stock_inventories.id',
+                            'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                            'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                            'lolo_pinoy_grill_branches_stock_inventories.date',
+                            'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                            'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                            'lolo_pinoy_grill_branches_stock_inventories.price',
+                            'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                            'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                            'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                            'lolo_pinoy_grill_branches_stock_inventories.sold',
+                            'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                            'lolo_pinoy_grill_branches_stock_inventories.amount',
+                            'lolo_pinoy_grill_branches_stock_inventories.flag',
+                            'lolo_pinoy_grill_branches_stock_inventories.branch')
+                            ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                            ->orderBy('lolo_pinoy_grill_branches_stock_inventories.id', 'asc')
                             ->get()->toArray();
 
-            $flagUrgelloDrinks = "Drinks";
-            $getStockStatusUrgelloDrinks = DB::table(
-                                'lolo_pinoy_grill_branches_store_stocks')
+    $totalAmount = DB::table(
+                                'lolo_pinoy_grill_branches_stock_inventories')
                                 ->select(
-                                'lolo_pinoy_grill_branches_store_stocks.id',
-                                'lolo_pinoy_grill_branches_store_stocks.user_id',
-                                'lolo_pinoy_grill_branches_store_stocks.date',
-                                'lolo_pinoy_grill_branches_store_stocks.dr_no',
-                                'lolo_pinoy_grill_branches_store_stocks.supplier',
-                                'lolo_pinoy_grill_branches_store_stocks.product_name',
-                                'lolo_pinoy_grill_branches_store_stocks.price',
-                                'lolo_pinoy_grill_branches_store_stocks.qty',
-                                'lolo_pinoy_grill_branches_store_stocks.unit',
-                                'lolo_pinoy_grill_branches_store_stocks.product_in',
-                                'lolo_pinoy_grill_branches_store_stocks.product_out',
-                                'lolo_pinoy_grill_branches_store_stocks.amount',
-                                'lolo_pinoy_grill_branches_store_stocks.branch',
-                                'lolo_pinoy_grill_branches_store_stocks.created_by',
-                                'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
-                                'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
-                                ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
-                                ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branchUrgello)
-                                ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flagUrgelloDrinks)
-                                ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'desc')
-                                ->get()->toArray();
-    
-        $branchVelez = "Velez";
-        $flagVelez = "Foods";
-        $getStockStatusVelezes = DB::table(
-                            'lolo_pinoy_grill_branches_store_stocks')
-                            ->select(
-                            'lolo_pinoy_grill_branches_store_stocks.id',
-                            'lolo_pinoy_grill_branches_store_stocks.user_id',
-                            'lolo_pinoy_grill_branches_store_stocks.date',
-                            'lolo_pinoy_grill_branches_store_stocks.dr_no',
-                            'lolo_pinoy_grill_branches_store_stocks.supplier',
-                            'lolo_pinoy_grill_branches_store_stocks.product_name',
-                            'lolo_pinoy_grill_branches_store_stocks.qty',
-                            'lolo_pinoy_grill_branches_store_stocks.unit',
-                            'lolo_pinoy_grill_branches_store_stocks.product_in',
-                            'lolo_pinoy_grill_branches_store_stocks.product_out',
-                            'lolo_pinoy_grill_branches_store_stocks.amount',
-                            'lolo_pinoy_grill_branches_store_stocks.branch',
-                            'lolo_pinoy_grill_branches_store_stocks.created_by',
-                            'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
-                            'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
-                            ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
-                            ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branchVelez)
-                            ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flagVelez)
-                            ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'desc')
-                            ->get()->toArray();
+                                'lolo_pinoy_grill_branches_stock_inventories.id',
+                                'lolo_pinoy_grill_branches_stock_inventories.user_id',
+                                'lolo_pinoy_grill_branches_stock_inventories.transaction_id',
+                                'lolo_pinoy_grill_branches_stock_inventories.date',
+                                'lolo_pinoy_grill_branches_stock_inventories.product_name',
+                                'lolo_pinoy_grill_branches_stock_inventories.flavor',
+                                'lolo_pinoy_grill_branches_stock_inventories.price',
+                                'lolo_pinoy_grill_branches_stock_inventories.opening_stock',
+                                'lolo_pinoy_grill_branches_stock_inventories.product_in',
+                                'lolo_pinoy_grill_branches_stock_inventories.product_out',
+                                'lolo_pinoy_grill_branches_stock_inventories.sold',
+                                'lolo_pinoy_grill_branches_stock_inventories.remaining_stock',
+                                'lolo_pinoy_grill_branches_stock_inventories.amount',
+                                'lolo_pinoy_grill_branches_stock_inventories.flag',
+                                'lolo_pinoy_grill_branches_stock_inventories.branch')
+                                ->where('lolo_pinoy_grill_branches_stock_inventories.branch', $data)
+                                ->sum('lolo_pinoy_grill_branches_stock_inventories.amount');
 
-            $flagVelezDrinks = "Drinks";
-            $getStockStatusVelezDrinks = DB::table(
-                                'lolo_pinoy_grill_branches_store_stocks')
-                                ->select(
-                                'lolo_pinoy_grill_branches_store_stocks.id',
-                                'lolo_pinoy_grill_branches_store_stocks.user_id',
-                                'lolo_pinoy_grill_branches_store_stocks.date',
-                                'lolo_pinoy_grill_branches_store_stocks.dr_no',
-                                'lolo_pinoy_grill_branches_store_stocks.supplier',
-                                'lolo_pinoy_grill_branches_store_stocks.product_name',
-                                'lolo_pinoy_grill_branches_store_stocks.qty',
-                                'lolo_pinoy_grill_branches_store_stocks.unit',
-                                'lolo_pinoy_grill_branches_store_stocks.product_in',
-                                'lolo_pinoy_grill_branches_store_stocks.product_out',
-                                'lolo_pinoy_grill_branches_store_stocks.amount',
-                                'lolo_pinoy_grill_branches_store_stocks.branch',
-                                'lolo_pinoy_grill_branches_store_stocks.created_by',
-                                'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
-                                'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
-                                ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
-                                ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branchVelez)
-                                ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flagVelezDrinks)
-                                ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'desc')
-                                ->get()->toArray();
-    
-        $branchBanilad = "Banilad";
-        $flagBanilad = "Foods";
-        $getStockStatusBanilads = DB::table(
-                            'lolo_pinoy_grill_branches_store_stocks')
-                            ->select(
-                            'lolo_pinoy_grill_branches_store_stocks.id',
-                            'lolo_pinoy_grill_branches_store_stocks.user_id',
-                            'lolo_pinoy_grill_branches_store_stocks.date',
-                            'lolo_pinoy_grill_branches_store_stocks.dr_no',
-                            'lolo_pinoy_grill_branches_store_stocks.supplier',
-                            'lolo_pinoy_grill_branches_store_stocks.product_name',
-                            'lolo_pinoy_grill_branches_store_stocks.price',
-                            'lolo_pinoy_grill_branches_store_stocks.qty',
-                            'lolo_pinoy_grill_branches_store_stocks.unit',
-                            'lolo_pinoy_grill_branches_store_stocks.product_in',
-                            'lolo_pinoy_grill_branches_store_stocks.product_out',
-                            'lolo_pinoy_grill_branches_store_stocks.amount',
-                            'lolo_pinoy_grill_branches_store_stocks.branch',
-                            'lolo_pinoy_grill_branches_store_stocks.created_by',
-                            'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
-                            'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
-                            ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
-                            ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branchBanilad)
-                            ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flagBanilad)
-                            ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'desc')
-                            ->get()->toArray();
-
-        $flagBaniladDrinks = "Drinks";
-        $getStockStatusBaniladDrinks = DB::table(
-                                'lolo_pinoy_grill_branches_store_stocks')
-                                ->select(
-                                'lolo_pinoy_grill_branches_store_stocks.id',
-                                'lolo_pinoy_grill_branches_store_stocks.user_id',
-                                'lolo_pinoy_grill_branches_store_stocks.date',
-                                'lolo_pinoy_grill_branches_store_stocks.dr_no',
-                                'lolo_pinoy_grill_branches_store_stocks.supplier',
-                                'lolo_pinoy_grill_branches_store_stocks.product_name',
-                                'lolo_pinoy_grill_branches_store_stocks.price',
-                                'lolo_pinoy_grill_branches_store_stocks.qty',
-                                'lolo_pinoy_grill_branches_store_stocks.unit',
-                                'lolo_pinoy_grill_branches_store_stocks.product_in',
-                                'lolo_pinoy_grill_branches_store_stocks.product_out',
-                                'lolo_pinoy_grill_branches_store_stocks.amount',
-                                'lolo_pinoy_grill_branches_store_stocks.branch',
-                                'lolo_pinoy_grill_branches_store_stocks.created_by',
-                                'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
-                                'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
-                                ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
-                                ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branchBanilad)
-                                ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flagBaniladDrinks)
-                                ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'desc')
-                                ->get()->toArray();
-    
-            $branchGqs = "GQS";
-            $flagGQS = "Foods";
-            $getStockStatusGqses = DB::table(
-                                'lolo_pinoy_grill_branches_store_stocks')
-                                ->select(
-                                'lolo_pinoy_grill_branches_store_stocks.id',
-                                'lolo_pinoy_grill_branches_store_stocks.user_id',
-                                'lolo_pinoy_grill_branches_store_stocks.date',
-                                'lolo_pinoy_grill_branches_store_stocks.dr_no',
-                                'lolo_pinoy_grill_branches_store_stocks.supplier',
-                                'lolo_pinoy_grill_branches_store_stocks.product_name',
-                                'lolo_pinoy_grill_branches_store_stocks.price',
-                                'lolo_pinoy_grill_branches_store_stocks.qty',
-                                'lolo_pinoy_grill_branches_store_stocks.unit',
-                                'lolo_pinoy_grill_branches_store_stocks.product_in',
-                                'lolo_pinoy_grill_branches_store_stocks.product_out',
-                                'lolo_pinoy_grill_branches_store_stocks.amount',
-                                'lolo_pinoy_grill_branches_store_stocks.branch',
-                                'lolo_pinoy_grill_branches_store_stocks.created_by',
-                                'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
-                                'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
-                                ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
-                                ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branchGqs)
-                                ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flagGQS)
-                                ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'desc')
-                                ->get()->toArray();
-
-            $flagGQSDrinks = "Drinks";
-            $getStockStatusGqsDrinks = DB::table(
-                                'lolo_pinoy_grill_branches_store_stocks')
-                                ->select(
-                                'lolo_pinoy_grill_branches_store_stocks.id',
-                                'lolo_pinoy_grill_branches_store_stocks.user_id',
-                                'lolo_pinoy_grill_branches_store_stocks.date',
-                                'lolo_pinoy_grill_branches_store_stocks.dr_no',
-                                'lolo_pinoy_grill_branches_store_stocks.supplier',
-                                'lolo_pinoy_grill_branches_store_stocks.product_name',
-                                'lolo_pinoy_grill_branches_store_stocks.price',
-                                'lolo_pinoy_grill_branches_store_stocks.qty',
-                                'lolo_pinoy_grill_branches_store_stocks.unit',
-                                'lolo_pinoy_grill_branches_store_stocks.product_in',
-                                'lolo_pinoy_grill_branches_store_stocks.product_out',
-                                'lolo_pinoy_grill_branches_store_stocks.amount',
-                                'lolo_pinoy_grill_branches_store_stocks.branch',
-                                'lolo_pinoy_grill_branches_store_stocks.created_by',
-                                'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
-                                'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
-                                ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
-                                ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branchGqs)
-                                ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flagGQSDrinks)
-                                ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'desc')
-                                ->get()->toArray();
-                    
+   
         return view('lolo-pinoy-grill-branches-stock-inventory', compact('data', 
-        'getStockStatusUrgellos', 'getStockStatusUrgelloDrinks', 
-        'getStockStatusVelezes', 'getStockStatusVelezDrinks',
-        'getStockStatusBanilads',  'getStockStatusBaniladDrinks', 'getStockStatusGqses', 'getStockStatusGqsDrinks'));
+            'getStockInventories', 'totalAmount'));
     }
+
+
 
     public function stockStatus(Request $request){
         $data =  $request->session()->get('sessionDeliveryInTransaction'); 
         
-        $branchUrgello = "Urgello";
-        $flagUrgello = "Foods";
-        $getStockStatusUrgellos = DB::table(
+        $getStockStatuses = DB::table(
                             'lolo_pinoy_grill_branches_store_stocks')
                             ->select(
                             'lolo_pinoy_grill_branches_store_stocks.id',
@@ -3547,13 +4683,12 @@ class LoloPinoyGrillBranchesController extends Controller
                             'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
                             'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
                             ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
-                            ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branchUrgello)
-                            ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flagUrgello)
+                            ->where('lolo_pinoy_grill_branches_store_stocks.branch', $data)
+                            ->where('lolo_pinoy_grill_branches_store_stocks.flag', self::FOODS)
                             ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'desc')
                             ->get()->toArray();
 
-        $flagUrgelloDrinks = "Drinks";
-        $getStockStatusUrgelloDrinks = DB::table(
+        $getStockStatusDrinks = DB::table(
                                 'lolo_pinoy_grill_branches_store_stocks')
                                 ->select(
                                 'lolo_pinoy_grill_branches_store_stocks.id',
@@ -3572,142 +4707,13 @@ class LoloPinoyGrillBranchesController extends Controller
                                 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
                                 'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
                                 ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
-                                ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branchUrgello)
-                                ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flagUrgelloDrinks)
-                                ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'desc')
-                                ->get()->toArray();
-
-        $branchVelez = "Velez";
-        $flagVelez = "Foods";
-        $getStockStatusVelezes = DB::table(
-                            'lolo_pinoy_grill_branches_store_stocks')
-                            ->select(
-                            'lolo_pinoy_grill_branches_store_stocks.id',
-                            'lolo_pinoy_grill_branches_store_stocks.user_id',
-                            'lolo_pinoy_grill_branches_store_stocks.date',
-                            'lolo_pinoy_grill_branches_store_stocks.dr_no',
-                            'lolo_pinoy_grill_branches_store_stocks.supplier',
-                            'lolo_pinoy_grill_branches_store_stocks.product_name',
-                            'lolo_pinoy_grill_branches_store_stocks.qty',
-                            'lolo_pinoy_grill_branches_store_stocks.unit',
-                            'lolo_pinoy_grill_branches_store_stocks.product_in',
-                            'lolo_pinoy_grill_branches_store_stocks.product_out',
-                            'lolo_pinoy_grill_branches_store_stocks.amount',
-                            'lolo_pinoy_grill_branches_store_stocks.branch',
-                            'lolo_pinoy_grill_branches_store_stocks.created_by',
-                            'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
-                            'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
-                            ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
-                            ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branchVelez)
-                            ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flagVelez)
-                            ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'desc')
-                            ->get()->toArray();
-
-        $flagVelezDrinks = "Drinks";
-        $getStockStatusVelezDrinks = DB::table(
-                                'lolo_pinoy_grill_branches_store_stocks')
-                                ->select(
-                                'lolo_pinoy_grill_branches_store_stocks.id',
-                                'lolo_pinoy_grill_branches_store_stocks.user_id',
-                                'lolo_pinoy_grill_branches_store_stocks.date',
-                                'lolo_pinoy_grill_branches_store_stocks.dr_no',
-                                'lolo_pinoy_grill_branches_store_stocks.supplier',
-                                'lolo_pinoy_grill_branches_store_stocks.product_name',
-                                'lolo_pinoy_grill_branches_store_stocks.qty',
-                                'lolo_pinoy_grill_branches_store_stocks.unit',
-                                'lolo_pinoy_grill_branches_store_stocks.product_in',
-                                'lolo_pinoy_grill_branches_store_stocks.product_out',
-                                'lolo_pinoy_grill_branches_store_stocks.amount',
-                                'lolo_pinoy_grill_branches_store_stocks.branch',
-                                'lolo_pinoy_grill_branches_store_stocks.created_by',
-                                'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
-                                'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
-                                ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
-                                ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branchVelez)
-                                ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flagVelezDrinks)
-                                ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'desc')
-                                ->get()->toArray();
-           
-        $branchBanilad = "Banilad";
-        $flagBanilad = "Foods";
-        $getStockStatusBanilads = DB::table(
-                            'lolo_pinoy_grill_branches_store_stocks')
-                            ->select(
-                            'lolo_pinoy_grill_branches_store_stocks.id',
-                            'lolo_pinoy_grill_branches_store_stocks.user_id',
-                            'lolo_pinoy_grill_branches_store_stocks.date',
-                            'lolo_pinoy_grill_branches_store_stocks.dr_no',
-                            'lolo_pinoy_grill_branches_store_stocks.supplier',
-                            'lolo_pinoy_grill_branches_store_stocks.product_name',
-                            'lolo_pinoy_grill_branches_store_stocks.qty',
-                            'lolo_pinoy_grill_branches_store_stocks.unit',
-                            'lolo_pinoy_grill_branches_store_stocks.product_in',
-                            'lolo_pinoy_grill_branches_store_stocks.product_out',
-                            'lolo_pinoy_grill_branches_store_stocks.amount',
-                            'lolo_pinoy_grill_branches_store_stocks.branch',
-                            'lolo_pinoy_grill_branches_store_stocks.created_by',
-                            'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
-                            'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
-                            ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
-                            ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branchBanilad)
-                            ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flagBanilad)
-                            ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'desc')
-                            ->get()->toArray();
-
-            $flagBaniladDrinks = "Drinks";
-            $getStockStatusBaniladDrinks = DB::table(
-                                'lolo_pinoy_grill_branches_store_stocks')
-                                ->select(
-                                'lolo_pinoy_grill_branches_store_stocks.id',
-                                'lolo_pinoy_grill_branches_store_stocks.user_id',
-                                'lolo_pinoy_grill_branches_store_stocks.date',
-                                'lolo_pinoy_grill_branches_store_stocks.dr_no',
-                                'lolo_pinoy_grill_branches_store_stocks.supplier',
-                                'lolo_pinoy_grill_branches_store_stocks.product_name',
-                                'lolo_pinoy_grill_branches_store_stocks.qty',
-                                'lolo_pinoy_grill_branches_store_stocks.unit',
-                                'lolo_pinoy_grill_branches_store_stocks.product_in',
-                                'lolo_pinoy_grill_branches_store_stocks.product_out',
-                                'lolo_pinoy_grill_branches_store_stocks.amount',
-                                'lolo_pinoy_grill_branches_store_stocks.branch',
-                                'lolo_pinoy_grill_branches_store_stocks.created_by',
-                                'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
-                                'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
-                                ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
-                                ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branchBanilad)
-                                ->where('lolo_pinoy_grill_branches_store_stocks.flag', $flagBaniladDrinks)
-                                ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'desc')
-                                ->get()->toArray();
-    
-    
-            $branchGqs = "GQS";
-            $getStockStatusGqses = DB::table(
-                                'lolo_pinoy_grill_branches_store_stocks')
-                                ->select(
-                                'lolo_pinoy_grill_branches_store_stocks.id',
-                                'lolo_pinoy_grill_branches_store_stocks.user_id',
-                                'lolo_pinoy_grill_branches_store_stocks.date',
-                                'lolo_pinoy_grill_branches_store_stocks.dr_no',
-                                'lolo_pinoy_grill_branches_store_stocks.supplier',
-                                'lolo_pinoy_grill_branches_store_stocks.product_name',
-                                'lolo_pinoy_grill_branches_store_stocks.qty',
-                                'lolo_pinoy_grill_branches_store_stocks.unit',
-                                'lolo_pinoy_grill_branches_store_stocks.product_in',
-                                'lolo_pinoy_grill_branches_store_stocks.product_out',
-                                'lolo_pinoy_grill_branches_store_stocks.amount',
-                                'lolo_pinoy_grill_branches_store_stocks.branch',
-                                'lolo_pinoy_grill_branches_store_stocks.created_by',
-                                'lolo_pinoy_grill_branches_store_stock_products.store_stock_id',
-                                'lolo_pinoy_grill_branches_store_stock_products.product_id_no')
-                                ->join('lolo_pinoy_grill_branches_store_stock_products', 'lolo_pinoy_grill_branches_store_stocks.id', '=', 'lolo_pinoy_grill_branches_store_stock_products.store_stock_id')
-                                ->where('lolo_pinoy_grill_branches_store_stocks.branch', $branchGqs)
+                                ->where('lolo_pinoy_grill_branches_store_stocks.branch', $data)
+                                ->where('lolo_pinoy_grill_branches_store_stocks.flag', self::DRINKS)
                                 ->orderBy('lolo_pinoy_grill_branches_store_stocks.id', 'desc')
                                 ->get()->toArray();
 
       
-        return view('lolo-pinoy-grill-branches-stock-status', compact('data', 'getStockStatusUrgellos', 
-        'getStockStatusUrgelloDrinks',
-        'getStockStatusVelezes', 'getStockStatusVelezDrinks', 'getStockStatusBanilads', 'getStockStatusGqses'));
+        return view('lolo-pinoy-grill-branches-stock-status', compact('data', 'getStockStatuses', 'getStockStatusDrinks'));
     }
     
     public function viewBills($id){
@@ -4578,11 +5584,13 @@ class LoloPinoyGrillBranchesController extends Controller
     public function index(Request $request)
     {
         $data =  $request->session()->get('sessionBranch');
-
+    
         $getDateToday = date("Y-m-d");
         $getTransactionBranches = LoloPinoyGrillBranchesSalesForm::where('sf_id', NULL)
                                 ->where('branch', $data)
                                 ->where('date', $getDateToday)
+                                ->where('branch', $data)
+                                ->orderBy('id', 'desc')
                                 ->withTrashed()
                                 ->get()->toArray();
                                 

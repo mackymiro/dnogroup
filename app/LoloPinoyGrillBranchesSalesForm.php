@@ -22,6 +22,8 @@ class LoloPinoyGrillBranchesSalesForm extends Model
         'branch',
         'qty',
         'item_description',
+        'flavor',
+        'original_price',
         'amount',
         'total_discounts_seniors_pwds',
         'senior_citizen_label',

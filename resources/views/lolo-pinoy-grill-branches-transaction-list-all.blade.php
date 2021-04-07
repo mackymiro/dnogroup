@@ -1,5 +1,17 @@
 @extends('layouts.lolo-pinoy-grill-branches-app')
 @section('content')
+<script>
+ 
+  $(function() {
+        $(".datepicker").datepicker({
+            dateFormat: "yy-mm-dd",
+        });
+      }); 
+</script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <div id="wrapper">
      @include('sidebar.sidebar-lolo-pinoy-grill-branches')
      <div id="content-wrapper">
@@ -21,6 +33,61 @@
                      <div class="col-lg-12">
                          <div class="card mb-3">
                             <div class="card-header">
+                                <i class="fas fa-search"></i>
+                                Search Date
+                            </div>
+                            <div class="card-body">
+                                 <div class="form-group">
+                                    <div class="form-row">
+                                        
+                                        <div class="col-lg-4">
+                                            <form action="{{ action('LoloPinoyGrillBranchesController@getTransactionList') }}" method="get">
+                                            {{ csrf_field() }}
+                                                <h1>Search Date</h1>
+                                                <input type="text" name="selectDate" class="datepicker form-control"  required/>
+                                                <br>
+                                                <input type="hidden" name="branch" value="{{ Session::get('sessionBranch') }}" />
+                                                <button type="submit" class="btn btn-success btn-lg"><i class="fa fa-search" aria-hidden="true"></i> Search Date</button>
+                                            </form>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <form action="{{ action('LoloPinoyGrillBranchesController@getMultipleTransactionList')}}" method="get"> 
+                                     {{ csrf_field() }}
+                                    <div class="form-group">
+                                        <div class="form-row">
+                                            <div class="col-lg-4">
+                                            <h1>Search Start Date</h1>
+                                            <input type="text" name="startDate" class="datepicker form-control"  required/>
+                                                
+                                            </div>
+                                            <div class="col-lg-4">
+                                            <h1>Search End Date</h1>
+
+                                            <input type="text" name="endDate" class="datepicker form-control"  required/>
+                                            
+                                            </div>
+                                        
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-row">
+                                            <br>
+                                            <input type="hidden" name="branch" value="{{ Session::get('sessionBranch') }}" />
+                                            <button type="submit" class="btn btn-success  btn-lg"><i class="fa fa-search" aria-hidden="true"></i> Search Date</button>
+                                            
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                         </div>
+                     </div>
+                </div>
+                <div class="row">
+                     <div class="col-lg-12">
+                         <div class="card mb-3">
+                            <div class="card-header">
                                 <i class="fa fa-file-invoice" aria-hidden="true"></i>
                                 Transaction List All
                               
@@ -37,7 +104,7 @@
                                           <th >Total Discounts (Seniors/PWD's)</th>
                                           <th >Gift Cert</th>
                                         
-                                          <th>Created By</th>
+                                          <th>Cashier</th>
                                         </tr>
                                       </thead>
                                     <tfoot>	
@@ -49,14 +116,14 @@
                                         <th >Total Discounts (Seniors/PWD's)</th>
                                         <th >Gift Cert</th>
                                       
-                                        <th>Created By</th>
+                                        <th>Cashier</th>
                                       </tr>
                                     </tfoot>
                                     <tbody>
                                         @foreach($getTransactionBranches as $getTransactionBranch)
                                       <tr>
                                          <td>{{ $getTransactionBranch['date']}}</td>
-                                         <td>{{ $getTransactionBranch['id']}}</td>
+                                         <td><a href="/lolo-pinoy-grill-branches/transaction-list-details/{{ $getTransactionBranch['id']}}">{{ $getTransactionBranch['id']}}</a></td>
                                         <td>{{ $getTransactionBranch['branch']}}</td>
                                         <td class="bg-danger" style="color:#fff;"><?= number_format($getTransactionBranch['total_amount_of_sales'], 2); ?></td>
                                         <td><?= number_format($getTransactionBranch['total_discounts_seniors_pwds']); ?></td>

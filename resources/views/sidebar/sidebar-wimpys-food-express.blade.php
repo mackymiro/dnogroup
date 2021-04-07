@@ -41,7 +41,7 @@
           
         </div>
       </li>
-      <li class="nav-item dropdown">
+     <!-- <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-receipt"></i>
           <span>Catering Event<br> Delivery Checklist</span>
@@ -51,7 +51,7 @@
           <a class="dropdown-item" href="{{ url('wimpys-food-express') }}">Lists</a>
           
         </div>
-      </li>
+      </li>-->
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="fas fa-receipt"></i>

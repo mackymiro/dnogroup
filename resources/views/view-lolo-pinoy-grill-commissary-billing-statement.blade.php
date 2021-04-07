@@ -79,30 +79,67 @@
                 					<thead>
                                       <tr>
                                         <th class="bg-info" style="color:white;">DATE</th>
+										@if($viewBillingStatement[0]->order === "Delivery Receipt")
+										<th class="bg-info" style="color:white;">ORDER</th>
+										<th class="bg-info" style="color:white;">QTY</th>
+										<th class="bg-info" style="color:white;">UNIT PRICE</th>
+										<th class="bg-info" style="color:white;">UNIT</th>
+										@else
                                         <th class="bg-info" style="color:white;">INVOICE #</th>
+										<th class="bg-info" style="color:white;">QTY</th>
+										<th class="bg-info" style="color:white;">TOTAL KLS</th>
+										<th class="bg-info" style="color:white;">UNIT PRICE</th>
+										@endif
                                         <th class="bg-info" style="color:white;">DESCRIPTION</th>
+
                                         <th class="bg-info" style="color:white;">AMOUNT</th>
                                       </tr>
                                     </thead>
                                      <tbody>
                                       <tr>
 	                                      <td>{{ $viewBillingStatement[0]->date_of_transaction }}</td>
+										  @if($viewBillingStatement[0]->order === "Delivery Receipt")
+										  <td>{{ $viewBillingStatement[0]->dr_no }}</td>
+										  <td>{{ $viewBillingStatement[0]->qty }}</td>
+										  <td>{{ $viewBillingStatement[0]->unit_price }}</td>
+										  <td>{{ $viewBillingStatement[0]->unit }}</td>
+										  @else
 	                                      <td>{{ $viewBillingStatement[0]->invoice_number }}</td>
-	                                      <td>{{ $viewBillingStatement[0]->description }}</td>
+										  <td>{{ $viewBillingStatement[0]->qty }}</td>
+										  <td>{{ $viewBillingStatement[0]->total_kls }}</td>
+										  <td>{{ $viewBillingStatement[0]->unit_price }}</td>
+										 
+										  @endif
+										  <td>{{ $viewBillingStatement[0]->description }}</td>
+	                                    
 	                                      <td><?php echo number_format($viewBillingStatement[0]->amount, 2); ?></td>
                                       </tr>
                                       @foreach($billingStatements as $billingStatement)
                                       <tr>
 	                                        <td>{{ $billingStatement['date_of_transaction'] }}</td>
+											@if($billingStatement['order'] === "Delivery Receipt")
+											<td>{{ $billingStatement['dr_no'] }}</td>
+										
+											<td>{{ $billingStatement['qty'] }}</td>
+											<td>{{ $billingStatement['unit_price'] }}</td>
+											<td>{{ $billingStatement['unit'] }}</td>
+											@else
 	                                        <td>{{ $billingStatement['invoice_number'] }}</td>
-	                                        <td>{{ $billingStatement['description'] }}</td>
+											<td>{{ $billingStatement['qty'] }}</td>
+											<td>{{ $billingStatement['total_kls'] }}</td>
+											<td>{{ $billingStatement['unit_price'] }}</td>
+											
+											@endif
+											<td>{{ $billingStatement['description'] }}</td>
 	                                        <td><?php echo number_format($billingStatement['amount'], 2);?></td>
                                       </tr>
                                       @endforeach
                                       <tr>
 	                                        <td></td>
 	                                        <td></td>
-	                                      
+											<td></td>
+											<td></td>
+											<td></td>
 	                                        <td><strong>Total</strong></td>
 	                                        <td>₱ <?php echo number_format($sum, 2)?></td>
                                       </tr>

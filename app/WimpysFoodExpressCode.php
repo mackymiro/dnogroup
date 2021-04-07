@@ -10,6 +10,7 @@ class WimpysFoodExpressCode extends Model
     protected $fillable = [
         'user_id',
         'wimpys_food_express_code',
+        'cbf_no',
         'module_id',
         'module_code',
         'module_name',

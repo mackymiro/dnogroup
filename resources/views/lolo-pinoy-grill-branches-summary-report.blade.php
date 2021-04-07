@@ -319,7 +319,7 @@
                                     <div class="tab-pane fade" id="all" role="tabpanel" aria-labelledby="all-tab">
                                     <br>
                                          <div class="float-right">
-                                             <a href="{{ action('LoloPinoyGrillBranchesController@printSummary') }}"><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
+                                             <a href=""><i class="fa fa-print fa-4x" aria-hidden="true"></i></a>
                                         </div>
                                        
                                         <br>

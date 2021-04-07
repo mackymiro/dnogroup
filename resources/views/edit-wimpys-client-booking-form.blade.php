@@ -138,6 +138,7 @@
             </div>
             <div class="row">
                  <div class="col-lg-4">
+                     @if($menuItem->type_of_package != "Cooking Charge - 0.00")
                       <div class="card mb-3">
                             <div class="card-header">
                             <i class="fas fa-soup"></i>
@@ -378,6 +379,9 @@
                                 </div>
                             </div>
                       </div>
+
+                      @endif
+                      @if($menuItem->type_of_package != "Cooking Charge - 0.00")
                       <div class="card mb-3">
                             <div class="card-header">
                             <i class="fas fa-soup"></i>
@@ -415,9 +419,79 @@
                                 </div>
                             </div>
                       </div>
+                      @endif
+                      @if($menuItem->type_of_package == "Cooking Charge - 0.00")
+                      <div class="card mb-3" >
+                          <div class="card-header">
+                              <i class="fas fa-soup"></i>
+                                Additional Orders
+                           </div>
+                           <div class="card-body">
+                              <div class="form-group">
+                                    <div class="form-row">
+                                        <div class="col-lg-12">
+                                           <form action="{{ action('WimpysFoodExpressController@addItemCookingCharge', $menuItem->id)}}" method="post">
+                                            {{csrf_field()}}
+                                            <label>Qty</label>
+                                            <input type="text" name="qty" class="form-control"  onkeypress="return isNumber(event)" autocomplete="off"/>
+                                            <br>
+                                            
+                                            <label>Item</label>
+                                            <input type="text" name="item" class="form-control"  autocomplete="off" />
+                                            <br>
+                                            <label>Amount</label>
+                                            <input type="text" name="amount" class="form-control" onkeypress="return isNumber(event)" autocomplete="off" />
+                                           
+                                            <br>
+                                            <br>
+                                            	<div>
+                                                
+                                                <input type="hidden" name="menuId" value="{{ $menuItem->id }}" />
+                                                <button type="submit" class="btn btn-primary btn-lg float-right">Add</button>
+                                              
+                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                           </div>
+                      </div>
+                      <div class="card mb-3" >
+                          <div class="card-header">
+                              <i class="fas fa-soup"></i>
+                                Amount
+                           </div>
+                           <div class="card-body">
+                              <div class="form-group">
+                                    <div class="form-row">
+                                        <div class="col-lg-12">
+                                           <form action="{{ action('WimpysFoodExpressController@addItemCookingCharge', $menuItem->id)}}" method="post">
+                                            {{csrf_field()}}
+                                            <label>Description</label>
+                                            <input type="text" name="description" class="form-control" autocomplete="off" required/>
+                                           
+                                            <br>
+                                            <label>Less</label>
+                                            <input type="text" name="less" class="form-control"  onkeypress="return isNumber(event)" autocomplete="off" required/>
+                                           
+                                            <br>
+                                            	<div>
+                                                <input type="hidden" name="menuCat" value="lessAmount" />
+                                                <input type="hidden" name="menuId" value="{{ $menuItem->id }}" />
+                                                <button type="submit" class="btn btn-primary btn-lg float-right">Add</button>
+                                              
+                                            </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                           </div>
+                      </div>
+                      @endif
                  </div>
                  
                  <div class="col-lg-8">
+                      @if($menuItem->type_of_package != "Cooking Charge - 0.00")
                       <div class="card mb-3">
                             <div class="card-header">
                             <i class="fas fa-hamburger"></i>
@@ -534,7 +608,64 @@
                                 </table>
                             </div>
                       </div>
+                      @endif
+                      @if($menuItem->type_of_package == "Cooking Charge - 0.00")
+                      <div class="card mb-3">
+                            <div class="card-header">
+                            <i class="fas fa-hamburger"></i>
+                              Menu</div>
+                            <div class="card-body">
+                               @foreach($getMenuItems as $getMenuItem)
+                                <p id="deletedId{{ $getMenuItem['id'] }}">
+                                  Qty-{{ $getMenuItem['qty']}}, {{ $getMenuItem['item'] }},
+                                  Amount - {{ $getMenuItem['amount']}} 
+                                  <a href="javascript:void" onclick="confirmDelete('{{ $getMenuItem['id']}}')"><i class="fas fa-times-circle" style="font-size:20px;"></i></a>
+                                  <input type="hidden" id="menuId" name="menuId" value="{{ $menuItem->id }}" />
+                                </p>
+                                @endforeach
+                            </div>
+                      </div>
+                      <div class="card mb-3">
+                            <div class="card-header">
+                            <i class="fas fa-receipt"></i>
+                              Amount</div>
+                            <div class="card-body">
+                            <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                          <th style="width:20%">Total</th>
+                                          <td>
+                                             <?= number_format($menuItem->total, 2)?> 
+                                          </td>
+                                          
+                                        </tr>
+                                        <tr>
+                                          <th style="width:20%">Less</th>
+                                          <td>  
+                                          {{ $menuItem->description }} - 
+                                          <?= number_format($menuItem->less, 2)?> 
+                                          </td>
+                                          
+                                        </tr>
+                                        <tr>
+                                          <th style="width:20%">Balance</th>
+                                          <?php
+                                            $total = $menuItem->total - $menuItem->less;
+                                          ?>
+                                          <td>
+                                             <?= number_format($total, 2) ?>
+                                          </td>
+                                          
+                                        </tr>
+                                     
+                                       
+                                    </thead>
+                                </table>
+                            </div>
+                      </div>
+                      @endif
                  </div>
+                
             </div>
 
         
@@ -564,13 +695,15 @@
             { text:'SET A - 300', value: 'SET A - 300' },
             { text:'SET B - 350', value: 'SET B - 350' },
             { text:'SET C - 400', value: 'SET C - 400'},
-            { text:'EXECUTIVE SET - 600', value: 'EXECUTIVE SET - 600'}
+            { text:'EXECUTIVE SET - 600', value: 'EXECUTIVE SET - 600'},
+            { text:'Cooking Charge - 0.00', value: 'Cooking Charge - 0.00'},
           ]
       }
     })
 </script>
 <script>
-  
+ 
+
   const confirmDelete = (id) =>{
     const x = confirm("Do you want to delete this?"); 
     const menuId = $("#menuId").val();

@@ -67,7 +67,11 @@
                                         <td style="text-align:center; border: 1px solid black;">{{ $getBillingStatement->module_code}}{{ $getBillingStatement->wimpys_food_express_code}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getBillingStatement->date }}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getBillingStatement->bill_to}}</td>
-                                        <td style="text-align:center; border: 1px solid black;">{{ $getBillingStatement->order }}</td>
+                                        <td style="text-align:center; border: 1px solid black;">{{ $getBillingStatement->order }}
+											@if($getBillingStatement->order === "DR")
+												- {{ $getBillingStatement->dr_no}}
+											@endif
+										</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getBillingStatement->period_cover}}</td>
                                         <td style="text-align:center; border: 1px solid black;"><?= number_format($getBillingStatement->total_amount, 2)?></td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getBillingStatement->created_by }}</td>
@@ -80,7 +84,7 @@
                                 <thead>
                                     <tr>
                                         <th width="15%"  style="text-align:center; border: 1px solid black;">Total:</th>
-                                        <th  style="text-align:center; border: 1px solid black;"><?php //number_format($totalAmountCashes, 2);?></th>
+                                        <th  style="text-align:center; border: 1px solid black;"><?= number_format($totalAmount, 2);?></th>
                                     </tr>
                                 </thead>
                             </table>

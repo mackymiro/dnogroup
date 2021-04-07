@@ -126,9 +126,7 @@
                                           <?php
                                               $prodArr = $getDeliveryReceipt['product_id'];
                                               $prodExp = explode("-", $prodArr);
-
                                           ?>
-                                      
                                           <option value="0">--Please Select--</option>
                                           @foreach($getRawMaterials as $getRawMaterial)
                                           <option value="{{ $getRawMaterial->id}}-{{ $getRawMaterial->product_id_no}}" <?= ($prodExp[1] == $getRawMaterial->product_id_no) ? 'selected="selected"' : '' ?>>{{ $getRawMaterial->product_id_no}}</option>
@@ -137,7 +135,9 @@
                                     </div>
                                  <div class="col-md-1">
                                   <label>QTY</label>
-                                  <input type="text" name="qty" class="form-control"  value="{{ $getDeliveryReceipt['qty']}}" />
+                                  <input type="text" name="qty" class="qty form-control"  value="{{ $getDeliveryReceipt['qty']}}" 
+                                    onkeypress="return isNumber(event)"
+                                    onchange="javascript:checkQty()" autocomplete="off" />
                                 </div>
                               	<div class="col-md-2">
                                   <label>Unit</label>
@@ -156,14 +156,17 @@
                     					<div class="col-md-2">
                                 <label>Unit Price</label>
                                 <div id="unitPriceClose">
-                                  <input type="text" name="unitPrice" class="form-control"  value="{{ $getDeliveryReceipt['unit_price']}}"   readonly="readonly"/>
+                                  <input type="text"  name="unitPrice" class="unitPrice form-control"  value="{{ $getDeliveryReceipt['unit_price']}}"   readonly="readonly"/>
                                 </div>
                                 <div id="unitPrice"></div>
                               </div>
                               <div class="col-md-2">
-                                <label>Amount</label>
-                                <input type="text" name="unitPrice" class="form-control"  disabled="disabled"
-                                value="<?= number_format($getDeliveryReceipt['price'], 2)?>" />
+                                  <label>Amount</label>
+                                  <div class="curAmount">
+                                    <input type="text" name="amount" class="form-control"  disabled="disabled"
+                                    value="<?= number_format($getDeliveryReceipt['price'], 2)?>" />
+                                  </div>
+                                  <div class="amountNew"></div>
                               </div>
                              		</div>
                              	</div>
@@ -208,7 +211,9 @@
                                     </div>
                                      <div class="col-md-12">
                                         <label>QTY</label>
-                                        <input type="text" name="qty" class="form-control" required="required" />
+                                        <input type="text" name="qtyAdd" class="qtyAdd form-control" required="required" 
+                                        onkeypress="return isNumber(event)"
+                                        onchange="javascript:checkQtyAdd()" autocomplete="off"/>
                                     </div>
                                     <div class="col-md-12">
                                       <label>Remaining Stock</label>
@@ -234,9 +239,16 @@
                                       <div class="col-md-12">
                                         <label>Unit Price</label>
                                         <div id="unitPriceCloseAdd">
-                                            <input type="text" name="unitPrice" class="form-control" disabled />
+                                            <input type="text"  name="unitPrice" class="form-control" disabled />
                                         </div>
                                         <div id="unitPriceAdd"></div>
+                                      </div>
+                                      <div class="col-md-12">
+                                        <label>Amount</label>
+                                        <div class="curAmount">
+                                            <input type="text" name="amount" class="form-control" disabled />
+                                        </div>
+                                        <div class="amountNew"></div>
                                       </div>
                                 </div>
                             </div>
@@ -294,7 +306,7 @@
                                   <div class="col-md-2">
                                       <label>Unit Price</label>
                                       <div id="unitPrice2-{{ $dReceipt['id']}}">
-                                        <input type="text" name="unitPrice" class="form-control"  value="{{ $dReceipt['unit_price']}}" disabled/>
+                                        <input type="text"  name="unitPrice" class="form-control"  value="{{ $dReceipt['unit_price']}}" disabled/>
                                       </div>
                                       <div id="unitPrice2-{{ $dReceipt['id']}}"></div>
                                   </div>
@@ -372,6 +384,63 @@
 </script>
 
 <script>
+   const isNumber =(evt) => {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+      }
+      return true;
+    };
+
+    checkQtyAdd = function(){
+      const quantity = parseInt($(".qtyAdd").val());
+      if(quantity === 1){
+          const unitPrice = parseInt($(".unitPrice").val());
+          
+          const calc = parseInt(unitPrice) * parseInt(quantity);
+          const tot = calc.toFixed();
+
+          $(".curAmount").hide();
+          $(".amountNew").html(`<input type="text" name="amount" id="amount" value="${tot}" class="form-control" readonly>`);
+     
+         
+      }else{
+          const unitPrice = parseInt($(".unitPrice").val());
+          const calc = parseInt(unitPrice) * parseInt(quantity);
+          const tot = calc.toFixed();
+         
+          $(".curAmount").hide();
+          $(".amountNew").html(`<input type="text" name="amount" id="amount" value="${tot}" class="form-control" readonly>`);
+     
+      }
+    }
+
+
+    checkQty = function(){
+      const quantity = parseInt($(".qty").val());
+     
+      if(quantity === 1){
+          const unitPrice = parseInt($(".unitPrice").val());
+          const calc = parseInt(unitPrice) * parseInt(quantity);
+          const tot = calc.toFixed();
+
+          $(".curAmount").hide();
+          $(".amountNew").html(`<input type="text" name="amount" id="amount" value="${tot}" class="form-control" readonly>`);
+     
+         
+      }else{
+          const unitPrice = parseInt($(".unitPrice").val());
+         
+          const calc = parseInt(unitPrice) * parseInt(quantity);
+          const tot = calc.toFixed();
+          
+          $(".curAmount").hide();
+          $(".amountNew").html(`<input type="text" name="amount" id="amount" value="${tot}" class="form-control" readonly>`);
+     
+      }
+    }
+
     const confirmDelete = (id) => {
         const x = confirm("Do you want to delete this?");
         const drId = $('#drId').val();
@@ -427,7 +496,7 @@
                      $("#unitCloseAdd").hide();
                      $("#itemDescAdd").html('<input type="text" name="itemDescription" value="<?= $getId[0]->product_name; ?>" class="form-control" readonly="readonly">')
                      $("#itemDescCloseAdd").hide();
-                     $("#unitPriceAdd").html('<input type="text" name="unitPrice" value="<?= $getId[0]->unit_price; ?>" class="form-control" readonly="readonly" >');
+                     $("#unitPriceAdd").html('<input type="text"  name="unitPrice" value="<?= $getId[0]->unit_price; ?>" class="unitPrice form-control" readonly="readonly" >');
                      $("#unitPriceCloseAdd").hide();
                 }
 

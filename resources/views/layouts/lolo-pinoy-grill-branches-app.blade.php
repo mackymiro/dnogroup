@@ -43,6 +43,13 @@
           doRefresh(); 
         });
 
+
+        /*var auto_refresh = setInterval(
+         function () {
+            let rows = $('#rows').html();
+            console.log(rows);
+        }, 2000);*/
+
   </script>
 </head>
 <body>
@@ -86,6 +93,8 @@
                     Sales
                   @elseif(Auth::user()['role_type'] == 3)
                     User
+                  @elseif(Auth::user()['role_type'] == 4)
+                    Cashier
                   @endif                  
            </strong>
            </div>
@@ -129,14 +138,14 @@
       <script src="{{ asset('vendor/jquery.easing.min.js') }}"></script>
 
       <!-- Page level plugin JavaScript-->
-      <script src="{{ asset('vendor/Chart.min.js') }}"></script>
+      <!--<script src="{{ asset('vendor/Chart.min.js') }}"></script>-->
       <script src="{{ asset('vendor/jquery.dataTables.js') }}"></script>
       <script src="{{ asset('vendor/dataTables.bootstrap4.js') }} "></script>
 
       <!-- Custom scripts for all pages-->
       <script src="{{ asset('js/sb-admin.min.js') }} "></script>
       <script src="{{ asset('js/datatables-demo.js') }} "></script>
-      <script src="{{ asset('js/chart-area-demo.js') }} "></script>
+      <!--<script src="{{ asset('js/chart-area-demo.js') }} "></script>-->
      
 </body>
 </html>

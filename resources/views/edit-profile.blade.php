@@ -10,36 +10,8 @@
           <span>Dashboard</span>
         </a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{ url('lolo-pinoy-lechon-de-cebu') }}">
-          <i class="fas fa-book"></i>
-          <span>Lolo Pinoy Lechon de Cebu</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{ url('lolo-pinoy-grill-commissary') }}">
-          <i class="fas fa-book"></i>
-          <span>Lolo Pinoy Grill Commissary</span>
-        </a>
-      </li>
-       <li class="nav-item">
-        <a class="nav-link" href="{{ url('lolo-pinoy-grill-branches') }}">
-          <i class="fas fa-book"></i>
-          <span>Lolo Pinoy Grill Branches</span>
-        </a>
-      </li>
-       <li class="nav-item">
-        <a class="nav-link" href="{{ url('mr-potato') }}">
-          <i class="fas fa-book"></i>
-          <span>Mr Potato</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{ url('ribos-bar') }}">
-          <i class="fas fa-book"></i>
-          <span>Ribos Bar</span>
-        </a>
-      </li>
+   
+     
      
      
     </ul>

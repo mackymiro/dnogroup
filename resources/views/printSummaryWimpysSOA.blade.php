@@ -69,7 +69,11 @@
                                     <tr  style="border:1px solid black;">
                                         <td style="text-align:center; border: 1px solid black;">{{ $getStatementOfAccount->date }}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getStatementOfAccount->module_code}}{{ $getStatementOfAccount->wimpys_food_express_code}}</td>
-                                        <td style="text-align:center; border: 1px solid black;">{{ $getStatementOfAccount->order }}</td>
+                                        <td style="text-align:center; border: 1px solid black;">{{ $getStatementOfAccount->order }}
+                                            @if($getStatementOfAccount->order === "DR")
+                                                - {{ $getStatementOfAccount->dr_no }}
+                                            @endif
+                                        </td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getStatementOfAccount->bill_to}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getStatementOfAccount->bs_no}}</td>
                                         <td style="text-align:center; border: 1px solid black;">{{ $getStatementOfAccount->period_cover}}</td>
@@ -86,11 +90,15 @@
                             <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Total Amount:</th>
+                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Total Balance:</th>
+                                        <th  style="text-align:center; border: 1px solid black;"><?= number_format($totalBalance, 2);?></th>
+                                    </tr>
+                                    <tr>
+                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Total Paid Amount:</th>
                                         <th  style="text-align:center; border: 1px solid black;"><?= number_format($totalSOA, 2);?></th>
                                     </tr>
                                     <tr>
-                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Total Remaining Balance:</th>
+                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Total Unpaid Amount:</th>
                                         <th  style="text-align:center; border: 1px solid black;"><?= number_format($totalRemainingBalance, 2);?></th>
                                     </tr>
                                 </thead>

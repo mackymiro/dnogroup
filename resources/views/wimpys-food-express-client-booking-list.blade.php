@@ -27,6 +27,7 @@
 				  						<tr>
 				  							<th>Action</th>
                         <th>Client Booking No</th>
+                        <th>CBF No</th>
                         <th>Client Name</th>
 			  								<th>Date of Event</th>
 			  								<th>Time of Event</th>
@@ -41,6 +42,7 @@
                       <tr>
 				  							<th>Action</th>
                         <th>Client Booking No</th>
+                        <th>CBF No</th>
                         <th>Client Name</th>
 			  								<th>Date of Event</th>
 			  								<th>Time of Event</th>
@@ -53,7 +55,7 @@
 				  					</tfoot>
 				  					<tbody>
                     @foreach($clientBookingLists as $clientBookingList)
-                    <tr>
+                    <tr id="deletedId{{ $clientBookingList['id']}}">
                         <td>
                         <a href="/wimpys-food-express/{{ $clientBookingList['id'] }}/edit-client-booking-form " title="Edit"><i class="fas fa-pencil-alt"></i></a>
                         @if(Auth::user()['role_type'] == 1)
@@ -62,19 +64,26 @@
                             <a href="/wimpys-food-express/{{ $clientBookingList['id']}}/view-client-booking" title="View"><i class="fas fa-low-vision"></i></a>
     
                         </td>
-                        <td>
+                        <td style="width:30%;">
                             @foreach($clientBookingList->client_bookings as $clientBooking)
                                 @if($clientBooking->module_name === "Client Booking")
                                     {{ $clientBooking->module_code }} {{ $clientBooking->wimpys_food_express_code  }}
                                 @endif
                             @endforeach    
                         </td>
-                        <td>{{ $clientBookingList['client']}}</td>
-                        <td>{{ $clientBookingList['date_of_event'] }}</td>
-                        <td>{{ $clientBookingList['time_of_event']}}</td>
+                        <td>
+                            @foreach($clientBookingList->client_bookings as $clientBooking)
+                                @if($clientBooking->module_name === "Client Booking")
+                                    {{ $clientBooking->cbf_no }} 
+                                @endif
+                            @endforeach   
+                        </td>
+                        <td  style="width:20%;">{{ $clientBookingList['client']}}</td>
+                        <td  style="width:20%;">{{ $clientBookingList['date_of_event'] }}</td>
+                        <td  style="width:25%;">{{ $clientBookingList['time_of_event']}}</td>
                         <td>{{ $clientBookingList['no_of_people']}}</td>
-                        <td>{{ $clientBookingList['motiff']}}</td>
-                        <td>{{ $clientBookingList['type_of_package']}}</td>
+                        <td  style="width:40%;">{{ $clientBookingList['motiff']}}</td>
+                        <td  style="width:25%;">{{ $clientBookingList['type_of_package']}}</td>
                         <td><?= number_format($clientBookingList['total'], 2)?></td>
                         <td>{{ $clientBookingList['created_by']}}</td>
                     </tr>

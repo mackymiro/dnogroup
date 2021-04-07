@@ -38,11 +38,45 @@
                                 <div class="form-group">
                                   <div class="form-row">
                                    <?php foreach($getBranches as $getBranch): ?>
+                                    <?php if($getBranch->product_in == 0): ?>
                                      <div class="col-lg-4">
-                                        <button type="button" class="bbq btn btn-warning btn-lg" data-toggle="modal" data-target="#bbq" data-id="<?= $getBranch->id ?>" data-menu="<?= $getBranch->product_name?>" data-price="<?= number_format($getBranch->price, 2) ?>" data-available="<?= $getBranch->product_in ?>" data-flag="<?= $getBranch->flag; ?>"><?= $getBranch->product_name?> ₱ <?= number_format($getBranch->price, 2) ?></button>
+                                        <button 
+                                            type="button" 
+                                            class="bbq btn btn-danger btn-lg" 
+                                          
+                                            data-id="<?= $getBranch->id ?>" 
+                                            data-menu="<?= $getBranch->product_name?>" 
+                                            data-price="<?= number_format($getBranch->price, 2) ?>" 
+                                            data-available="<?= $getBranch->product_in ?>" 
+                                            data-flag="<?= $getBranch->flag; ?>">
+                                            <?= $getBranch->product_name?> 
+                                            ₱ <?= number_format($getBranch->price, 2) ?>
+                                            <br>
+                                            NOT Available
+                                        </button>
                                         <br>
                                         <br>
-                                     </div>                         
+                                     </div>    
+                                     <?php else:?>
+                                        <div class="col-lg-4">
+                                        <button 
+                                            type="button" 
+                                            class="bbq btn btn-warning btn-lg" 
+                                            data-toggle="modal" 
+                                            data-target="#bbq" 
+                                            data-id="<?= $getBranch->id ?>" 
+                                            data-menu="<?= $getBranch->product_name?>" 
+                                            data-price="<?= number_format($getBranch->price, 2) ?>" 
+                                            data-available="<?= $getBranch->product_in ?>" 
+                                            data-flag="<?= $getBranch->flag; ?>">
+                                            <?= $getBranch->product_name?> 
+                                            ₱ <?= number_format($getBranch->price, 2) ?>
+                                        </button>
+                                        <br>
+                                        <br>
+                                     </div> 
+
+                                     <?php endif; ?>                     
                                      <?php endforeach ; ?>  
                                      
                                   </div>
@@ -135,7 +169,7 @@
                        <input type="hidden" id="softDrinksName" />
                        <input type="hidden" id="softDrinksPcs" />
                        <input type="hidden" id="drinkId" />
-                      
+                       <input type="hidden" class="getPcs" />
                     </div>
                 </div>
             </div>
@@ -147,44 +181,7 @@
         </div>
     </div>
     </div><!--end of MOdal -->
-      <!-- Modal -->
-    <div class="modal fade" id="food" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5  id="exampleModalLongTitle"><i class="fas fa-utensils"></i>Menu</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <h1 >Available Pcs - <span id="availPcs"></span></h1>
-            <h1 class="modal-title"></h1>
-            
-            <div class="form-group">
-                <div class="form-row">
-                   
-                    <div class="col-lg-4">
-                        <label>Quantity</label>
-                       <input type="number" name="quantity" class="quantityFood quantity form-control" value="1"  onchange="javascript:checkPriceFood()"/>
-                    </div>
-                    <div class="col-lg-4">
-                        <label>Price</label>
-                       <div id="priceFood"></div>
-                       <input type="text" id="originalPriceFood" name="price" class=" form-control" readonly />
-                       <input type="hidden" id="foodNameNotBbq" />
-                       <input type="hidden" id="pcsFood" />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" onclick="closeFood()" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
-            <button type="button" onclick="addFood()" class="btn btn-success btn-lg">Add</button>
-        </div>
-        </div>
-    </div>
-    </div><!--end of MOdal -->
+   
      <!-- Modal -->
     <div class="modal fade" id="bbq" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -200,7 +197,7 @@
             <h1 class="modal-title"></h1>
             <div class="form-group">
                 <div class="form-row">
-                    <div id="flavor" class="col-lg-4">
+                    <div id="flavorShow" class="col-lg-4">
                         <label>Flavor</label>
                         <select id="flavor" name="flavor" class="form-control">
                             <option value="Regular">Regular</option>
@@ -215,10 +212,12 @@
                        <label>Price</label>
                        <div id="price"></div>
                        <input type="text" id="originalPrice" name="price" class=" form-control" readonly />
+                      
                        <input type="hidden" id="foodName" />
                        <input type="hidden" id="pcsBbq" />
                        <input type="hidden" id="foodId" />
                        <input type="hidden" id="flag" />
+                       <input type="hidden" id="getPcs" />
                     </div>
                 </div>
             </div>
@@ -242,6 +241,7 @@
         </div>
       </footer>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
 
@@ -259,9 +259,9 @@
         modal.find('.modal-title').text(recipient);
         if(recipient === "PORK REGULAR BBQ" || recipient === "PORK JUMBO BBQ" || recipient === "CHICKEN BBQ B&W"
         || recipient === "CHICKEN BBQ Q- LEG"){
-            $("#flavor").show();
+            $("#flavorShow").show();
         }else{
-            $("#flavor").hide();
+            $("#flavorShow").hide();
         }
 
         modal.find('.modal-title').text(recipient);
@@ -276,22 +276,7 @@
         
     })
 
-    $('#food').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) // Button that triggered the modal
-        var recipient = button.data('menu') // Extract info from data-* attributes
-        var price = button.data('price');
-        var available = button.data('available');
-        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-        var modal = $(this);
-        modal.find('.modal-title').text(recipient);
-        modal.find('.modal-body #availPcs').text(available);
-        modal.find('.modal-body #pcsFood').val(available);
-        modal.find('.modal-body #originalPriceFood').val(price);
-        modal.find('.modal-body #foodNameNotBbq').val(recipient);
-    
-    })
-
+  
     $('#softdrinks').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var recipient = button.data('menu') // Extract info from data-* attributes
@@ -304,6 +289,7 @@
         var modal = $(this);
         modal.find('.modal-title').text(recipient);
         modal.find('.modal-body #availPcs').text(available);
+        modal.find('.modal-body .getPcs').val(available);
         modal.find('.modal-body #softDrinksPcs').val(available);
         modal.find('.modal-body #drinkId').val(drinkId);
         modal.find('.modal-body #originalPriceDrinks').val(price);
@@ -315,20 +301,41 @@
     $("#originalPriceDrinks").show();
     checkDrinks = function(){
         const originalPriceDrinks = $("#originalPriceDrinks").val();
-        const quantity = $(".quantityDrinks").val();
+        const quantity = parseInt($(".quantityDrinks").val());
         const compute = parseInt(quantity) * parseInt(originalPriceDrinks);
         const result = compute.toFixed(2);
 
-        if(quantity == "1"){
+        const getPcs = $(".getPcs").val();
+        if(quantity === 1){
             $("#originalPriceDrinks").show();
             $("#priceDrinks").hide();
         }else{
-            $("#originalPriceDrinks").hide();
-            $("#priceDrinks").show();
-            $("#priceDrinks").html(`<input type="text" id="newPriceDrinks" name="price" value="${result}" class="form-control" readonly>`);
+            if(quantity > getPcs){
+                let roundPcs = getPcs;
+                let resPcs = roundPcs.split(".");
+                $(".quantityDrinks").val(resPcs[0]);
+
+                const oPrice = $("#originalPriceDrinks").val();
+                const qt = parseInt($(".quantityDrinks").val());
+                const mul = parseInt(qt) * parseInt(oPrice);
+                const res = mul.toFixed();
+                $("#originalPriceDrinks").hide();
+                $("#priceDrinks").show();
+                $("#priceDrinks").html(`<input type="text" id="newPriceDrinks" name="price" value="${res}" class="form-control" readonly>`);
+     
+            }else{
+                $("#originalPriceDrinks").hide();
+                $("#priceDrinks").show();
+                $("#priceDrinks").html(`<input type="text" id="newPriceDrinks" name="price" value="${result}" class="form-control" readonly>`);
+     
+            }
+
         }
 
     }
+
+   
+   
 
     const isNumber =(evt) => {
         evt = (evt) ? evt : window.event;
@@ -420,106 +427,45 @@
         }
     }
 
-    $("#priceFood").hide();  
-    checkPriceFood = function(){
-        const originalPrice = $("#originalPriceFood").val();
-        const quantity = $(".quantityFood").val();
-        const compute = parseInt(quantity) * parseInt(originalPrice);
-        const result = compute.toFixed(2);
-
-        if(quantity == "1"){
-            $("#originalPriceFood").show();
-            $("#priceFood").hide();
-        }else{
-            $("#originalPriceFood").hide();
-            $("#priceFood").show();
-            $("#priceFood").html(`<input type="text" id="newPriceFood" name="price" value="${result}" class="form-control" readonly>`);
-        }
-    }
-
-
-    const addFood = () =>{
-        const quantityFood = $(".quantityFood").val();
-        const originalPriceFood = $("#originalPriceFood").val();
-        const newPriceFood = $("#newPriceFood").val();
-        const foodNameNotBbq = $("#foodNameNotBbq").val();
-        const branch = "{{ Session::get('sessionBranch') }}";
-        const availPcs = $("#aPcs").val();
-        const foodId = $("#foodId").val();
-
-        if(quantityFood == "1"){
-            //make ajax call
-            $.ajax({
-                type: 'POST',
-                url: '/lolo-pinoy-grill-branches/sales-form/add-transaction',
-                data:{
-                    _method:'post',
-                    "_token":"{{ csrf_token() }}",
-                    "quantity":quantityFood,
-                    "itemDescription":foodNameNotBbq,
-                    "branch":branch,
-                    "amount":originalPriceFood,
-                },
-                success:function(data){
-                    console.log(data);
-                    setTimeout(function(){
-                        window.location = "/lolo-pinoy-grill-branches/{{ Session::get('sessionBranch') }}/sales-form/transaction/" + data;
-                    }, 1000);
-                
-                },
-                error:function(data){
-                    console.log('Error', data);
-                }
-            });
-
-            $('#food').modal('hide');
-        }else{
-           
-            //make ajax call
-            $.ajax({
-                type: 'POST',
-                url: '/lolo-pinoy-grill-branches/sales-form/add-transaction',
-                data:{
-                    _method:'post',
-                    "_token":"{{ csrf_token() }}",
-                    "quantity":quantityFood,
-                    "itemDescription":foodNameNotBbq,
-                    "branch":branch,
-                    "amount":newPriceFood,
-                },
-                success:function(data){
-                    console.log(data);
-                    setTimeout(function(){
-                        window.location = "/lolo-pinoy-grill-branches/{{ Session::get('sessionBranch') }}/sales-form/transaction/" + data;
-                    }, 1000);
-                
-                },
-                error:function(data){
-                    console.log('Error', data);
-                }
-            });
-
-            $('#food').modal('hide');
-            closeFood();
-        }
-    }
-
+  
 
 
     $("#price").hide();  
     checkPrice = function(){
         const originalPrice = $("#originalPrice").val();
-        const quantity = $(".quantityBBQ").val();
-
+        const quantity = parseInt($(".quantityBBQ").val());
         const compute = parseInt(quantity) * parseInt(originalPrice);
         const result = compute.toFixed(2);
-        if(quantity == "1"){
+
+        const getPcs = $("#getPcs").val();
+        if(quantity === 1){
             $("#originalPrice").show();
             $("#price").hide();
+
         }else{
-            $("#originalPrice").hide();
-            $("#price").show();
-            $("#price").html(`<input type="text" id="newPrice" name="price" value="${result}" class="form-control" readonly>`);
+           
+            if(quantity > getPcs){
+                let roundPcs = getPcs;
+                let resPcs = roundPcs.split(".");
+                $(".quantityBBQ").val(resPcs[0]);
+
+                const oPrice = $("#originalPrice").val();
+                const qt = parseInt($(".quantityBBQ").val());
+                const mul = parseInt(qt) * parseInt(oPrice);
+                const res = mul.toFixed(2);
+                $("#originalPrice").hide();
+                $("#price").show();
+                $("#price").html(`<input type="text" id="newPrice" name="price" value="${res}" class="form-control" readonly>`);
+     
+            }else{
+                $("#originalPrice").hide();
+                $("#price").show();
+                $("#price").html(`<input type="text" id="newPrice" name="price" value="${result}" class="form-control" readonly>`);
+
+            }
+
+           
+
         }
                    
     };
@@ -530,41 +476,43 @@
         $("#priceDrinks").hide();
         $("#originalPriceDrinks").show();
         
-    }
+    };
 
-    const closeFood = () =>{
-        $(".quantityFood").val('1');
-        $("#priceFood").hide();
-        $("#originalPriceFood").show();
-    }
+  
   
     const closeBBQ = () =>{
         $(".quantityBBQ").val('1');
         $("#price").hide();
         $("#originalPrice").show();
-    }
+    };
 
     const addBBQ = () =>{
-        const quantity = $(".quantityBBQ").val();
+        const quantity = parseInt($(".quantityBBQ").val());
         const newPrice = $("#newPrice").val();
         const originalPrice = $("#originalPrice").val();
         const flavor = $("#flavor").val();
         const foodName = $("#foodName").val();
 
-        const combineFoodName = `${foodName} - ${flavor}`;
-        const branch = "{{ Session::get('sessionBranch') }}";
 
-        const availPcs = $("#pcsBbq").val();
-        
-        const foodId = $("#foodId").val();
+        if(foodName === "PORK REGULAR BBQ" || foodName === "PORK JUMBO BBQ" || foodName === "CHICKEN BBQ B&W"
+        || foodName === "CHICKEN BBQ Q-LEG"){
+            $("#flavorShow").show();
+            const combineFoodName = `${foodName}`;
+            const branch = "{{ Session::get('sessionBranch') }}";
 
-        //compute minus available pcs to quantity
-        const compute = availPcs - quantity;
+            const availPcs = $("#pcsBbq").val();
+            
+            const foodId = $("#foodId").val();
 
-        const flag = $("#flag").val();
-    
-        if(quantity == "1"){
+            //compute minus available pcs to quantity
+            const compute = availPcs - quantity;
+
+            const flag = $("#flag").val();
+
+            if(quantity === 1){
             console.log(originalPrice);
+          
+
             const table =  document.getElementById("output");
             const row = document.createElement("tr");
             
@@ -591,6 +539,8 @@
                     "_token":"{{ csrf_token() }}",
                     "quantity":quantity,
                     "itemDescription":combineFoodName,
+                    "flavor":flavor,
+                    "originalPrice":originalPrice,
                     "branch":branch,
                     "amount":originalPrice,
                     "compute":compute,
@@ -613,6 +563,7 @@
            
         }else{
             console.log(newPrice);
+
             const table =  document.getElementById("output");
             const row = document.createElement("tr");
             
@@ -640,6 +591,8 @@
                     "_token":"{{ csrf_token() }}",
                     "quantity":quantity,
                     "itemDescription":combineFoodName,
+                    "flavor":flavor,
+                    "originalPrice":originalPrice,
                     "branch":branch,
                     "amount":newPrice,
                     "compute":compute,
@@ -660,6 +613,126 @@
            
             $('#bbq').modal('hide');
         }
+       
+    }else{
+        $("#flavorShow").hide();
+        const combineFoodName = `${foodName}`;
+        const branch = "{{ Session::get('sessionBranch') }}";
+
+        const availPcs = $("#pcsBbq").val();
+        
+        const foodId = $("#foodId").val();
+
+        //compute minus available pcs to quantity
+        const compute = availPcs - quantity;
+
+        const flag = $("#flag").val();
+        if(quantity === 1){
+            console.log(originalPrice);
+          
+            
+            const table =  document.getElementById("output");
+            const row = document.createElement("tr");
+            
+            const item = row.insertCell(0);
+            const qty = row.insertCell(1);
+            const amount = row.insertCell(2);
+
+    
+            qty.innerHTML = `${quantity}`;
+            item.innerHTML = `${foodName}`;
+            amount.innerHTML = `${originalPrice}`;
+              
+            row.append(qty);
+            row.append(item);
+            row.append(amount);
+            document.getElementById("rows").appendChild(row);
+
+            //make ajax call
+            $.ajax({
+                type: 'POST',
+                url: '/lolo-pinoy-grill-branches/sales-form/add-transaction',
+                data:{
+                    _method:'post',
+                    "_token":"{{ csrf_token() }}",
+                    "quantity":quantity,
+                    "itemDescription":combineFoodName,
+                    "originalPrice":originalPrice,
+                    "branch":branch,
+                    "amount":originalPrice,
+                    "compute":compute,
+                    "foodId":foodId,
+                    "flag":flag,
+                },
+                success:function(data){
+                    console.log(data);
+                    setTimeout(function(){
+                        window.location = "/lolo-pinoy-grill-branches/{{ Session::get('sessionBranch') }}/sales-form/transaction/" + data;
+                    }, 1000);
+                
+                },
+                error:function(data){
+                    console.log('Error', data);
+                }
+            });
+
+            $('#bbq').modal('hide');
+           
+        }else{
+            console.log(newPrice);
+
+            const table =  document.getElementById("output");
+            const row = document.createElement("tr");
+            
+            const item = row.insertCell(0);
+            const qty = row.insertCell(1);
+            const amount = row.insertCell(2);
+    
+           
+            qty.innerHTML = `${quantity}`;
+            item.innerHTML = `${foodName}`;
+            amount.innerHTML = `${newPrice}`;
+           
+            
+            row.append(qty);
+            row.append(item);
+            row.append(amount);
+            document.getElementById("rows").appendChild(row);
+
+             //make ajax call
+             $.ajax({
+                type: 'POST',
+                url: '/lolo-pinoy-grill-branches/sales-form/add-transaction',
+                data:{
+                    _method:'post',
+                    "_token":"{{ csrf_token() }}",
+                    "quantity":quantity,
+                    "itemDescription":combineFoodName,
+                    "originalPrice":originalPrice,
+                    "branch":branch,
+                    "amount":newPrice,
+                    "compute":compute,
+                    "foodId":foodId,
+                    "flag":flag,
+                },
+                success:function(data){
+                    console.log(data);
+                    setTimeout(function(){
+                        window.location = "/lolo-pinoy-grill-branches/{{ Session::get('sessionBranch') }}/sales-form/transaction/" + data;
+                    }, 1000);
+                
+                },
+                error:function(data){
+                    console.log('Error', data);
+                }
+             });
+           
+            $('#bbq').modal('hide');
+        }
+       
+        
+    }
+    
        
         
     }

@@ -79,7 +79,13 @@
                                                         @endif
                                                     @endforeach
                                                 </td>
-                                                <td><p style="width:160px;">{{ $statementOfAccount->order }}</p></td>
+                                                <td><p style="width:160px;">{{ $statementOfAccount->order }}
+                                                    @if($statementOfAccount->order === "DR")
+                                                      - {{ $statementOfAccount->dr_no }}
+                                                    @endif
+                                                </p>
+                                                
+                                                </td>
                                                 <td><p style="width:160px;">{{ $statementOfAccount->bill_to}}</p></td> 
                                                 <td><p style="width:140px;">{{ $statementOfAccount->bs_no }}</p></td>
                                                

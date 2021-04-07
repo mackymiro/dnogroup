@@ -91,7 +91,17 @@
                           		  <thead>
                                       <tr>
                                         <th style="height: 1%; text-align: center;">DATE</th>
+										@if($printBillingStatement[0]->order === "Delivery Receipt")
+										<th style="height: 1%; text-align: center;">ORDER</th>
+										<th style="height: 1%; text-align: center;">QTY</th>
+										<th style="height: 1%; text-align: center;">UNIT PRICE</th>
+										<th style="height: 1%; text-align: center;">UNIT</th>
+										@else
                                         <th style="height: 1%; text-align: center;">INVOICE #</th>
+										<th style="height: 1%; text-align: center;">QTY</th>
+										<th style="height: 1%; text-align: center;">TOTAL KLS</th>
+										<th style="height: 1%; text-align: center;">UNIT PRICE</th>
+										@endif
                                         <th style="height: 1%; text-align: center;">DESCRIPTION</th>
                                         <th style="height: 1%; text-align: center;">AMOUNT</th>
                                       </tr>
@@ -99,16 +109,39 @@
                                   <tbody>
                                   		<tr style="border:1px solid black;">
                                       <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->date_of_transaction }}</td>
+									  @if($printBillingStatement[0]->order === "Delivery Receipt")
+										<td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->dr_no }}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->qty }}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->unit_price }}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->unit }}</td>
+									  @else
                                       <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->invoice_number }}</td>
-                                      <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->description }}</td>
-                                      <td style="text-align:center; border: 1px solid black;"><?php echo number_format($printBillingStatement[0]->amount, 2); ?></td>
+									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->qty }}</td>
+									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->total_kls }}</td>
+									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->unit_price }}</td>
+									 
+									  @endif
+									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->description }}</td>
+                                      <td style="text-align:center; border: 1px solid black;"><?= number_format($printBillingStatement[0]->amount, 2); ?></td>
                                   	 	</tr>
                                   	 	 @foreach($billingStatements as $billingStatement)
                                         <tr style="border:1px solid black;">
                                           <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['date_of_transaction'] }}</td>
-                                          <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['invoice_number'] }}</td>
-                                          <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['description'] }}</td>
-                                          <td style="text-align:center; border: 1px solid black;"><?php echo number_format($billingStatement['amount'], 2);?></td>
+										  @if($billingStatement['order'] === "Delivery Receipt")
+											<td style="text-align:center; border: 1px solid black;">{{ $billingStatement['dr_no'] }}</td>
+											
+											<td style="text-align:center; border: 1px solid black;">{{ $billingStatement['qty'] }}</td>
+											<td style="text-align:center; border: 1px solid black;">{{ $billingStatement['unit_price'] }}</td>
+											<td style="text-align:center; border: 1px solid black;">{{ $billingStatement['unit'] }}</td>
+										  @else
+										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['invoice_number'] }}</td>
+										  	<td style="text-align:center; border: 1px solid black;">{{ $billingStatement['qty'] }}</td>
+											<td style="text-align:center; border: 1px solid black;">{{ $billingStatement['total_kls'] }}</td>
+											<td style="text-align:center; border: 1px solid black;">{{ $billingStatement['unit_price'] }}</td>
+											
+										  @endif
+										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['description'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;"><?= number_format($billingStatement['amount'], 2);?></td>
                                         </tr> 
                                         @endforeach
                                       
@@ -116,8 +149,11 @@
 	                                       <tr style="border:1px solid black;">
 	                                        <td style=" border: 1px solid black;"></td>
 	                                        <td style=" border: 1px solid black;"></td>
+											<td style=" border: 1px solid black;"></td>
+											<td style=" border: 1px solid black;"></td>
+											<td style=" border: 1px solid black;"></td>
 	                                        <td style=" border: 1px solid black;"><strong>Total</strong></td>
-	                                        <td style=" text-align:center; border: 1px solid black;"> <?php echo number_format($sum, 2)?></td>
+	                                        <td style=" text-align:center; border: 1px solid black;"> <?= number_format($sum, 2)?></td>
 	                                      </tr>
                                   </tbody>
                           </table>

@@ -48,13 +48,17 @@
                                       <label>Time of Event</label>
                                       <input type="text" name="timeOfEvent" class="form-control" required />
                                     </div>
-                                    <div class="col-lg-2">
+                                    <div class="col-lg-2 ">
                                       <label>No of People (PAX)</label>
-                                      <input type="text" name="noOfPeople" class="form-control"  onkeypress="return isNumber(event)" required autocomplete="off"/>
+                                      <div id="hidePep">
+                                      <input type="text" id="noOfPeople" name="noOfPeople" class="form-control"  onchange="noPeople()" onkeypress="return isNumber(event)" required autocomplete="off"
+                                      />
+                                      </div>
+                                      <div id="newPeople"></div>
                                     </div>
                                     <div class="col-lg-2">
                                       <label>Motiff</label>
-                                      <input type="text" name="motiff" class="form-control"  required/>
+                                      <input type="text" name="motiff" class="form-control"/>
                                     </div>
                                     <div class="col-lg-4">
                                       <label>Type of Package</label>
@@ -141,12 +145,21 @@
             { text:'SET A - 300', value: 'SET A - 300' },
             { text:'SET B - 350', value: 'SET B - 350' },
             { text:'SET C - 400', value: 'SET C - 400'},
-            { text:'EXECUTIVE SET - 600', value: 'EXECUTIVE SET - 600'}
+            { text:'EXECUTIVE SET - 600', value: 'EXECUTIVE SET - 600'},
+            { text:'Cooking Charge - 0.00', value: 'Cooking Charge - 0.00'},
           ]
       }
     })
 </script>
 <script>
+    noPeople = function(){
+      let people = parseInt($("#noOfPeople").val());
+      if(people === 0){
+          $("#newPeople").html(`<input type="text" class="form-control" name="noOfPeople" value="00">`);
+          $("#hidePep").hide();
+      }
+    }
+
     const isNumber =(evt) => {
         evt = (evt) ? evt : window.event;
         var charCode = (evt.which) ? evt.which : evt.keyCode;

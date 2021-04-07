@@ -2,7 +2,7 @@
 @section('title', 'Transaction Form| ')
 @section('content')
 <script>
-
+     
 </script>
 <div id="wrapper">
     <!-- Sidebar -->
@@ -32,11 +32,41 @@
                                 <div class="form-group">
                                   <div class="form-row">
                                     <?php foreach($getBranches as $getBranch): ?>
-                                     <div class="col-lg-4">
-                                        <button type="button" class="bbq btn btn-warning btn-lg" data-toggle="modal" data-target="#bbq" data-id="<?php echo $getBranch->id ?>" data-menu="<?php echo $getBranch->product_name?>" data-price="<?php echo number_format($getBranch->price, 2) ?>" data-available="<?php echo $getBranch->product_in ?>" data-flag="<?php echo $getBranch->flag; ?>"><?php echo $getBranch->product_name?> ₱ <?php echo number_format($getBranch->price, 2) ?></button>
-                                        <br>
-                                        <br>
-                                     </div>                         
+                                    <?php if($getBranch->product_in == 0): ?>
+                                        <div class="col-lg-4">
+                                            <button 
+                                                type="button" 
+                                                class="bbq btn btn-danger btn-lg" 
+                                               
+                                                data-id="<?= $getBranch->id ?>" 
+                                                data-menu="<?= $getBranch->product_name?>" 
+                                                data-price="<?= number_format($getBranch->price, 2) ?>" 
+                                                data-available="<?= $getBranch->product_in ?>" 
+                                                data-flag="<?= $getBranch->flag; ?>">
+                                                <?= $getBranch->product_name?> ₱ <?= number_format($getBranch->price, 2) ?>
+                                                <br>
+                                                NOT Available
+                                                </button>
+                                            <br>
+                                            <br>
+                                        </div> 
+                                    <?php else:?>
+                                        <div class="col-lg-4">
+                                            <button 
+                                                type="button" 
+                                                class="bbq btn btn-warning btn-lg" 
+                                                data-toggle="modal" data-target="#bbq" 
+                                                data-id="<?= $getBranch->id ?>" 
+                                                data-menu="<?= $getBranch->product_name?>" 
+                                                data-price="<?= number_format($getBranch->price, 2) ?>" 
+                                                data-available="<?= $getBranch->product_in ?>" 
+                                                data-flag="<?= $getBranch->flag; ?>">
+                                                <?= $getBranch->product_name?> ₱ <?= number_format($getBranch->price, 2) ?></button>
+                                            <br>
+                                            <br>
+                                        </div> 
+
+                                    <?php endif; ?>
                                      <?php endforeach ; ?>       
                                   </div>
                                 </div>
@@ -57,11 +87,41 @@
                             <div class="form-group">
                                 <div class="form-row">
                                     <?php foreach($getBranchDrinks as $getBranchDrink): ?>
+                                    <?php if($getBranchDrink->product_in == 0): ?>
                                     <div class="col-lg-2">
-                                        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#softdrinks" data-id="<?php echo $getBranchDrink->id?>" data-menu="<?php echo $getBranchDrink->product_name ?>" data-price="<?php echo number_format($getBranchDrink->price, 2)?>" data-available="<?php echo number_format($getBranchDrink->product_in, 2) ?>" data-flag="<?php echo $getBranchDrink->flag?>"><?php echo $getBranchDrink->product_name?> ₱ <?php echo number_format($getBranchDrink->price, 2)?></button>
+                                        <button 
+                                            type="button" 
+                                            class="btn btn-danger btn-lg" 
+                                            data-target="#softdrinks" 
+                                            data-id="<?= $getBranchDrink->id?>" 
+                                            data-menu="<?= $getBranchDrink->product_name ?>" 
+                                            data-price="<?= number_format($getBranchDrink->price, 2)?>" 
+                                            data-available="<?= number_format($getBranchDrink->product_in, 2) ?>"
+                                             data-flag="<?= $getBranchDrink->flag?>">
+                                             <?= $getBranchDrink->product_name?> ₱ <?= number_format($getBranchDrink->price, 2)?>
+                                             <br>
+                                             NOT Available
+                                             </button>
                                         <br>
                                         <br>
                                     </div>
+                                    <?php else:?>
+                                    <div class="col-lg-2">
+                                        <button 
+                                            type="button" 
+                                            class="btn btn-info btn-lg" 
+                                            data-toggle="modal" 
+                                            data-target="#softdrinks" 
+                                            data-id="<?= $getBranchDrink->id?>" 
+                                            data-menu="<?= $getBranchDrink->product_name ?>" 
+                                            data-price="<?= number_format($getBranchDrink->price, 2)?>" 
+                                            data-available="<?= number_format($getBranchDrink->product_in, 2) ?>"
+                                             data-flag="<?= $getBranchDrink->flag?>">
+                                             <?= $getBranchDrink->product_name?> ₱ <?= number_format($getBranchDrink->price, 2)?></button>
+                                        <br>
+                                        <br>
+                                    </div>
+                                    <?php endif; ?>
                                     <?php endforeach; ?>
                                 </div>
                             </div>
@@ -114,20 +174,52 @@
                                     <th class="bg-success" style="color:#ffff">QTY</th>
                                     <th class="bg-success" style="color:#ffff">ITEM DESCRIPTION</th>
                                     <th class="bg-success" style="color:#ffff">AMOUNT</th>
+                                    <th class="bg-success" style="color:#ffff">OPTONS</th>
                                 </thead>
                                 <tbody id="rows">
                                     @if($transaction[0]->deleted_at == NULL)
-                                    <tr>
-                                        <td>{{ $transaction[0]->qty}}</td>
-                                        <td>{{ $transaction[0]->item_description }}</td>
-                                        <td>{{ $transaction[0]->amount }}</td>
+                                    <tr id="deletedId1{{ $transaction[0]->id }}">
+                                        <td class="qty{{ $transaction[0]->id }}">{{ $transaction[0]->qty}}</td>
+                                        <td>{{ $transaction[0]->item_description }}
+
+                                            @if($transaction[0]->flavor != NULL)
+                                                <span class="updateFlavor{{ $transaction[0]->id }}">
+                                                    - {{ $transaction[0]->flavor }}
+                                                   </span>
+                                            @endif
+                                        </td>
+                                        <td class="amt{{ $transaction[0]->id }}">{{ $transaction[0]->amount }}</td>
+                                        <td >
+                                            <a href="javascript::void(0)"  
+                                            data-toggle="modal" 
+                                            data-target=".editMeal1{{ $transaction[0]->id }}"  onclick="editMeal1({{ $transaction[0]->id }})" class="btn btn-warning btn-lg"><i class="fas fa-edit"></i></a> 
+                                            <a href="javascript::void(0)" 
+                                                data-toggle="modal"
+                                                data-target=".deleteMeal1{{ $transaction[0]->id }}"
+                                                class="btn btn-danger btn-lg"><i class="fas fa-trash"></i></a>
+                                        </td>
                                     </tr>
                                     @endif
                                     @foreach($getTransactions as $getTransaction)
-                                    <tr>
-                                      <td>{{ $getTransaction['qty']}}</td>
-                                      <td>{{ $getTransaction['item_description']}}</td>
-                                      <td>{{ $getTransaction['amount']}}</td>
+                                    <tr id="deletedId{{ $getTransaction['id'] }}">
+                                      <td class="qty{{ $getTransaction['id'] }}">{{ $getTransaction['qty']}}</td>
+                                      <td>
+                                        {{ $getTransaction['item_description']}} 
+                                        @if($getTransaction['flavor'] != "NULL")
+                                              <span class="updateFlavor{{ $getTransaction['id']}}"> - {{ $getTransaction['flavor']}}</span>
+                                        @endif
+                                        </td>
+                                      <td class="amt{{ $getTransaction['id'] }}">{{ $getTransaction['amount']}}</td>
+                                      <td >
+                                        <a href="javascript::void(0)" 
+                                        data-toggle="modal" 
+                                        data-target=".editMeal{{ $getTransaction['id'] }}"  onclick="editMeal({{ $getTransaction['id'] }})" class="btn btn-warning btn-lg"><i class="fas fa-edit"></i></a>
+                                        <a href="javascript::void(0)" 
+                                        data-toggle="modal"
+                                        data-target=".deleteMeal{{ $getTransaction['id']}}"
+                                        class="btn btn-danger btn-lg"><i class="fas fa-trash"></i></a>
+                                      </td>
+                                     
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -135,6 +227,7 @@
                                     <td></td>
                                     <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Total</td>
                                     <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?php echo number_format($transaction[0]->total_amount_of_sales, 2);?></span></td>
+                                    <td class="bg-danger">
                                 </tr>
                             </table>
                             <div class="form-group">
@@ -183,6 +276,7 @@
                        <input type="hidden" id="softDrinksPcs" />
                        <input type="hidden" id="drinkId" />
                        <input type="hidden" id="flagDrinks" />
+                       <input type="hidden" class="getPcs" />
                     </div>
                 </div>
             </div>
@@ -194,40 +288,7 @@
         </div>
     </div>
     </div><!--end of MOdal -->
-     <!-- Modal -->
-     <div class="modal fade" id="food" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5  id="exampleModalLongTitle"><i class="fas fa-utensils"></i>Menu</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <h1 class="modal-title"></h1>
-            <div class="form-group">
-                <div class="form-row">
-                    <div class="col-lg-4">
-                        <label>Quantity</label>
-                       <input type="number" name="quantity" class="quantityFood quantity form-control" value="1"  onchange="javascript:checkPriceFood()"/>
-                    </div>
-                    <div class="col-lg-4">
-                        <label>Price</label>
-                       <div id="priceFood"></div>
-                       <input type="text" id="originalPriceFood" name="price" class=" form-control" readonly />
-                       <input type="hidden" id="foodNameNotBbq" />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" onclick="closeFood()" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
-            <button type="button" onclick="addFood()" class="btn btn-success btn-lg">Add</button>
-        </div>
-        </div>
-    </div>
-    </div><!--end of MOdal -->
+   
     <!-- Modal -->
     <div class="modal fade" id="bbq" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -244,7 +305,7 @@
             <div class="form-group">
                 <div class="form-row">
                     
-                    <div id="flavor" class="col-lg-4">
+                    <div id="flavorShow" class="col-lg-4">
                         <label>Flavor</label>
                         <select id="flavor" name="flavor" class="form-control">
                             <option value="Regular">Regular</option>
@@ -253,7 +314,7 @@
                     </div>
                     <div class="col-lg-4">
                         <label>Quantity</label>
-                       <input type="number" name="quantity" class="quantityBBQ form-control" value="1" onchange="javascript:checkPrice()" onkeypress="return isNumber(event)" autocomplete="off" />   
+                       <input type="number"  name="quantity" class="quantityBBQ form-control" value="1" onchange="javascript:checkPrice()" onkeypress="return isNumber(event)" autocomplete="off" />   
                     </div>
                     <div class="col-lg-4">
                         <label>Price</label>
@@ -269,12 +330,128 @@
         </div>
         <div class="modal-footer">
             <button type="button" onclick="closeBBQ()" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
-            <button type="button" onclick="addBBQ()" class="btn btn-success btn-lg">Add</button>
+            <button type="button" onclick="addBBQ()" class="disabledBtn btn btn-success btn-lg">Add</button>
         </div>
         </div>
     </div>
     </div><!--end of MOdal -->
-      <!-- Sticky Footer -->
+    <div class="deleteMeal1{{ $transaction[0]->id }} modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5  id="exampleModalLongTitle"><i class="fas fa-utensils"></i> Remove Item</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to remove this? This can't be undone.</p>
+                    
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="branch1" value="{{ Session::get('sessionBranch') }}" />
+                    <button type="button" onclick="closeMenu()" class="btn  btn-success btn-lg" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="deleteMenuOrder1({{ $transaction[0]->id }})" class="btn btn-danger btn-lg">Remove</button>
+                </div>
+                </div>
+            </div>
+        </div><!--end of MOdal -->
+   
+    <!-- Modal -->
+    @foreach($getTransactions as $getTransaction)
+    <div class="deleteMeal{{ $getTransaction['id'] }} modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5  id="exampleModalLongTitle"><i class="fas fa-utensils"></i> Remove Item</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to remove this? This can't be undone.</p>
+                    
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="getMainId" value="{{ $transaction[0]->id }}" />
+                    <input type="hidden" id="branch" value="{{ Session::get('sessionBranch') }}" />
+                    <button type="button" onclick="closeMenu()" class="btn  btn-success btn-lg" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="deleteMenuOrder({{ $getTransaction['id'] }})" class="btn btn-danger btn-lg">Remove</button>
+                </div>
+                </div>
+            </div>
+        </div><!--end of MOdal -->
+    @endforeach
+    <div class="editMeal1{{ $transaction[0]->id }} modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5  id="exampleModalLongTitle"><i class="fas fa-utensils"></i> Edit Menu</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <h1  >{{ $transaction[0]->item_description }}</h1>
+            <h1 class="modal-title"></h1>
+            <div class="form-group">
+                
+                <div class="form-row">
+                    @if($transaction[0]->flavor === "Regular")
+                    <div class="flavor col-lg-4">
+                        <label>Flavor</label>
+                        <select  name="flavor" class="flavorEdit{{ $transaction[0]->id }} form-control">
+                            <option value="Regular" {{ ( 'Regular' == $transaction[0]->flavor)? 'selected' : '' }}>Regular</option>
+                            <option value="Spicy" {{ ('Spicy' == $transaction[0]->flavor) ? 'selected' : '' }}>Spicy</option>
+                        </select>
+                    </div>
+                    @elseif($transaction[0]->flavor === "Spicy")
+                    <div id="flavor" class="flavor col-lg-4">
+                        <label>Flavor</label>
+                        <select name="flavor" class="flavorEdit{{ $transaction[0]->id }} form-control">
+                            <option value="Regular" {{ ( 'Regular' == $transaction[0]->flavor)? 'selected' : '' }}>Regular</option>
+                            <option value="Spicy" {{ ('Spicy' == $transaction[0]->flavor) ? 'selected' : '' }}>Spicy</option>
+                        </select>
+                    </div>
+
+                    @endif
+                    <div class="col-lg-4">
+                        <label>Quantity</label>
+                       <input 
+                        type="number" 
+                        name="quantity" 
+                        class="quantityBBQEdit{{ $transaction[0]->id }} form-control" 
+                        value="{{ $transaction[0]->qty }}" 
+                        onchange="javascript:checkPriceFoodEdit({{ $transaction[0]->id }})" 
+                        onkeypress="return isNumber(event)" 
+                        autocomplete="off" />   
+                    </div>
+                    <div class="col-lg-4">
+                        <label>Price</label>
+                       <div class="priceEdit{{ $transaction[0]->id }}"></div>
+                       <div></div>
+                       <input type="text"  name="price" class="originalPriceEdit{{ $transaction[0]->id }} form-control" value="{{ $transaction[0]->amount }}" readonly />
+                       <input type="text"  name="orgPrice" class="orgPrice{{ $transaction[0]->id }} form-control" value="{{ $transaction[0]->original_price }}" readonly />
+                       
+                       <input type="hidden" id="foodNameEdit" />
+                       <input type="hidden" id="pcsBbqEdit" />
+                       <input type="hidden" id="foodIdEdit" />
+                       <input type="hidden" id="flagEdit" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="hidden" id="updateBranch1{{ $transaction[0]->id }}" value="{{ Session::get('sessionBranch') }}" />
+          
+            <input type="hidden" class="mainId{{ $transaction[0]->id }}" name="mainId" value="{{ $transaction[0]->id }}" />
+            <button type="button" onclick="closeMenu('{{ $transaction[0]->id }}')" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
+            <button type="button" onclick="updateMenu1('{{ $transaction[0]->id }}')" class="btn btn-success btn-lg">Update</button>
+        </div>
+        </div>
+    </div>
+</div><!--end of MOdal -->
+    <!-- Sticky Footer -->
       <footer class="sticky-footer">
         <div class="container my-auto">
           <div class="copyright text-center my-auto">
@@ -298,7 +475,8 @@
         return true;
     }
     
-      $('#bbq').on('show.bs.modal', function (event) {
+
+    $('#bbq').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var recipient = button.data('menu') // Extract info from data-* attributes
         var price = button.data('price');
@@ -310,10 +488,10 @@
         var modal = $(this);
         modal.find('.modal-title').text(recipient);
         if(recipient === "PORK REGULAR BBQ" || recipient === "PORK JUMBO BBQ" || recipient === "CHICKEN BBQ B&W"
-        || recipient === "CHICKEN BBQ Q- LEG"){
-            $("#flavor").show();
+        || recipient === "CHICKEN BBQ Q-LEG"){
+            $("#flavorShow").show();
         }else{
-            $("#flavor").hide();
+            $("#flavorShow").hide();
         }
 
         modal.find('.modal-body #availPcs').text(available);
@@ -325,19 +503,7 @@
         
     })
 
-    $('#food').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) // Button that triggered the modal
-        var recipient = button.data('menu') // Extract info from data-* attributes
-        var price = button.data('price');
-        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-        var modal = $(this);
-        modal.find('.modal-title').text(recipient);
-        modal.find('.modal-body #originalPriceFood').val(price);
-        modal.find('.modal-body #foodNameNotBbq').val(recipient);
     
-    })
-
     $('#softdrinks').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
         var recipient = button.data('menu') // Extract info from data-* attributes
@@ -350,6 +516,7 @@
         var modal = $(this);
         modal.find('.modal-title').text(recipient);
         modal.find('.modal-body #availPcs').text(available);
+        modal.find('.modal-body .getPcs').val(available);
         modal.find('.modal-body #softDrinksPcs').val(available);
         modal.find('.modal-body #drinkId').val(drinkId);
         modal.find('.modal-body #originalPriceDrinks').val(price);
@@ -361,24 +528,114 @@
     $("#originalPriceDrinks").show();
     checkDrinks = function(){
         const originalPriceDrinks = $("#originalPriceDrinks").val();
-        const quantity = $(".quantityDrinks").val();
+        const quantity = parseInt($(".quantityDrinks").val());
         const compute = parseInt(quantity) * parseInt(originalPriceDrinks);
         const result = compute.toFixed(2);
 
-        if(quantity == "1"){
+        const getPcs = $(".getPcs").val();
+
+        if(quantity === 1){
             $("#originalPriceDrinks").show();
             $("#priceDrinks").hide();
         }else{
-            $("#originalPriceDrinks").hide();
-            $("#priceDrinks").show();
-            $("#priceDrinks").html(`<input type="text" id="newPriceDrinks" name="price" value="${result}" class="form-control" readonly>`);
+            if(quantity > getPcs){
+                let roundPcs = getPcs;
+                let resPcs = roundPcs.split(".");
+                $(".quantityDrinks").val(resPcs[0]);
+
+                const oPrice = $("#originalPriceDrinks").val();
+                const qt = parseInt($(".quantityDrinks").val());
+                const mul = parseInt(qt) * parseInt(oPrice);
+                const res = mul.toFixed();
+
+                $("#originalPriceDrinks").hide();
+                $("#priceDrinks").show();
+                $("#priceDrinks").html(`<input type="text" id="newPriceDrinks" name="price" value="${res}" class="form-control" readonly>`);
+ 
+            }else{
+
+                $("#originalPriceDrinks").hide();
+                $("#priceDrinks").show();
+                $("#priceDrinks").html(`<input type="text" id="newPriceDrinks" name="price" value="${result}" class="form-control" readonly>`);
+ 
+            }
+
         }
 
     }
 
+  
+    const editMeal1 = (id) =>{
+        $(".orgPrice" +id).hide();
+        checkPriceFoodEdit = function(id){
+            const orgPrice = $(".orgPrice" +id).val();
+            console.log(orgPrice);
+            const originalPriceEdit = $(".originalPriceEdit" +id).val();
+            
+            const quantity = parseInt($(".quantityBBQEdit"+id).val());
+            const compute = parseInt(quantity) * parseInt(orgPrice);
+            const result = compute.toFixed(2);
+
+            if(quantity === 1){
+                
+                $(".orgPrice"+id).hide();
+                $(".originalPriceEdit"+id).hide();
+                
+                $(".priceEdit"+id).show();
+                $(".priceEdit"+id).html(`<input type="text" class="newPriceEdit${id} form-control" name="newPriceEdit" value="${result}"  readonly>`);
+            
+
+            }else{  
+                const quantity = parseInt($(".quantityBBQEdit"+id).val());
+                const compute = parseInt(quantity) * parseInt(orgPrice);
+                const result2 = compute.toFixed(2);
+                console.log("res"+result2);
+
+                $(".originalPriceEdit"+id).hide();
+                $(".orgPrice"+id).hide();
+                $(".priceEdit"+id).show();
+                $(".priceEdit"+id).html(`<input type="text" class="newPriceEdit${id} form-control" name="newPriceEdit" value="${result2}"  readonly>`);
+            }
+         }
+    };
+
+    const editMeal = (id) =>{
+        $(".orgPrice" +id).hide();
+        checkPriceFoodEdit = function(id){
+            const orgPrice = $(".orgPrice" +id).val();
+            console.log(orgPrice);
+            const originalPriceEdit = $(".originalPriceEdit" +id).val();
+            
+            const quantity = parseInt($(".quantityBBQEdit"+id).val());
+            const compute = parseInt(quantity) * parseInt(orgPrice);
+            const result = compute.toFixed(2);
+
+            if(quantity === 1){
+                
+                $(".orgPrice"+id).hide();
+                $(".originalPriceEdit"+id).hide();
+                
+                $(".priceEdit"+id).show();
+                $(".priceEdit"+id).html(`<input type="text" class="newPriceEdit${id} form-control" name="newPriceEdit" value="${result}"  readonly>`);
+            
+
+            }else{  
+                const quantity = parseInt($(".quantityBBQEdit"+id).val());
+                const compute = parseInt(quantity) * parseInt(orgPrice);
+                const result2 = compute.toFixed(2);
+                console.log("res"+result2);
+
+                $(".originalPriceEdit"+id).hide();
+                $(".orgPrice"+id).hide();
+                $(".priceEdit"+id).show();
+                $(".priceEdit"+id).html(`<input type="text" class="newPriceEdit${id} form-control" name="newPriceEdit" value="${result2}"  readonly>`);
+            }
+         }
+    };
+
     const addDrinks = () =>{
         const transactionId = $("#transactionId").val();
-        const quantityDrinks = $(".quantityDrinks").val();
+        const quantityDrinks = parseInt($(".quantityDrinks").val());
         const originalPriceDrinks = $("#originalPriceDrinks").val();
         const softDrinksName = $("#softDrinksName").val();
         const newPriceDrinks = $("#newPriceDrinks").val();
@@ -393,23 +650,26 @@
 
         const flagDrink = $("#flagDrinks").val();
 
-        if(quantityDrinks == "1"){
+        if(quantityDrinks === 1){
             const table =  document.getElementById("output");
             const row = document.createElement("tr");
             
             const item = row.insertCell(0);
             const qty = row.insertCell(1);
             const amount = row.insertCell(2);
-
+            const action = row.insertCell(3);
     
             qty.innerHTML = `${quantityDrinks}`;
             item.innerHTML = `${softDrinksName}`;
             amount.innerHTML = `${originalPriceDrinks}`;
-           
-            
+            action.innerHTML = `
+                <span class="getIds"></span>
+                 `;  
+              
             row.append(qty);
             row.append(item);
             row.append(amount);
+            row.append(action);
             document.getElementById("rows").appendChild(row);
 
             //make ajax call
@@ -422,6 +682,7 @@
                     "transactionId":transactionId,
                     "quantity":quantityDrinks,
                     "itemDescription":softDrinksName,
+                    "originalPrice":originalPriceDrinks,
                     "branch":branch,
                     "amount":originalPriceDrinks,
                     "softDrinksPcs":softDrinksPcs,
@@ -430,9 +691,21 @@
                     "flag":flagDrink,
                 },
                 success:function(data){
-                    console.log(data);
-                    $("#totalCharge").html(`<span  style="color:#fff; font-size:35px; font-weight:bold">₱ ${data}.00</span>`);
-                   
+                    console.log(data.getTotalSales);
+                    $("#totalCharge").html(`<span  style="color:#fff; font-size:35px; font-weight:bold">₱ ${data.getTotalSales}.00</span>`);
+                    $(".getIds").html(`
+                         <a href="javascript::void(0)" 
+                            onclick="editMeal(${data.getId})"
+                            data-toggle="modal" 
+                            data-target="#bbq" 
+                             class="btn btn-warning btn-lg"><i class="fas fa-edit"></i></a>
+                            <a href="javascript::void(0)" 
+                                class="btn btn-danger btn-lg"><i class="fas fa-trash"></i></a>
+                    `);
+
+                    setTimeout(function(){
+                        location.reload(true);
+                    }, 2000);
                    
                 },
                 error:function(data){
@@ -448,16 +721,21 @@
             const item = row.insertCell(0);
             const qty = row.insertCell(1);
             const amount = row.insertCell(2);
+            const action = row.insertCell(3);
 
     
             qty.innerHTML = `${quantityDrinks}`;
             item.innerHTML = `${softDrinksName}`;
             amount.innerHTML = `${newPriceDrinks}`;
-           
-            
+            action.innerHTML = `
+                <span class="getIds"></span>
+                 `;  
+              
             row.append(qty);
             row.append(item);
             row.append(amount);
+            row.append(action);
+        
             document.getElementById("rows").appendChild(row);
             
             //make ajax call
@@ -470,6 +748,7 @@
                     "transactionId":transactionId,
                     "quantity":quantityDrinks,
                     "itemDescription":softDrinksName,
+                    "originalPrice":originalPriceDrinks,
                     "branch":branch,
                     "amount":newPriceDrinks,
                     "softDrinksPcs":softDrinksPcs,
@@ -478,9 +757,22 @@
                     "flag":flagDrink,
                 },
                 success:function(data){
-                    console.log(data);
-                    $("#totalCharge").html(`<span  style="color:#fff; font-size:35px; font-weight:bold">₱ ${data}.00</span>`);
-                   
+                    console.log(data.getTotalSales);
+                    $("#totalCharge").html(`<span  style="color:#fff; font-size:35px; font-weight:bold">₱ ${data.getTotalSales}.00</span>`);
+                    $(".getIds").html(`
+                         <a href="javascript::void(0)" 
+                            onclick="editMeal(${data.getId})"
+                            data-toggle="modal" 
+                            data-target="#bbq" 
+                             class="btn btn-warning btn-lg"><i class="fas fa-edit"></i></a>
+                        <a href="javascript::void(0)" 
+                           
+                            class="btn btn-danger btn-lg"><i class="fas fa-trash"></i></a>
+                    `);
+
+                    setTimeout(function(){
+                        location.reload(true);
+                    }, 2000);
                    
                 },
                 error:function(data){
@@ -491,279 +783,600 @@
         }
     }
 
-    $("#priceFood").hide();  
-    checkPriceFood = function(){
-        const originalPrice = $("#originalPriceFood").val();
-        const quantity = $(".quantityFood").val();
-        const compute = parseInt(quantity) * parseInt(originalPrice);
-        const result = compute.toFixed(2);
 
-        if(quantity == "1"){
-            $("#originalPriceFood").show();
-            $("#priceFood").hide();
-        }else{
-            $("#originalPriceFood").hide();
-            $("#priceFood").show();
-            $("#priceFood").html(`<input type="text" id="newPriceFood" name="price" value="${result}" class="form-control" readonly>`);
-        }
-    }
-
-    const addFood = () =>{
-        const transactionId = $("#transactionId").val();
-        const quantityFood = $(".quantityFood").val();
-        const originalPriceFood = $("#originalPriceFood").val();
-        const newPriceFood = $("#newPriceFood").val();
-        const foodNameNotBbq = $("#foodNameNotBbq").val();
-        
-        const branch = "{{ Session::get('sessionBranch') }}";
-        
-        if(quantityFood == "1"){
-            console.log(originalPriceFood);
-            const table =  document.getElementById("output");
-            const row = document.createElement("tr");
-            
-            const item = row.insertCell(0);
-            const qty = row.insertCell(1);
-            const amount = row.insertCell(2);
-
-    
-            qty.innerHTML = `${quantityFood}`;
-            item.innerHTML = `${foodNameNotBbq}`;
-            amount.innerHTML = `${originalPriceFood}`;
-           
-            
-            row.append(qty);
-            row.append(item);
-            row.append(amount);
-            document.getElementById("rows").appendChild(row);
-
-             //make ajax call
-             $.ajax({
-                type: 'POST',
-                url: '/lolo-pinoy-grill-branches/sales-form/transaction/additional',
-                data:{
-                    _method:'post',
-                    "_token":"{{ csrf_token() }}",
-                    "transactionId":transactionId,
-                    "quantity":quantityFood,
-                    "itemDescription":foodNameNotBbq,
-                    "branch":branch,
-                    "amount":originalPriceFood,
-                },
-                success:function(data){
-                    console.log(data);
-                   
-                },
-                error:function(data){
-                    console.log('Error', data);
-                }
-             });
-
-            $('#food').modal('hide');
-        }else{
-           
-            const table =  document.getElementById("output");
-            const row = document.createElement("tr");
-            
-            const item = row.insertCell(0);
-            const qty = row.insertCell(1);
-            const amount = row.insertCell(2);
-
-    
-            qty.innerHTML = `${quantityFood}`;
-            item.innerHTML = `${foodNameNotBbq}`;
-            amount.innerHTML = `${newPriceFood}`;
-           
-            
-            row.append(qty);
-            row.append(item);
-            row.append(amount);
-            document.getElementById("rows").appendChild(row);
-
-            //make ajax
-            $.ajax({
-                type: 'POST',
-                url: '/lolo-pinoy-grill-branches/sales-form/transaction/additional',
-                data:{
-                    _method:'post',
-                    "_token":"{{ csrf_token() }}",
-                    "transactionId":transactionId,
-                    "quantity":quantityFood,
-                    "itemDescription":foodNameNotBbq,
-                    "branch":branch,
-                    "amount":newPriceFood,
-                },
-                success:function(data){
-                    console.log(data);
-                   
-                },
-                error:function(data){
-                    console.log('Error', data);
-                }
-            });
-
-            $('#food').modal('hide');
-            closeFood();
-        }
-    }
-
+  
+  
+  
     $("#price").hide();  
     checkPrice = function(){
         const originalPrice = $("#originalPrice").val();
-        const quantity = $(".quantityBBQ").val();
-
+        const quantity = parseInt($(".quantityBBQ").val());
         const compute = parseInt(quantity) * parseInt(originalPrice);
         const result = compute.toFixed(2);
-        if(quantity == "1"){
+
+        const getPcs = $("#pcsBbq").val();
+        if(quantity === 1){
             $("#originalPrice").show();
             $("#price").hide();
         }else{
-            $("#originalPrice").hide();
-            $("#price").show();
-            $("#price").html(`<input type="text" id="newPrice" name="price" value="${result}" class="form-control" readonly>`);
+
+            if(quantity > getPcs){
+                let roundPcs = getPcs;
+                let resPcs = roundPcs.split(".");
+                $(".quantityBBQ").val(resPcs[0]);
+                const oPrice = $("#originalPrice").val();
+                const qt = parseInt($(".quantityBBQ").val());
+                const mul = parseInt(qt) * parseInt(oPrice);
+                const res = mul.toFixed(2);
+
+                $("#originalPrice").hide();
+                $("#price").show();
+                $("#price").html(`<input type="text" id="newPrice" name="price" value="${res}" class="form-control" readonly>`);
+    
+
+            }else{
+                $("#originalPrice").hide();
+                $("#price").show();
+                $("#price").html(`<input type="text" id="newPrice" name="price" value="${result}" class="form-control" readonly>`);
+    
+            }
+
         }
                    
-    };
+    }
 
     const closeDrinks = () =>{
         $(".quantityDrinks").val('1');
         $("#priceDrinks").hide();
         $("#originalPriceDrinks").show();
         
-    }
+    };
 
-    const closeFood = () =>{
-        $(".quantityFood").val('1');
-        $("#priceFood").hide();
-        $("#originalPriceFood").show();
-    }
-  
+    const closeMenu = (id) =>{
+        $(".editMeal"+id).modal('hide');
+    };
+   
     const closeBBQ = () =>{
         $(".quantityBBQ").val('1');
         $("#price").hide();
         $("#originalPrice").show();
-    }
+    };
 
 
     const addBBQ = () =>{
         const transactionId = $("#transactionId").val();
-        const quantity = $(".quantityBBQ").val();
+        const quantity = parseInt($(".quantityBBQ").val());
         const newPrice = $("#newPrice").val();
         const originalPrice = $("#originalPrice").val();
-        const flavor = $("#flavor").val();
+       
         const foodName = $("#foodName").val();
-      
-        const combineFoodName = `${foodName} - ${flavor}`;
-        const branch = "{{ Session::get('sessionBranch') }}";
 
-        const availPcs = $("#pcsBbq").val();
-        const foodId = $("#foodId").val();
+        console.log("original price"+originalPrice);
 
-         //compute minus available pcs to quantity
-        const compute = availPcs - quantity;
-     
-        const flag = $("#flag").val();
-
-        if(quantity == "1"){
-            console.log(originalPrice);
-            const table =  document.getElementById("output");
-            const row = document.createElement("tr");
+        if(foodName === "PORK REGULAR BBQ" || foodName === "PORK JUMBO BBQ" || foodName === "CHICKEN BBQ B&W"
+        || foodName === "CHICKEN BBQ Q-LEG"){
+            $("#flavorShow").show();
+            const flavor = $("#flavor").val();
+            const combineFoodName = `${foodName}`;
             
-            const item = row.insertCell(0);
-            const qty = row.insertCell(1);
-            const amount = row.insertCell(2);
+            const branch = "{{ Session::get('sessionBranch') }}";
 
-    
-            qty.innerHTML = `${quantity}`;
-            item.innerHTML = `${foodName} - ${flavor}`;
-            amount.innerHTML = `${originalPrice}`;
-              
-            row.append(qty);
-            row.append(item);
-            row.append(amount);
-            document.getElementById("rows").appendChild(row);
+            const availPcs = $("#pcsBbq").val();
+            const foodId = $("#foodId").val();
 
+            //compute minus available pcs to quantity
+            const compute = availPcs - quantity;
+
+            const flag = $("#flag").val();
+
+            if(quantity === 1){
+                console.log(originalPrice);
+                const table =  document.getElementById("output");
+                const row = document.createElement("tr");
+                
+                const item = row.insertCell(0);
+                const qty = row.insertCell(1);
+                const amount = row.insertCell(2);
+                const action = row.insertCell(3);
+
+                qty.innerHTML = `${quantity}`;
+                item.innerHTML = `${foodName} - ${flavor}`;
+                amount.innerHTML = `${originalPrice}`;
+                action.innerHTML = `
+                    <span class="getIds"></span>
+                    `;  
+                
+                row.append(qty);
+                row.append(item);
+                row.append(amount);
+                row.append(action);
+                document.getElementById("rows").appendChild(row);
+
+                //make ajax call
+                $.ajax({
+                    type: 'POST',
+                    url: '/lolo-pinoy-grill-branches/sales-form/transaction/additional',
+                    data:{
+                        _method:'post',
+                        "_token":"{{ csrf_token() }}",
+                        "transactionId":transactionId,
+                        "quantity":quantity,
+                        "itemDescription":combineFoodName,
+                        "flavor":flavor,
+                        "originalPrice":originalPrice,
+                        "branch":branch,
+                        "amount":originalPrice,
+                        "compute":compute,
+                        "foodId":foodId,
+                        "flag":flag,
+                    },
+                    success:function(data){
+                        console.log(data);
+                        $("#totalCharge").html(`<span  style="color:#fff; font-size:35px; font-weight:bold">₱ ${data.getTotalSales}.00</span>`);
+                        $(".getIds").html(`
+                            <a href="javascript::void(0)" 
+                                onclick="editMeal(${data.getId})"
+                                data-toggle="modal" 
+                                data-target="#bbq" 
+                                class="btn btn-warning btn-lg"><i class="fas fa-edit"></i></a>
+                            <a href="javascript::void(0)" 
+                              
+                                class="btn btn-danger btn-lg"><i class="fas fa-trash"></i></a>
+                        `);
+
+                        setTimeout(function(){
+                            location.reload(true);
+                        }, 2000);
+                    },
+                    error:function(data){
+                        console.log('Error', data);
+                    }
+                });
+
+                $('#bbq').modal('hide');
+            
+            
+            }else{
+                console.log(newPrice);
+                const flavor = $("#flavor").val();
+                const table =  document.getElementById("output");
+                const row = document.createElement("tr");
+                
+                const item = row.insertCell(0);
+                const qty = row.insertCell(1);
+                const amount = row.insertCell(2);
+                const action = row.insertCell(3);
+
+            
+                qty.innerHTML = `${quantity}`;
+                item.innerHTML = `${foodName} - ${flavor}`;
+                amount.innerHTML = `${newPrice}`;
+                action.innerHTML = `
+                    <span class="getIds">
+                    </span>
+                `; 
+            
+                
+                row.append(qty);
+                row.append(item);
+                row.append(amount);
+                row.append(action);
+                document.getElementById("rows").appendChild(row);
+
+                //make ajax call
+                $.ajax({
+                    type: 'POST',
+                    url: '/lolo-pinoy-grill-branches/sales-form/transaction/additional',
+                    data:{
+                        _method:'post',
+                        "_token":"{{ csrf_token() }}",
+                        "transactionId":transactionId,
+                        "quantity":quantity,
+                        "itemDescription":combineFoodName,
+                        "flavor":flavor,
+                        "originalPrice":originalPrice,
+                        "branch":branch,
+                        "amount":newPrice,
+                        "compute":compute,
+                        "foodId":foodId,
+                        "flag":flag,
+                    },
+                    success:function(data){
+                        console.log(data.getTotalSales);
+                        $("#totalCharge").html(`<span  style="color:#fff; font-size:35px; font-weight:bold">₱ ${data.getTotalSales}.00</span>`);
+                        $(".getIds").html(`
+                            <a href="javascript::void(0)" 
+                                data-toggle="modal" 
+                                data-target="#bbq" 
+                                onclick="editMeal(${data.getId})" 
+                                class="btn btn-warning btn-lg"><i class="fas fa-edit"></i></a>
+                            <a href="javascript::void(0)" 
+                                    class="btn btn-danger btn-lg"><i class="fas fa-trash"></i></a>
+                        `);
+
+                        setTimeout(function(){
+                            location.reload(true);
+                        }, 2000);
+
+                        $('#bbq').modal('hide');
+                    },
+                    error:function(data){
+                        console.log('Error', data);
+                    }
+                });
+            
+            
+            }
+        
+        }else{
+            $("#flavorShow").hide();
+          
+            const flavor = "NULL";
+            const combineFoodName = `${foodName}`;
+
+            const branch = "{{ Session::get('sessionBranch') }}";
+
+            const availPcs = $("#pcsBbq").val();
+            const foodId = $("#foodId").val();
+
+            //compute minus available pcs to quantity
+            const compute = availPcs - quantity;
+
+            const flag = $("#flag").val();
+
+            if(quantity === 1){
+                console.log(originalPrice);
+                const table =  document.getElementById("output");
+                const row = document.createElement("tr");
+                
+                const item = row.insertCell(0);
+                const qty = row.insertCell(1);
+                const amount = row.insertCell(2);
+                const action = row.insertCell(3);
+
+                qty.innerHTML = `${quantity}`;
+                item.innerHTML = `${foodName}`;
+                amount.innerHTML = `${originalPrice}`;
+                action.innerHTML = `
+                    <span class="getIds"></span>
+                    `;  
+                
+                row.append(qty);
+                row.append(item);
+                row.append(amount);
+                row.append(action);
+                document.getElementById("rows").appendChild(row);
+
+                //make ajax call
+                $.ajax({
+                    type: 'POST',
+                    url: '/lolo-pinoy-grill-branches/sales-form/transaction/additional',
+                    data:{
+                        _method:'post',
+                        "_token":"{{ csrf_token() }}",
+                        "transactionId":transactionId,
+                        "quantity":quantity,
+                        "itemDescription":combineFoodName,
+                        "flavor":flavor,
+                        "originalPrice":originalPrice,
+                        "branch":branch,
+                        "amount":originalPrice,
+                        "compute":compute,
+                        "foodId":foodId,
+                        "flag":flag,
+                    },
+                    success:function(data){
+                        console.log(data.getTotalSales);
+                        $("#totalCharge").html(`<span  style="color:#fff; font-size:35px; font-weight:bold">₱ ${data.getTotalSales}.00</span>`);
+                        $(".getIds").html(`
+                            <a href="javascript::void(0)" 
+                                onclick="editMeal(${data.getId})"
+                                data-toggle="modal" 
+                                data-target="#bbq" 
+                                class="btn btn-warning btn-lg"><i class="fas fa-edit"></i></a>
+                            <a href="javascript::void(0)" 
+                                    class="btn btn-danger btn-lg"><i class="fas fa-trash"></i></a>
+                        `);
+
+                        setTimeout(function(){
+                            location.reload(true);
+                        }, 2000);
+                    },
+                    error:function(data){
+                        console.log('Error', data);
+                    }
+                });
+
+                $('#bbq').modal('hide');
+            
+            
+            }else{
+                console.log(newPrice);
+               
+                
+                const table =  document.getElementById("output");
+                const row = document.createElement("tr");
+                
+                const item = row.insertCell(0);
+                const qty = row.insertCell(1);
+                const amount = row.insertCell(2);
+                const action = row.insertCell(3);
+
+            
+                qty.innerHTML = `${quantity}`;
+                item.innerHTML = `${foodName}`;
+                amount.innerHTML = `${newPrice}`;
+                action.innerHTML = `
+                    <span class="getIds">
+                    </span>
+                `; 
+            
+                
+                row.append(qty);
+                row.append(item);
+                row.append(amount);
+                row.append(action);
+                document.getElementById("rows").appendChild(row);
+
+                //make ajax call
+                $.ajax({
+                    type: 'POST',
+                    url: '/lolo-pinoy-grill-branches/sales-form/transaction/additional',
+                    data:{
+                        _method:'post',
+                        "_token":"{{ csrf_token() }}",
+                        "transactionId":transactionId,
+                        "quantity":quantity,
+                        "itemDescription":combineFoodName,
+                        "flavor":flavor,
+                        "originalPrice":originalPrice,
+                        "branch":branch,
+                        "amount":newPrice,
+                        "compute":compute,
+                        "foodId":foodId,
+                        "flag":flag,
+                    },
+                    success:function(data){
+                        console.log(data.getTotalSales);
+                        $("#totalCharge").html(`<span  style="color:#fff; font-size:35px; font-weight:bold">₱ ${data.getTotalSales}.00</span>`);
+                        $(".getIds").html(`
+                            <a href="javascript::void(0)" 
+                                data-toggle="modal" 
+                                data-target="#bbq" 
+                                onclick="editMeal(${data.getId})" 
+                                class="btn btn-warning btn-lg"><i class="fas fa-edit"></i></a>
+                            <a href="javascript::void(0)" 
+                                    class="btn btn-danger btn-lg"><i class="fas fa-trash"></i></a>
+                        `);
+
+                        setTimeout(function(){
+                            location.reload(true);
+                        }, 2000);
+
+                        $('#bbq').modal('hide');
+                    },
+                    error:function(data){
+                        console.log('Error', data);
+                    }
+                });
+            
+            }      
+
+        }
+      
+         
+    };
+
+    //delete first item 
+    const deleteMenuOrder1 = (id) =>{
+        let branch = $("#branch1").val();
+
+        $.ajax({
+            type: 'DELETE',
+            url: '/lolo-pinoy-grill-branches/sales-form/transaction/first-item/delete/'+id,
+            data:{
+                _method: 'delete', 
+                "_token": "{{ csrf_token() }}",
+                "id": id,
+                "branch":branch,
+            },
+            success:function(data){
+                console.log(data);
+                $("#totalCharge").html(`<span  style="color:#fff; font-size:35px; font-weight:bold">₱ ${data}</span>`);
+                $(".deleteMeal1"+id).modal('hide')
+                $("#deletedId1"+id).fadeOut('slow');
+               
+            },
+            error:function(data){
+                console.log('Error'+data);
+            }
+         });
+    };
+   
+
+    const deleteMenuOrder = (id) =>{
+        const getMainId = $("#getMainId").val();
+        let branch = $("#branch").val();
+
+        $.ajax({
+            type: 'DELETE',
+            url: '/lolo-pinoy-grill-branches/sales-form/transaction/delete/'+id,
+            data:{
+                _method: 'delete', 
+                "_token": "{{ csrf_token() }}",
+                "id": id,
+                "getMainId":getMainId,
+                "branch":branch,
+            },
+            success:function(data){
+                console.log(data);
+                $("#totalCharge").html(`<span  style="color:#fff; font-size:35px; font-weight:bold">₱ ${data}.00</span>`);
+                $(".deleteMeal"+id).modal('hide')
+                $("#deletedId"+id).fadeOut('slow');
+               
+            },
+            error:function(data){
+                console.log('Error'+data);
+            }
+         });
+    };
+
+    const updateMenu1 = (id) =>{
+        let flavor = $(".flavorEdit"+id).val();
+        let qty = $(".quantityBBQEdit"+id).val();
+        let price = $(".newPriceEdit"+id).val();
+        let branch = $("#updateBranch1"+id).val();
+
+        let originalPrice = $(".originalPriceEdit"+id).val();
+
+
+        let mainId = $(".mainId"+id).val();
+      
+
+        if(flavor === undefined){
+            //make ajax call
+            closeMenu();
+            $.ajax({
+                type:'PUT',
+                url:'/lolo-pinoy-grill-branches/sales-form/transaction/update/'+id,
+                data:{
+                    _method:'PUT',
+                    "_token":"{{ csrf_token() }}",
+                    "id":id,
+                    "mainId":mainId,
+                    "flavor":flavor,
+                    "qty":qty,
+                    "price":price,
+                    "originalPrice":originalPrice,
+                    "branch":branch,
+                },
+                success:function(data){
+                    console.log(data.sum);
+                    $(".qty"+id).html(`${data.qty}`);
+                    $(".amt"+id).html(`${data.amt}`);
+                    if(data.flavor != "NULL"){
+                        $(".updateFlavor"+id).html(`- ${data.flavor}`);
+                    }
+                  
+                    $("#totalCharge").html(`<span  style="color:#fff; font-size:35px; font-weight:bold">₱ ${data.sum}.00</span>`);
+                    $(".editMeal1"+id).modal('hide');
+                },
+                error:function(data){
+                    console.log('Error'+data);
+                }
+            });
+        }else{
             //make ajax call
             $.ajax({
-                type: 'POST',
-                url: '/lolo-pinoy-grill-branches/sales-form/transaction/additional',
+                type:'PUT',
+                url:'/lolo-pinoy-grill-branches/sales-form/transaction/update/'+id,
                 data:{
-                    _method:'post',
+                    _method:'put',
                     "_token":"{{ csrf_token() }}",
-                    "transactionId":transactionId,
-                    "quantity":quantity,
-                    "itemDescription":combineFoodName,
+                    "id":id,
+                    "mainId":mainId,
+                    "flavor":flavor,
+                    "qty":qty,
+                    "price":price,
+                    "originalPrice":originalPrice,
                     "branch":branch,
-                    "amount":originalPrice,
-                    "compute":compute,
-                    "foodId":foodId,
-                    "flag":flag,
                 },
                 success:function(data){
-                    console.log(data);
-                    $("#totalCharge").html(`<span  style="color:#fff; font-size:35px; font-weight:bold">₱ ${data}.00</span>`);
-                   
+                    console.log(data.sum);
+                    $(".qty"+id).html(`${data.qty}`);
+                    $(".amt"+id).html(`${data.amt}`);
+                    if(data.flavor != "NULL"){
+                        $(".updateFlavor"+id).html(`- ${data.flavor}`);
+                    }
+                    $("#totalCharge").html(`<span  style="color:#fff; font-size:35px; font-weight:bold">₱ ${data.sum}.00</span>`);
+                    $(".editMeal1"+id).modal('hide');
+
                 },
                 error:function(data){
-                    console.log('Error', data);
+                    console.log('Error'+data);
                 }
             });
-
-            $('#bbq').modal('hide');
-           
-           
-        }else{
-            console.log(newPrice);
-            const table =  document.getElementById("output");
-            const row = document.createElement("tr");
-            
-            const item = row.insertCell(0);
-            const qty = row.insertCell(1);
-            const amount = row.insertCell(2);
-    
-           
-            qty.innerHTML = `${quantity}`;
-            item.innerHTML = `${foodName} - ${flavor}`;
-            amount.innerHTML = `${newPrice}`;
-           
-            
-            row.append(qty);
-            row.append(item);
-            row.append(amount);
-            document.getElementById("rows").appendChild(row);
-
-              //make ajax call
-              $.ajax({
-                type: 'POST',
-                url: '/lolo-pinoy-grill-branches/sales-form/transaction/additional',
-                data:{
-                    _method:'post',
-                    "_token":"{{ csrf_token() }}",
-                    "transactionId":transactionId,
-                    "quantity":quantity,
-                    "itemDescription":combineFoodName,
-                    "branch":branch,
-                    "amount":newPrice,
-                    "compute":compute,
-                    "foodId":foodId,
-                    "flag":flag,
-                },
-                success:function(data){
-                    console.log(data);
-                    $("#totalCharge").html(`<span  style="color:#fff; font-size:35px; font-weight:bold">₱ ${data}.00</span>`);
-                   
-                    $('#bbq').modal('hide');
-                },
-                error:function(data){
-                    console.log('Error', data);
-                }
-            });
-           
-           
         }
        
-        
-    }
+
+    };
+  
+
+    const updateMenu = (id) =>{
+        let flavor = $(".flavorEdit"+id).val();
+        let qty = $(".quantityBBQEdit"+id).val();
+        let price = $(".newPriceEdit"+id).val();
+        let branch = $("#updateBranch"+id).val();
+        let originalPrice = $(".originalPriceEdit"+id).val();
+        let mainId = $(".mainId"+id).val();
+      
+
+        if(flavor === undefined){
+            //make ajax call
+            closeMenu();
+            $.ajax({
+                type:'PUT',
+                url:'/lolo-pinoy-grill-branches/sales-form/transaction/update/'+id,
+                data:{
+                    _method:'put',
+                    "_token":"{{ csrf_token() }}",
+                    "id":id,
+                    "mainId":mainId,
+                    "flavor":flavor,
+                    "qty":qty,
+                    "price":price,
+                    "originalPrice":originalPrice,
+                    "branch":branch,
+                },
+                success:function(data){
+                    console.log(data);
+                    $(".qty"+id).html(`${data.qty}`);
+                    $(".amt"+id).html(`${data.amt}`);
+                    if(data.flavor != "NULL"){
+                        $(".updateFlavor"+id).html(`- ${data.flavor}`);
+                    }
+                    $("#totalCharge").html(`<span  style="color:#fff; font-size:35px; font-weight:bold">₱ ${data.sum}.00</span>`);
+                    $(".editMeal"+id).modal('hide');
+                },
+                error:function(data){
+                    console.log('Error'+data);
+                }
+            });
+        }else{
+            //make ajax call
+            $.ajax({
+                type:'PUT',
+                url:'/lolo-pinoy-grill-branches/sales-form/transaction/update/'+id,
+                data:{
+                    _method:'put',
+                    "_token":"{{ csrf_token() }}",
+                    "id":id,
+                    "mainId":mainId,
+                    "flavor":flavor,
+                    "qty":qty,
+                    "price":price,
+                    "originalPrice":originalPrice,
+                    "branch":branch,
+                },
+                success:function(data){
+                    console.log(data.sum);
+                    $(".qty"+id).html(`${data.qty}`);
+                    $(".amt"+id).html(`${data.amt}`);
+                    if(data.flavor != "NULL"){
+                        $(".updateFlavor"+id).html(`- ${data.flavor}`);
+                    }
+                    $("#totalCharge").html(`<span  style="color:#fff; font-size:35px; font-weight:bold">₱ ${data.sum}.00</span>`);
+                    $(".editMeal"+id).modal('hide');
+
+                },
+                error:function(data){
+                    console.log('Error'+data);
+                }
+            });
+        }
+       
+
+    };
 </script>
 <script >
    
@@ -795,4 +1408,78 @@
         }
     }) 
 </script>
+
+
+   
+   
+ @foreach($getTransactions as $getTransaction)
+<div class="editMeal{{ $getTransaction['id'] }} modal fade" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5  id="exampleModalLongTitle"><i class="fas fa-utensils"></i> Edit Menu</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <h1  >{{ $getTransaction['item_description'] }}</h1>
+            <h1 class="modal-title"></h1>
+            <div class="form-group">
+                
+                <div class="form-row">
+                    @if($getTransaction['flavor'] === "Regular")
+                    <div class="flavor col-lg-4">
+                        <label>Flavor</label>
+                        <select  name="flavor" class="flavorEdit{{ $getTransaction['id'] }} form-control">
+                            <option value="Regular" {{ ( 'Regular' == $getTransaction['flavor'])? 'selected' : '' }}>Regular</option>
+                            <option value="Spicy" {{ ('Spicy' == $getTransaction['flavor']) ? 'selected' : '' }}>Spicy</option>
+                        </select>
+                    </div>
+                    @elseif($getTransaction['flavor'] === "Spicy")
+                    <div id="flavor" class="flavor col-lg-4">
+                        <label>Flavor</label>
+                        <select name="flavor" class="flavorEdit{{ $getTransaction['id'] }} form-control">
+                            <option value="Regular" {{ ( 'Regular' == $getTransaction['flavor'])? 'selected' : '' }}>Regular</option>
+                            <option value="Spicy" {{ ('Spicy' == $getTransaction['flavor']) ? 'selected' : '' }}>Spicy</option>
+                        </select>
+                    </div>
+
+                    @endif
+                    <div class="col-lg-4">
+                        <label>Quantity</label>
+                       <input 
+                        type="number" 
+                        name="quantity" 
+                        class="quantityBBQEdit{{ $getTransaction['id'] }} form-control" 
+                        value="{{ $getTransaction['qty'] }}" 
+                        onchange="javascript:checkPriceFoodEdit({{ $getTransaction['id'] }})" 
+                        onkeypress="return isNumber(event)" 
+                        autocomplete="off" />   
+                    </div>
+                    <div class="col-lg-4">
+                        <label>Price</label>
+                       <div class="priceEdit{{ $getTransaction['id'] }}"></div>
+                       <div></div>
+                       <input type="text"  name="price" class="originalPriceEdit{{ $getTransaction['id'] }} form-control" value="{{ $getTransaction['amount'] }}" readonly />
+                       <input type="text"  name="orgPrice" class="orgPrice{{ $getTransaction['id'] }} form-control" value="{{ $getTransaction['original_price'] }}" readonly />
+                       
+                       <input type="hidden" id="foodNameEdit" />
+                       <input type="hidden" id="pcsBbqEdit" />
+                       <input type="hidden" id="foodIdEdit" />
+                       <input type="hidden" id="flagEdit" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <input type="hidden" id="updateBranch{{ $getTransaction['id'] }}" value="{{ Session::get('sessionBranch') }}" />
+            <input type="hidden" class="mainId{{ $getTransaction['id'] }}" name="mainId" value="{{ $transaction[0]->id }}" />
+            <button type="button" onclick="closeMenu('{{ $getTransaction['id'] }}')" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
+            <button type="button" onclick="updateMenu('{{ $getTransaction['id']}}')" class="btn btn-success btn-lg">Update</button>
+        </div>
+        </div>
+    </div>
+    </div><!--end of MOdal -->
+   @endforeach
 @endsection

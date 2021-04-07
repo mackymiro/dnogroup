@@ -5415,7 +5415,7 @@ class MrPotatoController extends Controller
     public function storeDeliveryReceipt(Request $request){
         $ids = Auth::user()->id;
         $user = User::find($ids);
-
+     
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 

@@ -10497,12 +10497,16 @@ class LoloPinoyLechonDeCebuController extends Controller
         return view('lechon-de-cebu-all-lists', compact('purchaseOrders'));
     }
 
-    //purchase order
+    
     public function purchaseOrder(){
         $id =  Auth::user()->id;
         $user = User::find($id);
 
-        return view('lechon-de-cebu-purchase-order', compact('user'));
+
+        //get supplier
+        $getSuppliers = LechonDeCebuSupplier::get()->toArray();
+
+        return view('lechon-de-cebu-purchase-order', compact('user', 'getSuppliers'));
     }
 
     /**
@@ -10607,6 +10611,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'quantity'=>$request->get('quantity'),
             'description'=>$request->get('description'),
             'unit_price'=>$request->get('unitPrice'),
+            'received'=>$request->get('recievedBy'),
             'amount'=>$request->get('amount'),
             'total_price'=>$request->get('amount'),
             'created_by'=>$name,
@@ -10698,15 +10703,45 @@ class LoloPinoyLechonDeCebuController extends Controller
     public function edit($id)
     {
         //
-        $purchaseOrder = LechonDeCebuPurchaseOrder::find($id);
+
+        $moduleName = "Purchase Order";
+        $purchaseOrder = DB::table(
+                    'lechon_de_cebu_purchase_orders')
+                    ->select(
+                        'lechon_de_cebu_purchase_orders.id',
+                        'lechon_de_cebu_purchase_orders.user_id',
+                        'lechon_de_cebu_purchase_orders.po_id',
+                        'lechon_de_cebu_purchase_orders.paid_to',
+                        'lechon_de_cebu_purchase_orders.address',
+                        'lechon_de_cebu_purchase_orders.date',
+                        'lechon_de_cebu_purchase_orders.quantity',
+                        'lechon_de_cebu_purchase_orders.total_kls',
+                        'lechon_de_cebu_purchase_orders.description',
+                        'lechon_de_cebu_purchase_orders.unit_price',
+                        'lechon_de_cebu_purchase_orders.amount',
+                        'lechon_de_cebu_purchase_orders.total_price',
+                        'lechon_de_cebu_purchase_orders.requested_by',
+                        'lechon_de_cebu_purchase_orders.prepared_by',
+                        'lechon_de_cebu_purchase_orders.checked_by',
+                        'lechon_de_cebu_purchase_orders.created_by',
+                        'lechon_de_cebu_purchase_orders.deleted_at',
+                        'lechon_de_cebu_codes.lechon_de_cebu_code',
+                        'lechon_de_cebu_codes.module_id',
+                        'lechon_de_cebu_codes.module_code',
+                        'lechon_de_cebu_codes.module_name')
+                    ->leftJoin('lechon_de_cebu_codes', 'lechon_de_cebu_purchase_orders.id', '=', 'lechon_de_cebu_codes.module_id')
+                    ->where('lechon_de_cebu_purchase_orders.id',$id)
+                    ->where('lechon_de_cebu_codes.module_name', $moduleName)
+                    ->get();
+
 
         $pOrders = LechonDeCebuPurchaseOrder::where('po_id', $id)->get()->toArray();
 
-        //get users
-        $getUsers = User::get()->toArray();
-       
+        //get supplier
+        $getSuppliers = LechonDeCebuSupplier::get()->toArray();
 
-        return view('edit-lechon-de-cebu-purchase-order', compact('purchaseOrder', 'pOrders', 'getUsers'));
+    
+        return view('edit-lechon-de-cebu-purchase-order', compact('purchaseOrder', 'pOrders', 'getSuppliers'));
     }
 
     /**
@@ -10727,23 +10762,18 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $name  = $firstName." ".$lastName;
 
-        $paidTo = $request->get('paidTo');
-        $address = $request->get('address');
-        $quantity = $request->get('quantity');
-        $description = $request->get('description');
-        $date = $request->get('date');
-        $unitPrice = $request->get('unitPrice');
-        $amount = $request->get('amount');
 
         $purchaseOrder = LechonDeCebuPurchaseOrder::find($id);
         
-        $purchaseOrder->paid_to = $paidTo;
-        $purchaseOrder->address = $address;
-        $purchaseOrder->date = $date;
-        $purchaseOrder->description = $description;
-        $purchaseOrder->quantity = $quantity;
-        $purchaseOrder->unit_price = $unitPrice;
-        $purchaseOrder->amount = $amount;
+        $purchaseOrder->paid_to = $request->get('paidTo');
+        $purchaseOrder->address = $request->get('address');
+        $purchaseOrder->date = $request->get('date');
+        $purchaseOrder->description = $request->get('description');
+        $purchaseOrder->requested_by = $request->get('requestedBy');
+        $purchaseOrder->checked_by = $request->get('checkedBy');
+        $purchaseOrder->quantity = $request->get('quantity');
+        $purchaseOrder->unit_price = $request->get('unitPrice');
+        $purchaseOrder->amount = $request->get('amount');
 
         $purchaseOrder->save();
 

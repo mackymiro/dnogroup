@@ -102,7 +102,8 @@
                     {text:'Urgello', value:'Urgello'},
                     {text:'Velez', value:'Velez'},
                     {text:'Banilad', value:'Banilad'},
-                    {text:'GQS', value:'GQS' }
+                    {text:'GQS', value:'GQS' },
+                    {text:'Ramos', value:'Ramos'},
                 ]
             }
     });

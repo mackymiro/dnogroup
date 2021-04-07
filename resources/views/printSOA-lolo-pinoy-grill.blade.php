@@ -111,27 +111,61 @@
                           		  <thead>
                                       <tr>
                                         <th style="height: 1%; text-align: center;">DATE</th>
+                                        @if($Soa[0]->order === "Delivery Receipt")
+										<th style="height: 1%; text-align: center;">ORDER</th>
+										<th style="height: 1%; text-align: center;">QTY</th>
+										<th style="height: 1%; text-align: center;">UNIT PRICE</th>
+										<th style="height: 1%; text-align: center;">UNIT</th>
+										@else
                                         <th style="height: 1%; text-align: center;">INVOICE #</th>
+										<th style="height: 1%; text-align: center;">QTY</th>
+										<th style="height: 1%; text-align: center;">TOTAL KLS</th>
+										<th style="height: 1%; text-align: center;">UNIT PRICE</th>
+
+                                        @endif
                                         <th style="height: 1%; text-align: center;">DESCRIPTION</th>
                                         <th style="height: 1%; text-align: center;">AMOUNT</th>
                                         <th style="height: 1%; text-align: center;">STATUS</th>
                                       </tr>
                                     </thead>
                                   <tbody>
-                                  		<tr style="border:1px solid black;">
+                                    <tr style="border:1px solid black;">
                                       <td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->date_of_transaction }}</td>
+                                      @if($Soa[0]->order === "Delivery Receipt")
+										<td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->dr_no }}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->qty }}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->unit_price }}</td>
+										<td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->unit }}</td>
+									  @else
                                       <td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->invoice_number }}</td>
+									  <td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->qty }}</td>
+									  <td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->total_kls }}</td>
+									  <td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->unit_price }}</td>
+								
+								
+                                      @endif
                                       <td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->description }}</td>
-                                      <td style="text-align:center; border: 1px solid black;"><?php echo number_format($Soa[0]->amount, 2); ?></td>
+                                      <td style="text-align:center; border: 1px solid black;"><?= number_format($Soa[0]->amount, 2); ?></td>
                                        <td style="text-align:center; border: 1px solid black;">{{ $Soa[0]->status }}</td>
-                                  	 	</tr>
+                                    </tr>
                                   	 	 @foreach($statementAccounts as $statementAccount)
                                         <tr style="border:1px solid black;">
                                           <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['date_of_transaction'] }}</td>
+                                          @if($statementAccount['order'] === "Delivery Receipt")
+											<td style="text-align:center; border: 1px solid black;">{{ $statementAccount['dr_no'] }}</td>
+											<td style="text-align:center; border: 1px solid black;">{{ $statementAccount['qty'] }}</td>
+											<td style="text-align:center; border: 1px solid black;">{{ $statementAccount['unit_price'] }}</td>
+											<td style="text-align:center; border: 1px solid black;">{{ $statementAccount['unit'] }}</td>
+										  @else
                                           <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['invoice_number'] }}</td>
+                                          <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['qty'] }}</td>
+											<td style="text-align:center; border: 1px solid black;">{{ $statementAccount['total_kls'] }}</td>
+											<td style="text-align:center; border: 1px solid black;">{{ $statementAccount['unit_price'] }}</td>
+										
+                                          @endif
                                           <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['whole_lechon'] }}</td>
                                           <td style="text-align:center; border: 1px solid black;">{{ $statementAccount['description'] }}</td>
-                                          <td style="text-align:center; border: 1px solid black;"><?php echo number_format($statementAccount['amount'], 2);?></td>
+                                          <td style="text-align:center; border: 1px solid black;"><?= number_format($statementAccount['amount'], 2);?></td>
                                            <td style="text-align:center; border: 1px solid black;">{{ $Soa['status'] }}</td>
                                         </tr> 
                                         @endforeach
@@ -140,9 +174,11 @@
                                         <tr style="border:1px solid black;">
 	                                        <td style=" border: 1px solid black;"></td>
 	                                        <td style=" border: 1px solid black;"></td>
-                                            <td style=" border: 1px solid black;"></td>
+											<td style=" border: 1px solid black;"></td>
+											<td style=" border: 1px solid black;"></td>
+											<td style=" border: 1px solid black;"></td>
 	                                        <td style="text-align:center; border: 1px solid black;"><strong>Total</strong></td>
-	                                        <td style=" text-align:center; border: 1px solid black;"> <?php echo number_format($sum, 2)?></td>
+	                                        <td style=" text-align:center; border: 1px solid black;"> <?= number_format($sum, 2)?></td>
                                           <td  style=" border: 1px solid black;"></td>
                                         </tr>
                                   </tbody>

@@ -147,7 +147,7 @@
                       <td style="text-align:center; font-size:16px; ">{{ $deliveryId[0]->unit }}</td>
                       <td style="text-align:center; font-size:16px; ">{{ $deliveryId[0]->description }}</td>
                       <td style="text-align:center; font-size:16px; ">{{ $deliveryId[0]->unit_price}}</td>
-                      <td style="text-align:center; font-size:16px; "><?= number_format($deliveryId[0]->total, 2); ?></td>
+                      <td style="text-align:center; font-size:16px; "><?= number_format($deliveryId[0]->price, 2); ?></td>
                     </tr>
                      @foreach($deliveryReceipts as $deliveryReceipt)
                      <tr style="border:1px solid black;">
@@ -156,7 +156,7 @@
                         <td style="text-align:center; font-size:16px; ">{{ $deliveryReceipt['unit']}}</td>
                         <td style="text-align:center; font-size:16px; ">{{ $deliveryReceipt['description']}}</td>
                         <td style="text-align:center; font-size:16px; ">{{ $deliveryReceipt['unit_price']}}</td>
-                        <td style="text-align:center; font-size:16px; "><?= number_format($deliveryReceipt['total'], 2); ?></td>
+                        <td style="text-align:center; font-size:16px; "><?= number_format($deliveryReceipt['price'], 2); ?></td>
                      </tr>
                      @endforeach
                 </tbody>
@@ -185,7 +185,7 @@
                     </tr>
                     <tr  >
                         <th style="font-size:16px; height: 1%; ">&nbsp;</th>
-                        <th style="font-size:16px;">Aprilane Q Maturan</th>
+                        <th style="font-size:16px;">Antonia Cara S. Osmeña</th>
                     </tr>
                    
                 </thead>

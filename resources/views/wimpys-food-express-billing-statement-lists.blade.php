@@ -62,7 +62,11 @@
                                             </td>
                                             <td>{{ $billingStatement->date }}</td>
 			  								<td>{{ $billingStatement->bill_to }}</td>
-			  								<td>{{ $billingStatement->order }}</td>
+			  								<td>{{ $billingStatement->order }}
+												@if($billingStatement->order === "DR")
+													- {{ $billingStatement->dr_no }}
+												@endif  
+											</td>
 			  								<td>{{ $billingStatement->period_cover }}</td>
 			  								<td>{{ $billingStatement->created_by }}</td>
 			  							</tr>

@@ -73,7 +73,11 @@
                                             </td>
                                             @endif
                                             <td style="font-size:35px;">{{ $getOrder[0]->qty }}</td>
-                                            <td style="font-size:35px;">{{ $getOrder[0]->item_description}}</td>
+                                            <td style="font-size:35px;">{{ $getOrder[0]->item_description}}
+                                                 @if($getOrder[0]->flavor != "NULL")
+                                                     - {{ $getOrder[0]->flavor }}
+                                                @endif     
+                                            </td>
                                             <td style="font-size:35px;"><?php echo number_format($getOrder[0]->amount, 2) ?></td>
                                         </tr>
                                         @endif
@@ -90,7 +94,11 @@
                                             </td>
                                             @endif
                                             <td style="font-size:35px;">{{ $getTransaction->qty}}</td>
-                                            <td style="font-size:35px;">{{ $getTransaction->item_description}}</td>
+                                            <td style="font-size:35px;">{{ $getTransaction->item_description}} 
+                                                @if($getTransaction->flavor != "NULL")
+                                                - {{ $getTransaction->flavor }}
+                                                @endif    
+                                            </td>
                                             <td style="font-size:35px;">{{ $getTransaction->amount}}</td>
                                         </tr>
                                         @endif
@@ -102,8 +110,8 @@
                                     <td></td>
                                     @endif 
                                     <td></td>
-                                    <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Total</td>
-                                    <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?php echo number_format($getOrder[0]->total_amount_of_sales , 2); ?></span></td>
+                                    <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Sub Total</td>
+                                    <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?= number_format($getOrder[0]->total_amount_of_sales , 2); ?></span></td>
                                 </tr>
                                 <tr>
                                     @if(Auth::user()['role_type'] != 4)
@@ -118,8 +126,8 @@
                                     <td></td>
                                     @endif 
                                     <td></td>
-                                    <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Senior</td>
-                                    <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?php echo number_format($getOrder[0]->senior_amount, 2) ?> </span></td>
+                                    <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Senior Discount</td>
+                                    <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?= number_format($getOrder[0]->senior_amount, 2) ?> </span></td>
                                 </tr>
                                 <tr>
                                     @if(Auth::user()['role_type'] != 4)
@@ -127,15 +135,26 @@
                                     @endif 
                                     <td></td>
                                     <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Gift Cert</td>
-                                    <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?php echo number_format($getOrder[0]->gift_cert, 2);?></span></td>
+                                    <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?= number_format($getOrder[0]->gift_cert, 2);?></span></td>
                                 </tr>
                                 <tr>
                                     @if(Auth::user()['role_type'] != 4)
                                     <td></td>
                                     @endif 
                                     <td></td>
+                                    <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Total</td>
+                                    <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?= number_format($getOrder[0]->total , 2); ?></span></td>
+                                </tr>
+                               
+                              
+                              
+                                <tr>
+                                    @if(Auth::user()['role_type'] != 4)
+                                    <td></td>
+                                    @endif 
+                                    <td></td>
                                     <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Change</td>
-                                    <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?php echo number_format($getOrder[0]->change, 2);?></span></td>
+                                    <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?= number_format($getOrder[0]->change, 2);?></span></td>
                                 </tr>
                             </table>
                         </div>

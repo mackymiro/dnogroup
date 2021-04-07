@@ -10,6 +10,12 @@
 <link rel="stylesheet" href="/resources/demos/style.css">
 <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css" >
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.min.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
 <div id="wrapper">
 	<!-- Sidebar -->
     @include('sidebar.sidebar')
@@ -57,6 +63,7 @@
                                           <strong>{{ $errors->first('address') }}</strong>
                                         </span>
                                       @endif
+                                     
                                     </div>
                                     <div class="col-lg-6">
                                      
@@ -67,6 +74,12 @@
                                           <strong>{{ $errors->first('date') }}</strong>
                                         </span>
                                       @endif
+                                      <label>Recieved By</label>
+                                      <select data-live-search="true" name="recievedBy" class="form-control selectpicker">
+                                          @foreach($getSuppliers as $getSupplier)
+                                          <option value="{{ $getSupplier['supplier_name']}}">{{ $getSupplier['supplier_name']}}</option>
+                                          @endforeach
+                                      </select>
                                     </div>
                                   </div>
                               </div>

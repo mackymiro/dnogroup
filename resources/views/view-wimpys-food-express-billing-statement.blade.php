@@ -144,8 +144,9 @@
                                       <tr>
                                         <th class="bg-info" style="color:white;">DATE</th>
                                         <th class="bg-info" style="color:white;">DR #</th>
+                                        <th class="bg-info" style="color:white;">QTY</th>
                                         <th class="bg-info" style="color:white;">ITEM DESCRIPTION</th>
-                                        <th class="bg-info" style="color:white;">UNIT PRICE</th>
+                                        <th class="bg-info" style="color:white;">UNIT</th>
                                         <th class="bg-info" style="color:white;">AMOUNT</th>
                                       </tr>
                                     </thead>
@@ -154,6 +155,7 @@
                                         <td>{{ $viewBillingStatement[0]->date_of_transaction }}</td>                  
                                         
                                         <td>{{ $viewBillingStatement[0]->dr_no }}</td>
+                                        <td>{{ $viewBillingStatement[0]->qty }}</td>
                                         <td>{{ $viewBillingStatement[0]->description}}</td>
                                         <td>{{ $viewBillingStatement[0]->unit }}</td>
                                         <td><?= number_format($viewBillingStatement[0]->amount, 2); ?></td>
@@ -163,6 +165,7 @@
                                       <tr>
                                         <td>{{ $billingStatement['date_of_transaction'] }}</td>
                                         <td>{{ $billingStatement['dr_no'] }}</td>
+                                        <td>{{ $billingStatement['qty'] }}</td>
                                         <td>{{ $billingStatement['description'] }}</td>
                                         <td>{{ $billingStatement['unit'] }}</td>
                                         <td><?= number_format($billingStatement['amount'], 2);?></td>

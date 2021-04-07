@@ -132,15 +132,24 @@
                                          Gift Cert
                                     </div>
                                     <div class="card-body">
+                                          <form action="{{ action('LoloPinoyGrillBranchesController@addGC', $transaction[0]->id)}}" method="post">
+                                          {{ csrf_field() }}
                                           <div class="form-group">
                                                 <div class="form-row">  
                                                       <div class="col-lg-4 ">
                                                             <label><strong>GIFT CERT (optional)</strong></label>
-                                                            <input type="text" name="giftCert" placeholder="ENTER GIFT CERT HERE ..." class="form-control form-control-lg" onkeypress="return isNumber(event)" />
+                                                            <input type="text" name="giftCert" placeholder="ENTER GIFT CERT HERE ..." class="form-control form-control-lg" onkeypress="return isNumber(event)" required />
                                                       </div>
                                                 </div>
                                           </div>
-                                         
+                                          <div class="form-group">
+                                                <div class="form-row">  
+                                                      <div class="col-lg-4 ">
+                                                         <button type="submit" class="btn btn-success btn-lg">Add Gift Cert</button>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                          </form>
                                     </div>
                               </div>
                         </div>
@@ -202,14 +211,22 @@
                                                        @if($transaction[0]->deleted_at == NULL)
                                                       <tr>
                                                             <td>{{ $transaction[0]->qty}}</td>
-                                                            <td>{{ $transaction[0]->item_description}}</td>
+                                                            <td>{{ $transaction[0]->item_description}} 
+                                                                   @if($transaction[0]->flavor != "NULL")
+                                                                        - {{ $transaction[0]->flavor}}
+                                                                  @endif
+                                                                  </td>
                                                             <td>{{ $transaction[0]->amount}}</td>
                                                       </tr>
                                                       @endif
                                                       @foreach($getTransactions as $getTransaction)
                                                       <tr>
                                                       <td>{{ $getTransaction['qty']}}</td>
-                                                      <td>{{ $getTransaction['item_description']}}</td>
+                                                      <td>{{ $getTransaction['item_description']}} 
+                                                            @if($getTransaction['flavor'] != "NULL")
+                                                                  - {{ $getTransaction['flavor'] }}
+                                                            @endif
+                                                      </td>
                                                       <td>{{ $getTransaction['amount']}}</td>
                                                       </tr>
                                                       @endforeach
@@ -217,32 +234,33 @@
                                                 <tr>
                                                       <td></td>
                                                       <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Sub Total</td>
-                                                      <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?php echo number_format($transaction[0]->total_amount_of_sales , 2); ?></span></td>
+                                                      <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?= number_format($transaction[0]->total_amount_of_sales , 2); ?></span></td>
                                                 </tr>
                                                 <tr>
                                                       <td></td>
                                                       <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Cash</td>
-                                                      <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?php echo number_format($transaction[0]->cash_amount, 2);?></span></td>
+                                                      <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?= number_format($transaction[0]->cash_amount, 2);?></span></td>
                                                 </tr>
                                                 <tr>
                                                       <td></td>
                                                       <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Senior Discount</td>
-                                                      <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?php echo number_format($transaction[0]->senior_discount, 2)?></span></td>
-                                                </tr>
-                                                <tr>
-                                                      <td></td>
-                                                      <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Total</td>
-                                                      <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?php echo number_format($transaction[0]->total, 2)?></span></td>
+                                                      <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?= number_format($transaction[0]->senior_discount, 2)?></span></td>
                                                 </tr>
                                                 <tr>
                                                       <td></td>
                                                       <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Gift Cert</td>
-                                                      <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?php echo number_format($transaction[0]->gift_cert, 2);?></span></td>
+                                                      <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?= number_format($transaction[0]->gift_cert, 2);?></span></td>
                                                 </tr>
                                                 <tr>
                                                       <td></td>
+                                                      <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Total</td>
+                                                      <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?= number_format($transaction[0]->total, 2)?></span></td>
+                                                </tr>
+                                              
+                                                <tr>
+                                                      <td></td>
                                                       <td class="bg-success" style="color:#fff; font-size:35px; font-weight:bold">Change</td>
-                                                      <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?php echo number_format($transaction[0]->change, 2);?></span></td>
+                                                      <td class="bg-danger" ><span id="totalCharge" style="color:#fff; font-size:35px; font-weight:bold">₱ <?= number_format($transaction[0]->change, 2);?></span></td>
                                                 </tr>
                                            </table>      
                                            <div class="form-group">

@@ -147,9 +147,9 @@
                                       <tr>
                                         <th style="height: 1%; text-align: center;">DATE</th>
 										<th style="height: 1%; text-align: center;">DR #</th>
-									
+										<th style="height: 1%; text-align: center;">QTY</th>
                                         <th style="height: 1%; text-align: center;">ITEM DESCRIPTION</th>
-                                        <th style="height: 1%; text-align: center;">UNIT PRICE</th>
+                                        <th style="height: 1%; text-align: center;">UNIT</th>
                                         <th style="height: 1%; text-align: center;">AMOUNT</th>
                                       </tr>
                                     </thead>
@@ -157,6 +157,7 @@
                                   		<tr style="border:1px solid black;">
                                       <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->date_of_transaction }}</td>
                                       <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->dr_no }}</td>
+									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->qty }}</td>
 									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->description }}</td>
                                       <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->unit }}</td>
                                       <td style="text-align:center; border: 1px solid black;"><?= number_format($printBillingStatement[0]->amount, 2); ?></td>
@@ -165,6 +166,7 @@
                                         <tr style="border:1px solid black;">
                                           <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['date_of_transaction'] }}</td>
                                           <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['dr_no'] }}</td>
+										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['qty'] }}</td>
 										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['description'] }}</td>
                                           <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['unit'] }}</td>
                                           <td style="text-align:center; border: 1px solid black;"><?= number_format($billingStatement['amount'], 2);?></td>
@@ -176,6 +178,7 @@
 	                                        <td style=" border: 1px solid black;"></td>
 	                                        <td style=" border: 1px solid black;"></td>
                                           	<td style=" border: 1px solid black;"></td>
+											  <td style=" border: 1px solid black;"></td>
 	                                        <td style=" border: 1px solid black;"><strong>Total</strong></td>
 	                                        <td style=" text-align:center; border: 1px solid black;"> <?= number_format($sum, 2)?></td>
 	                                      </tr>

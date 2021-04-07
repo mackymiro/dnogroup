@@ -116,11 +116,11 @@
                                             <thead>
                                                 <tr>
                                                     <th width="30%">Requested By</th>
-                                                    <th></th>
+                                                    <th>{{ $purchaseOrder[0]->requested_by }}</th>
                                                 </tr>
                                                  <tr>
                                                     <th>Checked By</th>
-                                                    <th></th>
+                                                    <th>{{ $purchaseOrder[0]->checked_by }}</th>
                                                 </tr>
                                             </thead>
                                         </table>

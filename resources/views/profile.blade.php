@@ -9,68 +9,7 @@
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span>
         </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{ url('lolo-pinoy-lechon-de-cebu') }}">
-          <i class="fas fa-book"></i>
-          <span>Lolo Pinoy Lechon de Cebu</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{ url('lolo-pinoy-grill-commissary') }}">
-          <i class="fas fa-book"></i>
-          <span>Lolo Pinoy Grill Commissary</span>
-        </a>
-      </li>
-       <li class="nav-item">
-        <a class="nav-link" href="{{ url('lolo-pinoy-grill-branches') }}">
-          <i class="fas fa-book"></i>
-          <span>Lolo Pinoy Grill Branches</span>
-        </a>
-      </li>
-       <li class="nav-item">
-        <a class="nav-link" href="{{ url('mr-potato') }}">
-          <i class="fas fa-book"></i>
-          <span>Mr Potato</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{ url('ribos-bar') }}">
-          <i class="fas fa-book"></i>
-          <span>Ribos Bar</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{ url('dno-personal') }}">
-          <i class="fas fa-book"></i>
-          <span>DNO Personal</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">
-          <i class="fas fa-book"></i>
-          <span>DNO Food Ventures</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">
-          <i class="fas fa-book"></i>
-          <span>DNO Resources and Development Corp</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{ url('dong-fang-corporation')}}">
-          <i class="fas fa-book"></i>
-          <span>Dong Fang Corporation</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="{{ url('wlg-corporation') }}">
-          <i class="fas fa-book"></i>
-          <span>WLG Corporation</span>
-        </a>
-      </li>
-     
+      </li>   
      
     </ul>
     <div id="content-wrapper">

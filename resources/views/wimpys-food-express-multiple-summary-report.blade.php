@@ -358,7 +358,11 @@
                                                         </td>
                                                         <td>{{ $getStatementOfAccount->date }}</td>
                                                         <td>{{ $getStatementOfAccount->module_code}}{{ $getStatementOfAccount->wimpys_food_express_code}}</td>
-                                                        <td>{{ $getStatementOfAccount->order}}</td>
+                                                        <td>{{ $getStatementOfAccount->order}}
+                                                            @if($getStatementOfAccount->order === "DR")
+                                                                - {{ $getStatementOfAccount->dr_no }}
+                                                            @endif
+                                                        </td>
                                                         <td>{{ $getStatementOfAccount->bill_to}}</td>
                                                         <td>{{ $getStatementOfAccount->bs_no}}</td>
                                                         <td>{{ $getStatementOfAccount->period_cover }}</td>
@@ -455,7 +459,11 @@
                                                         <td>{{ $getBillingStatement->module_code}}{{ $getBillingStatement->wimpys_food_express_code}}</td>
                                                         <td>{{ $getBillingStatement->date}}</td>
                                                         <td>{{ $getBillingStatement->bill_to }}</td>
-                                                        <td>{{ $getBillingStatement->order }}</td>
+                                                        <td>{{ $getBillingStatement->order }}
+                                                            @if($getBillingStatement->order === "DR")
+                                                                - {{ $getBillingStatement->dr_no }}
+                                                            @endif
+                                                        </td>
                                                         <td>{{ $getBillingStatement->period_cover}}</td>
                                                         <td><?= number_format($getBillingStatement->total_amount, 2)?></td>
                                                         <td>{{ $getBillingStatement->created_by }}</td>

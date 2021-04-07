@@ -60,5 +60,7 @@ class Kernel extends HttpKernel
         'user' => \App\Http\Middleware\UserMiddleware::class,
         'sales' => \App\Http\Middleware\SalesMiddleware::class,
         'cashier'=> \App\Http\Middleware\CashierMiddleware::class,
+        'wimpys'=> \App\Http\Middleware\WimpysMiddleware::class,
+        'mrpotato'=> \App\Http\Middleware\MrPotatoMiddleware::class,
     ];
 }

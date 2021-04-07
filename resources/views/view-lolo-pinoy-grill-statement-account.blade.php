@@ -128,7 +128,17 @@
                                      <thead>
                                         <tr>
                                           <th class="bg-info" style="color:white;">DATE</th>
+                                          @if($viewStatementAccount[0]->order === "Delivery Receipt")
+                                          <th class="bg-info" style="color:white;">ORDER</th>
+                                          <th class="bg-info" style="color:white;">QTY</th>
+                                          <th class="bg-info" style="color:white;">UNIT PRICE</th>
+                                          <th class="bg-info" style="color:white;">UNIT</th>
+                                          @else
                                           <th class="bg-info" style="color:white;">INVOICE #</th>
+                                          <th class="bg-info" style="color:white;">QTY</th>
+                                          <th class="bg-info" style="color:white;">TOTAL KLS</th>
+                                          <th class="bg-info" style="color:white;">UNIT PRICE</th>
+                                          @endif
                                           <th class="bg-info" style="color:white;">DESCRIPTION</th>
                                           <th class="bg-info" style="color:white;">AMOUNT</th>
                                           <th class="bg-info" style="color:white;">STATUS</th>
@@ -137,20 +147,45 @@
                                       <tbody>
                                           <tr>
                                           <td>{{ $viewStatementAccount[0]->date_of_transaction }}</td>
+                                          @if($viewStatementAccount[0]->order === "Delivery Receipt")
+                                          <td>{{ $viewStatementAccount[0]->dr_no }}</td>
+                                          <td>{{ $viewStatementAccount[0]->qty }}</td>
+                                          <td>{{ $viewStatementAccount[0]->unit_price }}</td>
+                                          <td>{{ $viewStatementAccount[0]->unit }}</td>
+                                          @else
                                           <td>{{ $viewStatementAccount[0]->invoice_number }}</td>
+                                          <td>{{ $viewStatementAccount[0]->qty }}</td>
+                                          <td>{{ $viewStatementAccount[0]->total_kls }}</td>
+                                          <td>{{ $viewStatementAccount[0]->unit_price }}</td>
+                                          <td>{{ $viewStatementAccount[0]->description }}</td>
+                                          @endif
                                           <td>{{ $viewStatementAccount[0]->description }}</td>
                                           <td><?php echo number_format($viewStatementAccount[0]->amount, 2); ?></td>
                                           <td>{{ $viewStatementAccount[0]->status }}</td>
                                           </tr>
                                           @foreach($statementAccounts as $statementAccount)
                                           <tr>
-                                            <td>{{ $statementAccount['transaction_date'] }}</td>
+                                            <td>{{ $statementAccount['date_of_transaction'] }}</td>
+                                            @if($statementAccount['order'] === "Delivery Receipt")
+                                            <td>{{ $statementAccount['dr_no'] }}</td>
+                                            <td>{{ $statementAccount['qty'] }}</td>
+                                            <td>{{ $statementAccount['unit_price'] }}</td>
+                                            <td>{{ $statementAccount['unit'] }}</td>
+                                            @else
                                             <td>{{ $statementAccount['invoice_number'] }}</td>
+                                            <td>{{ $statementAccount['qty'] }}</td>
+                                            <td>{{ $statementAccount['total_kls'] }}</td>
+                                            <td>{{ $statementAccount['unit_price'] }}</td>
+                                            @endif
                                             <td>{{ $statementAccount['description'] }}</td>
                                             <td><?php echo number_format($statementAccount['amount'], 2);?></td>
                                             <td>{{ $statementAccount['status']}}</td>
                                           </tr>
                                           @endforeach
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
                                             <td></td>
                                             <td></td>
                                             <td><strong>Total</strong></td>

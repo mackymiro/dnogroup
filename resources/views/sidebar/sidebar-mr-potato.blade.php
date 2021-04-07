@@ -47,9 +47,9 @@
           <span>Purchase Order</span>
         </a>
         <div class="dropdown-menu" aria-labelledby="pagesDropdown">
-          @if(Auth::user()['role_type'] == 1)
+        
           <a class="dropdown-item" href="{{ url('mr-potato/purchase-order') }}">P.O Form</a>
-          @endif
+         
           <a class="dropdown-item" href="{{ url('mr-potato/purchase-order-lists') }}">Lists</a>
          
         </div>

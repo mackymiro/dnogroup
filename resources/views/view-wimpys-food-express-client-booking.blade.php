@@ -62,6 +62,23 @@
                                                 <th>Total Amount</th>
                                                 <th><?= number_format($viewClientBooking[0]->total, 2)?></th>
                                             </tr>
+                                            <tr class="bg-success" style="color:white;">
+                                                <th>Less</th>
+                                                <th>
+                                                {{ $viewClientBooking[0]->description}} - 
+                                                <?= number_format($viewClientBooking[0]->less, 2)?></th>
+                                            </tr>
+                                            <tr class="bg-success" style="color:white;">
+                                                
+                                               <?php
+                                                  $total = $viewClientBooking[0]->total - $viewClientBooking[0]->less;
+                                                ?>
+                                                <th>Balance</th>
+                                                <th>
+                                                  <?= number_format($total, 2) ?>
+                                                </th>
+                                               
+                                            </tr>
                                         </thead>
 
                                     </table>
@@ -76,6 +93,16 @@
                                                    @foreach($viewClientBooking[0]->client_bookings as $clientBooking)
                                                         @if($clientBooking->module_name === "Client Booking")          
                                                             {{ $clientBooking->module_code }} {{ $clientBooking->wimpys_food_express_code}}
+                                                        @endif
+                                                    @endforeach
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th width="40%">Client Booking No</th>
+                                                <th>
+                                                   @foreach($viewClientBooking[0]->client_bookings as $clientBooking)
+                                                        @if($clientBooking->module_name === "Client Booking")          
+                                                            {{ $clientBooking->cbf_no }} 
                                                         @endif
                                                     @endforeach
                                                 </th>
@@ -106,6 +133,7 @@
                                   </div>
                                 </div>
                                </div>
+                               @if($viewClientBooking[0]->type_of_package != "Cooking Charge - 0.00")
                                <table class="table table-striped">
                                   <thead>
                                     <tr>
@@ -215,8 +243,32 @@
                                         </tr>
                                   </tbody>
                                </table>
-                            
-                          
+                              @endif
+
+                              @if($viewClientBooking[0]->type_of_package === "Cooking Charge - 0.00")
+                              <table class="table table-striped">
+                                  <thead>
+                                    <tr>
+                                      <th class="bg-info" style="color:white;">Qty</th>
+                                      <th class="bg-info" style="color:white;">Item</th>
+                                      <th class="bg-info" style="color:white;">Amount</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                       @foreach($getMenuItems as $getMenuItem)
+                                      <tr>
+                                         <td>{{ $getMenuItem['qty']}}</td>
+                                         <td> {{ $getMenuItem['item'] }},</td>
+                                          <td>
+                                            <?= number_format($getMenuItem['amount'], 2)?>
+                                          </td>
+                                          
+                                      </tr>
+                                      @endforeach 
+                                       
+                                  </tbody>
+                               </table>
+                              @endif
                               
                         </div>
                     </div>
