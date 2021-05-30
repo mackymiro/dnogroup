@@ -198,7 +198,7 @@ class WlgCorporationController extends Controller
     public function addSupplier(Request $request){
         $ids = Auth::user()->id;
         $user = User::find($ids);
-
+        
         $firstName = $user->first_name;
         $lastName = $user->last_name;
 
@@ -2743,7 +2743,34 @@ class WlgCorporationController extends Controller
     }
 
     public function printPO($id){
-        $purchaseOrder = WlgCorporationPurchaseOrder::find($id);
+        $moduleName = "Purchase Order";
+        $purchaseOrder = DB::table(
+                        'wlg_corporation_purchase_orders')
+                        ->select(
+                            'wlg_corporation_purchase_orders.id',
+                            'wlg_corporation_purchase_orders.user_id',
+                            'wlg_corporation_purchase_orders.po_id',
+                            'wlg_corporation_purchase_orders.paid_to',
+                            'wlg_corporation_purchase_orders.address',
+                            'wlg_corporation_purchase_orders.date',
+                            'wlg_corporation_purchase_orders.model',
+                            'wlg_corporation_purchase_orders.particulars',
+                            'wlg_corporation_purchase_orders.quantity',
+                            'wlg_corporation_purchase_orders.unit_price',
+                            'wlg_corporation_purchase_orders.amount',
+                            'wlg_corporation_purchase_orders.requested_by',
+                            'wlg_corporation_purchase_orders.prepared_by',
+                            'wlg_corporation_purchase_orders.checked_by',
+                            'wlg_corporation_purchase_orders.created_by',
+                            'wlg_corporation_purchase_orders.deleted_at',
+                            'wlg_corporation_codes.wlg_code',
+                            'wlg_corporation_codes.module_id',
+                            'wlg_corporation_codes.module_code',
+                            'wlg_corporation_codes.module_name')
+                        ->join('wlg_corporation_codes', 'wlg_corporation_purchase_orders.id', '=', 'wlg_corporation_codes.module_id')
+                        ->where('wlg_corporation_purchase_orders.id', $id)
+                        ->where('wlg_corporation_codes.module_name', $moduleName)
+                        ->get();
 
         $pOrders = WlgCorporationPurchaseOrder::where('po_id', $id)->get()->toArray();
 

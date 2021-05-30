@@ -124,8 +124,11 @@
 										<td style="text-align:center; border: 1px solid black;">
 												<p>
                                              
-                                              <?php $totl = $statementOfAccount->qty + $getQty;?>
-                                              <?= $totl; ?>
+												<?php if( $statementOfAccount->qty != "."): ?>
+													<?php $totl = $statementOfAccount->qty + $getQty;?>
+                                              		<?= $totl; ?>
+												<?php endif; ?>
+                                              
                                               </p>
                                             
 										  </td>

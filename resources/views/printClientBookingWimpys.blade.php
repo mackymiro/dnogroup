@@ -123,7 +123,7 @@
                           <br>
                           <br>
                           <br>
-                          @if($printCB[0]->type_of_package != "Cooking Charge - 0.00")
+                          @if($printCB[0]->type_of_package != "Cooking Charge - 0.00" && $printCB[0]->type_of_package != "Staff Meals - 0.00")
                           <table style="border:1px solid black;">
                           		  <thead>
 	                                  <tr>
@@ -245,7 +245,7 @@
                                   </tbody>
                           </table>
                           @endif
-                          @if($printCB[0]->type_of_package === "Cooking Charge - 0.00")
+                          @if($printCB[0]->type_of_package === "Cooking Charge - 0.00" || $printCB[0]->type_of_package === "Staff Meals - 0.00")
                             <table style="border:1px solid black;">
                           		  <thead>
 	                                  <tr style="border:1px solid black;">
@@ -324,12 +324,12 @@
                            					</td>
                                                <td>
                            						________________________<br>
-                           						
+                           					    Antonia Cara S. Osmeña	
 
                            					</td>
                            					<td>
                            						________________________<br>
-                           						Mr. Alan L. Dino
+                           						{{ $printCB[0]->client }}
                            					</td>
 											
 

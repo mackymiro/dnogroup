@@ -8619,8 +8619,9 @@ class LoloPinoyGrillCommissaryController extends Controller
     }
 
     public function destroyBillingDataStatement(Request $request, $id){
+       
         $billStatement = LoloPinoyGrillCommissaryBillingStatement::find($request->billingStatementId);
-
+      
         $billingStatement = LoloPinoyGrillCommissaryBillingStatement::find($id);
 
         $getAmount = $billStatement->total_amount - $billingStatement->amount;

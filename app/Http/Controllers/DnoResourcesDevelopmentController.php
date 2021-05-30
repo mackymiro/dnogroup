@@ -3239,6 +3239,7 @@ class DnoResourcesDevelopmentController extends Controller
                             'dno_resources_development_corp_payment_vouchers.approved_by',
                             'dno_resources_development_corp_payment_vouchers.date_apprroved',
                             'dno_resources_development_corp_payment_vouchers.received_by_date',
+                            'dno_resources_development_corp_payment_vouchers.currency',
                             'dno_resources_development_corp_payment_vouchers.created_by',
                             'dno_resources_development_corp_payment_vouchers.invoice_number',
                             'dno_resources_development_corp_payment_vouchers.issued_date',

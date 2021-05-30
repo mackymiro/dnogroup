@@ -133,7 +133,7 @@
                                   </div>
                                 </div>
                                </div>
-                               @if($viewClientBooking[0]->type_of_package != "Cooking Charge - 0.00")
+                               @if($viewClientBooking[0]->type_of_package != "Cooking Charge - 0.00" && $viewClientBooking[0]->type_of_package != "Staff Meals - 0.00")
                                <table class="table table-striped">
                                   <thead>
                                     <tr>
@@ -245,7 +245,7 @@
                                </table>
                               @endif
 
-                              @if($viewClientBooking[0]->type_of_package === "Cooking Charge - 0.00")
+                              @if($viewClientBooking[0]->type_of_package === "Cooking Charge - 0.00" || $viewClientBooking[0]->type_of_package === "Staff Meals - 0.00")
                               <table class="table table-striped">
                                   <thead>
                                     <tr>

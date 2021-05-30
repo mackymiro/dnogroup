@@ -100,11 +100,11 @@
 					  				<thead>
 					  					<tr>
 					  						<th width="30%" class="bg-info" style="color:white; font-size:28px;">TOTAL PAID AMOUNT</th>
-					  						<th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?php echo number_format($totalAmount, 2);?></span></th>
+					  						<th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?= number_format($totalAmount, 2);?></span></th>
 					  					</tr>
                       <tr>
 					  						<th width="30%" class="bg-info" style="color:white; font-size:28px;">TOTAL UNPAID AMOUNT</th>
-					  						<th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?php echo number_format($totalRemainingBalance, 2);?></span></th>
+					  						<th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?= number_format($totalRemainingBalance, 2);?></span></th>
 					  					</tr>
 
 					  				</thead>
@@ -225,8 +225,13 @@
                                           <td>
                                              <p>
                                              
-                                              <?php $totl = $privateOrder->qty + $getQty;?>
-                                              <?= $totl; ?>
+                                              <?php if( $privateOrder->qty != "."): ?>
+                                                  <?php $totl = $privateOrder->qty + $getQty;?>
+                                                  <?= $totl; ?>
+
+                                              <?php endif; ?>
+
+                                             
                                               </p>
                                               
                                               
@@ -239,8 +244,8 @@
                                             @endif
                                           </td>
                                           
-                                          <td><?php echo number_format($privateOrder->total_amount, 2)?></td>
-                                          <td><?php echo number_format($privateOrder->total_remaining_balance, 2)?></td>
+                                          <td><?= number_format($privateOrder->total_amount, 2)?></td>
+                                          <td><?= number_format($privateOrder->total_remaining_balance, 2)?></td>
                                           <td>{{ $privateOrder->created_by}}</td>
                                         </tr>
                                       @endforeach
@@ -251,11 +256,11 @@
                                   <thead>
                                     <tr>
                                       <th width="30%" class="bg-info" style="color:white; font-size:28px;">TOTAL PAID AMOUNT</th>
-                                      <th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?php echo number_format($totalAmountPO, 2);?></span></th>
+                                      <th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?= number_format($totalAmountPO, 2);?></span></th>
                                     </tr>
                                     <tr>
                                       <th width="30%" class="bg-info" style="color:white; font-size:28px;">TOTAL UNPAID AMOUNT</th>
-                                      <th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?php echo number_format($totalRemainingBalancePo, 2);?></span></th>
+                                      <th class="bg-danger" style="color:white; font-size:28px;"><span id="totalDue">₱ <?= number_format($totalRemainingBalancePo, 2);?></span></th>
                                     </tr>
 
                                   </thead>

@@ -160,13 +160,13 @@
 
                     if(succDataArr == "Success"){
                         $("#succAdd").fadeIn().delay(3000).fadeOut();
-                        $("#succAdd").html(`<p class="alert alert-success">Succesfully added.</p>`);
+                        $("#succAdd").html(`<p class="alert alert-success">${getData}</p>`);
                         setTimeout(function(){
                             document.location.reload();
                         }, 3000);
                     }else{
                         $("#succExists").fadeIn().delay(3000).fadeOut();
-                        $("#succExists").html(`<p class="alert alert-danger">Supplier already exists.</p>`);
+                        $("#succExists").html(`<p class="alert alert-danger">${getData}</p>`);
                     }
                 },
                 error:function(data){

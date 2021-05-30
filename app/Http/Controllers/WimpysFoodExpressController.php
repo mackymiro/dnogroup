@@ -22,6 +22,7 @@ use App\WimpysFoodExpressClientBookingForm;
 use App\WimpysFoodExpressDeliveryReceipt;
 use App\WimpysFoodExpressRawMaterial;
 use App\WimpysFoodExpressRawMaterialProduct; 
+use App\WimpysFoodExpressPettyCash;
 
 class WimpysFoodExpressController extends Controller
 {
@@ -35,6 +36,148 @@ class WimpysFoodExpressController extends Controller
     CONST MODULE_NAME_SOA    = "Statement Of Account";
     CONST MODULE_NAME_BS     = "Billing Statement";
     CONST MODULE_NAME_PV     = "Payment Voucher";
+
+    public function printPettyCash($id){
+        $getPettyCash =  WimpysFoodExpressPettyCash::with(['user', 'petty_cashes'])
+                                                    ->where('id', $id)
+                                                    ->get();
+
+        $getPettyCashSummaries = WimpysFoodExpressPettyCash::where('pc_id', $id)->get()->toArray();
+
+        //total
+        $totalPettyCash = WimpysFoodExpressPettyCash::where('id', $id)->where('pc_id', NULL)->sum('amount');
+
+        $pettyCashSummaryTotal = WimpysFoodExpressPettyCash::where('pc_id', $id)->sum('amount');
+
+        $sum = $totalPettyCash + $pettyCashSummaryTotal;
+
+        $pdf = PDF::loadView('printPettyCashWimpysFoodExpress', compact('getPettyCash', 'getPettyCashSummaries', 'sum'));
+
+        return $pdf->download('wimpys-food-express-petty-cash.pdf');
+    }
+
+    public function viewPettyCash($id){
+        $getPettyCash =  WimpysFoodExpressPettyCash::with(['user', 'petty_cashes'])
+                                                    ->where('id', $id)
+                                                    ->get();
+
+        $getPettyCashSummaries = WimpysFoodExpressPettyCash::where('pc_id', $id)->get()->toArray();
+
+        //total
+        $totalPettyCash = WimpysFoodExpressPettyCash::where('id', $id)->where('pc_id', NULL)->sum('amount');
+
+        $pettyCashSummaryTotal = WimpysFoodExpressPettyCash::where('pc_id', $id)->sum('amount');
+
+        $sum = $totalPettyCash + $pettyCashSummaryTotal;
+
+
+        return view('wimpys-food-express-view-petty-cash', compact('getPettyCash', 'getPettyCashSummaries', 'sum'));
+    }
+
+    public function updatePC(Request $request, $id){
+        $updatePC = WimpysFoodExpressPettyCash::find($id);
+
+        $updatePC->date = $request->get('date');
+        $updatePC->petty_cash_summary = $request->get('pettyCashSummary');
+        $updatePC->amount = $request->get('amount');
+        $updatePC->save();
+
+        Session::flash('updatePC', 'Successfully updated.');
+        return redirect()->route('editPettyCashWimpys', ['id'=>$request->get('pcId')]);
+    }
+
+    public function addNewPettyCash(Request $request, $id){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+        $addNew = new WimpysFoodExpressPettyCash([
+            'user_id'=>$user->id,
+            'pc_id'=>$id,
+            'date'=>$request->get('date'),
+            'petty_cash_summary'=>$request->get('pettyCashSummary'),
+            'amount'=>$request->get('amount'),
+            'created_by'=>$name,
+        ]);
+        $addNew->save();
+
+        Session::flash('addNewSuccess', 'Successfully added.');
+
+        return redirect()->route('editPettyCashWimpys', ['id'=>$id]);
+    }
+
+    public function editPettyCash($id){
+        $pettyCash =  WimpysFoodExpressPettyCash::with(['user', 'petty_cashes'])
+                                                ->where('id', $id)
+                                                ->get();
+
+        $pettyCashSummaries = WimpysFoodExpressPettyCash::where('pc_id', $id)->get()->toArray();
+
+        return view('edit-wimpys-food-express-petty-cash', compact('pettyCash', 'pettyCashSummaries'));
+    }
+
+    public function addPettyCash(Request $request){
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+         //get the latest insert id query in table dno personal codes
+         $dataCashNo = DB::select('SELECT id, wimpys_food_express_code FROM wimpys_food_express_codes ORDER BY id DESC LIMIT 1');
+
+         //if code is not zero add plus 1 petty cash no
+         if(isset($dataCashNo[0]->wimpys_food_express_code) != 0){
+             //if code is not 0
+             $newProd = $dataCashNo[0]->wimpys_food_express_code +1;
+             $uPetty = sprintf("%06d",$newProd);   
+ 
+         }else{
+             //if code is 0 
+             $newProd = 1;
+             $uPetty = sprintf("%06d",$newProd);
+         } 
+
+         $addPettyCash = new WimpysFoodExpressPettyCash([
+            'user_id'=>$user->id,
+            'date'=>$request->date,
+            'petty_cash_name'=>$request->pettyCashName,
+            'petty_cash_summary'=>$request->pettyCashSummary,
+            'created_by'=>$name,
+        ]);
+
+        $addPettyCash->save();
+        $insertId = $addPettyCash->id;
+
+        $moduleCode = "PC-";
+        $moduleName = "Petty Cash";
+
+        $wimpysCode = new WimpysFoodExpressCode([
+            'user_id'=>$user->id,
+            'wimpys_food_express_code'=>$uPetty,
+            'module_id'=>$insertId,
+            'module_code'=>$moduleCode,
+            'module_name'=>$moduleName,
+        ]);
+        $wimpysCode->save();
+      
+        return response()->json($insertId);
+    }
+
+    public function pettyCashList(){
+        $pettyCashLists =  WimpysFoodExpressPettyCash::with(['user', 'petty_cashes'])
+                                                        ->where('pc_id', NULL)
+                                                        ->where('deleted_at', NULL)
+                                                        ->orderBy('id', 'desc')
+                                                        ->get();
+        return view('wimpys-food-express-petty-cash-list', compact('pettyCashLists'));
+    }
 
     public function printMultipleSummaryGetBSDR(Request $request){
         $urlSegment = \Request::segment(2);
@@ -592,6 +735,7 @@ class WimpysFoodExpressController extends Controller
                         'wimpys_food_express_statement_of_accounts.user_id',
                         'wimpys_food_express_statement_of_accounts.billing_statement_id',
                         'wimpys_food_express_statement_of_accounts.bill_to',
+                        'wimpys_food_express_statement_of_accounts.dr_no',
                         'wimpys_food_express_statement_of_accounts.date',
                         'wimpys_food_express_statement_of_accounts.order',
                         'wimpys_food_express_statement_of_accounts.bs_no',
@@ -632,6 +776,7 @@ class WimpysFoodExpressController extends Controller
                             'wimpys_food_express_billing_statements.user_id',
                             'wimpys_food_express_billing_statements.billing_statement_id',
                             'wimpys_food_express_billing_statements.bill_to',
+                            'wimpys_food_express_billing_statements.dr_no',
                             'wimpys_food_express_billing_statements.date',
                             'wimpys_food_express_billing_statements.order',
                             'wimpys_food_express_billing_statements.period_cover',
@@ -1002,6 +1147,7 @@ class WimpysFoodExpressController extends Controller
                         'wimpys_food_express_statement_of_accounts.user_id',
                         'wimpys_food_express_statement_of_accounts.billing_statement_id',
                         'wimpys_food_express_statement_of_accounts.bill_to',
+                        'wimpys_food_express_statement_of_accounts.dr_no',
                         'wimpys_food_express_statement_of_accounts.date',
                         'wimpys_food_express_statement_of_accounts.order',
                         'wimpys_food_express_statement_of_accounts.bs_no',
@@ -1042,6 +1188,7 @@ class WimpysFoodExpressController extends Controller
                             'wimpys_food_express_billing_statements.user_id',
                             'wimpys_food_express_billing_statements.billing_statement_id',
                             'wimpys_food_express_billing_statements.bill_to',
+                            'wimpys_food_express_billing_statements.dr_no',
                             'wimpys_food_express_billing_statements.date',
                             'wimpys_food_express_billing_statements.order',
                             'wimpys_food_express_billing_statements.period_cover',
@@ -1451,6 +1598,7 @@ class WimpysFoodExpressController extends Controller
                             'wimpys_food_express_billing_statements.user_id',
                             'wimpys_food_express_billing_statements.billing_statement_id',
                             'wimpys_food_express_billing_statements.bill_to',
+                            'wimpys_food_express_billing_statements.dr_no',
                             'wimpys_food_express_billing_statements.date',
                             'wimpys_food_express_billing_statements.order',
                             'wimpys_food_express_billing_statements.period_cover',
@@ -1716,6 +1864,7 @@ class WimpysFoodExpressController extends Controller
             'wimpys_food_express_billing_statements.user_id',
             'wimpys_food_express_billing_statements.billing_statement_id',
             'wimpys_food_express_billing_statements.bill_to',
+            'wimpys_food_express_billing_statements.dr_no',
             'wimpys_food_express_billing_statements.date',
             'wimpys_food_express_billing_statements.order',
             'wimpys_food_express_billing_statements.period_cover',
@@ -1747,6 +1896,7 @@ class WimpysFoodExpressController extends Controller
                 'wimpys_food_express_billing_statements.user_id',
                 'wimpys_food_express_billing_statements.billing_statement_id',
                 'wimpys_food_express_billing_statements.bill_to',
+                'wimpys_food_express_billing_statements.dr_no',
                 'wimpys_food_express_billing_statements.date',
                 'wimpys_food_express_billing_statements.order',
                 'wimpys_food_express_billing_statements.period_cover',
@@ -1793,6 +1943,7 @@ class WimpysFoodExpressController extends Controller
             'wimpys_food_express_statement_of_accounts.user_id',
             'wimpys_food_express_statement_of_accounts.billing_statement_id',
             'wimpys_food_express_statement_of_accounts.bill_to',
+            'wimpys_food_express_statement_of_accounts.dr_no',
             'wimpys_food_express_statement_of_accounts.date',
             'wimpys_food_express_statement_of_accounts.order',
             'wimpys_food_express_statement_of_accounts.bs_no',
@@ -1825,9 +1976,126 @@ class WimpysFoodExpressController extends Controller
             ->orderBy('wimpys_food_express_statement_of_accounts.id', 'desc')
             ->get()->toArray();
 
+
+    $status = "PAID";   
+    $totalBalance =  DB::table(
+                'wimpys_food_express_statement_of_accounts')
+                ->select(
+                'wimpys_food_express_statement_of_accounts.id',
+                'wimpys_food_express_statement_of_accounts.user_id',
+                'wimpys_food_express_statement_of_accounts.billing_statement_id',
+                'wimpys_food_express_statement_of_accounts.bill_to',
+                'wimpys_food_express_statement_of_accounts.date',   
+                'wimpys_food_express_statement_of_accounts.order',
+                'wimpys_food_express_statement_of_accounts.bs_no',
+                'wimpys_food_express_statement_of_accounts.period_cover',
+                'wimpys_food_express_statement_of_accounts.terms',
+                'wimpys_food_express_statement_of_accounts.date_of_transaction',
+                'wimpys_food_express_statement_of_accounts.description',
+                'wimpys_food_express_statement_of_accounts.amount',
+                'wimpys_food_express_statement_of_accounts.paid_amount',
+                'wimpys_food_express_statement_of_accounts.payment_method',
+                'wimpys_food_express_statement_of_accounts.collection_date',
+                'wimpys_food_express_statement_of_accounts.check_number',
+                'wimpys_food_express_statement_of_accounts.check_amount',
+                'wimpys_food_express_statement_of_accounts.or_number',
+                'wimpys_food_express_statement_of_accounts.status',
+                'wimpys_food_express_statement_of_accounts.total_amount',
+                'wimpys_food_express_statement_of_accounts.total_remaining_balance',
+                'wimpys_food_express_statement_of_accounts.created_by',
+                'wimpys_food_express_statement_of_accounts.deleted_at',
+                'wimpys_food_express_codes.wimpys_food_express_code',
+                'wimpys_food_express_codes.module_id',
+                'wimpys_food_express_codes.module_code',
+                'wimpys_food_express_codes.module_name')
+                ->join('wimpys_food_express_codes', 'wimpys_food_express_statement_of_accounts.id', '=', 'wimpys_food_express_codes.module_id')
+                ->where('wimpys_food_express_statement_of_accounts.billing_statement_id', NULL)
+                ->where('wimpys_food_express_codes.module_name', self::MODULE_NAME_SOA)
+                ->where('wimpys_food_express_statement_of_accounts.deleted_at', NULL)
+                ->whereDate('wimpys_food_express_statement_of_accounts.created_at', '=', date($date))
+                ->sum('wimpys_food_express_statement_of_accounts.total_amount');
+
+
+    $totalSOA =  DB::table(
+                'wimpys_food_express_statement_of_accounts')
+                ->select(
+                'wimpys_food_express_statement_of_accounts.id',
+                'wimpys_food_express_statement_of_accounts.user_id',
+                'wimpys_food_express_statement_of_accounts.billing_statement_id',
+                'wimpys_food_express_statement_of_accounts.bill_to',
+                'wimpys_food_express_statement_of_accounts.date',
+                'wimpys_food_express_statement_of_accounts.order',
+                'wimpys_food_express_statement_of_accounts.bs_no',
+                'wimpys_food_express_statement_of_accounts.period_cover',
+                'wimpys_food_express_statement_of_accounts.terms',
+                'wimpys_food_express_statement_of_accounts.date_of_transaction',
+                'wimpys_food_express_statement_of_accounts.description',
+                'wimpys_food_express_statement_of_accounts.amount',
+                'wimpys_food_express_statement_of_accounts.paid_amount',
+                'wimpys_food_express_statement_of_accounts.payment_method',
+                'wimpys_food_express_statement_of_accounts.collection_date',
+                'wimpys_food_express_statement_of_accounts.check_number',
+                'wimpys_food_express_statement_of_accounts.check_amount',
+                'wimpys_food_express_statement_of_accounts.or_number',
+                'wimpys_food_express_statement_of_accounts.status',
+                'wimpys_food_express_statement_of_accounts.total_amount',
+                'wimpys_food_express_statement_of_accounts.total_remaining_balance',
+                'wimpys_food_express_statement_of_accounts.created_by',
+                'wimpys_food_express_statement_of_accounts.deleted_at',
+                'wimpys_food_express_codes.wimpys_food_express_code',
+                'wimpys_food_express_codes.module_id',
+                'wimpys_food_express_codes.module_code',
+                'wimpys_food_express_codes.module_name')
+                ->join('wimpys_food_express_codes', 'wimpys_food_express_statement_of_accounts.id', '=', 'wimpys_food_express_codes.module_id')
+                ->where('wimpys_food_express_statement_of_accounts.billing_statement_id', NULL)
+                ->where('wimpys_food_express_codes.module_name', self::MODULE_NAME_SOA)
+                ->where('wimpys_food_express_statement_of_accounts.status', $status)
+                ->where('wimpys_food_express_statement_of_accounts.deleted_at', NULL)
+                ->whereDate('wimpys_food_express_statement_of_accounts.created_at', '=', date($date))
+                ->sum('wimpys_food_express_statement_of_accounts.total_amount');
+
+
+        $totalRemainingBalance =  DB::table(
+                    'wimpys_food_express_statement_of_accounts')
+                    ->select(
+                    'wimpys_food_express_statement_of_accounts.id',
+                    'wimpys_food_express_statement_of_accounts.user_id',
+                    'wimpys_food_express_statement_of_accounts.billing_statement_id',
+                    'wimpys_food_express_statement_of_accounts.bill_to',
+                    'wimpys_food_express_statement_of_accounts.date',
+                    'wimpys_food_express_statement_of_accounts.order',
+                    'wimpys_food_express_statement_of_accounts.bs_no',
+                    'wimpys_food_express_statement_of_accounts.period_cover',
+                    'wimpys_food_express_statement_of_accounts.terms',
+                    'wimpys_food_express_statement_of_accounts.date_of_transaction',
+                    'wimpys_food_express_statement_of_accounts.description',
+                    'wimpys_food_express_statement_of_accounts.amount',
+                    'wimpys_food_express_statement_of_accounts.paid_amount',
+                    'wimpys_food_express_statement_of_accounts.payment_method',
+                    'wimpys_food_express_statement_of_accounts.collection_date',
+                    'wimpys_food_express_statement_of_accounts.check_number',
+                    'wimpys_food_express_statement_of_accounts.check_amount',
+                    'wimpys_food_express_statement_of_accounts.or_number',
+                    'wimpys_food_express_statement_of_accounts.status',
+                    'wimpys_food_express_statement_of_accounts.total_amount',
+                    'wimpys_food_express_statement_of_accounts.total_remaining_balance',
+                    'wimpys_food_express_statement_of_accounts.created_by',
+                    'wimpys_food_express_statement_of_accounts.deleted_at',
+                    'wimpys_food_express_codes.wimpys_food_express_code',
+                    'wimpys_food_express_codes.module_id',
+                    'wimpys_food_express_codes.module_code',
+                    'wimpys_food_express_codes.module_name')
+                    ->join('wimpys_food_express_codes', 'wimpys_food_express_statement_of_accounts.id', '=', 'wimpys_food_express_codes.module_id')
+                    ->where('wimpys_food_express_statement_of_accounts.billing_statement_id', NULL)
+                    ->where('wimpys_food_express_codes.module_name', self::MODULE_NAME_SOA)
+                    ->where('wimpys_food_express_statement_of_accounts.deleted_at', NULL)
+                    ->where('wimpys_food_express_statement_of_accounts.status', NULL)
+                    ->whereDate('wimpys_food_express_statement_of_accounts.created_at', '=', date($date))
+                    ->sum('wimpys_food_express_statement_of_accounts.total_remaining_balance');
+
     $getDateToday = "";     
     $pdf = PDF::loadView('printSummaryWimpysSOA',  compact('date', 'getDateToday', 'uri0', 'uri1', 
-        'getStatementOfAccounts'));
+        'getStatementOfAccounts', 'totalBalance', 'totalSOA', 'totalRemainingBalance'));
     
     return $pdf->download('wimpys-food-express-inc-summary-statement-of-account.pdf');
     
@@ -1944,10 +2212,41 @@ class WimpysFoodExpressController extends Controller
             ->orderBy('wimpys_food_express_billing_statements.id', 'desc')
             ->get()->toArray();
 
+    $totalAmount =  DB::table(
+                'wimpys_food_express_billing_statements')
+                ->select(
+                'wimpys_food_express_billing_statements.id',
+                'wimpys_food_express_billing_statements.user_id',
+                'wimpys_food_express_billing_statements.billing_statement_id',
+                'wimpys_food_express_billing_statements.bill_to',
+                'wimpys_food_express_billing_statements.dr_no',
+                'wimpys_food_express_billing_statements.date',
+                'wimpys_food_express_billing_statements.order',
+                'wimpys_food_express_billing_statements.period_cover',
+                'wimpys_food_express_billing_statements.terms',
+                'wimpys_food_express_billing_statements.date_of_transaction',
+                'wimpys_food_express_billing_statements.description',
+                'wimpys_food_express_billing_statements.amount',
+                'wimpys_food_express_billing_statements.paid_amount',
+                'wimpys_food_express_billing_statements.total_amount',
+                'wimpys_food_express_billing_statements.created_by',
+                'wimpys_food_express_billing_statements.deleted_at',
+                'wimpys_food_express_codes.wimpys_food_express_code',
+                'wimpys_food_express_codes.module_id',
+                'wimpys_food_express_codes.module_code',
+                'wimpys_food_express_codes.module_name')
+                ->join('wimpys_food_express_codes', 'wimpys_food_express_billing_statements.id', '=', 'wimpys_food_express_codes.module_id')
+                ->where('wimpys_food_express_billing_statements.billing_statement_id', NULL)
+                ->where('wimpys_food_express_codes.module_name', self::MODULE_NAME_BS)
+                ->where('wimpys_food_express_billing_statements.order', self::ORDER_FORM_CB)
+                ->where('wimpys_food_express_billing_statements.deleted_at', NULL)
+                ->whereDate('wimpys_food_express_billing_statements.created_at', '=', date($date))
+                ->sum('wimpys_food_express_billing_statements.total_amount');
+
         
         $getDateToday = "";     
         $pdf = PDF::loadView('printSummaryWimpysBS',  compact('date', 'getDateToday', 'uri0', 'uri1', 
-            'getBillingStatements'));
+            'getBillingStatements', 'totalAmount'));
         
         return $pdf->download('wimpys-food-express-inc-summary-billing-statement.pdf');
     
@@ -1998,9 +2297,131 @@ class WimpysFoodExpressController extends Controller
                 ->orderBy('wimpys_food_express_statement_of_accounts.id', 'desc')
                 ->get()->toArray();
 
+        
+    $status = "PAID";   
+    $totalBalance =  DB::table(
+                'wimpys_food_express_statement_of_accounts')
+                ->select(
+                'wimpys_food_express_statement_of_accounts.id',
+                'wimpys_food_express_statement_of_accounts.user_id',
+                'wimpys_food_express_statement_of_accounts.billing_statement_id',
+                'wimpys_food_express_statement_of_accounts.bill_to',
+                'wimpys_food_express_statement_of_accounts.date',   
+                'wimpys_food_express_statement_of_accounts.order',
+                'wimpys_food_express_statement_of_accounts.bs_no',
+                'wimpys_food_express_statement_of_accounts.period_cover',
+                'wimpys_food_express_statement_of_accounts.terms',
+                'wimpys_food_express_statement_of_accounts.date_of_transaction',
+                'wimpys_food_express_statement_of_accounts.description',
+                'wimpys_food_express_statement_of_accounts.amount',
+                'wimpys_food_express_statement_of_accounts.paid_amount',
+                'wimpys_food_express_statement_of_accounts.payment_method',
+                'wimpys_food_express_statement_of_accounts.collection_date',
+                'wimpys_food_express_statement_of_accounts.check_number',
+                'wimpys_food_express_statement_of_accounts.check_amount',
+                'wimpys_food_express_statement_of_accounts.or_number',
+                'wimpys_food_express_statement_of_accounts.status',
+                'wimpys_food_express_statement_of_accounts.total_amount',
+                'wimpys_food_express_statement_of_accounts.total_remaining_balance',
+                'wimpys_food_express_statement_of_accounts.created_by',
+                'wimpys_food_express_statement_of_accounts.deleted_at',
+                'wimpys_food_express_codes.wimpys_food_express_code',
+                'wimpys_food_express_codes.module_id',
+                'wimpys_food_express_codes.module_code',
+                'wimpys_food_express_codes.module_name')
+                ->join('wimpys_food_express_codes', 'wimpys_food_express_statement_of_accounts.id', '=', 'wimpys_food_express_codes.module_id')
+                ->where('wimpys_food_express_statement_of_accounts.billing_statement_id', NULL)
+                ->where('wimpys_food_express_codes.module_name', self::MODULE_NAME_SOA)
+                ->where('wimpys_food_express_statement_of_accounts.order', self::ORDER_FORM_CB)
+                ->where('wimpys_food_express_statement_of_accounts.deleted_at', NULL)
+                ->whereDate('wimpys_food_express_statement_of_accounts.created_at', '=', date($date))
+                ->sum('wimpys_food_express_statement_of_accounts.total_amount');
+
+
+    $totalSOA =  DB::table(
+                'wimpys_food_express_statement_of_accounts')
+                ->select(
+                'wimpys_food_express_statement_of_accounts.id',
+                'wimpys_food_express_statement_of_accounts.user_id',
+                'wimpys_food_express_statement_of_accounts.billing_statement_id',
+                'wimpys_food_express_statement_of_accounts.bill_to',
+                'wimpys_food_express_statement_of_accounts.date',
+                'wimpys_food_express_statement_of_accounts.order',
+                'wimpys_food_express_statement_of_accounts.bs_no',
+                'wimpys_food_express_statement_of_accounts.period_cover',
+                'wimpys_food_express_statement_of_accounts.terms',
+                'wimpys_food_express_statement_of_accounts.date_of_transaction',
+                'wimpys_food_express_statement_of_accounts.description',
+                'wimpys_food_express_statement_of_accounts.amount',
+                'wimpys_food_express_statement_of_accounts.paid_amount',
+                'wimpys_food_express_statement_of_accounts.payment_method',
+                'wimpys_food_express_statement_of_accounts.collection_date',
+                'wimpys_food_express_statement_of_accounts.check_number',
+                'wimpys_food_express_statement_of_accounts.check_amount',
+                'wimpys_food_express_statement_of_accounts.or_number',
+                'wimpys_food_express_statement_of_accounts.status',
+                'wimpys_food_express_statement_of_accounts.total_amount',
+                'wimpys_food_express_statement_of_accounts.total_remaining_balance',
+                'wimpys_food_express_statement_of_accounts.created_by',
+                'wimpys_food_express_statement_of_accounts.deleted_at',
+                'wimpys_food_express_codes.wimpys_food_express_code',
+                'wimpys_food_express_codes.module_id',
+                'wimpys_food_express_codes.module_code',
+                'wimpys_food_express_codes.module_name')
+                ->join('wimpys_food_express_codes', 'wimpys_food_express_statement_of_accounts.id', '=', 'wimpys_food_express_codes.module_id')
+                ->where('wimpys_food_express_statement_of_accounts.billing_statement_id', NULL)
+                ->where('wimpys_food_express_codes.module_name', self::MODULE_NAME_SOA)
+                ->where('wimpys_food_express_statement_of_accounts.order', self::ORDER_FORM_CB)
+                ->where('wimpys_food_express_statement_of_accounts.status', $status)
+                ->where('wimpys_food_express_statement_of_accounts.deleted_at', NULL)
+                ->whereDate('wimpys_food_express_statement_of_accounts.created_at', '=', date($date))
+                ->sum('wimpys_food_express_statement_of_accounts.total_amount');
+
+
+        $totalRemainingBalance =  DB::table(
+                    'wimpys_food_express_statement_of_accounts')
+                    ->select(
+                    'wimpys_food_express_statement_of_accounts.id',
+                    'wimpys_food_express_statement_of_accounts.user_id',
+                    'wimpys_food_express_statement_of_accounts.billing_statement_id',
+                    'wimpys_food_express_statement_of_accounts.bill_to',
+                    'wimpys_food_express_statement_of_accounts.date',
+                    'wimpys_food_express_statement_of_accounts.order',
+
+                    'wimpys_food_express_statement_of_accounts.bs_no',
+                    'wimpys_food_express_statement_of_accounts.period_cover',
+                    'wimpys_food_express_statement_of_accounts.terms',
+                    'wimpys_food_express_statement_of_accounts.date_of_transaction',
+                    'wimpys_food_express_statement_of_accounts.description',
+                    'wimpys_food_express_statement_of_accounts.amount',
+                    'wimpys_food_express_statement_of_accounts.paid_amount',
+                    'wimpys_food_express_statement_of_accounts.payment_method',
+                    'wimpys_food_express_statement_of_accounts.collection_date',
+                    'wimpys_food_express_statement_of_accounts.check_number',
+                    'wimpys_food_express_statement_of_accounts.check_amount',
+                    'wimpys_food_express_statement_of_accounts.or_number',
+                    'wimpys_food_express_statement_of_accounts.status',
+                    'wimpys_food_express_statement_of_accounts.total_amount',
+                    'wimpys_food_express_statement_of_accounts.total_remaining_balance',
+                    'wimpys_food_express_statement_of_accounts.created_by',
+                    'wimpys_food_express_statement_of_accounts.deleted_at',
+                    'wimpys_food_express_codes.wimpys_food_express_code',
+                    'wimpys_food_express_codes.module_id',
+                    'wimpys_food_express_codes.module_code',
+                    'wimpys_food_express_codes.module_name')
+                    ->join('wimpys_food_express_codes', 'wimpys_food_express_statement_of_accounts.id', '=', 'wimpys_food_express_codes.module_id')
+                    ->where('wimpys_food_express_statement_of_accounts.billing_statement_id', NULL)
+                    ->where('wimpys_food_express_codes.module_name', self::MODULE_NAME_SOA)
+                    ->where('wimpys_food_express_statement_of_accounts.order', self::ORDER_FORM_CB)
+                    ->where('wimpys_food_express_statement_of_accounts.deleted_at', NULL)
+                    ->where('wimpys_food_express_statement_of_accounts.status', NULL)
+                    ->whereDate('wimpys_food_express_statement_of_accounts.created_at', '=', date($date))
+                    ->sum('wimpys_food_express_statement_of_accounts.total_remaining_balance');
+
+
         $getDateToday = "";     
         $pdf = PDF::loadView('printSummaryWimpysSOA',  compact('date', 'getDateToday', 'uri0', 'uri1', 
-            'getStatementOfAccounts'));
+            'getStatementOfAccounts', 'totalBalance', 'totalSOA', 'totalRemainingBalance'));
         
         return $pdf->download('wimpys-food-express-inc-summary-statement-of-account.pdf');
         
@@ -4513,8 +4934,7 @@ class WimpysFoodExpressController extends Controller
     public function selectOrderSOA(Request $request){
         $getDate = date("Y-m-d");  
         $order = $request->get('selectOrder');
-
-
+     
         if($request->get('selectOrder') === self::ORDER_FORM_CB){
             $getTransactionCBFs = DB::table(
                 'wimpys_food_express_client_booking_forms')
@@ -4700,8 +5120,6 @@ class WimpysFoodExpressController extends Controller
 
 
                 $moduleNamePV = "Payment Voucher";
-
-
                 $getTransactionLists = DB::table(
                             'wimpys_food_express_payment_vouchers')
                             ->select( 
@@ -5767,6 +6185,7 @@ class WimpysFoodExpressController extends Controller
                         'wimpys_food_express_billing_statements.user_id',
                         'wimpys_food_express_billing_statements.billing_statement_id',
                         'wimpys_food_express_billing_statements.bill_to',
+                        'wimpys_food_express_billing_statements.dr_no',
                         'wimpys_food_express_billing_statements.date',
                         'wimpys_food_express_billing_statements.order',
                         'wimpys_food_express_billing_statements.period_cover',
@@ -5790,11 +6209,41 @@ class WimpysFoodExpressController extends Controller
                         ->orderBy('wimpys_food_express_billing_statements.id', 'desc')
                         ->get()->toArray();
 
+        $totalAmount =  DB::table(
+            'wimpys_food_express_billing_statements')
+            ->select(
+            'wimpys_food_express_billing_statements.id',
+            'wimpys_food_express_billing_statements.user_id',
+            'wimpys_food_express_billing_statements.billing_statement_id',
+            'wimpys_food_express_billing_statements.bill_to',
+            'wimpys_food_express_billing_statements.date',
+            'wimpys_food_express_billing_statements.dr_no',
+            'wimpys_food_express_billing_statements.order',
+            'wimpys_food_express_billing_statements.period_cover',
+            'wimpys_food_express_billing_statements.terms',
+            'wimpys_food_express_billing_statements.date_of_transaction',
+            'wimpys_food_express_billing_statements.description',
+            'wimpys_food_express_billing_statements.amount',
+            'wimpys_food_express_billing_statements.paid_amount',
+            'wimpys_food_express_billing_statements.total_amount',
+            'wimpys_food_express_billing_statements.created_by',
+            'wimpys_food_express_billing_statements.deleted_at',
+            'wimpys_food_express_codes.wimpys_food_express_code',
+            'wimpys_food_express_codes.module_id',
+            'wimpys_food_express_codes.module_code',
+            'wimpys_food_express_codes.module_name')
+            ->join('wimpys_food_express_codes', 'wimpys_food_express_billing_statements.id', '=', 'wimpys_food_express_codes.module_id')
+            ->where('wimpys_food_express_billing_statements.billing_statement_id', NULL)
+            ->where('wimpys_food_express_codes.module_name', self::MODULE_NAME_BS)
+            ->where('wimpys_food_express_billing_statements.deleted_at', NULL)
+            ->whereDate('wimpys_food_express_billing_statements.created_at','=', date($getDateToday))
+            ->sum('wimpys_food_express_billing_statements.total_amount');
+
         $uri0 = "";
         $uri1 = "";
 
         $pdf = PDF::loadView('printSummaryWimpysBS', compact('uri0', 'uri1', 'getDateToday', 
-        'getBillingStatements'));
+        'getBillingStatements', 'totalAmount'));
 
         return $pdf->download('wimpys-food-express-inc-summary-report-billing-statement.pdf');
 
@@ -5812,6 +6261,7 @@ class WimpysFoodExpressController extends Controller
                     'wimpys_food_express_statement_of_accounts.billing_statement_id',
                     'wimpys_food_express_statement_of_accounts.bill_to',
                     'wimpys_food_express_statement_of_accounts.date',
+                    'wimpys_food_express_statement_of_accounts.dr_no',
                     'wimpys_food_express_statement_of_accounts.order',
                     'wimpys_food_express_statement_of_accounts.bs_no',
                     'wimpys_food_express_statement_of_accounts.period_cover',
@@ -5841,6 +6291,46 @@ class WimpysFoodExpressController extends Controller
                     ->whereDate('wimpys_food_express_statement_of_accounts.created_at', '=', date($getDateToday))
                     ->orderBy('wimpys_food_express_statement_of_accounts.id', 'desc')
                     ->get()->toArray();
+
+    $status = "PAID";   
+    $totalBalance =  DB::table(
+                'wimpys_food_express_statement_of_accounts')
+                ->select(
+                'wimpys_food_express_statement_of_accounts.id',
+                'wimpys_food_express_statement_of_accounts.user_id',
+                'wimpys_food_express_statement_of_accounts.billing_statement_id',
+                'wimpys_food_express_statement_of_accounts.bill_to',
+                'wimpys_food_express_statement_of_accounts.date',   
+                'wimpys_food_express_statement_of_accounts.order',
+                'wimpys_food_express_statement_of_accounts.bs_no',
+                'wimpys_food_express_statement_of_accounts.period_cover',
+                'wimpys_food_express_statement_of_accounts.terms',
+                'wimpys_food_express_statement_of_accounts.date_of_transaction',
+                'wimpys_food_express_statement_of_accounts.description',
+                'wimpys_food_express_statement_of_accounts.amount',
+                'wimpys_food_express_statement_of_accounts.paid_amount',
+                'wimpys_food_express_statement_of_accounts.payment_method',
+                'wimpys_food_express_statement_of_accounts.collection_date',
+                'wimpys_food_express_statement_of_accounts.check_number',
+                'wimpys_food_express_statement_of_accounts.check_amount',
+                'wimpys_food_express_statement_of_accounts.or_number',
+                'wimpys_food_express_statement_of_accounts.status',
+                'wimpys_food_express_statement_of_accounts.total_amount',
+                'wimpys_food_express_statement_of_accounts.total_remaining_balance',
+                'wimpys_food_express_statement_of_accounts.created_by',
+                'wimpys_food_express_statement_of_accounts.deleted_at',
+                'wimpys_food_express_codes.wimpys_food_express_code',
+                'wimpys_food_express_codes.module_id',
+                'wimpys_food_express_codes.module_code',
+                'wimpys_food_express_codes.module_name')
+                ->join('wimpys_food_express_codes', 'wimpys_food_express_statement_of_accounts.id', '=', 'wimpys_food_express_codes.module_id')
+                ->where('wimpys_food_express_statement_of_accounts.billing_statement_id', NULL)
+                ->where('wimpys_food_express_codes.module_name', self::MODULE_NAME_SOA)
+                ->where('wimpys_food_express_statement_of_accounts.deleted_at', NULL)
+                ->whereDate('wimpys_food_express_statement_of_accounts.created_at', '=', date($getDateToday))
+                ->sum('wimpys_food_express_statement_of_accounts.total_amount');
+
+                
 
         $totalSOA =  DB::table(
                         'wimpys_food_express_statement_of_accounts')
@@ -5876,6 +6366,7 @@ class WimpysFoodExpressController extends Controller
                         ->where('wimpys_food_express_statement_of_accounts.billing_statement_id', NULL)
                         ->where('wimpys_food_express_codes.module_name', self::MODULE_NAME_SOA)
                         ->where('wimpys_food_express_statement_of_accounts.deleted_at', NULL)
+                        ->where('wimpys_food_express_statement_of_accounts.status', $status)
                         ->whereDate('wimpys_food_express_statement_of_accounts.created_at', '=', date($getDateToday))
                         ->sum('wimpys_food_express_statement_of_accounts.total_amount');
         
@@ -5921,7 +6412,7 @@ class WimpysFoodExpressController extends Controller
         $uri1 = "";
 
         $pdf = PDF::loadView('printSummaryWimpysSOA', compact('uri0', 'uri1', 'getDateToday', 
-        'getStatementOfAccounts', 'totalSOA', 'totalRemainingBalance'));
+        'getStatementOfAccounts', 'totalBalance','totalSOA', 'totalRemainingBalance'));
 
         return $pdf->download('wimpys-food-express-inc-summary-report-statement-of-account.pdf');
         
@@ -8256,6 +8747,8 @@ class WimpysFoodExpressController extends Controller
     CONST PACK_PRICEC = 400;
     CONST PACK_EXEC = 600;
     CONST COOKING_CHARGE = 0.00;
+    CONST STAFF_MEALS = 0.00;
+    CONST PACKED_MEALS = 210.00;
 
     public function storeBookingForm(Request $request){
         $ids = Auth::user()->id;
@@ -8316,6 +8809,10 @@ class WimpysFoodExpressController extends Controller
             }else if($package == "Cooking Charge - 0.00"){
                 $total = $pax * self::COOKING_CHARGE;
                
+            }else if($package == "Staff Meals - 0.00"){
+                $total = $pax * self::STAFF_MEALS;
+            }else if($package == "Packed Meals - 210.00"){
+                $total = $pax * self::PACKED_MEALS;
             }
         }
         $addClientBooking = new WimpysFoodExpressClientBookingForm([
@@ -12334,6 +12831,12 @@ class WimpysFoodExpressController extends Controller
 
             $subCat = NULL;
             $subCatAccountId = NULL;
+        }else if($request->get('category') === "Payroll"){
+            $subCat = NULL;
+            $subCatAccountId = NULL;
+
+            $supplierExp = NULL;
+            $supplierExp1 = NULL;
         }
 
           //check if invoice number already exists
@@ -12582,6 +13085,11 @@ class WimpysFoodExpressController extends Controller
         Session::flash('SuccessE', 'Successfully updated');
 
         return redirect()->route('editWimpysFoodExpress', ['id'=>$id]);
+    }
+
+    public function destroyPettyCash($id){
+        $pettyCash = WimpysFoodExpressPettyCash::find($id);
+        $pettyCash->delete();
     }
 
     public function destroyDR($id){

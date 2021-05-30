@@ -34,7 +34,11 @@
 
 						Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph
             	 	 </p>
-	            	 <h4 ><u>BILLING STATEMENT</u></h4>
+	            	 <h4 >
+					 	<u>BILLING STATEMENT</u>
+						<br />
+						<u>COMMISSARY</u>	
+					</h4>
 	            </div>
 				<div class="row">
 					<div class="col-lg-12">
@@ -163,6 +167,7 @@
                            				<tr>
                        						<th style="width:30%;">Prepared By</th>
                        						<th>Approved By</th>
+											<th>Conforme By</th>
                            				</tr>
                            			</thead>
                            			<tbody>
@@ -174,14 +179,32 @@
                            					</td>
                            					<td>
                            						________________________<br>
-                           						AprilAn Q Maturan<br>
+                           						Aprilane Q Maturan<br>
                            						Finance Officer
+                           					</td>
+											<td>
+                           						________________________<br>
+                           						
                            					</td>
                            					
                            				</tr>
                            			</tbody>
                            		</table>
-                           	
+								<table style="margin-top:50px;" >
+									<thead>
+                           				<tr>
+                       						<th style="width:30%;">Received By</th>
+                       						
+                           			</thead>
+									<tbody>  
+										<tr>
+                           					<td>
+                           						________________________<br>
+                           					</td>
+										</tr>
+									</tbody>
+								</table>
+
                            </div>
 
 						 </div>

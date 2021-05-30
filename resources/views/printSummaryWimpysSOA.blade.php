@@ -26,8 +26,11 @@
  				<div   style="margin-top:-10px;">
                  <img style="margin-left:5px;" src="{{ asset('images/digitized-logos/wimpys-logo1.png')}}"  alt="Wimpy's Food Express">
             	 	
-                     <p  style="margin-top:-50px; margin-left:140px;text-align:left;">
-		 	 			Dino Compound, 3rd Floor Dino Group Administration Bldg., No.88 Labogon Road, Barangay Labogon, Mandaue City, 6014 Cebu, Philippines<br>
+                     <p  style="margin-top:-50px; margin-left:145px;text-align:left;">
+		 	 			 Dino Compound
+                        Ground & 3rd Floors, Dino Group Administration Building,
+                        No. 88 Labogon Road, Barangay Labogon, Mandaue City, <br>Cebu 6014
+                        Philippines<br>
 						Tel. Nos. (63-32) 346-2567; 420-5639 / Fax No. (63-32) 346-0341<br>
 
 						Email Address: admin@dnogroup.ph / sales@dnogroup.ph / marketing@dnogroup.ph

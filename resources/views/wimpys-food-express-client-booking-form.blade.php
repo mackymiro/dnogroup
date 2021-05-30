@@ -147,6 +147,8 @@
             { text:'SET C - 400', value: 'SET C - 400'},
             { text:'EXECUTIVE SET - 600', value: 'EXECUTIVE SET - 600'},
             { text:'Cooking Charge - 0.00', value: 'Cooking Charge - 0.00'},
+            { text:'Staff Meals - 0.00', value: 'Staff Meals - 0.00'},
+            { text:'Packed Meals - 210.00', value: 'Packed Meals - 210.00'},
           ]
       }
     })

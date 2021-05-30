@@ -7693,6 +7693,54 @@ Route::group(['middleware' => ['auth']], function(){
 		->middleware(['cashier']);
 
 	Route::get(
+		'/wimpys-food-express/petty-cash-list',
+		'WimpysFoodExpressController@pettyCashList')
+		->name('pettyCashList')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/wimpys-food-express/petty-cash/add',
+		'WimpysFoodExpressController@addPettyCash')
+		->name('addPettyCash')
+		->middleware(['cashier']);
+
+	Route::get(
+		'wimpys-food-express/{id}/edit-petty-cash/',
+		'WimpysFoodExpressController@editPettyCash')
+		->name('editPettyCashWimpys')
+		->middleware(['cashier']);
+
+	Route::post(
+		'/wimpys-food-express/{id}/add-new-petty-cash',
+		'WimpysFoodExpressController@addNewPettyCash')
+		->name('addNewPettyCash')
+		->middleware(['cashier']);
+
+	Route::put(
+		'/wimpys-food-express/{id}/update-pc',
+		'WimpysFoodExpressController@updatePC')
+		->name('updatePC')
+		->middleware(['cashier']);
+
+	Route::delete(
+		'/wimpys-food-express/petty-cash/delete/{id}',
+		'WimpysFoodExpressController@destroyPettyCash')
+		->name('destroyPettyCash')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/petty-cash/{id}/view',
+		'WimpysFoodExpressController@viewPettyCash')
+		->name('viewPettyCash')
+		->middleware(['cashier']);
+
+	Route::get(
+		'/wimpys-food-express/{id}/printPettyCash',
+		'WimpysFoodExpressController@printPettyCash')
+		->name('printPettyCash')
+		->middleware(['cashier']);
+
+	Route::get(
 		'/wimpys-food-express/statement-of-account/lists',
 		'WimpysFoodExpressController@statementOfAccountLists')
 		->name('statementOfAccountLists')

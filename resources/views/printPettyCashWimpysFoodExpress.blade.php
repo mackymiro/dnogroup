@@ -24,8 +24,9 @@
 	 <div id="content-wrapper">
  		<div class="container-fluid">
  				<div style="margin-top:-10px;">
-                 <img style="margin-left: 5px;" src="{{ asset('images/digitized-logos/dno-foundation.png')}}"  alt="DNO Foundation Inc">
-            	 	  	 <p  style="margin-top:-50px; margin-left:110px;text-align:left;">
+                 <img style="margin-left:5px;" src="{{ asset('images/digitized-logos/wimpys-logo1.png')}}"  alt="Wimpy's Food Express">
+            	 	
+                  	  	 <p  style="margin-top:-50px; margin-left:110px;text-align:left;">
 							Dino Compound
 							Ground & 3rd Floors, Dino Group Administration Building,
 							No. 88 Labogon Road, Barangay Labogon, Mandaue City, Cebu 6014
@@ -51,7 +52,7 @@
                                                 <th>
                                                     @foreach($getPettyCash[0]->petty_cashes as $pc)
                                                         @if($pc->module_name === "Petty Cash")
-                                                        {{ $pc->module_code}}{{ $pc->dno_foundation_code }}</th>
+                                                        {{ $pc->module_code}}{{ $pc->wimpys_food_express_code }}</th>
                                          
                                                         @endif
                                                     @endforeach
@@ -132,8 +133,7 @@
                            					</td>
                            					<td>
                            						________________________<br>
-                           						Aprilane Q Maturan<br>
-                           						Finance Officer
+                           						Antonia Cara S. Osmeña
                            					</td>
                            					
                            				</tr>

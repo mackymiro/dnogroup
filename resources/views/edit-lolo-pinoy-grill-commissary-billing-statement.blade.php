@@ -300,12 +300,14 @@
 	            	 						</div>
 	            	 						<div class="col-lg-2">
 	        	 								<label>Amount</label>
-	        	 								<input type="text" name="amount" class="form-control" value="<?php echo number_format($bStatement['amount'], 2); ?>" disabled="disabled" />
+	        	 								<input type="text" name="amount" class="form-control" value="<?= number_format($bStatement['amount'], 2); ?>" disabled="disabled" />
 	        	 								
 	            	 						</div>
 	            	 						<div class="col-lg-4">
 	                                          <br>
-	                                        
+											  <br>
+                                          		<input type="hidden" id="billingStatementId" name="billingStatementId" value="{{ $billingStatement['id'] }}" />
+                                         
 	                                          @if(Auth::user()['role_type'] == 1)
 	                                          <a id="delete" onClick="confirmDelete('{{ $bStatement['id'] }}')" href="javascript:void" class="btn btn-danger">Remove</a>
 	                                          @endif
@@ -536,6 +538,7 @@
 
 	 const confirmDelete = (id) =>{
 		const billingStatementId =  $("#billingStatementId").val();		
+
 		var x = confirm("Do you want to delete this?");
 			if(x){
 				$.ajax({

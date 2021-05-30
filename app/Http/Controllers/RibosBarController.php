@@ -5017,7 +5017,7 @@ class RibosBarController extends Controller
 
              $supplierExp = NULL;
              $supplierExp1 = NULL;
-        }else if($request->get('category') == "Utilities"){
+        }else if($request->get('category') == "Utility"){
             $subCat = $request->get('bills');
             $subCatAcctId = $request->get('selectAccountID');
 

@@ -83,10 +83,22 @@
 						  <table class="table table-bordered">
                                 <thead>
                                     <tr>
-                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Remaining Balance:</th>
-                                        <th  style="text-align:center; border: 1px solid black;"><?= number_format($totalAmountDue, 2);?></th>
+										<th width="15%"  style="text-align:center; border: 1px solid black;">Total Balance:</th>
+                                        <th  style="text-align:center; border: 1px solid black;"><?= number_format($totalBalance, 2);?></th>
+                                       
                                     </tr>
                                 </thead>
+								<tbody>
+									<tr>
+                                        <th width="15%"  style="text-align:center; border: 1px solid black;">Paid Balance:</th>
+                                        <th  style="text-align:center; border: 1px solid black;"><?= number_format($paidBalance, 2);?></th>
+                                    </tr>
+									<tr>
+									 <th width="15%"  style="text-align:center; border: 1px solid black;">Remaining Balance:</th>
+                                        <th  style="text-align:center; border: 1px solid black;"><?= number_format($totalAmountDue, 2);?></th>
+                                    </tr>
+									
+								</tbody>
                              
                             </table>
                             <br>

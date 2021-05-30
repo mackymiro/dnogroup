@@ -138,7 +138,7 @@
             </div>
             <div class="row">
                  <div class="col-lg-4">
-                     @if($menuItem->type_of_package != "Cooking Charge - 0.00")
+                     @if($menuItem->type_of_package != "Cooking Charge - 0.00" && $menuItem->type_of_package != "Staff Meals - 0.00")
                       <div class="card mb-3">
                             <div class="card-header">
                             <i class="fas fa-soup"></i>
@@ -381,7 +381,7 @@
                       </div>
 
                       @endif
-                      @if($menuItem->type_of_package != "Cooking Charge - 0.00")
+                      @if($menuItem->type_of_package != "Cooking Charge - 0.00" && $menuItem->type_of_package != "Staff Meals - 0.00")
                       <div class="card mb-3">
                             <div class="card-header">
                             <i class="fas fa-soup"></i>
@@ -420,7 +420,7 @@
                             </div>
                       </div>
                       @endif
-                      @if($menuItem->type_of_package == "Cooking Charge - 0.00")
+                      @if($menuItem->type_of_package == "Cooking Charge - 0.00" || $menuItem->type_of_package == "Staff Meals - 0.00")
                       <div class="card mb-3" >
                           <div class="card-header">
                               <i class="fas fa-soup"></i>
@@ -491,7 +491,7 @@
                  </div>
                  
                  <div class="col-lg-8">
-                      @if($menuItem->type_of_package != "Cooking Charge - 0.00")
+                      @if($menuItem->type_of_package != "Cooking Charge - 0.00" &&  $menuItem->type_of_package != "Staff Meals - 0.00")
                       <div class="card mb-3">
                             <div class="card-header">
                             <i class="fas fa-hamburger"></i>
@@ -609,7 +609,7 @@
                             </div>
                       </div>
                       @endif
-                      @if($menuItem->type_of_package == "Cooking Charge - 0.00")
+                      @if($menuItem->type_of_package == "Cooking Charge - 0.00" || $menuItem->type_of_package == "Staff Meals - 0.00")
                       <div class="card mb-3">
                             <div class="card-header">
                             <i class="fas fa-hamburger"></i>
@@ -697,6 +697,8 @@
             { text:'SET C - 400', value: 'SET C - 400'},
             { text:'EXECUTIVE SET - 600', value: 'EXECUTIVE SET - 600'},
             { text:'Cooking Charge - 0.00', value: 'Cooking Charge - 0.00'},
+            { text:'Staff Meals - 0.00', value: 'Staff Meals - 0.00'},
+            { text:'Packed Meals - 210.00', value: 'Packed Meals - 210.00'},
           ]
       }
     })
