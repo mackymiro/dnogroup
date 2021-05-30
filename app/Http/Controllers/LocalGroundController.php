@@ -1330,7 +1330,7 @@ class LocalGroundController extends Controller
                             ->sum('local_ground_payment_vouchers.amount_due');
         return view('local-ground-multiple-summary-report', compact('getTransactionLists', 
         'startDate', 'endDate', 'getTransactionListCashes', 
-        'getTransactionListChecks', 'totalPaymentVoucher', 'totalAmountCashes', 'totalAmountCheck', 'totalAmountCheckInUSD'));
+        'getTransactionListChecks', 'totalAmountCashes', 'totalAmountCheck', 'totalAmountCheckInUSD'));
 
 
 
@@ -1987,7 +1987,7 @@ class LocalGroundController extends Controller
                             ->sum('local_ground_payment_vouchers.amount_due');
         
         return view('local-ground-get-summary-report', compact('getDate','getTransactionLists', 'getTransactionListCashes', 
-        'getTransactionListChecks', 'totalPaymentVoucher', 'totalAmountCashes', 'totalAmountCheck', 'totalAmountCheckInUSD'));
+        'getTransactionListChecks', 'totalAmountCashes', 'totalAmountCheck', 'totalAmountCheckInUSD'));
                     
 
     }
@@ -2264,7 +2264,7 @@ class LocalGroundController extends Controller
                             ->sum('local_ground_payment_vouchers.amount_due');
 
         return view('local-ground-summary-report', compact('getTransactionLists', 'getTransactionListCashes', 
-        'getTransactionListChecks', 'totalPaymentVoucher', 'totalAmountCashes', 'totalAmountCheck', 'totalAmountCheckInUSD'));
+        'getTransactionListChecks', 'totalAmountCashes', 'totalAmountCheck', 'totalAmountCheckInUSD'));
 
     }
 

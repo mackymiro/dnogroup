@@ -19,6 +19,17 @@
             dateFormat: "yy-mm-dd",
         });
       }); 
+
+    $(function() {
+        $('a[data-toggle="tab"]').on('click', function(e) {
+            window.localStorage.setItem('activeTab', $(e.target).attr('href'));
+        });
+        var activeTab = window.localStorage.getItem('activeTab');
+        if (activeTab) {
+            $('#nav-tab a[href="' + activeTab + '"]').tab('show');
+            window.localStorage.removeItem("activeTab");
+        }
+    });
 </script>
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -50,7 +61,7 @@
                                         <div class="form-row">
                                             
                                             <div class="col-lg-4">
-                                                <form action="{{ action('DnoFoundationIncController@getSummaryReport') }}" method="get">
+                                                <form action="{{ action('DnoHoldingsCoController@getSummaryReport') }}" method="get">
                                                 {{ csrf_field() }}  
                                                 <h1>Search Date</h1>
                                                 <input type="text" name="selectDate" class="datepicker form-control"  required/>
@@ -62,7 +73,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <form action="{{ action('DnoFoundationIncController@getSummaryReportMultiple')}}" method="get"> 
+                                <form action="{{ action('DnoHoldingsCoController@getSummaryReportMultiple')}}" method="get"> 
                                      {{ csrf_field() }}
                                     <div class="form-group">
                                         <div class="form-row">

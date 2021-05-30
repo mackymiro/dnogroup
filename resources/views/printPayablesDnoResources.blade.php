@@ -60,6 +60,10 @@
                                                 <th>Date</th>
                                                 <th> {{ $payableId[0]->issued_date }} </th>
                                             </tr>
+											<tr>
+                                                <th>Account Name</th>
+                                                <th> {{ $payableId[0]->account_name }} </th>
+                                            </tr>
                                            
                                         </thead>
                                       
