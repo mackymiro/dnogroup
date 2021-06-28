@@ -5252,7 +5252,7 @@ class MrPotatoController extends Controller
 
         $sum2  = $countTotalAmount + $countAmount;
 
-        return view('view-mr-potato-delivery-receipt', compact('viewDeliveryReceipt', 'deliveryReceipts', 'countUnit', 'sum', 'sum2'));
+        return view('view-mr-potato-delivery-receipt', compact('viewDeliveryReceipt', 'deliveryReceipts', 'sum', 'sum2'));
     }
 
     //

@@ -23,6 +23,7 @@ use App\LechonDeCebuUtility;
 use App\LechonDeCebuCode;
 use App\LechonDeCebuSupplier;
 use App\LechonDeCebuContractor;
+use App\SettingsModel;
 use Session;
 
 
@@ -7862,14 +7863,18 @@ class LoloPinoyLechonDeCebuController extends Controller
            //body 400kls
         $body = $request->get('body');
 
-        $bodyComp = 400;
+        $getBody = SettingsModel::get()->where('flag', 'body')->toArray();
+        $getHead = SettingsModel::get()->where('flag', 'headfeet')->toArray();
+
+
+        $bodyComp = $getBody[0]['settings_for_body'];
         $computeBody = $body * $bodyComp;
 
 
         //head and feet 200kls
         $head = $request->get('headFeet');
 
-        $headFeet = 200;
+        $headFeet = $getHead[1]['settings_head_feet'];
         $computeHeadFeet = $head * $headFeet;
 
 
@@ -7914,14 +7919,17 @@ class LoloPinoyLechonDeCebuController extends Controller
         //body 400kls
         $body = $request->get('body');
 
-        $bodyComp = 400;
+        $getBody = SettingsModel::get()->where('flag', 'body')->toArray();
+        $getHead = SettingsModel::get()->where('flag', 'headfeet')->toArray();
+
+        $bodyComp = $getBody[0]['settings_for_body'];
         $computeBody = $body * $bodyComp;
 
 
         //head and feet 200kls
         $head = $request->get('headFeet');
 
-        $headFeet = 200;
+        $headFeet = $getHead[1]['settings_head_feet'];
         $computeHeadFeet = $head * $headFeet;
 
 
@@ -7986,14 +7994,18 @@ class LoloPinoyLechonDeCebuController extends Controller
          //body 400kls
         $body = $request->get('body');
 
-        $bodyComp = 400;
+        
+        $getBody = SettingsModel::get()->where('flag', 'body')->toArray();
+        $getHead = SettingsModel::get()->where('flag', 'headfeet')->toArray();
+
+        $bodyComp = $getBody[0]['settings_for_body'];
         $computeBody = $body * $bodyComp;
 
 
         //head and feet 200kls
         $head = $request->get('headFeet');
 
-        $headFeet = 200;
+        $headFeet = $getHead[1]['settings_head_feet'];
         $computeHeadFeet = $head * $headFeet;
 
 
@@ -8030,9 +8042,12 @@ class LoloPinoyLechonDeCebuController extends Controller
         //getSalesInvoice
         $getSalesInvoice = LechonDeCebuSalesInvoice::find($id);
 
+        $getBody = SettingsModel::get()->where('flag', 'body')->toArray();
+        $getHead = SettingsModel::get()->where('flag', 'headfeet')->toArray();
+
         $sInvoices  = LechonDeCebuSalesInvoice::where('si_id', $id)->get()->toArray();
 
-        return view('edit-lechon-de-cebu-sales-invoice', compact('id', 'getSalesInvoice', 'sInvoices'));
+        return view('edit-lechon-de-cebu-sales-invoice', compact('id', 'getSalesInvoice', 'sInvoices', 'getBody', 'getHead'));
     }
 
     //store sales invoice
@@ -8083,14 +8098,17 @@ class LoloPinoyLechonDeCebuController extends Controller
         //body 400kls
         $body = $request->get('body');
 
-        $bodyComp = 400;
+        $getBody = SettingsModel::get()->where('flag', 'body')->toArray();
+        $getHead = SettingsModel::get()->where('flag', 'headfeet')->toArray();
+
+        $bodyComp = $getBody[0]['settings_for_body'];
         $computeBody = $body * $bodyComp;
 
 
         //head and feet 200kls
         $head = $request->get('headFeet');
 
-        $headFeet = 200;
+        $headFeet = $getHead[1]['settings_head_feet'];
         $computeHeadFeet = $head * $headFeet;
 
 
@@ -8141,7 +8159,10 @@ class LoloPinoyLechonDeCebuController extends Controller
         $ids = Auth::user()->id;
         $user = User::find($ids);
 
-        return view('lechon-de-cebu-sales-invoice-form', compact('user'));
+        $getBody = SettingsModel::get()->where('flag', 'body')->toArray();
+        $getHead = SettingsModel::get()->where('flag', 'headfeet')->toArray();
+
+        return view('lechon-de-cebu-sales-invoice-form', compact('user', 'getBody', 'getHead'));
     }
 
     //view delivery duplicate

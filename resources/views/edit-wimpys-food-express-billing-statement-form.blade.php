@@ -540,16 +540,16 @@
       ?>
        const cb = $(this).children("option:selected").val();
         <?php foreach($clientBookings as $clientBooking): ?>
-          
-            $("#dateOfEvent").html('<label>Date Of Event</label><input type="text"  name="dateOfEvent" value="<?= $clientBooking->date_of_event; ?>" class="form-control" readonly="readonly" />');
-            $("#timeOfEvent").html('<label>Time Of Event</label><input type="text"  name="timeOFEvent" value="<?= $clientBooking->time_of_event; ?>" class="form-control" readonly="readonly" />');
-            $("#noOfPax").html('<label>No Of People(Pax)</label><input type="text"  name="noOfPax" value="<?= $clientBooking->no_of_people; ?>" class="form-control" readonly="readonly" />');
-            $("#motiff").html('<label>Motiff</label><input type="text"  name="motiff" value="<?= $clientBooking->motiff; ?>" class="form-control" readonly="readonly" />');
-            $("#typeOfPackage").html('<label>Type Of Package</label><input type="text"  name="typeOfPackage" value="<?= $clientBooking->type_of_package; ?>" class="form-control" readonly="readonly" />');
-            $("#client").html('<label>Client</label><input type="text"  name="client" value="<?= $clientBooking->client; ?>" class="form-control" readonly="readonly" />');
-            $("#placeOfEvent").html('<label>Place Of Event</label><input type="text" name="placeOfEvent" value="<?= $clientBooking->place_of_event; ?>" class="form-control" readonly="readonly" />');
-            $("#totalAmount").html('<label>Total Amount</label><input type="text" name="totalAmount" value="<?= $clientBooking->total; ?>" class="form-control" readonly="readonly" />');
-                 
+              if(cb === "<?php echo $clientBooking->wimpys_food_express_code?>"){
+                    $("#dateOfEvent").html('<label>Date Of Event</label><input type="text"  name="dateOfEvent" value="<?= $clientBooking->date_of_event; ?>" class="form-control" readonly="readonly" />');
+                    $("#timeOfEvent").html('<label>Time Of Event</label><input type="text"  name="timeOFEvent" value="<?= $clientBooking->time_of_event; ?>" class="form-control" readonly="readonly" />');
+                    $("#noOfPax").html('<label>No Of People(Pax)</label><input type="text"  name="noOfPax" value="<?= $clientBooking->no_of_people; ?>" class="form-control" readonly="readonly" />');
+                    $("#motiff").html('<label>Motiff</label><input type="text"  name="motiff" value="<?= $clientBooking->motiff; ?>" class="form-control" readonly="readonly" />');
+                    $("#typeOfPackage").html('<label>Type Of Package</label><input type="text"  name="typeOfPackage" value="<?= $clientBooking->type_of_package; ?>" class="form-control" readonly="readonly" />');
+                    $("#client").html('<label>Client</label><input type="text"  name="client" value="<?= $clientBooking->client; ?>" class="form-control" readonly="readonly" />');
+                    $("#placeOfEvent").html('<label>Place Of Event</label><input type="text" name="placeOfEvent" value="<?= $clientBooking->place_of_event; ?>" class="form-control" readonly="readonly" />');
+                    $("#totalAmount").html('<label>Total Amount</label><input type="text" name="totalAmount" value="<?= $clientBooking->total; ?>" class="form-control" readonly="readonly" />');
+              }
         <?php endforeach; ?>
 
   });

@@ -94,8 +94,10 @@
                                  
                                   <div class="col-md-1">
                                     <label>QTY</label>
-                                    <input type="text" name="qty" class="form-control"  onkeypress="return isNumber(event)"/>
-                                    
+                                    <div id="qtyclose">
+                                      <input type="text" name="qty" class="form-control" onkeypress="return isNumber(event)"/>
+                                    </div>
+                                    <div id="qty" ></div>
                                   </div>
                                   <div class="col-md-4">
                                      <label>Remaining Stock</label>
@@ -124,6 +126,13 @@
                                       <input type="text" name="unitPrice" class="form-control"  disabled />
                                     </div>
                                     <div id="unitPrice"></div>
+                                  </div>
+                                  <div class="col-md-2">
+                                    <label>Amount</label>
+                                    <div id="amountClose">
+                                        <input type="text" name="amount" class="form-control"  disabled />
+                                    </div>
+                                    <div id="amount"></div>
                                   </div>
                               
                             </div>
@@ -159,6 +168,30 @@
 		return true;
 	}
 
+  checkQty = function(){
+       const quantity = parseInt($("#qtyInput").val());
+      
+        if(quantity === 1){
+            const unitPrice = parseInt($("#uPrice").val());
+
+            const calc = parseInt(unitPrice) * parseInt(quantity);
+            const tot = calc.toFixed();
+           
+            $("#amountClose").hide();
+            $("#amount").html(`<input type="text" name="amount" id="amount" value="${tot}" class="form-control" readonly>`);
+        }else{
+            const unitPrice = parseInt($("#uPrice").val());
+            const calc = parseInt(unitPrice) * parseInt(quantity);
+            const tot = calc.toFixed();
+
+            $("#amountClose").hide();
+            $("#amount").html(`<input type="text" name="amount" id="amount" value="${tot}" class="form-control" readonly>`);
+   
+        }
+       
+
+    }
+
   $(document).ready(function(){
       $("select").change(function(){
           <?php
@@ -180,13 +213,19 @@
                                   ->where('id', $getRawMaterial->id)
                                   ->get();
                     ?>
+                     $("#qtyclose").hide();
+                     $("#qty").html(`
+                        
+                        <input type="text" id="qtyInput" name="qtyInput" class="form-control" onkeypress="return isNumber(event)"  autocomplete="off"
+                        onchange="javascript:checkQty()" />
+                     `)
                      $("#available").html('<input type="text" name="available" value="<?= $getId[0]->remaining_stock?>" class="form-control" readonly="readonly" /> ');
                      $("#availableClose").hide(); 
                      $("#unit").html('<input type="text" name="unit" value="<?= $getId[0]->unit?>" class="form-control" readonly="readonly" /> ');
                      $("#unitClose").hide();
                      $("#itemDesc").html('<input type="text" name="itemDescription" value="<?= $getId[0]->product_name; ?>" class="form-control" readonly="readonly">')
                      $("#itemDescClose").hide();
-                     $("#unitPrice").html('<input type="text" name="unitPrice" value="<?= $getId[0]->unit_price; ?>" class="form-control" readonly="readonly" >');
+                     $("#unitPrice").html('<input type="text" id="uPrice" name="uPrice" value="<?= $getId[0]->unit_price; ?>" class="form-control" readonly="readonly" >');
                      $("#unitPriceClose").hide();
                     
                   

@@ -129,8 +129,7 @@
                     				<div  class="col-md-1">
                 						<label>QTY</label>
                                         <div id="qtyclose">
-                						<input type="text" name="qty" class="form-control" disabled 
-                                         />
+                						<input type="text" name="qty" class="form-control" disabled onkeypress="return isNumber(event)"/>
                                          </div>
                                          <div id="qty"></div>
                     				</div>

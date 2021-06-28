@@ -163,7 +163,9 @@
                                     </div>
                                     <div class="col-md-12">
                                         <label>QTY</label>
-                                        <input type="text" name="qty" class="form-control" required="required" />
+                                        <input type="text" name="qtyAdd" class="qtyAdd form-control" required="required" 
+                                        onkeypress="return isNumber(event)"
+                                        onchange="javascript:checkQtyAdd()" autocomplete="off"/>
                                     </div>
                                     <div class="col-md-12">
                                       <label>Remaining Stock</label>
@@ -192,6 +194,13 @@
                                             <input type="text" name="unitPrice" class="form-control" disabled />
                                         </div>
                                         <div id="unitPriceAdd"></div>
+                                      </div>
+                                      <div class="col-md-12">
+                                        <label>Amount</label>
+                                        <div class="curAmount">
+                                            <input type="text" name="amount" class="form-control" disabled />
+                                        </div>
+                                        <div class="amountNew"></div>
                                       </div>
                                     
                                 </div>
@@ -311,6 +320,14 @@
       </footer>
 </div>
 <script>
+    const isNumber =(evt) => {
+      evt = (evt) ? evt : window.event;
+      var charCode = (evt.which) ? evt.which : evt.keyCode;
+      if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+      }
+      return true;
+    };
      const confirmDelete = (id) => {
         var x = confirm("Do you want to delete this?");
         const drId = $("#drId").val();
@@ -340,6 +357,29 @@
         }
      }
 
+     checkQtyAdd = function(){
+      const quantity = parseInt($(".qtyAdd").val());
+      if(quantity === 1){
+          const unitPrice = parseInt($(".unitPrice").val());
+          
+          const calc = parseInt(unitPrice) * parseInt(quantity);
+          const tot = calc.toFixed();
+
+          $(".curAmount").hide();
+          $(".amountNew").html(`<input type="text" name="amount" id="amount" value="${tot}" class="form-control" readonly>`);
+     
+         
+      }else{
+          const unitPrice = parseInt($(".unitPrice").val());
+          const calc = parseInt(unitPrice) * parseInt(quantity);
+          const tot = calc.toFixed();
+         
+          $(".curAmount").hide();
+          $(".amountNew").html(`<input type="text" name="amount" id="amount" value="${tot}" class="form-control" readonly>`);
+     
+      }
+    }
+
      $("#productIdAdd").change(function(){
              <?php
                    $getRawMaterials = DB::table(
@@ -364,7 +404,7 @@
                      $("#unitCloseAdd").hide();
                      $("#itemDescAdd").html('<input type="text" name="itemDescription" value="<?= $getId[0]->product_name; ?>" class="form-control" readonly="readonly">')
                      $("#itemDescCloseAdd").hide();
-                     $("#unitPriceAdd").html('<input type="text" name="unitPrice" value="<?= $getId[0]->unit_price; ?>" class="form-control" readonly="readonly" >');
+                     $("#unitPriceAdd").html('<input type="text" name="unitPrice" value="<?= $getId[0]->unit_price; ?>" class="unitPrice form-control" readonly="readonly" >');
                      $("#unitPriceCloseAdd").hide();
                                 
               }

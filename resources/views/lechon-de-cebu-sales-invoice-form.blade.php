@@ -95,11 +95,11 @@
                          			</div>
                          			
                                     <div class="col-md-2">
-                                        <label>Body 400/KLS</label>
+                                        <label>Body {{ $getBody[0]['settings_for_body'] }}/KLS</label>
                                         <input type="text" name="body" class="selcls form-control" />
                                     </div>
                                     <div class="col-md-2">
-                                        <label>Head & Feet 200/KLS</label>
+                                        <label>Head & Feet {{ $getHead[1]['settings_head_feet'] }}/KLS</label>
                                         <input type="text" name="headFeet" class="selcls form-control" />
                                     </div>
                          			<div class="col-md-4">

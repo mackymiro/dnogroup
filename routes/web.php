@@ -37,6 +37,18 @@ Route::group(['middleware' =>['user']], function(){
 		->name('indexSettings')
 		->middleware(['cashier', 'wimpys', 'mrpotato']);
 
+	Route::put(
+		'/settings/body-lechon/add',
+		'SettingsController@addBody')
+		->name('addBody.settings')
+		->middleware(['cashier', 'wimpys', 'mrpotato']);
+
+	Route::put(
+			'/settings/head-feet/add',
+			'SettingsController@addHeadFeet')
+			->name('addBody.settings')
+			->middleware(['cashier', 'wimpys', 'mrpotato']);
+
 	Route::get(
 		'/profile/create-user',
 		'ProfileController@createUser')

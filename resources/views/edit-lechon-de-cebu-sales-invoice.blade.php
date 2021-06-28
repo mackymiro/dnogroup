@@ -80,11 +80,11 @@
 		                     					<input type="text" name="qty" class="selcls form-control" value="{{ $getSalesInvoice['qty']}}" />
 		                         			</div>
 		                         			 <div class="col-md-2">
-		                                        <label>Body 400/KLS</label>
+		                                        <label>Body {{ $getBody[0]['settings_for_body'] }}/KLS</label>
 		                                        <input type="text" name="body" class="selcls form-control" value="{{ $getSalesInvoice['body']}}" />
 		                                    </div>
 		                                    <div class="col-md-2">
-		                                        <label>Head & Feet 200/KLS</label>
+		                                        <label>Head & Feet {{ $getHead[1]['settings_head_feet'] }}/KLS</label>
 		                                        <input type="text" name="headFeet" class="selcls form-control" value="{{ $getSalesInvoice['head_and_feet']}}" />
 		                                    </div>
 		                         			<div class="col-md-4">
@@ -135,11 +135,11 @@
 											<input type="text" name="qty" class="form-control" required="required"  />
 										</div>
 										<div class="col-md-12">
-											<label>Body 400/KLS</label>
+											<label>Body  {{ $getBody[0]['settings_for_body'] }}/KLS</label>
 											<input type="text" name="body" class="form-control" />
 										</div>
 										<div class="col-md-12">
-											<label>Head & Feet 200/KLS</label>
+											<label>Head & Feet {{ $getHead[1]['settings_head_feet'] }}/KLS</label>
 											<input type="text" name="headFeet" class="form-control" />
 										</div>
 										<div class="col-md-12">
@@ -177,11 +177,11 @@
 	                     					<input type="text" name="qty" class="selcls form-control" value="{{ $sInvoice['qty']}}" />
 	                         			</div>
 	                         				 <div class="col-md-2">
-		                                        <label>Body 400/KLS</label>
+		                                        <label>Body {{ $getBody[0]['settings_for_body'] }}/KLS</label>
 		                                        <input type="text" name="body" class="selcls form-control" value="{{ $sInvoice['body']}}" />
 		                                    </div>
 		                                    <div class="col-md-4">
-		                                        <label>Head & Feet 200/KLS</label>
+		                                        <label>Head & Feet {{ $getHead[1]['settings_head_feet'] }}/KLS</label>
 		                                        <input type="text" name="headFeet" class="selcls form-control" value="{{ $sInvoice['head_and_feet']}}" />
 		                                    </div>
 		                         			<div class="col-md-6">

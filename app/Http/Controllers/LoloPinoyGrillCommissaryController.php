@@ -7964,7 +7964,7 @@ class LoloPinoyGrillCommissaryController extends Controller
 
         $deliveryReceipt = LoloPinoyGrillCommissaryDeliveryReceipt::find($id);
 
-        $qty = $request->get('qty');
+        $qty = $request->get('qtyAdd');
         $unitPrice = $request->get('unitPrice');
 
         $compute = $qty * $unitPrice;
@@ -8164,8 +8164,8 @@ class LoloPinoyGrillCommissaryController extends Controller
             $uDr = sprintf("%06d",$newDr);
         } 
 
-        $qty = $request->get('qty');
-        $unitPrice = $request->get('unitPrice');
+        $qty = $request->get('qtyInput');
+        $unitPrice = $request->get('uPrice');
 
         $compute = $qty * $unitPrice;
         $sum = $compute;

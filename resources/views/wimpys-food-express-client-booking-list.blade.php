@@ -27,7 +27,6 @@
 				  						<tr>
 				  							<th>Action</th>
                         <th>Client Booking No</th>
-                        <th>CBF No</th>
                         <th>Client Name</th>
 			  								<th>Date of Event</th>
 			  								<th>Time of Event</th>
@@ -42,7 +41,6 @@
                       <tr>
 				  							<th>Action</th>
                         <th>Client Booking No</th>
-                        <th>CBF No</th>
                         <th>Client Name</th>
 			  								<th>Date of Event</th>
 			  								<th>Time of Event</th>
@@ -71,13 +69,7 @@
                                 @endif
                             @endforeach    
                         </td>
-                        <td>
-                            @foreach($clientBookingList->client_bookings as $clientBooking)
-                                @if($clientBooking->module_name === "Client Booking")
-                                    {{ $clientBooking->cbf_no }} 
-                                @endif
-                            @endforeach   
-                        </td>
+                      
                         <td  style="width:20%;">{{ $clientBookingList['client']}}</td>
                         <td  style="width:20%;">{{ $clientBookingList['date_of_event'] }}</td>
                         <td  style="width:25%;">{{ $clientBookingList['time_of_event']}}</td>

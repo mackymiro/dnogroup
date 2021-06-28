@@ -97,16 +97,7 @@
                                                     @endforeach
                                                 </th>
                                             </tr>
-                                            <tr>
-                                                <th width="40%">Client Booking No</th>
-                                                <th>
-                                                   @foreach($viewClientBooking[0]->client_bookings as $clientBooking)
-                                                        @if($clientBooking->module_name === "Client Booking")          
-                                                            {{ $clientBooking->cbf_no }} 
-                                                        @endif
-                                                    @endforeach
-                                                </th>
-                                            </tr>
+                                            
                                             <tr>
                                                 <th>Client</th>
                                                 <th> {{ $viewClientBooking[0]->client }}</th>
