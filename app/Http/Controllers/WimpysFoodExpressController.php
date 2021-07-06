@@ -10496,7 +10496,6 @@ class WimpysFoodExpressController extends Controller
                         'wimpys_food_express_client_booking_forms.client',
                         'wimpys_food_express_client_booking_forms.place_of_event',
                         'wimpys_food_express_client_booking_forms.mobile_number',
-                        'wimpys_food_express_client_booking_forms.status',
                         'wimpys_food_express_client_booking_forms.email',
                         'wimpys_food_express_client_booking_forms.special_requests',
                         'wimpys_food_express_client_booking_forms.menu',

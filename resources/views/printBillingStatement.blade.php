@@ -106,13 +106,14 @@
 										@if($printBillingStatement[0]->order === "Private Order")
 										<th style="height: 1%; text-align: center;">DR No</th>
 										@else
-                                        <th style="height: 1%; text-align: center;">ORDER SLIP #</th>
+                                        <th style="height: 1%; text-align: center;">INVOICE #</th>
+										<th style="height: 1%; text-align: center;">QTY</th>
+										<th style="height: 1%; text-align: center;">BODY  {{ $getBody[0]['settings_for_body'] }}/KLS</th>
+										<th style="height: 1%; text-align: center;">HEAD AND FEET  {{ $getHead[1]['settings_head_feet'] }}/KLS</th>
 										@endif
 										@if($printBillingStatement[0]->order === "Private Order")
 										<th style="height: 1%; text-align: center;">QTY</th>
 										<th style="height: 1%; text-align: center;">UNIT</th>
-										@else
-                                        <th style="height: 1%; text-align: center;">WEIGHT AT 500/kl</th>
 										@endif
                                         <th style="height: 1%; text-align: center;">DESCRIPTION</th>
                                         <th style="height: 1%; text-align: center;">AMOUNT</th>
@@ -125,14 +126,16 @@
 									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->dr_no }}</td>
                                     
 									  @else
-									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->invoice_number }}</td>
-                                      @endif
+									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->input_invoice_number }}</td>
+									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->qty }}</td>
+									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->body }}/kls</td>
+									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->head_and_feet }}/kls</td>
+                                    
+									  @endif
 									  @if($printBillingStatement[0]->order === "Private Order")
 									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->qty }}</td>
 									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->unit }}</td>
-									  @else
-									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->whole_lechon }}</td>
-                                      @endif
+										@endif
 									  <td style="text-align:center; border: 1px solid black;">{{ $printBillingStatement[0]->description }}</td>
                                       <td style="text-align:center; border: 1px solid black;"><?= number_format($printBillingStatement[0]->amount, 2); ?></td>
                                   	 	</tr>
@@ -141,16 +144,15 @@
                                           <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['date_of_transaction'] }}</td>
                                           @if($billingStatement['order']  === "Private Order")
 										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['dr_no'] }}</td>
-                                         
-										  @else
-										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['invoice_number'] }}</td>
-                                          @endif
-										  @if($printBillingStatement[0]->order === "Private Order")
 										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['qty'] }}</td>
 										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['unit'] }}</td>
 										  @else
-										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['whole_lechon'] }}</td>
+										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['input_invoice_number'] }}</td>
+										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['qty'] }}</td>
+										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['body'] }}/kls</td>
+										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['head_and_feet'] }}/kls</td>
                                           @endif
+										
 										  <td style="text-align:center; border: 1px solid black;">{{ $billingStatement['description'] }}</td>
                                           <td style="text-align:center; border: 1px solid black;"><?= number_format($billingStatement['amount'], 2);?></td>
                                         </tr> 
@@ -158,13 +160,26 @@
                                       
 	                                      
 	                                       <tr style="border:1px solid black;">
-	                                        <td style=" border: 1px solid black;"></td>
+										   @if($printBillingStatement[0]->order === "Private Order")
+										  
 	                                        <td style=" border: 1px solid black;"></td>
                                           	<td style=" border: 1px solid black;"></td>
 											<td style=" border: 1px solid black;"></td>
-	                                        <td style=" border: 1px solid black;"><strong>Total</strong></td>
+	                                        <td style=" border: 1px solid black;"></td>
+											<td style=" border: 1px solid black;"><strong>Total</strong></td>
 	                                        <td style=" text-align:center; border: 1px solid black;"> <?= number_format($sum, 2)?></td>
-	                                      </tr>
+	                                 
+										   @else
+										   	<td style=" border: 1px solid black;"><strong>Total</strong></td>
+	                                        <td style=" border: 1px solid black;"></td>
+                                          	<td style=" border: 1px solid black;"></td>
+											<td style=" border: 1px solid black;"><?= number_format($sumBody, 2)?>/kls</td>
+	                                        <td style=" border: 1px solid black;"><?= number_format($sumHead, 2)?>/kls</td>
+											<td style=" border: 1px solid black;"></td>
+	                                        <td style=" text-align:center; border: 1px solid black;"> <?= number_format($sum, 2)?></td>
+	                                 
+										   @endif
+										</tr>
                                   </tbody>
                           </table>
                            <div style="margin-top:100px;">

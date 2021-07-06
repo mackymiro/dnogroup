@@ -165,13 +165,13 @@
                                   <input type="text" name="unit" class="form-control"  disabled />
                                  
                                 </div>
-                                <div id="body" class="col-lg-1">
-                                  <label>Body 400/kls</label>
+                                <div id="body" class="col-lg-2">
+                                  <label>Body {{ $getBody[0]['settings_for_body'] }}/kls</label>
                                   <input type="text" name="body" class="form-control"  disabled />
                                  
                                 </div>
                                 <div id="headFeet" class="col-lg-2">
-                                  <label>Head & Feet 200/KLS</label>
+                                  <label>Head & Feet {{ $getHead[1]['settings_head_feet'] }}/kls</label>
                                   <input type="text" name="headFeet" class="form-control"  disabled />
                                  
                                 </div>

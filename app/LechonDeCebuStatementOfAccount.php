@@ -22,6 +22,7 @@ class LechonDeCebuStatementOfAccount extends Model
 		'transaction_date',
 		'branch',
 		'invoice_number',
+		'input_invoice_number',
 		'whole_lechon',
 		'description',
 		'invoice_number_soa',

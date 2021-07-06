@@ -24,6 +24,7 @@ class LechonDeCebuBillingStatement extends Model
     	'terms',
     	'date_of_transaction',
     	'invoice_number',
+		'input_invoice_number',
     	'whole_lechon',
     	'description',
 		'amount',

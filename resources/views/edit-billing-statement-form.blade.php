@@ -136,13 +136,13 @@
                                       </div>
                                       @endif
                                       @if($billingStatement['order'] == "Ssp")
-                                      <div  class="col-lg-1">
-                                        <label>Body 400/kls</label>
+                                      <div  class="col-lg-2">
+                                        <label>Body {{ $getBody[0]['settings_for_body'] }}/kls</label>
                                         <input type="text" name="qty" class="form-control"  value="{{ $billingStatement['body']}}" disabled />
                                       
                                       </div>
                                       <div  class="col-lg-2">
-                                        <label>Head and Feet 200/kls</label>
+                                        <label>Head and Feet {{ $getHead[1]['settings_head_feet'] }}/kls</label>
                                         <input type="text" name="qty" class="form-control"  value="{{ $billingStatement['head_and_feet']}}" disabled />
                                       
                                       </div>
@@ -199,7 +199,7 @@
                                         </div>
                                        
                                         <div id="invoiceNo" class="col-lg-12">
-                                            <label>Invoice #</label>
+                                            <label>SI No</label>
                                             <select data-live-search="true" name="invoiceNumber" class="invoiceSelect form-control selectpicker">
                                               <option value="0">--Please Select--</option>
                                               @foreach($getAllSalesInvoices as $getAllSalesInvoice)
@@ -235,7 +235,11 @@
                                             <label>DR Delivered For</label>
                                             <input type="text" name="drDeliveredFor" class="form-control" disabled />
                                         </div>
-                      
+                                        <div id="invoiceNum" class="col-lg-12">
+                                          <label>Invoice #</label>
+                                          <input type="text" name="invoiceNum1" class="form-control"  readonly="readonly" />
+                                        
+                                        </div>
                                         <div id="qty" class="col-lg-12">
                                           <label>Qty</label>
                                           <input type="text" name="qty" class="form-control"  readonly="readonly" />
@@ -247,12 +251,12 @@
                                         
                                         </div>
                                         <div id="body" class="col-lg-12">
-                                          <label>Body 400/kls</label>
+                                          <label>Body {{ $getBody[0]['settings_for_body'] }}/kls</label>
                                           <input type="text" name="body" class="form-control"  readonly="readonly" />
                                         
                                         </div>
                                         <div id="headFeet" class="col-lg-12">
-                                          <label>Head & Feet 200/KLS</label>
+                                          <label>Head & Feet {{ $getHead[1]['settings_head_feet'] }}/KLS</label>
                                           <input type="text" name="headFeet" class="form-control"  readonly="readonly" />
                                         
                                         </div>
@@ -310,7 +314,7 @@
                                         @if($bStatement['order'] != "Private Order")
                                         <div class="col-lg-2">
                                             <label>Invoice #</label>
-                                            <input type="text" name="invoiceNumber" class="form-control" disabled="disbled" value="{{ $bStatement['invoice_number'] }}" />
+                                            <input type="text" name="invoiceNumber" class="form-control" disabled="disbled" value="{{ $bStatement['input_invoice_number'] }}" />
                                         </div>
                                        @endif
                                        @if($bStatement['order'] == "Private Order")
@@ -339,11 +343,11 @@
                                         @endif
                                         @if($bStatement['order'] == "Ssp")
                                         <div class="col-lg-2">
-                                            <label>Body</label>
+                                            <label>Body {{ $getBody[0]['settings_for_body'] }}/kls</label>
                                             <input type="text" name="body" class="form-control" value="{{ $bStatement['body'] }}" disabled="diasabled" />
                                         </div>
                                         <div class="col-lg-4">
-                                            <label>Head and Feet 200/kls</label>
+                                            <label>Head and Feet {{ $getHead[1]['settings_head_feet'] }}/kls</label>
                                             <input type="text" name="body" class="form-control" value="{{ $bStatement['head_and_feet'] }}" disabled="diasabled" />
                                         </div>
                                         @endif 
@@ -368,7 +372,7 @@
                                           <input type="hidden" id="billingStatementId" name="billingStatementId" value="{{ $billingStatement['id'] }}" />
                                          
                                           @if($bStatement['order'] != "Private Order")
-                                          <input type="submit" class="btn btn-success" value="Update" />
+                                         <!-- <input type="submit" class="btn btn-success" value="Update" />-->
                                           @endif
                                           @if(Auth::user()['role_type'] == 1)
                                          
@@ -461,6 +465,7 @@
              $("#qty").show();
              $("#body").show();
              $("#headFeet").show();
+             $("#invoiceNum").show();
 
              $("#drNo").hide();
              $("#price").hide();
@@ -488,6 +493,7 @@
              $("#amountAdd").hide();
              $("#wholeLechon").hide();
              $("#description").hide();
+             $("#invoiceNum").hide();
          }  
     });
 
@@ -534,7 +540,7 @@
                                     ->get(); ?>
               <?php foreach($getSIInsides as $getSIInside): ?>
                  $("#dataInvoice").append(  
-                          `<option value="<?php echo $getSIInside->id?>"><?php echo $getSIInside->id?></option>
+                          `<option value="<?php echo $getSIInside->id?>"><?= $getSIInside->id?></option>
                           `);
                   $(".chooseInvoice").change(function(){
                       const cat  = $(this.options[this.selectedIndex]).closest('option:selected').val();
@@ -545,25 +551,28 @@
                                       ->get(); ?>
 
                       <?php foreach($datas as $data): ?>
-                            if(cat === "<?php echo $data->id?>"){
-                              $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $data->qty; ?>" class="form-control" readonly="readonly" />');
-                              $("#body").html('<label> Body 400/kls</label><input type="text" name="body" value="<?php echo $data->body; ?>" class="form-control" readonly="readonly" />');
-                              $("#headFeet").html('<label> Head & Feet 200/KLS</label><input type="text" name="headFeet" value="<?php echo $data->head_and_feet; ?>" class="form-control" readonly="readonly" />');
+                            if(cat === "<?= $data->id?>"){
+                              $("#invoiceNum").html('<label>Invoice #</label><input type="text" name="invoiceNum1" class="form-control" value="<?= $data->invoice_number;?>" readonly="readonly">');
+                              $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?= $data->qty; ?>" class="form-control" readonly="readonly" />');
+                              $("#body").html('<label> Body 400/kls</label><input type="text" name="body" value="<?= $data->body; ?>" class="form-control" readonly="readonly" />');
+                              $("#headFeet").html('<label> Head & Feet 200/KLS</label><input type="text" name="headFeet" value="<?= $data->head_and_feet; ?>" class="form-control" readonly="readonly" />');
                               
-                              $("#descriptionAdd").html('<label>Description</label><input type="text" name="description" value="<?php echo $data->item_description; ?>" class="form-control" readonly="readonly" />');
-                              $("#amountAdd").html('<label>Amount</label><input type="text" name="amount" value="<?php echo $data->amount; ?>" class="form-control" readonly="readonly" />');
+                              $("#descriptionAdd").html('<label>Description</label><input type="text" name="description" value="<?= $data->item_description; ?>" class="form-control" readonly="readonly" />');
+                              $("#amountAdd").html('<label>Amount</label><input type="text" name="amount" value="<?= $data->amount; ?>" class="form-control" readonly="readonly" />');
          
                             }
                       <?php endforeach;?>
                   });
               <?php endforeach; ?>
 
-            $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?php echo $salesInvoice->qty; ?>" class="form-control" readonly="readonly" />');
-            $("#body").html('<label> Body 400/kls</label><input type="text" name="body" value="<?php echo $salesInvoice->body; ?>" class="form-control" readonly="readonly" />');
-            $("#headFeet").html('<label> Head & Feet 200/KLS</label><input type="text" name="headFeet" value="<?php echo $salesInvoice->head_and_feet; ?>" class="form-control" readonly="readonly" />');
+            $("#invoiceNum").html('<label>Invoice #</label><input type="text" name="invoiceNum1" class="form-control" value="<?= $data->invoice_number;?>" readonly="readonly">');
+                          
+            $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?= $salesInvoice->qty; ?>" class="form-control" readonly="readonly" />');
+            $("#body").html('<label> Body 400/kls</label><input type="text" name="body" value="<?= $salesInvoice->body; ?>" class="form-control" readonly="readonly" />');
+            $("#headFeet").html('<label> Head & Feet 200/KLS</label><input type="text" name="headFeet" value="<?= $salesInvoice->head_and_feet; ?>" class="form-control" readonly="readonly" />');
             
-            $("#descriptionAdd").html('<label>Description</label><input type="text" name="description" value="<?php echo $salesInvoice->item_description; ?>" class="form-control" readonly="readonly" />');
-            $("#amountAdd").html('<label>Amount</label><input type="text" name="amount" value="<?php echo $salesInvoice->amount; ?>" class="form-control" readonly="readonly" />');
+            $("#descriptionAdd").html('<label>Description</label><input type="text" name="description" value="<?= $salesInvoice->item_description; ?>" class="form-control" readonly="readonly" />');
+            $("#amountAdd").html('<label>Amount</label><input type="text" name="amount" value="<?= $salesInvoice->amount; ?>" class="form-control" readonly="readonly" />');
          
           }
         <?php endforeach; ?>
@@ -625,7 +634,7 @@
                 <?php foreach($getDrNosInsides as $getDrNosInside):?>
                       $("#dataList").append(  
                           `
-                           <option value="<?php echo $getDrNosInside->id?>"><?php echo $getDrNosInside->id?></option>
+                           <option value="<?= $getDrNosInside->id?>"><?= $getDrNosInside->id?></option>
                           `);
                         
                         $(".chooseDr").change(function(){
@@ -637,7 +646,7 @@
                                       ->get(); ?>
 
                                <?php foreach($datas as $data): ?>
-                                     if(cat === "<?php echo $data->id?>"){
+                                     if(cat === "<?= $data->id?>"){
                                           $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?= $data->qty; ?>" class="form-control" readonly="readonly" />');
                                           $("#unit").html('<label>Unit</label><input type="text" name="unit" value="<?= $data->unit; ?>" class="form-control" readonly="readonly" />');
                                          

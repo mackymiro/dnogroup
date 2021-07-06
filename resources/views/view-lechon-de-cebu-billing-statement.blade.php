@@ -1,11 +1,7 @@
 @extends('layouts.lolo-pinoy-lechon-de-cebu-app')
 @section('title', 'View Billing Statement |')
 @section('content')
-<script>
-    function myFunction() {
-      window.print();
-    }
-</script>
+
 <div id="wrapper">
 	<!-- Sidebar -->
    @include('sidebar.sidebar')
@@ -102,6 +98,9 @@
                                         <th class="bg-info" style="color:white;">UNIT</th>
                                         @else
                                         <th class="bg-info" style="color:white;">INVOICE #</th>
+                                        <th class="bg-info" style="color:white;">QTY </th>
+                                        <th class="bg-info" style="color:white;">BODY  {{ $getBody[0]['settings_for_body'] }}/KLS </th>
+                                        <th class="bg-info" style="color:white;">HEAD AND FEET  {{ $getHead[1]['settings_head_feet'] }}/KLS</th>
                                         @endif
                                         <th class="bg-info" style="color:white;">DESCRIPTION</th>
                                         <th class="bg-info" style="color:white;">AMOUNT</th>
@@ -115,11 +114,14 @@
                                       <td>{{ $viewBillingStatement[0]->qty }}</td>
                                       <td>{{ $viewBillingStatement[0]->unit }}</td>
                                       @else
-                                      <td>{{ $viewBillingStatement[0]->invoice_number }}</td>
+                                      <td>{{ $viewBillingStatement[0]->input_invoice_number }}</td>
+                                      <td>{{ $viewBillingStatement[0]->qty }}</td>
+                                      <td>{{ $viewBillingStatement[0]->body }}/kls</td>
+                                      <td>{{ $viewBillingStatement[0]->head_and_feet }}/kls</td>
                                       @endif
                                      
                                       <td>{{ $viewBillingStatement[0]->description }}</td>
-                                      <td><?php echo number_format($viewBillingStatement[0]->amount, 2); ?></td>
+                                      <td><?= number_format($viewBillingStatement[0]->amount, 2); ?></td>
                                       </tr>
                                       @foreach($billingStatements as $billingStatement)
                                       <tr>
@@ -129,20 +131,35 @@
                                         <td>{{ $billingStatement['qty'] }}</td>
                                         <td>{{ $billingStatement['unit'] }}</td>
                                         @else
-                                        <td>{{ $billingStatement['invoice_number'] }}</td>
+                                        <td>{{ $billingStatement['input_invoice_number'] }}</td>
+                                        <td>{{ $billingStatement['qty'] }}</td>
+                                        <td>{{ $billingStatement['body'] }}/kls</td>
+                                        <td>{{ $billingStatement['head_and_feet'] }}/kls</td>
                                         @endif
                                        
                                         <td>{{ $billingStatement['description'] }}</td>
-                                        <td><?php echo number_format($billingStatement['amount'], 2);?></td>
+                                        <td><?= number_format($billingStatement['amount'], 2);?></td>
                                       </tr>
                                       @endforeach
                                       <tr>
+                                         @if($viewBillingStatement[0]->order == "Private Order")
+                                        
                                         <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>
                                         <td><strong>Total</strong></td>
-                                        <td>₱ <?php echo number_format($sum, 2)?></td>
+                                        <td>₱ <?= number_format($sum, 2)?></td>
+                                         @else
+                                          <td><strong>Total</strong></td>
+                                          <td></td>
+                                          <td></td>
+                                          <td> <?= number_format($sumBody, 2)?>/kls</td>
+                                          <td><?= number_format($sumHead, 2)?>/kls</td>
+                                          <td></td>
+                                          <td>₱ <?= number_format($sum, 2)?></td>
+                                         @endif
+                                       
                                       </tr>
                                     </tbody>
                               </table>

@@ -7284,6 +7284,8 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_billing_statements.address',
                                     'lechon_de_cebu_billing_statements.dr_no',
                                     'lechon_de_cebu_billing_statements.dr_address',
+                                    'lechon_de_cebu_billing_statements.body',
+                                    'lechon_de_cebu_billing_statements.head_and_feet',
                                     'lechon_de_cebu_billing_statements.dr_delivered_for',
                                     'lechon_de_cebu_billing_statements.qty',
                                     'lechon_de_cebu_billing_statements.unit',
@@ -7293,6 +7295,7 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_billing_statements.terms',
                                     'lechon_de_cebu_billing_statements.date_of_transaction',
                                     'lechon_de_cebu_billing_statements.invoice_number',
+                                    'lechon_de_cebu_billing_statements.input_invoice_number',
                                     'lechon_de_cebu_billing_statements.order',
                                     'lechon_de_cebu_billing_statements.whole_lechon',
                                     'lechon_de_cebu_billing_statements.description',
@@ -7318,7 +7321,24 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $sum  = $countTotalAmount + $countAmount;
 
-        $pdf = PDF::loadView('printBillingStatement', compact('printBillingStatement', 'billingStatements', 'sum'));
+        //count body 
+        $countBody = LechonDeCebuBillingStatement::where('id', $id)->sum('body');
+
+        $countAmountBody = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->sum('body');
+  
+        $sumBody = $countBody + $countAmountBody;
+
+        //count head
+        $countHead = LechonDeCebuBillingStatement::where('id', $id)->sum('head_and_feet');
+        $countAmountHead = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->sum('head_and_feet');
+
+        $sumHead = $countHead + $countAmountHead;
+
+        $getBody = SettingsModel::get()->where('flag', 'body')->toArray();
+        $getHead = SettingsModel::get()->where('flag', 'headfeet')->toArray();
+
+        $pdf = PDF::loadView('printBillingStatement', compact('printBillingStatement', 'billingStatements', 'sum', 
+        'getBody', 'getHead', 'sumBody', 'sumHead'));
 
         return $pdf->download('lechon-de-cebu-billing-statement.pdf');         
     }
@@ -9818,10 +9838,13 @@ class LoloPinoyLechonDeCebuController extends Controller
                                     'lechon_de_cebu_billing_statements.dr_delivered_for',
                                     'lechon_de_cebu_billing_statements.date',
                                     'lechon_de_cebu_billing_statements.branch',
+                                    'lechon_de_cebu_billing_statements.body',
+                                    'lechon_de_cebu_billing_statements.head_and_feet',
                                     'lechon_de_cebu_billing_statements.period_cover',
                                     'lechon_de_cebu_billing_statements.terms',
                                     'lechon_de_cebu_billing_statements.date_of_transaction',
                                     'lechon_de_cebu_billing_statements.invoice_number',
+                                    'lechon_de_cebu_billing_statements.input_invoice_number',
                                     'lechon_de_cebu_billing_statements.qty',
                                     'lechon_de_cebu_billing_statements.unit',
                                     'lechon_de_cebu_billing_statements.order',
@@ -9852,8 +9875,24 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         $sum  = $countTotalAmount + $countAmount;
 
+        //count body 
+        $countBody = LechonDeCebuBillingStatement::where('id', $id)->sum('body');
 
-        return view('view-lechon-de-cebu-billing-statement', compact('viewBillingStatement', 'billingStatements', 'sum'));
+        $countAmountBody = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->sum('body');
+
+        $sumBody = $countBody + $countAmountBody;
+
+        //count head
+        $countHead = LechonDeCebuBillingStatement::where('id', $id)->sum('head_and_feet');
+        $countAmountHead = LechonDeCebuBillingStatement::where('billing_statement_id', $id)->sum('head_and_feet');
+
+        $sumHead = $countHead + $countAmountHead;
+
+        $getBody = SettingsModel::get()->where('flag', 'body')->toArray();
+        $getHead = SettingsModel::get()->where('flag', 'headfeet')->toArray();
+
+        return view('view-lechon-de-cebu-billing-statement', compact('viewBillingStatement', 'billingStatements', 
+        'sum', 'getBody', 'getHead', 'sumBody', 'sumHead'));
     }
 
 
@@ -9973,7 +10012,9 @@ class LoloPinoyLechonDeCebuController extends Controller
 
           //if user selects an order
         if($request->get('choose') === "Ssp"){
-            $invoiceNum = $request->get('invoiceNumber');
+            $invoiceNum = $request->invoiceNumber;
+            $inputInvoice = $request->invoiceNum1;
+          
             $wholeLechon = 0;
             $description = $request->get('description');
             $unit = 0;
@@ -9994,6 +10035,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         }else{
             $invoiceNum = NULL;
+            $inputInvoice = NULL;
             $wholeLechon = $request->get('price');
             $description = $request->get('description');
             $drNo = $request->get('drNo');
@@ -10010,6 +10052,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             $headFeet = 0;
         }
 
+
     
         $addBillingStatement = new LechonDeCebuBillingStatement([
             'user_id'=>$user->id,
@@ -10017,6 +10060,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'branch'=>$request->get('branch'),
             'date_of_transaction'=>$request->get('transactionDate'),
             'invoice_number'=>$invoiceNum,
+            'input_invoice_number'=>$inputInvoice,
             'whole_lechon'=>$wholeLechon,
             'description'=>$description,
             'order'=>$request->get('choose'),
@@ -10040,6 +10084,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'branch'=>$request->get('branch'),
             'transaction_date'=>$request->get('transactionDate'),
             'invoice_number'=>$invoiceNum,
+            'input_invoice_number'=>$inputInvoice,
             'whole_lechon'=>$wholeLechon,
             'description'=>$description,
             'order'=>$request->get('choose'),
@@ -10154,10 +10199,13 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 ->orderBy('lechon_de_cebu_sales_invoices.id', 'desc')
                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameSales)
                                 ->get()->toArray();
-            
+
+        $getBody = SettingsModel::get()->where('flag', 'body')->toArray();
+        $getHead = SettingsModel::get()->where('flag', 'headfeet')->toArray();
+
         
         return view('edit-billing-statement-form', compact('billingStatement', 'bStatements', 
-        'getPurchaseOrders', 'drNos', 'getAllSalesInvoices'));
+        'getPurchaseOrders', 'drNos', 'getAllSalesInvoices', 'getBody', 'getHead'));
     }
 
     //storeBillingStatement
@@ -10409,7 +10457,11 @@ class LoloPinoyLechonDeCebuController extends Controller
                                 ->where('lechon_de_cebu_codes.module_name', $moduleNameSales)
                                 ->get()->toArray();
 
-        return view('lechon-de-cebu-billing-statement-form', compact('drNos', 'getAllSalesInvoices'));
+        $getBody = SettingsModel::get()->where('flag', 'body')->toArray();
+        $getHead = SettingsModel::get()->where('flag', 'headfeet')->toArray();
+        
+
+        return view('lechon-de-cebu-billing-statement-form', compact('drNos', 'getAllSalesInvoices', 'getBody', 'getHead'));
     }
 
     //update-po
