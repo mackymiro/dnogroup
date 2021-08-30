@@ -10233,6 +10233,8 @@ class LoloPinoyLechonDeCebuController extends Controller
         //if user selects an order
         if($request->get('choose') === "Ssp"){
             $invoiceNum = $request->get('invoiceNumber');
+            $inputInvoice = $request->invoiceNum1;
+
             $amount = $request->get('amount');
             $description = $request->get('description');
             $unit = 0;
@@ -10252,6 +10254,7 @@ class LoloPinoyLechonDeCebuController extends Controller
 
         }else{
             $invoiceNum = NULL;
+            $inputInvoice = NULL;
             $wholeLechon = $request->get('wholeLechon6000');
             $description = $request->get('descriptionDrNo');
 
@@ -10283,7 +10286,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             $uRef = sprintf("%06d",$newRefNum);
         } 
 
-       
+        
         $billingStatement = new LechonDeCebuBillingStatement([
             'user_id'=>$user->id,
             'bill_to'=>$request->get('billTo'),
@@ -10292,6 +10295,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'address'=>$request->get('address'),
             'date'=>$request->get('date'),
             'invoice_number'=>$invoiceNum,
+            'input_invoice_number'=>$inputInvoice,
             'order'=>$request->get('choose'),
             'branch'=>$request->get('branch'),
             'terms'=>$request->get('terms'),
@@ -10339,6 +10343,7 @@ class LoloPinoyLechonDeCebuController extends Controller
             'period_cover'=>$request->get('periodCovered'),
             'date'=>$request->get('date'),
             'invoice_number'=>$invoiceNum,
+            'input_invoice_number'=>$inputInvoice,
             'order'=>$request->get('choose'),
             'branch'=>$request->get('branch'),
             'terms'=>$request->get('terms'),

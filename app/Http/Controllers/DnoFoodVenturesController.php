@@ -4949,6 +4949,33 @@ class DnoFoodVenturesController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $ids = Auth::user()->id;
+        $user = User::find($ids);
+
+        $firstName = $user->first_name;
+        $lastName = $user->last_name;
+
+        $name  = $firstName." ".$lastName;
+
+
+        $purchaseOrder = DnoFoodVenturesPurchaseOrder::find($id);
+
+        $purchaseOrder->paid_to = $request->get('paidTo');
+        $purchaseOrder->address = $request->get('address');
+        $purchaseOrder->date = $request->get('date');
+        $purchaseOrder->description = $request->get('description');
+
+        $purchaseOrder->quantity = $request->get('quantity');
+        $purchaseOrder->unit_price = $request->get('unitPrice');
+        $purchaseOrder->amount = $request->get('amount');
+
+        $purchaseOrder->save();
+
+
+        Session::flash('SuccessE', 'Successfully updated');
+
+        return redirect()->route('editDnoFoodVentures', ['id'=>$id]);
+
         
     }
 

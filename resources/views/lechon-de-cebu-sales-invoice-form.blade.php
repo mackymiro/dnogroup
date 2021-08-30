@@ -96,16 +96,25 @@
                          			
                                     <div class="col-md-2">
                                         <label>Body {{ $getBody[0]['settings_for_body'] }}/KLS</label>
-                                        <input type="text" name="body" class="selcls form-control" />
+                                        <input type="text" name="body" id="body" onkeyup="getBody()" class="selcls form-control" />
                                     </div>
                                     <div class="col-md-2">
                                         <label>Head & Feet {{ $getHead[1]['settings_head_feet'] }}/KLS</label>
-                                        <input type="text" name="headFeet" class="selcls form-control" />
+                                        <input type="text" name="headFeet" id="headFeet" onkeyup="getHeadFeet()" class="selcls form-control" />
                                     </div>
-                         			<div class="col-md-4">
-                         				<label>Item Description</label>
-                         				<input type="text" name="itemDescription" class="selcls form-control" />
+									<div class="col-md-2">
+                         				<label>Whole weight</label>
+                         				<input type="text" name="wholeWeight" id="wholeWeight" class="form-control" readonly />
                          			</div>
+									<div class="col-md-4">
+                         				<label>Item Description</label>
+                         				<input type="text" name="itemDescription" id="itemDesc" class="selcls form-control" />
+                         			</div>
+									 <div class="col-md-2">
+                         				<label>Total Amount</label>
+                         				<input type="text" name="totalAmount" id="totalAmount" class="form-control" readonly />
+                         			</div>
+									
                          			
                          			
                          		</div>
@@ -134,4 +143,40 @@
         </div>
       </footer>
 </div>
+<script>
+
+	function getBody () {
+		const body = document.querySelector('#body').value;
+		var getBody =  <?= $getBody[0]['settings_for_body'] ?>;
+		var comp = body * getBody;
+		console.log(comp);
+		getBodyAmount(comp, val);
+
+	}
+
+	function getHeadFeet(){
+		const headFeet = document.querySelector('#headFeet').value;
+		var getHeadFeet = <?= $getHead[1]['settings_head_feet'] ?>;
+		var compHead = headFeet * getHeadFeet;
+		console.log(compHead);	
+
+		getBodyAmount(val, compHead);
+		//$("#totalAmount").html(`<input type="text" name="totalAmount" value="${tot}">`);
+	}
+
+	
+	const getBodyAmount = (val, compHead) =>{
+		console.log('tot'+val);
+		
+		console.log('toooot'+ compHead);
+	}
+
+	function addTwoNumbers(getBody, getHeadFeet){
+		const body = document.querySelector('#body').value;
+		const headFeet = document.querySelector('#headFeet').value;
+
+	}
+	
+
+</script>
 @endsection

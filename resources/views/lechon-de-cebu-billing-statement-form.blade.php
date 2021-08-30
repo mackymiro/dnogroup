@@ -154,7 +154,11 @@
                                     <label>DR Delivered For</label>
                                     <input type="text" name="drDeliveredFor" class="form-control" disabled />
                                 </div>
-                      
+                                <div id="invoiceNum" class="col-lg-1">
+                                    <label>Invoice #</label>
+                                    <input type="text" name="invoiceNum1" class="form-control"  readonly="readonly" />
+                                  
+                                  </div>
                                 <div id="qty" class="col-lg-1">
                                   <label>Qty</label>
                                   <input type="text" name="qty" class="form-control"  disabled />
@@ -248,6 +252,7 @@
              $("#qty").show();
              $("#invoiceList").show();
              $("#amount").show();
+             $("#invoiceNum").show();
              
              $("#drNo").hide();
              $("#wholeLechon6000").hide();
@@ -274,6 +279,7 @@
              $("#wholeLechon").hide();
              $("#description").hide();
              $("#invoiceList").hide();
+             $("#invoiceNum").hide();
          }  
     });
 
@@ -333,6 +339,8 @@
 
                       <?php foreach($datas as $data): ?>
                             if(cat === "<?php echo $data->id?>"){
+                              $("#invoiceNum").html('<label>Invoice #</label><input type="text" name="invoiceNum1" class="form-control" value="<?= $data->invoice_number;?>" readonly="readonly">');
+                           
                               $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?= $data->qty; ?>" class="form-control" readonly="readonly" />');
                               $("#body").html('<label> Body 400/kls</label><input type="text" name="body" value="<?= $data->body; ?>" class="form-control" readonly="readonly" />');
                               $("#headFeet").html('<label> Head & Feet 200/KLS</label><input type="text" name="headFeet" value="<?= $data->head_and_feet; ?>" class="form-control" readonly="readonly" />');
@@ -345,6 +353,8 @@
                   });
               <?php endforeach; ?>
 
+            $("#invoiceNum").html('<label>Invoice #</label><input type="text" name="invoiceNum1" class="form-control" value="<?= $data->invoice_number;?>" readonly="readonly">');
+          
             $("#qty").html('<label>Qty</label><input type="text" name="qty" value="<?= $salesInvoice->qty; ?>" class="form-control" readonly="readonly" />');
             $("#body").html('<label> Body 400/kls</label><input type="text" name="body" value="<?= $salesInvoice->body; ?>" class="form-control" readonly="readonly" />');
             $("#headFeet").html('<label> Head & Feet 200/KLS</label><input type="text" name="headFeet" value="<?= $salesInvoice->head_and_feet; ?>" class="form-control" readonly="readonly" />');

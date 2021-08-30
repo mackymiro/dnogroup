@@ -5115,6 +5115,12 @@ Route::group(['middleware' => ['auth']], function(){
 		->name('editDnoFoodVentures')
 		->middleware(['cashier', 'wimpys', 'mrpotato']);
 
+	Route::put(
+		'/dno-food-ventures/{id}/update',
+		'DnoFoodVenturesController@update')
+		->name('updateDnoFoodVentures')
+		->middleware(['cashier', 'wimpys', 'mrpotato']);
+
 	Route::post(
 		'/dno-food-ventures/add-new-purchase-order/{id}',
 		'DnoFoodVenturesController@addNewPurchaseOrder')

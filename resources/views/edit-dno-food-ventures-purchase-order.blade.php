@@ -58,9 +58,9 @@
                                @if(session('SuccessE'))
                                  <p class="alert alert-success">{{ Session::get('SuccessE') }}</p>
                                 @endif 
-                               <form action="{{ action('LoloPinoyLechonDeCebuController@update', $purchaseOrder[0]->id) }}" method="post">
+                               <form action="{{ action('DnoFoodVenturesController@update', $purchaseOrder[0]->id) }}" method="post">
                                {{csrf_field()}}
-                              <input name="_method" type="hidden" value="PATCH">
+                              <input name="_method" type="hidden" value="PUT">
                               <div class="form-group">
                                 <div class="form-row">
                                   <div class="col-lg-6">

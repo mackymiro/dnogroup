@@ -98,7 +98,7 @@
                                       @if($billingStatement['order'] != "Private Order")
                                       <div class="col-lg-2">
                                         <label>Invoice #</label>
-                                          <input type="text" name="invoiceNumber" class="form-control"  disabled="disabled" value="{{ $billingStatement['invoice_number'] }}"  />
+                                          <input type="text" name="invoiceNumber" class="form-control"  disabled="disabled" value="{{ $billingStatement['input_invoice_number'] }}"  />
                                       </div>
                                       @endif
                                       @if($billingStatement['order'] == "Private Order")
