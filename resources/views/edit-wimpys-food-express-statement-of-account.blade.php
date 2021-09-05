@@ -102,6 +102,9 @@
                                     <i class="fas fa-tasks" aria-hidden="true"></i>
                                   Lists (Unpaid)</div>
                               <div class="card-body">
+                                <button data-toggle="modal" data-target="#payAll" class="btn btn-primary btn-lg">PAY ALL</button>
+                                  <br>
+                                  <br>
                                  <div class="table-responsive">
                                   @if($getStatementOfAccount[0]->order == $orFormCBF)
                                   <table class="table table-bordered display" width="100%" cellspacing="0">
@@ -468,6 +471,72 @@
           </div>
     </div>
      <!-- Modal -->
+     <div class="modal fade" id="payAll" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">PAY ALL</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">    
+                <div  class="validate col-lg-12">
+                    <p class="alert alert-danger">Please Fill up the fields</p>
+                </div>
+                <div id="succUp<?= $getStatementOfAccount[0]->id?>" class="col-lg-12"></div>
+                <div class="form-group">
+                    <div class="form-row">
+                       
+                        <div class="col-lg-4">
+                            <label>Total Remaining Balance</label>
+                            <input type="text" name="totalRemainingBalance" class="form-control" value="<?= number_format($computeAll, 2);?>" disabled />
+                        </div>
+                        <div class="col-lg-2">
+                            <label>Paid Amount</label>
+                            <input type="text"  name="paidAmount" class="paidAmount{{ $getStatementOfAccount[0]->id}} form-control"  />
+                        </div>
+                      
+                      
+                        <div class="col-lg-2">
+                            <label>Collection Date</label>
+                            <input type="text"  name="collectionDate" class="collectionDate{{ $getStatementOfAccount[0]->id }} datepicker form-control"  />
+                        </div>
+                        <div class="col-lg-4">
+                            <label>Check Number</label>
+                            <input type="text" name="checkNumber" class="checkNumber{{ $getStatementOfAccount[0]->id }} form-control" />
+                        </div>
+                        <div class="col-lg-4">
+                            <label>Check Amount</label>
+                            <input type="text" name="checkAmount" class="checkAmount{{ $getStatementOfAccount[0]->id }} form-control"   />
+                        </div>
+                        <div class="col-lg-4">
+                            <label>OR Number</label>
+                            <input type="text"  name="orNumber" class="orNumber{{ $getStatementOfAccount[0]->id }} form-control"  />
+                        </div>
+                        <div class="col-lg-4">
+                            <label>Payment Method</label>
+                            <div id="app-payment1">
+                                <select  name="payment" class="payment{{ $getStatementOfAccount[0]->id }} form-control"> 
+                                    <option v-for="payment in payments1" v-bind:value="payment.value">
+                                    @{{ payment.text }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden"  class="mainId{{ $getStatementOfAccount[0]->id}}" value="{{ $getStatementOfAccount[0]->id }}" />
+                <button type="button" class="btn btn-danger btn-lg" data-dismiss="modal">Close</button>
+                <button type="button" onclick="payAll(<?= $getStatementOfAccount[0]->id ?>)" class="btn btn-success btn-lg">Paid</button>
+            </div>
+            </div>
+        </div>
+        </div>
+     <!-- Modal -->
+     <!-- Modal -->
      @foreach($allAccounts as $allAccount)
      <div class="modal fade" id="listPopUp{{ $allAccount['id'] }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-keyboard="false" data-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
@@ -806,6 +875,56 @@
   </div>
   <script type="text/javascript">
      $(".validate").hide();
+
+     const payAll = (id) =>{
+        const paidAmount = $(".paidAmount"+id).val();
+        const collectionDate = $(".collectionDate"+id).val();
+        const checkNumber = $(".checkNumber"+id).val();
+        const checkAmount = $(".checkAmount"+id).val();
+        const orNumber = $(".orNumber"+id).val();
+        const payment = $(".payment"+id).val();
+        
+        if(paidAmount.length === 0 || collectionDate.length === 0){
+            $(".validate").fadeIn().delay(3000).fadeOut();
+        }else{
+            //make ajax call
+            $.ajax({
+                type: "PUT",
+                url: '/wimpys-food-express/pay-all/' + id,
+                data:{
+                    _method: 'put', 
+                    "_token": "{{ csrf_token() }}",
+                    "id":id,
+                    "paidAmount":paidAmount,
+                    "status":status,
+                    "collectionDate":collectionDate,
+                    "checkNumber":checkNumber,
+                    "checkAmount":checkAmount,
+                    "orNumber":orNumber,
+                    "payment":payment,
+                },
+                success: function(data){
+                    console.log(data);
+                    const getData = data;
+                    const succData = getData.split(":");
+                    const succDataArr = succData[0];
+                    if(succDataArr == "Success"){
+                        $("#succUp"+id).fadeIn().delay(3000).fadeOut();
+                        $("#succUp"+id).html(`<p class="alert alert-success"> ${data}</p>`);
+                        
+                        setTimeout(function(){
+                            document.location.reload();
+                        }, 3000);
+                    }
+                
+                },
+                error: function(data){
+                    console.log('Error:', data);
+                }
+
+                });
+        }
+     }
      
      const updatePaid = (id) =>{
         const paidAmount = $(".paidAmount"+id).val();
@@ -859,7 +978,7 @@
                 });
         }
       
-     }
+     };
 
     
   </script>

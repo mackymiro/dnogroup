@@ -37,6 +37,65 @@ class WimpysFoodExpressController extends Controller
     CONST MODULE_NAME_BS     = "Billing Statement";
     CONST MODULE_NAME_PV     = "Payment Voucher";
 
+    public function soaPayAll(Request $request, $id){
+        $statementAccountPaid = WimpysFoodExpressStatementOfAccount::find($request->id);
+
+        $subStatementIds = WimpysFoodExpressStatementOfAccount::where('billing_statement_id', $id)->get()->toArray();
+     
+        if($subStatementIds != ""){
+            $stat = "PAID";
+            foreach($subStatementIds as $subStatementId){
+                $status1 = $subStatementId['status'] = $stat;
+                
+                $updateStat = WimpysFoodExpressStatementOfAccount::find($subStatementId['id']);
+                $updateStat->status = $status1; 
+                $updateStat->save();
+    
+            }
+
+            $drUpdate2s = WimpysFoodExpressStatementOfAccount::where('dr_no', $statementAccountPaid->dr_no)
+                                                    ->where('price', $statementAccountPaid->amount)
+                                                    ->get();
+            $stat2 = "PAID";
+            foreach($drUpdate2s as $drUpdate2){
+                $status2 = $drUpdate2->status = $stat2;
+                $updateStat = WimpysFoodExpressStatementOfAccount::find($drUpdate2->id);
+                $updateStat->status = $stat2;
+                $updateStat->save();
+            }
+        }
+
+        $statementAccountPaid->paid_amount = $request->paidAmount;
+        $statementAccountPaid->status = "PAID";
+        $statementAccountPaid->collection_date = $request->collectionDate;
+        $statementAccountPaid->check_number = $request->checkNumber;
+        $statementAccountPaid->check_amount = $request->checkAmount;
+        $statementAccountPaid->or_number = $request->orNumber;
+        $statementAccountPaid->payment_method = $request->payment;
+        $statementAccountPaid->total_remaining_balance = 0.00;
+
+        $statementAccountPaid->save();
+
+        //update the DR delivery receipts table to paid 
+
+        if($request->id){
+            $drUpdate1s = WimpysFoodExpressStatementOfAccount::where('dr_no', $statementAccountPaid->dr_no)
+                                                        ->where('price', $statementAccountPaid->amount)
+                                                        ->get();
+            $stat1 = "PAID";
+            foreach($drUpdate1s as $drUpdate1){
+                    $status1 =  $drUpdate1->status = $stat1;
+                    $updateStat = WimpysFoodExpressStatementOfAccount::find($drUpdate1->id);
+                    $updateStat->status = $status1;
+                    $updateStat->save();
+
+            }
+        }
+
+        return response()->json('Success: fully paid successfully');
+
+    }
+
     public function printPettyCash($id){
         $getPettyCash =  WimpysFoodExpressPettyCash::with(['user', 'petty_cashes'])
                                                     ->where('id', $id)

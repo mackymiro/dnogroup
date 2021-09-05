@@ -316,7 +316,7 @@
                            					</td>
                                                <td>
                            						________________________<br>
-                           					    Antonia Cara S. Osmeña	
+                           					    Juvy G. Osmeña	
 
                            					</td>
                            					<td>

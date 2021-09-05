@@ -7771,6 +7771,12 @@ Route::group(['middleware' => ['auth']], function(){
 		->middleware(['cashier']);
 
 	Route::put(
+			'/wimpys-food-express/pay-all/{id}',
+			'WimpysFoodExpressController@soaPayAll')
+			->name('soaPayAll')
+			->middleware(['cashier']);
+
+	Route::put(
 		'/wimpys-food-express/s-account/{id}',
 		'WimpysFoodExpressController@sAccountUpdate')
 		->name('sAccountUpdate')

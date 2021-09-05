@@ -628,7 +628,7 @@
 
                 });
         }
-     }
+     };
 
      const updatePaidFirstLine = (id) =>{
         const paidAmount = $(".paidAmount").val();
@@ -683,7 +683,7 @@
                 });
         }
       
-     }
+     };
      
      const updatePaid = (id) =>{
         const paidAmount = $(".paidAmount"+id).val();
@@ -737,7 +737,7 @@
                 });
         }
       
-     }
+     };
 
       const confirmDelete = (id) =>{
           const x = confirm("Do you want to delete this?");
@@ -762,7 +762,7 @@
           }else{
               return false;
           }
-      }
+      };
   </script>
   <script>
   	//status data
